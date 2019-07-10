@@ -1,0 +1,318 @@
+public class com.inditex.itxinwalletframework.manager.impl.CryptoManager extends java.lang.Object implements com.inditex.itxinwalletframework.manager.ICryptoManager
+{
+
+    public void <init>()
+    {
+        com.inditex.itxinwalletframework.manager.impl.CryptoManager $r0;
+
+        nop;
+
+        $r0 := @this: com.inditex.itxinwalletframework.manager.impl.CryptoManager;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public byte[] generateDatabaseKey()
+    {
+        com.inditex.itxinwalletframework.manager.impl.CryptoManager $r0;
+        byte[] $r1;
+        java.security.SecureRandom $r2;
+
+        nop;
+
+        $r0 := @this: com.inditex.itxinwalletframework.manager.impl.CryptoManager;
+
+        $r1 = newarray (byte)[64];
+
+        $r2 = new java.security.SecureRandom;
+
+        specialinvoke $r2.<java.security.SecureRandom: void <init>()>();
+
+        virtualinvoke $r2.<java.security.SecureRandom: void nextBytes(byte[])>($r1);
+
+        return $r1;
+    }
+
+    public java.security.KeyPair generateKeyPairKeys()
+    {
+        com.inditex.itxinwalletframework.manager.impl.CryptoManager $r0;
+        java.lang.Throwable $r1;
+        java.security.KeyPairGenerator $r2;
+        java.security.KeyPair $r3;
+        null_type varReplacer5205;
+        int varReplacer5206;
+        java.lang.String varReplacer5207, varReplacer5208, varReplacer5209;
+
+        nop;
+
+        $r0 := @this: com.inditex.itxinwalletframework.manager.impl.CryptoManager;
+
+     label1:
+        varReplacer5209 = "RSA";
+
+        $r2 = staticinvoke <java.security.KeyPairGenerator: java.security.KeyPairGenerator getInstance(java.lang.String)>(varReplacer5209);
+
+        varReplacer5206 = 1024;
+
+        virtualinvoke $r2.<java.security.KeyPairGenerator: void initialize(int)>(varReplacer5206);
+
+        $r3 = virtualinvoke $r2.<java.security.KeyPairGenerator: java.security.KeyPair generateKeyPair()>();
+
+     label2:
+        return $r3;
+
+     label3:
+        $r1 := @caughtexception;
+
+        varReplacer5207 = "CryptoManager";
+
+        varReplacer5208 = "Error generating KeyPairKeys";
+
+        staticinvoke <com.inditex.itxinwalletframework.utils.Log: void e(java.lang.String,java.lang.String)>(varReplacer5207, varReplacer5208);
+
+        varReplacer5205 = null;
+
+        return varReplacer5205;
+
+        catch java.security.GeneralSecurityException from label1 to label2 with label3;
+    }
+
+    public byte[] getPrivateKeyAsByteArray(java.security.KeyPair)
+    {
+        com.inditex.itxinwalletframework.manager.impl.CryptoManager $r0;
+        java.security.KeyPair $r1;
+        java.security.PrivateKey $r2;
+        byte[] $r3;
+
+        nop;
+
+        $r0 := @this: com.inditex.itxinwalletframework.manager.impl.CryptoManager;
+
+        $r1 := @parameter0: java.security.KeyPair;
+
+        $r2 = virtualinvoke $r1.<java.security.KeyPair: java.security.PrivateKey getPrivate()>();
+
+        $r3 = interfaceinvoke $r2.<java.security.PrivateKey: byte[] getEncoded()>();
+
+        return $r3;
+    }
+
+    public java.security.PrivateKey getPrivateKeyFromByteArray(byte[])
+    {
+        com.inditex.itxinwalletframework.manager.impl.CryptoManager $r0;
+        byte[] $r1;
+        java.security.spec.PKCS8EncodedKeySpec $r2, r7;
+        java.security.KeyFactory $r3;
+        java.security.PrivateKey $r4;
+        java.lang.Throwable $r5, $r6;
+        java.security.spec.InvalidKeySpecException r8;
+        java.security.NoSuchAlgorithmException r9;
+        java.lang.String varReplacer14247;
+        null_type varReplacer14248, varReplacer14249;
+
+        nop;
+
+        $r0 := @this: com.inditex.itxinwalletframework.manager.impl.CryptoManager;
+
+        $r1 := @parameter0: byte[];
+
+     label1:
+        varReplacer14247 = "RSA";
+
+        $r3 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer14247);
+
+     label2:
+        r7 = new java.security.spec.PKCS8EncodedKeySpec;
+
+        $r2 = r7;
+
+     label3:
+        specialinvoke r7.<java.security.spec.PKCS8EncodedKeySpec: void <init>(byte[])>($r1);
+
+        $r4 = virtualinvoke $r3.<java.security.KeyFactory: java.security.PrivateKey generatePrivate(java.security.spec.KeySpec)>($r2);
+
+     label4:
+        return $r4;
+
+     label5:
+        $r5 := @caughtexception;
+
+        r8 = (java.security.spec.InvalidKeySpecException) $r5;
+
+        virtualinvoke r8.<java.security.spec.InvalidKeySpecException: void printStackTrace()>();
+
+        varReplacer14248 = null;
+
+        return varReplacer14248;
+
+     label6:
+        $r6 := @caughtexception;
+
+        r9 = (java.security.NoSuchAlgorithmException) $r6;
+
+        virtualinvoke r9.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        varReplacer14249 = null;
+
+        return varReplacer14249;
+
+        catch java.security.spec.InvalidKeySpecException from label1 to label2 with label5;
+        catch java.security.spec.InvalidKeySpecException from label3 to label4 with label5;
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label6;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label6;
+    }
+
+    public java.lang.String getPublicKeyAsBase64(java.security.KeyPair)
+    {
+        com.inditex.itxinwalletframework.manager.impl.CryptoManager $r0;
+        java.security.KeyPair $r1;
+        java.security.PublicKey $r2;
+        byte[] $r3;
+        java.lang.String $r4;
+        int varReplacer5210;
+
+        nop;
+
+        $r0 := @this: com.inditex.itxinwalletframework.manager.impl.CryptoManager;
+
+        $r1 := @parameter0: java.security.KeyPair;
+
+        $r2 = virtualinvoke $r1.<java.security.KeyPair: java.security.PublicKey getPublic()>();
+
+        $r3 = interfaceinvoke $r2.<java.security.PublicKey: byte[] getEncoded()>();
+
+        varReplacer5210 = 2;
+
+        $r4 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r3, varReplacer5210);
+
+        return $r4;
+    }
+
+    public byte[] signData(byte[], java.security.PrivateKey)
+    {
+        com.inditex.itxinwalletframework.manager.impl.CryptoManager $r0;
+        byte[] $r1, $r3;
+        java.security.PrivateKey $r2;
+        java.security.Signature $r4;
+        java.lang.Throwable $r5, $r6, $r7;
+        java.lang.String varReplacer14250, varReplacer14251, varReplacer14252, varReplacer14253, varReplacer14254, varReplacer14255, varReplacer14256;
+
+        nop;
+
+        $r0 := @this: com.inditex.itxinwalletframework.manager.impl.CryptoManager;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 := @parameter1: java.security.PrivateKey;
+
+        $r3 = newarray (byte)[0];
+
+     label1:
+        varReplacer14256 = "SHA256withRSA";
+
+        $r4 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer14256);
+
+        virtualinvoke $r4.<java.security.Signature: void initSign(java.security.PrivateKey)>($r2);
+
+        virtualinvoke $r4.<java.security.Signature: void update(byte[])>($r1);
+
+        $r1 = virtualinvoke $r4.<java.security.Signature: byte[] sign()>();
+
+     label2:
+        return $r1;
+
+     label3:
+        $r5 := @caughtexception;
+
+        varReplacer14254 = "CryptoManager";
+
+        varReplacer14255 = "Error signing data";
+
+        staticinvoke <com.inditex.itxinwalletframework.utils.Log: void e(java.lang.String,java.lang.String)>(varReplacer14254, varReplacer14255);
+
+        return $r3;
+
+     label4:
+        $r6 := @caughtexception;
+
+        varReplacer14252 = "CryptoManager";
+
+        varReplacer14253 = "Error signing data";
+
+        staticinvoke <com.inditex.itxinwalletframework.utils.Log: void e(java.lang.String,java.lang.String)>(varReplacer14252, varReplacer14253);
+
+        return $r3;
+
+     label5:
+        $r7 := @caughtexception;
+
+        varReplacer14250 = "CryptoManager";
+
+        varReplacer14251 = "Error signing data";
+
+        staticinvoke <com.inditex.itxinwalletframework.utils.Log: void e(java.lang.String,java.lang.String)>(varReplacer14250, varReplacer14251);
+
+        return $r3;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+        catch java.security.InvalidKeyException from label1 to label2 with label4;
+        catch java.security.SignatureException from label1 to label2 with label5;
+    }
+
+    public boolean verifyData(byte[], byte[], java.security.PublicKey)
+    {
+        com.inditex.itxinwalletframework.manager.impl.CryptoManager $r0;
+        byte[] $r1, $r2;
+        java.security.PublicKey $r3;
+        java.security.Signature $r4;
+        boolean $z0;
+        java.lang.Throwable $r5, $r6, $r7;
+
+        $r0 := @this: com.inditex.itxinwalletframework.manager.impl.CryptoManager;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 := @parameter1: byte[];
+
+        $r3 := @parameter2: java.security.PublicKey;
+
+     label1:
+        $r4 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>("SHA256withRSA");
+
+        virtualinvoke $r4.<java.security.Signature: void initVerify(java.security.PublicKey)>($r3);
+
+        virtualinvoke $r4.<java.security.Signature: void update(byte[])>($r1);
+
+        $z0 = virtualinvoke $r4.<java.security.Signature: boolean verify(byte[])>($r2);
+
+     label2:
+        return $z0;
+
+     label3:
+        $r5 := @caughtexception;
+
+        staticinvoke <com.inditex.itxinwalletframework.utils.Log: void e(java.lang.String,java.lang.String)>("CryptoManager", "Error verifyng signed data");
+
+        return 0;
+
+     label4:
+        $r6 := @caughtexception;
+
+        staticinvoke <com.inditex.itxinwalletframework.utils.Log: void e(java.lang.String,java.lang.String)>("CryptoManager", "Error verifyng signed data");
+
+        return 0;
+
+     label5:
+        $r7 := @caughtexception;
+
+        staticinvoke <com.inditex.itxinwalletframework.utils.Log: void e(java.lang.String,java.lang.String)>("CryptoManager", "Error verifyng signed data");
+
+        return 0;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+        catch java.security.SignatureException from label1 to label2 with label4;
+        catch java.security.InvalidKeyException from label1 to label2 with label5;
+    }
+}

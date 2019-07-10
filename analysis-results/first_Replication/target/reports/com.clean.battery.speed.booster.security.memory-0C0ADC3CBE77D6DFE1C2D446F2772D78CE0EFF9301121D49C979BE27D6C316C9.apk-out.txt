@@ -1,0 +1,119 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.clean.battery.speed.booster.security.memory-0C0ADC3CBE77D6DFE1C2D446F2772D78CE0EFF9301121D49C979BE27D6C316C9.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.onemobile.adnetwork.track.util.l: java.lang.String a(java.lang.String)>
+		SHA-256: ce625f85b73310b128d3cacb0190c94fd664f806216dc7889d93011394798ec7
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r1.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, varReplacer1289)
+		Method: <com.fw.basemodules.l.a: java.lang.String a(java.lang.String)>
+		SHA-256: 8f95c121db97d71f6d636e88fac7075af0cb24c41e6485360a75ea0d4652c625
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7302)
+		Method: <com.onemobile.adnetwork.track.util.l: java.lang.String a(java.lang.String)>
+		SHA-256: c953ebc2a0f6f15b727113d66360747c0bb1f73c84c887ec5124ef63829f2bdf
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: javax.crypto.Cipher
+		Statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1291)
+		Method: <com.fw.basemodules.l.a: java.lang.String a(java.lang.String)>
+		SHA-256: 63bce09a6223e697ad2ed6fb01aa23c8555aa56596cfed5319913204a942d586
+		Secure: false
+	Object:
+		Variable: varReplacer1289
+		Type: java.lang.String
+		Statement: specialinvoke $r1.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, varReplacer1289)
+		Method: <com.fw.basemodules.l.a: java.lang.String a(java.lang.String)>
+		SHA-256: 92e34df86c7a147284577368609018e5c1fa8afe5633f96647920eafc54055fa
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2216)
+		Method: <com.facebook.ads.internal.util.u: java.lang.String a(java.lang.String)>
+		SHA-256: 4e6dc8e4a4760c73b95d0fc57327b6667f0cc3eee8b70636017ed8ee27aad42e
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r2)
+		Method: <com.fw.basemodules.l.a: java.lang.String a(java.lang.String)>
+		SHA-256: dab8a24b29594c3773fdf23a6af8d52b9504958f4db36042241631b16d7d0204
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r3)
+		Method: <com.facebook.ads.internal.util.u: java.lang.String a(java.lang.String)>
+		SHA-256: ad19a603e89360657fd031ecd3a9b509e8b25fed8dc69952eef89a447965eed4
+		Secure: true
+
+Findings in Java Class: com.fw.basemodules.l.a
+
+	 in Method: java.lang.String a(java.lang.String)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #63bce09a6223e697ad2ed6fb01aa23c8555aa56596cfed5319913204a942d586)
+			First parameter (with value "AES") should be any of AES/{OFB, CTS, CTR, CFB, ECB, CBC}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1291)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1290, $r1)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r1.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, varReplacer1289)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 8
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 2
+	ConstraintError: 1
+=====================================================================

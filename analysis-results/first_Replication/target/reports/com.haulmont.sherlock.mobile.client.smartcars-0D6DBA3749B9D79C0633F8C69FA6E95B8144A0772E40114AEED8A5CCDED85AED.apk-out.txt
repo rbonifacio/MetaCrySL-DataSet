@@ -1,0 +1,89 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.haulmont.sherlock.mobile.client.smartcars-0D6DBA3749B9D79C0633F8C69FA6E95B8144A0772E40114AEED8A5CCDED85AED.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r0
+		Type: java.security.SecureRandom
+		Statement: specialinvoke $r0.<java.security.SecureRandom: void <init>()>()
+		Method: <com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters: void <clinit>()>
+		SHA-256: 81571f0f65b71822bd958d9fd94e85c4e0b32e123ab4c4b6ad790e4712eb88cf
+		Secure: true
+	Object:
+		Variable: $r6
+		Type: javax.crypto.Mac
+		Statement: $r6 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer5216)
+		Method: <com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters: java.lang.String calculateSignature(java.lang.String)>
+		SHA-256: e6c905c48eb02ffa43a548fc6951355f550db6970853228a30c085ca3e4272a2
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer5225)
+		Method: <com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters: java.lang.String calculateSignature(java.lang.String)>
+		SHA-256: c896532aeacbaac8adef6d779cdf5bbf58b168ee50607756575901e0e38d47e4
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r6.<javax.crypto.Mac: byte[] doFinal(byte[])>($r4)
+		Method: <com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters: java.lang.String calculateSignature(java.lang.String)>
+		SHA-256: b6a2629ca3df05cde3339bac2578ee7359d8b1fc6f6e61cdb7655abdac5e5575
+		Secure: true
+	Object:
+		Variable: varReplacer5225
+		Type: java.lang.String
+		Statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer5225)
+		Method: <com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters: java.lang.String calculateSignature(java.lang.String)>
+		SHA-256: 9e3c5fa17138fd0221a0c3549a8c714f9d7c344b15254ddb65179f7e729b5dba
+		Secure: false
+
+Findings in Java Class: com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters
+
+	 in Method: java.lang.String calculateSignature(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer5225)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 5
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 1
+=====================================================================

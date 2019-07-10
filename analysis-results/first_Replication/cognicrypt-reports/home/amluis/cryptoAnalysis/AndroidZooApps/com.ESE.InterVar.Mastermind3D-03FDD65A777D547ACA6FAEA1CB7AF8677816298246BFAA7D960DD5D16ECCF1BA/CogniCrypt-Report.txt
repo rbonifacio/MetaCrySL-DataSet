@@ -1,0 +1,114 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: 5a54f705314d6605f4cf61ba388d3b495336c885c3ea98cfb7cec081c65981da
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: javax.crypto.Mac
+		Statement: $r6 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer614)
+		Method: <com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters: java.lang.String calculateSignature(java.lang.String)>
+		SHA-256: 2c293b48825715716c2edf2c516084036daae8498db83141e12f760c0f3570c7
+		Secure: true
+	Object:
+		Variable: varReplacer609
+		Type: java.lang.String
+		Statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer609)
+		Method: <com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters: java.lang.String calculateSignature(java.lang.String)>
+		SHA-256: 801339ec29f489c2eb7159a6b8a3fff8e4f23b09400bc426c6be9c5ae720f2f9
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer268)
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: db71e1f6d99b8d5c64086bc95bcac64a14465120a42b55707f353ed4c8e43f93
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r6.<javax.crypto.Mac: byte[] doFinal(byte[])>($r4)
+		Method: <com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters: java.lang.String calculateSignature(java.lang.String)>
+		SHA-256: b6a2629ca3df05cde3339bac2578ee7359d8b1fc6f6e61cdb7655abdac5e5575
+		Secure: true
+	Object:
+		Variable: $r0
+		Type: java.security.SecureRandom
+		Statement: specialinvoke $r0.<java.security.SecureRandom: void <init>()>()
+		Method: <com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters: void <clinit>()>
+		SHA-256: 81571f0f65b71822bd958d9fd94e85c4e0b32e123ab4c4b6ad790e4712eb88cf
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer609)
+		Method: <com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters: java.lang.String calculateSignature(java.lang.String)>
+		SHA-256: 9acbc7ab43c2eabeb991e0f1cef3a385613d01887b9303401b19dbc0b85a07f6
+		Secure: false
+
+Findings in Java Class: com.unity3d.player.UnityPlayer
+
+	 in Method: java.lang.String a(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #db71e1f6d99b8d5c64086bc95bcac64a14465120a42b55707f353ed4c8e43f93)
+			Third parameter (with value 0)Variable pre_lenmust be  greater than pre_off
+			at statement: virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r1, varReplacer272, $i3)
+
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #db71e1f6d99b8d5c64086bc95bcac64a14465120a42b55707f353ed4c8e43f93)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte),java.security.MessageDigest: void update(byte[])
+			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+
+
+Findings in Java Class: com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters
+
+	 in Method: java.lang.String calculateSignature(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer609)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 7
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 1
+	TypestateError: 1
+	ConstraintError: 1
+=====================================================================

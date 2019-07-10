@@ -1,0 +1,763 @@
+public class com.boyaa.entity.file.FileUtil extends java.lang.Object
+{
+    private java.lang.String SDPath;
+    private java.lang.String XML_DIR;
+
+    public void <init>()
+    {
+        com.boyaa.entity.file.FileUtil $r0;
+
+        nop;
+
+        $r0 := @this: com.boyaa.entity.file.FileUtil;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static boolean deleteDir(java.io.File)
+    {
+        java.io.File $r0, $r3;
+        java.lang.Exception $r1;
+        java.lang.String $r2;
+        int $i0, $i1;
+        boolean $z0;
+        java.lang.String[] $r4;
+
+        $r0 := @parameter0: java.io.File;
+
+     label01:
+        $z0 = virtualinvoke $r0.<java.io.File: boolean exists()>();
+
+     label02:
+        if $z0 != 0 goto label03;
+
+        return 0;
+
+     label03:
+        $z0 = virtualinvoke $r0.<java.io.File: boolean isDirectory()>();
+
+     label04:
+        if $z0 == 0 goto label12;
+
+     label05:
+        $r4 = virtualinvoke $r0.<java.io.File: java.lang.String[] list()>();
+
+        $i0 = lengthof $r4;
+
+     label06:
+        $i1 = 0;
+
+     label07:
+        if $i1 >= $i0 goto label12;
+
+     label08:
+        $r2 = $r4[$i1];
+
+     label09:
+        $r3 = new java.io.File;
+
+     label10:
+        specialinvoke $r3.<java.io.File: void <init>(java.io.File,java.lang.String)>($r0, $r2);
+
+        $z0 = staticinvoke <com.boyaa.entity.file.FileUtil: boolean deleteDir(java.io.File)>($r3);
+
+     label11:
+        if $z0 == 0 goto label15;
+
+        $i1 = $i1 + 1;
+
+        goto label07;
+
+     label12:
+        virtualinvoke $r0.<java.io.File: boolean delete()>();
+
+     label13:
+        return 1;
+
+     label14:
+        $r1 := @caughtexception;
+
+     label15:
+        return 0;
+
+        catch java.lang.Exception from label01 to label02 with label14;
+        catch java.lang.Exception from label03 to label04 with label14;
+        catch java.lang.Exception from label05 to label06 with label14;
+        catch java.lang.Exception from label08 to label09 with label14;
+        catch java.lang.Exception from label10 to label11 with label14;
+        catch java.lang.Exception from label12 to label13 with label14;
+    }
+
+    private boolean isHasUseableSDCard()
+    {
+        com.boyaa.entity.file.FileUtil $r0;
+        java.lang.String $r1, varReplacer3741;
+        boolean $z0;
+
+        nop;
+
+        $r0 := @this: com.boyaa.entity.file.FileUtil;
+
+        $r1 = staticinvoke <android.os.Environment: java.lang.String getExternalStorageState()>();
+
+        varReplacer3741 = "mounted";
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer3741);
+
+        return $z0;
+    }
+
+    public java.io.File creatSDDir(java.lang.String)
+    {
+        com.boyaa.entity.file.FileUtil $r0;
+        java.lang.String $r1;
+        java.io.File $r2;
+
+        nop;
+
+        $r0 := @this: com.boyaa.entity.file.FileUtil;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = new java.io.File;
+
+        specialinvoke $r2.<java.io.File: void <init>(java.lang.String)>($r1);
+
+        virtualinvoke $r2.<java.io.File: boolean mkdirs()>();
+
+        return $r2;
+    }
+
+    public java.io.File creatSDFile(java.lang.String) throws java.io.IOException
+    {
+        com.boyaa.entity.file.FileUtil $r0;
+        java.lang.String $r1;
+        java.io.File $r2;
+
+        nop;
+
+        $r0 := @this: com.boyaa.entity.file.FileUtil;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = new java.io.File;
+
+        specialinvoke $r2.<java.io.File: void <init>(java.lang.String)>($r1);
+
+        virtualinvoke $r2.<java.io.File: boolean createNewFile()>();
+
+        return $r2;
+    }
+
+    public boolean deleteFile(java.lang.String)
+    {
+        com.boyaa.entity.file.FileUtil $r0;
+        java.lang.String $r1;
+        java.io.File $r2;
+        boolean $z0;
+        int varReplacer6098, varReplacer6099;
+
+        nop;
+
+        $r0 := @this: com.boyaa.entity.file.FileUtil;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = new java.io.File;
+
+        specialinvoke $r2.<java.io.File: void <init>(java.lang.String)>($r1);
+
+        $z0 = virtualinvoke $r2.<java.io.File: boolean isFile()>();
+
+        if $z0 == 0 goto label1;
+
+        $z0 = virtualinvoke $r2.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke $r2.<java.io.File: boolean delete()>();
+
+        varReplacer6098 = 1;
+
+        return varReplacer6098;
+
+     label1:
+        varReplacer6099 = 0;
+
+        return varReplacer6099;
+    }
+
+    public java.lang.String getFile2Str(java.io.File)
+    {
+        com.boyaa.entity.file.FileUtil $r0;
+        java.io.File $r1;
+        java.io.BufferedReader $r2, r11;
+        java.lang.Throwable $r3;
+        java.io.FileInputStream $r4, r9;
+        java.lang.StringBuilder $r5, r12;
+        java.lang.String $r6, $r8, varReplacer3737, varReplacer3738;
+        boolean $z0;
+        java.io.InputStreamReader $r7, r10;
+        java.io.IOException r13;
+
+        nop;
+
+        $r0 := @this: com.boyaa.entity.file.FileUtil;
+
+        $r1 := @parameter0: java.io.File;
+
+        $r6 = "";
+
+        if $r1 != null goto label01;
+
+        varReplacer3738 = "";
+
+        return varReplacer3738;
+
+     label01:
+        $z0 = virtualinvoke $r1.<java.io.File: boolean isFile()>();
+
+        if $z0 != 0 goto label02;
+
+        varReplacer3737 = "";
+
+        return varReplacer3737;
+
+     label02:
+        r9 = new java.io.FileInputStream;
+
+        $r4 = r9;
+
+     label03:
+        specialinvoke r9.<java.io.FileInputStream: void <init>(java.io.File)>($r1);
+
+     label04:
+        r11 = new java.io.BufferedReader;
+
+        $r2 = r11;
+
+        r10 = new java.io.InputStreamReader;
+
+        $r7 = r10;
+
+     label05:
+        specialinvoke r10.<java.io.InputStreamReader: void <init>(java.io.InputStream)>($r4);
+
+        specialinvoke r11.<java.io.BufferedReader: void <init>(java.io.Reader)>($r7);
+
+     label06:
+        r12 = new java.lang.StringBuilder;
+
+        $r5 = r12;
+
+     label07:
+        specialinvoke r12.<java.lang.StringBuilder: void <init>()>();
+
+     label08:
+        $r8 = virtualinvoke $r2.<java.io.BufferedReader: java.lang.String readLine()>();
+
+     label09:
+        if $r8 == null goto label14;
+
+     label10:
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+     label11:
+        goto label08;
+
+     label12:
+        $r3 := @caughtexception;
+
+        r13 = (java.io.IOException) $r3;
+
+        virtualinvoke r13.<java.io.IOException: void printStackTrace()>();
+
+     label13:
+        return $r6;
+
+     label14:
+        $r8 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label15:
+        $r6 = $r8;
+
+     label16:
+        virtualinvoke $r4.<java.io.InputStream: void close()>();
+
+     label17:
+        goto label13;
+
+        catch java.io.IOException from label03 to label04 with label12;
+        catch java.io.IOException from label05 to label06 with label12;
+        catch java.io.IOException from label07 to label09 with label12;
+        catch java.io.IOException from label10 to label11 with label12;
+        catch java.io.IOException from label14 to label15 with label12;
+        catch java.io.IOException from label16 to label17 with label12;
+    }
+
+    public java.lang.String getFileMD5(java.io.File)
+    {
+        com.boyaa.entity.file.FileUtil $r0;
+        java.io.File $r1;
+        byte[] $r2;
+        java.io.FileInputStream $r3;
+        boolean $z0;
+        java.security.MessageDigest $r4;
+        int $i0, varReplacer3734, varReplacer3735, varReplacer3736;
+        java.lang.Exception $r5;
+        java.lang.String $r6, varReplacer3731;
+        char[] $r7;
+        null_type varReplacer3730, varReplacer3732, varReplacer3733;
+
+        nop;
+
+        $r0 := @this: com.boyaa.entity.file.FileUtil;
+
+        $r1 := @parameter0: java.io.File;
+
+        if $r1 != null goto label01;
+
+        varReplacer3730 = null;
+
+        return varReplacer3730;
+
+     label01:
+        $z0 = virtualinvoke $r1.<java.io.File: boolean isFile()>();
+
+        if $z0 == 0 goto label14;
+
+        $r2 = newarray (byte)[1024];
+
+     label02:
+        varReplacer3731 = "MD5";
+
+        $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3731);
+
+     label03:
+        $r3 = new java.io.FileInputStream;
+
+     label04:
+        specialinvoke $r3.<java.io.FileInputStream: void <init>(java.io.File)>($r1);
+
+     label05:
+        varReplacer3734 = 0;
+
+        varReplacer3735 = 1024;
+
+        $i0 = virtualinvoke $r3.<java.io.FileInputStream: int read(byte[],int,int)>($r2, varReplacer3734, varReplacer3735);
+
+     label06:
+        if $i0 == -1 goto label11;
+
+     label07:
+        varReplacer3736 = 0;
+
+        virtualinvoke $r4.<java.security.MessageDigest: void update(byte[],int,int)>($r2, varReplacer3736, $i0);
+
+     label08:
+        goto label05;
+
+     label09:
+        $r5 := @caughtexception;
+
+     label10:
+        virtualinvoke $r5.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer3733 = null;
+
+        return varReplacer3733;
+
+     label11:
+        virtualinvoke $r3.<java.io.FileInputStream: void close()>();
+
+     label12:
+        $r6 = new java.lang.String;
+
+        $r2 = virtualinvoke $r4.<java.security.MessageDigest: byte[] digest()>();
+
+        $r7 = staticinvoke <com.boyaa.entity.file.Hex: char[] encodeHex(byte[])>($r2);
+
+        specialinvoke $r6.<java.lang.String: void <init>(char[])>($r7);
+
+        return $r6;
+
+     label13:
+        $r5 := @caughtexception;
+
+        goto label10;
+
+     label14:
+        varReplacer3732 = null;
+
+        return varReplacer3732;
+
+        catch java.lang.Exception from label02 to label03 with label13;
+        catch java.lang.Exception from label04 to label05 with label13;
+        catch java.lang.Exception from label05 to label06 with label09;
+        catch java.lang.Exception from label07 to label08 with label09;
+        catch java.lang.Exception from label11 to label12 with label09;
+    }
+
+    public java.lang.String getSDPath()
+    {
+        com.boyaa.entity.file.FileUtil $r0;
+        boolean $z0;
+        java.lang.StringBuilder $r1;
+        java.io.File $r2;
+        java.lang.String $r3, varReplacer3740;
+
+        nop;
+
+        $r0 := @this: com.boyaa.entity.file.FileUtil;
+
+        $z0 = specialinvoke $r0.<com.boyaa.entity.file.FileUtil: boolean isHasUseableSDCard()>();
+
+        if $z0 == 0 goto label1;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = staticinvoke <android.os.Environment: java.io.File getExternalStorageDirectory()>();
+
+        $r3 = virtualinvoke $r2.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer3740 = "/";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3740);
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r0.<com.boyaa.entity.file.FileUtil: java.lang.String SDPath> = $r3;
+
+     label1:
+        $r3 = $r0.<com.boyaa.entity.file.FileUtil: java.lang.String SDPath>;
+
+        return $r3;
+    }
+
+    public java.lang.String getXmlDir()
+    {
+        com.boyaa.entity.file.FileUtil $r0;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2, varReplacer3728, varReplacer3729;
+        com.boyaa.made.AppActivity $r3;
+
+        nop;
+
+        $r0 := @this: com.boyaa.entity.file.FileUtil;
+
+        $r2 = $r0.<com.boyaa.entity.file.FileUtil: java.lang.String XML_DIR>;
+
+        if $r2 != null goto label1;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r0.<com.boyaa.entity.file.FileUtil: java.lang.String getSDPath()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        varReplacer3729 = ".";
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3729);
+
+        $r3 = <com.boyaa.made.AppActivity: com.boyaa.made.AppActivity mActivity>;
+
+        $r2 = virtualinvoke $r3.<com.boyaa.made.AppActivity: java.lang.String getPackageName()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        varReplacer3728 = "/xml/";
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3728);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r0.<com.boyaa.entity.file.FileUtil: java.lang.String XML_DIR> = $r2;
+
+     label1:
+        $r2 = $r0.<com.boyaa.entity.file.FileUtil: java.lang.String XML_DIR>;
+
+        return $r2;
+    }
+
+    public java.lang.String gzipString(java.lang.String) throws java.io.IOException
+    {
+        com.boyaa.entity.file.FileUtil $r0;
+        java.util.zip.GZIPOutputStream $r1;
+        java.io.ByteArrayOutputStream $r2;
+        java.lang.String $r3, $r4, $r5;
+        boolean $z0;
+        byte[] $r6;
+
+        $r0 := @this: com.boyaa.entity.file.FileUtil;
+
+        $r3 := @parameter0: java.lang.String;
+
+        if $r3 == null goto label2;
+
+        $r4 = "";
+
+        $r5 = virtualinvoke $r3.<java.lang.String: java.lang.String trim()>();
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>($r5);
+
+        if $z0 == 0 goto label1;
+
+        return $r3;
+
+     label1:
+        $r2 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r2.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        $r1 = new java.util.zip.GZIPOutputStream;
+
+        specialinvoke $r1.<java.util.zip.GZIPOutputStream: void <init>(java.io.OutputStream)>($r2);
+
+        $r6 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r1.<java.util.zip.GZIPOutputStream: void write(byte[])>($r6);
+
+        virtualinvoke $r1.<java.util.zip.GZIPOutputStream: void close()>();
+
+        $r3 = virtualinvoke $r2.<java.io.ByteArrayOutputStream: java.lang.String toString(java.lang.String)>("ISO-8859-1");
+
+     label2:
+        return $r3;
+    }
+
+    public boolean isFileExist(java.lang.String)
+    {
+        com.boyaa.entity.file.FileUtil $r0;
+        java.lang.String $r1;
+        java.io.File $r2;
+        boolean $z0;
+
+        $r0 := @this: com.boyaa.entity.file.FileUtil;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = new java.io.File;
+
+        specialinvoke $r2.<java.io.File: void <init>(java.lang.String)>($r1);
+
+        $z0 = virtualinvoke $r2.<java.io.File: boolean exists()>();
+
+        return $z0;
+    }
+
+    public java.lang.String unGzipString(java.lang.String) throws java.io.IOException
+    {
+        com.boyaa.entity.file.FileUtil $r0;
+        byte[] $r1;
+        java.util.zip.GZIPInputStream $r2;
+        java.io.ByteArrayInputStream $r3;
+        java.io.ByteArrayOutputStream $r4;
+        java.lang.String $r5, $r6, $r7;
+        boolean $z0;
+        int $i0;
+
+        $r0 := @this: com.boyaa.entity.file.FileUtil;
+
+        $r5 := @parameter0: java.lang.String;
+
+        if $r5 == null goto label4;
+
+        $r6 = "";
+
+        $r7 = virtualinvoke $r5.<java.lang.String: java.lang.String trim()>();
+
+        $z0 = virtualinvoke $r6.<java.lang.String: boolean equals(java.lang.Object)>($r7);
+
+        if $z0 == 0 goto label1;
+
+        return $r5;
+
+     label1:
+        $r4 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r4.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        $r3 = new java.io.ByteArrayInputStream;
+
+        $r1 = virtualinvoke $r5.<java.lang.String: byte[] getBytes(java.lang.String)>("ISO-8859-1");
+
+        specialinvoke $r3.<java.io.ByteArrayInputStream: void <init>(byte[])>($r1);
+
+        $r2 = new java.util.zip.GZIPInputStream;
+
+        specialinvoke $r2.<java.util.zip.GZIPInputStream: void <init>(java.io.InputStream)>($r3);
+
+        $r1 = newarray (byte)[256];
+
+     label2:
+        $i0 = virtualinvoke $r2.<java.util.zip.GZIPInputStream: int read(byte[])>($r1);
+
+        if $i0 < 0 goto label3;
+
+        virtualinvoke $r4.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r1, 0, $i0);
+
+        goto label2;
+
+     label3:
+        $r5 = virtualinvoke $r4.<java.io.ByteArrayOutputStream: java.lang.String toString()>();
+
+     label4:
+        return $r5;
+    }
+
+    public java.io.File write2SDFromInput(java.lang.String, java.lang.String, java.io.InputStream)
+    {
+        com.boyaa.entity.file.FileUtil $r0;
+        java.lang.String $r1, $r2;
+        java.io.InputStream $r3;
+        java.io.FileOutputStream $r4, $r6;
+        java.io.File $r5, $r8;
+        java.lang.StringBuilder $r7;
+        int $i0;
+        java.lang.Exception $r9, $r10, $r11, $r13;
+        java.lang.Throwable $r12;
+
+        nop;
+
+        $r0 := @this: com.boyaa.entity.file.FileUtil;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.io.InputStream;
+
+        $r5 = null;
+
+        $r6 = null;
+
+     label01:
+        virtualinvoke $r0.<com.boyaa.entity.file.FileUtil: java.io.File creatSDDir(java.lang.String)>($r1);
+
+     label02:
+        $r7 = new java.lang.StringBuilder;
+
+     label03:
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r1 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r8 = virtualinvoke $r0.<com.boyaa.entity.file.FileUtil: java.io.File creatSDFile(java.lang.String)>($r1);
+
+     label04:
+        $r5 = $r8;
+
+     label05:
+        $r4 = new java.io.FileOutputStream;
+
+     label06:
+        specialinvoke $r4.<java.io.FileOutputStream: void <init>(java.io.File)>($r8);
+
+     label07:
+        $i0 = virtualinvoke $r3.<java.io.InputStream: int read()>();
+
+     label08:
+        if $i0 == -1 goto label11;
+
+     label09:
+        virtualinvoke $r4.<java.io.OutputStream: void write(int)>($i0);
+
+        $i0 = virtualinvoke $r3.<java.io.InputStream: int read()>();
+
+     label10:
+        goto label08;
+
+     label11:
+        virtualinvoke $r4.<java.io.OutputStream: void flush()>();
+
+     label12:
+        virtualinvoke $r4.<java.io.OutputStream: void close()>();
+
+     label13:
+        return $r8;
+
+     label14:
+        $r9 := @caughtexception;
+
+        virtualinvoke $r9.<java.lang.Exception: void printStackTrace()>();
+
+        return $r8;
+
+     label15:
+        $r10 := @caughtexception;
+
+     label16:
+        virtualinvoke $r10.<java.lang.Exception: void printStackTrace()>();
+
+     label17:
+        virtualinvoke $r6.<java.io.OutputStream: void close()>();
+
+     label18:
+        return $r5;
+
+     label19:
+        $r11 := @caughtexception;
+
+        virtualinvoke $r11.<java.lang.Exception: void printStackTrace()>();
+
+        return $r5;
+
+     label20:
+        $r12 := @caughtexception;
+
+     label21:
+        virtualinvoke $r6.<java.io.OutputStream: void close()>();
+
+     label22:
+        throw $r12;
+
+     label23:
+        $r13 := @caughtexception;
+
+        virtualinvoke $r13.<java.lang.Exception: void printStackTrace()>();
+
+        goto label22;
+
+     label24:
+        $r12 := @caughtexception;
+
+        $r6 = $r4;
+
+        goto label21;
+
+     label25:
+        $r10 := @caughtexception;
+
+        $r6 = $r4;
+
+        goto label16;
+
+        catch java.lang.Exception from label01 to label02 with label15;
+        catch java.lang.Exception from label03 to label04 with label15;
+        catch java.lang.Exception from label06 to label07 with label15;
+        catch java.lang.Throwable from label01 to label04 with label20;
+        catch java.lang.Throwable from label05 to label07 with label20;
+        catch java.lang.Exception from label07 to label08 with label25;
+        catch java.lang.Exception from label09 to label10 with label25;
+        catch java.lang.Exception from label11 to label12 with label25;
+        catch java.lang.Throwable from label07 to label08 with label24;
+        catch java.lang.Throwable from label09 to label10 with label24;
+        catch java.lang.Throwable from label11 to label12 with label24;
+        catch java.lang.Exception from label12 to label13 with label14;
+        catch java.lang.Throwable from label16 to label17 with label20;
+        catch java.lang.Exception from label17 to label18 with label19;
+        catch java.lang.Exception from label21 to label22 with label23;
+    }
+}

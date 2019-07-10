@@ -1,0 +1,272 @@
+class com.microsoft.aad.adal.PackageHelper extends java.lang.Object
+{
+    android.accounts.AccountManager mAcctManager;
+    private android.content.Context mContext;
+
+    public void <init>(android.content.Context)
+    {
+        com.microsoft.aad.adal.PackageHelper $r0;
+        android.content.Context $r1;
+        android.accounts.AccountManager $r2;
+
+        nop;
+
+        $r0 := @this: com.microsoft.aad.adal.PackageHelper;
+
+        $r1 := @parameter0: android.content.Context;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<com.microsoft.aad.adal.PackageHelper: android.content.Context mContext> = $r1;
+
+        $r1 = $r0.<com.microsoft.aad.adal.PackageHelper: android.content.Context mContext>;
+
+        $r2 = staticinvoke <android.accounts.AccountManager: android.accounts.AccountManager get(android.content.Context)>($r1);
+
+        $r0.<com.microsoft.aad.adal.PackageHelper: android.accounts.AccountManager mAcctManager> = $r2;
+
+        return;
+    }
+
+    public static java.lang.String getBrokerRedirectUrl(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, varReplacer7975, varReplacer7976, varReplacer7977, varReplacer7978, varReplacer7979, varReplacer7980;
+        java.lang.Throwable $r2;
+        boolean $z0;
+        java.lang.Object[] $r3;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $z0 = staticinvoke <com.microsoft.aad.adal.StringExtensions: boolean IsNullOrBlank(java.lang.String)>($r0);
+
+        if $z0 != 0 goto label8;
+
+        $z0 = staticinvoke <com.microsoft.aad.adal.StringExtensions: boolean IsNullOrBlank(java.lang.String)>($r1);
+
+        if $z0 != 0 goto label8;
+
+        $r3 = newarray (java.lang.Object)[3];
+
+        $r3[0] = "msauth";
+
+     label1:
+        varReplacer7978 = "UTF_8";
+
+        $r0 = staticinvoke <java.net.URLEncoder: java.lang.String encode(java.lang.String,java.lang.String)>($r0, varReplacer7978);
+
+     label2:
+        $r3[1] = $r0;
+
+     label3:
+        varReplacer7975 = "UTF_8";
+
+        $r0 = staticinvoke <java.net.URLEncoder: java.lang.String encode(java.lang.String,java.lang.String)>($r1, varReplacer7975);
+
+     label4:
+        $r3[2] = $r0;
+
+     label5:
+        varReplacer7977 = "%s://%s/%s";
+
+        $r0 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer7977, $r3);
+
+     label6:
+        return $r0;
+
+     label7:
+        $r2 := @caughtexception;
+
+        varReplacer7979 = "CallerInfo";
+
+        varReplacer7980 = "Encoding";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer7979, varReplacer7980, $r2);
+
+     label8:
+        varReplacer7976 = "";
+
+        return varReplacer7976;
+
+        catch java.io.UnsupportedEncodingException from label1 to label2 with label7;
+        catch java.io.UnsupportedEncodingException from label3 to label4 with label7;
+        catch java.io.UnsupportedEncodingException from label5 to label6 with label7;
+    }
+
+    public java.lang.String getCurrentSignatureForPackage(java.lang.String)
+    {
+        com.microsoft.aad.adal.PackageHelper $r0;
+        java.lang.String $r1, varReplacer8348, varReplacer8349, varReplacer8350, varReplacer8351, varReplacer8352, varReplacer8353, varReplacer8355;
+        android.content.pm.Signature $r2;
+        android.content.Context $r3;
+        android.content.pm.PackageManager $r4;
+        android.content.pm.PackageInfo $r5;
+        android.content.pm.Signature[] $r6;
+        int $i0, varReplacer8347, varReplacer8354;
+        java.security.MessageDigest $r7;
+        byte[] $r8;
+        java.lang.Throwable $r9, $r11;
+        com.microsoft.aad.adal.ADALError $r10;
+        null_type varReplacer8346;
+
+        nop;
+
+        $r0 := @this: com.microsoft.aad.adal.PackageHelper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r3 = $r0.<com.microsoft.aad.adal.PackageHelper: android.content.Context mContext>;
+
+     label1:
+        $r4 = virtualinvoke $r3.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        varReplacer8347 = 64;
+
+        $r5 = virtualinvoke $r4.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>($r1, varReplacer8347);
+
+     label2:
+        if $r5 == null goto label6;
+
+        $r6 = $r5.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        if $r6 == null goto label6;
+
+        $r6 = $r5.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        $i0 = lengthof $r6;
+
+        if $i0 <= 0 goto label6;
+
+        $r6 = $r5.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        $r2 = $r6[0];
+
+     label3:
+        varReplacer8355 = "SHA";
+
+        $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer8355);
+
+        $r8 = virtualinvoke $r2.<android.content.pm.Signature: byte[] toByteArray()>();
+
+        virtualinvoke $r7.<java.security.MessageDigest: void update(byte[])>($r8);
+
+        $r8 = virtualinvoke $r7.<java.security.MessageDigest: byte[] digest()>();
+
+        varReplacer8354 = 2;
+
+        $r1 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r8, varReplacer8354);
+
+     label4:
+        return $r1;
+
+     label5:
+        $r9 := @caughtexception;
+
+        $r10 = <com.microsoft.aad.adal.ADALError: com.microsoft.aad.adal.ADALError APP_PACKAGE_NAME_NOT_FOUND>;
+
+        varReplacer8348 = "CallerInfo";
+
+        varReplacer8349 = "Calling App\'s package does not exist in PackageManager";
+
+        varReplacer8350 = "";
+
+        staticinvoke <com.microsoft.aad.adal.Logger: void e(java.lang.String,java.lang.String,java.lang.String,com.microsoft.aad.adal.ADALError)>(varReplacer8348, varReplacer8349, varReplacer8350, $r10);
+
+     label6:
+        varReplacer8346 = null;
+
+        return varReplacer8346;
+
+     label7:
+        $r11 := @caughtexception;
+
+        $r10 = <com.microsoft.aad.adal.ADALError: com.microsoft.aad.adal.ADALError DEVICE_NO_SUCH_ALGORITHM>;
+
+        varReplacer8351 = "CallerInfo";
+
+        varReplacer8352 = "Digest SHA algorithm does not exists";
+
+        varReplacer8353 = "";
+
+        staticinvoke <com.microsoft.aad.adal.Logger: void e(java.lang.String,java.lang.String,java.lang.String,com.microsoft.aad.adal.ADALError)>(varReplacer8351, varReplacer8352, varReplacer8353, $r10);
+
+        goto label6;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label5;
+        catch android.content.pm.PackageManager$NameNotFoundException from label3 to label4 with label5;
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label7;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label7;
+    }
+
+    public int getUIDForPackage(java.lang.String)
+    {
+        com.microsoft.aad.adal.PackageHelper $r0;
+        java.lang.String $r1, varReplacer8341, varReplacer8342, varReplacer8343, varReplacer8344;
+        java.lang.Throwable $r2;
+        com.microsoft.aad.adal.ADALError $r3;
+        android.content.Context $r4;
+        android.content.pm.PackageManager $r5;
+        android.content.pm.ApplicationInfo $r6;
+        java.lang.StringBuilder $r7;
+        int i0, varReplacer8340, varReplacer8345;
+
+        nop;
+
+        $r0 := @this: com.microsoft.aad.adal.PackageHelper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r4 = $r0.<com.microsoft.aad.adal.PackageHelper: android.content.Context mContext>;
+
+     label1:
+        $r5 = virtualinvoke $r4.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        varReplacer8345 = 0;
+
+        $r6 = virtualinvoke $r5.<android.content.pm.PackageManager: android.content.pm.ApplicationInfo getApplicationInfo(java.lang.String,int)>($r1, varReplacer8345);
+
+     label2:
+        if $r6 == null goto label4;
+
+        i0 = $r6.<android.content.pm.ApplicationInfo: int uid>;
+
+        return i0;
+
+     label3:
+        $r2 := @caughtexception;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer8344 = "Package ";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer8344);
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer8343 = " is not found";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer8343);
+
+        $r1 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r3 = <com.microsoft.aad.adal.ADALError: com.microsoft.aad.adal.ADALError PACKAGE_NAME_NOT_FOUND>;
+
+        varReplacer8341 = "CallerInfo";
+
+        varReplacer8342 = "";
+
+        staticinvoke <com.microsoft.aad.adal.Logger: void e(java.lang.String,java.lang.String,java.lang.String,com.microsoft.aad.adal.ADALError,java.lang.Throwable)>(varReplacer8341, $r1, varReplacer8342, $r3, $r2);
+
+     label4:
+        varReplacer8340 = 0;
+
+        return varReplacer8340;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label3;
+    }
+}

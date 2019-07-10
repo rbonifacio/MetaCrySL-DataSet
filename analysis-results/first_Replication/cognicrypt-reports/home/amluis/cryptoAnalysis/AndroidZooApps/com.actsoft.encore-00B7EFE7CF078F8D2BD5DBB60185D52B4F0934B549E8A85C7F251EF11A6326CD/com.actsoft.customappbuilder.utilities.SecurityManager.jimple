@@ -1,0 +1,362 @@
+public class com.actsoft.customappbuilder.utilities.SecurityManager extends java.lang.Object
+{
+    private static final java.lang.String APP_SIGNATURE;
+    public static final int FAILED;
+    private static final org.slf4j.Logger Log;
+    public static final int PASSED;
+    private static final java.lang.String PLAY_STORE_APP_ID;
+    public static boolean hasCheckedDeviceRooted;
+    private static boolean isRooted;
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+        int varReplacer2228, varReplacer2229;
+
+        nop;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "Lcom/actsoft/customappbuilder/utilities/SecurityManager;");
+
+        <com.actsoft.customappbuilder.utilities.SecurityManager: org.slf4j.Logger Log> = $r0;
+
+        varReplacer2229 = 0;
+
+        <com.actsoft.customappbuilder.utilities.SecurityManager: boolean hasCheckedDeviceRooted> = varReplacer2229;
+
+        varReplacer2228 = 0;
+
+        <com.actsoft.customappbuilder.utilities.SecurityManager: boolean isRooted> = varReplacer2228;
+
+        return;
+    }
+
+    private void <init>()
+    {
+        com.actsoft.customappbuilder.utilities.SecurityManager $r0;
+
+        $r0 := @this: com.actsoft.customappbuilder.utilities.SecurityManager;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static int checkAppInstaller(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.content.pm.PackageManager $r1;
+        java.lang.String $r2, varReplacer2203;
+        boolean $z0;
+        int varReplacer2204, varReplacer2205;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r2 = virtualinvoke $r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        $r2 = virtualinvoke $r1.<android.content.pm.PackageManager: java.lang.String getInstallerPackageName(java.lang.String)>($r2);
+
+        if $r2 == null goto label1;
+
+        varReplacer2203 = "com.android.vending";
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean startsWith(java.lang.String)>(varReplacer2203);
+
+        if $z0 == 0 goto label1;
+
+        varReplacer2204 = 0;
+
+        return varReplacer2204;
+
+     label1:
+        varReplacer2205 = 1;
+
+        return varReplacer2205;
+    }
+
+    public static int checkAppSignature(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.content.pm.PackageManager $r1;
+        java.lang.String $r2, $r8, varReplacer2206, varReplacer2208, varReplacer2209, varReplacer2212;
+        android.content.pm.PackageInfo $r3;
+        android.content.pm.Signature[] $r4;
+        int $i0, $i1, varReplacer2207, varReplacer2210, varReplacer2211, varReplacer2213;
+        android.content.pm.Signature $r5;
+        java.security.MessageDigest $r6;
+        byte[] $r7;
+        boolean $z0;
+        java.lang.Exception $r9;
+        org.slf4j.Logger $r10;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+     label01:
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r2 = virtualinvoke $r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        varReplacer2211 = 64;
+
+        $r3 = virtualinvoke $r1.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>($r2, varReplacer2211);
+
+        $r4 = $r3.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        $i0 = lengthof $r4;
+
+     label02:
+        $i1 = 0;
+
+     label03:
+        if $i1 >= $i0 goto label10;
+
+     label04:
+        $r5 = $r4[$i1];
+
+        varReplacer2212 = "SHA";
+
+        $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2212);
+
+        $r7 = virtualinvoke $r5.<android.content.pm.Signature: byte[] toByteArray()>();
+
+        virtualinvoke $r6.<java.security.MessageDigest: void update(byte[])>($r7);
+
+        $r7 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>();
+
+        varReplacer2213 = 0;
+
+        $r2 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r7, varReplacer2213);
+
+        varReplacer2208 = "\n";
+
+        varReplacer2209 = "";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer2208, varReplacer2209);
+
+     label05:
+        $r8 = "Ez/yhBPRBHni0SkfAUJ4XFZXibU=";
+
+     label06:
+        $z0 = virtualinvoke $r8.<java.lang.String: boolean equals(java.lang.Object)>($r2);
+
+     label07:
+        if $z0 == 0 goto label08;
+
+        varReplacer2210 = 0;
+
+        return varReplacer2210;
+
+     label08:
+        $i1 = $i1 + 1;
+
+        goto label03;
+
+     label09:
+        $r9 := @caughtexception;
+
+        $r10 = <com.actsoft.customappbuilder.utilities.SecurityManager: org.slf4j.Logger Log>;
+
+        varReplacer2206 = "Error checking app signature:";
+
+        interfaceinvoke $r10.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>(varReplacer2206, $r9);
+
+     label10:
+        varReplacer2207 = 1;
+
+        return varReplacer2207;
+
+        catch java.lang.Exception from label01 to label02 with label09;
+        catch java.lang.Exception from label04 to label05 with label09;
+        catch java.lang.Exception from label06 to label07 with label09;
+    }
+
+    public static int checkDebuggable(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.content.pm.ApplicationInfo $r1;
+        int $i0;
+        boolean $z0;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.pm.ApplicationInfo getApplicationInfo()>();
+
+        $i0 = $r1.<android.content.pm.ApplicationInfo: int flags>;
+
+        $i0 = $i0 & 2;
+
+        if $i0 == 0 goto label2;
+
+        $z0 = 1;
+
+     label1:
+        if $z0 == 0 goto label3;
+
+        return 1;
+
+     label2:
+        $z0 = 0;
+
+        goto label1;
+
+     label3:
+        return 0;
+    }
+
+    public static int checkDeviceRooted(android.content.Context)
+    {
+        android.content.Context $r0;
+        boolean $z0;
+        com.scottyab.rootbeer.b $r1;
+        int varReplacer2214, varReplacer2215, varReplacer2216;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $z0 = <com.actsoft.customappbuilder.utilities.SecurityManager: boolean hasCheckedDeviceRooted>;
+
+        if $z0 != 0 goto label1;
+
+        $r1 = new com.scottyab.rootbeer.b;
+
+        $r0 = virtualinvoke $r0.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        specialinvoke $r1.<com.scottyab.rootbeer.b: void <init>(android.content.Context)>($r0);
+
+        $z0 = virtualinvoke $r1.<com.scottyab.rootbeer.b: boolean a()>();
+
+        <com.actsoft.customappbuilder.utilities.SecurityManager: boolean isRooted> = $z0;
+
+        varReplacer2215 = 1;
+
+        <com.actsoft.customappbuilder.utilities.SecurityManager: boolean hasCheckedDeviceRooted> = varReplacer2215;
+
+     label1:
+        $z0 = <com.actsoft.customappbuilder.utilities.SecurityManager: boolean isRooted>;
+
+        if $z0 == 0 goto label2;
+
+        varReplacer2214 = 1;
+
+        return varReplacer2214;
+
+     label2:
+        varReplacer2216 = 0;
+
+        return varReplacer2216;
+    }
+
+    public static int checkEmulator()
+    {
+        java.lang.String $r0, varReplacer2195, varReplacer2196, varReplacer2197, varReplacer2198, varReplacer2199, varReplacer2201, varReplacer2202;
+        boolean $z0, $z1, $z2;
+        java.lang.Exception $r1;
+        org.slf4j.Logger $r2;
+        int varReplacer2192, varReplacer2193, varReplacer2194, varReplacer2200;
+
+     label1:
+        nop;
+
+        varReplacer2196 = "ro.hardware";
+
+        $r0 = staticinvoke <com.actsoft.customappbuilder.utilities.SecurityManager: java.lang.String getSystemProperty(java.lang.String)>(varReplacer2196);
+
+        varReplacer2201 = "goldfish";
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean contains(java.lang.CharSequence)>(varReplacer2201);
+
+        varReplacer2202 = "ro.kernel.qemu";
+
+        $r0 = staticinvoke <com.actsoft.customappbuilder.utilities.SecurityManager: java.lang.String getSystemProperty(java.lang.String)>(varReplacer2202);
+
+        varReplacer2197 = "1";
+
+        $z1 = virtualinvoke $r0.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer2197);
+
+        varReplacer2199 = "ro.product.model";
+
+        $r0 = staticinvoke <com.actsoft.customappbuilder.utilities.SecurityManager: java.lang.String getSystemProperty(java.lang.String)>(varReplacer2199);
+
+        varReplacer2195 = "sdk";
+
+        $z2 = virtualinvoke $r0.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer2195);
+
+     label2:
+        if $z1 != 0 goto label5;
+
+        if $z0 != 0 goto label5;
+
+        if $z2 == 0 goto label4;
+
+        varReplacer2194 = 1;
+
+        return varReplacer2194;
+
+     label3:
+        $r1 := @caughtexception;
+
+        $r2 = <com.actsoft.customappbuilder.utilities.SecurityManager: org.slf4j.Logger Log>;
+
+        varReplacer2198 = "Error checking app signature:";
+
+        interfaceinvoke $r2.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>(varReplacer2198, $r1);
+
+        varReplacer2192 = 1;
+
+        return varReplacer2192;
+
+     label4:
+        varReplacer2193 = 0;
+
+        return varReplacer2193;
+
+     label5:
+        varReplacer2200 = 1;
+
+        return varReplacer2200;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    private static java.lang.String getSystemProperty(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer2230, varReplacer2231;
+        java.lang.Class $r1;
+        java.lang.Class[] $r2;
+        java.lang.reflect.Method $r3;
+        java.lang.Object[] $r4;
+        java.lang.Object $r5;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        varReplacer2231 = "android.os.SystemProperties";
+
+        $r1 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>(varReplacer2231);
+
+        $r2 = newarray (java.lang.Class)[1];
+
+        $r2[0] = class "Ljava/lang/String;";
+
+        varReplacer2230 = "get";
+
+        $r3 = virtualinvoke $r1.<java.lang.Class: java.lang.reflect.Method getMethod(java.lang.String,java.lang.Class[])>(varReplacer2230, $r2);
+
+        $r4 = newarray (java.lang.Object)[1];
+
+        $r4[0] = $r0;
+
+        $r5 = virtualinvoke $r3.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>($r1, $r4);
+
+        $r0 = (java.lang.String) $r5;
+
+        return $r0;
+    }
+}

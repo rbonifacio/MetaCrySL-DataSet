@@ -1,0 +1,2414 @@
+public class org.mozilla.gecko.updater.UpdateService extends android.app.IntentService
+{
+    private boolean mApplyImmediately;
+    private android.support.v4.app.NotificationCompat$Builder mBuilder;
+    private boolean mCancelDownload;
+    private android.net.ConnectivityManager mConnectivityManager;
+    private org.mozilla.gecko.CrashHandler mCrashHandler;
+    private boolean mDownloading;
+    private android.support.v4.app.NotificationManagerCompat mNotificationManager;
+    private android.content.SharedPreferences mPrefs;
+    private volatile android.net.wifi.WifiManager$WifiLock mWifiLock;
+    public android.content.Intent ipcIntent;
+    public android.os.IBinder ipcBinder_0;
+
+    public void <init>()
+    {
+        org.mozilla.gecko.updater.UpdateService $r0;
+        java.lang.String varReplacer8655;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.updater.UpdateService;
+
+        varReplacer8655 = "updater";
+
+        specialinvoke $r0.<android.app.IntentService: void <init>(java.lang.String)>(varReplacer8655);
+
+        return;
+    }
+
+    private void applyUpdate(java.io.File)
+    {
+        org.mozilla.gecko.updater.UpdateService $r0;
+        java.io.File $r1;
+        boolean $z0;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3, varReplacer8729, varReplacer8730, varReplacer8731, varReplacer8732, varReplacer8734, varReplacer8735;
+        android.content.Intent $r4;
+        android.net.Uri $r5;
+        int varReplacer8733, varReplacer8736;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.updater.UpdateService;
+
+        $r1 := @parameter0: java.io.File;
+
+        varReplacer8733 = 0;
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: boolean mApplyImmediately> = varReplacer8733;
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer8734 = "Verifying package: ";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer8734);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer8730 = "UpdateService";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer8730, $r3);
+
+        $z0 = specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: boolean verifyDownloadedPackage(java.io.File)>($r1);
+
+        if $z0 != 0 goto label2;
+
+        varReplacer8731 = "UpdateService";
+
+        varReplacer8732 = "Not installing update, failed verification";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer8731, varReplacer8732);
+
+        return;
+
+     label2:
+        $r4 = new android.content.Intent;
+
+        varReplacer8729 = "android.intent.action.VIEW";
+
+        specialinvoke $r4.<android.content.Intent: void <init>(java.lang.String)>(varReplacer8729);
+
+        $r5 = staticinvoke <android.net.Uri: android.net.Uri fromFile(java.io.File)>($r1);
+
+        varReplacer8735 = "application/vnd.android.package-archive";
+
+        virtualinvoke $r4.<android.content.Intent: android.content.Intent setDataAndType(android.net.Uri,java.lang.String)>($r5, varReplacer8735);
+
+        varReplacer8736 = 268435456;
+
+        virtualinvoke $r4.<android.content.Intent: android.content.Intent setFlags(int)>(varReplacer8736);
+
+        virtualinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void startActivity(android.content.Intent)>($r4);
+
+        return;
+    }
+
+    private static java.security.MessageDigest createMessageDigest(java.lang.String)
+    {
+        java.lang.String $r0, $r2, varReplacer8764, varReplacer8766, varReplacer8767, varReplacer8768, varReplacer8769, varReplacer8770;
+        java.lang.StringBuilder $r1;
+        boolean $z0;
+        java.security.MessageDigest $r3;
+        java.lang.Throwable $r4;
+        null_type varReplacer8765, varReplacer8771;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r2 = "sha512";
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>($r0);
+
+        if $z0 == 0 goto label3;
+
+     label1:
+        varReplacer8768 = "SHA-512";
+
+        $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer8768);
+
+     label2:
+        return $r3;
+
+     label3:
+        $r1 = new java.lang.StringBuilder;
+
+        varReplacer8766 = "Unhandled hash function: ";
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer8766);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer8764 = "UpdateService";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer8764, $r0);
+
+        varReplacer8771 = null;
+
+        return varReplacer8771;
+
+     label4:
+        $r4 := @caughtexception;
+
+        $r1 = new java.lang.StringBuilder;
+
+        varReplacer8769 = "Couldn\'t find algorithm ";
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer8769);
+
+        varReplacer8770 = "SHA-512";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer8770);
+
+        $r0 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer8767 = "UpdateService";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer8767, $r0, $r4);
+
+        varReplacer8765 = null;
+
+        return varReplacer8765;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label4;
+    }
+
+    private java.io.File downloadUpdatePackage(org.mozilla.gecko.updater.UpdateService$UpdateInfo, boolean)
+    {
+        org.mozilla.gecko.updater.UpdateService $r0;
+        org.mozilla.gecko.updater.UpdateService$UpdateInfo $r1;
+        boolean $z0;
+        java.net.URI $r2;
+        java.net.URL $r3;
+        java.lang.String $r4, $r7, varReplacer8802, varReplacer8803, varReplacer8804, varReplacer8805, varReplacer8809, varReplacer8810, varReplacer8813, varReplacer8815, varReplacer8816, varReplacer8817, varReplacer8818, varReplacer8822, varReplacer8828, varReplacer8829, varReplacer8830;
+        java.io.File $r5, $r6;
+        java.lang.Throwable $r8, $r26, $r27, $r28, $r29, $r30, $r31, $r32, $r33, $r34;
+        org.mozilla.gecko.updater.UpdateService$CheckUpdateResult $r9;
+        android.net.ConnectivityManager $r10;
+        android.net.NetworkInfo $r11;
+        int $i0, $i1, $i2, $i3, varReplacer8800, varReplacer8801, varReplacer8806, varReplacer8807, varReplacer8808, varReplacer8811, varReplacer8812, varReplacer8819, varReplacer8820, varReplacer8821, varReplacer8823, varReplacer8824, varReplacer8825, varReplacer8826, varReplacer8827;
+        android.net.wifi.WifiManager$WifiLock $r12;
+        java.net.URLConnection $r13;
+        java.io.BufferedOutputStream $r14;
+        java.io.FileOutputStream $r15;
+        java.io.BufferedInputStream $r16;
+        java.io.InputStream $r17;
+        byte[] $r18;
+        android.support.v4.app.NotificationCompat$Builder $r19;
+        android.support.v4.app.NotificationManagerCompat $r20;
+        android.app.Notification $r21;
+        java.lang.StringBuilder $r22;
+        java.lang.Exception $r23;
+        android.content.Intent $r24;
+        android.app.PendingIntent $r25;
+        long $l4;
+        null_type varReplacer8814, varReplacer8831, varReplacer8832;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.updater.UpdateService;
+
+        $r1 := @parameter0: org.mozilla.gecko.updater.UpdateService$UpdateInfo;
+
+        $z0 := @parameter1: boolean;
+
+        $r2 = $r1.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: java.net.URI uri>;
+
+     label01:
+        $r3 = virtualinvoke $r2.<java.net.URI: java.net.URL toURL()>();
+
+     label02:
+        $r4 = <android.os.Environment: java.lang.String DIRECTORY_DOWNLOADS>;
+
+        $r5 = staticinvoke <android.os.Environment: java.io.File getExternalStoragePublicDirectory(java.lang.String)>($r4);
+
+        virtualinvoke $r5.<java.io.File: boolean mkdirs()>();
+
+        $r6 = new java.io.File;
+
+        $r4 = virtualinvoke $r3.<java.net.URL: java.lang.String getFile()>();
+
+        specialinvoke $r6.<java.io.File: void <init>(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r6.<java.io.File: java.lang.String getName()>();
+
+        $r6 = new java.io.File;
+
+        specialinvoke $r6.<java.io.File: void <init>(java.io.File,java.lang.String)>($r5, $r4);
+
+        if $z0 != 0 goto label05;
+
+        $r4 = $r1.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: java.lang.String buildID>;
+
+        $r7 = specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: java.lang.String getLastBuildID()>();
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>($r7);
+
+        if $z0 == 0 goto label05;
+
+        $z0 = virtualinvoke $r6.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label05;
+
+        $z0 = specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: boolean verifyDownloadedPackage(java.io.File)>($r6);
+
+        if $z0 == 0 goto label04;
+
+        varReplacer8804 = "UpdateService";
+
+        varReplacer8805 = "using existing update package";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer8804, varReplacer8805);
+
+        return $r6;
+
+     label03:
+        $r8 := @caughtexception;
+
+        varReplacer8828 = "UpdateService";
+
+        varReplacer8829 = "failed to read URL: ";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer8828, varReplacer8829, $r8);
+
+        varReplacer8831 = null;
+
+        return varReplacer8831;
+
+     label04:
+        virtualinvoke $r6.<java.io.File: boolean delete()>();
+
+     label05:
+        $r4 = $r1.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: java.lang.String buildID>;
+
+        $r7 = specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: java.lang.String getLastBuildID()>();
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>($r7);
+
+        if $z0 != 0 goto label06;
+
+        $r4 = specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: java.lang.String getLastFileName()>();
+
+        if $r4 != null goto label29;
+
+     label06:
+        varReplacer8817 = "UpdateService";
+
+        varReplacer8818 = "downloading update package";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer8817, varReplacer8818);
+
+        $r9 = <org.mozilla.gecko.updater.UpdateService$CheckUpdateResult: org.mozilla.gecko.updater.UpdateService$CheckUpdateResult DOWNLOADING>;
+
+        specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void sendCheckUpdateResult(org.mozilla.gecko.updater.UpdateService$CheckUpdateResult)>($r9);
+
+        varReplacer8806 = 1;
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: boolean mDownloading> = varReplacer8806;
+
+        varReplacer8823 = 0;
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: boolean mCancelDownload> = varReplacer8823;
+
+        specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void showDownloadNotification(java.io.File)>($r6);
+
+     label07:
+        $r10 = $r0.<org.mozilla.gecko.updater.UpdateService: android.net.ConnectivityManager mConnectivityManager>;
+
+        $r11 = virtualinvoke $r10.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+     label08:
+        if $r11 == null goto label14;
+
+     label09:
+        $z0 = virtualinvoke $r11.<android.net.NetworkInfo: boolean isConnected()>();
+
+     label10:
+        if $z0 == 0 goto label14;
+
+     label11:
+        $i0 = virtualinvoke $r11.<android.net.NetworkInfo: int getType()>();
+
+     label12:
+        if $i0 != 1 goto label14;
+
+     label13:
+        $r12 = $r0.<org.mozilla.gecko.updater.UpdateService: android.net.wifi.WifiManager$WifiLock mWifiLock>;
+
+        virtualinvoke $r12.<android.net.wifi.WifiManager$WifiLock: void acquire()>();
+
+     label14:
+        $r2 = $r1.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: java.net.URI uri>;
+
+        $r13 = staticinvoke <org.mozilla.gecko.updater.UpdateService: java.net.URLConnection openConnectionWithProxy(java.net.URI)>($r2);
+
+        $i0 = virtualinvoke $r13.<java.net.URLConnection: int getContentLength()>();
+
+     label15:
+        $r14 = new java.io.BufferedOutputStream;
+
+        $r15 = new java.io.FileOutputStream;
+
+     label16:
+        specialinvoke $r15.<java.io.FileOutputStream: void <init>(java.io.File)>($r6);
+
+        specialinvoke $r14.<java.io.BufferedOutputStream: void <init>(java.io.OutputStream)>($r15);
+
+     label17:
+        $r16 = new java.io.BufferedInputStream;
+
+     label18:
+        $r17 = virtualinvoke $r13.<java.net.URLConnection: java.io.InputStream getInputStream()>();
+
+        specialinvoke $r16.<java.io.BufferedInputStream: void <init>(java.io.InputStream)>($r17);
+
+     label19:
+        $r18 = newarray (byte)[8192];
+
+     label20:
+        $i1 = 0;
+
+        $i2 = 0;
+
+     label21:
+        varReplacer8825 = 0;
+
+        varReplacer8826 = 8192;
+
+        $i3 = virtualinvoke $r16.<java.io.InputStream: int read(byte[],int,int)>($r18, varReplacer8825, varReplacer8826);
+
+     label22:
+        if $i3 <= 0 goto label30;
+
+     label23:
+        $z0 = $r0.<org.mozilla.gecko.updater.UpdateService: boolean mCancelDownload>;
+
+     label24:
+        if $z0 != 0 goto label30;
+
+     label25:
+        varReplacer8821 = 0;
+
+        virtualinvoke $r14.<java.io.OutputStream: void write(byte[],int,int)>($r18, varReplacer8821, $i3);
+
+     label26:
+        $i2 = $i2 + $i3;
+
+        $i3 = $i2 - $i1;
+
+        if $i3 <= 1048576 goto label21;
+
+     label27:
+        $r19 = $r0.<org.mozilla.gecko.updater.UpdateService: android.support.v4.app.NotificationCompat$Builder mBuilder>;
+
+        varReplacer8807 = 0;
+
+        virtualinvoke $r19.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setProgress(int,int,boolean)>($i0, $i2, varReplacer8807);
+
+        $r20 = $r0.<org.mozilla.gecko.updater.UpdateService: android.support.v4.app.NotificationManagerCompat mNotificationManager>;
+
+        $r19 = $r0.<org.mozilla.gecko.updater.UpdateService: android.support.v4.app.NotificationCompat$Builder mBuilder>;
+
+        $r21 = virtualinvoke $r19.<android.support.v4.app.NotificationCompat$Builder: android.app.Notification build()>();
+
+        varReplacer8808 = 1044438461;
+
+        virtualinvoke $r20.<android.support.v4.app.NotificationManagerCompat: void notify(int,android.app.Notification)>(varReplacer8808, $r21);
+
+     label28:
+        $i1 = $i2;
+
+        goto label21;
+
+     label29:
+        $r5 = new java.io.File;
+
+        specialinvoke $r5.<java.io.File: void <init>(java.lang.String)>($r4);
+
+        $z0 = virtualinvoke $r5.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label06;
+
+        virtualinvoke $r5.<java.io.File: boolean delete()>();
+
+        $r22 = new java.lang.StringBuilder;
+
+        varReplacer8830 = "deleted update package: ";
+
+        specialinvoke $r22.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer8830);
+
+        $r22 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer8813 = "UpdateService";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer8813, $r4);
+
+        goto label06;
+
+     label30:
+        $r20 = $r0.<org.mozilla.gecko.updater.UpdateService: android.support.v4.app.NotificationManagerCompat mNotificationManager>;
+
+        varReplacer8824 = 1044438461;
+
+        virtualinvoke $r20.<android.support.v4.app.NotificationManagerCompat: void cancel(int)>(varReplacer8824);
+
+        $z0 = $r0.<org.mozilla.gecko.updater.UpdateService: boolean mCancelDownload>;
+
+     label31:
+        if $z0 == 0 goto label37;
+
+     label32:
+        varReplacer8809 = "UpdateService";
+
+        varReplacer8810 = "download canceled by user!";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer8809, varReplacer8810);
+
+        virtualinvoke $r6.<java.io.File: boolean delete()>();
+
+     label33:
+        virtualinvoke $r16.<java.io.InputStream: void close()>();
+
+     label34:
+        virtualinvoke $r14.<java.io.OutputStream: void close()>();
+
+     label35:
+        varReplacer8819 = 0;
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: boolean mDownloading> = varReplacer8819;
+
+        $r12 = $r0.<org.mozilla.gecko.updater.UpdateService: android.net.wifi.WifiManager$WifiLock mWifiLock>;
+
+        $z0 = virtualinvoke $r12.<android.net.wifi.WifiManager$WifiLock: boolean isHeld()>();
+
+        if $z0 == 0 goto label36;
+
+        $r12 = $r0.<org.mozilla.gecko.updater.UpdateService: android.net.wifi.WifiManager$WifiLock mWifiLock>;
+
+        virtualinvoke $r12.<android.net.wifi.WifiManager$WifiLock: void release()>();
+
+     label36:
+        varReplacer8814 = null;
+
+        return varReplacer8814;
+
+     label37:
+        varReplacer8802 = "UpdateService";
+
+        varReplacer8803 = "completed update download!";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer8802, varReplacer8803);
+
+     label38:
+        virtualinvoke $r16.<java.io.InputStream: void close()>();
+
+     label39:
+        virtualinvoke $r14.<java.io.OutputStream: void close()>();
+
+     label40:
+        varReplacer8801 = 0;
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: boolean mDownloading> = varReplacer8801;
+
+        $r12 = $r0.<org.mozilla.gecko.updater.UpdateService: android.net.wifi.WifiManager$WifiLock mWifiLock>;
+
+        $z0 = virtualinvoke $r12.<android.net.wifi.WifiManager$WifiLock: boolean isHeld()>();
+
+        if $z0 == 0 goto label68;
+
+        $r12 = $r0.<org.mozilla.gecko.updater.UpdateService: android.net.wifi.WifiManager$WifiLock mWifiLock>;
+
+        virtualinvoke $r12.<android.net.wifi.WifiManager$WifiLock: void release()>();
+
+        return $r6;
+
+     label41:
+        $r23 := @caughtexception;
+
+        $r16 = null;
+
+        $r14 = null;
+
+     label42:
+        virtualinvoke $r6.<java.io.File: boolean delete()>();
+
+        $r24 = new android.content.Intent;
+
+        varReplacer8822 = "jp.co.jmas.full.KAITO.CHECK_FOR_UPDATE";
+
+        specialinvoke $r24.<android.content.Intent: void <init>(java.lang.String)>(varReplacer8822);
+
+        virtualinvoke $r24.<android.content.Intent: android.content.Intent setClass(android.content.Context,java.lang.Class)>($r0, class "Lorg/mozilla/gecko/updater/UpdateService;");
+
+        varReplacer8811 = 0;
+
+        varReplacer8812 = 134217728;
+
+        $r25 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getService(android.content.Context,int,android.content.Intent,int)>($r0, varReplacer8811, $r24, varReplacer8812);
+
+        $r19 = new android.support.v4.app.NotificationCompat$Builder;
+
+        specialinvoke $r19.<android.support.v4.app.NotificationCompat$Builder: void <init>(android.content.Context)>($r0);
+
+        $i0 = <org.mozilla.gecko.R$drawable: int ic_status_logo>;
+
+        virtualinvoke $r19.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setSmallIcon(int)>($i0);
+
+        $l4 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        virtualinvoke $r19.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setWhen(long)>($l4);
+
+        $i0 = <org.mozilla.gecko.R$string: int updater_downloading_title_failed>;
+
+        $r4 = virtualinvoke $r0.<org.mozilla.gecko.updater.UpdateService: java.lang.String getString(int)>($i0);
+
+        virtualinvoke $r19.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setContentTitle(java.lang.CharSequence)>($r4);
+
+        $i0 = <org.mozilla.gecko.R$string: int updater_downloading_retry>;
+
+        $r4 = virtualinvoke $r0.<org.mozilla.gecko.updater.UpdateService: java.lang.String getString(int)>($i0);
+
+        virtualinvoke $r19.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setContentText(java.lang.CharSequence)>($r4);
+
+        $r19.<android.support.v4.app.NotificationCompat$Builder: android.app.PendingIntent mContentIntent> = $r25;
+
+        $r20 = $r0.<org.mozilla.gecko.updater.UpdateService: android.support.v4.app.NotificationManagerCompat mNotificationManager>;
+
+        $r21 = virtualinvoke $r19.<android.support.v4.app.NotificationCompat$Builder: android.app.Notification build()>();
+
+        varReplacer8800 = 1044438461;
+
+        virtualinvoke $r20.<android.support.v4.app.NotificationManagerCompat: void notify(int,android.app.Notification)>(varReplacer8800, $r21);
+
+        varReplacer8815 = "UpdateService";
+
+        varReplacer8816 = "failed to download update: ";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer8815, varReplacer8816, $r23);
+
+     label43:
+        if $r16 == null goto label45;
+
+     label44:
+        virtualinvoke $r16.<java.io.InputStream: void close()>();
+
+     label45:
+        if $r14 == null goto label47;
+
+     label46:
+        virtualinvoke $r14.<java.io.OutputStream: void close()>();
+
+     label47:
+        varReplacer8820 = 0;
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: boolean mDownloading> = varReplacer8820;
+
+        $r12 = $r0.<org.mozilla.gecko.updater.UpdateService: android.net.wifi.WifiManager$WifiLock mWifiLock>;
+
+        $z0 = virtualinvoke $r12.<android.net.wifi.WifiManager$WifiLock: boolean isHeld()>();
+
+        if $z0 == 0 goto label48;
+
+        $r12 = $r0.<org.mozilla.gecko.updater.UpdateService: android.net.wifi.WifiManager$WifiLock mWifiLock>;
+
+        virtualinvoke $r12.<android.net.wifi.WifiManager$WifiLock: void release()>();
+
+     label48:
+        varReplacer8832 = null;
+
+        return varReplacer8832;
+
+     label49:
+        $r26 := @caughtexception;
+
+        $r16 = null;
+
+        $r14 = null;
+
+     label50:
+        if $r16 == null goto label52;
+
+     label51:
+        virtualinvoke $r16.<java.io.InputStream: void close()>();
+
+     label52:
+        if $r14 == null goto label54;
+
+     label53:
+        virtualinvoke $r14.<java.io.OutputStream: void close()>();
+
+     label54:
+        varReplacer8827 = 0;
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: boolean mDownloading> = varReplacer8827;
+
+        $r12 = $r0.<org.mozilla.gecko.updater.UpdateService: android.net.wifi.WifiManager$WifiLock mWifiLock>;
+
+        $z0 = virtualinvoke $r12.<android.net.wifi.WifiManager$WifiLock: boolean isHeld()>();
+
+        if $z0 == 0 goto label55;
+
+        $r12 = $r0.<org.mozilla.gecko.updater.UpdateService: android.net.wifi.WifiManager$WifiLock mWifiLock>;
+
+        virtualinvoke $r12.<android.net.wifi.WifiManager$WifiLock: void release()>();
+
+     label55:
+        throw $r26;
+
+     label56:
+        $r27 := @caughtexception;
+
+        goto label34;
+
+     label57:
+        $r28 := @caughtexception;
+
+        goto label35;
+
+     label58:
+        $r29 := @caughtexception;
+
+        goto label39;
+
+     label59:
+        $r30 := @caughtexception;
+
+        goto label40;
+
+     label60:
+        $r31 := @caughtexception;
+
+        goto label45;
+
+     label61:
+        $r32 := @caughtexception;
+
+        goto label47;
+
+     label62:
+        $r33 := @caughtexception;
+
+        goto label52;
+
+     label63:
+        $r34 := @caughtexception;
+
+        goto label54;
+
+     label64:
+        $r26 := @caughtexception;
+
+        $r16 = null;
+
+        goto label50;
+
+     label65:
+        $r26 := @caughtexception;
+
+        goto label50;
+
+     label66:
+        $r23 := @caughtexception;
+
+        $r16 = null;
+
+        goto label42;
+
+     label67:
+        $r23 := @caughtexception;
+
+        goto label42;
+
+     label68:
+        return $r6;
+
+        catch java.net.MalformedURLException from label01 to label02 with label03;
+        catch java.lang.Exception from label07 to label08 with label41;
+        catch java.lang.Exception from label09 to label10 with label41;
+        catch java.lang.Exception from label11 to label12 with label41;
+        catch java.lang.Exception from label13 to label15 with label41;
+        catch java.lang.Exception from label16 to label17 with label41;
+        catch java.lang.Throwable from label07 to label08 with label49;
+        catch java.lang.Throwable from label09 to label10 with label49;
+        catch java.lang.Throwable from label11 to label12 with label49;
+        catch java.lang.Throwable from label13 to label17 with label49;
+        catch java.lang.Exception from label18 to label19 with label66;
+        catch java.lang.Throwable from label17 to label19 with label64;
+        catch java.lang.Exception from label19 to label20 with label67;
+        catch java.lang.Exception from label21 to label22 with label67;
+        catch java.lang.Exception from label23 to label24 with label67;
+        catch java.lang.Exception from label25 to label26 with label67;
+        catch java.lang.Exception from label27 to label28 with label67;
+        catch java.lang.Throwable from label21 to label22 with label65;
+        catch java.lang.Throwable from label23 to label24 with label65;
+        catch java.lang.Throwable from label25 to label26 with label65;
+        catch java.lang.Throwable from label27 to label28 with label65;
+        catch java.lang.Exception from label30 to label31 with label67;
+        catch java.lang.Exception from label32 to label33 with label67;
+        catch java.lang.Throwable from label30 to label31 with label65;
+        catch java.lang.Throwable from label32 to label33 with label65;
+        catch java.io.IOException from label33 to label34 with label56;
+        catch java.io.IOException from label34 to label35 with label57;
+        catch java.lang.Exception from label37 to label38 with label67;
+        catch java.lang.Throwable from label37 to label38 with label65;
+        catch java.io.IOException from label38 to label39 with label58;
+        catch java.io.IOException from label39 to label40 with label59;
+        catch java.lang.Throwable from label42 to label43 with label65;
+        catch java.io.IOException from label44 to label45 with label60;
+        catch java.io.IOException from label46 to label47 with label61;
+        catch java.io.IOException from label51 to label52 with label62;
+        catch java.io.IOException from label53 to label54 with label63;
+    }
+
+    private org.mozilla.gecko.updater.UpdateService$UpdateInfo findUpdate(boolean)
+    {
+        org.mozilla.gecko.updater.UpdateService $r0;
+        boolean $z0, $z1;
+        android.content.SharedPreferences $r1;
+        java.lang.String $r2, varReplacer8775, varReplacer8776, varReplacer8777, varReplacer8779, varReplacer8782, varReplacer8783, varReplacer8784, varReplacer8788, varReplacer8789, varReplacer8790, varReplacer8793, varReplacer8794, varReplacer8795, varReplacer8796, varReplacer8798, varReplacer8799;
+        java.net.URI $r3;
+        javax.xml.parsers.DocumentBuilderFactory $r4;
+        javax.xml.parsers.DocumentBuilder $r5;
+        java.net.URLConnection $r6;
+        java.io.InputStream $r7;
+        org.w3c.dom.Document $r8;
+        org.w3c.dom.NodeList $r9;
+        int $i0, varReplacer8778, varReplacer8786, varReplacer8787;
+        org.w3c.dom.Node $r10, $r12, $r13, $r14, $r15;
+        org.w3c.dom.NamedNodeMap $r11;
+        org.mozilla.gecko.updater.UpdateService$UpdateInfo $r16;
+        java.lang.StringBuilder $r17;
+        java.lang.Exception $r18;
+        java.lang.Throwable $r19;
+        null_type varReplacer8780, varReplacer8781, varReplacer8785, varReplacer8791, varReplacer8792, varReplacer8797;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.updater.UpdateService;
+
+        $z0 := @parameter0: boolean;
+
+        $z1 = 0;
+
+     label01:
+        $r1 = $r0.<org.mozilla.gecko.updater.UpdateService: android.content.SharedPreferences mPrefs>;
+
+        varReplacer8779 = "UpdateService.updateUrl";
+
+        varReplacer8780 = null;
+
+        $r2 = interfaceinvoke $r1.<android.content.SharedPreferences: java.lang.String getString(java.lang.String,java.lang.String)>(varReplacer8779, varReplacer8780);
+
+        $r3 = staticinvoke <org.mozilla.gecko.updater.UpdateServiceHelper: java.net.URI expandUpdateURI(android.content.Context,java.lang.String,boolean)>($r0, $r2, $z0);
+
+     label02:
+        if $r3 != null goto label05;
+
+     label03:
+        varReplacer8776 = "UpdateService";
+
+        varReplacer8777 = "failed to get update URI";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer8776, varReplacer8777);
+
+     label04:
+        varReplacer8792 = null;
+
+        return varReplacer8792;
+
+     label05:
+        $r4 = staticinvoke <javax.xml.parsers.DocumentBuilderFactory: javax.xml.parsers.DocumentBuilderFactory newInstance()>();
+
+        $r5 = virtualinvoke $r4.<javax.xml.parsers.DocumentBuilderFactory: javax.xml.parsers.DocumentBuilder newDocumentBuilder()>();
+
+        $r6 = staticinvoke <org.mozilla.gecko.updater.UpdateService: java.net.URLConnection openConnectionWithProxy(java.net.URI)>($r3);
+
+        $r7 = virtualinvoke $r6.<java.net.URLConnection: java.io.InputStream getInputStream()>();
+
+        $r8 = virtualinvoke $r5.<javax.xml.parsers.DocumentBuilder: org.w3c.dom.Document parse(java.io.InputStream)>($r7);
+
+        varReplacer8775 = "update";
+
+        $r9 = interfaceinvoke $r8.<org.w3c.dom.Document: org.w3c.dom.NodeList getElementsByTagName(java.lang.String)>(varReplacer8775);
+
+     label06:
+        if $r9 == null goto label40;
+
+     label07:
+        $i0 = interfaceinvoke $r9.<org.w3c.dom.NodeList: int getLength()>();
+
+     label08:
+        if $i0 == 0 goto label40;
+
+     label09:
+        varReplacer8778 = 0;
+
+        $r10 = interfaceinvoke $r9.<org.w3c.dom.NodeList: org.w3c.dom.Node item(int)>(varReplacer8778);
+
+        $r11 = interfaceinvoke $r10.<org.w3c.dom.Node: org.w3c.dom.NamedNodeMap getAttributes()>();
+
+        varReplacer8788 = "buildID";
+
+        $r10 = interfaceinvoke $r11.<org.w3c.dom.NamedNodeMap: org.w3c.dom.Node getNamedItem(java.lang.String)>(varReplacer8788);
+
+     label10:
+        if $r10 == null goto label40;
+
+     label11:
+        varReplacer8784 = "patch";
+
+        $r9 = interfaceinvoke $r8.<org.w3c.dom.Document: org.w3c.dom.NodeList getElementsByTagName(java.lang.String)>(varReplacer8784);
+
+     label12:
+        if $r9 == null goto label40;
+
+     label13:
+        $i0 = interfaceinvoke $r9.<org.w3c.dom.NodeList: int getLength()>();
+
+     label14:
+        if $i0 == 0 goto label40;
+
+     label15:
+        varReplacer8786 = 0;
+
+        $r12 = interfaceinvoke $r9.<org.w3c.dom.NodeList: org.w3c.dom.Node item(int)>(varReplacer8786);
+
+        $r11 = interfaceinvoke $r12.<org.w3c.dom.Node: org.w3c.dom.NamedNodeMap getAttributes()>();
+
+        varReplacer8796 = "URL";
+
+        $r13 = interfaceinvoke $r11.<org.w3c.dom.NamedNodeMap: org.w3c.dom.Node getNamedItem(java.lang.String)>(varReplacer8796);
+
+        $r11 = interfaceinvoke $r12.<org.w3c.dom.Node: org.w3c.dom.NamedNodeMap getAttributes()>();
+
+        varReplacer8782 = "hashFunction";
+
+        $r14 = interfaceinvoke $r11.<org.w3c.dom.NamedNodeMap: org.w3c.dom.Node getNamedItem(java.lang.String)>(varReplacer8782);
+
+        $r11 = interfaceinvoke $r12.<org.w3c.dom.Node: org.w3c.dom.NamedNodeMap getAttributes()>();
+
+        varReplacer8783 = "hashValue";
+
+        $r15 = interfaceinvoke $r11.<org.w3c.dom.NamedNodeMap: org.w3c.dom.Node getNamedItem(java.lang.String)>(varReplacer8783);
+
+        $r11 = interfaceinvoke $r12.<org.w3c.dom.Node: org.w3c.dom.NamedNodeMap getAttributes()>();
+
+        varReplacer8793 = "size";
+
+        $r12 = interfaceinvoke $r11.<org.w3c.dom.NamedNodeMap: org.w3c.dom.Node getNamedItem(java.lang.String)>(varReplacer8793);
+
+     label16:
+        if $r13 == null goto label40;
+
+        if $r14 == null goto label40;
+
+        if $r15 == null goto label40;
+
+        if $r12 == null goto label40;
+
+        $r16 = new org.mozilla.gecko.updater.UpdateService$UpdateInfo;
+
+     label17:
+        varReplacer8787 = 0;
+
+        specialinvoke $r16.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: void <init>(org.mozilla.gecko.updater.UpdateService,byte)>($r0, varReplacer8787);
+
+     label18:
+        $r3 = new java.net.URI;
+
+     label19:
+        $r2 = interfaceinvoke $r13.<org.w3c.dom.Node: java.lang.String getTextContent()>();
+
+        specialinvoke $r3.<java.net.URI: void <init>(java.lang.String)>($r2);
+
+        $r16.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: java.net.URI uri> = $r3;
+
+        $r2 = interfaceinvoke $r10.<org.w3c.dom.Node: java.lang.String getTextContent()>();
+
+        $r16.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: java.lang.String buildID> = $r2;
+
+        $r2 = interfaceinvoke $r14.<org.w3c.dom.Node: java.lang.String getTextContent()>();
+
+        $r16.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: java.lang.String hashFunction> = $r2;
+
+        $r2 = interfaceinvoke $r15.<org.w3c.dom.Node: java.lang.String getTextContent()>();
+
+        $r16.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: java.lang.String hashValue> = $r2;
+
+     label20:
+        $r2 = interfaceinvoke $r12.<org.w3c.dom.Node: java.lang.String getTextContent()>();
+
+        $i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r2);
+
+     label21:
+        $r16.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: int size> = $i0;
+
+     label22:
+        $r3 = $r16.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: java.net.URI uri>;
+
+     label23:
+        if $r3 == null goto label32;
+
+     label24:
+        $r2 = $r16.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: java.lang.String buildID>;
+
+        $z0 = staticinvoke <org.mozilla.gecko.updater.UpdateService$UpdateInfo: boolean isNonEmpty(java.lang.String)>($r2);
+
+     label25:
+        if $z0 == 0 goto label32;
+
+     label26:
+        $r2 = $r16.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: java.lang.String hashFunction>;
+
+        $z0 = staticinvoke <org.mozilla.gecko.updater.UpdateService$UpdateInfo: boolean isNonEmpty(java.lang.String)>($r2);
+
+     label27:
+        if $z0 == 0 goto label32;
+
+     label28:
+        $r2 = $r16.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: java.lang.String hashValue>;
+
+        $z0 = staticinvoke <org.mozilla.gecko.updater.UpdateService$UpdateInfo: boolean isNonEmpty(java.lang.String)>($r2);
+
+     label29:
+        if $z0 == 0 goto label32;
+
+     label30:
+        $i0 = $r16.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: int size>;
+
+     label31:
+        if $i0 <= 0 goto label32;
+
+        $z1 = 1;
+
+     label32:
+        if $z1 != 0 goto label39;
+
+        $r17 = new java.lang.StringBuilder;
+
+     label33:
+        varReplacer8794 = "missing some required update information, have: ";
+
+        specialinvoke $r17.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer8794);
+
+        $r17 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r16);
+
+        $r2 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer8795 = "UpdateService";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer8795, $r2);
+
+     label34:
+        varReplacer8781 = null;
+
+        return varReplacer8781;
+
+     label35:
+        $r18 := @caughtexception;
+
+        varReplacer8789 = "UpdateService";
+
+        varReplacer8790 = "failed to check for update: ";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer8789, varReplacer8790, $r18);
+
+        varReplacer8791 = null;
+
+        return varReplacer8791;
+
+     label36:
+        $r19 := @caughtexception;
+
+     label37:
+        varReplacer8798 = "UpdateService";
+
+        varReplacer8799 = "Failed to find APK size: ";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer8798, varReplacer8799, $r19);
+
+     label38:
+        varReplacer8797 = null;
+
+        return varReplacer8797;
+
+     label39:
+        return $r16;
+
+     label40:
+        varReplacer8785 = null;
+
+        return varReplacer8785;
+
+        catch java.lang.Exception from label01 to label02 with label35;
+        catch java.lang.Exception from label03 to label04 with label35;
+        catch java.lang.Exception from label05 to label06 with label35;
+        catch java.lang.Exception from label07 to label08 with label35;
+        catch java.lang.Exception from label09 to label10 with label35;
+        catch java.lang.Exception from label11 to label12 with label35;
+        catch java.lang.Exception from label13 to label14 with label35;
+        catch java.lang.Exception from label15 to label16 with label35;
+        catch java.lang.Exception from label17 to label18 with label35;
+        catch java.lang.Exception from label19 to label20 with label35;
+        catch java.lang.NumberFormatException from label20 to label21 with label36;
+        catch java.lang.Exception from label20 to label22 with label35;
+        catch java.lang.Exception from label22 to label23 with label35;
+        catch java.lang.Exception from label24 to label25 with label35;
+        catch java.lang.Exception from label26 to label27 with label35;
+        catch java.lang.Exception from label28 to label29 with label35;
+        catch java.lang.Exception from label30 to label31 with label35;
+        catch java.lang.Exception from label33 to label34 with label35;
+        catch java.lang.Exception from label37 to label38 with label35;
+    }
+
+    private java.lang.String getLastBuildID()
+    {
+        org.mozilla.gecko.updater.UpdateService $r0;
+        java.lang.String $r1, varReplacer8879;
+        android.content.SharedPreferences $r2;
+        null_type varReplacer8880;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.updater.UpdateService;
+
+        $r2 = $r0.<org.mozilla.gecko.updater.UpdateService: android.content.SharedPreferences mPrefs>;
+
+        varReplacer8879 = "UpdateService.lastBuildID";
+
+        varReplacer8880 = null;
+
+        $r1 = interfaceinvoke $r2.<android.content.SharedPreferences: java.lang.String getString(java.lang.String,java.lang.String)>(varReplacer8879, varReplacer8880);
+
+        return $r1;
+    }
+
+    private java.lang.String getLastFileName()
+    {
+        org.mozilla.gecko.updater.UpdateService $r0;
+        java.lang.String $r1, varReplacer8727;
+        android.content.SharedPreferences $r2;
+        null_type varReplacer8728;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.updater.UpdateService;
+
+        $r2 = $r0.<org.mozilla.gecko.updater.UpdateService: android.content.SharedPreferences mPrefs>;
+
+        varReplacer8727 = "UpdateService.lastFileName";
+
+        varReplacer8728 = null;
+
+        $r1 = interfaceinvoke $r2.<android.content.SharedPreferences: java.lang.String getString(java.lang.String,java.lang.String)>(varReplacer8727, varReplacer8728);
+
+        return $r1;
+    }
+
+    private static boolean hasFlag(int, int)
+    {
+        int $i0, $i1, varReplacer8737, varReplacer8738;
+
+        nop;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        $i0 = $i0 & $i1;
+
+        if $i0 != $i1 goto label1;
+
+        varReplacer8737 = 1;
+
+        return varReplacer8737;
+
+     label1:
+        varReplacer8738 = 0;
+
+        return varReplacer8738;
+    }
+
+    private static java.net.URLConnection openConnectionWithProxy(java.net.URI) throws java.net.MalformedURLException, java.io.IOException
+    {
+        java.net.URI $r0;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2, varReplacer8836, varReplacer8837;
+        java.net.ProxySelector $r3;
+        java.net.Proxy $r4;
+        java.util.List $r5;
+        boolean $z0;
+        java.lang.Object $r6;
+        java.net.URL $r7;
+        java.net.URLConnection $r8;
+        int varReplacer8835;
+
+        nop;
+
+        $r0 := @parameter0: java.net.URI;
+
+        $r1 = new java.lang.StringBuilder;
+
+        varReplacer8837 = "opening connection with URI: ";
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer8837);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer8836 = "UpdateService";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer8836, $r2);
+
+        $r3 = staticinvoke <java.net.ProxySelector: java.net.ProxySelector getDefault()>();
+
+        $r4 = <java.net.Proxy: java.net.Proxy NO_PROXY>;
+
+        if $r3 == null goto label1;
+
+        $r5 = virtualinvoke $r3.<java.net.ProxySelector: java.util.List select(java.net.URI)>($r0);
+
+        if $r5 == null goto label1;
+
+        $z0 = interfaceinvoke $r5.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label1;
+
+        varReplacer8835 = 0;
+
+        $r6 = interfaceinvoke $r5.<java.util.List: java.lang.Object get(int)>(varReplacer8835);
+
+        $r4 = (java.net.Proxy) $r6;
+
+     label1:
+        $r7 = virtualinvoke $r0.<java.net.URI: java.net.URL toURL()>();
+
+        $r8 = virtualinvoke $r7.<java.net.URL: java.net.URLConnection openConnection(java.net.Proxy)>($r4);
+
+        return $r8;
+    }
+
+    private void registerForUpdates(boolean)
+    {
+        org.mozilla.gecko.updater.UpdateService $r0;
+        boolean $z0;
+        android.content.SharedPreferences $r1;
+        long $l0, $l3, varReplacer8686;
+        byte $b1;
+        java.util.GregorianCalendar $r2, $r3;
+        java.util.TimeZone $r4;
+        int $i2, varReplacer8680, varReplacer8682, varReplacer8688, varReplacer8689;
+        java.lang.Object $r5;
+        android.app.AlarmManager $r6;
+        android.content.Intent $r7;
+        android.app.PendingIntent $r8;
+        java.lang.StringBuilder $r9;
+        java.util.Date $r10;
+        java.lang.String $r11, varReplacer8681, varReplacer8683, varReplacer8685, varReplacer8687, varReplacer8690, varReplacer8691, varReplacer8692, varReplacer8693, varReplacer8694;
+        null_type varReplacer8684;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.updater.UpdateService;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = $r0.<org.mozilla.gecko.updater.UpdateService: android.content.SharedPreferences mPrefs>;
+
+        varReplacer8685 = "UpdateService.lastAttemptDate";
+
+        varReplacer8686 = -1L;
+
+        $l0 = interfaceinvoke $r1.<android.content.SharedPreferences: long getLong(java.lang.String,long)>(varReplacer8685, varReplacer8686);
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 >= 0 goto label4;
+
+        $r2 = null;
+
+     label1:
+        $r3 = new java.util.GregorianCalendar;
+
+        varReplacer8681 = "GMT";
+
+        $r4 = staticinvoke <java.util.TimeZone: java.util.TimeZone getTimeZone(java.lang.String)>(varReplacer8681);
+
+        specialinvoke $r3.<java.util.GregorianCalendar: void <init>(java.util.TimeZone)>($r4);
+
+        if $z0 == 0 goto label5;
+
+        $i2 = 3600000;
+
+     label2:
+        if $r2 == null goto label3;
+
+        $l0 = virtualinvoke $r3.<java.util.Calendar: long getTimeInMillis()>();
+
+        $l3 = virtualinvoke $r2.<java.util.Calendar: long getTimeInMillis()>();
+
+        $l0 = $l0 - $l3;
+
+        $l3 = (long) $i2;
+
+        $b1 = $l0 cmp $l3;
+
+        if $b1 <= 0 goto label6;
+
+     label3:
+        varReplacer8693 = "UpdateService";
+
+        varReplacer8694 = "no update has ever been attempted, checking now";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer8693, varReplacer8694);
+
+        varReplacer8682 = 0;
+
+        specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void startUpdate(int)>(varReplacer8682);
+
+        return;
+
+     label4:
+        $r2 = new java.util.GregorianCalendar;
+
+        varReplacer8687 = "GMT";
+
+        $r4 = staticinvoke <java.util.TimeZone: java.util.TimeZone getTimeZone(java.lang.String)>(varReplacer8687);
+
+        specialinvoke $r2.<java.util.GregorianCalendar: void <init>(java.util.TimeZone)>($r4);
+
+        virtualinvoke $r2.<java.util.GregorianCalendar: void setTimeInMillis(long)>($l0);
+
+        goto label1;
+
+     label5:
+        $i2 = 86400000;
+
+        goto label2;
+
+     label6:
+        varReplacer8691 = "alarm";
+
+        $r5 = virtualinvoke $r0.<org.mozilla.gecko.updater.UpdateService: java.lang.Object getSystemService(java.lang.String)>(varReplacer8691);
+
+        $r6 = (android.app.AlarmManager) $r5;
+
+        if $r6 == null goto label7;
+
+        $r7 = new android.content.Intent;
+
+        varReplacer8683 = "jp.co.jmas.full.KAITO.CHECK_FOR_UPDATE";
+
+        varReplacer8684 = null;
+
+        specialinvoke $r7.<android.content.Intent: void <init>(java.lang.String,android.net.Uri,android.content.Context,java.lang.Class)>(varReplacer8683, varReplacer8684, $r0, class "Lorg/mozilla/gecko/updater/UpdateService;");
+
+        varReplacer8688 = 0;
+
+        varReplacer8689 = 134217728;
+
+        $r8 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getService(android.content.Context,int,android.content.Intent,int)>($r0, varReplacer8688, $r7, varReplacer8689);
+
+        virtualinvoke $r6.<android.app.AlarmManager: void cancel(android.app.PendingIntent)>($r8);
+
+        $l0 = virtualinvoke $r2.<java.util.Calendar: long getTimeInMillis()>();
+
+        $l3 = (long) $i2;
+
+        $l0 = $l0 + $l3;
+
+        virtualinvoke $r2.<java.util.Calendar: void setTimeInMillis(long)>($l0);
+
+        $r9 = new java.lang.StringBuilder;
+
+        varReplacer8690 = "next update will be at: ";
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer8690);
+
+        $r10 = virtualinvoke $r2.<java.util.Calendar: java.util.Date getTime()>();
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r10);
+
+        $r11 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer8692 = "UpdateService";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer8692, $r11);
+
+        $l0 = virtualinvoke $r2.<java.util.Calendar: long getTimeInMillis()>();
+
+        varReplacer8680 = 0;
+
+        virtualinvoke $r6.<android.app.AlarmManager: void set(int,long,android.app.PendingIntent)>(varReplacer8680, $l0, $r8);
+
+     label7:
+        return;
+    }
+
+    private void sendCheckUpdateResult(org.mozilla.gecko.updater.UpdateService$CheckUpdateResult)
+    {
+        org.mozilla.gecko.updater.UpdateService $r0;
+        org.mozilla.gecko.updater.UpdateService$CheckUpdateResult $r1;
+        android.content.Intent $r2;
+        java.lang.String $r3, varReplacer8773, varReplacer8774;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.updater.UpdateService;
+
+        $r1 := @parameter0: org.mozilla.gecko.updater.UpdateService$CheckUpdateResult;
+
+        $r2 = new android.content.Intent;
+
+        varReplacer8773 = "jp.co.jmas.full.KAITO.CHECK_UPDATE_RESULT";
+
+        specialinvoke $r2.<android.content.Intent: void <init>(java.lang.String)>(varReplacer8773);
+
+        $r3 = virtualinvoke $r1.<org.mozilla.gecko.updater.UpdateService$CheckUpdateResult: java.lang.String toString()>();
+
+        varReplacer8774 = "result";
+
+        virtualinvoke $r2.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>(varReplacer8774, $r3);
+
+        virtualinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void sendBroadcast(android.content.Intent)>($r2);
+
+        return;
+    }
+
+    private void showDownloadNotification(java.io.File)
+    {
+        org.mozilla.gecko.updater.UpdateService $r0;
+        java.io.File $r1;
+        android.content.Intent $r2, $r3;
+        java.lang.String $r4, varReplacer8887, varReplacer8891, varReplacer8892;
+        android.app.PendingIntent $r5, $r6;
+        android.support.v4.app.NotificationCompat$Builder $r7;
+        android.content.res.Resources $r8;
+        int $i0, varReplacer8881, varReplacer8882, varReplacer8883, varReplacer8884, varReplacer8885, varReplacer8886, varReplacer8888, varReplacer8889, varReplacer8890;
+        boolean $z0;
+        android.support.v4.app.NotificationManagerCompat $r9;
+        android.app.Notification $r10;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.updater.UpdateService;
+
+        $r1 := @parameter0: java.io.File;
+
+        $r2 = new android.content.Intent;
+
+        varReplacer8891 = "jp.co.jmas.full.KAITO.APPLY_UPDATE";
+
+        specialinvoke $r2.<android.content.Intent: void <init>(java.lang.String)>(varReplacer8891);
+
+        virtualinvoke $r2.<android.content.Intent: android.content.Intent setClass(android.content.Context,java.lang.Class)>($r0, class "Lorg/mozilla/gecko/updater/UpdateService;");
+
+        $r3 = new android.content.Intent;
+
+        varReplacer8892 = "jp.co.jmas.full.KAITO.CANCEL_DOWNLOAD";
+
+        specialinvoke $r3.<android.content.Intent: void <init>(java.lang.String)>(varReplacer8892);
+
+        virtualinvoke $r3.<android.content.Intent: android.content.Intent setClass(android.content.Context,java.lang.Class)>($r0, class "Lorg/mozilla/gecko/updater/UpdateService;");
+
+        if $r1 == null goto label1;
+
+        $r4 = virtualinvoke $r1.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        varReplacer8887 = "packagePath";
+
+        virtualinvoke $r2.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>(varReplacer8887, $r4);
+
+     label1:
+        varReplacer8888 = 0;
+
+        varReplacer8889 = 134217728;
+
+        $r5 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getService(android.content.Context,int,android.content.Intent,int)>($r0, varReplacer8888, $r2, varReplacer8889);
+
+        varReplacer8885 = 0;
+
+        varReplacer8886 = 268435456;
+
+        $r6 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getService(android.content.Context,int,android.content.Intent,int)>($r0, varReplacer8885, $r3, varReplacer8886);
+
+        $r7 = new android.support.v4.app.NotificationCompat$Builder;
+
+        specialinvoke $r7.<android.support.v4.app.NotificationCompat$Builder: void <init>(android.content.Context)>($r0);
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: android.support.v4.app.NotificationCompat$Builder mBuilder> = $r7;
+
+        $r7 = $r0.<org.mozilla.gecko.updater.UpdateService: android.support.v4.app.NotificationCompat$Builder mBuilder>;
+
+        $r8 = virtualinvoke $r0.<org.mozilla.gecko.updater.UpdateService: android.content.res.Resources getResources()>();
+
+        $i0 = <org.mozilla.gecko.R$string: int updater_downloading_title>;
+
+        $r4 = virtualinvoke $r8.<android.content.res.Resources: java.lang.String getString(int)>($i0);
+
+        $r7 = virtualinvoke $r7.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setContentTitle(java.lang.CharSequence)>($r4);
+
+        $z0 = $r0.<org.mozilla.gecko.updater.UpdateService: boolean mApplyImmediately>;
+
+        if $z0 == 0 goto label3;
+
+        $r4 = "";
+
+     label2:
+        $r7 = virtualinvoke $r7.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setContentText(java.lang.CharSequence)>($r4);
+
+        varReplacer8890 = 17301633;
+
+        $r7 = virtualinvoke $r7.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setSmallIcon(int)>(varReplacer8890);
+
+        $r7.<android.support.v4.app.NotificationCompat$Builder: android.app.PendingIntent mContentIntent> = $r5;
+
+        virtualinvoke $r7.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setDeleteIntent(android.app.PendingIntent)>($r6);
+
+        $r7 = $r0.<org.mozilla.gecko.updater.UpdateService: android.support.v4.app.NotificationCompat$Builder mBuilder>;
+
+        varReplacer8881 = 100;
+
+        varReplacer8882 = 0;
+
+        varReplacer8883 = 1;
+
+        virtualinvoke $r7.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setProgress(int,int,boolean)>(varReplacer8881, varReplacer8882, varReplacer8883);
+
+        $r9 = $r0.<org.mozilla.gecko.updater.UpdateService: android.support.v4.app.NotificationManagerCompat mNotificationManager>;
+
+        $r7 = $r0.<org.mozilla.gecko.updater.UpdateService: android.support.v4.app.NotificationCompat$Builder mBuilder>;
+
+        $r10 = virtualinvoke $r7.<android.support.v4.app.NotificationCompat$Builder: android.app.Notification build()>();
+
+        varReplacer8884 = 1044438461;
+
+        virtualinvoke $r9.<android.support.v4.app.NotificationManagerCompat: void notify(int,android.app.Notification)>(varReplacer8884, $r10);
+
+        return;
+
+     label3:
+        $r8 = virtualinvoke $r0.<org.mozilla.gecko.updater.UpdateService: android.content.res.Resources getResources()>();
+
+        $i0 = <org.mozilla.gecko.R$string: int updater_downloading_select>;
+
+        $r4 = virtualinvoke $r8.<android.content.res.Resources: java.lang.String getString(int)>($i0);
+
+        goto label2;
+    }
+
+    private void startUpdate(int)
+    {
+        org.mozilla.gecko.updater.UpdateService $r0;
+        int $i0, $i2, varReplacer8699, varReplacer8700, varReplacer8701, varReplacer8702, varReplacer8703, varReplacer8704, varReplacer8705, varReplacer8706, varReplacer8707, varReplacer8709, varReplacer8713, varReplacer8718, varReplacer8722;
+        android.content.SharedPreferences $r1;
+        android.content.SharedPreferences$Editor $r2;
+        long $l1;
+        android.net.ConnectivityManager $r3;
+        android.net.NetworkInfo $r4;
+        boolean $z0;
+        org.mozilla.gecko.updater.UpdateService$CheckUpdateResult $r5;
+        org.mozilla.gecko.updater.UpdateService$UpdateInfo $r6;
+        java.lang.StringBuilder $r7;
+        java.lang.String $r8, varReplacer8695, varReplacer8696, varReplacer8697, varReplacer8698, varReplacer8708, varReplacer8710, varReplacer8711, varReplacer8712, varReplacer8714, varReplacer8715, varReplacer8716, varReplacer8717, varReplacer8719, varReplacer8720, varReplacer8721, varReplacer8723, varReplacer8724, varReplacer8725, varReplacer8726;
+        org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy $r9, $r10;
+        android.content.Intent $r11;
+        android.app.PendingIntent $r12;
+        android.support.v4.app.NotificationCompat$Builder $r13;
+        android.support.v4.app.NotificationManagerCompat $r14;
+        android.app.Notification $r15;
+        java.io.File $r16;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.updater.UpdateService;
+
+        $i0 := @parameter0: int;
+
+        $r1 = $r0.<org.mozilla.gecko.updater.UpdateService: android.content.SharedPreferences mPrefs>;
+
+        $r2 = interfaceinvoke $r1.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        $l1 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        varReplacer8695 = "UpdateService.lastAttemptDate";
+
+        interfaceinvoke $r2.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putLong(java.lang.String,long)>(varReplacer8695, $l1);
+
+        interfaceinvoke $r2.<android.content.SharedPreferences$Editor: boolean commit()>();
+
+        $r3 = $r0.<org.mozilla.gecko.updater.UpdateService: android.net.ConnectivityManager mConnectivityManager>;
+
+        $r4 = virtualinvoke $r3.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+        if $r4 == null goto label01;
+
+        $z0 = virtualinvoke $r4.<android.net.NetworkInfo: boolean isConnected()>();
+
+        if $z0 != 0 goto label02;
+
+     label01:
+        varReplacer8725 = "UpdateService";
+
+        varReplacer8726 = "not connected to the network";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer8725, varReplacer8726);
+
+        varReplacer8713 = 1;
+
+        specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void registerForUpdates(boolean)>(varReplacer8713);
+
+        $r5 = <org.mozilla.gecko.updater.UpdateService$CheckUpdateResult: org.mozilla.gecko.updater.UpdateService$CheckUpdateResult NOT_AVAILABLE>;
+
+        specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void sendCheckUpdateResult(org.mozilla.gecko.updater.UpdateService$CheckUpdateResult)>($r5);
+
+        return;
+
+     label02:
+        varReplacer8704 = 0;
+
+        specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void registerForUpdates(boolean)>(varReplacer8704);
+
+        varReplacer8707 = 4;
+
+        $z0 = staticinvoke <org.mozilla.gecko.updater.UpdateService: boolean hasFlag(int,int)>($i0, varReplacer8707);
+
+        $r6 = specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: org.mozilla.gecko.updater.UpdateService$UpdateInfo findUpdate(boolean)>($z0);
+
+        if $r6 == null goto label04;
+
+        $z0 = 1;
+
+     label03:
+        if $z0 != 0 goto label05;
+
+        varReplacer8696 = "UpdateService";
+
+        varReplacer8697 = "no update available";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer8696, varReplacer8697);
+
+        $r5 = <org.mozilla.gecko.updater.UpdateService$CheckUpdateResult: org.mozilla.gecko.updater.UpdateService$CheckUpdateResult NOT_AVAILABLE>;
+
+        specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void sendCheckUpdateResult(org.mozilla.gecko.updater.UpdateService$CheckUpdateResult)>($r5);
+
+        return;
+
+     label04:
+        $z0 = 0;
+
+        goto label03;
+
+     label05:
+        $r7 = new java.lang.StringBuilder;
+
+        varReplacer8712 = "update available, buildID = ";
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer8712);
+
+        $r8 = $r6.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: java.lang.String buildID>;
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer8719 = "UpdateService";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer8719, $r8);
+
+        $r1 = $r0.<org.mozilla.gecko.updater.UpdateService: android.content.SharedPreferences mPrefs>;
+
+        $r9 = <org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy: org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy WIFI>;
+
+        $i2 = $r9.<org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy: int value>;
+
+        varReplacer8716 = "UpdateService.autoDownloadPolicy";
+
+        $i2 = interfaceinvoke $r1.<android.content.SharedPreferences: int getInt(java.lang.String,int)>(varReplacer8716, $i2);
+
+        $r9 = staticinvoke <org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy: org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy get(int)>($i2);
+
+        varReplacer8722 = 1;
+
+        $z0 = staticinvoke <org.mozilla.gecko.updater.UpdateService: boolean hasFlag(int,int)>($i0, varReplacer8722);
+
+        if $z0 != 0 goto label06;
+
+        $r10 = <org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy: org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy ENABLED>;
+
+        if $r9 == $r10 goto label06;
+
+        $r10 = <org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy: org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy WIFI>;
+
+        if $r9 != $r10 goto label08;
+
+        $r3 = $r0.<org.mozilla.gecko.updater.UpdateService: android.net.ConnectivityManager mConnectivityManager>;
+
+        $z0 = staticinvoke <android.support.v4.net.ConnectivityManagerCompat: boolean isActiveNetworkMetered(android.net.ConnectivityManager)>($r3);
+
+        if $z0 != 0 goto label08;
+
+     label06:
+        $z0 = 1;
+
+     label07:
+        if $z0 != 0 goto label09;
+
+        $r7 = new java.lang.StringBuilder;
+
+        varReplacer8714 = "not initiating automatic update download due to policy ";
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer8714);
+
+        $r8 = virtualinvoke $r9.<org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy: java.lang.String toString()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer8715 = "UpdateService";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer8715, $r8);
+
+        $r5 = <org.mozilla.gecko.updater.UpdateService$CheckUpdateResult: org.mozilla.gecko.updater.UpdateService$CheckUpdateResult AVAILABLE>;
+
+        specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void sendCheckUpdateResult(org.mozilla.gecko.updater.UpdateService$CheckUpdateResult)>($r5);
+
+        $r11 = new android.content.Intent;
+
+        varReplacer8717 = "jp.co.jmas.full.KAITO.DOWNLOAD_UPDATE";
+
+        specialinvoke $r11.<android.content.Intent: void <init>(java.lang.String)>(varReplacer8717);
+
+        virtualinvoke $r11.<android.content.Intent: android.content.Intent setClass(android.content.Context,java.lang.Class)>($r0, class "Lorg/mozilla/gecko/updater/UpdateService;");
+
+        varReplacer8705 = 0;
+
+        varReplacer8706 = 134217728;
+
+        $r12 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getService(android.content.Context,int,android.content.Intent,int)>($r0, varReplacer8705, $r11, varReplacer8706);
+
+        $r13 = new android.support.v4.app.NotificationCompat$Builder;
+
+        specialinvoke $r13.<android.support.v4.app.NotificationCompat$Builder: void <init>(android.content.Context)>($r0);
+
+        $i0 = <org.mozilla.gecko.R$drawable: int ic_status_logo>;
+
+        virtualinvoke $r13.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setSmallIcon(int)>($i0);
+
+        $l1 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        virtualinvoke $r13.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setWhen(long)>($l1);
+
+        varReplacer8703 = 1;
+
+        virtualinvoke $r13.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setAutoCancel(boolean)>(varReplacer8703);
+
+        $i0 = <org.mozilla.gecko.R$string: int updater_start_title>;
+
+        $r8 = virtualinvoke $r0.<org.mozilla.gecko.updater.UpdateService: java.lang.String getString(int)>($i0);
+
+        virtualinvoke $r13.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setContentTitle(java.lang.CharSequence)>($r8);
+
+        $i0 = <org.mozilla.gecko.R$string: int updater_start_select>;
+
+        $r8 = virtualinvoke $r0.<org.mozilla.gecko.updater.UpdateService: java.lang.String getString(int)>($i0);
+
+        virtualinvoke $r13.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setContentText(java.lang.CharSequence)>($r8);
+
+        $r13.<android.support.v4.app.NotificationCompat$Builder: android.app.PendingIntent mContentIntent> = $r12;
+
+        $r14 = $r0.<org.mozilla.gecko.updater.UpdateService: android.support.v4.app.NotificationManagerCompat mNotificationManager>;
+
+        $r15 = virtualinvoke $r13.<android.support.v4.app.NotificationCompat$Builder: android.app.Notification build()>();
+
+        varReplacer8718 = 1044438461;
+
+        virtualinvoke $r14.<android.support.v4.app.NotificationManagerCompat: void notify(int,android.app.Notification)>(varReplacer8718, $r15);
+
+        return;
+
+     label08:
+        $z0 = 0;
+
+        goto label07;
+
+     label09:
+        varReplacer8709 = 2;
+
+        $z0 = staticinvoke <org.mozilla.gecko.updater.UpdateService: boolean hasFlag(int,int)>($i0, varReplacer8709);
+
+        $r16 = specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: java.io.File downloadUpdatePackage(org.mozilla.gecko.updater.UpdateService$UpdateInfo,boolean)>($r6, $z0);
+
+        if $r16 != null goto label10;
+
+        $r5 = <org.mozilla.gecko.updater.UpdateService$CheckUpdateResult: org.mozilla.gecko.updater.UpdateService$CheckUpdateResult NOT_AVAILABLE>;
+
+        specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void sendCheckUpdateResult(org.mozilla.gecko.updater.UpdateService$CheckUpdateResult)>($r5);
+
+        return;
+
+     label10:
+        $r7 = new java.lang.StringBuilder;
+
+        varReplacer8710 = "have update package at ";
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer8710);
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r16);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer8723 = "UpdateService";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer8723, $r8);
+
+        $r1 = $r0.<org.mozilla.gecko.updater.UpdateService: android.content.SharedPreferences mPrefs>;
+
+        $r2 = interfaceinvoke $r1.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        $r8 = $r6.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: java.lang.String buildID>;
+
+        varReplacer8698 = "UpdateService.lastBuildID";
+
+        interfaceinvoke $r2.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putString(java.lang.String,java.lang.String)>(varReplacer8698, $r8);
+
+        $r8 = $r6.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: java.lang.String hashFunction>;
+
+        varReplacer8724 = "UpdateService.lastHashFunction";
+
+        interfaceinvoke $r2.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putString(java.lang.String,java.lang.String)>(varReplacer8724, $r8);
+
+        $r8 = $r6.<org.mozilla.gecko.updater.UpdateService$UpdateInfo: java.lang.String hashValue>;
+
+        varReplacer8711 = "UpdateService.lastHashValue";
+
+        interfaceinvoke $r2.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putString(java.lang.String,java.lang.String)>(varReplacer8711, $r8);
+
+        $r8 = virtualinvoke $r16.<java.io.File: java.lang.String toString()>();
+
+        varReplacer8708 = "UpdateService.lastFileName";
+
+        interfaceinvoke $r2.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putString(java.lang.String,java.lang.String)>(varReplacer8708, $r8);
+
+        interfaceinvoke $r2.<android.content.SharedPreferences$Editor: boolean commit()>();
+
+        $r5 = <org.mozilla.gecko.updater.UpdateService$CheckUpdateResult: org.mozilla.gecko.updater.UpdateService$CheckUpdateResult DOWNLOADED>;
+
+        specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void sendCheckUpdateResult(org.mozilla.gecko.updater.UpdateService$CheckUpdateResult)>($r5);
+
+        $z0 = $r0.<org.mozilla.gecko.updater.UpdateService: boolean mApplyImmediately>;
+
+        if $z0 == 0 goto label11;
+
+        specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void applyUpdate(java.io.File)>($r16);
+
+        return;
+
+     label11:
+        $r11 = new android.content.Intent;
+
+        varReplacer8721 = "jp.co.jmas.full.KAITO.APPLY_UPDATE";
+
+        specialinvoke $r11.<android.content.Intent: void <init>(java.lang.String)>(varReplacer8721);
+
+        virtualinvoke $r11.<android.content.Intent: android.content.Intent setClass(android.content.Context,java.lang.Class)>($r0, class "Lorg/mozilla/gecko/updater/UpdateService;");
+
+        $r8 = virtualinvoke $r16.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        varReplacer8720 = "packagePath";
+
+        virtualinvoke $r11.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>(varReplacer8720, $r8);
+
+        varReplacer8699 = 0;
+
+        varReplacer8700 = 134217728;
+
+        $r12 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getService(android.content.Context,int,android.content.Intent,int)>($r0, varReplacer8699, $r11, varReplacer8700);
+
+        $r13 = new android.support.v4.app.NotificationCompat$Builder;
+
+        specialinvoke $r13.<android.support.v4.app.NotificationCompat$Builder: void <init>(android.content.Context)>($r0);
+
+        $i0 = <org.mozilla.gecko.R$drawable: int ic_status_logo>;
+
+        virtualinvoke $r13.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setSmallIcon(int)>($i0);
+
+        $l1 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        virtualinvoke $r13.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setWhen(long)>($l1);
+
+        varReplacer8702 = 1;
+
+        virtualinvoke $r13.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setAutoCancel(boolean)>(varReplacer8702);
+
+        $i0 = <org.mozilla.gecko.R$string: int updater_apply_title>;
+
+        $r8 = virtualinvoke $r0.<org.mozilla.gecko.updater.UpdateService: java.lang.String getString(int)>($i0);
+
+        virtualinvoke $r13.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setContentTitle(java.lang.CharSequence)>($r8);
+
+        $i0 = <org.mozilla.gecko.R$string: int updater_apply_select>;
+
+        $r8 = virtualinvoke $r0.<org.mozilla.gecko.updater.UpdateService: java.lang.String getString(int)>($i0);
+
+        virtualinvoke $r13.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder setContentText(java.lang.CharSequence)>($r8);
+
+        $r13.<android.support.v4.app.NotificationCompat$Builder: android.app.PendingIntent mContentIntent> = $r12;
+
+        $r14 = $r0.<org.mozilla.gecko.updater.UpdateService: android.support.v4.app.NotificationManagerCompat mNotificationManager>;
+
+        $r15 = virtualinvoke $r13.<android.support.v4.app.NotificationCompat$Builder: android.app.Notification build()>();
+
+        varReplacer8701 = 1044438461;
+
+        virtualinvoke $r14.<android.support.v4.app.NotificationManagerCompat: void notify(int,android.app.Notification)>(varReplacer8701, $r15);
+
+        return;
+    }
+
+    private boolean verifyDownloadedPackage(java.io.File)
+    {
+        org.mozilla.gecko.updater.UpdateService $r0;
+        java.io.File $r1;
+        android.content.SharedPreferences $r2;
+        java.lang.String $r3, $r10, varReplacer8748, varReplacer8752, varReplacer8753, varReplacer8757, varReplacer8762, varReplacer8763;
+        java.security.MessageDigest $r4;
+        java.io.BufferedInputStream $r5;
+        java.io.FileInputStream $r6;
+        byte[] $r7;
+        int $i0, varReplacer8747, varReplacer8750, varReplacer8751, varReplacer8754, varReplacer8755, varReplacer8756, varReplacer8759, varReplacer8760, varReplacer8761;
+        java.lang.Throwable $r8, $r9, $r11, $r12, $r13;
+        boolean $z0;
+        null_type varReplacer8749, varReplacer8758;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.updater.UpdateService;
+
+        $r1 := @parameter0: java.io.File;
+
+        $r2 = $r0.<org.mozilla.gecko.updater.UpdateService: android.content.SharedPreferences mPrefs>;
+
+        varReplacer8748 = "UpdateService.lastHashFunction";
+
+        varReplacer8749 = null;
+
+        $r3 = interfaceinvoke $r2.<android.content.SharedPreferences: java.lang.String getString(java.lang.String,java.lang.String)>(varReplacer8748, varReplacer8749);
+
+        $r4 = staticinvoke <org.mozilla.gecko.updater.UpdateService: java.security.MessageDigest createMessageDigest(java.lang.String)>($r3);
+
+        if $r4 != null goto label01;
+
+        varReplacer8760 = 0;
+
+        return varReplacer8760;
+
+     label01:
+        $r5 = new java.io.BufferedInputStream;
+
+        $r6 = new java.io.FileInputStream;
+
+     label02:
+        specialinvoke $r6.<java.io.FileInputStream: void <init>(java.io.File)>($r1);
+
+        specialinvoke $r5.<java.io.BufferedInputStream: void <init>(java.io.InputStream)>($r6);
+
+     label03:
+        $r7 = newarray (byte)[8192];
+
+     label04:
+        varReplacer8750 = 0;
+
+        varReplacer8751 = 8192;
+
+        $i0 = virtualinvoke $r5.<java.io.InputStream: int read(byte[],int,int)>($r7, varReplacer8750, varReplacer8751);
+
+     label05:
+        if $i0 <= 0 goto label14;
+
+     label06:
+        varReplacer8755 = 0;
+
+        virtualinvoke $r4.<java.security.MessageDigest: void update(byte[],int,int)>($r7, varReplacer8755, $i0);
+
+     label07:
+        goto label04;
+
+     label08:
+        $r8 := @caughtexception;
+
+     label09:
+        varReplacer8752 = "UpdateService";
+
+        varReplacer8753 = "Failed to verify update package: ";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer8752, varReplacer8753, $r8);
+
+     label10:
+        if $r5 == null goto label25;
+
+     label11:
+        virtualinvoke $r5.<java.io.InputStream: void close()>();
+
+     label12:
+        varReplacer8761 = 0;
+
+        return varReplacer8761;
+
+     label13:
+        $r9 := @caughtexception;
+
+        varReplacer8747 = 0;
+
+        return varReplacer8747;
+
+     label14:
+        virtualinvoke $r5.<java.io.InputStream: void close()>();
+
+     label15:
+        $r7 = virtualinvoke $r4.<java.security.MessageDigest: byte[] digest()>();
+
+        $r3 = staticinvoke <org.mozilla.apache.commons.codec.binary.Hex: java.lang.String encodeHexString(byte[])>($r7);
+
+        $r2 = $r0.<org.mozilla.gecko.updater.UpdateService: android.content.SharedPreferences mPrefs>;
+
+        varReplacer8757 = "UpdateService.lastHashValue";
+
+        varReplacer8758 = null;
+
+        $r10 = interfaceinvoke $r2.<android.content.SharedPreferences: java.lang.String getString(java.lang.String,java.lang.String)>(varReplacer8757, varReplacer8758);
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r10);
+
+        if $z0 != 0 goto label20;
+
+        varReplacer8762 = "UpdateService";
+
+        varReplacer8763 = "Package hash does not match";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer8762, varReplacer8763);
+
+        varReplacer8754 = 0;
+
+        return varReplacer8754;
+
+     label16:
+        $r11 := @caughtexception;
+
+        $r5 = null;
+
+     label17:
+        if $r5 == null goto label19;
+
+     label18:
+        virtualinvoke $r5.<java.io.InputStream: void close()>();
+
+     label19:
+        throw $r11;
+
+     label20:
+        varReplacer8756 = 1;
+
+        return varReplacer8756;
+
+     label21:
+        $r12 := @caughtexception;
+
+        goto label15;
+
+     label22:
+        $r13 := @caughtexception;
+
+        goto label19;
+
+     label23:
+        $r11 := @caughtexception;
+
+        goto label17;
+
+     label24:
+        $r8 := @caughtexception;
+
+        $r5 = null;
+
+        goto label09;
+
+     label25:
+        varReplacer8759 = 0;
+
+        return varReplacer8759;
+
+        catch java.io.IOException from label02 to label03 with label24;
+        catch java.lang.Throwable from label01 to label03 with label16;
+        catch java.io.IOException from label04 to label05 with label08;
+        catch java.io.IOException from label06 to label07 with label08;
+        catch java.lang.Throwable from label03 to label05 with label23;
+        catch java.lang.Throwable from label06 to label07 with label23;
+        catch java.lang.Throwable from label09 to label10 with label23;
+        catch java.io.IOException from label11 to label12 with label13;
+        catch java.io.IOException from label14 to label15 with label21;
+        catch java.io.IOException from label18 to label19 with label22;
+    }
+
+    public void onCreate()
+    {
+        org.mozilla.gecko.updater.UpdateService $r0;
+        android.content.Context $r1;
+        org.mozilla.gecko.CrashHandler $r2;
+        android.content.SharedPreferences $r3;
+        android.support.v4.app.NotificationManagerCompat $r4;
+        java.lang.Object $r5;
+        android.net.ConnectivityManager $r6;
+        android.net.wifi.WifiManager $r7;
+        android.net.wifi.WifiManager$WifiLock $r8;
+        int varReplacer8656, varReplacer8659, varReplacer8660;
+        java.lang.String varReplacer8657, varReplacer8658, varReplacer8661, varReplacer8662;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.updater.UpdateService;
+
+        $r1 = virtualinvoke $r0.<org.mozilla.gecko.updater.UpdateService: android.content.Context getApplicationContext()>();
+
+        $r2 = staticinvoke <org.mozilla.gecko.CrashHandler: org.mozilla.gecko.CrashHandler createDefaultCrashHandler(android.content.Context)>($r1);
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: org.mozilla.gecko.CrashHandler mCrashHandler> = $r2;
+
+        specialinvoke $r0.<android.app.IntentService: void onCreate()>();
+
+        varReplacer8658 = "UpdateService";
+
+        varReplacer8659 = 0;
+
+        $r3 = virtualinvoke $r0.<org.mozilla.gecko.updater.UpdateService: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>(varReplacer8658, varReplacer8659);
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: android.content.SharedPreferences mPrefs> = $r3;
+
+        $r4 = staticinvoke <android.support.v4.app.NotificationManagerCompat: android.support.v4.app.NotificationManagerCompat 'from'(android.content.Context)>($r0);
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: android.support.v4.app.NotificationManagerCompat mNotificationManager> = $r4;
+
+        varReplacer8661 = "connectivity";
+
+        $r5 = virtualinvoke $r0.<org.mozilla.gecko.updater.UpdateService: java.lang.Object getSystemService(java.lang.String)>(varReplacer8661);
+
+        $r6 = (android.net.ConnectivityManager) $r5;
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: android.net.ConnectivityManager mConnectivityManager> = $r6;
+
+        varReplacer8662 = "wifi";
+
+        $r5 = virtualinvoke $r0.<org.mozilla.gecko.updater.UpdateService: java.lang.Object getSystemService(java.lang.String)>(varReplacer8662);
+
+        $r7 = (android.net.wifi.WifiManager) $r5;
+
+        varReplacer8656 = 3;
+
+        varReplacer8657 = "UpdateService";
+
+        $r8 = virtualinvoke $r7.<android.net.wifi.WifiManager: android.net.wifi.WifiManager$WifiLock createWifiLock(int,java.lang.String)>(varReplacer8656, varReplacer8657);
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: android.net.wifi.WifiManager$WifiLock mWifiLock> = $r8;
+
+        varReplacer8660 = 0;
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: boolean mCancelDownload> = varReplacer8660;
+
+        return;
+    }
+
+    public void onDestroy()
+    {
+        org.mozilla.gecko.updater.UpdateService $r0;
+        boolean $z0;
+        org.mozilla.gecko.CrashHandler $r1;
+        android.net.wifi.WifiManager$WifiLock $r2;
+        null_type varReplacer8679;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.updater.UpdateService;
+
+        $r1 = $r0.<org.mozilla.gecko.updater.UpdateService: org.mozilla.gecko.CrashHandler mCrashHandler>;
+
+        virtualinvoke $r1.<org.mozilla.gecko.CrashHandler: void unregister()>();
+
+        varReplacer8679 = null;
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: org.mozilla.gecko.CrashHandler mCrashHandler> = varReplacer8679;
+
+        $r2 = $r0.<org.mozilla.gecko.updater.UpdateService: android.net.wifi.WifiManager$WifiLock mWifiLock>;
+
+        $z0 = virtualinvoke $r2.<android.net.wifi.WifiManager$WifiLock: boolean isHeld()>();
+
+        if $z0 == 0 goto label1;
+
+        $r2 = $r0.<org.mozilla.gecko.updater.UpdateService: android.net.wifi.WifiManager$WifiLock mWifiLock>;
+
+        virtualinvoke $r2.<android.net.wifi.WifiManager$WifiLock: void release()>();
+
+     label1:
+        return;
+    }
+
+    protected void onHandleIntent(android.content.Intent)
+    {
+        org.mozilla.gecko.updater.UpdateService $r0;
+        android.content.Intent $r1;
+        java.lang.String $r2, $r3, varReplacer8669, varReplacer8670, varReplacer8672, varReplacer8674, varReplacer8675, varReplacer8677;
+        boolean $z0;
+        org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy $r4, $r5;
+        int $i0, varReplacer8671, varReplacer8673, varReplacer8676, varReplacer8678;
+        android.content.SharedPreferences $r6;
+        android.content.SharedPreferences$Editor $r7;
+        java.io.File $r8;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.updater.UpdateService;
+
+        $r1 := @parameter0: android.content.Intent;
+
+        $r2 = "jp.co.jmas.full.KAITO.REGISTER_FOR_UPDATES";
+
+        $r3 = virtualinvoke $r1.<android.content.Intent: java.lang.String getAction()>();
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r3);
+
+        if $z0 == 0 goto label3;
+
+        $r4 = <org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy: org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy NONE>;
+
+        $i0 = $r4.<org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy: int value>;
+
+        varReplacer8669 = "autodownload";
+
+        $i0 = virtualinvoke $r1.<android.content.Intent: int getIntExtra(java.lang.String,int)>(varReplacer8669, $i0);
+
+        $r4 = staticinvoke <org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy: org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy get(int)>($i0);
+
+        $r5 = <org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy: org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy NONE>;
+
+        if $r4 == $r5 goto label1;
+
+        $r6 = $r0.<org.mozilla.gecko.updater.UpdateService: android.content.SharedPreferences mPrefs>;
+
+        $r7 = interfaceinvoke $r6.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        $i0 = $r4.<org.mozilla.gecko.updater.UpdateService$AutoDownloadPolicy: int value>;
+
+        varReplacer8670 = "UpdateService.autoDownloadPolicy";
+
+        interfaceinvoke $r7.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putInt(java.lang.String,int)>(varReplacer8670, $i0);
+
+        interfaceinvoke $r7.<android.content.SharedPreferences$Editor: boolean commit()>();
+
+     label1:
+        varReplacer8675 = "updateUrl";
+
+        $r2 = virtualinvoke $r1.<android.content.Intent: java.lang.String getStringExtra(java.lang.String)>(varReplacer8675);
+
+        if $r2 == null goto label2;
+
+        $r6 = $r0.<org.mozilla.gecko.updater.UpdateService: android.content.SharedPreferences mPrefs>;
+
+        $r7 = interfaceinvoke $r6.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        varReplacer8677 = "UpdateService.updateUrl";
+
+        interfaceinvoke $r7.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putString(java.lang.String,java.lang.String)>(varReplacer8677, $r2);
+
+        interfaceinvoke $r7.<android.content.SharedPreferences$Editor: boolean commit()>();
+
+     label2:
+        varReplacer8671 = 0;
+
+        specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void registerForUpdates(boolean)>(varReplacer8671);
+
+        return;
+
+     label3:
+        $r2 = "jp.co.jmas.full.KAITO.CHECK_FOR_UPDATE";
+
+        $r3 = virtualinvoke $r1.<android.content.Intent: java.lang.String getAction()>();
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r3);
+
+        if $z0 == 0 goto label4;
+
+        varReplacer8672 = "updateFlags";
+
+        varReplacer8673 = 0;
+
+        $i0 = virtualinvoke $r1.<android.content.Intent: int getIntExtra(java.lang.String,int)>(varReplacer8672, varReplacer8673);
+
+        specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void startUpdate(int)>($i0);
+
+        return;
+
+     label4:
+        $r2 = "jp.co.jmas.full.KAITO.DOWNLOAD_UPDATE";
+
+        $r3 = virtualinvoke $r1.<android.content.Intent: java.lang.String getAction()>();
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r3);
+
+        if $z0 == 0 goto label5;
+
+        varReplacer8678 = 1;
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: boolean mApplyImmediately> = varReplacer8678;
+
+        varReplacer8676 = 1;
+
+        specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void startUpdate(int)>(varReplacer8676);
+
+        return;
+
+     label5:
+        $r2 = "jp.co.jmas.full.KAITO.APPLY_UPDATE";
+
+        $r3 = virtualinvoke $r1.<android.content.Intent: java.lang.String getAction()>();
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r3);
+
+        if $z0 == 0 goto label7;
+
+        varReplacer8674 = "packagePath";
+
+        $r2 = virtualinvoke $r1.<android.content.Intent: java.lang.String getStringExtra(java.lang.String)>(varReplacer8674);
+
+        $r3 = $r2;
+
+        if $r2 != null goto label6;
+
+        $r3 = specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: java.lang.String getLastFileName()>();
+
+     label6:
+        $r8 = new java.io.File;
+
+        specialinvoke $r8.<java.io.File: void <init>(java.lang.String)>($r3);
+
+        specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void applyUpdate(java.io.File)>($r8);
+
+     label7:
+        return;
+    }
+
+    public int onStartCommand(android.content.Intent, int, int)
+    {
+        org.mozilla.gecko.updater.UpdateService $r0;
+        android.content.Intent $r1;
+        int $i0, $i1, varReplacer8665, varReplacer8666, varReplacer8668;
+        boolean $z0;
+        java.lang.String $r2, $r3, varReplacer8663, varReplacer8664;
+        java.lang.Throwable $r4;
+        null_type varReplacer8667;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.updater.UpdateService;
+
+        $r1 := @parameter0: android.content.Intent;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        entermonitor $r0;
+
+     label1:
+        $z0 = $r0.<org.mozilla.gecko.updater.UpdateService: boolean mDownloading>;
+
+        if $z0 == 0 goto label3;
+
+        $r2 = "jp.co.jmas.full.KAITO.APPLY_UPDATE";
+
+        $r3 = virtualinvoke $r1.<android.content.Intent: java.lang.String getAction()>();
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r3);
+
+        if $z0 == 0 goto label3;
+
+        varReplacer8663 = "UpdateService";
+
+        varReplacer8664 = "will apply update when download finished";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer8663, varReplacer8664);
+
+        varReplacer8668 = 1;
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: boolean mApplyImmediately> = varReplacer8668;
+
+        varReplacer8667 = null;
+
+        specialinvoke $r0.<org.mozilla.gecko.updater.UpdateService: void showDownloadNotification(java.io.File)>(varReplacer8667);
+
+     label2:
+        exitmonitor $r0;
+
+        varReplacer8666 = 3;
+
+        return varReplacer8666;
+
+     label3:
+        $r2 = "jp.co.jmas.full.KAITO.CANCEL_DOWNLOAD";
+
+        $r3 = virtualinvoke $r1.<android.content.Intent: java.lang.String getAction()>();
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r3);
+
+        if $z0 == 0 goto label6;
+
+        varReplacer8665 = 1;
+
+        $r0.<org.mozilla.gecko.updater.UpdateService: boolean mCancelDownload> = varReplacer8665;
+
+     label4:
+        goto label2;
+
+     label5:
+        $r4 := @caughtexception;
+
+        exitmonitor $r0;
+
+        throw $r4;
+
+     label6:
+        specialinvoke $r0.<android.app.IntentService: int onStartCommand(android.content.Intent,int,int)>($r1, $i0, $i1);
+
+     label7:
+        goto label2;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+        catch java.lang.Throwable from label6 to label7 with label5;
+    }
+
+    public android.os.IBinder onBind(android.content.Intent)
+    {
+        org.mozilla.gecko.updater.UpdateService this;
+        android.content.Intent parameter0;
+
+        nop;
+
+        this := @this: org.mozilla.gecko.updater.UpdateService;
+
+        parameter0 := @parameter0: android.content.Intent;
+
+        this.<org.mozilla.gecko.updater.UpdateService: android.os.IBinder ipcBinder_0> = parameter0;
+
+        this.<org.mozilla.gecko.updater.UpdateService: android.os.IBinder ipcBinder_0> = parameter0;
+
+        this.<org.mozilla.gecko.updater.UpdateService: android.os.IBinder ipcBinder_0> = parameter0;
+
+        return parameter0;
+    }
+}

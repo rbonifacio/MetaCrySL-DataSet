@@ -1,0 +1,204 @@
+public class as.arc.tools.des3.Des3 extends java.lang.Object
+{
+    private static final java.lang.String encoding;
+    private static final java.lang.String iv;
+    private static java.lang.String secretKey;
+
+    static void <clinit>()
+    {
+        java.lang.String varReplacer1340;
+
+        nop;
+
+        varReplacer1340 = "kevinhuang@asustor.com";
+
+        <as.arc.tools.des3.Des3: java.lang.String secretKey> = varReplacer1340;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        as.arc.tools.des3.Des3 $r0;
+
+        $r0 := @this: as.arc.tools.des3.Des3;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void createSecretKey()
+    {
+        javax.crypto.spec.SecretKeySpec $r0;
+        byte[] $r1;
+        java.lang.String $r2, varReplacer1345;
+        int $i0, $i1;
+        char $c2;
+        byte $b3;
+
+        nop;
+
+        $r2 = "4d89g13j4j91j27c582ji69373y788r6";
+
+        $r1 = newarray (byte)[24];
+
+        $i0 = 0;
+
+     label1:
+        $i1 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        if $i0 >= $i1 goto label2;
+
+        $i1 = lengthof $r1;
+
+        if $i0 < $i1 goto label3;
+
+     label2:
+        $r0 = new javax.crypto.spec.SecretKeySpec;
+
+        varReplacer1345 = "DESede";
+
+        specialinvoke $r0.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer1345);
+
+        $r2 = virtualinvoke $r0.<java.lang.Object: java.lang.String toString()>();
+
+        <as.arc.tools.des3.Des3: java.lang.String secretKey> = $r2;
+
+        return;
+
+     label3:
+        $c2 = virtualinvoke $r2.<java.lang.String: char charAt(int)>($i0);
+
+        $b3 = (byte) $c2;
+
+        $r1[$i0] = $b3;
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+    }
+
+    public static java.lang.String decode(java.lang.String) throws java.lang.Exception
+    {
+        java.lang.String $r0, $r3, varReplacer1342, varReplacer1343, varReplacer1344;
+        javax.crypto.spec.IvParameterSpec $r1;
+        javax.crypto.spec.DESedeKeySpec $r2;
+        byte[] $r4;
+        javax.crypto.SecretKeyFactory $r5;
+        javax.crypto.SecretKey $r6;
+        javax.crypto.Cipher $r7;
+        int varReplacer1341;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r2 = new javax.crypto.spec.DESedeKeySpec;
+
+        $r3 = <as.arc.tools.des3.Des3: java.lang.String secretKey>;
+
+        $r4 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        specialinvoke $r2.<javax.crypto.spec.DESedeKeySpec: void <init>(byte[])>($r4);
+
+        varReplacer1342 = "desede";
+
+        $r5 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer1342);
+
+        $r6 = virtualinvoke $r5.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2);
+
+        varReplacer1343 = "desede/CBC/PKCS5Padding";
+
+        $r7 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1343);
+
+        $r1 = new javax.crypto.spec.IvParameterSpec;
+
+        $r3 = "01234567";
+
+        $r4 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        specialinvoke $r1.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4);
+
+        varReplacer1341 = 2;
+
+        virtualinvoke $r7.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1341, $r6, $r1);
+
+        $r4 = staticinvoke <as.arc.tools.des3.Base64: byte[] decode(java.lang.String)>($r0);
+
+        $r4 = virtualinvoke $r7.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r4);
+
+        $r0 = new java.lang.String;
+
+        varReplacer1344 = "utf-8";
+
+        specialinvoke $r0.<java.lang.String: void <init>(byte[],java.lang.String)>($r4, varReplacer1344);
+
+        return $r0;
+    }
+
+    public static java.lang.String encode(java.lang.String) throws java.lang.Exception
+    {
+        java.lang.String $r0, $r3;
+        javax.crypto.spec.IvParameterSpec $r1;
+        javax.crypto.spec.DESedeKeySpec $r2;
+        byte[] $r4;
+        javax.crypto.SecretKeyFactory $r5;
+        javax.crypto.SecretKey $r6;
+        javax.crypto.Cipher $r7;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r2 = new javax.crypto.spec.DESedeKeySpec;
+
+        $r3 = <as.arc.tools.des3.Des3: java.lang.String secretKey>;
+
+        $r4 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        specialinvoke $r2.<javax.crypto.spec.DESedeKeySpec: void <init>(byte[])>($r4);
+
+        $r5 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>("desede");
+
+        $r6 = virtualinvoke $r5.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2);
+
+        $r7 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>("desede/CBC/PKCS5Padding");
+
+        $r1 = new javax.crypto.spec.IvParameterSpec;
+
+        $r3 = "01234567";
+
+        $r4 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        specialinvoke $r1.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4);
+
+        virtualinvoke $r7.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(1, $r6, $r1);
+
+        $r4 = virtualinvoke $r0.<java.lang.String: byte[] getBytes(java.lang.String)>("utf-8");
+
+        $r4 = virtualinvoke $r7.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r4);
+
+        $r0 = staticinvoke <as.arc.tools.des3.Base64: java.lang.String encode(byte[])>($r4);
+
+        return $r0;
+    }
+
+    public static java.lang.String getSecretKey()
+    {
+        java.lang.String r0;
+
+        r0 = <as.arc.tools.des3.Des3: java.lang.String secretKey>;
+
+        return r0;
+    }
+
+    public static void setSecretKey(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        <as.arc.tools.des3.Des3: java.lang.String secretKey> = $r0;
+
+        return;
+    }
+}

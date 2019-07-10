@@ -1,0 +1,1767 @@
+public final class jcifs.smb.SmbSession extends java.lang.Object
+{
+    private static final int CACHE_POLICY;
+    private static final java.lang.String DOMAIN;
+    private static final java.lang.String LOGON_SHARE;
+    private static final int LOOKUP_RESP_LIMIT;
+    private static final java.lang.String USERNAME;
+    static jcifs.netbios.NbtAddress[] dc_list;
+    static int dc_list_counter;
+    static long dc_list_expiration;
+    private jcifs.UniAddress address;
+    jcifs.smb.NtlmPasswordAuthentication auth;
+    int connectionState;
+    long expiration;
+    private java.net.InetAddress localAddr;
+    private int localPort;
+    java.lang.String netbiosName;
+    private int port;
+    jcifs.smb.SmbTransport transport;
+    java.util.Vector trees;
+    int uid;
+
+    static void <clinit>()
+    {
+        java.lang.String $r0, varReplacer573, varReplacer575, varReplacer577, varReplacer579, varReplacer582;
+        int $i0, varReplacer576, varReplacer580;
+        null_type varReplacer574, varReplacer578, varReplacer581, varReplacer583;
+
+        nop;
+
+        varReplacer577 = "jcifs.smb.client.logonShare";
+
+        varReplacer578 = null;
+
+        $r0 = staticinvoke <jcifs.Config: java.lang.String getProperty(java.lang.String,java.lang.String)>(varReplacer577, varReplacer578);
+
+        <jcifs.smb.SmbSession: java.lang.String LOGON_SHARE> = $r0;
+
+        varReplacer575 = "jcifs.netbios.lookupRespLimit";
+
+        varReplacer576 = 3;
+
+        $i0 = staticinvoke <jcifs.Config: int getInt(java.lang.String,int)>(varReplacer575, varReplacer576);
+
+        <jcifs.smb.SmbSession: int LOOKUP_RESP_LIMIT> = $i0;
+
+        varReplacer573 = "jcifs.smb.client.domain";
+
+        varReplacer574 = null;
+
+        $r0 = staticinvoke <jcifs.Config: java.lang.String getProperty(java.lang.String,java.lang.String)>(varReplacer573, varReplacer574);
+
+        <jcifs.smb.SmbSession: java.lang.String DOMAIN> = $r0;
+
+        varReplacer582 = "jcifs.smb.client.username";
+
+        varReplacer583 = null;
+
+        $r0 = staticinvoke <jcifs.Config: java.lang.String getProperty(java.lang.String,java.lang.String)>(varReplacer582, varReplacer583);
+
+        <jcifs.smb.SmbSession: java.lang.String USERNAME> = $r0;
+
+        varReplacer579 = "jcifs.netbios.cachePolicy";
+
+        varReplacer580 = 600;
+
+        $i0 = staticinvoke <jcifs.Config: int getInt(java.lang.String,int)>(varReplacer579, varReplacer580);
+
+        $i0 = $i0 * 60;
+
+        <jcifs.smb.SmbSession: int CACHE_POLICY> = $i0;
+
+        varReplacer581 = null;
+
+        <jcifs.smb.SmbSession: jcifs.netbios.NbtAddress[] dc_list> = varReplacer581;
+
+        return;
+    }
+
+    void <init>(jcifs.UniAddress, int, java.net.InetAddress, int, jcifs.smb.NtlmPasswordAuthentication)
+    {
+        jcifs.smb.SmbSession $r0;
+        jcifs.UniAddress $r1;
+        int $i0, $i1, varReplacer593;
+        java.net.InetAddress $r2;
+        jcifs.smb.NtlmPasswordAuthentication $r3;
+        java.util.Vector $r4;
+        null_type varReplacer592, varReplacer594;
+
+        nop;
+
+        $r0 := @this: jcifs.smb.SmbSession;
+
+        $r1 := @parameter0: jcifs.UniAddress;
+
+        $i0 := @parameter1: int;
+
+        $r2 := @parameter2: java.net.InetAddress;
+
+        $i1 := @parameter3: int;
+
+        $r3 := @parameter4: jcifs.smb.NtlmPasswordAuthentication;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer594 = null;
+
+        $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport> = varReplacer594;
+
+        varReplacer592 = null;
+
+        $r0.<jcifs.smb.SmbSession: java.lang.String netbiosName> = varReplacer592;
+
+        $r0.<jcifs.smb.SmbSession: jcifs.UniAddress address> = $r1;
+
+        $r0.<jcifs.smb.SmbSession: int port> = $i0;
+
+        $r0.<jcifs.smb.SmbSession: java.net.InetAddress localAddr> = $r2;
+
+        $r0.<jcifs.smb.SmbSession: int localPort> = $i1;
+
+        $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth> = $r3;
+
+        $r4 = new java.util.Vector;
+
+        specialinvoke $r4.<java.util.Vector: void <init>()>();
+
+        $r0.<jcifs.smb.SmbSession: java.util.Vector trees> = $r4;
+
+        varReplacer593 = 0;
+
+        $r0.<jcifs.smb.SmbSession: int connectionState> = varReplacer593;
+
+        return;
+    }
+
+    public static byte[] getChallenge(jcifs.UniAddress) throws jcifs.smb.SmbException, java.net.UnknownHostException
+    {
+        jcifs.UniAddress $r0;
+        byte[] $r1;
+
+        $r0 := @parameter0: jcifs.UniAddress;
+
+        $r1 = staticinvoke <jcifs.smb.SmbSession: byte[] getChallenge(jcifs.UniAddress,int)>($r0, 0);
+
+        return $r1;
+    }
+
+    public static byte[] getChallenge(jcifs.UniAddress, int) throws jcifs.smb.SmbException, java.net.UnknownHostException
+    {
+        jcifs.UniAddress $r0;
+        int $i0;
+        jcifs.smb.SmbTransport $r1;
+        jcifs.smb.SmbTransport$ServerData $r2;
+        byte[] r3;
+
+        $r0 := @parameter0: jcifs.UniAddress;
+
+        $i0 := @parameter1: int;
+
+        $r1 = staticinvoke <jcifs.smb.SmbTransport: jcifs.smb.SmbTransport getSmbTransport(jcifs.UniAddress,int)>($r0, $i0);
+
+        virtualinvoke $r1.<jcifs.smb.SmbTransport: void connect()>();
+
+        $r2 = $r1.<jcifs.smb.SmbTransport: jcifs.smb.SmbTransport$ServerData server>;
+
+        r3 = $r2.<jcifs.smb.SmbTransport$ServerData: byte[] encryptionKey>;
+
+        return r3;
+    }
+
+    public static jcifs.smb.NtlmChallenge getChallengeForDomain() throws jcifs.smb.SmbException, java.net.UnknownHostException
+    {
+        int $i0, $i2, $i5, $i6, $i7;
+        jcifs.smb.SmbException $r0;
+        java.lang.String $r1, $r2;
+        long $l1, $l3;
+        byte $b4;
+        jcifs.netbios.NbtAddress[] $r3;
+        jcifs.netbios.NbtAddress $r4;
+        jcifs.smb.NtlmChallenge $r5;
+        jcifs.util.LogStream $r6;
+        java.lang.Throwable $r7;
+        java.lang.StringBuilder $r8;
+        java.net.UnknownHostException $r9;
+
+        $r1 = <jcifs.smb.SmbSession: java.lang.String DOMAIN>;
+
+        if $r1 != null goto label01;
+
+        $r0 = new jcifs.smb.SmbException;
+
+        specialinvoke $r0.<jcifs.smb.SmbException: void <init>(java.lang.String)>("A domain was not specified");
+
+        throw $r0;
+
+     label01:
+        $r1 = <jcifs.smb.SmbSession: java.lang.String DOMAIN>;
+
+        entermonitor $r1;
+
+     label02:
+        $l1 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $i2 = 1;
+
+     label03:
+        $l3 = <jcifs.smb.SmbSession: long dc_list_expiration>;
+
+        $b4 = $l3 cmp $l1;
+
+        if $b4 >= 0 goto label04;
+
+        $r2 = <jcifs.smb.SmbSession: java.lang.String DOMAIN>;
+
+        $r3 = staticinvoke <jcifs.netbios.NbtAddress: jcifs.netbios.NbtAddress[] getAllByName(java.lang.String,int,java.lang.String,java.net.InetAddress)>($r2, 28, null, null);
+
+        $i5 = <jcifs.smb.SmbSession: int CACHE_POLICY>;
+
+        $l3 = (long) $i5;
+
+        $l3 = $l3 * 1000L;
+
+        $l3 = $l3 + $l1;
+
+        <jcifs.smb.SmbSession: long dc_list_expiration> = $l3;
+
+        if $r3 == null goto label11;
+
+        $i5 = lengthof $r3;
+
+        if $i5 <= 0 goto label11;
+
+        <jcifs.smb.SmbSession: jcifs.netbios.NbtAddress[] dc_list> = $r3;
+
+     label04:
+        $r3 = <jcifs.smb.SmbSession: jcifs.netbios.NbtAddress[] dc_list>;
+
+        $i5 = lengthof $r3;
+
+        $i6 = <jcifs.smb.SmbSession: int LOOKUP_RESP_LIMIT>;
+
+        $i5 = staticinvoke <java.lang.Math: int min(int,int)>($i5, $i6);
+
+        $i6 = 0;
+
+     label05:
+        if $i6 >= $i5 goto label18;
+
+        $i0 = <jcifs.smb.SmbSession: int dc_list_counter>;
+
+        $i7 = $i0 + 1;
+
+        <jcifs.smb.SmbSession: int dc_list_counter> = $i7;
+
+        $i0 = $i0 % $i5;
+
+        $r3 = <jcifs.smb.SmbSession: jcifs.netbios.NbtAddress[] dc_list>;
+
+        $r4 = $r3[$i0];
+
+     label06:
+        if $r4 == null goto label17;
+
+     label07:
+        $r3 = <jcifs.smb.SmbSession: jcifs.netbios.NbtAddress[] dc_list>;
+
+        $r4 = $r3[$i0];
+
+     label08:
+        $r5 = staticinvoke <jcifs.smb.SmbSession: jcifs.smb.NtlmChallenge interrogate(jcifs.netbios.NbtAddress)>($r4);
+
+     label09:
+        exitmonitor $r1;
+
+     label10:
+        return $r5;
+
+     label11:
+        $l3 = 900000L + $l1;
+
+        <jcifs.smb.SmbSession: long dc_list_expiration> = $l3;
+
+        $r6 = <jcifs.smb.SmbTransport: jcifs.util.LogStream log>;
+
+        $i5 = <jcifs.util.LogStream: int level>;
+
+        if $i5 < 2 goto label04;
+
+        $r6 = <jcifs.smb.SmbTransport: jcifs.util.LogStream log>;
+
+        virtualinvoke $r6.<jcifs.util.LogStream: void println(java.lang.String)>("Failed to retrieve DC list from WINS");
+
+        goto label04;
+
+     label12:
+        $r7 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label13:
+        throw $r7;
+
+     label14:
+        $r0 := @caughtexception;
+
+     label15:
+        $r6 = <jcifs.smb.SmbTransport: jcifs.util.LogStream log>;
+
+        $i7 = <jcifs.util.LogStream: int level>;
+
+        if $i7 < 2 goto label16;
+
+        $r6 = <jcifs.smb.SmbTransport: jcifs.util.LogStream log>;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed validate DC: ");
+
+        $r3 = <jcifs.smb.SmbSession: jcifs.netbios.NbtAddress[] dc_list>;
+
+        $r4 = $r3[$i0];
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        $r2 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r6.<jcifs.util.LogStream: void println(java.lang.String)>($r2);
+
+        $r6 = <jcifs.smb.SmbTransport: jcifs.util.LogStream log>;
+
+        $i7 = <jcifs.util.LogStream: int level>;
+
+        if $i7 <= 2 goto label16;
+
+        $r6 = <jcifs.smb.SmbTransport: jcifs.util.LogStream log>;
+
+        virtualinvoke $r0.<jcifs.smb.SmbException: void printStackTrace(java.io.PrintStream)>($r6);
+
+     label16:
+        $r3 = <jcifs.smb.SmbSession: jcifs.netbios.NbtAddress[] dc_list>;
+
+        $r3[$i0] = null;
+
+     label17:
+        $i6 = $i6 + 1;
+
+        goto label05;
+
+     label18:
+        <jcifs.smb.SmbSession: long dc_list_expiration> = 0L;
+
+        $i5 = $i2 + -1;
+
+        if $i2 > 0 goto label20;
+
+        $l1 = 900000L + $l1;
+
+        <jcifs.smb.SmbSession: long dc_list_expiration> = $l1;
+
+        exitmonitor $r1;
+
+     label19:
+        $r9 = new java.net.UnknownHostException;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to negotiate with a suitable domain controller for ");
+
+        $r1 = <jcifs.smb.SmbSession: java.lang.String DOMAIN>;
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r9.<java.net.UnknownHostException: void <init>(java.lang.String)>($r1);
+
+        throw $r9;
+
+     label20:
+        $i2 = $i5;
+
+        goto label03;
+
+        catch java.lang.Throwable from label02 to label06 with label12;
+        catch jcifs.smb.SmbException from label08 to label09 with label14;
+        catch java.lang.Throwable from label07 to label09 with label12;
+        catch java.lang.Throwable from label09 to label10 with label12;
+        catch java.lang.Throwable from label11 to label13 with label12;
+        catch java.lang.Throwable from label15 to label19 with label12;
+    }
+
+    private static jcifs.smb.NtlmChallenge interrogate(jcifs.netbios.NbtAddress) throws jcifs.smb.SmbException
+    {
+        jcifs.netbios.NbtAddress $r0;
+        jcifs.UniAddress $r1;
+        jcifs.smb.SmbTransport $r2;
+        java.lang.String $r3;
+        jcifs.util.LogStream $r4;
+        int $i0;
+        jcifs.smb.NtlmChallenge $r5;
+        jcifs.smb.SmbTransport$ServerData $r6;
+        byte[] $r7;
+        jcifs.smb.NtlmPasswordAuthentication $r8;
+        jcifs.smb.SmbSession $r9;
+        jcifs.smb.SmbTree $r10;
+
+        $r0 := @parameter0: jcifs.netbios.NbtAddress;
+
+        $r1 = new jcifs.UniAddress;
+
+        specialinvoke $r1.<jcifs.UniAddress: void <init>(java.lang.Object)>($r0);
+
+        $r2 = staticinvoke <jcifs.smb.SmbTransport: jcifs.smb.SmbTransport getSmbTransport(jcifs.UniAddress,int)>($r1, 0);
+
+        $r3 = <jcifs.smb.SmbSession: java.lang.String USERNAME>;
+
+        if $r3 != null goto label2;
+
+        virtualinvoke $r2.<jcifs.smb.SmbTransport: void connect()>();
+
+        $r4 = <jcifs.smb.SmbTransport: jcifs.util.LogStream log>;
+
+        $i0 = <jcifs.util.LogStream: int level>;
+
+        if $i0 < 3 goto label1;
+
+        $r4 = <jcifs.smb.SmbTransport: jcifs.util.LogStream log>;
+
+        virtualinvoke $r4.<jcifs.util.LogStream: void println(java.lang.String)>("Default credentials (jcifs.smb.client.username/password) not specified. SMB signing may not work propertly.  Skipping DC interrogation.");
+
+     label1:
+        $r5 = new jcifs.smb.NtlmChallenge;
+
+        $r6 = $r2.<jcifs.smb.SmbTransport: jcifs.smb.SmbTransport$ServerData server>;
+
+        $r7 = $r6.<jcifs.smb.SmbTransport$ServerData: byte[] encryptionKey>;
+
+        specialinvoke $r5.<jcifs.smb.NtlmChallenge: void <init>(byte[],jcifs.UniAddress)>($r7, $r1);
+
+        return $r5;
+
+     label2:
+        $r8 = <jcifs.smb.NtlmPasswordAuthentication: jcifs.smb.NtlmPasswordAuthentication DEFAULT>;
+
+        $r9 = virtualinvoke $r2.<jcifs.smb.SmbTransport: jcifs.smb.SmbSession getSmbSession(jcifs.smb.NtlmPasswordAuthentication)>($r8);
+
+        $r3 = <jcifs.smb.SmbSession: java.lang.String LOGON_SHARE>;
+
+        $r10 = virtualinvoke $r9.<jcifs.smb.SmbSession: jcifs.smb.SmbTree getSmbTree(java.lang.String,java.lang.String)>($r3, null);
+
+        virtualinvoke $r10.<jcifs.smb.SmbTree: void treeConnect(jcifs.smb.ServerMessageBlock,jcifs.smb.ServerMessageBlock)>(null, null);
+
+        goto label1;
+    }
+
+    public static void logon(jcifs.UniAddress, int, jcifs.smb.NtlmPasswordAuthentication) throws jcifs.smb.SmbException
+    {
+        jcifs.UniAddress $r0;
+        int $i0;
+        jcifs.smb.NtlmPasswordAuthentication $r1;
+        jcifs.smb.Trans2FindFirst2 $r2;
+        jcifs.smb.Trans2FindFirst2Response $r3;
+        jcifs.smb.SmbTransport $r4;
+        jcifs.smb.SmbSession $r5;
+        java.lang.String $r6;
+        jcifs.smb.SmbTree $r7;
+
+        $r0 := @parameter0: jcifs.UniAddress;
+
+        $i0 := @parameter1: int;
+
+        $r1 := @parameter2: jcifs.smb.NtlmPasswordAuthentication;
+
+        $r4 = staticinvoke <jcifs.smb.SmbTransport: jcifs.smb.SmbTransport getSmbTransport(jcifs.UniAddress,int)>($r0, $i0);
+
+        $r5 = virtualinvoke $r4.<jcifs.smb.SmbTransport: jcifs.smb.SmbSession getSmbSession(jcifs.smb.NtlmPasswordAuthentication)>($r1);
+
+        $r6 = <jcifs.smb.SmbSession: java.lang.String LOGON_SHARE>;
+
+        $r7 = virtualinvoke $r5.<jcifs.smb.SmbSession: jcifs.smb.SmbTree getSmbTree(java.lang.String,java.lang.String)>($r6, null);
+
+        $r6 = <jcifs.smb.SmbSession: java.lang.String LOGON_SHARE>;
+
+        if $r6 != null goto label1;
+
+        virtualinvoke $r7.<jcifs.smb.SmbTree: void treeConnect(jcifs.smb.ServerMessageBlock,jcifs.smb.ServerMessageBlock)>(null, null);
+
+        return;
+
+     label1:
+        $r2 = new jcifs.smb.Trans2FindFirst2;
+
+        specialinvoke $r2.<jcifs.smb.Trans2FindFirst2: void <init>(java.lang.String,java.lang.String,int)>("\\", "*", 16);
+
+        $r3 = new jcifs.smb.Trans2FindFirst2Response;
+
+        specialinvoke $r3.<jcifs.smb.Trans2FindFirst2Response: void <init>()>();
+
+        virtualinvoke $r7.<jcifs.smb.SmbTree: void send(jcifs.smb.ServerMessageBlock,jcifs.smb.ServerMessageBlock)>($r2, $r3);
+
+        return;
+    }
+
+    public static void logon(jcifs.UniAddress, jcifs.smb.NtlmPasswordAuthentication) throws jcifs.smb.SmbException
+    {
+        jcifs.UniAddress $r0;
+        jcifs.smb.NtlmPasswordAuthentication $r1;
+
+        $r0 := @parameter0: jcifs.UniAddress;
+
+        $r1 := @parameter1: jcifs.smb.NtlmPasswordAuthentication;
+
+        staticinvoke <jcifs.smb.SmbSession: void logon(jcifs.UniAddress,int,jcifs.smb.NtlmPasswordAuthentication)>($r0, 0, $r1);
+
+        return;
+    }
+
+    jcifs.smb.SmbTree getSmbTree(java.lang.String, java.lang.String)
+    {
+        jcifs.smb.SmbSession $r0;
+        java.lang.String $r1, $r2;
+        java.util.Vector $r3;
+        java.util.Enumeration $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+        jcifs.smb.SmbTree $r6;
+        java.lang.Throwable $r7;
+
+        nop;
+
+        $r0 := @this: jcifs.smb.SmbSession;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        entermonitor $r0;
+
+        if $r2 != null goto label2;
+
+     label1:
+        $r2 = "IPC$";
+
+     label2:
+        $r3 = $r0.<jcifs.smb.SmbSession: java.util.Vector trees>;
+
+        $r4 = virtualinvoke $r3.<java.util.Vector: java.util.Enumeration elements()>();
+
+     label3:
+        $z0 = interfaceinvoke $r4.<java.util.Enumeration: boolean hasMoreElements()>();
+
+        if $z0 == 0 goto label6;
+
+        $r5 = interfaceinvoke $r4.<java.util.Enumeration: java.lang.Object nextElement()>();
+
+        $r6 = (jcifs.smb.SmbTree) $r5;
+
+        $z0 = virtualinvoke $r6.<jcifs.smb.SmbTree: boolean matches(java.lang.String,java.lang.String)>($r2, $r1);
+
+     label4:
+        if $z0 == 0 goto label3;
+
+     label5:
+        exitmonitor $r0;
+
+        return $r6;
+
+     label6:
+        $r6 = new jcifs.smb.SmbTree;
+
+        specialinvoke $r6.<jcifs.smb.SmbTree: void <init>(jcifs.smb.SmbSession,java.lang.String,java.lang.String)>($r0, $r2, $r1);
+
+        $r3 = $r0.<jcifs.smb.SmbSession: java.util.Vector trees>;
+
+        virtualinvoke $r3.<java.util.Vector: void addElement(java.lang.Object)>($r6);
+
+     label7:
+        goto label5;
+
+     label8:
+        $r7 := @caughtexception;
+
+        exitmonitor $r0;
+
+        throw $r7;
+
+        catch java.lang.Throwable from label1 to label4 with label8;
+        catch java.lang.Throwable from label6 to label7 with label8;
+    }
+
+    void logoff(boolean)
+    {
+        jcifs.smb.SmbSession $r0;
+        boolean $z0, $z1;
+        jcifs.smb.SmbComLogoffAndX $r1;
+        jcifs.smb.SmbTransport $r2, $r8;
+        int $i0, varReplacer586, varReplacer587, varReplacer591;
+        java.util.Vector $r3;
+        java.util.Enumeration $r4;
+        java.lang.Object $r5;
+        jcifs.smb.SmbTree $r6;
+        java.lang.Throwable $r7;
+        jcifs.smb.SmbTransport$ServerData $r9;
+        jcifs.smb.SmbException $r10;
+        null_type varReplacer588, varReplacer589, varReplacer590;
+
+        nop;
+
+        $r0 := @this: jcifs.smb.SmbSession;
+
+        $z0 := @parameter0: boolean;
+
+        $r2 = virtualinvoke $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport()>();
+
+        entermonitor $r2;
+
+     label01:
+        $i0 = $r0.<jcifs.smb.SmbSession: int connectionState>;
+
+        if $i0 == 2 goto label03;
+
+        exitmonitor $r2;
+
+     label02:
+        return;
+
+     label03:
+        varReplacer586 = 3;
+
+        $r0.<jcifs.smb.SmbSession: int connectionState> = varReplacer586;
+
+        varReplacer589 = null;
+
+        $r0.<jcifs.smb.SmbSession: java.lang.String netbiosName> = varReplacer589;
+
+        $r3 = $r0.<jcifs.smb.SmbSession: java.util.Vector trees>;
+
+        $r4 = virtualinvoke $r3.<java.util.Vector: java.util.Enumeration elements()>();
+
+     label04:
+        $z1 = interfaceinvoke $r4.<java.util.Enumeration: boolean hasMoreElements()>();
+
+        if $z1 == 0 goto label07;
+
+        $r5 = interfaceinvoke $r4.<java.util.Enumeration: java.lang.Object nextElement()>();
+
+        $r6 = (jcifs.smb.SmbTree) $r5;
+
+        virtualinvoke $r6.<jcifs.smb.SmbTree: void treeDisconnect(boolean)>($z0);
+
+        goto label04;
+
+     label05:
+        $r7 := @caughtexception;
+
+        exitmonitor $r2;
+
+     label06:
+        throw $r7;
+
+     label07:
+        if $z0 != 0 goto label12;
+
+     label08:
+        $r8 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+        $r9 = $r8.<jcifs.smb.SmbTransport: jcifs.smb.SmbTransport$ServerData server>;
+
+        $i0 = $r9.<jcifs.smb.SmbTransport$ServerData: int security>;
+
+        if $i0 == 0 goto label12;
+
+        $r1 = new jcifs.smb.SmbComLogoffAndX;
+
+        varReplacer588 = null;
+
+        specialinvoke $r1.<jcifs.smb.SmbComLogoffAndX: void <init>(jcifs.smb.ServerMessageBlock)>(varReplacer588);
+
+        $i0 = $r0.<jcifs.smb.SmbSession: int uid>;
+
+        $r1.<jcifs.smb.SmbComLogoffAndX: int uid> = $i0;
+
+     label09:
+        $r8 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+     label10:
+        varReplacer590 = null;
+
+        virtualinvoke $r8.<jcifs.smb.SmbTransport: void send(jcifs.smb.ServerMessageBlock,jcifs.smb.ServerMessageBlock)>($r1, varReplacer590);
+
+     label11:
+        varReplacer587 = 0;
+
+        $r0.<jcifs.smb.SmbSession: int uid> = varReplacer587;
+
+     label12:
+        varReplacer591 = 0;
+
+        $r0.<jcifs.smb.SmbSession: int connectionState> = varReplacer591;
+
+        $r8 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+        virtualinvoke $r8.<java.lang.Object: void notifyAll()>();
+
+        exitmonitor $r2;
+
+     label13:
+        return;
+
+     label14:
+        $r10 := @caughtexception;
+
+        goto label11;
+
+        catch java.lang.Throwable from label01 to label02 with label05;
+        catch java.lang.Throwable from label03 to label06 with label05;
+        catch java.lang.Throwable from label08 to label09 with label05;
+        catch jcifs.smb.SmbException from label10 to label11 with label14;
+        catch java.lang.Throwable from label09 to label11 with label05;
+        catch java.lang.Throwable from label11 to label13 with label05;
+    }
+
+    boolean matches(jcifs.smb.NtlmPasswordAuthentication)
+    {
+        jcifs.smb.SmbSession $r0;
+        jcifs.smb.NtlmPasswordAuthentication $r1, $r2;
+        boolean $z0;
+        int varReplacer584, varReplacer585;
+
+        nop;
+
+        $r0 := @this: jcifs.smb.SmbSession;
+
+        $r1 := @parameter0: jcifs.smb.NtlmPasswordAuthentication;
+
+        $r2 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+        if $r2 == $r1 goto label1;
+
+        $r2 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+        $z0 = virtualinvoke $r2.<jcifs.smb.NtlmPasswordAuthentication: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        varReplacer584 = 1;
+
+        return varReplacer584;
+
+     label2:
+        varReplacer585 = 0;
+
+        return varReplacer585;
+    }
+
+    void send(jcifs.smb.ServerMessageBlock, jcifs.smb.ServerMessageBlock) throws jcifs.smb.SmbException
+    {
+        jcifs.smb.SmbSession $r0;
+        jcifs.smb.ServerMessageBlock $r1, $r2;
+        jcifs.smb.SmbException $r3;
+        long $l0, $l1;
+        jcifs.smb.SmbTransport $r4, $r9;
+        int $i2, varReplacer5655, varReplacer5656;
+        boolean $z0;
+        jcifs.smb.SmbComTreeConnectAndX $r5;
+        java.lang.String $r6, varReplacer5653, varReplacer5654, varReplacer5657;
+        java.lang.StringBuilder $r7;
+        jcifs.smb.NtlmPasswordAuthentication $r8;
+        java.lang.Throwable $r10;
+        null_type varReplacer5658;
+
+        nop;
+
+        $r0 := @this: jcifs.smb.SmbSession;
+
+        $r1 := @parameter0: jcifs.smb.ServerMessageBlock;
+
+        $r2 := @parameter1: jcifs.smb.ServerMessageBlock;
+
+        $r4 = virtualinvoke $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport()>();
+
+        entermonitor $r4;
+
+        if $r2 == null goto label02;
+
+     label01:
+        varReplacer5656 = 0;
+
+        $r2.<jcifs.smb.ServerMessageBlock: boolean received> = varReplacer5656;
+
+     label02:
+        $l1 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $i2 = <jcifs.smb.SmbTransport: int SO_TIMEOUT>;
+
+        $l0 = (long) $i2;
+
+        $l0 = $l1 + $l0;
+
+        $r0.<jcifs.smb.SmbSession: long expiration> = $l0;
+
+        virtualinvoke $r0.<jcifs.smb.SmbSession: void sessionSetup(jcifs.smb.ServerMessageBlock,jcifs.smb.ServerMessageBlock)>($r1, $r2);
+
+        if $r2 == null goto label04;
+
+        $z0 = $r2.<jcifs.smb.ServerMessageBlock: boolean received>;
+
+        if $z0 == 0 goto label04;
+
+        exitmonitor $r4;
+
+     label03:
+        return;
+
+     label04:
+        $z0 = $r1 instanceof jcifs.smb.SmbComTreeConnectAndX;
+
+        if $z0 == 0 goto label05;
+
+        $r5 = (jcifs.smb.SmbComTreeConnectAndX) $r1;
+
+        $r6 = $r0.<jcifs.smb.SmbSession: java.lang.String netbiosName>;
+
+        if $r6 == null goto label05;
+
+        $r6 = $r5.<jcifs.smb.SmbComTreeConnectAndX: java.lang.String path>;
+
+        varReplacer5653 = "\\IPC$";
+
+        $z0 = virtualinvoke $r6.<java.lang.String: boolean endsWith(java.lang.String)>(varReplacer5653);
+
+        if $z0 == 0 goto label05;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer5657 = "\\\\";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer5657);
+
+        $r6 = $r0.<jcifs.smb.SmbSession: java.lang.String netbiosName>;
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        varReplacer5654 = "\\IPC$";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer5654);
+
+        $r6 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r5.<jcifs.smb.SmbComTreeConnectAndX: java.lang.String path> = $r6;
+
+     label05:
+        $i2 = $r0.<jcifs.smb.SmbSession: int uid>;
+
+        $r1.<jcifs.smb.ServerMessageBlock: int uid> = $i2;
+
+        $r8 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+        $r1.<jcifs.smb.ServerMessageBlock: jcifs.smb.NtlmPasswordAuthentication auth> = $r8;
+
+     label06:
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+     label07:
+        virtualinvoke $r9.<jcifs.smb.SmbTransport: void send(jcifs.smb.ServerMessageBlock,jcifs.smb.ServerMessageBlock)>($r1, $r2);
+
+     label08:
+        exitmonitor $r4;
+
+     label09:
+        return;
+
+     label10:
+        $r10 := @caughtexception;
+
+        exitmonitor $r4;
+
+     label11:
+        throw $r10;
+
+     label12:
+        $r3 := @caughtexception;
+
+     label13:
+        $z0 = $r1 instanceof jcifs.smb.SmbComTreeConnectAndX;
+
+        if $z0 == 0 goto label14;
+
+        varReplacer5655 = 1;
+
+        virtualinvoke $r0.<jcifs.smb.SmbSession: void logoff(boolean)>(varReplacer5655);
+
+     label14:
+        varReplacer5658 = null;
+
+        $r1.<jcifs.smb.ServerMessageBlock: jcifs.smb.SigningDigest digest> = varReplacer5658;
+
+        throw $r3;
+
+     label15:
+        nop;
+
+        catch java.lang.Throwable from label01 to label03 with label10;
+        catch java.lang.Throwable from label04 to label06 with label10;
+        catch jcifs.smb.SmbException from label07 to label08 with label12;
+        catch java.lang.Throwable from label06 to label08 with label10;
+        catch java.lang.Throwable from label08 to label09 with label10;
+        catch java.lang.Throwable from label10 to label11 with label10;
+        catch java.lang.Throwable from label13 to label15 with label10;
+    }
+
+    void sessionSetup(jcifs.smb.ServerMessageBlock, jcifs.smb.ServerMessageBlock) throws jcifs.smb.SmbException
+    {
+        jcifs.smb.SmbSession $r0, $r20;
+        jcifs.smb.ServerMessageBlock $r1, $r2;
+        java.lang.Throwable $r3, $r11, $r16, $r32;
+        jcifs.smb.NtlmContext $r4, $r6;
+        jcifs.smb.SmbTransport $r5, $r9;
+        jcifs.smb.SmbException $r7, $r15, $r27, $r28, $r30;
+        byte[] $r8, $r25;
+        byte $b0;
+        int $i1, varReplacer5659, varReplacer5660, varReplacer5661, varReplacer5666, varReplacer5667, varReplacer5668, varReplacer5669, varReplacer5670, varReplacer5674, varReplacer5675, varReplacer5677, varReplacer5678, varReplacer5679, varReplacer5680, varReplacer5681, varReplacer5682;
+        java.lang.String $r10, $r22, varReplacer5662, varReplacer5672, varReplacer5673;
+        jcifs.util.LogStream $r12;
+        java.lang.StringBuilder $r13, r33;
+        jcifs.smb.NtlmPasswordAuthentication $r14, $r17;
+        boolean $z0;
+        jcifs.smb.SmbComSessionSetupAndX $r18, r34;
+        jcifs.smb.SmbComSessionSetupAndXResponse $r19, r35;
+        jcifs.smb.SmbTree $r21;
+        jcifs.smb.SmbTransport$ServerData $r23;
+        jcifs.smb.SmbAuthException $r24, $r29;
+        jcifs.smb.SigningDigest $r26, r36;
+        java.lang.Exception $r31;
+        java.lang.InterruptedException r37;
+        null_type varReplacer5663, varReplacer5664, varReplacer5665, varReplacer5671, varReplacer5676;
+
+        nop;
+
+        $r0 := @this: jcifs.smb.SmbSession;
+
+        $r1 := @parameter0: jcifs.smb.ServerMessageBlock;
+
+        $r2 := @parameter1: jcifs.smb.ServerMessageBlock;
+
+        $r5 = virtualinvoke $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport()>();
+
+        entermonitor $r5;
+
+        $r6 = null;
+
+        $r7 = null;
+
+     label001:
+        $r8 = newarray (byte)[0];
+
+        $b0 = 10;
+
+     label002:
+        $i1 = $r0.<jcifs.smb.SmbSession: int connectionState>;
+
+        if $i1 == 0 goto label012;
+
+        $i1 = $r0.<jcifs.smb.SmbSession: int connectionState>;
+
+        if $i1 == 2 goto label003;
+
+        $i1 = $r0.<jcifs.smb.SmbSession: int connectionState>;
+
+        if $i1 != 3 goto label005;
+
+     label003:
+        exitmonitor $r5;
+
+     label004:
+        return;
+
+     label005:
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+     label006:
+        virtualinvoke $r9.<java.lang.Object: void wait()>();
+
+     label007:
+        goto label002;
+
+     label008:
+        $r3 := @caughtexception;
+
+     label009:
+        $r27 = new jcifs.smb.SmbException;
+
+        r37 = (java.lang.InterruptedException) $r3;
+
+        $r10 = virtualinvoke r37.<java.lang.InterruptedException: java.lang.String getMessage()>();
+
+        specialinvoke $r27.<jcifs.smb.SmbException: void <init>(java.lang.String,java.lang.Throwable)>($r10, $r3);
+
+        throw $r27;
+
+     label010:
+        $r11 := @caughtexception;
+
+        exitmonitor $r5;
+
+     label011:
+        throw $r11;
+
+     label012:
+        varReplacer5669 = 1;
+
+        $r0.<jcifs.smb.SmbSession: int connectionState> = varReplacer5669;
+
+     label013:
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+     label014:
+        virtualinvoke $r9.<jcifs.smb.SmbTransport: void connect()>();
+
+     label015:
+        $r12 = <jcifs.smb.SmbTransport: jcifs.util.LogStream log>;
+
+        $i1 = <jcifs.util.LogStream: int level>;
+
+        if $i1 < 4 goto label021;
+
+        $r12 = <jcifs.smb.SmbTransport: jcifs.util.LogStream log>;
+
+        r33 = new java.lang.StringBuilder;
+
+        $r13 = r33;
+
+     label016:
+        specialinvoke r33.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer5662 = "sessionSetup: accountName=";
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer5662);
+
+     label017:
+        $r14 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+        $r10 = $r14.<jcifs.smb.NtlmPasswordAuthentication: java.lang.String username>;
+
+     label018:
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        varReplacer5672 = ",primaryDomain=";
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer5672);
+
+     label019:
+        $r14 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+        $r10 = $r14.<jcifs.smb.NtlmPasswordAuthentication: java.lang.String domain>;
+
+     label020:
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        $r10 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r12.<jcifs.util.LogStream: void println(java.lang.String)>($r10);
+
+     label021:
+        varReplacer5678 = 0;
+
+        $r0.<jcifs.smb.SmbSession: int uid> = varReplacer5678;
+
+     label022:
+        $r4 = $r6;
+
+        lookupswitch($b0)
+        {
+            case 10: goto label029;
+            case 20: goto label065;
+            default: goto label023;
+        };
+
+     label023:
+        $r27 = new jcifs.smb.SmbException;
+
+        $r7 = $r27;
+
+        r33 = new java.lang.StringBuilder;
+
+        $r13 = r33;
+
+     label024:
+        specialinvoke r33.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer5673 = "Unexpected session setup state: ";
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer5673);
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($b0);
+
+        $r10 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r27.<jcifs.smb.SmbException: void <init>(java.lang.String)>($r10);
+
+        throw $r7;
+
+     label025:
+        $r15 := @caughtexception;
+
+     label026:
+        varReplacer5677 = 1;
+
+        virtualinvoke $r0.<jcifs.smb.SmbSession: void logoff(boolean)>(varReplacer5677);
+
+        varReplacer5660 = 0;
+
+        $r0.<jcifs.smb.SmbSession: int connectionState> = varReplacer5660;
+
+        throw $r15;
+
+     label027:
+        $r16 := @caughtexception;
+
+     label028:
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+        virtualinvoke $r9.<java.lang.Object: void notifyAll()>();
+
+        throw $r16;
+
+     label029:
+        $r14 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+        $r17 = <jcifs.smb.NtlmPasswordAuthentication: jcifs.smb.NtlmPasswordAuthentication ANONYMOUS>;
+
+        if $r14 == $r17 goto label035;
+
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+     label030:
+        varReplacer5679 = -2147483648;
+
+        $z0 = virtualinvoke $r9.<jcifs.smb.SmbTransport: boolean hasCapability(int)>(varReplacer5679);
+
+     label031:
+        if $z0 == 0 goto label035;
+
+        $b0 = 20;
+
+     label032:
+        if $b0 != 0 goto label022;
+
+     label033:
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+        virtualinvoke $r9.<java.lang.Object: void notifyAll()>();
+
+        exitmonitor $r5;
+
+     label034:
+        return;
+
+     label035:
+        r34 = new jcifs.smb.SmbComSessionSetupAndX;
+
+        $r18 = r34;
+
+        $r14 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+     label036:
+        specialinvoke r34.<jcifs.smb.SmbComSessionSetupAndX: void <init>(jcifs.smb.SmbSession,jcifs.smb.ServerMessageBlock,java.lang.Object)>($r0, $r1, $r14);
+
+     label037:
+        r35 = new jcifs.smb.SmbComSessionSetupAndXResponse;
+
+        $r19 = r35;
+
+     label038:
+        specialinvoke r35.<jcifs.smb.SmbComSessionSetupAndXResponse: void <init>(jcifs.smb.ServerMessageBlock)>($r2);
+
+     label039:
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+        $r14 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+     label040:
+        $z0 = virtualinvoke $r9.<jcifs.smb.SmbTransport: boolean isSignatureSetupRequired(jcifs.smb.NtlmPasswordAuthentication)>($r14);
+
+     label041:
+        if $z0 == 0 goto label045;
+
+        $r14 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+        $z0 = $r14.<jcifs.smb.NtlmPasswordAuthentication: boolean hashesExternal>;
+
+        if $z0 == 0 goto label053;
+
+        $r10 = <jcifs.smb.NtlmPasswordAuthentication: java.lang.String DEFAULT_PASSWORD>;
+
+        if $r10 == "" goto label053;
+
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+        $r14 = <jcifs.smb.NtlmPasswordAuthentication: jcifs.smb.NtlmPasswordAuthentication DEFAULT>;
+
+     label042:
+        $r20 = virtualinvoke $r9.<jcifs.smb.SmbTransport: jcifs.smb.SmbSession getSmbSession(jcifs.smb.NtlmPasswordAuthentication)>($r14);
+
+     label043:
+        $r10 = <jcifs.smb.SmbSession: java.lang.String LOGON_SHARE>;
+
+     label044:
+        varReplacer5671 = null;
+
+        $r21 = virtualinvoke $r20.<jcifs.smb.SmbSession: jcifs.smb.SmbTree getSmbTree(java.lang.String,java.lang.String)>($r10, varReplacer5671);
+
+        varReplacer5663 = null;
+
+        varReplacer5664 = null;
+
+        virtualinvoke $r21.<jcifs.smb.SmbTree: void treeConnect(jcifs.smb.ServerMessageBlock,jcifs.smb.ServerMessageBlock)>(varReplacer5663, varReplacer5663);
+
+     label045:
+        $r14 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+        $r18.<jcifs.smb.SmbComSessionSetupAndX: jcifs.smb.NtlmPasswordAuthentication auth> = $r14;
+
+     label046:
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+     label047:
+        virtualinvoke $r9.<jcifs.smb.SmbTransport: void send(jcifs.smb.ServerMessageBlock,jcifs.smb.ServerMessageBlock)>($r18, $r19);
+
+     label048:
+        $z0 = $r19.<jcifs.smb.SmbComSessionSetupAndXResponse: boolean isLoggedInAsGuest>;
+
+        if $z0 == 0 goto label061;
+
+        $r10 = "GUEST";
+
+        $r14 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+        $r22 = $r14.<jcifs.smb.NtlmPasswordAuthentication: java.lang.String username>;
+
+     label049:
+        $z0 = virtualinvoke $r10.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>($r22);
+
+     label050:
+        if $z0 != 0 goto label061;
+
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+        $r23 = $r9.<jcifs.smb.SmbTransport: jcifs.smb.SmbTransport$ServerData server>;
+
+        $i1 = $r23.<jcifs.smb.SmbTransport$ServerData: int security>;
+
+        if $i1 == 0 goto label061;
+
+        $r14 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+        $r17 = <jcifs.smb.NtlmPasswordAuthentication: jcifs.smb.NtlmPasswordAuthentication ANONYMOUS>;
+
+        if $r14 == $r17 goto label061;
+
+        $r29 = new jcifs.smb.SmbAuthException;
+
+        $r24 = $r29;
+
+     label051:
+        varReplacer5666 = -1073741715;
+
+        specialinvoke $r29.<jcifs.smb.SmbAuthException: void <init>(int)>(varReplacer5666);
+
+        throw $r24;
+
+     label052:
+        $r16 := @caughtexception;
+
+        goto label028;
+
+     label053:
+        $r14 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+        $r23 = $r9.<jcifs.smb.SmbTransport: jcifs.smb.SmbTransport$ServerData server>;
+
+        $r25 = $r23.<jcifs.smb.SmbTransport$ServerData: byte[] encryptionKey>;
+
+     label054:
+        $r25 = virtualinvoke $r14.<jcifs.smb.NtlmPasswordAuthentication: byte[] getSigningKey(byte[])>($r25);
+
+     label055:
+        r36 = new jcifs.smb.SigningDigest;
+
+     label056:
+        varReplacer5670 = 0;
+
+        specialinvoke r36.<jcifs.smb.SigningDigest: void <init>(byte[],boolean)>($r25, varReplacer5670);
+
+     label057:
+        $r18.<jcifs.smb.SmbComSessionSetupAndX: jcifs.smb.SigningDigest digest> = r36;
+
+        goto label045;
+
+     label058:
+        $r24 := @caughtexception;
+
+     label059:
+        throw $r24;
+
+     label060:
+        $r27 := @caughtexception;
+
+        $r7 = $r27;
+
+        goto label048;
+
+     label061:
+        if $r7 == null goto label063;
+
+     label062:
+        throw $r7;
+
+     label063:
+        $i1 = $r19.<jcifs.smb.SmbComSessionSetupAndXResponse: int uid>;
+
+        $r0.<jcifs.smb.SmbSession: int uid> = $i1;
+
+        $r26 = $r18.<jcifs.smb.SmbComSessionSetupAndX: jcifs.smb.SigningDigest digest>;
+
+        if $r26 == null goto label064;
+
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+        $r26 = $r18.<jcifs.smb.SmbComSessionSetupAndX: jcifs.smb.SigningDigest digest>;
+
+        $r9.<jcifs.smb.SmbTransport: jcifs.smb.SigningDigest digest> = $r26;
+
+     label064:
+        varReplacer5667 = 2;
+
+        $r0.<jcifs.smb.SmbSession: int connectionState> = varReplacer5667;
+
+        $b0 = 0;
+
+        $r6 = $r4;
+
+        goto label032;
+
+     label065:
+        if $r6 != null goto label115;
+
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+        $i1 = $r9.<jcifs.smb.SmbTransport: int flags2>;
+
+        $i1 = $i1 & 4;
+
+        if $i1 == 0 goto label075;
+
+        $z0 = 1;
+
+     label066:
+        $r4 = new jcifs.smb.NtlmContext;
+
+        $r6 = $r4;
+
+        $r14 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+     label067:
+        specialinvoke $r4.<jcifs.smb.NtlmContext: void <init>(jcifs.smb.NtlmPasswordAuthentication,boolean)>($r14, $z0);
+
+     label068:
+        $r12 = <jcifs.smb.SmbTransport: jcifs.util.LogStream log>;
+
+        $i1 = <jcifs.util.LogStream: int level>;
+
+        if $i1 < 4 goto label070;
+
+        $r12 = <jcifs.smb.SmbTransport: jcifs.util.LogStream log>;
+
+     label069:
+        virtualinvoke $r12.<jcifs.util.LogStream: void println(java.lang.Object)>($r6);
+
+     label070:
+        $z0 = virtualinvoke $r6.<jcifs.smb.NtlmContext: boolean isEstablished()>();
+
+     label071:
+        if $z0 == 0 goto label076;
+
+     label072:
+        $r10 = virtualinvoke $r6.<jcifs.smb.NtlmContext: java.lang.String getNetbiosName()>();
+
+     label073:
+        $r0.<jcifs.smb.SmbSession: java.lang.String netbiosName> = $r10;
+
+        varReplacer5674 = 2;
+
+        $r0.<jcifs.smb.SmbSession: int connectionState> = varReplacer5674;
+
+     label074:
+        $b0 = 0;
+
+        goto label032;
+
+     label075:
+        $z0 = 0;
+
+        goto label066;
+
+     label076:
+        $i1 = lengthof $r8;
+
+     label077:
+        varReplacer5675 = 0;
+
+        $r25 = virtualinvoke $r6.<jcifs.smb.NtlmContext: byte[] initSecContext(byte[],int,int)>($r8, varReplacer5675, $i1);
+
+     label078:
+        $r8 = $r25;
+
+        if $r25 == null goto label032;
+
+     label079:
+        r34 = new jcifs.smb.SmbComSessionSetupAndX;
+
+        $r18 = r34;
+
+     label080:
+        varReplacer5676 = null;
+
+        specialinvoke r34.<jcifs.smb.SmbComSessionSetupAndX: void <init>(jcifs.smb.SmbSession,jcifs.smb.ServerMessageBlock,java.lang.Object)>($r0, varReplacer5676, $r25);
+
+     label081:
+        r35 = new jcifs.smb.SmbComSessionSetupAndXResponse;
+
+        $r19 = r35;
+
+     label082:
+        varReplacer5665 = null;
+
+        specialinvoke r35.<jcifs.smb.SmbComSessionSetupAndXResponse: void <init>(jcifs.smb.ServerMessageBlock)>(varReplacer5665);
+
+     label083:
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+        $r14 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+     label084:
+        $z0 = virtualinvoke $r9.<jcifs.smb.SmbTransport: boolean isSignatureSetupRequired(jcifs.smb.NtlmPasswordAuthentication)>($r14);
+
+     label085:
+        if $z0 == 0 goto label090;
+
+     label086:
+        $r8 = virtualinvoke $r6.<jcifs.smb.NtlmContext: byte[] getSigningKey()>();
+
+     label087:
+        if $r8 == null goto label090;
+
+        r36 = new jcifs.smb.SigningDigest;
+
+     label088:
+        varReplacer5680 = 1;
+
+        specialinvoke r36.<jcifs.smb.SigningDigest: void <init>(byte[],boolean)>($r8, varReplacer5680);
+
+     label089:
+        $r18.<jcifs.smb.SmbComSessionSetupAndX: jcifs.smb.SigningDigest digest> = r36;
+
+     label090:
+        $i1 = $r0.<jcifs.smb.SmbSession: int uid>;
+
+        $r18.<jcifs.smb.SmbComSessionSetupAndX: int uid> = $i1;
+
+        varReplacer5661 = 0;
+
+        $r0.<jcifs.smb.SmbSession: int uid> = varReplacer5661;
+
+     label091:
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+     label092:
+        virtualinvoke $r9.<jcifs.smb.SmbTransport: void send(jcifs.smb.ServerMessageBlock,jcifs.smb.ServerMessageBlock)>($r18, $r19);
+
+     label093:
+        $z0 = $r19.<jcifs.smb.SmbComSessionSetupAndXResponse: boolean isLoggedInAsGuest>;
+
+        if $z0 == 0 goto label109;
+
+        $r10 = "GUEST";
+
+        $r14 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+        $r22 = $r14.<jcifs.smb.NtlmPasswordAuthentication: java.lang.String username>;
+
+     label094:
+        $z0 = virtualinvoke $r10.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>($r22);
+
+     label095:
+        if $z0 != 0 goto label109;
+
+        $r29 = new jcifs.smb.SmbAuthException;
+
+        $r24 = $r29;
+
+     label096:
+        varReplacer5681 = -1073741715;
+
+        specialinvoke $r29.<jcifs.smb.SmbAuthException: void <init>(int)>(varReplacer5681);
+
+        throw $r24;
+
+     label097:
+        $r15 := @caughtexception;
+
+        goto label026;
+
+     label098:
+        $r28 := @caughtexception;
+
+     label099:
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+     label100:
+        varReplacer5659 = 1;
+
+        virtualinvoke $r9.<jcifs.smb.SmbTransport: void disconnect(boolean)>(varReplacer5659);
+
+     label101:
+        varReplacer5668 = 0;
+
+        $r0.<jcifs.smb.SmbSession: int uid> = varReplacer5668;
+
+     label102:
+        throw $r28;
+
+     label103:
+        $r29 := @caughtexception;
+
+     label104:
+        throw $r29;
+
+     label105:
+        $r30 := @caughtexception;
+
+        $r7 = $r30;
+
+     label106:
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+        varReplacer5682 = 1;
+
+        virtualinvoke $r9.<jcifs.smb.SmbTransport: void disconnect(boolean)>(varReplacer5682);
+
+     label107:
+        goto label093;
+
+     label108:
+        $r31 := @caughtexception;
+
+        goto label093;
+
+     label109:
+        if $r7 == null goto label111;
+
+     label110:
+        throw $r7;
+
+     label111:
+        $i1 = $r19.<jcifs.smb.SmbComSessionSetupAndXResponse: int uid>;
+
+        $r0.<jcifs.smb.SmbSession: int uid> = $i1;
+
+        $r26 = $r18.<jcifs.smb.SmbComSessionSetupAndX: jcifs.smb.SigningDigest digest>;
+
+        if $r26 == null goto label112;
+
+        $r9 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+        $r26 = $r18.<jcifs.smb.SmbComSessionSetupAndX: jcifs.smb.SigningDigest digest>;
+
+        $r9.<jcifs.smb.SmbTransport: jcifs.smb.SigningDigest digest> = $r26;
+
+     label112:
+        $r8 = $r19.<jcifs.smb.SmbComSessionSetupAndXResponse: byte[] blob>;
+
+     label113:
+        goto label032;
+
+     label114:
+        $r32 := @caughtexception;
+
+        goto label101;
+
+     label115:
+        goto label068;
+
+        catch java.lang.Throwable from label001 to label004 with label010;
+        catch java.lang.InterruptedException from label006 to label007 with label008;
+        catch java.lang.Throwable from label005 to label007 with label010;
+        catch java.lang.Throwable from label009 to label011 with label010;
+        catch java.lang.Throwable from label012 to label013 with label010;
+        catch jcifs.smb.SmbException from label014 to label015 with label097;
+        catch jcifs.smb.SmbException from label016 to label017 with label097;
+        catch jcifs.smb.SmbException from label018 to label019 with label097;
+        catch jcifs.smb.SmbException from label020 to label021 with label097;
+        catch java.lang.Throwable from label013 to label022 with label027;
+        catch jcifs.smb.SmbException from label024 to label025 with label025;
+        catch java.lang.Throwable from label023 to label025 with label052;
+        catch java.lang.Throwable from label026 to label027 with label027;
+        catch java.lang.Throwable from label028 to label029 with label010;
+        catch jcifs.smb.SmbException from label030 to label031 with label025;
+        catch java.lang.Throwable from label029 to label031 with label052;
+        catch java.lang.Throwable from label033 to label034 with label010;
+        catch jcifs.smb.SmbException from label036 to label037 with label025;
+        catch jcifs.smb.SmbException from label038 to label039 with label025;
+        catch jcifs.smb.SmbException from label040 to label041 with label025;
+        catch jcifs.smb.SmbException from label042 to label043 with label025;
+        catch jcifs.smb.SmbException from label044 to label045 with label025;
+        catch java.lang.Throwable from label035 to label046 with label052;
+        catch jcifs.smb.SmbAuthException from label047 to label048 with label058;
+        catch jcifs.smb.SmbException from label047 to label048 with label060;
+        catch java.lang.Throwable from label046 to label048 with label052;
+        catch jcifs.smb.SmbException from label049 to label050 with label025;
+        catch jcifs.smb.SmbException from label051 to label052 with label025;
+        catch jcifs.smb.SmbException from label054 to label055 with label025;
+        catch jcifs.smb.SmbException from label056 to label057 with label025;
+        catch jcifs.smb.SmbException from label059 to label060 with label025;
+        catch jcifs.smb.SmbException from label062 to label063 with label025;
+        catch jcifs.smb.SmbException from label067 to label068 with label025;
+        catch java.lang.Throwable from label048 to label068 with label052;
+        catch jcifs.smb.SmbException from label069 to label071 with label097;
+        catch jcifs.smb.SmbException from label072 to label073 with label097;
+        catch java.lang.Throwable from label068 to label074 with label027;
+        catch jcifs.smb.SmbException from label077 to label078 with label098;
+        catch java.lang.Throwable from label076 to label078 with label027;
+        catch jcifs.smb.SmbException from label080 to label081 with label097;
+        catch jcifs.smb.SmbException from label082 to label083 with label097;
+        catch jcifs.smb.SmbException from label084 to label085 with label097;
+        catch jcifs.smb.SmbException from label086 to label087 with label097;
+        catch jcifs.smb.SmbException from label088 to label089 with label097;
+        catch java.lang.Throwable from label079 to label091 with label027;
+        catch jcifs.smb.SmbAuthException from label092 to label093 with label103;
+        catch jcifs.smb.SmbException from label092 to label093 with label105;
+        catch java.lang.Throwable from label091 to label093 with label027;
+        catch jcifs.smb.SmbException from label094 to label095 with label097;
+        catch jcifs.smb.SmbException from label096 to label097 with label097;
+        catch java.lang.Throwable from label093 to label097 with label027;
+        catch java.io.IOException from label100 to label101 with label114;
+        catch java.lang.Throwable from label099 to label101 with label027;
+        catch jcifs.smb.SmbException from label102 to label103 with label097;
+        catch jcifs.smb.SmbException from label104 to label105 with label097;
+        catch java.lang.Throwable from label101 to label105 with label027;
+        catch java.lang.Exception from label106 to label107 with label108;
+        catch java.lang.Throwable from label106 to label107 with label027;
+        catch jcifs.smb.SmbException from label110 to label111 with label097;
+        catch java.lang.Throwable from label110 to label113 with label027;
+    }
+
+    public java.lang.String toString()
+    {
+        jcifs.smb.SmbSession $r0;
+        java.lang.StringBuilder $r1;
+        jcifs.smb.NtlmPasswordAuthentication $r2;
+        java.lang.String $r3;
+        int $i0;
+
+        $r0 := @this: jcifs.smb.SmbSession;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("SmbSession[accountName=");
+
+        $r2 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+        $r3 = $r2.<jcifs.smb.NtlmPasswordAuthentication: java.lang.String username>;
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(",primaryDomain=");
+
+        $r2 = $r0.<jcifs.smb.SmbSession: jcifs.smb.NtlmPasswordAuthentication auth>;
+
+        $r3 = $r2.<jcifs.smb.NtlmPasswordAuthentication: java.lang.String domain>;
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(",uid=");
+
+        $i0 = $r0.<jcifs.smb.SmbSession: int uid>;
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(",connectionState=");
+
+        $i0 = $r0.<jcifs.smb.SmbSession: int connectionState>;
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r3;
+    }
+
+    jcifs.smb.SmbTransport transport()
+    {
+        jcifs.smb.SmbSession $r0;
+        int $i0, $i1;
+        java.net.InetAddress $r1;
+        jcifs.smb.SmbTransport $r2;
+        jcifs.UniAddress $r3;
+        java.lang.Throwable $r4;
+        null_type varReplacer597;
+
+        nop;
+
+        $r0 := @this: jcifs.smb.SmbSession;
+
+        entermonitor $r0;
+
+     label1:
+        $r2 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+        if $r2 != null goto label2;
+
+        $r3 = $r0.<jcifs.smb.SmbSession: jcifs.UniAddress address>;
+
+        $i0 = $r0.<jcifs.smb.SmbSession: int port>;
+
+        $r1 = $r0.<jcifs.smb.SmbSession: java.net.InetAddress localAddr>;
+
+        $i1 = $r0.<jcifs.smb.SmbSession: int localPort>;
+
+        varReplacer597 = null;
+
+        $r2 = staticinvoke <jcifs.smb.SmbTransport: jcifs.smb.SmbTransport getSmbTransport(jcifs.UniAddress,int,java.net.InetAddress,int,java.lang.String)>($r3, $i0, $r1, $i1, varReplacer597);
+
+        $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport> = $r2;
+
+     label2:
+        $r2 = $r0.<jcifs.smb.SmbSession: jcifs.smb.SmbTransport transport>;
+
+     label3:
+        exitmonitor $r0;
+
+        return $r2;
+
+     label4:
+        $r4 := @caughtexception;
+
+        exitmonitor $r0;
+
+        throw $r4;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+    }
+}

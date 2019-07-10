@@ -1,0 +1,2594 @@
+public abstract class com.playhaven.android.req.PlayHavenRequest extends java.lang.Object
+{
+    private static final java.lang.String COLON;
+    protected static final java.lang.String HMAC;
+    private net.minidev.json.JSONObject customDimensions;
+    private com.playhaven.android.req.RequestListener handler;
+    private java.util.Set identifiers;
+    private java.lang.String ifa;
+    private java.lang.String ktsid;
+    private java.lang.String lastUrl;
+    private org.springframework.http.HttpMethod restMethod;
+    private javax.crypto.Mac sigMac;
+    private java.util.Set usedIdentifiers;
+
+    protected void <init>()
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        org.springframework.http.HttpMethod $r1;
+        java.util.HashSet $r2;
+        java.util.Set $r3;
+        com.playhaven.android.req.Identifier $r4;
+        null_type varReplacer4667;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r1 = <org.springframework.http.HttpMethod: org.springframework.http.HttpMethod GET>;
+
+        $r0.<com.playhaven.android.req.PlayHavenRequest: org.springframework.http.HttpMethod restMethod> = $r1;
+
+        varReplacer4667 = null;
+
+        $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String ifa> = varReplacer4667;
+
+        $r2 = new java.util.HashSet;
+
+        specialinvoke $r2.<java.util.HashSet: void <init>()>();
+
+        $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set identifiers> = $r2;
+
+        $r3 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set identifiers>;
+
+        $r4 = <com.playhaven.android.req.Identifier: com.playhaven.android.req.Identifier AndroidID>;
+
+        interfaceinvoke $r3.<java.util.Set: boolean add(java.lang.Object)>($r4);
+
+        $r3 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set identifiers>;
+
+        $r4 = <com.playhaven.android.req.Identifier: com.playhaven.android.req.Identifier SenderID>;
+
+        interfaceinvoke $r3.<java.util.Set: boolean add(java.lang.Object)>($r4);
+
+        $r3 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set identifiers>;
+
+        $r4 = <com.playhaven.android.req.Identifier: com.playhaven.android.req.Identifier Signature>;
+
+        interfaceinvoke $r3.<java.util.Set: boolean add(java.lang.Object)>($r4);
+
+        $r2 = new java.util.HashSet;
+
+        specialinvoke $r2.<java.util.HashSet: void <init>()>();
+
+        $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set usedIdentifiers> = $r2;
+
+        return;
+    }
+
+    static org.springframework.http.HttpMethod access$000(com.playhaven.android.req.PlayHavenRequest)
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        org.springframework.http.HttpMethod r1;
+
+        nop;
+
+        $r0 := @parameter0: com.playhaven.android.req.PlayHavenRequest;
+
+        r1 = $r0.<com.playhaven.android.req.PlayHavenRequest: org.springframework.http.HttpMethod restMethod>;
+
+        return r1;
+    }
+
+    protected static java.lang.String base64Digest(java.lang.String) throws java.io.UnsupportedEncodingException, java.security.NoSuchAlgorithmException
+    {
+        java.lang.String $r0;
+        byte[] $r1;
+        int $i0, varReplacer7959;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <com.playhaven.android.req.PlayHavenRequest: byte[] dataDigest(java.lang.String)>($r0);
+
+        $r0 = staticinvoke <com.playhaven.android.req.PlayHavenRequest: java.lang.String convertToBase64(byte[])>($r1);
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        $i0 = $i0 + -1;
+
+        varReplacer7959 = 0;
+
+        $r0 = virtualinvoke $r0.<java.lang.String: java.lang.String substring(int,int)>(varReplacer7959, $i0);
+
+        return $r0;
+    }
+
+    protected static java.lang.String convertToBase64(byte[]) throws java.io.UnsupportedEncodingException
+    {
+        byte[] $r0;
+        java.lang.String $r1;
+        java.nio.charset.Charset $r2;
+        null_type varReplacer7991;
+        int varReplacer7992;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        if $r0 != null goto label1;
+
+        varReplacer7991 = null;
+
+        return varReplacer7991;
+
+     label1:
+        $r1 = new java.lang.String;
+
+        varReplacer7992 = 9;
+
+        $r0 = staticinvoke <android.util.Base64: byte[] encode(byte[],int)>($r0, varReplacer7992);
+
+        $r2 = staticinvoke <com.playhaven.android.PlayHaven: java.nio.charset.Charset getUTF8()>();
+
+        specialinvoke $r1.<java.lang.String: void <init>(byte[],java.nio.charset.Charset)>($r0, $r2);
+
+        return $r1;
+    }
+
+    protected static java.lang.String convertToHex(byte[])
+    {
+        byte[] $r0;
+        java.lang.StringBuilder $r1;
+        java.util.Formatter $r2;
+        byte $b0;
+        int $i1, $i2;
+        java.lang.Object[] $r3;
+        java.lang.Byte $r4;
+        java.lang.String $r5;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 = new java.lang.StringBuilder;
+
+        $i1 = lengthof $r0;
+
+        $i1 = $i1 * 2;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(int)>($i1);
+
+        $r2 = new java.util.Formatter;
+
+        specialinvoke $r2.<java.util.Formatter: void <init>(java.lang.Appendable)>($r1);
+
+        $i1 = lengthof $r0;
+
+        $i2 = 0;
+
+     label1:
+        if $i2 >= $i1 goto label2;
+
+        $b0 = $r0[$i2];
+
+        $r3 = newarray (java.lang.Object)[1];
+
+        $r4 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b0);
+
+        $r3[0] = $r4;
+
+        virtualinvoke $r2.<java.util.Formatter: java.util.Formatter format(java.lang.String,java.lang.Object[])>("%02x", $r3);
+
+        $i2 = $i2 + 1;
+
+        goto label1;
+
+     label2:
+        $r5 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r5;
+    }
+
+    protected static byte[] dataDigest(java.lang.String) throws java.security.NoSuchAlgorithmException, java.io.UnsupportedEncodingException
+    {
+        java.lang.String $r0, varReplacer7989;
+        java.security.MessageDigest $r1;
+        java.nio.charset.Charset $r2;
+        byte[] $r3;
+        null_type varReplacer7990;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        if $r0 != null goto label1;
+
+        varReplacer7990 = null;
+
+        return varReplacer7990;
+
+     label1:
+        varReplacer7989 = "SHA-1";
+
+        $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7989);
+
+        $r2 = staticinvoke <com.playhaven.android.PlayHaven: java.nio.charset.Charset getUTF8()>();
+
+        $r3 = virtualinvoke $r0.<java.lang.String: byte[] getBytes(java.nio.charset.Charset)>($r2);
+
+        $r3 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r3);
+
+        return $r3;
+    }
+
+    protected static com.playhaven.android.PlayHaven$ConnectionType getConnectionType(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.Throwable $r1;
+        java.lang.Object $r2;
+        android.net.ConnectivityManager $r3;
+        android.net.NetworkInfo $r4;
+        android.net.NetworkInfo$State $r5, $r6;
+        com.playhaven.android.PlayHaven$ConnectionType r7;
+        int varReplacer7986, varReplacer7987;
+        java.lang.String varReplacer7988;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+     label01:
+        varReplacer7988 = "connectivity";
+
+        $r2 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer7988);
+
+     label02:
+        $r3 = (android.net.ConnectivityManager) $r2;
+
+        if $r3 != null goto label03;
+
+        r7 = <com.playhaven.android.PlayHaven$ConnectionType: com.playhaven.android.PlayHaven$ConnectionType NO_NETWORK>;
+
+        return r7;
+
+     label03:
+        varReplacer7987 = 1;
+
+        $r4 = virtualinvoke $r3.<android.net.ConnectivityManager: android.net.NetworkInfo getNetworkInfo(int)>(varReplacer7987);
+
+     label04:
+        if $r4 == null goto label08;
+
+     label05:
+        $r5 = virtualinvoke $r4.<android.net.NetworkInfo: android.net.NetworkInfo$State getState()>();
+
+     label06:
+        $r6 = <android.net.NetworkInfo$State: android.net.NetworkInfo$State CONNECTED>;
+
+        if $r5 == $r6 goto label07;
+
+        $r6 = <android.net.NetworkInfo$State: android.net.NetworkInfo$State CONNECTING>;
+
+        if $r5 != $r6 goto label08;
+
+     label07:
+        r7 = <com.playhaven.android.PlayHaven$ConnectionType: com.playhaven.android.PlayHaven$ConnectionType WIFI>;
+
+        return r7;
+
+     label08:
+        varReplacer7986 = 0;
+
+        $r4 = virtualinvoke $r3.<android.net.ConnectivityManager: android.net.NetworkInfo getNetworkInfo(int)>(varReplacer7986);
+
+     label09:
+        if $r4 == null goto label14;
+
+     label10:
+        $r5 = virtualinvoke $r4.<android.net.NetworkInfo: android.net.NetworkInfo$State getState()>();
+
+     label11:
+        $r6 = <android.net.NetworkInfo$State: android.net.NetworkInfo$State CONNECTED>;
+
+        if $r5 == $r6 goto label12;
+
+        $r6 = <android.net.NetworkInfo$State: android.net.NetworkInfo$State CONNECTING>;
+
+        if $r5 != $r6 goto label14;
+
+     label12:
+        r7 = <com.playhaven.android.PlayHaven$ConnectionType: com.playhaven.android.PlayHaven$ConnectionType MOBILE>;
+
+        return r7;
+
+     label13:
+        $r1 := @caughtexception;
+
+        r7 = <com.playhaven.android.PlayHaven$ConnectionType: com.playhaven.android.PlayHaven$ConnectionType NO_PERMISSION>;
+
+        return r7;
+
+     label14:
+        r7 = <com.playhaven.android.PlayHaven$ConnectionType: com.playhaven.android.PlayHaven$ConnectionType NO_NETWORK>;
+
+        return r7;
+
+        catch java.lang.SecurityException from label01 to label02 with label13;
+        catch java.lang.SecurityException from label03 to label04 with label13;
+        catch java.lang.SecurityException from label05 to label06 with label13;
+        catch java.lang.SecurityException from label08 to label09 with label13;
+        catch java.lang.SecurityException from label10 to label11 with label13;
+    }
+
+    protected static java.lang.String hexDigest(java.lang.String) throws java.security.NoSuchAlgorithmException, java.io.UnsupportedEncodingException
+    {
+        java.lang.String $r0;
+        byte[] $r1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <com.playhaven.android.req.PlayHavenRequest: byte[] dataDigest(java.lang.String)>($r0);
+
+        $r0 = staticinvoke <com.playhaven.android.req.PlayHavenRequest: java.lang.String convertToHex(byte[])>($r1);
+
+        return $r0;
+    }
+
+    protected org.springframework.web.util.UriComponentsBuilder addApiPath(android.content.Context, org.springframework.web.util.UriComponentsBuilder) throws com.playhaven.android.PlayHavenException
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        android.content.Context $r1;
+        org.springframework.web.util.UriComponentsBuilder $r2;
+        android.content.res.Resources $r3;
+        int $i0;
+        java.lang.String $r4;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: org.springframework.web.util.UriComponentsBuilder;
+
+        $r3 = virtualinvoke $r1.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $i0 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: int getApiPath(android.content.Context)>($r1);
+
+        $r4 = virtualinvoke $r3.<android.content.res.Resources: java.lang.String getString(int)>($i0);
+
+        virtualinvoke $r2.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder path(java.lang.String)>($r4);
+
+        return $r2;
+    }
+
+    public void addDimension(java.lang.String, java.lang.Object)
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        java.lang.String $r1;
+        java.lang.Object $r2;
+        net.minidev.json.JSONObject $r3;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.Object;
+
+        $r3 = $r0.<com.playhaven.android.req.PlayHavenRequest: net.minidev.json.JSONObject customDimensions>;
+
+        if $r3 != null goto label1;
+
+        $r3 = new net.minidev.json.JSONObject;
+
+        specialinvoke $r3.<net.minidev.json.JSONObject: void <init>()>();
+
+        $r0.<com.playhaven.android.req.PlayHavenRequest: net.minidev.json.JSONObject customDimensions> = $r3;
+
+     label1:
+        $r3 = $r0.<com.playhaven.android.req.PlayHavenRequest: net.minidev.json.JSONObject customDimensions>;
+
+        virtualinvoke $r3.<net.minidev.json.JSONObject: java.lang.Object put(java.lang.Object,java.lang.Object)>($r1, $r2);
+
+        return;
+    }
+
+    public void addDimensions(java.util.Map)
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        java.util.Map $r1;
+        net.minidev.json.JSONObject $r2;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: java.util.Map;
+
+        $r2 = $r0.<com.playhaven.android.req.PlayHavenRequest: net.minidev.json.JSONObject customDimensions>;
+
+        if $r2 != null goto label1;
+
+        $r2 = new net.minidev.json.JSONObject;
+
+        specialinvoke $r2.<net.minidev.json.JSONObject: void <init>()>();
+
+        $r0.<com.playhaven.android.req.PlayHavenRequest: net.minidev.json.JSONObject customDimensions> = $r2;
+
+     label1:
+        $r2 = $r0.<com.playhaven.android.req.PlayHavenRequest: net.minidev.json.JSONObject customDimensions>;
+
+        virtualinvoke $r2.<net.minidev.json.JSONObject: void putAll(java.util.Map)>($r1);
+
+        return;
+    }
+
+    protected void addSignature(org.springframework.web.util.UriComponentsBuilder, android.content.SharedPreferences, java.lang.String) throws java.io.UnsupportedEncodingException, java.security.NoSuchAlgorithmException, java.security.InvalidKeyException, com.playhaven.android.PlayHavenException
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        org.springframework.web.util.UriComponentsBuilder $r1;
+        android.content.SharedPreferences $r2;
+        java.lang.String $r3;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: org.springframework.web.util.UriComponentsBuilder;
+
+        $r2 := @parameter1: android.content.SharedPreferences;
+
+        $r3 := @parameter2: java.lang.String;
+
+        virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: void addV4Signature(org.springframework.web.util.UriComponentsBuilder,android.content.SharedPreferences,java.lang.String)>($r1, $r2, $r3);
+
+        return;
+    }
+
+    protected void addV3Signature(org.springframework.web.util.UriComponentsBuilder, android.content.SharedPreferences, java.lang.String) throws java.io.UnsupportedEncodingException, java.security.NoSuchAlgorithmException
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        org.springframework.web.util.UriComponentsBuilder $r1;
+        android.content.SharedPreferences $r2;
+        java.lang.String $r3, $r6;
+        java.util.Set $r4;
+        com.playhaven.android.req.Identifier $r5;
+        boolean $z0;
+        java.lang.Object[] $r7;
+        java.lang.String[] $r8;
+        com.playhaven.android.PlayHaven$Config $r9;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: org.springframework.web.util.UriComponentsBuilder;
+
+        $r2 := @parameter1: android.content.SharedPreferences;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set identifiers>;
+
+        $r5 = <com.playhaven.android.req.Identifier: com.playhaven.android.req.Identifier Signature>;
+
+        $z0 = interfaceinvoke $r4.<java.util.Set: boolean contains(java.lang.Object)>($r5);
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r4 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set identifiers>;
+
+        $r5 = <com.playhaven.android.req.Identifier: com.playhaven.android.req.Identifier AdvertiserID>;
+
+        $z0 = interfaceinvoke $r4.<java.util.Set: boolean contains(java.lang.Object)>($r5);
+
+        if $z0 == 0 goto label2;
+
+        $r6 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String ifa>;
+
+        if $r6 == null goto label2;
+
+        $r7 = newarray (java.lang.Object)[1];
+
+        $r8 = newarray (java.lang.String)[4];
+
+        $r9 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config Token>;
+
+        $r6 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r2, $r9);
+
+        $r8[0] = $r6;
+
+        $r6 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String ifa>;
+
+        $r8[1] = $r6;
+
+        $r8[2] = $r3;
+
+        $r9 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config Secret>;
+
+        $r3 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r2, $r9);
+
+        $r8[3] = $r3;
+
+        $r3 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String concat(java.lang.String,java.lang.String[])>(":", $r8);
+
+        $r3 = staticinvoke <com.playhaven.android.req.PlayHavenRequest: java.lang.String hexDigest(java.lang.String)>($r3);
+
+        $r7[0] = $r3;
+
+        virtualinvoke $r1.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>("signature", $r7);
+
+        return;
+
+     label2:
+        $r7 = newarray (java.lang.Object)[1];
+
+        $r8 = newarray (java.lang.String)[4];
+
+        $r9 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config Token>;
+
+        $r6 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r2, $r9);
+
+        $r8[0] = $r6;
+
+        $r9 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config DeviceId>;
+
+        $r6 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r2, $r9);
+
+        $r8[1] = $r6;
+
+        $r8[2] = $r3;
+
+        $r9 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config Secret>;
+
+        $r3 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r2, $r9);
+
+        $r8[3] = $r3;
+
+        $r3 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String concat(java.lang.String,java.lang.String[])>(":", $r8);
+
+        $r3 = staticinvoke <com.playhaven.android.req.PlayHavenRequest: java.lang.String hexDigest(java.lang.String)>($r3);
+
+        $r7[0] = $r3;
+
+        virtualinvoke $r1.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>("signature", $r7);
+
+        return;
+    }
+
+    protected void addV4Signature(org.springframework.web.util.UriComponentsBuilder, android.content.SharedPreferences, java.lang.String) throws java.io.UnsupportedEncodingException, java.security.NoSuchAlgorithmException, java.security.InvalidKeyException, com.playhaven.android.PlayHavenException
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        org.springframework.web.util.UriComponentsBuilder $r1;
+        android.content.SharedPreferences $r2;
+        java.lang.String $r3, $r8, varReplacer8230, varReplacer8232, varReplacer8233, varReplacer8234;
+        java.lang.StringBuilder $r4;
+        java.util.Set $r5, $r10;
+        com.playhaven.android.req.Identifier $r6;
+        boolean $z0, $z1;
+        com.playhaven.android.PlayHaven$Config $r7;
+        com.playhaven.android.req.NoIdentifierException $r9;
+        java.lang.Object[] $r11;
+        int varReplacer8231;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: org.springframework.web.util.UriComponentsBuilder;
+
+        $r2 := @parameter1: android.content.SharedPreferences;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r5 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set identifiers>;
+
+        $r6 = <com.playhaven.android.req.Identifier: com.playhaven.android.req.Identifier Signature>;
+
+        $z0 = interfaceinvoke $r5.<java.util.Set: boolean contains(java.lang.Object)>($r6);
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $z0 = 1;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set usedIdentifiers>;
+
+        $r6 = <com.playhaven.android.req.Identifier: com.playhaven.android.req.Identifier AndroidID>;
+
+        $z1 = interfaceinvoke $r5.<java.util.Set: boolean contains(java.lang.Object)>($r6);
+
+        if $z1 == 0 goto label2;
+
+        $r7 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config DeviceId>;
+
+        $r8 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r2, $r7);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $z0 = 0;
+
+     label2:
+        $r5 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set usedIdentifiers>;
+
+        $r6 = <com.playhaven.android.req.Identifier: com.playhaven.android.req.Identifier AdvertiserID>;
+
+        $z1 = interfaceinvoke $r5.<java.util.Set: boolean contains(java.lang.Object)>($r6);
+
+        if $z1 == 0 goto label4;
+
+        $r8 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String ifa>;
+
+        if $r8 == null goto label4;
+
+        if $z0 != 0 goto label3;
+
+        varReplacer8232 = ":";
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer8232);
+
+     label3:
+        $r8 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String ifa>;
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $z0 = 0;
+
+     label4:
+        $r5 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set usedIdentifiers>;
+
+        $r6 = <com.playhaven.android.req.Identifier: com.playhaven.android.req.Identifier SenderID>;
+
+        $z1 = interfaceinvoke $r5.<java.util.Set: boolean contains(java.lang.Object)>($r6);
+
+        if $z1 == 0 goto label6;
+
+        $r8 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String ktsid>;
+
+        if $r8 == null goto label6;
+
+        if $z0 != 0 goto label5;
+
+        varReplacer8230 = ":";
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer8230);
+
+     label5:
+        $r8 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String ktsid>;
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $z0 = 0;
+
+     label6:
+        if $z0 == 0 goto label7;
+
+        $r9 = new com.playhaven.android.req.NoIdentifierException;
+
+        $r5 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set identifiers>;
+
+        $r10 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set usedIdentifiers>;
+
+        specialinvoke $r9.<com.playhaven.android.req.NoIdentifierException: void <init>(java.util.Set,java.util.Set)>($r5, $r10);
+
+        throw $r9;
+
+     label7:
+        varReplacer8233 = ":";
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer8233);
+
+        $r7 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config Token>;
+
+        $r8 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r2, $r7);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        varReplacer8234 = ":";
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer8234);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r6 = <com.playhaven.android.req.Identifier: com.playhaven.android.req.Identifier Signature>;
+
+        $r3 = virtualinvoke $r6.<com.playhaven.android.req.Identifier: java.lang.String getParam()>();
+
+        $r11 = newarray (java.lang.Object)[1];
+
+        $r8 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer8231 = 1;
+
+        $r8 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String createHmac(android.content.SharedPreferences,java.lang.String,boolean)>($r2, $r8, varReplacer8231);
+
+        $r11[0] = $r8;
+
+        virtualinvoke $r1.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>($r3, $r11);
+
+        $r5 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set usedIdentifiers>;
+
+        $r6 = <com.playhaven.android.req.Identifier: com.playhaven.android.req.Identifier Signature>;
+
+        interfaceinvoke $r5.<java.util.Set: boolean add(java.lang.Object)>($r6);
+
+        return;
+    }
+
+    protected transient java.lang.String concat(java.lang.String, java.lang.String[])
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        java.lang.String $r1, $r3, varReplacer7922;
+        java.lang.String[] $r2;
+        int $i0, $i1;
+        java.lang.StringBuilder $r4;
+        boolean $z0;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String[];
+
+        $z0 = 1;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $i0 = lengthof $r2;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label6;
+
+        $r3 = $r2[$i1];
+
+        if $r3 != null goto label3;
+
+     label2:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        if $z0 != 0 goto label5;
+
+        varReplacer7922 = ":";
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7922);
+
+     label4:
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        goto label2;
+
+     label5:
+        $z0 = 0;
+
+        goto label4;
+
+     label6:
+        $r1 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    protected org.springframework.web.util.UriComponentsBuilder createApiUrl(android.content.Context) throws com.playhaven.android.PlayHavenException
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        android.content.Context $r1;
+        android.content.SharedPreferences $r2;
+        com.playhaven.android.PlayHaven$Config $r3;
+        java.lang.String $r4;
+        org.springframework.web.util.UriComponentsBuilder $r5;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 = staticinvoke <com.playhaven.android.PlayHaven: android.content.SharedPreferences getPreferences(android.content.Context)>($r1);
+
+        $r3 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config APIServer>;
+
+        $r4 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r2, $r3);
+
+        $r5 = staticinvoke <org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder fromHttpUrl(java.lang.String)>($r4);
+
+        return $r5;
+    }
+
+    protected java.lang.String createHmac(android.content.SharedPreferences, java.lang.String, boolean) throws java.security.NoSuchAlgorithmException, java.io.UnsupportedEncodingException, java.security.InvalidKeyException
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        android.content.SharedPreferences $r1;
+        java.lang.String $r2, $r5, varReplacer7923, varReplacer7924, varReplacer7925, varReplacer7927;
+        boolean $z0;
+        javax.crypto.spec.SecretKeySpec $r3;
+        com.playhaven.android.PlayHaven$Config $r4;
+        java.nio.charset.Charset $r6;
+        byte[] $r7;
+        javax.crypto.Mac $r8;
+        int varReplacer7926;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: android.content.SharedPreferences;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $z0 := @parameter2: boolean;
+
+        $r4 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config Secret>;
+
+        $r5 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r1, $r4);
+
+        $r3 = new javax.crypto.spec.SecretKeySpec;
+
+        $r6 = staticinvoke <com.playhaven.android.PlayHaven: java.nio.charset.Charset getUTF8()>();
+
+        $r7 = virtualinvoke $r5.<java.lang.String: byte[] getBytes(java.nio.charset.Charset)>($r6);
+
+        varReplacer7927 = "HmacSHA1";
+
+        specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r7, varReplacer7927);
+
+        varReplacer7923 = "HmacSHA1";
+
+        $r8 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer7923);
+
+        virtualinvoke $r8.<javax.crypto.Mac: void init(java.security.Key)>($r3);
+
+        $r6 = staticinvoke <com.playhaven.android.PlayHaven: java.nio.charset.Charset getUTF8()>();
+
+        $r7 = virtualinvoke $r2.<java.lang.String: byte[] getBytes(java.nio.charset.Charset)>($r6);
+
+        virtualinvoke $r8.<javax.crypto.Mac: void update(byte[])>($r7);
+
+        $r7 = virtualinvoke $r8.<javax.crypto.Mac: byte[] doFinal()>();
+
+        $r2 = new java.lang.String;
+
+        varReplacer7926 = 8;
+
+        $r7 = staticinvoke <android.util.Base64: byte[] encode(byte[],int)>($r7, varReplacer7926);
+
+        $r6 = staticinvoke <com.playhaven.android.PlayHaven: java.nio.charset.Charset getUTF8()>();
+
+        specialinvoke $r2.<java.lang.String: void <init>(byte[],java.nio.charset.Charset)>($r7, $r6);
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String trim()>();
+
+        varReplacer7924 = "=";
+
+        varReplacer7925 = "";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>(varReplacer7924, varReplacer7925);
+
+        return $r2;
+    }
+
+    protected org.springframework.web.util.UriComponentsBuilder createUrl(android.content.Context) throws com.playhaven.android.PlayHavenException
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        android.content.Context $r1;
+        javax.crypto.spec.SecretKeySpec $r2;
+        java.util.Locale $r3;
+        android.util.DisplayMetrics $r4;
+        android.graphics.Point $r5;
+        android.content.SharedPreferences $r6;
+        org.springframework.web.util.UriComponentsBuilder $r7;
+        java.lang.Object[] $r8, $r21;
+        com.playhaven.android.PlayHaven$Config $r9;
+        java.lang.String $r10, $r18, varReplacer7929, varReplacer7931, varReplacer7932, varReplacer7933, varReplacer7934, varReplacer7935, varReplacer7936, varReplacer7937, varReplacer7938, varReplacer7939, varReplacer7940, varReplacer7941, varReplacer7942, varReplacer7943, varReplacer7944, varReplacer7946, varReplacer7948, varReplacer7949, varReplacer7950, varReplacer7951, varReplacer7952, varReplacer7953, varReplacer7954, varReplacer7955, varReplacer7956, varReplacer7957, varReplacer7958;
+        java.lang.Integer $r11;
+        java.lang.Object $r12;
+        android.view.WindowManager $r13;
+        android.view.Display $r14;
+        com.playhaven.android.PlayHaven$ConnectionType $r15;
+        int $i0, varReplacer7930;
+        android.content.res.Resources $r16;
+        android.content.res.Configuration $r17;
+        java.lang.String[] $r19;
+        java.lang.StringBuilder $r20;
+        boolean $z0;
+        byte $b1;
+        java.util.Set $r22;
+        com.playhaven.android.req.Identifier $r23, $r26;
+        java.util.Iterator $r24;
+        int[] $r25;
+        com.playhaven.android.PlayHavenException $r27;
+        java.lang.Exception $r28;
+        net.minidev.json.JSONObject $r29;
+        java.util.UUID $r30;
+        java.nio.charset.Charset $r31;
+        byte[] $r32;
+        javax.crypto.Mac $r33;
+        null_type varReplacer7945, varReplacer7947;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: android.content.Context;
+
+     label001:
+        $r6 = staticinvoke <com.playhaven.android.PlayHaven: android.content.SharedPreferences getPreferences(android.content.Context)>($r1);
+
+        $r7 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: org.springframework.web.util.UriComponentsBuilder createApiUrl(android.content.Context)>($r1);
+
+        virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: org.springframework.web.util.UriComponentsBuilder addApiPath(android.content.Context,org.springframework.web.util.UriComponentsBuilder)>($r1, $r7);
+
+     label002:
+        $r8 = newarray (java.lang.Object)[1];
+
+     label003:
+        $r9 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config AppPkg>;
+
+     label004:
+        $r10 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r6, $r9);
+
+     label005:
+        $r8[0] = $r10;
+
+     label006:
+        varReplacer7956 = "app";
+
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>(varReplacer7956, $r8);
+
+     label007:
+        $r8 = newarray (java.lang.Object)[1];
+
+     label008:
+        $r9 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config OptOut>;
+
+     label009:
+        varReplacer7943 = "0";
+
+        $r10 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config,java.lang.String)>($r6, $r9, varReplacer7943);
+
+     label010:
+        $r8[0] = $r10;
+
+     label011:
+        varReplacer7951 = "opt_out";
+
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>(varReplacer7951, $r8);
+
+     label012:
+        $r8 = newarray (java.lang.Object)[1];
+
+     label013:
+        $r9 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config AppVersion>;
+
+     label014:
+        $r10 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r6, $r9);
+
+     label015:
+        $r8[0] = $r10;
+
+     label016:
+        varReplacer7935 = "app_version";
+
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>(varReplacer7935, $r8);
+
+     label017:
+        $r8 = newarray (java.lang.Object)[1];
+
+     label018:
+        $r9 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config OSVersion>;
+
+     label019:
+        varReplacer7930 = 0;
+
+        $r11 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.Integer getInt(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config,int)>($r6, $r9, varReplacer7930);
+
+     label020:
+        $r8[0] = $r11;
+
+     label021:
+        varReplacer7940 = "os";
+
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>(varReplacer7940, $r8);
+
+        varReplacer7955 = "window";
+
+        $r12 = virtualinvoke $r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer7955);
+
+     label022:
+        $r13 = (android.view.WindowManager) $r12;
+
+     label023:
+        $r14 = interfaceinvoke $r13.<android.view.WindowManager: android.view.Display getDefaultDisplay()>();
+
+     label024:
+        $r8 = newarray (java.lang.Object)[1];
+
+     label025:
+        $r9 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config DeviceModel>;
+
+     label026:
+        $r10 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r6, $r9);
+
+     label027:
+        $r8[0] = $r10;
+
+     label028:
+        varReplacer7958 = "hardware";
+
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>(varReplacer7958, $r8);
+
+        $r15 = staticinvoke <com.playhaven.android.req.PlayHavenRequest: com.playhaven.android.PlayHaven$ConnectionType getConnectionType(android.content.Context)>($r1);
+
+     label029:
+        $r8 = newarray (java.lang.Object)[1];
+
+     label030:
+        $i0 = virtualinvoke $r15.<com.playhaven.android.PlayHaven$ConnectionType: int ordinal()>();
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+     label031:
+        $r8[0] = $r11;
+
+     label032:
+        varReplacer7944 = "connection";
+
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>(varReplacer7944, $r8);
+
+     label033:
+        $r8 = newarray (java.lang.Object)[1];
+
+     label034:
+        $r16 = virtualinvoke $r1.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r17 = virtualinvoke $r16.<android.content.res.Resources: android.content.res.Configuration getConfiguration()>();
+
+     label035:
+        $i0 = $r17.<android.content.res.Configuration: int screenLayout>;
+
+     label036:
+        $i0 = $i0 & 15;
+
+     label037:
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+     label038:
+        $r8[0] = $r11;
+
+     label039:
+        varReplacer7952 = "idiom";
+
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>(varReplacer7952, $r8);
+
+     label040:
+        $r5 = new android.graphics.Point;
+
+     label041:
+        specialinvoke $r5.<android.graphics.Point: void <init>()>();
+
+     label042:
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 13 goto label118;
+
+     label043:
+        virtualinvoke $r14.<android.view.Display: void getSize(android.graphics.Point)>($r5);
+
+     label044:
+        $r8 = newarray (java.lang.Object)[1];
+
+        $i0 = $r5.<android.graphics.Point: int x>;
+
+     label045:
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+     label046:
+        $r8[0] = $r11;
+
+     label047:
+        varReplacer7957 = "width";
+
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>(varReplacer7957, $r8);
+
+     label048:
+        $r8 = newarray (java.lang.Object)[1];
+
+        $i0 = $r5.<android.graphics.Point: int y>;
+
+     label049:
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+     label050:
+        $r8[0] = $r11;
+
+     label051:
+        varReplacer7929 = "height";
+
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>(varReplacer7929, $r8);
+
+     label052:
+        $r9 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config SDKVersion>;
+
+     label053:
+        $r10 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r6, $r9);
+
+     label054:
+        $r18 = <com.playhaven.android.Version: java.lang.String PLUGIN_BUILD_TIME>;
+
+     label055:
+        varReplacer7938 = "[\\s]";
+
+        $r19 = virtualinvoke $r18.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer7938);
+
+     label056:
+        $r20 = new java.lang.StringBuilder;
+
+     label057:
+        specialinvoke $r20.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer7941 = ".";
+
+        $r20 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7941);
+
+     label058:
+        $r18 = $r19[0];
+
+     label059:
+        varReplacer7936 = "-";
+
+        varReplacer7937 = "";
+
+        $r18 = virtualinvoke $r18.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>(varReplacer7936, varReplacer7937);
+
+        $r20 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r18);
+
+        $r18 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer7932 = "-SNAPSHOT";
+
+        $r10 = virtualinvoke $r10.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer7932, $r18);
+
+     label060:
+        $r8 = newarray (java.lang.Object)[1];
+
+        $r8[0] = $r10;
+
+     label061:
+        varReplacer7946 = "sdk_version";
+
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>(varReplacer7946, $r8);
+
+     label062:
+        $r8 = newarray (java.lang.Object)[1];
+
+     label063:
+        $r9 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config PluginIdentifer>;
+
+     label064:
+        $r10 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r6, $r9);
+
+     label065:
+        $r8[0] = $r10;
+
+     label066:
+        varReplacer7953 = "plugin";
+
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>(varReplacer7953, $r8);
+
+        $r16 = virtualinvoke $r1.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r17 = virtualinvoke $r16.<android.content.res.Resources: android.content.res.Configuration getConfiguration()>();
+
+     label067:
+        $r3 = $r17.<android.content.res.Configuration: java.util.Locale locale>;
+
+        $r8 = newarray (java.lang.Object)[1];
+
+        $r21 = newarray (java.lang.Object)[2];
+
+     label068:
+        $r10 = virtualinvoke $r3.<java.util.Locale: java.lang.String toString()>();
+
+     label069:
+        $r21[0] = $r10;
+
+     label070:
+        $r10 = virtualinvoke $r3.<java.util.Locale: java.lang.String getLanguage()>();
+
+     label071:
+        $r21[1] = $r10;
+
+     label072:
+        varReplacer7933 = "%s,%s";
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer7933, $r21);
+
+     label073:
+        $r8[0] = $r10;
+
+     label074:
+        varReplacer7934 = "languages";
+
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>(varReplacer7934, $r8);
+
+     label075:
+        $r8 = newarray (java.lang.Object)[1];
+
+     label076:
+        $r9 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config Token>;
+
+     label077:
+        $r10 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r6, $r9);
+
+     label078:
+        $r8[0] = $r10;
+
+     label079:
+        varReplacer7939 = "token";
+
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>(varReplacer7939, $r8);
+
+     label080:
+        varReplacer7945 = null;
+
+        $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String ifa> = varReplacer7945;
+
+        varReplacer7947 = null;
+
+        $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String ktsid> = varReplacer7947;
+
+     label081:
+        $z0 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: boolean shouldIncludeIFA()>();
+
+     label082:
+        if $z0 == 0 goto label098;
+
+     label083:
+        $z0 = staticinvoke <com.playhaven.android.util.GooglePlayServicesUtil: boolean isGooglePlayServicesAvailable()>();
+
+     label084:
+        if $z0 == 0 goto label098;
+
+     label085:
+        $r10 = staticinvoke <com.playhaven.android.util.GoogleAdvertisementUtil: java.lang.String getAdvertisementID(android.content.Context)>($r1);
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r10);
+
+     label086:
+        if $z0 != 0 goto label098;
+
+     label087:
+        $r8 = newarray (java.lang.Object)[1];
+
+     label088:
+        $z0 = staticinvoke <com.playhaven.android.util.GoogleAdvertisementUtil: boolean isAdvertisementTrackingEnabled(android.content.Context)>($r1);
+
+     label089:
+        if $z0 == 0 goto label124;
+
+        $b1 = 0;
+
+     label090:
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($b1);
+
+     label091:
+        $r8[0] = $r11;
+
+     label092:
+        varReplacer7950 = "tracking";
+
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>(varReplacer7950, $r8);
+
+     label093:
+        $r22 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set identifiers>;
+
+     label094:
+        $r23 = <com.playhaven.android.req.Identifier: com.playhaven.android.req.Identifier AdvertiserID>;
+
+     label095:
+        $z0 = interfaceinvoke $r22.<java.util.Set: boolean contains(java.lang.Object)>($r23);
+
+     label096:
+        if $z0 == 0 goto label098;
+
+     label097:
+        $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String ifa> = $r10;
+
+     label098:
+        $r22 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set identifiers>;
+
+     label099:
+        $r24 = interfaceinvoke $r22.<java.util.Set: java.util.Iterator iterator()>();
+
+     label100:
+        $z0 = interfaceinvoke $r24.<java.util.Iterator: boolean hasNext()>();
+
+     label101:
+        if $z0 == 0 goto label144;
+
+     label102:
+        $r12 = interfaceinvoke $r24.<java.util.Iterator: java.lang.Object next()>();
+
+     label103:
+        $r23 = (com.playhaven.android.req.Identifier) $r12;
+
+     label104:
+        $r25 = <com.playhaven.android.req.PlayHavenRequest$2: int[] $SwitchMap$com$playhaven$android$req$Identifier>;
+
+     label105:
+        $i0 = virtualinvoke $r23.<com.playhaven.android.req.Identifier: int ordinal()>();
+
+     label106:
+        $i0 = $r25[$i0];
+
+     label107:
+        lookupswitch($i0)
+        {
+            case 1: goto label109;
+            case 2: goto label125;
+            case 3: goto label135;
+            default: goto label108;
+        };
+
+     label108:
+        goto label100;
+
+     label109:
+        $r10 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String ifa>;
+
+     label110:
+        if $r10 == null goto label100;
+
+        $r26 = <com.playhaven.android.req.Identifier: com.playhaven.android.req.Identifier AdvertiserID>;
+
+     label111:
+        $r10 = virtualinvoke $r26.<com.playhaven.android.req.Identifier: java.lang.String getParam()>();
+
+     label112:
+        $r8 = newarray (java.lang.Object)[1];
+
+        $r18 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String ifa>;
+
+        $r8[0] = $r18;
+
+     label113:
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>($r10, $r8);
+
+     label114:
+        $r22 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set usedIdentifiers>;
+
+     label115:
+        interfaceinvoke $r22.<java.util.Set: boolean add(java.lang.Object)>($r23);
+
+     label116:
+        goto label100;
+
+     label117:
+        $r27 := @caughtexception;
+
+        throw $r27;
+
+     label118:
+        $i0 = virtualinvoke $r14.<android.view.Display: int getWidth()>();
+
+     label119:
+        $r5.<android.graphics.Point: int x> = $i0;
+
+     label120:
+        $i0 = virtualinvoke $r14.<android.view.Display: int getHeight()>();
+
+     label121:
+        $r5.<android.graphics.Point: int y> = $i0;
+
+     label122:
+        goto label044;
+
+     label123:
+        $r28 := @caughtexception;
+
+        $r27 = new com.playhaven.android.PlayHavenException;
+
+        specialinvoke $r27.<com.playhaven.android.PlayHavenException: void <init>(java.lang.Throwable)>($r28);
+
+        throw $r27;
+
+     label124:
+        $b1 = 1;
+
+        goto label090;
+
+     label125:
+        $r26 = <com.playhaven.android.req.Identifier: com.playhaven.android.req.Identifier AndroidID>;
+
+     label126:
+        $r10 = virtualinvoke $r26.<com.playhaven.android.req.Identifier: java.lang.String getParam()>();
+
+     label127:
+        $r8 = newarray (java.lang.Object)[1];
+
+     label128:
+        $r9 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config DeviceId>;
+
+     label129:
+        $r18 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r6, $r9);
+
+     label130:
+        $r8[0] = $r18;
+
+     label131:
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>($r10, $r8);
+
+     label132:
+        $r22 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set usedIdentifiers>;
+
+     label133:
+        interfaceinvoke $r22.<java.util.Set: boolean add(java.lang.Object)>($r23);
+
+     label134:
+        goto label100;
+
+     label135:
+        $r10 = staticinvoke <com.playhaven.android.util.KontagentUtil: java.lang.String getSenderId(android.content.Context)>($r1);
+
+     label136:
+        $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String ktsid> = $r10;
+
+        $r10 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String ktsid>;
+
+     label137:
+        if $r10 == null goto label100;
+
+        $r26 = <com.playhaven.android.req.Identifier: com.playhaven.android.req.Identifier SenderID>;
+
+     label138:
+        $r10 = virtualinvoke $r26.<com.playhaven.android.req.Identifier: java.lang.String getParam()>();
+
+     label139:
+        $r8 = newarray (java.lang.Object)[1];
+
+        $r18 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String ktsid>;
+
+        $r8[0] = $r18;
+
+     label140:
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>($r10, $r8);
+
+     label141:
+        $r22 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set usedIdentifiers>;
+
+     label142:
+        interfaceinvoke $r22.<java.util.Set: boolean add(java.lang.Object)>($r23);
+
+     label143:
+        goto label100;
+
+     label144:
+        $r4 = new android.util.DisplayMetrics;
+
+     label145:
+        specialinvoke $r4.<android.util.DisplayMetrics: void <init>()>();
+
+        virtualinvoke $r14.<android.view.Display: void getMetrics(android.util.DisplayMetrics)>($r4);
+
+     label146:
+        $r8 = newarray (java.lang.Object)[1];
+
+        $i0 = $r4.<android.util.DisplayMetrics: int densityDpi>;
+
+     label147:
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+     label148:
+        $r8[0] = $r11;
+
+     label149:
+        varReplacer7931 = "dpi";
+
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>(varReplacer7931, $r8);
+
+     label150:
+        $r29 = $r0.<com.playhaven.android.req.PlayHavenRequest: net.minidev.json.JSONObject customDimensions>;
+
+     label151:
+        if $r29 == null goto label159;
+
+     label152:
+        $r29 = $r0.<com.playhaven.android.req.PlayHavenRequest: net.minidev.json.JSONObject customDimensions>;
+
+     label153:
+        $z0 = virtualinvoke $r29.<net.minidev.json.JSONObject: boolean isEmpty()>();
+
+     label154:
+        if $z0 != 0 goto label159;
+
+     label155:
+        $r8 = newarray (java.lang.Object)[1];
+
+        $r29 = $r0.<com.playhaven.android.req.PlayHavenRequest: net.minidev.json.JSONObject customDimensions>;
+
+     label156:
+        $r10 = virtualinvoke $r29.<net.minidev.json.JSONObject: java.lang.String toJSONString()>();
+
+     label157:
+        $r8[0] = $r10;
+
+     label158:
+        varReplacer7949 = "custom";
+
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>(varReplacer7949, $r8);
+
+     label159:
+        $r30 = staticinvoke <java.util.UUID: java.util.UUID randomUUID()>();
+
+        $r10 = virtualinvoke $r30.<java.util.UUID: java.lang.String toString()>();
+
+        $r10 = staticinvoke <com.playhaven.android.req.PlayHavenRequest: java.lang.String base64Digest(java.lang.String)>($r10);
+
+     label160:
+        $r8 = newarray (java.lang.Object)[1];
+
+        $r8[0] = $r10;
+
+     label161:
+        varReplacer7948 = "nonce";
+
+        virtualinvoke $r7.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponentsBuilder queryParam(java.lang.String,java.lang.Object[])>(varReplacer7948, $r8);
+
+        virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: void addSignature(org.springframework.web.util.UriComponentsBuilder,android.content.SharedPreferences,java.lang.String)>($r7, $r6, $r10);
+
+     label162:
+        $r9 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config Secret>;
+
+     label163:
+        $r18 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r6, $r9);
+
+     label164:
+        $r2 = new javax.crypto.spec.SecretKeySpec;
+
+     label165:
+        $r31 = staticinvoke <com.playhaven.android.PlayHaven: java.nio.charset.Charset getUTF8()>();
+
+        $r32 = virtualinvoke $r18.<java.lang.String: byte[] getBytes(java.nio.charset.Charset)>($r31);
+
+        varReplacer7954 = "HmacSHA1";
+
+        specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r32, varReplacer7954);
+
+        varReplacer7942 = "HmacSHA1";
+
+        $r33 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer7942);
+
+     label166:
+        $r0.<com.playhaven.android.req.PlayHavenRequest: javax.crypto.Mac sigMac> = $r33;
+
+        $r33 = $r0.<com.playhaven.android.req.PlayHavenRequest: javax.crypto.Mac sigMac>;
+
+     label167:
+        virtualinvoke $r33.<javax.crypto.Mac: void init(java.security.Key)>($r2);
+
+     label168:
+        $r33 = $r0.<com.playhaven.android.req.PlayHavenRequest: javax.crypto.Mac sigMac>;
+
+     label169:
+        $r31 = staticinvoke <com.playhaven.android.PlayHaven: java.nio.charset.Charset getUTF8()>();
+
+        $r32 = virtualinvoke $r10.<java.lang.String: byte[] getBytes(java.nio.charset.Charset)>($r31);
+
+        virtualinvoke $r33.<javax.crypto.Mac: void update(byte[])>($r32);
+
+     label170:
+        return $r7;
+
+        catch com.playhaven.android.PlayHavenException from label001 to label002 with label117;
+        catch com.playhaven.android.PlayHavenException from label004 to label005 with label117;
+        catch com.playhaven.android.PlayHavenException from label006 to label007 with label117;
+        catch com.playhaven.android.PlayHavenException from label009 to label010 with label117;
+        catch com.playhaven.android.PlayHavenException from label011 to label012 with label117;
+        catch com.playhaven.android.PlayHavenException from label014 to label015 with label117;
+        catch com.playhaven.android.PlayHavenException from label016 to label017 with label117;
+        catch com.playhaven.android.PlayHavenException from label019 to label020 with label117;
+        catch com.playhaven.android.PlayHavenException from label021 to label022 with label117;
+        catch com.playhaven.android.PlayHavenException from label023 to label024 with label117;
+        catch com.playhaven.android.PlayHavenException from label026 to label027 with label117;
+        catch com.playhaven.android.PlayHavenException from label028 to label029 with label117;
+        catch com.playhaven.android.PlayHavenException from label030 to label031 with label117;
+        catch com.playhaven.android.PlayHavenException from label032 to label033 with label117;
+        catch com.playhaven.android.PlayHavenException from label034 to label035 with label117;
+        catch com.playhaven.android.PlayHavenException from label037 to label038 with label117;
+        catch com.playhaven.android.PlayHavenException from label039 to label040 with label117;
+        catch com.playhaven.android.PlayHavenException from label041 to label042 with label117;
+        catch com.playhaven.android.PlayHavenException from label043 to label044 with label117;
+        catch com.playhaven.android.PlayHavenException from label045 to label046 with label117;
+        catch com.playhaven.android.PlayHavenException from label047 to label048 with label117;
+        catch com.playhaven.android.PlayHavenException from label049 to label050 with label117;
+        catch com.playhaven.android.PlayHavenException from label051 to label052 with label117;
+        catch com.playhaven.android.PlayHavenException from label053 to label054 with label117;
+        catch com.playhaven.android.PlayHavenException from label055 to label056 with label117;
+        catch com.playhaven.android.PlayHavenException from label057 to label058 with label117;
+        catch com.playhaven.android.PlayHavenException from label059 to label060 with label117;
+        catch com.playhaven.android.PlayHavenException from label061 to label062 with label117;
+        catch com.playhaven.android.PlayHavenException from label064 to label065 with label117;
+        catch com.playhaven.android.PlayHavenException from label066 to label067 with label117;
+        catch com.playhaven.android.PlayHavenException from label068 to label069 with label117;
+        catch com.playhaven.android.PlayHavenException from label070 to label071 with label117;
+        catch com.playhaven.android.PlayHavenException from label072 to label073 with label117;
+        catch com.playhaven.android.PlayHavenException from label074 to label075 with label117;
+        catch com.playhaven.android.PlayHavenException from label077 to label078 with label117;
+        catch com.playhaven.android.PlayHavenException from label079 to label080 with label117;
+        catch com.playhaven.android.PlayHavenException from label081 to label082 with label117;
+        catch com.playhaven.android.PlayHavenException from label083 to label084 with label117;
+        catch com.playhaven.android.PlayHavenException from label085 to label086 with label117;
+        catch com.playhaven.android.PlayHavenException from label088 to label089 with label117;
+        catch com.playhaven.android.PlayHavenException from label090 to label091 with label117;
+        catch com.playhaven.android.PlayHavenException from label092 to label093 with label117;
+        catch com.playhaven.android.PlayHavenException from label095 to label096 with label117;
+        catch com.playhaven.android.PlayHavenException from label099 to label101 with label117;
+        catch com.playhaven.android.PlayHavenException from label102 to label103 with label117;
+        catch com.playhaven.android.PlayHavenException from label105 to label106 with label117;
+        catch com.playhaven.android.PlayHavenException from label111 to label112 with label117;
+        catch com.playhaven.android.PlayHavenException from label113 to label114 with label117;
+        catch com.playhaven.android.PlayHavenException from label115 to label116 with label117;
+        catch java.lang.Exception from label001 to label003 with label123;
+        catch java.lang.Exception from label004 to label008 with label123;
+        catch java.lang.Exception from label009 to label013 with label123;
+        catch java.lang.Exception from label014 to label018 with label123;
+        catch java.lang.Exception from label019 to label025 with label123;
+        catch java.lang.Exception from label026 to label036 with label123;
+        catch java.lang.Exception from label037 to label040 with label123;
+        catch java.lang.Exception from label041 to label042 with label123;
+        catch java.lang.Exception from label043 to label052 with label123;
+        catch java.lang.Exception from label053 to label054 with label123;
+        catch java.lang.Exception from label055 to label056 with label123;
+        catch java.lang.Exception from label057 to label063 with label123;
+        catch java.lang.Exception from label064 to label076 with label123;
+        catch java.lang.Exception from label077 to label082 with label123;
+        catch java.lang.Exception from label083 to label084 with label123;
+        catch java.lang.Exception from label085 to label086 with label123;
+        catch java.lang.Exception from label087 to label089 with label123;
+        catch java.lang.Exception from label090 to label094 with label123;
+        catch java.lang.Exception from label095 to label096 with label123;
+        catch java.lang.Exception from label097 to label101 with label123;
+        catch java.lang.Exception from label102 to label104 with label123;
+        catch java.lang.Exception from label105 to label107 with label123;
+        catch java.lang.Exception from label109 to label110 with label123;
+        catch java.lang.Exception from label111 to label116 with label123;
+        catch com.playhaven.android.PlayHavenException from label118 to label119 with label117;
+        catch com.playhaven.android.PlayHavenException from label120 to label121 with label117;
+        catch java.lang.Exception from label118 to label122 with label123;
+        catch com.playhaven.android.PlayHavenException from label126 to label127 with label117;
+        catch com.playhaven.android.PlayHavenException from label129 to label130 with label117;
+        catch com.playhaven.android.PlayHavenException from label131 to label132 with label117;
+        catch com.playhaven.android.PlayHavenException from label133 to label134 with label117;
+        catch com.playhaven.android.PlayHavenException from label135 to label136 with label117;
+        catch com.playhaven.android.PlayHavenException from label138 to label139 with label117;
+        catch com.playhaven.android.PlayHavenException from label140 to label141 with label117;
+        catch com.playhaven.android.PlayHavenException from label142 to label143 with label117;
+        catch com.playhaven.android.PlayHavenException from label145 to label146 with label117;
+        catch com.playhaven.android.PlayHavenException from label147 to label148 with label117;
+        catch com.playhaven.android.PlayHavenException from label149 to label150 with label117;
+        catch com.playhaven.android.PlayHavenException from label153 to label154 with label117;
+        catch com.playhaven.android.PlayHavenException from label156 to label157 with label117;
+        catch com.playhaven.android.PlayHavenException from label158 to label160 with label117;
+        catch com.playhaven.android.PlayHavenException from label161 to label162 with label117;
+        catch com.playhaven.android.PlayHavenException from label163 to label164 with label117;
+        catch com.playhaven.android.PlayHavenException from label165 to label166 with label117;
+        catch com.playhaven.android.PlayHavenException from label167 to label168 with label117;
+        catch com.playhaven.android.PlayHavenException from label169 to label170 with label117;
+        catch java.lang.Exception from label126 to label128 with label123;
+        catch java.lang.Exception from label129 to label134 with label123;
+        catch java.lang.Exception from label135 to label137 with label123;
+        catch java.lang.Exception from label138 to label143 with label123;
+        catch java.lang.Exception from label145 to label151 with label123;
+        catch java.lang.Exception from label152 to label154 with label123;
+        catch java.lang.Exception from label155 to label162 with label123;
+        catch java.lang.Exception from label163 to label164 with label123;
+        catch java.lang.Exception from label165 to label170 with label123;
+    }
+
+    protected int getApiPath(android.content.Context)
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        android.content.Context $r1;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: android.content.Context;
+
+        return -1;
+    }
+
+    protected com.playhaven.android.compat.VendorCompat getCompat(android.content.Context)
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        android.content.Context $r1;
+        com.playhaven.android.compat.VendorCompat $r2;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 = staticinvoke <com.playhaven.android.PlayHaven: com.playhaven.android.compat.VendorCompat getVendorCompat(android.content.Context)>($r1);
+
+        return $r2;
+    }
+
+    protected org.springframework.http.HttpEntity getEntity()
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        org.springframework.http.HttpEntity $r1;
+        org.springframework.http.HttpHeaders $r2;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 = new org.springframework.http.HttpEntity;
+
+        $r2 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: org.springframework.http.HttpHeaders getHeaders()>();
+
+        specialinvoke $r1.<org.springframework.http.HttpEntity: void <init>(org.springframework.util.MultiValueMap)>($r2);
+
+        return $r1;
+    }
+
+    protected org.springframework.http.HttpHeaders getHeaders()
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        org.springframework.http.HttpHeaders $r1;
+        java.util.List $r2;
+        org.springframework.http.MediaType $r3;
+        java.lang.String $r4, varReplacer7584, varReplacer7585;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 = new org.springframework.http.HttpHeaders;
+
+        specialinvoke $r1.<org.springframework.http.HttpHeaders: void <init>()>();
+
+        $r3 = new org.springframework.http.MediaType;
+
+        varReplacer7584 = "application";
+
+        varReplacer7585 = "json";
+
+        specialinvoke $r3.<org.springframework.http.MediaType: void <init>(java.lang.String,java.lang.String)>(varReplacer7584, varReplacer7585);
+
+        $r2 = staticinvoke <java.util.Collections: java.util.List singletonList(java.lang.Object)>($r3);
+
+        virtualinvoke $r1.<org.springframework.http.HttpHeaders: void setAccept(java.util.List)>($r2);
+
+        $r4 = <com.playhaven.android.req.UserAgent: java.lang.String USER_AGENT>;
+
+        virtualinvoke $r1.<org.springframework.http.HttpHeaders: void setUserAgent(java.lang.String)>($r4);
+
+        return $r1;
+    }
+
+    public java.util.Set getIdentifiers()
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        java.util.HashSet $r1;
+        java.util.Set $r2;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 = new java.util.HashSet;
+
+        $r2 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set identifiers>;
+
+        specialinvoke $r1.<java.util.HashSet: void <init>(java.util.Collection)>($r2);
+
+        return $r1;
+    }
+
+    protected java.lang.Integer getInt(android.content.SharedPreferences, com.playhaven.android.PlayHaven$Config, int)
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        android.content.SharedPreferences $r1;
+        com.playhaven.android.PlayHaven$Config $r2;
+        int $i0, varReplacer8219;
+        java.lang.String $r3;
+        java.lang.Integer $r4;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: android.content.SharedPreferences;
+
+        $r2 := @parameter1: com.playhaven.android.PlayHaven$Config;
+
+        $i0 := @parameter2: int;
+
+        $r3 = virtualinvoke $r2.<com.playhaven.android.PlayHaven$Config: java.lang.String toString()>();
+
+        varReplacer8219 = 0;
+
+        $i0 = interfaceinvoke $r1.<android.content.SharedPreferences: int getInt(java.lang.String,int)>($r3, varReplacer8219);
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        return $r4;
+    }
+
+    public java.lang.String getLastUrl()
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        java.lang.String r1;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        r1 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String lastUrl>;
+
+        return r1;
+    }
+
+    protected org.springframework.http.HttpMethod getMethod()
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        org.springframework.http.HttpMethod r1;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        r1 = $r0.<com.playhaven.android.req.PlayHavenRequest: org.springframework.http.HttpMethod restMethod>;
+
+        return r1;
+    }
+
+    protected java.lang.String getMockJsonResponse()
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        null_type varReplacer7583;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        varReplacer7583 = null;
+
+        return varReplacer7583;
+    }
+
+    public com.playhaven.android.req.RequestListener getResponseHandler()
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        com.playhaven.android.req.RequestListener r1;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        r1 = $r0.<com.playhaven.android.req.PlayHavenRequest: com.playhaven.android.req.RequestListener handler>;
+
+        return r1;
+    }
+
+    protected java.lang.String getString(android.content.SharedPreferences, com.playhaven.android.PlayHaven$Config)
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        android.content.SharedPreferences $r1;
+        com.playhaven.android.PlayHaven$Config $r2;
+        java.lang.String $r3, varReplacer7608;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: android.content.SharedPreferences;
+
+        $r2 := @parameter1: com.playhaven.android.PlayHaven$Config;
+
+        varReplacer7608 = "unknown";
+
+        $r3 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config,java.lang.String)>($r1, $r2, varReplacer7608);
+
+        return $r3;
+    }
+
+    protected java.lang.String getString(android.content.SharedPreferences, com.playhaven.android.PlayHaven$Config, java.lang.String)
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        android.content.SharedPreferences $r1;
+        com.playhaven.android.PlayHaven$Config $r2;
+        java.lang.String $r3, $r4;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: android.content.SharedPreferences;
+
+        $r2 := @parameter1: com.playhaven.android.PlayHaven$Config;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 = virtualinvoke $r2.<com.playhaven.android.PlayHaven$Config: java.lang.String toString()>();
+
+        $r3 = interfaceinvoke $r1.<android.content.SharedPreferences: java.lang.String getString(java.lang.String,java.lang.String)>($r4, $r3);
+
+        return $r3;
+    }
+
+    public java.lang.String getUrl(android.content.Context) throws com.playhaven.android.PlayHavenException
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        android.content.Context $r1;
+        org.springframework.web.util.UriComponentsBuilder $r2;
+        org.springframework.web.util.UriComponents $r3;
+        java.lang.String $r4;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: org.springframework.web.util.UriComponentsBuilder createUrl(android.content.Context)>($r1);
+
+        $r3 = virtualinvoke $r2.<org.springframework.web.util.UriComponentsBuilder: org.springframework.web.util.UriComponents build()>();
+
+        $r3 = virtualinvoke $r3.<org.springframework.web.util.UriComponents: org.springframework.web.util.UriComponents encode()>();
+
+        $r4 = virtualinvoke $r3.<org.springframework.web.util.UriComponents: java.lang.String toUriString()>();
+
+        $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String lastUrl> = $r4;
+
+        $r4 = $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String lastUrl>;
+
+        return $r4;
+    }
+
+    protected void handleResponse(android.content.Context, com.playhaven.android.PlayHavenException)
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        android.content.Context $r1;
+        com.playhaven.android.PlayHavenException $r2;
+        com.playhaven.android.req.RequestListener $r3;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: com.playhaven.android.PlayHavenException;
+
+        $r3 = $r0.<com.playhaven.android.req.PlayHavenRequest: com.playhaven.android.req.RequestListener handler>;
+
+        if $r3 == null goto label1;
+
+        $r3 = $r0.<com.playhaven.android.req.PlayHavenRequest: com.playhaven.android.req.RequestListener handler>;
+
+        interfaceinvoke $r3.<com.playhaven.android.req.RequestListener: void handleResponse(android.content.Context,com.playhaven.android.PlayHavenException)>($r1, $r2);
+
+     label1:
+        return;
+    }
+
+    protected void handleResponse(android.content.Context, java.lang.String)
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        android.content.Context $r1;
+        java.lang.String $r2;
+        com.playhaven.android.req.RequestListener $r3;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 = $r0.<com.playhaven.android.req.PlayHavenRequest: com.playhaven.android.req.RequestListener handler>;
+
+        if $r3 == null goto label1;
+
+        $r3 = $r0.<com.playhaven.android.req.PlayHavenRequest: com.playhaven.android.req.RequestListener handler>;
+
+        interfaceinvoke $r3.<com.playhaven.android.req.RequestListener: void handleResponse(android.content.Context,java.lang.String)>($r1, $r2);
+
+     label1:
+        return;
+    }
+
+    public void send(android.content.Context)
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        android.content.Context $r1;
+        java.lang.Thread $r2;
+        com.playhaven.android.req.PlayHavenRequest$1 $r3;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 = new java.lang.Thread;
+
+        $r3 = new com.playhaven.android.req.PlayHavenRequest$1;
+
+        specialinvoke $r3.<com.playhaven.android.req.PlayHavenRequest$1: void <init>(com.playhaven.android.req.PlayHavenRequest,android.content.Context)>($r0, $r1);
+
+        specialinvoke $r2.<java.lang.Thread: void <init>(java.lang.Runnable)>($r3);
+
+        virtualinvoke $r2.<java.lang.Thread: void start()>();
+
+        return;
+    }
+
+    protected void serverSuccess(android.content.Context)
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        android.content.Context $r1;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: android.content.Context;
+
+        return;
+    }
+
+    public void setIdentifiers(java.util.Set) throws com.playhaven.android.PlayHavenException
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        java.util.Set $r1;
+        java.lang.IllegalArgumentException $r2;
+        boolean $z0;
+        com.playhaven.android.PlayHavenException $r3;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: java.util.Set;
+
+        $z0 = interfaceinvoke $r1.<java.util.Set: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        $r3 = new com.playhaven.android.PlayHavenException;
+
+        $r2 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("At least one identifier must be set");
+
+        specialinvoke $r3.<com.playhaven.android.PlayHavenException: void <init>(java.lang.Throwable)>($r2);
+
+        throw $r3;
+
+     label1:
+        $r0.<com.playhaven.android.req.PlayHavenRequest: java.util.Set identifiers> = $r1;
+
+        return;
+    }
+
+    public void setIdentifiers(net.minidev.json.JSONArray) throws com.playhaven.android.PlayHavenException
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        net.minidev.json.JSONArray $r1;
+        com.playhaven.android.req.Identifier $r2;
+        java.util.HashSet $r3;
+        int $i0, $i1;
+        com.playhaven.android.req.Identifier[] $r4;
+        java.lang.String $r5;
+        boolean $z0;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: net.minidev.json.JSONArray;
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        $r3 = new java.util.HashSet;
+
+        specialinvoke $r3.<java.util.HashSet: void <init>()>();
+
+        $r4 = staticinvoke <com.playhaven.android.req.Identifier: com.playhaven.android.req.Identifier[] values()>();
+
+        $i0 = lengthof $r4;
+
+        $i1 = 0;
+
+     label2:
+        if $i1 >= $i0 goto label5;
+
+        $r2 = $r4[$i1];
+
+        $r5 = virtualinvoke $r2.<com.playhaven.android.req.Identifier: java.lang.String getParam()>();
+
+        $z0 = virtualinvoke $r1.<net.minidev.json.JSONArray: boolean contains(java.lang.Object)>($r5);
+
+        if $z0 != 0 goto label3;
+
+        $r5 = virtualinvoke $r2.<com.playhaven.android.req.Identifier: java.lang.String toString()>();
+
+        $z0 = virtualinvoke $r1.<net.minidev.json.JSONArray: boolean contains(java.lang.Object)>($r5);
+
+        if $z0 == 0 goto label4;
+
+     label3:
+        virtualinvoke $r3.<java.util.HashSet: boolean add(java.lang.Object)>($r2);
+
+     label4:
+        $i1 = $i1 + 1;
+
+        goto label2;
+
+     label5:
+        virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: void setIdentifiers(java.util.Set)>($r3);
+
+        return;
+    }
+
+    public transient void setIdentifiers(com.playhaven.android.req.Identifier[]) throws com.playhaven.android.PlayHavenException
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        com.playhaven.android.req.Identifier[] $r1;
+        java.util.HashSet $r2;
+        java.util.List $r3;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: com.playhaven.android.req.Identifier[];
+
+        $r2 = new java.util.HashSet;
+
+        $r3 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r1);
+
+        specialinvoke $r2.<java.util.HashSet: void <init>(java.util.Collection)>($r3);
+
+        virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: void setIdentifiers(java.util.Set)>($r2);
+
+        return;
+    }
+
+    protected void setMethod(org.springframework.http.HttpMethod)
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        org.springframework.http.HttpMethod $r1;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: org.springframework.http.HttpMethod;
+
+        $r0.<com.playhaven.android.req.PlayHavenRequest: org.springframework.http.HttpMethod restMethod> = $r1;
+
+        return;
+    }
+
+    public void setResponseHandler(com.playhaven.android.req.RequestListener)
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        com.playhaven.android.req.RequestListener $r1;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: com.playhaven.android.req.RequestListener;
+
+        $r0.<com.playhaven.android.req.PlayHavenRequest: com.playhaven.android.req.RequestListener handler> = $r1;
+
+        return;
+    }
+
+    boolean shouldIncludeIFA()
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        return 1;
+    }
+
+    protected void validateSignatures(android.content.Context, java.lang.String, java.lang.String) throws com.playhaven.android.req.SignatureException
+    {
+        com.playhaven.android.req.PlayHavenRequest $r0;
+        android.content.Context $r1;
+        java.lang.String $r2, $r3, $r9, varReplacer7586, varReplacer7587, varReplacer7588, varReplacer7589, varReplacer7590, varReplacer7591, varReplacer7593, varReplacer7594, varReplacer7595, varReplacer7598, varReplacer7599, varReplacer7600, varReplacer7601, varReplacer7602, varReplacer7603, varReplacer7604, varReplacer7605, varReplacer7606, varReplacer7607;
+        javax.crypto.Mac $r4;
+        com.playhaven.android.req.SignatureException $r5, $r19;
+        com.playhaven.android.req.SignatureException$Type $r6;
+        java.nio.charset.Charset $r7;
+        byte[] $r8;
+        boolean $z0;
+        java.lang.Object[] $r10;
+        android.content.SharedPreferences $r11;
+        java.lang.Object $r12;
+        net.minidev.json.JSONArray $r13;
+        int $i0, $i1, varReplacer7592, varReplacer7596, varReplacer7597;
+        net.minidev.json.JSONObject $r14;
+        java.lang.String[] $r15;
+        com.playhaven.android.PlayHaven$Config $r16;
+        java.lang.Exception $r17, $r20;
+        com.jayway.jsonpath.Filter[] $r18;
+
+        nop;
+
+        $r0 := @this: com.playhaven.android.req.PlayHavenRequest;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 = $r0.<com.playhaven.android.req.PlayHavenRequest: javax.crypto.Mac sigMac>;
+
+        if $r4 != null goto label01;
+
+        return;
+
+     label01:
+        if $r2 != null goto label02;
+
+        $r5 = new com.playhaven.android.req.SignatureException;
+
+        $r6 = <com.playhaven.android.req.SignatureException$Type: com.playhaven.android.req.SignatureException$Type Digest>;
+
+        varReplacer7599 = "No digest found";
+
+        specialinvoke $r5.<com.playhaven.android.req.SignatureException: void <init>(com.playhaven.android.req.SignatureException$Type,java.lang.String)>($r6, varReplacer7599);
+
+        throw $r5;
+
+     label02:
+        if $r3 != null goto label03;
+
+        $r5 = new com.playhaven.android.req.SignatureException;
+
+        $r6 = <com.playhaven.android.req.SignatureException$Type: com.playhaven.android.req.SignatureException$Type Digest>;
+
+        varReplacer7605 = "No JSON found";
+
+        specialinvoke $r5.<com.playhaven.android.req.SignatureException: void <init>(com.playhaven.android.req.SignatureException$Type,java.lang.String)>($r6, varReplacer7605);
+
+        throw $r5;
+
+     label03:
+        $r4 = $r0.<com.playhaven.android.req.PlayHavenRequest: javax.crypto.Mac sigMac>;
+
+        $r7 = staticinvoke <com.playhaven.android.PlayHaven: java.nio.charset.Charset getUTF8()>();
+
+        $r8 = virtualinvoke $r3.<java.lang.String: byte[] getBytes(java.nio.charset.Charset)>($r7);
+
+        virtualinvoke $r4.<javax.crypto.Mac: void update(byte[])>($r8);
+
+        $r4 = $r0.<com.playhaven.android.req.PlayHavenRequest: javax.crypto.Mac sigMac>;
+
+        $r8 = virtualinvoke $r4.<javax.crypto.Mac: byte[] doFinal()>();
+
+        $r9 = new java.lang.String;
+
+        varReplacer7592 = 8;
+
+        $r8 = staticinvoke <android.util.Base64: byte[] encode(byte[],int)>($r8, varReplacer7592);
+
+        $r7 = staticinvoke <com.playhaven.android.PlayHaven: java.nio.charset.Charset getUTF8()>();
+
+        specialinvoke $r9.<java.lang.String: void <init>(byte[],java.nio.charset.Charset)>($r8, $r7);
+
+        $r9 = virtualinvoke $r9.<java.lang.String: java.lang.String trim()>();
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r9);
+
+        if $z0 != 0 goto label04;
+
+        $r10 = newarray (java.lang.Object)[2];
+
+        $r10[0] = $r2;
+
+        $r10[1] = $r9;
+
+        varReplacer7602 = "Signature error. Received: %s != Derived: %s";
+
+        staticinvoke <com.playhaven.android.PlayHaven: void v(java.lang.String,java.lang.Object[])>(varReplacer7602, $r10);
+
+        $r5 = new com.playhaven.android.req.SignatureException;
+
+        $r6 = <com.playhaven.android.req.SignatureException$Type: com.playhaven.android.req.SignatureException$Type Digest>;
+
+        varReplacer7595 = "Signature mismatch";
+
+        specialinvoke $r5.<com.playhaven.android.req.SignatureException: void <init>(com.playhaven.android.req.SignatureException$Type,java.lang.String)>($r6, varReplacer7595);
+
+        throw $r5;
+
+     label04:
+        $r11 = staticinvoke <com.playhaven.android.PlayHaven: android.content.SharedPreferences getPreferences(android.content.Context)>($r1);
+
+     label05:
+        varReplacer7600 = "$.response.context.content.*.parameters.rewards";
+
+        $r12 = staticinvoke <com.playhaven.android.util.JsonUtil: java.lang.Object getPath(java.lang.String,java.lang.String)>($r3, varReplacer7600);
+
+     label06:
+        $r13 = (net.minidev.json.JSONArray) $r12;
+
+     label07:
+        if $r13 == null goto label29;
+
+        $i0 = 0;
+
+     label08:
+        $i1 = virtualinvoke $r13.<net.minidev.json.JSONArray: int size()>();
+
+     label09:
+        if $i0 >= $i1 goto label29;
+
+     label10:
+        $r12 = virtualinvoke $r13.<net.minidev.json.JSONArray: java.lang.Object get(int)>($i0);
+
+     label11:
+        $r14 = (net.minidev.json.JSONObject) $r12;
+
+        $r15 = newarray (java.lang.String)[4];
+
+     label12:
+        $r16 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config DeviceId>;
+
+     label13:
+        $r2 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r11, $r16);
+
+     label14:
+        $r15[0] = $r2;
+
+     label15:
+        varReplacer7586 = "$.reward";
+
+        $r2 = staticinvoke <com.playhaven.android.util.JsonUtil: java.lang.String asString(net.minidev.json.JSONObject,java.lang.String)>($r14, varReplacer7586);
+
+     label16:
+        $r15[1] = $r2;
+
+     label17:
+        varReplacer7588 = "$.quantity";
+
+        $r2 = staticinvoke <com.playhaven.android.util.JsonUtil: java.lang.String asString(net.minidev.json.JSONObject,java.lang.String)>($r14, varReplacer7588);
+
+     label18:
+        $r15[2] = $r2;
+
+     label19:
+        varReplacer7593 = "$.receipt";
+
+        $r2 = staticinvoke <com.playhaven.android.util.JsonUtil: java.lang.String asString(net.minidev.json.JSONObject,java.lang.String)>($r14, varReplacer7593);
+
+     label20:
+        $r15[3] = $r2;
+
+     label21:
+        varReplacer7603 = ":";
+
+        $r2 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String concat(java.lang.String,java.lang.String[])>(varReplacer7603, $r15);
+
+        varReplacer7597 = 1;
+
+        $r2 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String createHmac(android.content.SharedPreferences,java.lang.String,boolean)>($r11, $r2, varReplacer7597);
+
+        varReplacer7601 = "$.sig4";
+
+        $r12 = staticinvoke <com.playhaven.android.util.JsonUtil: java.lang.Object getPath(net.minidev.json.JSONObject,java.lang.String)>($r14, varReplacer7601);
+
+     label22:
+        $r9 = (java.lang.String) $r12;
+
+     label23:
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r9);
+
+     label24:
+        if $z0 != 0 goto label27;
+
+        $r5 = new com.playhaven.android.req.SignatureException;
+
+        $r6 = <com.playhaven.android.req.SignatureException$Type: com.playhaven.android.req.SignatureException$Type Reward>;
+
+     label25:
+        varReplacer7606 = "Signature does not match.";
+
+        specialinvoke $r5.<com.playhaven.android.req.SignatureException: void <init>(com.playhaven.android.req.SignatureException$Type,java.lang.String)>($r6, varReplacer7606);
+
+        throw $r5;
+
+     label26:
+        $r5 := @caughtexception;
+
+        throw $r5;
+
+     label27:
+        $i0 = $i0 + 1;
+
+        goto label08;
+
+     label28:
+        $r17 := @caughtexception;
+
+        $r5 = new com.playhaven.android.req.SignatureException;
+
+        $r6 = <com.playhaven.android.req.SignatureException$Type: com.playhaven.android.req.SignatureException$Type Reward>;
+
+        specialinvoke $r5.<com.playhaven.android.req.SignatureException: void <init>(java.lang.Throwable,com.playhaven.android.req.SignatureException$Type)>($r17, $r6);
+
+        throw $r5;
+
+     label29:
+        varReplacer7587 = "$.response.context.content.*.parameters.purchases";
+
+        $r12 = staticinvoke <com.playhaven.android.util.JsonUtil: java.lang.Object getPath(java.lang.String,java.lang.String)>($r3, varReplacer7587);
+
+     label30:
+        $r13 = (net.minidev.json.JSONArray) $r12;
+
+     label31:
+        if $r13 == null goto label57;
+
+        $i0 = 0;
+
+     label32:
+        $i1 = virtualinvoke $r13.<net.minidev.json.JSONArray: int size()>();
+
+     label33:
+        if $i0 >= $i1 goto label57;
+
+     label34:
+        $r12 = virtualinvoke $r13.<net.minidev.json.JSONArray: java.lang.Object get(int)>($i0);
+
+     label35:
+        $r14 = (net.minidev.json.JSONObject) $r12;
+
+        $r15 = newarray (java.lang.String)[5];
+
+     label36:
+        $r16 = <com.playhaven.android.PlayHaven$Config: com.playhaven.android.PlayHaven$Config DeviceId>;
+
+     label37:
+        $r2 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String getString(android.content.SharedPreferences,com.playhaven.android.PlayHaven$Config)>($r11, $r16);
+
+     label38:
+        $r15[0] = $r2;
+
+     label39:
+        varReplacer7591 = "$.product";
+
+        $r2 = staticinvoke <com.playhaven.android.util.JsonUtil: java.lang.String asString(net.minidev.json.JSONObject,java.lang.String)>($r14, varReplacer7591);
+
+     label40:
+        $r15[1] = $r2;
+
+     label41:
+        varReplacer7607 = "$.name";
+
+        $r2 = staticinvoke <com.playhaven.android.util.JsonUtil: java.lang.String asString(net.minidev.json.JSONObject,java.lang.String)>($r14, varReplacer7607);
+
+     label42:
+        $r15[2] = $r2;
+
+     label43:
+        varReplacer7598 = "$.quantity";
+
+        $r2 = staticinvoke <com.playhaven.android.util.JsonUtil: java.lang.String asString(net.minidev.json.JSONObject,java.lang.String)>($r14, varReplacer7598);
+
+     label44:
+        $r15[3] = $r2;
+
+     label45:
+        varReplacer7594 = "$.receipt";
+
+        $r2 = staticinvoke <com.playhaven.android.util.JsonUtil: java.lang.String asString(net.minidev.json.JSONObject,java.lang.String)>($r14, varReplacer7594);
+
+     label46:
+        $r15[4] = $r2;
+
+     label47:
+        varReplacer7590 = ":";
+
+        $r2 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String concat(java.lang.String,java.lang.String[])>(varReplacer7590, $r15);
+
+        varReplacer7596 = 1;
+
+        $r2 = virtualinvoke $r0.<com.playhaven.android.req.PlayHavenRequest: java.lang.String createHmac(android.content.SharedPreferences,java.lang.String,boolean)>($r11, $r2, varReplacer7596);
+
+     label48:
+        $r18 = newarray (com.jayway.jsonpath.Filter)[0];
+
+     label49:
+        varReplacer7604 = "$.sig4";
+
+        $r12 = staticinvoke <com.jayway.jsonpath.JsonPath: java.lang.Object read(java.lang.Object,java.lang.String,com.jayway.jsonpath.Filter[])>($r14, varReplacer7604, $r18);
+
+     label50:
+        $r3 = (java.lang.String) $r12;
+
+     label51:
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r3);
+
+     label52:
+        if $z0 != 0 goto label55;
+
+        $r5 = new com.playhaven.android.req.SignatureException;
+
+        $r6 = <com.playhaven.android.req.SignatureException$Type: com.playhaven.android.req.SignatureException$Type Purchase>;
+
+     label53:
+        varReplacer7589 = "Signature does not match.";
+
+        specialinvoke $r5.<com.playhaven.android.req.SignatureException: void <init>(com.playhaven.android.req.SignatureException$Type,java.lang.String)>($r6, varReplacer7589);
+
+        throw $r5;
+
+     label54:
+        $r19 := @caughtexception;
+
+        throw $r19;
+
+     label55:
+        $i0 = $i0 + 1;
+
+        goto label32;
+
+     label56:
+        $r20 := @caughtexception;
+
+        $r5 = new com.playhaven.android.req.SignatureException;
+
+        $r6 = <com.playhaven.android.req.SignatureException$Type: com.playhaven.android.req.SignatureException$Type Purchase>;
+
+        specialinvoke $r5.<com.playhaven.android.req.SignatureException: void <init>(java.lang.Throwable,com.playhaven.android.req.SignatureException$Type)>($r20, $r6);
+
+        throw $r5;
+
+     label57:
+        return;
+
+        catch com.playhaven.android.req.SignatureException from label05 to label06 with label26;
+        catch com.playhaven.android.req.SignatureException from label08 to label09 with label26;
+        catch com.playhaven.android.req.SignatureException from label10 to label11 with label26;
+        catch com.playhaven.android.req.SignatureException from label13 to label14 with label26;
+        catch com.playhaven.android.req.SignatureException from label15 to label16 with label26;
+        catch com.playhaven.android.req.SignatureException from label17 to label18 with label26;
+        catch com.playhaven.android.req.SignatureException from label19 to label20 with label26;
+        catch com.playhaven.android.req.SignatureException from label21 to label22 with label26;
+        catch com.playhaven.android.req.SignatureException from label23 to label24 with label26;
+        catch com.playhaven.android.req.SignatureException from label25 to label26 with label26;
+        catch java.lang.Exception from label05 to label07 with label28;
+        catch java.lang.Exception from label08 to label09 with label28;
+        catch java.lang.Exception from label10 to label12 with label28;
+        catch java.lang.Exception from label13 to label24 with label28;
+        catch java.lang.Exception from label25 to label26 with label28;
+        catch com.playhaven.android.req.SignatureException from label29 to label30 with label54;
+        catch com.playhaven.android.req.SignatureException from label32 to label33 with label54;
+        catch com.playhaven.android.req.SignatureException from label34 to label35 with label54;
+        catch com.playhaven.android.req.SignatureException from label37 to label38 with label54;
+        catch com.playhaven.android.req.SignatureException from label39 to label40 with label54;
+        catch com.playhaven.android.req.SignatureException from label41 to label42 with label54;
+        catch com.playhaven.android.req.SignatureException from label43 to label44 with label54;
+        catch com.playhaven.android.req.SignatureException from label45 to label46 with label54;
+        catch com.playhaven.android.req.SignatureException from label47 to label48 with label54;
+        catch com.playhaven.android.req.SignatureException from label49 to label50 with label54;
+        catch com.playhaven.android.req.SignatureException from label51 to label52 with label54;
+        catch com.playhaven.android.req.SignatureException from label53 to label54 with label54;
+        catch java.lang.Exception from label29 to label31 with label56;
+        catch java.lang.Exception from label32 to label33 with label56;
+        catch java.lang.Exception from label34 to label36 with label56;
+        catch java.lang.Exception from label37 to label52 with label56;
+        catch java.lang.Exception from label53 to label54 with label56;
+    }
+}

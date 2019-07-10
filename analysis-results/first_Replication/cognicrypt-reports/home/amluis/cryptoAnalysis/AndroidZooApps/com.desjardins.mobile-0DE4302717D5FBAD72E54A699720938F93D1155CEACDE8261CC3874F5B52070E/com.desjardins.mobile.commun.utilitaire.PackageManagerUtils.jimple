@@ -1,0 +1,327 @@
+public class com.desjardins.mobile.commun.utilitaire.PackageManagerUtils extends java.lang.Object
+{
+    public static final java.lang.String TAG;
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+        java.lang.Class $r1;
+
+        nop;
+
+        $r1 = class "Lcom/desjardins/mobile/commun/utilitaire/PackageManagerUtils;";
+
+        $r0 = virtualinvoke $r1.<java.lang.Class: java.lang.String getSimpleName()>();
+
+        <com.desjardins.mobile.commun.utilitaire.PackageManagerUtils: java.lang.String TAG> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.desjardins.mobile.commun.utilitaire.PackageManagerUtils $r0;
+
+        $r0 := @this: com.desjardins.mobile.commun.utilitaire.PackageManagerUtils;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String getCurrentSignature(java.lang.String, android.content.Context)
+    {
+        java.lang.String $r0, $r4, $r9, $r10, varReplacer458, varReplacer461, varReplacer462, varReplacer463;
+        android.content.Context $r1;
+        android.content.pm.Signature $r2;
+        android.content.pm.Signature[] $r3;
+        android.content.pm.PackageManager $r5;
+        android.content.pm.PackageInfo $r6;
+        int $i0, $i1, varReplacer459, varReplacer460;
+        java.security.MessageDigest $r7;
+        byte[] $r8;
+        java.lang.StringBuilder $r11, r14;
+        java.lang.Throwable $r12, $r13;
+        android.content.pm.PackageManager$NameNotFoundException r15;
+        java.security.NoSuchAlgorithmException r16;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: android.content.Context;
+
+        $r4 = null;
+
+        $r5 = virtualinvoke $r1.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+     label01:
+        varReplacer460 = 64;
+
+        $r6 = virtualinvoke $r5.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>($r0, varReplacer460);
+
+     label02:
+        $r3 = $r6.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        $i0 = lengthof $r3;
+
+        $i1 = 0;
+
+     label03:
+        if $i1 >= $i0 goto label10;
+
+        $r2 = $r3[$i1];
+
+     label04:
+        varReplacer458 = "SHA256";
+
+        $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer458);
+
+        $r8 = virtualinvoke $r2.<android.content.pm.Signature: byte[] toByteArray()>();
+
+        virtualinvoke $r7.<java.security.MessageDigest: void update(byte[])>($r8);
+
+        $r8 = virtualinvoke $r7.<java.security.MessageDigest: byte[] digest()>();
+
+        varReplacer459 = 2;
+
+        $r9 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r8, varReplacer459);
+
+     label05:
+        $r4 = $r9;
+
+        $r10 = <com.desjardins.mobile.commun.utilitaire.PackageManagerUtils: java.lang.String TAG>;
+
+        r14 = new java.lang.StringBuilder;
+
+        $r11 = r14;
+
+     label06:
+        specialinvoke r14.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        varReplacer462 = " CURRENT SIGNATURE: ";
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer462);
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $r9 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r10, $r9);
+
+     label07:
+        $i1 = $i1 + 1;
+
+        goto label03;
+
+     label08:
+        $r12 := @caughtexception;
+
+        $r0 = <com.desjardins.mobile.commun.utilitaire.PackageManagerUtils: java.lang.String TAG>;
+
+        r14 = new java.lang.StringBuilder;
+
+        specialinvoke r14.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer463 = "error extracting signature ";
+
+        $r11 = virtualinvoke r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer463);
+
+        r15 = (android.content.pm.PackageManager$NameNotFoundException) $r12;
+
+        $r10 = virtualinvoke r15.<android.content.pm.PackageManager$NameNotFoundException: java.lang.String getMessage()>();
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        $r10 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r0, $r10);
+
+        return $r4;
+
+     label09:
+        $r13 := @caughtexception;
+
+        $r0 = <com.desjardins.mobile.commun.utilitaire.PackageManagerUtils: java.lang.String TAG>;
+
+        r14 = new java.lang.StringBuilder;
+
+        specialinvoke r14.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer461 = "error messageDigest ";
+
+        $r11 = virtualinvoke r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer461);
+
+        r16 = (java.security.NoSuchAlgorithmException) $r13;
+
+        $r10 = virtualinvoke r16.<java.security.NoSuchAlgorithmException: java.lang.String getMessage()>();
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        $r10 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r0, $r10);
+
+     label10:
+        return $r4;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label01 to label02 with label08;
+        catch android.content.pm.PackageManager$NameNotFoundException from label04 to label05 with label08;
+        catch android.content.pm.PackageManager$NameNotFoundException from label06 to label07 with label08;
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label09;
+        catch java.security.NoSuchAlgorithmException from label04 to label05 with label09;
+        catch java.security.NoSuchAlgorithmException from label06 to label07 with label09;
+    }
+
+    public static boolean isAppInstalled(android.content.Context, java.lang.String)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, $r4, $r6, varReplacer465, varReplacer466, varReplacer468, varReplacer469;
+        java.lang.Throwable $r2;
+        android.content.pm.PackageManager $r3;
+        java.lang.StringBuilder $r5, r7;
+        android.content.pm.PackageManager$NameNotFoundException r8;
+        int varReplacer464, varReplacer467, varReplacer470;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r3 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+     label1:
+        varReplacer464 = 1;
+
+        virtualinvoke $r3.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>($r1, varReplacer464);
+
+     label2:
+        $r4 = <com.desjardins.mobile.commun.utilitaire.PackageManagerUtils: java.lang.String TAG>;
+
+        r7 = new java.lang.StringBuilder;
+
+        $r5 = r7;
+
+     label3:
+        specialinvoke r7.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer466 = "Package:  ";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer466);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer468 = "  is installed";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer468);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r4, $r6);
+
+     label4:
+        varReplacer467 = 1;
+
+        return varReplacer467;
+
+     label5:
+        $r2 := @caughtexception;
+
+        $r4 = <com.desjardins.mobile.commun.utilitaire.PackageManagerUtils: java.lang.String TAG>;
+
+        r7 = new java.lang.StringBuilder;
+
+        specialinvoke r7.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer465 = "Package:  ";
+
+        $r5 = virtualinvoke r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer465);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer469 = "  is not installed ";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer469);
+
+        r8 = (android.content.pm.PackageManager$NameNotFoundException) $r2;
+
+        $r1 = virtualinvoke r8.<android.content.pm.PackageManager$NameNotFoundException: java.lang.String getMessage()>();
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r4, $r1);
+
+        varReplacer470 = 0;
+
+        return varReplacer470;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label5;
+        catch android.content.pm.PackageManager$NameNotFoundException from label3 to label4 with label5;
+    }
+
+    public static boolean isIntentActivitiesExist(android.content.Context, android.content.Intent)
+    {
+        android.content.Context $r0;
+        android.content.Intent $r1;
+        android.content.pm.PackageManager $r2;
+        java.util.List $r3;
+        int $i0;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: android.content.Intent;
+
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r3 = virtualinvoke $r2.<android.content.pm.PackageManager: java.util.List queryIntentActivities(android.content.Intent,int)>($r1, 0);
+
+        $i0 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        if $i0 <= 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public static boolean verifyLegitimateApp(android.content.Context, java.lang.String, java.lang.String)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, $r2;
+        boolean $z0;
+        int varReplacer188, varReplacer189;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $z0 = staticinvoke <com.desjardins.mobile.commun.utilitaire.PackageManagerUtils: boolean isAppInstalled(android.content.Context,java.lang.String)>($r0, $r1);
+
+        if $z0 == 0 goto label1;
+
+        $r1 = staticinvoke <com.desjardins.mobile.commun.utilitaire.PackageManagerUtils: java.lang.String getCurrentSignature(java.lang.String,android.content.Context)>($r1, $r0);
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        varReplacer189 = 1;
+
+        return varReplacer189;
+
+     label1:
+        varReplacer188 = 0;
+
+        return varReplacer188;
+    }
+}

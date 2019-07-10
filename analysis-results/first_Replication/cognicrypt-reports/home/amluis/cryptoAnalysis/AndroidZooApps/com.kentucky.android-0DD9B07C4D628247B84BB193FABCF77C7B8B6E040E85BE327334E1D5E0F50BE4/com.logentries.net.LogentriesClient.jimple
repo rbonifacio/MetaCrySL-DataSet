@@ -1,0 +1,674 @@
+public class com.logentries.net.LogentriesClient extends java.lang.Object
+{
+    private static final java.lang.String LE_HTTPS_API;
+    private static final java.lang.String LE_HTTP_API;
+    private static final int LE_PORT;
+    private static final int LE_SSL_PORT;
+    private static final java.lang.String LE_TOKEN_API;
+    static final java.nio.charset.Charset UTF8;
+    private int dataHubPort;
+    private java.lang.String dataHubServer;
+    private java.lang.String endpointToken;
+    private boolean httpChoice;
+    private org.apache.http.client.HttpClient httpClient;
+    private org.apache.http.client.methods.HttpPost postRequest;
+    private java.net.Socket socket;
+    private boolean sslChoice;
+    private final org.apache.http.conn.ssl.SSLSocketFactory sslFactory;
+    private java.io.OutputStream stream;
+    private java.lang.StringBuilder streamFormatter;
+    private boolean useDataHub;
+
+    static void <clinit>()
+    {
+        java.nio.charset.Charset $r0;
+        java.lang.String varReplacer1181;
+
+        nop;
+
+        varReplacer1181 = "UTF-8";
+
+        $r0 = staticinvoke <java.nio.charset.Charset: java.nio.charset.Charset forName(java.lang.String)>(varReplacer1181);
+
+        <com.logentries.net.LogentriesClient: java.nio.charset.Charset UTF8> = $r0;
+
+        return;
+    }
+
+    public void <init>(boolean, boolean, boolean, java.lang.String, int, java.lang.String) throws java.lang.InstantiationException, java.lang.IllegalArgumentException
+    {
+        com.logentries.net.LogentriesClient $r0;
+        boolean $z0, $z1, $z2, $z3;
+        java.lang.String $r1, $r2, varReplacer1182, varReplacer1183, varReplacer1185, varReplacer1186, varReplacer1189, varReplacer1190, varReplacer1191, varReplacer1194;
+        int $i0, varReplacer1188, varReplacer1192, varReplacer1193, varReplacer1195;
+        java.lang.Exception $r3;
+        java.lang.StringBuilder $r4;
+        java.lang.IllegalArgumentException $r5;
+        java.lang.InstantiationException $r6;
+        javax.net.ssl.SSLContext $r7;
+        org.apache.http.conn.ssl.SSLSocketFactory $r8;
+        null_type varReplacer1184, varReplacer1187;
+
+        nop;
+
+        $r0 := @this: com.logentries.net.LogentriesClient;
+
+        $z0 := @parameter0: boolean;
+
+        $z1 := @parameter1: boolean;
+
+        $z2 := @parameter2: boolean;
+
+        $r1 := @parameter3: java.lang.String;
+
+        $i0 := @parameter4: int;
+
+        $r2 := @parameter5: java.lang.String;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer1192 = 0;
+
+        $r0.<com.logentries.net.LogentriesClient: boolean sslChoice> = varReplacer1192;
+
+        varReplacer1188 = 0;
+
+        $r0.<com.logentries.net.LogentriesClient: boolean httpChoice> = varReplacer1188;
+
+        varReplacer1184 = null;
+
+        $r0.<com.logentries.net.LogentriesClient: java.lang.String dataHubServer> = varReplacer1184;
+
+        varReplacer1195 = 0;
+
+        $r0.<com.logentries.net.LogentriesClient: int dataHubPort> = varReplacer1195;
+
+        varReplacer1193 = 0;
+
+        $r0.<com.logentries.net.LogentriesClient: boolean useDataHub> = varReplacer1193;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r0.<com.logentries.net.LogentriesClient: java.lang.StringBuilder streamFormatter> = $r4;
+
+        if $z0 == 0 goto label01;
+
+        if $z2 == 0 goto label01;
+
+        $r5 = new java.lang.IllegalArgumentException;
+
+        varReplacer1191 = "\'httpPut\' parameter cannot be set to true if \'isUsingDataHub\' is set to true.";
+
+        specialinvoke $r5.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer1191);
+
+        throw $r5;
+
+     label01:
+        if $r2 == null goto label02;
+
+        $z3 = virtualinvoke $r2.<java.lang.String: boolean isEmpty()>();
+
+        if $z3 == 0 goto label03;
+
+     label02:
+        $r5 = new java.lang.IllegalArgumentException;
+
+        varReplacer1190 = "Token parameter cannot be empty!";
+
+        specialinvoke $r5.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer1190);
+
+        throw $r5;
+
+     label03:
+        $r0.<com.logentries.net.LogentriesClient: boolean useDataHub> = $z2;
+
+        $r0.<com.logentries.net.LogentriesClient: boolean sslChoice> = $z1;
+
+        $r0.<com.logentries.net.LogentriesClient: boolean httpChoice> = $z0;
+
+        $r0.<com.logentries.net.LogentriesClient: java.lang.String endpointToken> = $r2;
+
+        $z0 = $r0.<com.logentries.net.LogentriesClient: boolean useDataHub>;
+
+        if $z0 == 0 goto label08;
+
+        if $r1 == null goto label04;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean isEmpty()>();
+
+        if $z0 == 0 goto label05;
+
+     label04:
+        $r6 = new java.lang.InstantiationException;
+
+        varReplacer1194 = "\'server\' parameter is mandatory if \'isUsingDatahub\' parameter is set to true.";
+
+        specialinvoke $r6.<java.lang.InstantiationException: void <init>(java.lang.String)>(varReplacer1194);
+
+        throw $r6;
+
+     label05:
+        if $i0 <= 0 goto label06;
+
+        if $i0 <= 65535 goto label07;
+
+     label06:
+        $r6 = new java.lang.InstantiationException;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1185 = "Incorrect port number ";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1185);
+
+        $r1 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i0);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer1183 = ". Port number must ";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1183);
+
+        varReplacer1186 = "be greater than zero and less than 65535.";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1186);
+
+        $r1 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r6.<java.lang.InstantiationException: void <init>(java.lang.String)>($r1);
+
+        throw $r6;
+
+     label07:
+        $r0.<com.logentries.net.LogentriesClient: java.lang.String dataHubServer> = $r1;
+
+        $r0.<com.logentries.net.LogentriesClient: int dataHubPort> = $i0;
+
+     label08:
+        if $z1 == 0 goto label12;
+
+     label09:
+        varReplacer1189 = "TLS";
+
+        $r7 = specialinvoke $r0.<com.logentries.net.LogentriesClient: javax.net.ssl.SSLContext CreateAndInitSSLContext(java.lang.String)>(varReplacer1189);
+
+        $r8 = specialinvoke $r0.<com.logentries.net.LogentriesClient: org.apache.http.conn.ssl.SSLSocketFactory CreateAndInitSSLSocketFactory(javax.net.ssl.SSLContext)>($r7);
+
+        $r0.<com.logentries.net.LogentriesClient: org.apache.http.conn.ssl.SSLSocketFactory sslFactory> = $r8;
+
+     label10:
+        return;
+
+     label11:
+        $r3 := @caughtexception;
+
+        $r6 = new java.lang.InstantiationException;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1182 = "Cannot create LogentriesClient instance. Error: ";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1182);
+
+        $r1 = virtualinvoke $r3.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r6.<java.lang.InstantiationException: void <init>(java.lang.String)>($r1);
+
+        throw $r6;
+
+     label12:
+        varReplacer1187 = null;
+
+        $r0.<com.logentries.net.LogentriesClient: org.apache.http.conn.ssl.SSLSocketFactory sslFactory> = varReplacer1187;
+
+        return;
+
+        catch java.lang.Exception from label09 to label10 with label11;
+    }
+
+    private javax.net.ssl.SSLContext CreateAndInitSSLContext(java.lang.String) throws java.security.NoSuchAlgorithmException, java.security.KeyManagementException
+    {
+        com.logentries.net.LogentriesClient $r0;
+        java.lang.String $r1, varReplacer1206;
+        java.lang.Object[] $r2;
+        javax.net.ssl.SSLContext $r3;
+        com.logentries.net.LogentriesClient$1 r4;
+        javax.net.ssl.TrustManager[] r5;
+        null_type varReplacer1207, varReplacer1208;
+
+        nop;
+
+        $r0 := @this: com.logentries.net.LogentriesClient;
+
+        $r1 := @parameter0: java.lang.String;
+
+        varReplacer1206 = "TLS";
+
+        $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1206);
+
+        r4 = new com.logentries.net.LogentriesClient$1;
+
+        specialinvoke r4.<com.logentries.net.LogentriesClient$1: void <init>(com.logentries.net.LogentriesClient)>($r0);
+
+        $r2 = newarray (javax.net.ssl.TrustManager)[1];
+
+        $r2[0] = r4;
+
+        r5 = (javax.net.ssl.TrustManager[]) $r2;
+
+        varReplacer1207 = null;
+
+        varReplacer1208 = null;
+
+        virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1207, r5, varReplacer1207);
+
+        return $r3;
+    }
+
+    private org.apache.http.conn.ssl.SSLSocketFactory CreateAndInitSSLSocketFactory(javax.net.ssl.SSLContext)
+    {
+        com.logentries.net.LogentriesClient $r0;
+        javax.net.ssl.SSLContext $r1;
+        org.apache.http.conn.ssl.SSLSocketFactory $r2;
+        org.apache.http.conn.ssl.X509HostnameVerifier $r3;
+
+        nop;
+
+        $r0 := @this: com.logentries.net.LogentriesClient;
+
+        $r1 := @parameter0: javax.net.ssl.SSLContext;
+
+        $r3 = <org.apache.http.conn.ssl.SSLSocketFactory: org.apache.http.conn.ssl.X509HostnameVerifier ALLOW_ALL_HOSTNAME_VERIFIER>;
+
+        $r2 = staticinvoke <org.apache.http.conn.ssl.SSLSocketFactory: org.apache.http.conn.ssl.SSLSocketFactory getSocketFactory()>();
+
+        virtualinvoke $r2.<org.apache.http.conn.ssl.SSLSocketFactory: void setHostnameVerifier(org.apache.http.conn.ssl.X509HostnameVerifier)>($r3);
+
+        return $r2;
+    }
+
+    public void close()
+    {
+        com.logentries.net.LogentriesClient $r0;
+        java.net.Socket $r1;
+        java.lang.Exception $r2;
+        null_type varReplacer8863;
+
+        nop;
+
+        $r0 := @this: com.logentries.net.LogentriesClient;
+
+     label1:
+        $r1 = $r0.<com.logentries.net.LogentriesClient: java.net.Socket socket>;
+
+     label2:
+        if $r1 == null goto label6;
+
+     label3:
+        $r1 = $r0.<com.logentries.net.LogentriesClient: java.net.Socket socket>;
+
+        virtualinvoke $r1.<java.net.Socket: void close()>();
+
+        varReplacer8863 = null;
+
+        $r0.<com.logentries.net.LogentriesClient: java.net.Socket socket> = varReplacer8863;
+
+     label4:
+        return;
+
+     label5:
+        $r2 := @caughtexception;
+
+     label6:
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    public void connect() throws java.net.UnknownHostException, java.io.IOException, java.lang.IllegalArgumentException
+    {
+        com.logentries.net.LogentriesClient $r0;
+        org.apache.http.impl.client.DefaultHttpClient $r1, $r8;
+        org.apache.http.impl.conn.SingleClientConnManager $r2;
+        org.apache.http.conn.scheme.SchemeRegistry $r3;
+        java.net.Socket $r4;
+        boolean $z0;
+        org.apache.http.conn.scheme.Scheme $r5;
+        org.apache.http.conn.ssl.SSLSocketFactory $r6;
+        int $i0, varReplacer1197, varReplacer1199;
+        org.apache.http.params.HttpParams $r7;
+        org.apache.http.client.methods.HttpPost $r9;
+        java.lang.StringBuilder $r10;
+        java.lang.String $r11, varReplacer1196, varReplacer1198;
+        java.lang.IllegalArgumentException $r12;
+        javax.net.ssl.SSLSocket $r13;
+        java.io.OutputStream $r14;
+
+        nop;
+
+        $r0 := @this: com.logentries.net.LogentriesClient;
+
+        $z0 = $r0.<com.logentries.net.LogentriesClient: boolean httpChoice>;
+
+        if $z0 == 0 goto label3;
+
+        $r1 = new org.apache.http.impl.client.DefaultHttpClient;
+
+        specialinvoke $r1.<org.apache.http.impl.client.DefaultHttpClient: void <init>()>();
+
+        $z0 = $r0.<com.logentries.net.LogentriesClient: boolean sslChoice>;
+
+        if $z0 == 0 goto label2;
+
+        $r3 = new org.apache.http.conn.scheme.SchemeRegistry;
+
+        specialinvoke $r3.<org.apache.http.conn.scheme.SchemeRegistry: void <init>()>();
+
+        $r5 = new org.apache.http.conn.scheme.Scheme;
+
+        $r6 = $r0.<com.logentries.net.LogentriesClient: org.apache.http.conn.ssl.SSLSocketFactory sslFactory>;
+
+        $i0 = virtualinvoke $r0.<com.logentries.net.LogentriesClient: int getPort()>();
+
+        varReplacer1196 = "https";
+
+        specialinvoke $r5.<org.apache.http.conn.scheme.Scheme: void <init>(java.lang.String,org.apache.http.conn.scheme.SocketFactory,int)>(varReplacer1196, $r6, $i0);
+
+        virtualinvoke $r3.<org.apache.http.conn.scheme.SchemeRegistry: org.apache.http.conn.scheme.Scheme register(org.apache.http.conn.scheme.Scheme)>($r5);
+
+        $r2 = new org.apache.http.impl.conn.SingleClientConnManager;
+
+        $r7 = virtualinvoke $r1.<org.apache.http.impl.client.DefaultHttpClient: org.apache.http.params.HttpParams getParams()>();
+
+        specialinvoke $r2.<org.apache.http.impl.conn.SingleClientConnManager: void <init>(org.apache.http.params.HttpParams,org.apache.http.conn.scheme.SchemeRegistry)>($r7, $r3);
+
+        $r8 = new org.apache.http.impl.client.DefaultHttpClient;
+
+        $r7 = virtualinvoke $r1.<org.apache.http.impl.client.DefaultHttpClient: org.apache.http.params.HttpParams getParams()>();
+
+        specialinvoke $r8.<org.apache.http.impl.client.DefaultHttpClient: void <init>(org.apache.http.conn.ClientConnectionManager,org.apache.http.params.HttpParams)>($r2, $r7);
+
+        $r0.<com.logentries.net.LogentriesClient: org.apache.http.client.HttpClient httpClient> = $r8;
+
+     label1:
+        $r9 = new org.apache.http.client.methods.HttpPost;
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r0.<com.logentries.net.LogentriesClient: java.lang.String getAddress()>();
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        $r11 = $r0.<com.logentries.net.LogentriesClient: java.lang.String endpointToken>;
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r9.<org.apache.http.client.methods.HttpPost: void <init>(java.lang.String)>($r11);
+
+        $r0.<com.logentries.net.LogentriesClient: org.apache.http.client.methods.HttpPost postRequest> = $r9;
+
+        return;
+
+     label2:
+        $r0.<com.logentries.net.LogentriesClient: org.apache.http.client.HttpClient httpClient> = $r1;
+
+        goto label1;
+
+     label3:
+        $r4 = new java.net.Socket;
+
+        $r11 = virtualinvoke $r0.<com.logentries.net.LogentriesClient: java.lang.String getAddress()>();
+
+        $i0 = virtualinvoke $r0.<com.logentries.net.LogentriesClient: int getPort()>();
+
+        specialinvoke $r4.<java.net.Socket: void <init>(java.lang.String,int)>($r11, $i0);
+
+        $z0 = $r0.<com.logentries.net.LogentriesClient: boolean sslChoice>;
+
+        if $z0 == 0 goto label6;
+
+        $r6 = $r0.<com.logentries.net.LogentriesClient: org.apache.http.conn.ssl.SSLSocketFactory sslFactory>;
+
+        if $r6 != null goto label4;
+
+        $r12 = new java.lang.IllegalArgumentException;
+
+        varReplacer1198 = "SSL Socket Factory is not initialized!";
+
+        specialinvoke $r12.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer1198);
+
+        throw $r12;
+
+     label4:
+        $r6 = $r0.<com.logentries.net.LogentriesClient: org.apache.http.conn.ssl.SSLSocketFactory sslFactory>;
+
+        $r11 = virtualinvoke $r0.<com.logentries.net.LogentriesClient: java.lang.String getAddress()>();
+
+        $i0 = virtualinvoke $r0.<com.logentries.net.LogentriesClient: int getPort()>();
+
+        varReplacer1197 = 1;
+
+        $r4 = virtualinvoke $r6.<org.apache.http.conn.ssl.SSLSocketFactory: java.net.Socket createSocket(java.net.Socket,java.lang.String,int,boolean)>($r4, $r11, $i0, varReplacer1197);
+
+        $r13 = (javax.net.ssl.SSLSocket) $r4;
+
+        varReplacer1199 = 1;
+
+        virtualinvoke $r13.<javax.net.ssl.SSLSocket: void setTcpNoDelay(boolean)>(varReplacer1199);
+
+        $r0.<com.logentries.net.LogentriesClient: java.net.Socket socket> = $r13;
+
+     label5:
+        $r4 = $r0.<com.logentries.net.LogentriesClient: java.net.Socket socket>;
+
+        $r14 = virtualinvoke $r4.<java.net.Socket: java.io.OutputStream getOutputStream()>();
+
+        $r0.<com.logentries.net.LogentriesClient: java.io.OutputStream stream> = $r14;
+
+        return;
+
+     label6:
+        $r0.<com.logentries.net.LogentriesClient: java.net.Socket socket> = $r4;
+
+        goto label5;
+    }
+
+    public java.lang.String getAddress()
+    {
+        com.logentries.net.LogentriesClient $r0;
+        boolean $z0;
+        java.lang.String r1, varReplacer1203, varReplacer1204, varReplacer1205;
+
+        nop;
+
+        $r0 := @this: com.logentries.net.LogentriesClient;
+
+        $z0 = $r0.<com.logentries.net.LogentriesClient: boolean useDataHub>;
+
+        if $z0 == 0 goto label1;
+
+        r1 = $r0.<com.logentries.net.LogentriesClient: java.lang.String dataHubServer>;
+
+        return r1;
+
+     label1:
+        $z0 = $r0.<com.logentries.net.LogentriesClient: boolean httpChoice>;
+
+        if $z0 == 0 goto label3;
+
+        $z0 = $r0.<com.logentries.net.LogentriesClient: boolean sslChoice>;
+
+        if $z0 == 0 goto label2;
+
+        varReplacer1204 = "https://js.logentries.com/v1/logs/";
+
+        return varReplacer1204;
+
+     label2:
+        varReplacer1203 = "http://js.logentries.com/v1/logs/";
+
+        return varReplacer1203;
+
+     label3:
+        varReplacer1205 = "data.logentries.com";
+
+        return varReplacer1205;
+    }
+
+    public int getPort()
+    {
+        com.logentries.net.LogentriesClient $r0;
+        boolean $z0;
+        int i0, varReplacer1201, varReplacer1202;
+
+        nop;
+
+        $r0 := @this: com.logentries.net.LogentriesClient;
+
+        $z0 = $r0.<com.logentries.net.LogentriesClient: boolean useDataHub>;
+
+        if $z0 == 0 goto label1;
+
+        i0 = $r0.<com.logentries.net.LogentriesClient: int dataHubPort>;
+
+        return i0;
+
+     label1:
+        $z0 = $r0.<com.logentries.net.LogentriesClient: boolean sslChoice>;
+
+        if $z0 == 0 goto label2;
+
+        varReplacer1202 = 443;
+
+        return varReplacer1202;
+
+     label2:
+        varReplacer1201 = 80;
+
+        return varReplacer1201;
+    }
+
+    public void write(java.lang.String) throws java.io.IOException
+    {
+        com.logentries.net.LogentriesClient $r0;
+        java.lang.String $r1, $r5, varReplacer8864, varReplacer8866, varReplacer8867, varReplacer8868, varReplacer8869;
+        boolean $z0;
+        java.io.OutputStream $r2;
+        java.io.IOException $r3;
+        java.lang.StringBuilder $r4;
+        java.nio.charset.Charset $r6;
+        byte[] $r7;
+        org.apache.http.client.methods.HttpPost $r8;
+        org.apache.http.entity.StringEntity $r9;
+        org.apache.http.client.HttpClient $r10;
+        int varReplacer8865;
+
+        nop;
+
+        $r0 := @this: com.logentries.net.LogentriesClient;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 = $r0.<com.logentries.net.LogentriesClient: boolean httpChoice>;
+
+        if $z0 != 0 goto label3;
+
+        $r2 = $r0.<com.logentries.net.LogentriesClient: java.io.OutputStream stream>;
+
+        if $r2 != null goto label1;
+
+        $r3 = new java.io.IOException;
+
+        varReplacer8866 = "OutputStream is not initialized!";
+
+        specialinvoke $r3.<java.io.IOException: void <init>(java.lang.String)>(varReplacer8866);
+
+        throw $r3;
+
+     label1:
+        $r4 = $r0.<com.logentries.net.LogentriesClient: java.lang.StringBuilder streamFormatter>;
+
+        varReplacer8865 = 0;
+
+        virtualinvoke $r4.<java.lang.StringBuilder: void setLength(int)>(varReplacer8865);
+
+        $r4 = $r0.<com.logentries.net.LogentriesClient: java.lang.StringBuilder streamFormatter>;
+
+        $r5 = $r0.<com.logentries.net.LogentriesClient: java.lang.String endpointToken>;
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        varReplacer8867 = " ";
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer8867);
+
+        $r4 = $r0.<com.logentries.net.LogentriesClient: java.lang.StringBuilder streamFormatter>;
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer8864 = "\n";
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean endsWith(java.lang.String)>(varReplacer8864);
+
+        if $z0 != 0 goto label2;
+
+        $r4 = $r0.<com.logentries.net.LogentriesClient: java.lang.StringBuilder streamFormatter>;
+
+        varReplacer8869 = "\n";
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer8869);
+
+     label2:
+        $r2 = $r0.<com.logentries.net.LogentriesClient: java.io.OutputStream stream>;
+
+        $r4 = $r0.<com.logentries.net.LogentriesClient: java.lang.StringBuilder streamFormatter>;
+
+        $r1 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = <com.logentries.net.LogentriesClient: java.nio.charset.Charset UTF8>;
+
+        $r7 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.nio.charset.Charset)>($r6);
+
+        virtualinvoke $r2.<java.io.OutputStream: void write(byte[])>($r7);
+
+        $r2 = $r0.<com.logentries.net.LogentriesClient: java.io.OutputStream stream>;
+
+        virtualinvoke $r2.<java.io.OutputStream: void flush()>();
+
+        return;
+
+     label3:
+        $r8 = $r0.<com.logentries.net.LogentriesClient: org.apache.http.client.methods.HttpPost postRequest>;
+
+        $r9 = new org.apache.http.entity.StringEntity;
+
+        varReplacer8868 = "UTF8";
+
+        specialinvoke $r9.<org.apache.http.entity.StringEntity: void <init>(java.lang.String,java.lang.String)>($r1, varReplacer8868);
+
+        virtualinvoke $r8.<org.apache.http.client.methods.HttpPost: void setEntity(org.apache.http.HttpEntity)>($r9);
+
+        $r10 = $r0.<com.logentries.net.LogentriesClient: org.apache.http.client.HttpClient httpClient>;
+
+        $r8 = $r0.<com.logentries.net.LogentriesClient: org.apache.http.client.methods.HttpPost postRequest>;
+
+        interfaceinvoke $r10.<org.apache.http.client.HttpClient: org.apache.http.HttpResponse execute(org.apache.http.client.methods.HttpUriRequest)>($r8);
+
+        return;
+    }
+}

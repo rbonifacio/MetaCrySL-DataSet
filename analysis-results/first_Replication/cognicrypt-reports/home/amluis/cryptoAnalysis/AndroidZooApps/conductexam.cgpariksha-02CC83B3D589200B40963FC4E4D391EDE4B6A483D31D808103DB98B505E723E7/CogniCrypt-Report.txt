@@ -1,0 +1,108 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r5
+		Type: java.security.MessageDigest
+		Statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1651)
+		Method: <com.payUMoney.activity.PayuMoneyMainActivity: java.lang.String hashCal(java.lang.String,java.lang.String)>
+		SHA-256: a3e2cf6cf8e7a18c1672009f3de784635e96c186758e60596204020628d79c69
+		Secure: true
+	Object:
+		Variable: $r5
+		Type: byte[]
+		Statement: $r5 = virtualinvoke $r4.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.payu.india.Extras.PayUChecksum: com.payu.india.Model.PostData calculateHash(java.lang.String)>
+		SHA-256: e44d30750588a782c378f280d7ac33227f4f86d81a88f6942553107723757751
+		Secure: true
+	Object:
+		Variable: $r10
+		Type: java.security.MessageDigest
+		Statement: $r10 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3469)
+		Method: <com.payUMoney.Session: void addDeviceParams(com.loopj.android.http.RequestParams)>
+		SHA-256: 844ff889884b8e39b62698db82e93504b9635cda0d3aa7e22467ea226496028f
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: java.security.MessageDigest
+		Statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2495)
+		Method: <com.payu.india.Extras.PayUChecksum: com.payu.india.Model.PostData calculateHash(java.lang.String)>
+		SHA-256: 3a2812fb5fdc3263255bce05ea6f91253b545330eb4359a918b862b33efcd47
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r5.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.payUMoney.activity.PayuMoneyMainActivity: java.lang.String hashCal(java.lang.String,java.lang.String)>
+		SHA-256: e49cfca545af1d2d3968dbac11dc91eef7b315c5644a086234a13c59adf53265
+		Secure: true
+	Object:
+		Variable: $r12
+		Type: byte[]
+		Statement: $r12 = virtualinvoke $r10.<java.security.MessageDigest: byte[] digest(byte[])>($r12)
+		Method: <com.payUMoney.Session: void addDeviceParams(com.loopj.android.http.RequestParams)>
+		SHA-256: 75fa7e8bf3aa9713b0fb2694c4575d6b9b4737ba38071a76510d36a295323f66
+		Secure: true
+	Object:
+		Variable: $r12
+		Type: byte[]
+		Statement: $r12 = virtualinvoke $r10.<java.security.MessageDigest: byte[] digest(byte[])>($r12)
+		Method: <com.payUMoney.Session: void addDeviceParams(com.loopj.android.http.RequestParams)>
+		SHA-256: 75fa7e8bf3aa9713b0fb2694c4575d6b9b4737ba38071a76510d36a295323f66
+		Secure: true
+
+Findings in Java Class: com.payUMoney.Session
+
+	 in Method: void addDeviceParams(com.loopj.android.http.RequestParams)
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #844ff889884b8e39b62698db82e93504b9635cda0d3aa7e22467ea226496028f)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to update, java.security.MessageDigest: byte[] digest(byte[])
+			at statement: $r12 = virtualinvoke $r10.<java.security.MessageDigest: byte[] digest(byte[])>($r12)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #844ff889884b8e39b62698db82e93504b9635cda0d3aa7e22467ea226496028f)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r10 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3469)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #844ff889884b8e39b62698db82e93504b9635cda0d3aa7e22467ea226496028f)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to update, java.security.MessageDigest: byte[] digest(byte[])
+			at statement: $r12 = virtualinvoke $r10.<java.security.MessageDigest: byte[] digest(byte[])>($r12)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 7
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 3
+=====================================================================

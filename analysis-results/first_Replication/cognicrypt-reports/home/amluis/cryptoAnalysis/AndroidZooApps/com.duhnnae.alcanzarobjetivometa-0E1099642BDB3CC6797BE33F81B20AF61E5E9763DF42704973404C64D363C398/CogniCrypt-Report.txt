@@ -1,0 +1,100 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: r6
+		Type: javax.crypto.spec.IvParameterSpec
+		Statement: specialinvoke r6.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r2)
+		Method: <com.duhnnae.alcanzarobjetivometa.util.MCrypt: void <init>()>
+		SHA-256: df8cb0a5813a3c1377be041b3bfa4613a11e3933aa298c7e614d67e96253365f
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: byte[]
+		Statement: $r6 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6)
+		Method: <com.duhnnae.alcanzarobjetivometa.util.MCrypt: byte[] encrypt(java.lang.String)>
+		SHA-256: 7fd10edfff878a3c81c3922a3c4ffe9106f502b0cfe91eaf5fd53355b1e8927b
+		Secure: false
+	Object:
+		Variable: varReplacer84
+		Type: java.lang.String
+		Statement: specialinvoke r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, varReplacer84)
+		Method: <com.duhnnae.alcanzarobjetivometa.util.MCrypt: void <init>()>
+		SHA-256: ffe7f085fd0401b2545959976ead2ce81b93c706fdaf7e4b202445a9f6798225
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.crypto.Cipher
+		Statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer85)
+		Method: <com.duhnnae.alcanzarobjetivometa.util.MCrypt: void <init>()>
+		SHA-256: df139feb746d63cb2236d463c37d580f6744128330e59b7b0e97aa81844171e0
+		Secure: false
+	Object:
+		Variable: r7
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, varReplacer84)
+		Method: <com.duhnnae.alcanzarobjetivometa.util.MCrypt: void <init>()>
+		SHA-256: fc7c2e1d4e9364a7d2de61ffc2564e0d422ada7380558c9a1321c6096a9e7b2
+		Secure: false
+
+Findings in Java Class: com.duhnnae.alcanzarobjetivometa.util.MCrypt
+
+	 in Method: void <init>()
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, varReplacer84)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke r6.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r2)
+
+
+	 in Method: byte[] encrypt(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer88, $r5, $r3)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared I V
+			at statement: virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer88, $r5, $r3)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 5
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 4
+=====================================================================

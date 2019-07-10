@@ -1,0 +1,1233 @@
+public class com.lambdaworks.crypto.SCrypt extends java.lang.Object
+{
+    private static final boolean native_library_loaded;
+
+    static void <clinit>()
+    {
+        com.lambdaworks.jni.LibraryLoader $r0;
+        boolean $z0;
+        java.lang.String varReplacer7886;
+        int varReplacer7887;
+
+        nop;
+
+        $r0 = staticinvoke <com.lambdaworks.jni.LibraryLoaders: com.lambdaworks.jni.LibraryLoader loader()>();
+
+        varReplacer7886 = "scrypt";
+
+        varReplacer7887 = 1;
+
+        $z0 = interfaceinvoke $r0.<com.lambdaworks.jni.LibraryLoader: boolean load(java.lang.String,boolean)>(varReplacer7886, varReplacer7887);
+
+        <com.lambdaworks.crypto.SCrypt: boolean native_library_loaded> = $z0;
+
+        return;
+    }
+
+    public static int R(int, int)
+    {
+        int $i0, $i1, $i2;
+
+        nop;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        $i2 = $i0 << $i1;
+
+        $i1 = 32 - $i1;
+
+        $i0 = $i0 >>> $i1;
+
+        $i0 = $i2 | $i0;
+
+        return $i0;
+    }
+
+    public static void blockmix_salsa8(byte[], int, int, int)
+    {
+        byte[] $r0, $r1;
+        int $i0, $i1, $i2, $i3, $i4, $i5, varReplacer7920, varReplacer7921, varReplacer7922, varReplacer7923, varReplacer7924, varReplacer7925, varReplacer7926, varReplacer7927;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 := @parameter3: int;
+
+        $r1 = newarray (byte)[64];
+
+        $i3 = $i2 * 2;
+
+        $i3 = $i3 + -1;
+
+        $i3 = $i3 * 64;
+
+        $i3 = $i3 + 0;
+
+        varReplacer7920 = 0;
+
+        varReplacer7921 = 64;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r0, $i3, $r1, varReplacer7920, varReplacer7921);
+
+        $i3 = 0;
+
+     label1:
+        $i4 = $i2 * 2;
+
+        if $i3 >= $i4 goto label2;
+
+        $i4 = $i3 * 64;
+
+        varReplacer7924 = 0;
+
+        varReplacer7925 = 64;
+
+        staticinvoke <com.lambdaworks.crypto.SCrypt: void blockxor(byte[],int,byte[],int,int)>($r0, $i4, $r1, varReplacer7924, varReplacer7925);
+
+        staticinvoke <com.lambdaworks.crypto.SCrypt: void salsa20_8(byte[])>($r1);
+
+        $i4 = $i3 * 64;
+
+        $i4 = $i4 + $i1;
+
+        varReplacer7926 = 0;
+
+        varReplacer7927 = 64;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r1, varReplacer7926, $r0, $i4, varReplacer7927);
+
+        $i3 = $i3 + 1;
+
+        goto label1;
+
+     label2:
+        $i3 = 0;
+
+     label3:
+        if $i3 >= $i2 goto label4;
+
+        $i4 = $i3 * 2;
+
+        $i4 = $i4 * 64;
+
+        $i4 = $i4 + $i1;
+
+        $i5 = $i3 * 64;
+
+        $i5 = $i5 + 0;
+
+        varReplacer7922 = 64;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r0, $i4, $r0, $i5, varReplacer7922);
+
+        $i3 = $i3 + 1;
+
+        goto label3;
+
+     label4:
+        $i3 = 0;
+
+     label5:
+        if $i3 >= $i2 goto label6;
+
+        $i4 = $i3 * 2;
+
+        $i4 = $i4 + 1;
+
+        $i4 = $i4 * 64;
+
+        $i4 = $i4 + $i1;
+
+        $i5 = $i3 + $i2;
+
+        $i5 = $i5 * 64;
+
+        $i5 = $i5 + 0;
+
+        varReplacer7923 = 64;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r0, $i4, $r0, $i5, varReplacer7923);
+
+        $i3 = $i3 + 1;
+
+        goto label5;
+
+     label6:
+        return;
+    }
+
+    public static void blockxor(byte[], int, byte[], int, int)
+    {
+        byte[] $r0, $r1;
+        int $i0, $i1, $i2, $i3, $i4, $i6;
+        byte $b5, $b7;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $r1 := @parameter2: byte[];
+
+        $i1 := @parameter3: int;
+
+        $i2 := @parameter4: int;
+
+        $i4 = 0;
+
+     label1:
+        if $i4 >= $i2 goto label2;
+
+        $i3 = 0 + $i4;
+
+        $b5 = $r1[$i3];
+
+        $i6 = $i0 + $i4;
+
+        $b7 = $r0[$i6];
+
+        $b5 = $b5 ^ $b7;
+
+        $r1[$i3] = $b5;
+
+        $i4 = $i4 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public static int integerify(byte[], int, int)
+    {
+        byte[] $r0;
+        int $i0, $i1, $i4;
+        byte $b2;
+        short $s3;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $i1 := @parameter1: int;
+
+        $i0 := @parameter2: int;
+
+        $i0 = $i0 * 2;
+
+        $i0 = $i0 + -1;
+
+        $i0 = $i0 * 64;
+
+        $i1 = 0 + $i0;
+
+        $i0 = $i1;
+
+        $b2 = $r0[$i0];
+
+        $s3 = $b2 & 255;
+
+        $i0 = $s3 << 0;
+
+        $i4 = $i1 + 1;
+
+        $b2 = $r0[$i4];
+
+        $s3 = $b2 & 255;
+
+        $i4 = $s3 << 8;
+
+        $i0 = $i0 | $i4;
+
+        $i4 = $i1 + 2;
+
+        $b2 = $r0[$i4];
+
+        $s3 = $b2 & 255;
+
+        $i4 = $s3 << 16;
+
+        $i0 = $i0 | $i4;
+
+        $i1 = $i1 + 3;
+
+        $b2 = $r0[$i1];
+
+        $s3 = $b2 & 255;
+
+        $i1 = $s3 << 24;
+
+        $i1 = $i0 | $i1;
+
+        return $i1;
+    }
+
+    public static void salsa20_8(byte[])
+    {
+        byte[] $r0;
+        int[] $r1, $r2;
+        int $i0, $i1, $i4, $i5, varReplacer7928, varReplacer7929, varReplacer7930, varReplacer7931, varReplacer7932, varReplacer7933, varReplacer7934, varReplacer7935, varReplacer7936, varReplacer7937, varReplacer7938, varReplacer7939, varReplacer7940, varReplacer7941, varReplacer7942, varReplacer7943, varReplacer7944, varReplacer7945, varReplacer7946, varReplacer7947, varReplacer7948, varReplacer7949, varReplacer7950, varReplacer7951, varReplacer7952, varReplacer7953, varReplacer7954, varReplacer7955, varReplacer7956, varReplacer7957, varReplacer7958, varReplacer7959, varReplacer7960, varReplacer7961, varReplacer7962;
+        byte $b2;
+        short $s3;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 = newarray (int)[16];
+
+        $r2 = newarray (int)[16];
+
+        $i0 = 0;
+
+     label1:
+        if $i0 >= 16 goto label2;
+
+        $i1 = $i0 * 4;
+
+        $b2 = $r0[$i1];
+
+        $s3 = $b2 & 255;
+
+        $i1 = $s3 << 0;
+
+        $r1[$i0] = $i1;
+
+        $i1 = $r1[$i0];
+
+        $i4 = $i0 * 4;
+
+        $i4 = $i4 + 1;
+
+        $b2 = $r0[$i4];
+
+        $s3 = $b2 & 255;
+
+        $i4 = $s3 << 8;
+
+        $i1 = $i1 | $i4;
+
+        $r1[$i0] = $i1;
+
+        $i1 = $r1[$i0];
+
+        $i4 = $i0 * 4;
+
+        $i4 = $i4 + 2;
+
+        $b2 = $r0[$i4];
+
+        $s3 = $b2 & 255;
+
+        $i4 = $s3 << 16;
+
+        $i1 = $i1 | $i4;
+
+        $r1[$i0] = $i1;
+
+        $i1 = $r1[$i0];
+
+        $i4 = $i0 * 4;
+
+        $i4 = $i4 + 3;
+
+        $b2 = $r0[$i4];
+
+        $s3 = $b2 & 255;
+
+        $i4 = $s3 << 24;
+
+        $i1 = $i1 | $i4;
+
+        $r1[$i0] = $i1;
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label2:
+        varReplacer7928 = 0;
+
+        varReplacer7929 = 0;
+
+        varReplacer7930 = 16;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r1, varReplacer7928, $r2, varReplacer7928, varReplacer7930);
+
+        $i0 = 8;
+
+     label3:
+        if $i0 <= 0 goto label4;
+
+        $i1 = $r2[4];
+
+        $i4 = $r2[0];
+
+        $i5 = $r2[12];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7934 = 7;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7934);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[4] = $i1;
+
+        $i1 = $r2[8];
+
+        $i4 = $r2[4];
+
+        $i5 = $r2[0];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7935 = 9;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7935);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[8] = $i1;
+
+        $i1 = $r2[12];
+
+        $i4 = $r2[8];
+
+        $i5 = $r2[4];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7950 = 13;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7950);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[12] = $i1;
+
+        $i1 = $r2[0];
+
+        $i4 = $r2[12];
+
+        $i5 = $r2[8];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7936 = 18;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7936);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[0] = $i1;
+
+        $i1 = $r2[9];
+
+        $i4 = $r2[5];
+
+        $i5 = $r2[1];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7943 = 7;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7943);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[9] = $i1;
+
+        $i1 = $r2[13];
+
+        $i4 = $r2[9];
+
+        $i5 = $r2[5];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7947 = 9;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7947);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[13] = $i1;
+
+        $i1 = $r2[1];
+
+        $i4 = $r2[13];
+
+        $i5 = $r2[9];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7944 = 13;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7944);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[1] = $i1;
+
+        $i1 = $r2[5];
+
+        $i4 = $r2[1];
+
+        $i5 = $r2[13];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7949 = 18;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7949);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[5] = $i1;
+
+        $i1 = $r2[14];
+
+        $i4 = $r2[10];
+
+        $i5 = $r2[6];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7937 = 7;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7937);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[14] = $i1;
+
+        $i1 = $r2[2];
+
+        $i4 = $r2[14];
+
+        $i5 = $r2[10];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7954 = 9;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7954);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[2] = $i1;
+
+        $i1 = $r2[6];
+
+        $i4 = $r2[2];
+
+        $i5 = $r2[14];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7951 = 13;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7951);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[6] = $i1;
+
+        $i1 = $r2[10];
+
+        $i4 = $r2[6];
+
+        $i5 = $r2[2];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7957 = 18;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7957);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[10] = $i1;
+
+        $i1 = $r2[3];
+
+        $i4 = $r2[15];
+
+        $i5 = $r2[11];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7933 = 7;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7933);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[3] = $i1;
+
+        $i1 = $r2[7];
+
+        $i4 = $r2[3];
+
+        $i5 = $r2[15];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7960 = 9;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7960);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[7] = $i1;
+
+        $i1 = $r2[11];
+
+        $i4 = $r2[7];
+
+        $i5 = $r2[3];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7939 = 13;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7939);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[11] = $i1;
+
+        $i1 = $r2[15];
+
+        $i4 = $r2[11];
+
+        $i5 = $r2[7];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7959 = 18;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7959);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[15] = $i1;
+
+        $i1 = $r2[1];
+
+        $i4 = $r2[0];
+
+        $i5 = $r2[3];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7955 = 7;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7955);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[1] = $i1;
+
+        $i1 = $r2[2];
+
+        $i4 = $r2[1];
+
+        $i5 = $r2[0];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7931 = 9;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7931);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[2] = $i1;
+
+        $i1 = $r2[3];
+
+        $i4 = $r2[2];
+
+        $i5 = $r2[1];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7958 = 13;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7958);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[3] = $i1;
+
+        $i1 = $r2[0];
+
+        $i4 = $r2[3];
+
+        $i5 = $r2[2];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7952 = 18;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7952);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[0] = $i1;
+
+        $i1 = $r2[6];
+
+        $i4 = $r2[5];
+
+        $i5 = $r2[4];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7940 = 7;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7940);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[6] = $i1;
+
+        $i1 = $r2[7];
+
+        $i4 = $r2[6];
+
+        $i5 = $r2[5];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7945 = 9;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7945);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[7] = $i1;
+
+        $i1 = $r2[4];
+
+        $i4 = $r2[7];
+
+        $i5 = $r2[6];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7942 = 13;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7942);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[4] = $i1;
+
+        $i1 = $r2[5];
+
+        $i4 = $r2[4];
+
+        $i5 = $r2[7];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7932 = 18;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7932);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[5] = $i1;
+
+        $i1 = $r2[11];
+
+        $i4 = $r2[10];
+
+        $i5 = $r2[9];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7948 = 7;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7948);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[11] = $i1;
+
+        $i1 = $r2[8];
+
+        $i4 = $r2[11];
+
+        $i5 = $r2[10];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7946 = 9;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7946);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[8] = $i1;
+
+        $i1 = $r2[9];
+
+        $i4 = $r2[8];
+
+        $i5 = $r2[11];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7953 = 13;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7953);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[9] = $i1;
+
+        $i1 = $r2[10];
+
+        $i4 = $r2[9];
+
+        $i5 = $r2[8];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7961 = 18;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7961);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[10] = $i1;
+
+        $i1 = $r2[12];
+
+        $i4 = $r2[15];
+
+        $i5 = $r2[14];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7956 = 7;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7956);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[12] = $i1;
+
+        $i1 = $r2[13];
+
+        $i4 = $r2[12];
+
+        $i5 = $r2[15];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7962 = 9;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7962);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[13] = $i1;
+
+        $i1 = $r2[14];
+
+        $i4 = $r2[13];
+
+        $i5 = $r2[12];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7941 = 13;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7941);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[14] = $i1;
+
+        $i1 = $r2[15];
+
+        $i4 = $r2[14];
+
+        $i5 = $r2[13];
+
+        $i4 = $i4 + $i5;
+
+        varReplacer7938 = 18;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int R(int,int)>($i4, varReplacer7938);
+
+        $i1 = $i1 ^ $i4;
+
+        $r2[15] = $i1;
+
+        $i0 = $i0 + -2;
+
+        goto label3;
+
+     label4:
+        $i0 = 0;
+
+     label5:
+        if $i0 >= 16 goto label6;
+
+        $i1 = $r2[$i0];
+
+        $i4 = $r1[$i0];
+
+        $i1 = $i1 + $i4;
+
+        $r1[$i0] = $i1;
+
+        $i0 = $i0 + 1;
+
+        goto label5;
+
+     label6:
+        $i0 = 0;
+
+     label7:
+        if $i0 >= 16 goto label8;
+
+        $i1 = $i0 * 4;
+
+        $i4 = $r1[$i0];
+
+        $i4 = $i4 >> 0;
+
+        $i4 = $i4 & 255;
+
+        $b2 = (byte) $i4;
+
+        $r0[$i1] = $b2;
+
+        $i1 = $i0 * 4;
+
+        $i1 = $i1 + 1;
+
+        $i4 = $r1[$i0];
+
+        $i4 = $i4 >> 8;
+
+        $i4 = $i4 & 255;
+
+        $b2 = (byte) $i4;
+
+        $r0[$i1] = $b2;
+
+        $i1 = $i0 * 4;
+
+        $i1 = $i1 + 2;
+
+        $i4 = $r1[$i0];
+
+        $i4 = $i4 >> 16;
+
+        $i4 = $i4 & 255;
+
+        $b2 = (byte) $i4;
+
+        $r0[$i1] = $b2;
+
+        $i1 = $i0 * 4;
+
+        $i1 = $i1 + 3;
+
+        $i4 = $r1[$i0];
+
+        $i4 = $i4 >> 24;
+
+        $i4 = $i4 & 255;
+
+        $b2 = (byte) $i4;
+
+        $r0[$i1] = $b2;
+
+        $i0 = $i0 + 1;
+
+        goto label7;
+
+     label8:
+        return;
+    }
+
+    public static byte[] scrypt(byte[], byte[], int, int, int, int) throws java.security.GeneralSecurityException
+    {
+        byte[] $r0, $r1;
+        int $i0, $i1, $i2, $i3, varReplacer7884, varReplacer7885;
+        boolean $z0;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: byte[];
+
+        $i0 := @parameter2: int;
+
+        $i1 := @parameter3: int;
+
+        $i2 := @parameter4: int;
+
+        $i3 := @parameter5: int;
+
+        $z0 = <com.lambdaworks.crypto.SCrypt: boolean native_library_loaded>;
+
+        if $z0 == 0 goto label1;
+
+        varReplacer7884 = 32;
+
+        $r0 = staticinvoke <com.lambdaworks.crypto.SCrypt: byte[] scryptN(byte[],byte[],int,int,int,int)>($r0, $r1, $i0, $i1, $i2, varReplacer7884);
+
+        return $r0;
+
+     label1:
+        varReplacer7885 = 32;
+
+        $r0 = staticinvoke <com.lambdaworks.crypto.SCrypt: byte[] scryptJ(byte[],byte[],int,int,int,int)>($r0, $r1, $i0, $i1, $i2, varReplacer7885);
+
+        return $r0;
+    }
+
+    public static byte[] scryptJ(byte[], byte[], int, int, int, int) throws java.security.GeneralSecurityException
+    {
+        byte[] $r0, $r1, $r2, $r3, $r4;
+        int $i0, $i1, $i2, $i3, $i4, $i5, varReplacer7889, varReplacer7890, varReplacer7891;
+        javax.crypto.Mac $r5;
+        java.lang.IllegalArgumentException $r6;
+        javax.crypto.spec.SecretKeySpec $r7;
+        java.lang.String varReplacer7888, varReplacer7892, varReplacer7893, varReplacer7894, varReplacer7895;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: byte[];
+
+        $i0 := @parameter2: int;
+
+        $i1 := @parameter3: int;
+
+        $i2 := @parameter4: int;
+
+        $i3 := @parameter5: int;
+
+        if $i0 < 2 goto label1;
+
+        $i4 = $i0 + -1;
+
+        $i4 = $i4 & $i0;
+
+        if $i4 == 0 goto label2;
+
+     label1:
+        $r6 = new java.lang.IllegalArgumentException;
+
+        varReplacer7894 = "N must be a power of 2 greater than 1";
+
+        specialinvoke $r6.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer7894);
+
+        throw $r6;
+
+     label2:
+        $i4 = 16777215 / $i1;
+
+        if $i0 <= $i4 goto label3;
+
+        $r6 = new java.lang.IllegalArgumentException;
+
+        varReplacer7893 = "Parameter N is too large";
+
+        specialinvoke $r6.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer7893);
+
+        throw $r6;
+
+     label3:
+        $i4 = 16777215 / $i2;
+
+        if $i1 <= $i4 goto label4;
+
+        $r6 = new java.lang.IllegalArgumentException;
+
+        varReplacer7892 = "Parameter r is too large";
+
+        specialinvoke $r6.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer7892);
+
+        throw $r6;
+
+     label4:
+        varReplacer7895 = "HmacSHA256";
+
+        $r5 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer7895);
+
+        $r7 = new javax.crypto.spec.SecretKeySpec;
+
+        varReplacer7888 = "HmacSHA256";
+
+        specialinvoke $r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer7888);
+
+        virtualinvoke $r5.<javax.crypto.Mac: void init(java.security.Key)>($r7);
+
+        $r4 = newarray (byte)[32];
+
+        $i4 = $i1 * 128;
+
+        $i4 = $i4 * $i2;
+
+        $r0 = newarray (byte)[$i4];
+
+        $i4 = $i1 * 256;
+
+        $r3 = newarray (byte)[$i4];
+
+        $i4 = $i1 * 128;
+
+        $i4 = $i4 * $i0;
+
+        $r2 = newarray (byte)[$i4];
+
+        $i4 = $i2 * 128;
+
+        $i4 = $i4 * $i1;
+
+        varReplacer7889 = 1;
+
+        staticinvoke <com.lambdaworks.crypto.PBKDF: void pbkdf2(javax.crypto.Mac,byte[],int,byte[],int)>($r5, $r1, varReplacer7889, $r0, $i4);
+
+        $i4 = 0;
+
+     label5:
+        if $i4 >= $i2 goto label6;
+
+        $i5 = $i4 * 128;
+
+        $i5 = $i5 * $i1;
+
+        staticinvoke <com.lambdaworks.crypto.SCrypt: void smix(byte[],int,int,int,byte[],byte[])>($r0, $i5, $i1, $i0, $r2, $r3);
+
+        $i4 = $i4 + 1;
+
+        goto label5;
+
+     label6:
+        varReplacer7890 = 1;
+
+        varReplacer7891 = 32;
+
+        staticinvoke <com.lambdaworks.crypto.PBKDF: void pbkdf2(javax.crypto.Mac,byte[],int,byte[],int)>($r5, $r0, varReplacer7890, $r4, varReplacer7891);
+
+        return $r4;
+    }
+
+    public static native byte[] scryptN(byte[], byte[], int, int, int, int);
+
+    public static void smix(byte[], int, int, int, byte[], byte[])
+    {
+        byte[] $r0, $r1, $r2;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, varReplacer7913, varReplacer7914, varReplacer7915, varReplacer7916, varReplacer7917, varReplacer7918, varReplacer7919;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 := @parameter3: int;
+
+        $r1 := @parameter4: byte[];
+
+        $r2 := @parameter5: byte[];
+
+        $i3 = $i1 * 128;
+
+        $i5 = $i1 * 128;
+
+        varReplacer7919 = 0;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r0, $i0, $r2, varReplacer7919, $i5);
+
+        $i5 = 0;
+
+     label1:
+        if $i5 >= $i2 goto label2;
+
+        $i4 = $i1 * 128;
+
+        $i4 = $i4 * $i5;
+
+        $i6 = $i1 * 128;
+
+        varReplacer7915 = 0;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r2, varReplacer7915, $r1, $i4, $i6);
+
+        varReplacer7916 = 0;
+
+        staticinvoke <com.lambdaworks.crypto.SCrypt: void blockmix_salsa8(byte[],int,int,int)>($r2, varReplacer7916, $i3, $i1);
+
+        $i5 = $i5 + 1;
+
+        goto label1;
+
+     label2:
+        $i5 = 0;
+
+     label3:
+        if $i5 >= $i2 goto label4;
+
+        varReplacer7917 = 0;
+
+        $i4 = staticinvoke <com.lambdaworks.crypto.SCrypt: int integerify(byte[],int,int)>($r2, varReplacer7917, $i1);
+
+        $i6 = $i2 + -1;
+
+        $i4 = $i4 & $i6;
+
+        $i6 = $i1 * 128;
+
+        $i4 = $i6 * $i4;
+
+        $i6 = $i1 * 128;
+
+        varReplacer7918 = 0;
+
+        staticinvoke <com.lambdaworks.crypto.SCrypt: void blockxor(byte[],int,byte[],int,int)>($r1, $i4, $r2, varReplacer7918, $i6);
+
+        varReplacer7913 = 0;
+
+        staticinvoke <com.lambdaworks.crypto.SCrypt: void blockmix_salsa8(byte[],int,int,int)>($r2, varReplacer7913, $i3, $i1);
+
+        $i5 = $i5 + 1;
+
+        goto label3;
+
+     label4:
+        $i1 = $i1 * 128;
+
+        varReplacer7914 = 0;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r2, varReplacer7914, $r0, $i0, $i1);
+
+        return;
+    }
+}

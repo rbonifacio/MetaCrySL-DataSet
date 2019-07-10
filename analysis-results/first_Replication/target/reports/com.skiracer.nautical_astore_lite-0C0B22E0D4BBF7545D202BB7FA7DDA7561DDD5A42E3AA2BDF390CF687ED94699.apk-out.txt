@@ -1,0 +1,132 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.skiracer.nautical_astore_lite-0C0B22E0D4BBF7545D202BB7FA7DDA7561DDD5A42E3AA2BDF390CF687ED94699.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <skiracer.storage.RestUrls: byte[] sampleMD5Digest(byte[])>
+		SHA-256: 3b940b92f5e4b31443803d75519c1aec82c16b2ecfd8d102404ba591b0598d97
+		Secure: true
+	Object:
+		Variable: varReplacer7678
+		Type: java.lang.String
+		Statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer7678)
+		Method: <skiracer.util.EncryptionUtil: byte[] decrypt(byte[],java.io.InputStream,int)>
+		SHA-256: 2bcf93186b5bb065fe8972ad6f6cd55956c9495b02856aa2230b1bca73c7cafa
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: javax.crypto.CipherInputStream
+		Statement: specialinvoke $r2.<javax.crypto.CipherInputStream: void <init>(java.io.InputStream,javax.crypto.Cipher)>($r1, $r4)
+		Method: <skiracer.util.EncryptionUtil: byte[] decrypt(byte[],java.io.InputStream,int)>
+		SHA-256: ef73f93ca94e1e3466bf035c29ef42bcae68bf3229ae622149542eb92b1492c8
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: javax.crypto.Cipher
+		Statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7677)
+		Method: <skiracer.util.EncryptionUtil: byte[] decrypt(byte[],java.io.InputStream,int)>
+		SHA-256: 87ec27fa9e5d4772beead3ddf2141f6ba605d4a2baa499972e4b4b521e0552be
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.Signature
+		Statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer7222)
+		Method: <com.example.android.trivialdrivesample.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 9d31da3f7b0ae2ee1f9eeb21f86cd5b6389396dac5b9c0c3cb6d22534cac7da5
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4)
+		Method: <com.example.android.trivialdrivesample.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 50d20e0d863bf9aaaccbe6d5f71c736bbbd4ab16c1ca9b261b70d21b96f5b665
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2032)
+		Method: <skiracer.storage.RestUrls: byte[] sampleMD5Digest(byte[])>
+		SHA-256: 38f6ecf9de51bb1c719f48d4319680bc9f8882e4a01ad192dca9d7e865f28c85
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer7678)
+		Method: <skiracer.util.EncryptionUtil: byte[] decrypt(byte[],java.io.InputStream,int)>
+		SHA-256: 9e400112f15a7fca45dbdabe1ff27eafb9c35a7fdf5c7f85a15c39e156bf9da6
+		Secure: false
+
+Findings in Java Class: skiracer.util.EncryptionUtil
+
+	 in Method: byte[] decrypt(byte[],java.io.InputStream,int)
+		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #87ec27fa9e5d4772beead3ddf2141f6ba605d4a2baa499972e4b4b521e0552be)
+			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init, update, wrap, doFinal
+			at statement: specialinvoke $r2.<javax.crypto.CipherInputStream: void <init>(java.io.InputStream,javax.crypto.Cipher)>($r1, $r4)
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.CipherInputStream (on Object #ef73f93ca94e1e3466bf035c29ef42bcae68bf3229ae622149542eb92b1492c8)
+			Operation on object of type javax.crypto.CipherInputStream object not completed. Expected call to java.io.InputStream: int read(byte[],int,int), javax.crypto.CipherInputStream: int read(), java.io.InputStream: int read(byte[]), java.io.FilterInputStream: int read(byte[],int,int), javax.crypto.CipherInputStream: int read(byte[]), java.io.InputStream: int read(), java.io.FilterInputStream: int read(byte[]), close, java.io.FilterInputStream: int read(), javax.crypto.CipherInputStream: int read(byte[],int,int)
+			at statement: $i0 = virtualinvoke $r2.<java.io.InputStream: int read(byte[])>($r0)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #87ec27fa9e5d4772beead3ddf2141f6ba605d4a2baa499972e4b4b521e0552be)
+			First parameter (with value "DES/ECB/PKCS5Padding") should be any of {AES, DESede, RSA}
+			at statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7677)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer7678)
+
+
+Findings in Java Class: com.example.android.trivialdrivesample.util.Security
+
+	 in Method: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 8
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 2
+	ConstraintError: 1
+	IncompleteOperationError: 2
+=====================================================================

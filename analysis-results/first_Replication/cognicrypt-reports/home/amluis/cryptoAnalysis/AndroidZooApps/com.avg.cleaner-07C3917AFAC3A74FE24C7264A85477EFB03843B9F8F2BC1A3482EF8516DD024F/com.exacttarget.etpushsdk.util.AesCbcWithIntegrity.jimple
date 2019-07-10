@@ -1,0 +1,682 @@
+public class com.exacttarget.etpushsdk.util.AesCbcWithIntegrity extends java.lang.Object
+{
+    private static final int AES_KEY_LENGTH_BITS;
+    private static final boolean ALLOW_BROKEN_PRNG;
+    public static final int BASE64_FLAGS;
+    private static final java.lang.String CIPHER;
+    private static final java.lang.String CIPHER_TRANSFORMATION;
+    private static final java.lang.String HMAC_ALGORITHM;
+    private static final int HMAC_KEY_LENGTH_BITS;
+    private static final int IV_LENGTH_BYTES;
+    private static final java.lang.String PBE_ALGORITHM;
+    private static final int PBE_ITERATION_COUNT;
+    private static final int PBE_SALT_LENGTH_BITS;
+    private static final java.lang.String RANDOM_ALGORITHM;
+    static final java.util.concurrent.atomic.AtomicBoolean prngFixed;
+
+    static void <clinit>()
+    {
+        java.util.concurrent.atomic.AtomicBoolean $r0;
+        int varReplacer5927;
+
+        nop;
+
+        $r0 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        varReplacer5927 = 0;
+
+        specialinvoke $r0.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(varReplacer5927);
+
+        <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: java.util.concurrent.atomic.AtomicBoolean prngFixed> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity $r0;
+
+        $r0 := @this: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static boolean constantTimeEq(byte[], byte[])
+    {
+        byte[] $r0, $r1;
+        byte $b0, $b3, $b4;
+        int $i1, $i2, varReplacer5984, varReplacer5985, varReplacer5986;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: byte[];
+
+        $i1 = lengthof $r0;
+
+        $i2 = lengthof $r1;
+
+        if $i1 == $i2 goto label1;
+
+        varReplacer5985 = 0;
+
+        return varReplacer5985;
+
+     label1:
+        $i1 = 0;
+
+        $b3 = 0;
+
+     label2:
+        $i2 = lengthof $r0;
+
+        if $i1 >= $i2 goto label3;
+
+        $b4 = $r0[$i1];
+
+        $b0 = $r1[$i1];
+
+        $b0 = $b4 ^ $b0;
+
+        $b3 = $b3 | $b0;
+
+        $i1 = $i1 + 1;
+
+        goto label2;
+
+     label3:
+        if $b3 != 0 goto label4;
+
+        varReplacer5986 = 1;
+
+        return varReplacer5986;
+
+     label4:
+        varReplacer5984 = 0;
+
+        return varReplacer5984;
+    }
+
+    private static byte[] copyOfRange(byte[], int, int)
+    {
+        byte[] $r0, $r1;
+        int $i0, $i1, varReplacer5981;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i1 = $i1 - $i0;
+
+        $r1 = newarray (byte)[$i1];
+
+        varReplacer5981 = 0;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r0, $i0, $r1, varReplacer5981, $i1);
+
+        return $r1;
+    }
+
+    public static byte[] decrypt(com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac, com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys) throws java.security.GeneralSecurityException
+    {
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac $r0;
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys $r1;
+        javax.crypto.spec.IvParameterSpec $r2;
+        byte[] $r3, $r4;
+        javax.crypto.SecretKey $r5;
+        boolean $z0;
+        javax.crypto.Cipher $r6;
+        java.security.GeneralSecurityException $r7;
+        int varReplacer5973;
+        java.lang.String varReplacer5974, varReplacer5975;
+
+        nop;
+
+        $r0 := @parameter0: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac;
+
+        $r1 := @parameter1: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys;
+
+        $r3 = virtualinvoke $r0.<com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac: byte[] getIv()>();
+
+        $r4 = virtualinvoke $r0.<com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac: byte[] getCipherText()>();
+
+        $r3 = staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac: byte[] ivCipherConcat(byte[],byte[])>($r3, $r4);
+
+        $r5 = virtualinvoke $r1.<com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys: javax.crypto.SecretKey getIntegrityKey()>();
+
+        $r3 = staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: byte[] generateMac(byte[],javax.crypto.SecretKey)>($r3, $r5);
+
+        $r4 = virtualinvoke $r0.<com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac: byte[] getMac()>();
+
+        $z0 = staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: boolean constantTimeEq(byte[],byte[])>($r3, $r4);
+
+        if $z0 == 0 goto label1;
+
+        varReplacer5974 = "AES/CBC/PKCS5Padding";
+
+        $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer5974);
+
+        $r5 = virtualinvoke $r1.<com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys: javax.crypto.SecretKey getConfidentialityKey()>();
+
+        $r2 = new javax.crypto.spec.IvParameterSpec;
+
+        $r3 = virtualinvoke $r0.<com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac: byte[] getIv()>();
+
+        specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r3);
+
+        varReplacer5973 = 2;
+
+        virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer5973, $r5, $r2);
+
+        $r3 = virtualinvoke $r0.<com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac: byte[] getCipherText()>();
+
+        $r3 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r3);
+
+        return $r3;
+
+     label1:
+        $r7 = new java.security.GeneralSecurityException;
+
+        varReplacer5975 = "MAC stored in civ does not match computed MAC.";
+
+        specialinvoke $r7.<java.security.GeneralSecurityException: void <init>(java.lang.String)>(varReplacer5975);
+
+        throw $r7;
+    }
+
+    public static java.lang.String decryptString(com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac, com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys) throws java.io.UnsupportedEncodingException, java.security.GeneralSecurityException
+    {
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac $r0;
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys $r1;
+        java.lang.String $r2, varReplacer5937;
+
+        nop;
+
+        $r0 := @parameter0: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac;
+
+        $r1 := @parameter1: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys;
+
+        varReplacer5937 = "UTF-8";
+
+        $r2 = staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: java.lang.String decryptString(com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac,com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys,java.lang.String)>($r0, $r1, varReplacer5937);
+
+        return $r2;
+    }
+
+    public static java.lang.String decryptString(com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac, com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys, java.lang.String) throws java.io.UnsupportedEncodingException, java.security.GeneralSecurityException
+    {
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac $r0;
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys $r1;
+        java.lang.String $r2, $r3, varReplacer5958;
+        byte[] $r4;
+
+        nop;
+
+        $r0 := @parameter0: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac;
+
+        $r1 := @parameter1: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 = new java.lang.String;
+
+        $r4 = staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: byte[] decrypt(com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac,com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys)>($r0, $r1);
+
+        varReplacer5958 = "UTF-8";
+
+        specialinvoke $r3.<java.lang.String: void <init>(byte[],java.lang.String)>($r4, varReplacer5958);
+
+        return $r3;
+    }
+
+    public static com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac encrypt(java.lang.String, com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys) throws java.io.UnsupportedEncodingException, java.security.GeneralSecurityException
+    {
+        java.lang.String $r0, varReplacer5933;
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys $r1;
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac $r2;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys;
+
+        varReplacer5933 = "UTF-8";
+
+        $r2 = staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac encrypt(java.lang.String,com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys,java.lang.String)>($r0, $r1, varReplacer5933);
+
+        return $r2;
+    }
+
+    public static com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac encrypt(java.lang.String, com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys, java.lang.String) throws java.io.UnsupportedEncodingException, java.security.GeneralSecurityException
+    {
+        java.lang.String $r0, $r2, varReplacer5938;
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys $r1;
+        byte[] $r3;
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys;
+
+        $r2 := @parameter2: java.lang.String;
+
+        varReplacer5938 = "UTF-8";
+
+        $r3 = virtualinvoke $r0.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer5938);
+
+        $r4 = staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac encrypt(byte[],com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys)>($r3, $r1);
+
+        return $r4;
+    }
+
+    public static com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac encrypt(byte[], com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys) throws java.security.GeneralSecurityException
+    {
+        byte[] $r0, $r3, $r6;
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys $r1;
+        javax.crypto.spec.IvParameterSpec $r2;
+        javax.crypto.Cipher $r4;
+        javax.crypto.SecretKey $r5;
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac $r7;
+        int varReplacer5959;
+        java.lang.String varReplacer5960;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys;
+
+        $r3 = staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: byte[] generateIv()>();
+
+        varReplacer5960 = "AES/CBC/PKCS5Padding";
+
+        $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer5960);
+
+        $r5 = virtualinvoke $r1.<com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys: javax.crypto.SecretKey getConfidentialityKey()>();
+
+        $r2 = new javax.crypto.spec.IvParameterSpec;
+
+        specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r3);
+
+        varReplacer5959 = 1;
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer5959, $r5, $r2);
+
+        $r3 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] getIV()>();
+
+        $r0 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r0);
+
+        $r6 = staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac: byte[] ivCipherConcat(byte[],byte[])>($r3, $r0);
+
+        $r5 = virtualinvoke $r1.<com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys: javax.crypto.SecretKey getIntegrityKey()>();
+
+        $r6 = staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: byte[] generateMac(byte[],javax.crypto.SecretKey)>($r6, $r5);
+
+        $r7 = new com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac;
+
+        specialinvoke $r7.<com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac: void <init>(byte[],byte[],byte[])>($r0, $r3, $r6);
+
+        return $r7;
+    }
+
+    private static void fixPrng()
+    {
+        java.util.concurrent.atomic.AtomicBoolean $r0;
+        boolean $z0;
+        java.lang.Throwable $r1;
+        int varReplacer5982;
+
+        nop;
+
+        $r0 = <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: java.util.concurrent.atomic.AtomicBoolean prngFixed>;
+
+        $z0 = virtualinvoke $r0.<java.util.concurrent.atomic.AtomicBoolean: boolean get()>();
+
+        if $z0 != 0 goto label6;
+
+        entermonitor class "Lcom/exacttarget/etpushsdk/util/AesCbcWithIntegrity$PrngFixes;";
+
+     label1:
+        $r0 = <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: java.util.concurrent.atomic.AtomicBoolean prngFixed>;
+
+        $z0 = virtualinvoke $r0.<java.util.concurrent.atomic.AtomicBoolean: boolean get()>();
+
+        if $z0 != 0 goto label2;
+
+        staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$PrngFixes: void apply()>();
+
+        $r0 = <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: java.util.concurrent.atomic.AtomicBoolean prngFixed>;
+
+        varReplacer5982 = 1;
+
+        virtualinvoke $r0.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(varReplacer5982);
+
+     label2:
+        exitmonitor class "Lcom/exacttarget/etpushsdk/util/AesCbcWithIntegrity$PrngFixes;";
+
+     label3:
+        return;
+
+     label4:
+        $r1 := @caughtexception;
+
+        exitmonitor class "Lcom/exacttarget/etpushsdk/util/AesCbcWithIntegrity$PrngFixes;";
+
+     label5:
+        throw $r1;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public static byte[] generateIv() throws java.security.GeneralSecurityException
+    {
+        byte[] $r0;
+        int varReplacer5980;
+
+        nop;
+
+        varReplacer5980 = 16;
+
+        $r0 = staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: byte[] randomBytes(int)>(varReplacer5980);
+
+        return $r0;
+    }
+
+    public static com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys generateKey() throws java.security.GeneralSecurityException
+    {
+        javax.crypto.spec.SecretKeySpec $r0;
+        javax.crypto.KeyGenerator $r1;
+        javax.crypto.SecretKey $r2;
+        byte[] $r3;
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys $r4;
+
+        staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: void fixPrng()>();
+
+        $r1 = staticinvoke <javax.crypto.KeyGenerator: javax.crypto.KeyGenerator getInstance(java.lang.String)>("AES");
+
+        virtualinvoke $r1.<javax.crypto.KeyGenerator: void init(int)>(128);
+
+        $r2 = virtualinvoke $r1.<javax.crypto.KeyGenerator: javax.crypto.SecretKey generateKey()>();
+
+        $r3 = staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: byte[] randomBytes(int)>(32);
+
+        $r0 = new javax.crypto.spec.SecretKeySpec;
+
+        specialinvoke $r0.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, "HmacSHA256");
+
+        $r4 = new com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys;
+
+        specialinvoke $r4.<com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys: void <init>(javax.crypto.SecretKey,javax.crypto.SecretKey)>($r2, $r0);
+
+        return $r4;
+    }
+
+    public static com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys generateKeyFromPassword(java.lang.String, java.lang.String) throws java.security.GeneralSecurityException
+    {
+        java.lang.String $r0, $r1;
+        byte[] $r2;
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys $r3;
+        int varReplacer5939;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        varReplacer5939 = 2;
+
+        $r2 = staticinvoke <android.util.Base64: byte[] decode(java.lang.String,int)>($r1, varReplacer5939);
+
+        $r3 = staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys generateKeyFromPassword(java.lang.String,byte[])>($r0, $r2);
+
+        return $r3;
+    }
+
+    public static com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys generateKeyFromPassword(java.lang.String, byte[]) throws java.security.GeneralSecurityException
+    {
+        java.lang.String $r0, varReplacer5967, varReplacer5968, varReplacer5969;
+        byte[] $r1, $r6;
+        javax.crypto.spec.PBEKeySpec $r2;
+        char[] $r3;
+        javax.crypto.SecretKeyFactory $r4;
+        javax.crypto.SecretKey $r5;
+        javax.crypto.spec.SecretKeySpec $r7, $r8;
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys $r9;
+        int varReplacer5961, varReplacer5962, varReplacer5963, varReplacer5964, varReplacer5965, varReplacer5966;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: byte[];
+
+        staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: void fixPrng()>();
+
+        $r2 = new javax.crypto.spec.PBEKeySpec;
+
+        $r3 = virtualinvoke $r0.<java.lang.String: char[] toCharArray()>();
+
+        varReplacer5963 = 10000;
+
+        varReplacer5964 = 384;
+
+        specialinvoke $r2.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r3, $r1, varReplacer5963, varReplacer5964);
+
+        varReplacer5968 = "PBKDF2WithHmacSHA1";
+
+        $r4 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer5968);
+
+        $r5 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2);
+
+        $r6 = interfaceinvoke $r5.<javax.crypto.SecretKey: byte[] getEncoded()>();
+
+        varReplacer5961 = 0;
+
+        varReplacer5962 = 16;
+
+        $r1 = staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: byte[] copyOfRange(byte[],int,int)>($r6, varReplacer5961, varReplacer5962);
+
+        varReplacer5965 = 16;
+
+        varReplacer5966 = 48;
+
+        $r6 = staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: byte[] copyOfRange(byte[],int,int)>($r6, varReplacer5965, varReplacer5966);
+
+        $r7 = new javax.crypto.spec.SecretKeySpec;
+
+        varReplacer5967 = "AES";
+
+        specialinvoke $r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer5967);
+
+        $r8 = new javax.crypto.spec.SecretKeySpec;
+
+        varReplacer5969 = "HmacSHA256";
+
+        specialinvoke $r8.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer5969);
+
+        $r9 = new com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys;
+
+        specialinvoke $r9.<com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys: void <init>(javax.crypto.SecretKey,javax.crypto.SecretKey)>($r7, $r8);
+
+        return $r9;
+    }
+
+    public static byte[] generateMac(byte[], javax.crypto.SecretKey) throws java.security.NoSuchAlgorithmException, java.security.InvalidKeyException
+    {
+        byte[] $r0;
+        javax.crypto.SecretKey $r1;
+        javax.crypto.Mac $r2;
+        java.lang.String varReplacer5976;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: javax.crypto.SecretKey;
+
+        varReplacer5976 = "HmacSHA256";
+
+        $r2 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer5976);
+
+        virtualinvoke $r2.<javax.crypto.Mac: void init(java.security.Key)>($r1);
+
+        $r0 = virtualinvoke $r2.<javax.crypto.Mac: byte[] doFinal(byte[])>($r0);
+
+        return $r0;
+    }
+
+    public static byte[] generateSalt() throws java.security.GeneralSecurityException
+    {
+        byte[] $r0;
+        int varReplacer5972;
+
+        nop;
+
+        varReplacer5972 = 128;
+
+        $r0 = staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: byte[] randomBytes(int)>(varReplacer5972);
+
+        return $r0;
+    }
+
+    public static java.lang.String keyString(com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys)
+    {
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys $r0;
+        java.lang.String $r1;
+
+        $r0 := @parameter0: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys;
+
+        $r1 = virtualinvoke $r0.<com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    public static com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys keys(java.lang.String) throws java.security.InvalidKeyException
+    {
+        java.lang.String $r0;
+        java.lang.String[] $r1;
+        int $i0;
+        java.lang.IllegalArgumentException $r2;
+        byte[] $r3, $r5;
+        java.security.InvalidKeyException $r4;
+        com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys $r6;
+        javax.crypto.spec.SecretKeySpec $r7, $r8;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = virtualinvoke $r0.<java.lang.String: java.lang.String[] split(java.lang.String)>(":");
+
+        $i0 = lengthof $r1;
+
+        if $i0 == 2 goto label1;
+
+        $r2 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Cannot parse aesKey:hmacKey");
+
+        throw $r2;
+
+     label1:
+        $r0 = $r1[0];
+
+        $r3 = staticinvoke <android.util.Base64: byte[] decode(java.lang.String,int)>($r0, 2);
+
+        $i0 = lengthof $r3;
+
+        if $i0 == 16 goto label2;
+
+        $r4 = new java.security.InvalidKeyException;
+
+        specialinvoke $r4.<java.security.InvalidKeyException: void <init>(java.lang.String)>("Base64 decoded key is not 128 bytes");
+
+        throw $r4;
+
+     label2:
+        $r0 = $r1[1];
+
+        $r5 = staticinvoke <android.util.Base64: byte[] decode(java.lang.String,int)>($r0, 2);
+
+        $i0 = lengthof $r5;
+
+        if $i0 == 32 goto label3;
+
+        $r4 = new java.security.InvalidKeyException;
+
+        specialinvoke $r4.<java.security.InvalidKeyException: void <init>(java.lang.String)>("Base64 decoded key is not 256 bytes");
+
+        throw $r4;
+
+     label3:
+        $r6 = new com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys;
+
+        $r7 = new javax.crypto.spec.SecretKeySpec;
+
+        $i0 = lengthof $r3;
+
+        specialinvoke $r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r3, 0, $i0, "AES");
+
+        $r8 = new javax.crypto.spec.SecretKeySpec;
+
+        specialinvoke $r8.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, "HmacSHA256");
+
+        specialinvoke $r6.<com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys: void <init>(javax.crypto.SecretKey,javax.crypto.SecretKey)>($r7, $r8);
+
+        return $r6;
+    }
+
+    private static byte[] randomBytes(int) throws java.security.GeneralSecurityException
+    {
+        int $i0;
+        byte[] $r0;
+        java.security.SecureRandom $r1;
+        java.lang.String varReplacer5983;
+
+        nop;
+
+        $i0 := @parameter0: int;
+
+        staticinvoke <com.exacttarget.etpushsdk.util.AesCbcWithIntegrity: void fixPrng()>();
+
+        varReplacer5983 = "SHA1PRNG";
+
+        $r1 = staticinvoke <java.security.SecureRandom: java.security.SecureRandom getInstance(java.lang.String)>(varReplacer5983);
+
+        $r0 = newarray (byte)[$i0];
+
+        virtualinvoke $r1.<java.security.SecureRandom: void nextBytes(byte[])>($r0);
+
+        return $r0;
+    }
+
+    public static java.lang.String saltString(byte[])
+    {
+        byte[] $r0;
+        java.lang.String $r1;
+        int varReplacer5971;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        varReplacer5971 = 2;
+
+        $r1 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r0, varReplacer5971);
+
+        return $r1;
+    }
+}

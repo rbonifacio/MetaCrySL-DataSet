@@ -1,0 +1,396 @@
+public class com.pressplus.android.util.SignatureHelper extends java.lang.Object
+{
+    private static final java.lang.String ALGORITHM;
+    public static final java.lang.String APIKEY_HEADER;
+    public static final java.lang.String API_KEY;
+    public static final java.lang.String PRIVATE_KEY;
+    public static final java.lang.String PUBLIC_KEY;
+    public static final java.lang.String SIGNATURE_HEADER;
+    public static final java.util.List SIGNATURE_KEYWORDS;
+    public static final java.lang.String TIMESTAMP_HEADER;
+
+    static void <clinit>()
+    {
+        java.util.List $r0;
+        java.lang.String[] $r1;
+
+        nop;
+
+        $r1 = newarray (java.lang.String)[2];
+
+        $r1[0] = "apikey";
+
+        $r1[1] = "timestamp";
+
+        $r0 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r1);
+
+        <com.pressplus.android.util.SignatureHelper: java.util.List SIGNATURE_KEYWORDS> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.pressplus.android.util.SignatureHelper $r0;
+
+        $r0 := @this: com.pressplus.android.util.SignatureHelper;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String createSignature(java.util.ArrayList, java.lang.String, java.lang.String) throws java.lang.Exception
+    {
+        java.util.ArrayList $r0;
+        java.lang.String $r1, $r2, $r8, $r9, varReplacer775, varReplacer777, varReplacer778;
+        java.security.spec.PKCS8EncodedKeySpec $r3;
+        java.util.TreeMap $r4;
+        java.util.Iterator $r5;
+        boolean $z0;
+        java.lang.Object $r6;
+        org.apache.http.message.BasicNameValuePair $r7;
+        java.security.KeyFactory $r10;
+        byte[] $r11;
+        java.security.Signature $r12;
+        java.security.PrivateKey $r13;
+        int varReplacer776, varReplacer779;
+
+        nop;
+
+        $r0 := @parameter0: java.util.ArrayList;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r4 = new java.util.TreeMap;
+
+        specialinvoke $r4.<java.util.TreeMap: void <init>()>();
+
+        $r5 = virtualinvoke $r0.<java.util.ArrayList: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (org.apache.http.message.BasicNameValuePair) $r6;
+
+        $r8 = virtualinvoke $r7.<org.apache.http.message.BasicNameValuePair: java.lang.String getName()>();
+
+        $r9 = virtualinvoke $r7.<org.apache.http.message.BasicNameValuePair: java.lang.String getValue()>();
+
+        virtualinvoke $r4.<java.util.TreeMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r8, $r9);
+
+        goto label1;
+
+     label2:
+        $r1 = staticinvoke <com.pressplus.android.util.SignatureHelper: java.lang.String createSortedUrl(java.lang.String,java.util.TreeMap)>($r1, $r4);
+
+        varReplacer778 = "DSA";
+
+        $r10 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer778);
+
+        varReplacer775 = "MIIBSwIBADCCASwGByqGSM44BAEwggEfAoGBAP1_U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq_xfW6MPbLm1Vs14E7gB00b_JmYLdrmVClpJ-f6AR7ECLCT7up1_63xhv4O1fnxqimFQ8E-4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC_BYHPUCgYEA9-GghdabPd7LvKtcNrhXuXmUr7v6OuqC-VdMCz0HgmdRWVeOutRZT-ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN_C_ohNWLx-2J6ASQ7zKTxvqhRkImog9_hWuWfBpKLZl6Ae1UlZAFMO_7PSSoEFgIULXUuXN3W7OzvwwjTWA4DBmiQrmg";
+
+        varReplacer776 = 8;
+
+        $r11 = staticinvoke <android.util.Base64: byte[] decode(java.lang.String,int)>(varReplacer775, varReplacer776);
+
+        $r3 = new java.security.spec.PKCS8EncodedKeySpec;
+
+        specialinvoke $r3.<java.security.spec.PKCS8EncodedKeySpec: void <init>(byte[])>($r11);
+
+        varReplacer777 = "DSA";
+
+        $r12 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer777);
+
+        $r13 = virtualinvoke $r10.<java.security.KeyFactory: java.security.PrivateKey generatePrivate(java.security.spec.KeySpec)>($r3);
+
+        virtualinvoke $r12.<java.security.Signature: void initSign(java.security.PrivateKey)>($r13);
+
+        $r11 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r12.<java.security.Signature: void update(byte[])>($r11);
+
+        $r1 = new java.lang.String;
+
+        $r11 = virtualinvoke $r12.<java.security.Signature: byte[] sign()>();
+
+        varReplacer779 = 8;
+
+        $r11 = staticinvoke <android.util.Base64: byte[] encode(byte[],int)>($r11, varReplacer779);
+
+        specialinvoke $r1.<java.lang.String: void <init>(byte[])>($r11);
+
+        return $r1;
+    }
+
+    public static java.lang.String createSortedUrl(java.lang.String, java.util.TreeMap)
+    {
+        java.util.TreeMap $r0;
+        java.lang.String $r1, $r2, $r6, varReplacer780, varReplacer781, varReplacer782, varReplacer783;
+        java.util.Set $r3;
+        java.util.Iterator $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+        int $i0;
+        java.lang.StringBuilder $r7;
+
+        nop;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r0 := @parameter1: java.util.TreeMap;
+
+        $r2 = "";
+
+        $r3 = virtualinvoke $r0.<java.util.TreeMap: java.util.Set keySet()>();
+
+        $r4 = interfaceinvoke $r3.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r5 = interfaceinvoke $r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (java.lang.String) $r5;
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        if $i0 <= 0 goto label2;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        varReplacer782 = "&";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer782);
+
+        $r2 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label2:
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        varReplacer780 = "=";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer780);
+
+        $r5 = virtualinvoke $r0.<java.util.TreeMap: java.lang.Object get(java.lang.Object)>($r6);
+
+        $r2 = (java.lang.String) $r5;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String toString()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        goto label1;
+
+     label3:
+        varReplacer783 = "?";
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean endsWith(java.lang.String)>(varReplacer783);
+
+        if $z0 != 0 goto label4;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer781 = "?";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer781);
+
+        $r1 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label4:
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r1 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    private static java.security.PublicKey decodePublicKey(java.lang.String) throws java.lang.Exception
+    {
+        java.lang.String $r0;
+        java.security.spec.X509EncodedKeySpec $r1;
+        java.security.KeyFactory $r2;
+        byte[] $r3;
+        java.security.PublicKey $r4;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r2 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>("DSA");
+
+        $r3 = staticinvoke <android.util.Base64: byte[] decode(java.lang.String,int)>($r0, 8);
+
+        $r1 = new java.security.spec.X509EncodedKeySpec;
+
+        specialinvoke $r1.<java.security.spec.X509EncodedKeySpec: void <init>(byte[])>($r3);
+
+        $r4 = virtualinvoke $r2.<java.security.KeyFactory: java.security.PublicKey generatePublic(java.security.spec.KeySpec)>($r1);
+
+        return $r4;
+    }
+
+    public static java.lang.String getPublicKey(java.lang.String)
+    {
+        java.lang.String $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean equals(java.lang.Object)>("QA-001");
+
+        if $z0 == 0 goto label1;
+
+        return "MIIBuDCCASwGByqGSM44BAEwggEfAoGBAP1_U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq_xfW6MPbLm1Vs14E7gB00b_JmYLdrmVClpJ-f6AR7ECLCT7up1_63xhv4O1fnxqimFQ8E-4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC_BYHPUCgYEA9-GghdabPd7LvKtcNrhXuXmUr7v6OuqC-VdMCz0HgmdRWVeOutRZT-ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN_C_ohNWLx-2J6ASQ7zKTxvqhRkImog9_hWuWfBpKLZl6Ae1UlZAFMO_7PSSoDgYUAAoGBAKRKwK2O0kLXQHgzmkbrOMakFI98PK7_uhGFFxaGs7p_kkyzpTgZYE-y2q2sQUTdFqfdL7aWFbnWmVgQtSNvbsP9p3wQ1ibiCY6ZMJBa8cSZW2ou7_FuggXXFUUqIGaoUxJ7E6Dl8OnhHvXQ0g8WQMaHj3gVjn0PV-BGqvDxyRMS";
+
+     label1:
+        return null;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] $r0;
+        java.security.KeyPairGenerator $r1;
+        java.security.KeyPair $r2;
+        java.security.PrivateKey $r3;
+        java.security.PublicKey $r4;
+        byte[] $r5, $r6;
+        java.io.PrintStream $r7;
+        java.lang.StringBuilder $r8;
+        java.lang.String $r9;
+
+        $r0 := @parameter0: java.lang.String[];
+
+        $r1 = staticinvoke <java.security.KeyPairGenerator: java.security.KeyPairGenerator getInstance(java.lang.String)>("DSA");
+
+        virtualinvoke $r1.<java.security.KeyPairGenerator: void initialize(int)>(1024);
+
+        $r2 = virtualinvoke $r1.<java.security.KeyPairGenerator: java.security.KeyPair genKeyPair()>();
+
+        $r3 = virtualinvoke $r2.<java.security.KeyPair: java.security.PrivateKey getPrivate()>();
+
+        $r4 = virtualinvoke $r2.<java.security.KeyPair: java.security.PublicKey getPublic()>();
+
+        $r5 = interfaceinvoke $r3.<java.security.PrivateKey: byte[] getEncoded()>();
+
+        $r6 = interfaceinvoke $r4.<java.security.PublicKey: byte[] getEncoded()>();
+
+        $r7 = <java.lang.System: java.io.PrintStream out>;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Private Key: ");
+
+        $r9 = new java.lang.String;
+
+        $r5 = staticinvoke <android.util.Base64: byte[] encode(byte[],int)>($r5, 8);
+
+        specialinvoke $r9.<java.lang.String: void <init>(byte[])>($r5);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r7.<java.io.PrintStream: void println(java.lang.String)>($r9);
+
+        $r7 = <java.lang.System: java.io.PrintStream out>;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Public Key: ");
+
+        $r9 = new java.lang.String;
+
+        $r6 = staticinvoke <android.util.Base64: byte[] encode(byte[],int)>($r6, 8);
+
+        specialinvoke $r9.<java.lang.String: void <init>(byte[])>($r6);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r7.<java.io.PrintStream: void println(java.lang.String)>($r9);
+
+        return;
+    }
+
+    public static boolean validateSignature(java.lang.String, java.lang.String, java.lang.String) throws java.security.InvalidKeyException, java.lang.Exception
+    {
+        java.lang.String $r0, $r1, $r2;
+        java.lang.Throwable $r3;
+        java.security.Signature $r4;
+        java.security.PublicKey $r5;
+        byte[] $r6;
+        boolean $z0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r2 = staticinvoke <com.pressplus.android.util.SignatureHelper: java.lang.String getPublicKey(java.lang.String)>($r2);
+
+        if $r2 != null goto label1;
+
+        return 0;
+
+     label1:
+        $r4 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>("DSA");
+
+        $r5 = staticinvoke <com.pressplus.android.util.SignatureHelper: java.security.PublicKey decodePublicKey(java.lang.String)>($r2);
+
+        virtualinvoke $r4.<java.security.Signature: void initVerify(java.security.PublicKey)>($r5);
+
+        $r6 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r4.<java.security.Signature: void update(byte[])>($r6);
+
+     label2:
+        $r6 = staticinvoke <android.util.Base64: byte[] decode(java.lang.String,int)>($r1, 8);
+
+        $z0 = virtualinvoke $r4.<java.security.Signature: boolean verify(byte[])>($r6);
+
+     label3:
+        return $z0;
+
+     label4:
+        $r3 := @caughtexception;
+
+        return 0;
+
+        catch java.security.SignatureException from label2 to label3 with label4;
+    }
+}

@@ -1,0 +1,580 @@
+public class net.lingala.zip4j.crypto.AESDecrypter extends java.lang.Object implements net.lingala.zip4j.crypto.IDecrypter
+{
+    public net.lingala.zip4j.crypto.PBKDF2.MacBasedPRF a;
+    public int b;
+    public byte[] c;
+    private net.lingala.zip4j.model.LocalFileHeader d;
+    private net.lingala.zip4j.crypto.engine.AESEngine e;
+    private final int f;
+    private int g;
+    private int h;
+    private byte[] i;
+    private byte[] j;
+    private byte[] k;
+    private int l;
+    private byte[] m;
+    private byte[] n;
+    private int o;
+
+    public void <init>(net.lingala.zip4j.model.LocalFileHeader, byte[], byte[])
+    {
+        net.lingala.zip4j.crypto.AESDecrypter $r0;
+        net.lingala.zip4j.model.LocalFileHeader $r1;
+        byte[] $r2, $r3, $r5;
+        net.lingala.zip4j.exception.ZipException $r4;
+        net.lingala.zip4j.model.AESExtraDataRecord $r6;
+        int $i0, $i1, $i2, varReplacer6515, varReplacer6516, varReplacer6520, varReplacer6523, varReplacer6525, varReplacer6526, varReplacer6527, varReplacer6528, varReplacer6530, varReplacer6531, varReplacer6532, varReplacer6533, varReplacer6535, varReplacer6537, varReplacer6538, varReplacer6539, varReplacer6541, varReplacer6542;
+        java.lang.StringBuffer $r7;
+        java.lang.String $r8, varReplacer6517, varReplacer6518, varReplacer6519, varReplacer6521, varReplacer6522, varReplacer6524, varReplacer6534, varReplacer6536, varReplacer6540;
+        char[] $r9;
+        boolean $z0;
+        net.lingala.zip4j.crypto.engine.AESEngine $r10;
+        net.lingala.zip4j.crypto.PBKDF2.MacBasedPRF $r11;
+        null_type varReplacer6529;
+
+        nop;
+
+        $r0 := @this: net.lingala.zip4j.crypto.AESDecrypter;
+
+        $r1 := @parameter0: net.lingala.zip4j.model.LocalFileHeader;
+
+        $r2 := @parameter1: byte[];
+
+        $r3 := @parameter2: byte[];
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer6538 = 2;
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: int f> = varReplacer6538;
+
+        varReplacer6541 = 1;
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: int l> = varReplacer6541;
+
+        varReplacer6527 = 0;
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: int o> = varReplacer6527;
+
+        if $r1 != null goto label01;
+
+        $r4 = new net.lingala.zip4j.exception.ZipException;
+
+        varReplacer6521 = "one of the input parameters is null in AESDecryptor Constructor";
+
+        specialinvoke $r4.<net.lingala.zip4j.exception.ZipException: void <init>(java.lang.String)>(varReplacer6521);
+
+        throw $r4;
+
+     label01:
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: net.lingala.zip4j.model.LocalFileHeader d> = $r1;
+
+        varReplacer6529 = null;
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] c> = varReplacer6529;
+
+        $r5 = newarray (byte)[16];
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] m> = $r5;
+
+        $r5 = newarray (byte)[16];
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] n> = $r5;
+
+        $r1 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: net.lingala.zip4j.model.LocalFileHeader d>;
+
+        if $r1 != null goto label02;
+
+        $r4 = new net.lingala.zip4j.exception.ZipException;
+
+        varReplacer6518 = "invalid file header in init method of AESDecryptor";
+
+        specialinvoke $r4.<net.lingala.zip4j.exception.ZipException: void <init>(java.lang.String)>(varReplacer6518);
+
+        throw $r4;
+
+     label02:
+        $r1 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: net.lingala.zip4j.model.LocalFileHeader d>;
+
+        $r6 = $r1.<net.lingala.zip4j.model.LocalFileHeader: net.lingala.zip4j.model.AESExtraDataRecord s>;
+
+        if $r6 != null goto label03;
+
+        $r4 = new net.lingala.zip4j.exception.ZipException;
+
+        varReplacer6519 = "invalid aes extra data record - in init method of AESDecryptor";
+
+        specialinvoke $r4.<net.lingala.zip4j.exception.ZipException: void <init>(java.lang.String)>(varReplacer6519);
+
+        throw $r4;
+
+     label03:
+        $i0 = $r6.<net.lingala.zip4j.model.AESExtraDataRecord: int e>;
+
+        lookupswitch($i0)
+        {
+            case 1: goto label05;
+            case 2: goto label08;
+            case 3: goto label09;
+            default: goto label04;
+        };
+
+     label04:
+        $r4 = new net.lingala.zip4j.exception.ZipException;
+
+        $r7 = new java.lang.StringBuffer;
+
+        varReplacer6522 = "invalid aes key strength for file: ";
+
+        specialinvoke $r7.<java.lang.StringBuffer: void <init>(java.lang.String)>(varReplacer6522);
+
+        $r1 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: net.lingala.zip4j.model.LocalFileHeader d>;
+
+        $r8 = $r1.<net.lingala.zip4j.model.LocalFileHeader: java.lang.String l>;
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        specialinvoke $r4.<net.lingala.zip4j.exception.ZipException: void <init>(java.lang.String)>($r8);
+
+        throw $r4;
+
+     label05:
+        varReplacer6539 = 16;
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: int g> = varReplacer6539;
+
+        varReplacer6533 = 16;
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: int h> = varReplacer6533;
+
+        varReplacer6531 = 8;
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: int b> = varReplacer6531;
+
+     label06:
+        $r1 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: net.lingala.zip4j.model.LocalFileHeader d>;
+
+        $r9 = $r1.<net.lingala.zip4j.model.LocalFileHeader: char[] p>;
+
+        if $r9 == null goto label07;
+
+        $r1 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: net.lingala.zip4j.model.LocalFileHeader d>;
+
+        $r9 = $r1.<net.lingala.zip4j.model.LocalFileHeader: char[] p>;
+
+        $i0 = lengthof $r9;
+
+        if $i0 > 0 goto label10;
+
+     label07:
+        $r4 = new net.lingala.zip4j.exception.ZipException;
+
+        varReplacer6534 = "empty or null password provided for AES Decryptor";
+
+        specialinvoke $r4.<net.lingala.zip4j.exception.ZipException: void <init>(java.lang.String)>(varReplacer6534);
+
+        throw $r4;
+
+     label08:
+        varReplacer6523 = 24;
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: int g> = varReplacer6523;
+
+        varReplacer6520 = 24;
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: int h> = varReplacer6520;
+
+        varReplacer6532 = 12;
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: int b> = varReplacer6532;
+
+        goto label06;
+
+     label09:
+        varReplacer6542 = 32;
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: int g> = varReplacer6542;
+
+        varReplacer6535 = 32;
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: int h> = varReplacer6535;
+
+        varReplacer6537 = 16;
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: int b> = varReplacer6537;
+
+        goto label06;
+
+     label10:
+        $r1 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: net.lingala.zip4j.model.LocalFileHeader d>;
+
+        $r9 = $r1.<net.lingala.zip4j.model.LocalFileHeader: char[] p>;
+
+        $r2 = specialinvoke $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] a(byte[],char[])>($r2, $r9);
+
+        if $r2 == null goto label11;
+
+        $i0 = lengthof $r2;
+
+        $i1 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: int g>;
+
+        $i2 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: int h>;
+
+        $i1 = $i1 + $i2;
+
+        $i1 = $i1 + 2;
+
+        if $i0 == $i1 goto label12;
+
+     label11:
+        $r4 = new net.lingala.zip4j.exception.ZipException;
+
+        varReplacer6536 = "invalid derived key";
+
+        specialinvoke $r4.<net.lingala.zip4j.exception.ZipException: void <init>(java.lang.String)>(varReplacer6536);
+
+        throw $r4;
+
+     label12:
+        $i0 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: int g>;
+
+        $r5 = newarray (byte)[$i0];
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] i> = $r5;
+
+        $i0 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: int h>;
+
+        $r5 = newarray (byte)[$i0];
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] j> = $r5;
+
+        $r5 = newarray (byte)[2];
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] k> = $r5;
+
+        $r5 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] i>;
+
+        $i0 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: int g>;
+
+        varReplacer6515 = 0;
+
+        varReplacer6516 = 0;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r2, varReplacer6515, $r5, varReplacer6515, $i0);
+
+        $i0 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: int g>;
+
+        $r5 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] j>;
+
+        $i1 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: int h>;
+
+        varReplacer6530 = 0;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r2, $i0, $r5, varReplacer6530, $i1);
+
+        $i0 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: int g>;
+
+        $i1 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: int h>;
+
+        $i0 = $i0 + $i1;
+
+        $r5 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] k>;
+
+        varReplacer6525 = 0;
+
+        varReplacer6526 = 2;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r2, $i0, $r5, varReplacer6525, varReplacer6526);
+
+        $r2 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] k>;
+
+        if $r2 != null goto label13;
+
+        $r4 = new net.lingala.zip4j.exception.ZipException;
+
+        varReplacer6517 = "invalid derived password verifier for AES";
+
+        specialinvoke $r4.<net.lingala.zip4j.exception.ZipException: void <init>(java.lang.String)>(varReplacer6517);
+
+        throw $r4;
+
+     label13:
+        $r2 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] k>;
+
+        $z0 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>($r3, $r2);
+
+        if $z0 != 0 goto label14;
+
+        $r4 = new net.lingala.zip4j.exception.ZipException;
+
+        $r7 = new java.lang.StringBuffer;
+
+        varReplacer6524 = "Wrong Password for file: ";
+
+        specialinvoke $r7.<java.lang.StringBuffer: void <init>(java.lang.String)>(varReplacer6524);
+
+        $r1 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: net.lingala.zip4j.model.LocalFileHeader d>;
+
+        $r8 = $r1.<net.lingala.zip4j.model.LocalFileHeader: java.lang.String l>;
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        varReplacer6528 = 5;
+
+        specialinvoke $r4.<net.lingala.zip4j.exception.ZipException: void <init>(java.lang.String,int)>($r8, varReplacer6528);
+
+        throw $r4;
+
+     label14:
+        $r10 = new net.lingala.zip4j.crypto.engine.AESEngine;
+
+        $r2 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] i>;
+
+        specialinvoke $r10.<net.lingala.zip4j.crypto.engine.AESEngine: void <init>(byte[])>($r2);
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: net.lingala.zip4j.crypto.engine.AESEngine e> = $r10;
+
+        $r11 = new net.lingala.zip4j.crypto.PBKDF2.MacBasedPRF;
+
+        varReplacer6540 = "HmacSHA1";
+
+        specialinvoke $r11.<net.lingala.zip4j.crypto.PBKDF2.MacBasedPRF: void <init>(java.lang.String)>(varReplacer6540);
+
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: net.lingala.zip4j.crypto.PBKDF2.MacBasedPRF a> = $r11;
+
+        $r11 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: net.lingala.zip4j.crypto.PBKDF2.MacBasedPRF a>;
+
+        $r2 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] j>;
+
+        virtualinvoke $r11.<net.lingala.zip4j.crypto.PBKDF2.MacBasedPRF: void b(byte[])>($r2);
+
+        return;
+    }
+
+    private byte[] a(byte[], char[])
+    {
+        net.lingala.zip4j.crypto.AESDecrypter $r0;
+        byte[] $r1;
+        char[] $r2;
+        net.lingala.zip4j.crypto.PBKDF2.PBKDF2Parameters $r3;
+        net.lingala.zip4j.crypto.PBKDF2.PBKDF2Engine $r4;
+        int $i0, $i1;
+        java.lang.Exception $r5;
+        net.lingala.zip4j.exception.ZipException $r6;
+        java.lang.String varReplacer6548, varReplacer6549;
+
+        nop;
+
+        $r0 := @this: net.lingala.zip4j.crypto.AESDecrypter;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 := @parameter1: char[];
+
+        $r3 = new net.lingala.zip4j.crypto.PBKDF2.PBKDF2Parameters;
+
+     label1:
+        varReplacer6548 = "HmacSHA1";
+
+        varReplacer6549 = "ISO-8859-1";
+
+        specialinvoke $r3.<net.lingala.zip4j.crypto.PBKDF2.PBKDF2Parameters: void <init>(java.lang.String,java.lang.String,byte[])>(varReplacer6548, varReplacer6549, $r1);
+
+     label2:
+        $r4 = new net.lingala.zip4j.crypto.PBKDF2.PBKDF2Engine;
+
+     label3:
+        specialinvoke $r4.<net.lingala.zip4j.crypto.PBKDF2.PBKDF2Engine: void <init>(net.lingala.zip4j.crypto.PBKDF2.PBKDF2Parameters)>($r3);
+
+        $i0 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: int g>;
+
+        $i1 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: int h>;
+
+     label4:
+        $i0 = $i0 + $i1;
+
+        $i0 = $i0 + 2;
+
+     label5:
+        $r1 = virtualinvoke $r4.<net.lingala.zip4j.crypto.PBKDF2.PBKDF2Engine: byte[] a(char[],int)>($r2, $i0);
+
+     label6:
+        return $r1;
+
+     label7:
+        $r5 := @caughtexception;
+
+        $r6 = new net.lingala.zip4j.exception.ZipException;
+
+        specialinvoke $r6.<net.lingala.zip4j.exception.ZipException: void <init>(java.lang.Throwable)>($r5);
+
+        throw $r6;
+
+        catch java.lang.Exception from label1 to label2 with label7;
+        catch java.lang.Exception from label3 to label4 with label7;
+        catch java.lang.Exception from label5 to label6 with label7;
+    }
+
+    public final int a(byte[], int, int)
+    {
+        net.lingala.zip4j.crypto.AESDecrypter $r0;
+        byte[] $r1, $r5, $r6;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        net.lingala.zip4j.crypto.engine.AESEngine $r2;
+        net.lingala.zip4j.exception.ZipException $r3;
+        net.lingala.zip4j.crypto.PBKDF2.MacBasedPRF $r4;
+        byte $b6, $b7;
+        java.lang.Exception $r7;
+        java.lang.String varReplacer6683;
+
+        nop;
+
+        $r0 := @this: net.lingala.zip4j.crypto.AESDecrypter;
+
+        $r1 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r2 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: net.lingala.zip4j.crypto.engine.AESEngine e>;
+
+        if $r2 != null goto label01;
+
+        $r3 = new net.lingala.zip4j.exception.ZipException;
+
+        varReplacer6683 = "AES not initialized properly";
+
+        specialinvoke $r3.<net.lingala.zip4j.exception.ZipException: void <init>(java.lang.String)>(varReplacer6683);
+
+        throw $r3;
+
+     label01:
+        $i2 = 0;
+
+     label02:
+        $i3 = 0 + $i1;
+
+        if $i2 < $i3 goto label03;
+
+        return $i1;
+
+     label03:
+        $i3 = $i2 + 16;
+
+        $i4 = 0 + $i1;
+
+        if $i3 > $i4 goto label17;
+
+        $i3 = 16;
+
+     label04:
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: int o> = $i3;
+
+        $r4 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: net.lingala.zip4j.crypto.PBKDF2.MacBasedPRF a>;
+
+        $i3 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: int o>;
+
+     label05:
+        virtualinvoke $r4.<net.lingala.zip4j.crypto.PBKDF2.MacBasedPRF: void a(byte[],int,int)>($r1, $i2, $i3);
+
+     label06:
+        $r5 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] m>;
+
+        $i3 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: int l>;
+
+     label07:
+        staticinvoke <net.lingala.zip4j.util.Raw: void d(byte[],int)>($r5, $i3);
+
+     label08:
+        $r2 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: net.lingala.zip4j.crypto.engine.AESEngine e>;
+
+        $r5 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] m>;
+
+        $r6 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] n>;
+
+     label09:
+        virtualinvoke $r2.<net.lingala.zip4j.crypto.engine.AESEngine: int a(byte[],byte[])>($r5, $r6);
+
+     label10:
+        $i3 = 0;
+
+     label11:
+        $i4 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: int o>;
+
+     label12:
+        if $i3 < $i4 goto label18;
+
+     label13:
+        $i3 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: int l>;
+
+     label14:
+        $i3 = $i3 + 1;
+
+     label15:
+        $r0.<net.lingala.zip4j.crypto.AESDecrypter: int l> = $i3;
+
+     label16:
+        $i2 = $i2 + 16;
+
+        goto label02;
+
+     label17:
+        $i3 = 0 + $i1;
+
+        $i3 = $i3 - $i2;
+
+        goto label04;
+
+     label18:
+        $i4 = $i2 + $i3;
+
+        $i5 = $i2 + $i3;
+
+     label19:
+        $b6 = $r1[$i5];
+
+        $r5 = $r0.<net.lingala.zip4j.crypto.AESDecrypter: byte[] n>;
+
+        $b7 = $r5[$i3];
+
+     label20:
+        $b6 = $b6 ^ $b7;
+
+     label21:
+        $r1[$i4] = $b6;
+
+     label22:
+        $i3 = $i3 + 1;
+
+        goto label11;
+
+     label23:
+        $r3 := @caughtexception;
+
+        throw $r3;
+
+     label24:
+        $r7 := @caughtexception;
+
+        $r3 = new net.lingala.zip4j.exception.ZipException;
+
+        specialinvoke $r3.<net.lingala.zip4j.exception.ZipException: void <init>(java.lang.Throwable)>($r7);
+
+        throw $r3;
+
+        catch net.lingala.zip4j.exception.ZipException from label05 to label06 with label23;
+        catch net.lingala.zip4j.exception.ZipException from label07 to label08 with label23;
+        catch net.lingala.zip4j.exception.ZipException from label09 to label10 with label23;
+        catch java.lang.Exception from label04 to label10 with label24;
+        catch java.lang.Exception from label11 to label12 with label24;
+        catch java.lang.Exception from label13 to label14 with label24;
+        catch java.lang.Exception from label15 to label16 with label24;
+        catch java.lang.Exception from label19 to label20 with label24;
+        catch java.lang.Exception from label21 to label22 with label24;
+    }
+}

@@ -1,0 +1,135 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.cammsys.blacksys-1477F86983103C60929D98C1B61930CD76D7F691847A19BBD9C71597BB28B180.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r5
+		Type: javax.crypto.Cipher
+		Statement: $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer3231)
+		Method: <framework.crypto.SimpleCrypto: byte[] encrypt(byte[],byte[])>
+		SHA-256: 30d997c191b5c9d91f884bb276ddb22fa7a0e195153c5382e68b13d55092329e
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: javax.crypto.spec.IvParameterSpec
+		Statement: specialinvoke $r4.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r0)
+		Method: <framework.crypto.SimpleCrypto: byte[] encrypt(byte[],byte[])>
+		SHA-256: b0defa380405c35d7eff497766c37abdf3a263ecb8a85047606d3e778de0021c
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: javax.crypto.SecretKey
+		Statement: $r4 = virtualinvoke $r1.<javax.crypto.KeyGenerator: javax.crypto.SecretKey generateKey()>()
+		Method: <framework.crypto.SimpleCrypto: byte[] getRawKey(byte[])>
+		SHA-256: d5e8aa7851969c1ecc30218af1ee38e6c7433934b7fd6bb0da825f36638bf049
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer3229)
+		Method: <framework.crypto.SimpleCrypto: byte[] encrypt(byte[],byte[])>
+		SHA-256: 93b9027a0190bd067f204ea0603c9f85d187e14b8c11815ff728c3eeac5daba5
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.SecureRandom
+		Statement: $r3 = staticinvoke <java.security.SecureRandom: java.security.SecureRandom getInstance(java.lang.String,java.lang.String)>(varReplacer3224, varReplacer3225)
+		Method: <framework.crypto.SimpleCrypto: byte[] getRawKey(byte[])>
+		SHA-256: f630bc8d0dd5c752628805c7916327c8664930bc4743cd7bfde0673a9170229e
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: javax.crypto.KeyGenerator
+		Statement: $r1 = staticinvoke <javax.crypto.KeyGenerator: javax.crypto.KeyGenerator getInstance(java.lang.String)>(varReplacer3227)
+		Method: <framework.crypto.SimpleCrypto: byte[] getRawKey(byte[])>
+		SHA-256: 6e26fd4afd57428d27f86313561992ce5a5607ee74f561cb2a20975d81f9e593
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r5.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1)
+		Method: <framework.crypto.SimpleCrypto: byte[] encrypt(byte[],byte[])>
+		SHA-256: 7c0c9ca7154bc34176c069b54dbb78838e719a47537622753b7b6c909c00fb14
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r5.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1)
+		Method: <framework.crypto.SimpleCrypto: byte[] encrypt(byte[],byte[])>
+		SHA-256: 6d07de88a8a09b6d90eb4c26217c83992b6506788b7cbc9e4e056e0d7014ae72
+		Secure: false
+	Object:
+		Variable: varReplacer3229
+		Type: java.lang.String
+		Statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer3229)
+		Method: <framework.crypto.SimpleCrypto: byte[] encrypt(byte[],byte[])>
+		SHA-256: 6f2ca8230826d3521c2aba377696e4004b8152ec7c75f25c5839c66ed072d063
+		Secure: false
+
+Findings in Java Class: framework.crypto.SimpleCrypto
+
+	 in Method: byte[] encrypt(byte[],byte[])
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r4.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r0)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer3230, $r3, $r4)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer3229)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared I V
+			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer3230, $r3, $r4)
+
+
+	 in Method: byte[] getRawKey(byte[])
+		RequiredPredicateError violating CrySL rule for javax.crypto.KeyGenerator
+			Second parameter was not properly generated as randomized
+			at statement: virtualinvoke $r1.<javax.crypto.KeyGenerator: void init(int,java.security.SecureRandom)>(varReplacer3226, $r2)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 9
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 5
+=====================================================================

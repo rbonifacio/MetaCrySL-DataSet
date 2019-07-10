@@ -1,0 +1,91 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.andromo.dev1847.app283467-0F91FA88EFA7235FE6DF17FA022693759732D719908B0A545C0C9CD20ED803F6.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: r9
+		Type: java.security.SecureRandom
+		Statement: specialinvoke r9.<java.security.SecureRandom: void <init>()>()
+		Method: <com.facebook.ads.internal.g.k: void b()>
+		SHA-256: 9880c48a5c4f887bacb4627841040f978e3a05570361dc71d959b0cab19cf0c1
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3106)
+		Method: <com.facebook.ads.internal.g.aa: java.lang.String b(java.lang.String)>
+		SHA-256: 128a3d9e27585610dc8e3ae67f111ee1a9d99f3a95afe5325b937b5e3a5b0388
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r3)
+		Method: <com.facebook.ads.internal.g.aa: java.lang.String b(java.lang.String)>
+		SHA-256: 37f56919219a0374d881e989dd9b630568018c3ad7b05cf6cbee8b0542872ad
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: javax.net.ssl.SSLContext
+		Statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1809)
+		Method: <com.facebook.ads.internal.g.k: void b()>
+		SHA-256: 2478549dc72eebd05c1bd64976b768ddb671d8c880fa914337ac4e681cad8a82
+		Secure: false
+
+Findings in Java Class: com.facebook.ads.internal.g.k
+
+	 in Method: void b()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1808, r11, $r0)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1808, r11, $r0)
+
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #2478549dc72eebd05c1bd64976b768ddb671d8c880fa914337ac4e681cad8a82)
+			First parameter (with value "SSL") should be any of {TLS}
+			at statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1809)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 1
+	RequiredPredicateError: 2
+=====================================================================

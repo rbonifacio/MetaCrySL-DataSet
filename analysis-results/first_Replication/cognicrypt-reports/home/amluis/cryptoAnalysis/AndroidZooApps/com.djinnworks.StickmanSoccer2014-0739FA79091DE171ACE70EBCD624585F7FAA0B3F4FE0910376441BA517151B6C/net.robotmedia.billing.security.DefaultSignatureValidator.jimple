@@ -1,0 +1,288 @@
+public class net.robotmedia.billing.security.DefaultSignatureValidator extends java.lang.Object implements net.robotmedia.billing.security.ISignatureValidator
+{
+    protected static final java.lang.String KEY_FACTORY_ALGORITHM;
+    protected static final java.lang.String SIGNATURE_ALGORITHM;
+    private net.robotmedia.billing.BillingController$IConfiguration configuration;
+
+    public void <init>(net.robotmedia.billing.BillingController$IConfiguration)
+    {
+        net.robotmedia.billing.security.DefaultSignatureValidator $r0;
+        net.robotmedia.billing.BillingController$IConfiguration $r1;
+
+        nop;
+
+        $r0 := @this: net.robotmedia.billing.security.DefaultSignatureValidator;
+
+        $r1 := @parameter0: net.robotmedia.billing.BillingController$IConfiguration;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<net.robotmedia.billing.security.DefaultSignatureValidator: net.robotmedia.billing.BillingController$IConfiguration configuration> = $r1;
+
+        return;
+    }
+
+    protected java.security.PublicKey generatePublicKey(java.lang.String)
+    {
+        net.robotmedia.billing.security.DefaultSignatureValidator $r0;
+        java.lang.String $r1, varReplacer2726, varReplacer2727, varReplacer2728, varReplacer2729, varReplacer2730;
+        byte[] $r2;
+        java.security.KeyFactory $r3;
+        java.security.spec.X509EncodedKeySpec $r4;
+        java.security.PublicKey $r5;
+        java.lang.Throwable $r6, $r8;
+        java.lang.RuntimeException $r7;
+        java.lang.IllegalArgumentException $r9;
+        net.robotmedia.billing.utils.Base64DecoderException $r10;
+
+        nop;
+
+        $r0 := @this: net.robotmedia.billing.security.DefaultSignatureValidator;
+
+        $r1 := @parameter0: java.lang.String;
+
+     label1:
+        $r2 = staticinvoke <net.robotmedia.billing.utils.Base64: byte[] decode(java.lang.String)>($r1);
+
+        varReplacer2728 = "RSA";
+
+        $r3 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer2728);
+
+     label2:
+        $r4 = new java.security.spec.X509EncodedKeySpec;
+
+     label3:
+        specialinvoke $r4.<java.security.spec.X509EncodedKeySpec: void <init>(byte[])>($r2);
+
+        $r5 = virtualinvoke $r3.<java.security.KeyFactory: java.security.PublicKey generatePublic(java.security.spec.KeySpec)>($r4);
+
+     label4:
+        return $r5;
+
+     label5:
+        $r6 := @caughtexception;
+
+        $r7 = new java.lang.RuntimeException;
+
+        specialinvoke $r7.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r6);
+
+        throw $r7;
+
+     label6:
+        $r8 := @caughtexception;
+
+        varReplacer2726 = "Billing";
+
+        varReplacer2727 = "Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer2726, varReplacer2727);
+
+        $r9 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r8);
+
+        throw $r9;
+
+     label7:
+        $r10 := @caughtexception;
+
+        varReplacer2729 = "Billing";
+
+        varReplacer2730 = "Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer2729, varReplacer2730);
+
+        $r9 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r10);
+
+        throw $r9;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label5;
+        catch java.security.spec.InvalidKeySpecException from label1 to label2 with label6;
+        catch java.security.spec.InvalidKeySpecException from label3 to label4 with label6;
+        catch net.robotmedia.billing.utils.Base64DecoderException from label1 to label2 with label7;
+        catch net.robotmedia.billing.utils.Base64DecoderException from label3 to label4 with label7;
+    }
+
+    public boolean validate(java.lang.String, java.lang.String)
+    {
+        net.robotmedia.billing.security.DefaultSignatureValidator $r0;
+        java.lang.String $r1, $r2, $r4, varReplacer2722, varReplacer2723, varReplacer2724, varReplacer2725;
+        net.robotmedia.billing.BillingController$IConfiguration $r3;
+        boolean $z0;
+        java.security.PublicKey $r5;
+        int varReplacer2720, varReplacer2721;
+
+        nop;
+
+        $r0 := @this: net.robotmedia.billing.security.DefaultSignatureValidator;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 = $r0.<net.robotmedia.billing.security.DefaultSignatureValidator: net.robotmedia.billing.BillingController$IConfiguration configuration>;
+
+        if $r3 == null goto label1;
+
+        $r3 = $r0.<net.robotmedia.billing.security.DefaultSignatureValidator: net.robotmedia.billing.BillingController$IConfiguration configuration>;
+
+        $r4 = interfaceinvoke $r3.<net.robotmedia.billing.BillingController$IConfiguration: java.lang.String getPublicKey()>();
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r4);
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        varReplacer2724 = "Billing";
+
+        varReplacer2725 = "Please set the public key or turn on debug mode";
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>(varReplacer2724, varReplacer2725);
+
+        varReplacer2720 = 0;
+
+        return varReplacer2720;
+
+     label2:
+        if $r1 != null goto label3;
+
+        varReplacer2722 = "Billing";
+
+        varReplacer2723 = "Data is null";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer2722, varReplacer2723);
+
+        varReplacer2721 = 0;
+
+        return varReplacer2721;
+
+     label3:
+        $r5 = virtualinvoke $r0.<net.robotmedia.billing.security.DefaultSignatureValidator: java.security.PublicKey generatePublicKey(java.lang.String)>($r4);
+
+        $z0 = virtualinvoke $r0.<net.robotmedia.billing.security.DefaultSignatureValidator: boolean validate(java.security.PublicKey,java.lang.String,java.lang.String)>($r5, $r1, $r2);
+
+        return $z0;
+    }
+
+    protected boolean validate(java.security.PublicKey, java.lang.String, java.lang.String)
+    {
+        net.robotmedia.billing.security.DefaultSignatureValidator $r0;
+        java.security.PublicKey $r1;
+        java.lang.String $r2, $r3, varReplacer2732, varReplacer2733, varReplacer2734, varReplacer2737, varReplacer2738, varReplacer2740, varReplacer2741, varReplacer2742, varReplacer2743, varReplacer2744, varReplacer2745;
+        java.security.Signature $r4;
+        byte[] $r5;
+        boolean $z0;
+        java.lang.Throwable $r6, $r7, $r8;
+        net.robotmedia.billing.utils.Base64DecoderException $r9;
+        int varReplacer2731, varReplacer2735, varReplacer2736, varReplacer2739, varReplacer2746, varReplacer2747;
+
+        nop;
+
+        $r0 := @this: net.robotmedia.billing.security.DefaultSignatureValidator;
+
+        $r1 := @parameter0: java.security.PublicKey;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+     label1:
+        varReplacer2732 = "SHA1withRSA";
+
+        $r4 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer2732);
+
+        virtualinvoke $r4.<java.security.Signature: void initVerify(java.security.PublicKey)>($r1);
+
+        $r5 = virtualinvoke $r2.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r4.<java.security.Signature: void update(byte[])>($r5);
+
+        $r5 = staticinvoke <net.robotmedia.billing.utils.Base64: byte[] decode(java.lang.String)>($r3);
+
+        $z0 = virtualinvoke $r4.<java.security.Signature: boolean verify(byte[])>($r5);
+
+     label2:
+        if $z0 != 0 goto label5;
+
+     label3:
+        varReplacer2733 = "Billing";
+
+        varReplacer2734 = "Signature verification failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer2733, varReplacer2734);
+
+     label4:
+        varReplacer2731 = 0;
+
+        return varReplacer2731;
+
+     label5:
+        varReplacer2746 = 1;
+
+        return varReplacer2746;
+
+     label6:
+        $r6 := @caughtexception;
+
+        varReplacer2737 = "Billing";
+
+        varReplacer2738 = "NoSuchAlgorithmException";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer2737, varReplacer2738);
+
+        varReplacer2735 = 0;
+
+        return varReplacer2735;
+
+     label7:
+        $r7 := @caughtexception;
+
+        varReplacer2740 = "Billing";
+
+        varReplacer2741 = "Invalid key specification";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer2740, varReplacer2741);
+
+        varReplacer2736 = 0;
+
+        return varReplacer2736;
+
+     label8:
+        $r8 := @caughtexception;
+
+        varReplacer2742 = "Billing";
+
+        varReplacer2743 = "Signature exception";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer2742, varReplacer2743);
+
+        varReplacer2739 = 0;
+
+        return varReplacer2739;
+
+     label9:
+        $r9 := @caughtexception;
+
+        varReplacer2744 = "Billing";
+
+        varReplacer2745 = "Base64 decoding failed";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer2744, varReplacer2745);
+
+        varReplacer2747 = 0;
+
+        return varReplacer2747;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label6;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label6;
+        catch java.security.InvalidKeyException from label1 to label2 with label7;
+        catch java.security.InvalidKeyException from label3 to label4 with label7;
+        catch java.security.SignatureException from label1 to label2 with label8;
+        catch java.security.SignatureException from label3 to label4 with label8;
+        catch net.robotmedia.billing.utils.Base64DecoderException from label1 to label2 with label9;
+        catch net.robotmedia.billing.utils.Base64DecoderException from label3 to label4 with label9;
+    }
+}

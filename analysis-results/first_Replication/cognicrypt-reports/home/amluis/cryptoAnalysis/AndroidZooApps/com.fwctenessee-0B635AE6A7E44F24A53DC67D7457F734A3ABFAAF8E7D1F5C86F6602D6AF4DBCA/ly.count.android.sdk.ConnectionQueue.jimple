@@ -1,0 +1,702 @@
+public class ly.count.android.sdk.ConnectionQueue extends java.lang.Object
+{
+    private java.lang.String appKey_;
+    private java.util.concurrent.Future connectionProcessorFuture_;
+    private android.content.Context context_;
+    private ly.count.android.sdk.DeviceId deviceId_;
+    private java.util.concurrent.ExecutorService executor_;
+    private java.lang.String serverURL_;
+    private javax.net.ssl.SSLContext sslContext_;
+    private ly.count.android.sdk.CountlyStore store_;
+
+    public void <init>()
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+
+        nop;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    void beginSession()
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2, varReplacer1641, varReplacer1642, varReplacer1643, varReplacer1644, varReplacer1645, varReplacer1646;
+        int $i0;
+        android.content.Context $r3;
+        ly.count.android.sdk.CountlyStore $r4;
+
+        nop;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        virtualinvoke $r0.<ly.count.android.sdk.ConnectionQueue: void checkInternalState()>();
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1642 = "app_key=";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1642);
+
+        $r2 = $r0.<ly.count.android.sdk.ConnectionQueue: java.lang.String appKey_>;
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        varReplacer1641 = "&timestamp=";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1641);
+
+        $i0 = staticinvoke <ly.count.android.sdk.Countly: int currentTimestamp()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1643 = "&sdk_version=";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1643);
+
+        varReplacer1646 = "15.08";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1646);
+
+        varReplacer1645 = "&begin_session=1";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1645);
+
+        varReplacer1644 = "&metrics=";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1644);
+
+        $r3 = $r0.<ly.count.android.sdk.ConnectionQueue: android.content.Context context_>;
+
+        $r2 = staticinvoke <ly.count.android.sdk.DeviceInfo: java.lang.String getMetrics(android.content.Context)>($r3);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r4 = $r0.<ly.count.android.sdk.ConnectionQueue: ly.count.android.sdk.CountlyStore store_>;
+
+        virtualinvoke $r4.<ly.count.android.sdk.CountlyStore: void addConnection(java.lang.String)>($r2);
+
+        virtualinvoke $r0.<ly.count.android.sdk.ConnectionQueue: void tick()>();
+
+        return;
+    }
+
+    void checkInternalState()
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+        android.content.Context $r1;
+        java.lang.IllegalStateException $r2;
+        java.lang.String $r3, varReplacer1020, varReplacer1021, varReplacer1022, varReplacer1023, varReplacer1024, varReplacer1025;
+        int $i0;
+        ly.count.android.sdk.CountlyStore $r4;
+        boolean $z0;
+        java.util.List $r5;
+
+        nop;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        $r1 = $r0.<ly.count.android.sdk.ConnectionQueue: android.content.Context context_>;
+
+        if $r1 != null goto label1;
+
+        $r2 = new java.lang.IllegalStateException;
+
+        varReplacer1022 = "context has not been set";
+
+        specialinvoke $r2.<java.lang.IllegalStateException: void <init>(java.lang.String)>(varReplacer1022);
+
+        throw $r2;
+
+     label1:
+        $r3 = $r0.<ly.count.android.sdk.ConnectionQueue: java.lang.String appKey_>;
+
+        if $r3 == null goto label2;
+
+        $r3 = $r0.<ly.count.android.sdk.ConnectionQueue: java.lang.String appKey_>;
+
+        $i0 = virtualinvoke $r3.<java.lang.String: int length()>();
+
+        if $i0 != 0 goto label3;
+
+     label2:
+        $r2 = new java.lang.IllegalStateException;
+
+        varReplacer1023 = "app key has not been set";
+
+        specialinvoke $r2.<java.lang.IllegalStateException: void <init>(java.lang.String)>(varReplacer1023);
+
+        throw $r2;
+
+     label3:
+        $r4 = $r0.<ly.count.android.sdk.ConnectionQueue: ly.count.android.sdk.CountlyStore store_>;
+
+        if $r4 != null goto label4;
+
+        $r2 = new java.lang.IllegalStateException;
+
+        varReplacer1020 = "countly store has not been set";
+
+        specialinvoke $r2.<java.lang.IllegalStateException: void <init>(java.lang.String)>(varReplacer1020);
+
+        throw $r2;
+
+     label4:
+        $r3 = $r0.<ly.count.android.sdk.ConnectionQueue: java.lang.String serverURL_>;
+
+        if $r3 == null goto label5;
+
+        $r3 = $r0.<ly.count.android.sdk.ConnectionQueue: java.lang.String serverURL_>;
+
+        $z0 = staticinvoke <ly.count.android.sdk.Countly: boolean isValidURL(java.lang.String)>($r3);
+
+        if $z0 != 0 goto label6;
+
+     label5:
+        $r2 = new java.lang.IllegalStateException;
+
+        varReplacer1025 = "server URL is not valid";
+
+        specialinvoke $r2.<java.lang.IllegalStateException: void <init>(java.lang.String)>(varReplacer1025);
+
+        throw $r2;
+
+     label6:
+        $r5 = <ly.count.android.sdk.Countly: java.util.List publicKeyPinCertificates>;
+
+        if $r5 == null goto label7;
+
+        $r3 = $r0.<ly.count.android.sdk.ConnectionQueue: java.lang.String serverURL_>;
+
+        varReplacer1021 = "https";
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean startsWith(java.lang.String)>(varReplacer1021);
+
+        if $z0 != 0 goto label7;
+
+        $r2 = new java.lang.IllegalStateException;
+
+        varReplacer1024 = "server must start with https once you specified public keys";
+
+        specialinvoke $r2.<java.lang.IllegalStateException: void <init>(java.lang.String)>(varReplacer1024);
+
+        throw $r2;
+
+     label7:
+        return;
+    }
+
+    void endSession(int)
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+        int $i0, $i1;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2, $r3, varReplacer1013, varReplacer1014, varReplacer1015, varReplacer1016;
+        ly.count.android.sdk.CountlyStore $r4;
+
+        nop;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        $i0 := @parameter0: int;
+
+        virtualinvoke $r0.<ly.count.android.sdk.ConnectionQueue: void checkInternalState()>();
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1016 = "app_key=";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1016);
+
+        $r2 = $r0.<ly.count.android.sdk.ConnectionQueue: java.lang.String appKey_>;
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        varReplacer1015 = "&timestamp=";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1015);
+
+        $i1 = staticinvoke <ly.count.android.sdk.Countly: int currentTimestamp()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        varReplacer1013 = "&end_session=1";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1013);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r3 = $r2;
+
+        if $i0 <= 0 goto label1;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        varReplacer1014 = "&session_duration=";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1014);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label1:
+        $r4 = $r0.<ly.count.android.sdk.ConnectionQueue: ly.count.android.sdk.CountlyStore store_>;
+
+        virtualinvoke $r4.<ly.count.android.sdk.CountlyStore: void addConnection(java.lang.String)>($r3);
+
+        virtualinvoke $r0.<ly.count.android.sdk.ConnectionQueue: void tick()>();
+
+        return;
+    }
+
+    void ensureExecutor()
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+        java.util.concurrent.ExecutorService $r1;
+
+        nop;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        $r1 = $r0.<ly.count.android.sdk.ConnectionQueue: java.util.concurrent.ExecutorService executor_>;
+
+        if $r1 != null goto label1;
+
+        $r1 = staticinvoke <java.util.concurrent.Executors: java.util.concurrent.ExecutorService newSingleThreadExecutor()>();
+
+        $r0.<ly.count.android.sdk.ConnectionQueue: java.util.concurrent.ExecutorService executor_> = $r1;
+
+     label1:
+        return;
+    }
+
+    java.lang.String getAppKey()
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+        java.lang.String r1;
+
+        nop;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        r1 = $r0.<ly.count.android.sdk.ConnectionQueue: java.lang.String appKey_>;
+
+        return r1;
+    }
+
+    ly.count.android.sdk.CountlyStore getCountlyStore()
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+        ly.count.android.sdk.CountlyStore r1;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        r1 = $r0.<ly.count.android.sdk.ConnectionQueue: ly.count.android.sdk.CountlyStore store_>;
+
+        return r1;
+    }
+
+    ly.count.android.sdk.DeviceId getDeviceId()
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+        ly.count.android.sdk.DeviceId r1;
+
+        nop;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        r1 = $r0.<ly.count.android.sdk.ConnectionQueue: ly.count.android.sdk.DeviceId deviceId_>;
+
+        return r1;
+    }
+
+    java.lang.String getServerURL()
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+        java.lang.String r1;
+
+        nop;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        r1 = $r0.<ly.count.android.sdk.ConnectionQueue: java.lang.String serverURL_>;
+
+        return r1;
+    }
+
+    void recordEvents(java.lang.String)
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+        java.lang.String $r1, $r3, varReplacer1017, varReplacer1018, varReplacer1019;
+        java.lang.StringBuilder $r2;
+        int $i0;
+        ly.count.android.sdk.CountlyStore $r4;
+
+        nop;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        $r1 := @parameter0: java.lang.String;
+
+        virtualinvoke $r0.<ly.count.android.sdk.ConnectionQueue: void checkInternalState()>();
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1017 = "app_key=";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1017);
+
+        $r3 = $r0.<ly.count.android.sdk.ConnectionQueue: java.lang.String appKey_>;
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer1018 = "&timestamp=";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1018);
+
+        $i0 = staticinvoke <ly.count.android.sdk.Countly: int currentTimestamp()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1019 = "&events=";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1019);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r4 = $r0.<ly.count.android.sdk.ConnectionQueue: ly.count.android.sdk.CountlyStore store_>;
+
+        virtualinvoke $r4.<ly.count.android.sdk.CountlyStore: void addConnection(java.lang.String)>($r1);
+
+        virtualinvoke $r0.<ly.count.android.sdk.ConnectionQueue: void tick()>();
+
+        return;
+    }
+
+    void sendReferrerData(java.lang.String)
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+        java.lang.String $r1, $r3, varReplacer1680, varReplacer1681;
+        java.lang.StringBuilder $r2;
+        int $i0;
+        ly.count.android.sdk.CountlyStore $r4;
+
+        nop;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        $r1 := @parameter0: java.lang.String;
+
+        virtualinvoke $r0.<ly.count.android.sdk.ConnectionQueue: void checkInternalState()>();
+
+        if $r1 == null goto label1;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1680 = "app_key=";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1680);
+
+        $r3 = $r0.<ly.count.android.sdk.ConnectionQueue: java.lang.String appKey_>;
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer1681 = "&timestamp=";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1681);
+
+        $i0 = staticinvoke <ly.count.android.sdk.Countly: int currentTimestamp()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r4 = $r0.<ly.count.android.sdk.ConnectionQueue: ly.count.android.sdk.CountlyStore store_>;
+
+        virtualinvoke $r4.<ly.count.android.sdk.CountlyStore: void addConnection(java.lang.String)>($r1);
+
+        virtualinvoke $r0.<ly.count.android.sdk.ConnectionQueue: void tick()>();
+
+     label1:
+        return;
+    }
+
+    void setAppKey(java.lang.String)
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+        java.lang.String $r1;
+
+        nop;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r0.<ly.count.android.sdk.ConnectionQueue: java.lang.String appKey_> = $r1;
+
+        return;
+    }
+
+    void setContext(android.content.Context)
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+        android.content.Context $r1;
+
+        nop;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r0.<ly.count.android.sdk.ConnectionQueue: android.content.Context context_> = $r1;
+
+        return;
+    }
+
+    void setCountlyStore(ly.count.android.sdk.CountlyStore)
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+        ly.count.android.sdk.CountlyStore $r1;
+
+        nop;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        $r1 := @parameter0: ly.count.android.sdk.CountlyStore;
+
+        $r0.<ly.count.android.sdk.ConnectionQueue: ly.count.android.sdk.CountlyStore store_> = $r1;
+
+        return;
+    }
+
+    public void setDeviceId(ly.count.android.sdk.DeviceId)
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+        ly.count.android.sdk.DeviceId $r1;
+
+        nop;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        $r1 := @parameter0: ly.count.android.sdk.DeviceId;
+
+        $r0.<ly.count.android.sdk.ConnectionQueue: ly.count.android.sdk.DeviceId deviceId_> = $r1;
+
+        return;
+    }
+
+    void setServerURL(java.lang.String)
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+        java.lang.String $r1, varReplacer1754;
+        java.lang.Throwable $r2;
+        java.lang.Object[] $r3;
+        javax.net.ssl.SSLContext $r4;
+        java.util.List $r5;
+        ly.count.android.sdk.CertificateTrustManager $r6, r7;
+        java.lang.IllegalStateException r8;
+        javax.net.ssl.TrustManager[] r9;
+        null_type varReplacer1753, varReplacer1755, varReplacer1756;
+
+        nop;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r0.<ly.count.android.sdk.ConnectionQueue: java.lang.String serverURL_> = $r1;
+
+        $r5 = <ly.count.android.sdk.Countly: java.util.List publicKeyPinCertificates>;
+
+        if $r5 != null goto label1;
+
+        varReplacer1753 = null;
+
+        $r0.<ly.count.android.sdk.ConnectionQueue: javax.net.ssl.SSLContext sslContext_> = varReplacer1753;
+
+        return;
+
+     label1:
+        $r3 = newarray (javax.net.ssl.TrustManager)[1];
+
+        r7 = new ly.count.android.sdk.CertificateTrustManager;
+
+     label2:
+        $r6 = r7;
+
+     label3:
+        $r5 = <ly.count.android.sdk.Countly: java.util.List publicKeyPinCertificates>;
+
+        specialinvoke r7.<ly.count.android.sdk.CertificateTrustManager: void <init>(java.util.List)>($r5);
+
+        $r3[0] = $r6;
+
+        varReplacer1754 = "TLS";
+
+        $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1754);
+
+        $r0.<ly.count.android.sdk.ConnectionQueue: javax.net.ssl.SSLContext sslContext_> = $r4;
+
+        $r4 = $r0.<ly.count.android.sdk.ConnectionQueue: javax.net.ssl.SSLContext sslContext_>;
+
+        r9 = (javax.net.ssl.TrustManager[]) $r3;
+
+        varReplacer1755 = null;
+
+        varReplacer1756 = null;
+
+        virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1755, r9, varReplacer1755);
+
+     label4:
+        return;
+
+     label5:
+        $r2 := @caughtexception;
+
+        r8 = new java.lang.IllegalStateException;
+
+        specialinvoke r8.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r2);
+
+        throw r8;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+    }
+
+    void tick()
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+        ly.count.android.sdk.ConnectionProcessor $r1;
+        java.lang.String $r2;
+        ly.count.android.sdk.CountlyStore $r3;
+        ly.count.android.sdk.DeviceId $r4;
+        javax.net.ssl.SSLContext $r5;
+        boolean $z0;
+        java.util.concurrent.Future $r6;
+        java.util.concurrent.ExecutorService $r7;
+
+        nop;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        $r3 = $r0.<ly.count.android.sdk.ConnectionQueue: ly.count.android.sdk.CountlyStore store_>;
+
+        $z0 = virtualinvoke $r3.<ly.count.android.sdk.CountlyStore: boolean isEmptyConnections()>();
+
+        if $z0 != 0 goto label2;
+
+        $r6 = $r0.<ly.count.android.sdk.ConnectionQueue: java.util.concurrent.Future connectionProcessorFuture_>;
+
+        if $r6 == null goto label1;
+
+        $r6 = $r0.<ly.count.android.sdk.ConnectionQueue: java.util.concurrent.Future connectionProcessorFuture_>;
+
+        $z0 = interfaceinvoke $r6.<java.util.concurrent.Future: boolean isDone()>();
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        virtualinvoke $r0.<ly.count.android.sdk.ConnectionQueue: void ensureExecutor()>();
+
+        $r7 = $r0.<ly.count.android.sdk.ConnectionQueue: java.util.concurrent.ExecutorService executor_>;
+
+        $r1 = new ly.count.android.sdk.ConnectionProcessor;
+
+        $r2 = $r0.<ly.count.android.sdk.ConnectionQueue: java.lang.String serverURL_>;
+
+        $r3 = $r0.<ly.count.android.sdk.ConnectionQueue: ly.count.android.sdk.CountlyStore store_>;
+
+        $r4 = $r0.<ly.count.android.sdk.ConnectionQueue: ly.count.android.sdk.DeviceId deviceId_>;
+
+        $r5 = $r0.<ly.count.android.sdk.ConnectionQueue: javax.net.ssl.SSLContext sslContext_>;
+
+        specialinvoke $r1.<ly.count.android.sdk.ConnectionProcessor: void <init>(java.lang.String,ly.count.android.sdk.CountlyStore,ly.count.android.sdk.DeviceId,javax.net.ssl.SSLContext)>($r2, $r3, $r4, $r5);
+
+        $r6 = interfaceinvoke $r7.<java.util.concurrent.ExecutorService: java.util.concurrent.Future submit(java.lang.Runnable)>($r1);
+
+        $r0.<ly.count.android.sdk.ConnectionQueue: java.util.concurrent.Future connectionProcessorFuture_> = $r6;
+
+     label2:
+        return;
+    }
+
+    void updateSession(int)
+    {
+        ly.count.android.sdk.ConnectionQueue $r0;
+        int $i0, $i1;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2;
+        ly.count.android.sdk.CountlyStore $r3;
+
+        $r0 := @this: ly.count.android.sdk.ConnectionQueue;
+
+        $i0 := @parameter0: int;
+
+        virtualinvoke $r0.<ly.count.android.sdk.ConnectionQueue: void checkInternalState()>();
+
+        if $i0 <= 0 goto label1;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("app_key=");
+
+        $r2 = $r0.<ly.count.android.sdk.ConnectionQueue: java.lang.String appKey_>;
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("&timestamp=");
+
+        $i1 = staticinvoke <ly.count.android.sdk.Countly: int currentTimestamp()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("&session_duration=");
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("&location=");
+
+        $r3 = virtualinvoke $r0.<ly.count.android.sdk.ConnectionQueue: ly.count.android.sdk.CountlyStore getCountlyStore()>();
+
+        $r2 = virtualinvoke $r3.<ly.count.android.sdk.CountlyStore: java.lang.String getAndRemoveLocation()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r3 = $r0.<ly.count.android.sdk.ConnectionQueue: ly.count.android.sdk.CountlyStore store_>;
+
+        virtualinvoke $r3.<ly.count.android.sdk.CountlyStore: void addConnection(java.lang.String)>($r2);
+
+        virtualinvoke $r0.<ly.count.android.sdk.ConnectionQueue: void tick()>();
+
+     label1:
+        return;
+    }
+}

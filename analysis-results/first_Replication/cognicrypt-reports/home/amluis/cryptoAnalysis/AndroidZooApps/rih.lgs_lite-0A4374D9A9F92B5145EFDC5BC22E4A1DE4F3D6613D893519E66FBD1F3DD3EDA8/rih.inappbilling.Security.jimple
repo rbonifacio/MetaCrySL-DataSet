@@ -1,0 +1,199 @@
+public class rih.inappbilling.Security extends java.lang.Object
+{
+    private static final java.lang.String KEY_FACTORY_ALGORITHM;
+    private static final java.lang.String SIGNATURE_ALGORITHM;
+    private static final java.lang.String TAG;
+
+    public void <init>()
+    {
+        rih.inappbilling.Security $r0;
+
+        $r0 := @this: rih.inappbilling.Security;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.security.PublicKey generatePublicKey(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer1438;
+        byte[] $r1;
+        java.security.KeyFactory $r2;
+        java.security.spec.X509EncodedKeySpec $r3;
+        java.security.PublicKey $r4;
+        java.lang.Throwable $r5, $r7;
+        java.lang.RuntimeException $r6;
+        java.lang.IllegalArgumentException $r8;
+        int varReplacer1437;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer1437 = 0;
+
+        $r1 = staticinvoke <android.util.Base64: byte[] decode(java.lang.String,int)>($r0, varReplacer1437);
+
+        varReplacer1438 = "RSA";
+
+        $r2 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer1438);
+
+     label2:
+        $r3 = new java.security.spec.X509EncodedKeySpec;
+
+     label3:
+        specialinvoke $r3.<java.security.spec.X509EncodedKeySpec: void <init>(byte[])>($r1);
+
+        $r4 = virtualinvoke $r2.<java.security.KeyFactory: java.security.PublicKey generatePublic(java.security.spec.KeySpec)>($r3);
+
+     label4:
+        return $r4;
+
+     label5:
+        $r5 := @caughtexception;
+
+        $r6 = new java.lang.RuntimeException;
+
+        specialinvoke $r6.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r5);
+
+        throw $r6;
+
+     label6:
+        $r7 := @caughtexception;
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r7);
+
+        throw $r8;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label5;
+        catch java.security.spec.InvalidKeySpecException from label1 to label2 with label6;
+        catch java.security.spec.InvalidKeySpecException from label3 to label4 with label6;
+    }
+
+    public static boolean verify(java.security.PublicKey, java.lang.String, java.lang.String)
+    {
+        java.security.PublicKey $r0;
+        java.lang.String $r1, $r2, varReplacer1432;
+        java.lang.Throwable $r3, $r7, $r8, $r9;
+        byte[] $r4, $r6;
+        java.security.Signature $r5;
+        boolean $z0;
+        int varReplacer1429, varReplacer1430, varReplacer1431, varReplacer1433, varReplacer1434, varReplacer1435, varReplacer1436;
+
+        nop;
+
+        $r0 := @parameter0: java.security.PublicKey;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+     label1:
+        varReplacer1430 = 0;
+
+        $r4 = staticinvoke <android.util.Base64: byte[] decode(java.lang.String,int)>($r2, varReplacer1430);
+
+     label2:
+        varReplacer1432 = "SHA1withRSA";
+
+        $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer1432);
+
+        virtualinvoke $r5.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0);
+
+        $r6 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r5.<java.security.Signature: void update(byte[])>($r6);
+
+        $z0 = virtualinvoke $r5.<java.security.Signature: boolean verify(byte[])>($r4);
+
+     label3:
+        if $z0 != 0 goto label5;
+
+        varReplacer1435 = 0;
+
+        return varReplacer1435;
+
+     label4:
+        $r3 := @caughtexception;
+
+        varReplacer1429 = 0;
+
+        return varReplacer1429;
+
+     label5:
+        varReplacer1433 = 1;
+
+        return varReplacer1433;
+
+     label6:
+        $r7 := @caughtexception;
+
+        varReplacer1436 = 0;
+
+        return varReplacer1436;
+
+     label7:
+        $r8 := @caughtexception;
+
+        varReplacer1434 = 0;
+
+        return varReplacer1434;
+
+     label8:
+        $r9 := @caughtexception;
+
+        varReplacer1431 = 0;
+
+        return varReplacer1431;
+
+        catch java.lang.IllegalArgumentException from label1 to label2 with label4;
+        catch java.security.NoSuchAlgorithmException from label2 to label3 with label8;
+        catch java.security.InvalidKeyException from label2 to label3 with label7;
+        catch java.security.SignatureException from label2 to label3 with label6;
+    }
+
+    public static boolean verifyPurchase(java.lang.String, java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, $r2;
+        boolean $z0;
+        java.security.PublicKey $r3;
+        int varReplacer1428;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r0);
+
+        if $z0 != 0 goto label1;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        varReplacer1428 = 0;
+
+        return varReplacer1428;
+
+     label2:
+        $r3 = staticinvoke <rih.inappbilling.Security: java.security.PublicKey generatePublicKey(java.lang.String)>($r0);
+
+        $z0 = staticinvoke <rih.inappbilling.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>($r3, $r1, $r2);
+
+        return $z0;
+    }
+}

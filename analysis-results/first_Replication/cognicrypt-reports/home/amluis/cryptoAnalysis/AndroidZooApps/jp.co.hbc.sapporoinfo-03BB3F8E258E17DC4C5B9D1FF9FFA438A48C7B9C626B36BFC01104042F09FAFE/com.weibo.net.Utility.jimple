@@ -1,0 +1,2025 @@
+public class com.weibo.net.Utility extends java.lang.Object
+{
+    public static final java.lang.String BOUNDARY;
+    public static final java.lang.String END_MP_BOUNDARY;
+    public static final java.lang.String HTTPMETHOD_DELETE;
+    public static final java.lang.String HTTPMETHOD_GET;
+    public static final java.lang.String HTTPMETHOD_POST;
+    public static final java.lang.String MP_BOUNDARY;
+    public static final java.lang.String MULTIPART_FORM_DATA;
+    private static final int SET_CONNECTION_TIMEOUT;
+    private static final int SET_SOCKET_TIMEOUT;
+    private static com.weibo.net.HttpHeaderFactory mAuth;
+    private static com.weibo.net.WeiboParameters mRequestHeader;
+    private static com.weibo.net.Token mToken;
+
+    static void <clinit>()
+    {
+        com.weibo.net.WeiboParameters $r0;
+        null_type varReplacer730;
+
+        nop;
+
+        $r0 = new com.weibo.net.WeiboParameters;
+
+        specialinvoke $r0.<com.weibo.net.WeiboParameters: void <init>()>();
+
+        <com.weibo.net.Utility: com.weibo.net.WeiboParameters mRequestHeader> = $r0;
+
+        varReplacer730 = null;
+
+        <com.weibo.net.Utility: com.weibo.net.Token mToken> = varReplacer730;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.weibo.net.Utility $r0;
+
+        $r0 := @this: com.weibo.net.Utility;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static char[] base64Encode(byte[])
+    {
+        byte[] $r0;
+        char[] $r1, $r2;
+        java.lang.String $r3;
+        int $i0, $i1, $i2, $i5, $i6;
+        boolean $z0, $z1;
+        byte $b3;
+        short $s4;
+        char $c7;
+
+        $r0 := @parameter0: byte[];
+
+        $r3 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+        $r2 = virtualinvoke $r3.<java.lang.String: char[] toCharArray()>();
+
+        $i0 = lengthof $r0;
+
+        $i0 = $i0 + 2;
+
+        $i0 = $i0 / 3;
+
+        $i0 = $i0 * 4;
+
+        $r1 = newarray (char)[$i0];
+
+        $i0 = 0;
+
+        $i1 = 0;
+
+     label1:
+        $i2 = lengthof $r0;
+
+        if $i0 < $i2 goto label2;
+
+        return $r1;
+
+     label2:
+        $z0 = 0;
+
+        $z1 = 0;
+
+        $b3 = $r0[$i0];
+
+        $s4 = $b3 & 255;
+
+        $i2 = $s4 << 8;
+
+        $i5 = $i0 + 1;
+
+        $i6 = lengthof $r0;
+
+        if $i5 >= $i6 goto label3;
+
+        $i5 = $i0 + 1;
+
+        $b3 = $r0[$i5];
+
+        $s4 = $b3 & 255;
+
+        $i2 = $i2 | $s4;
+
+        $z1 = 1;
+
+     label3:
+        $i2 = $i2 << 8;
+
+        $i5 = $i0 + 2;
+
+        $i6 = lengthof $r0;
+
+        if $i5 >= $i6 goto label4;
+
+        $i5 = $i0 + 2;
+
+        $b3 = $r0[$i5];
+
+        $s4 = $b3 & 255;
+
+        $i2 = $i2 | $s4;
+
+        $z0 = 1;
+
+     label4:
+        $i5 = $i1 + 3;
+
+        if $z0 == 0 goto label7;
+
+        $i6 = $i2 & 63;
+
+     label5:
+        $c7 = $r2[$i6];
+
+        $r1[$i5] = $c7;
+
+        $i2 = $i2 >> 6;
+
+        $i5 = $i1 + 2;
+
+        if $z1 == 0 goto label8;
+
+        $i6 = $i2 & 63;
+
+     label6:
+        $c7 = $r2[$i6];
+
+        $r1[$i5] = $c7;
+
+        $i2 = $i2 >> 6;
+
+        $i5 = $i1 + 1;
+
+        $i6 = $i2 & 63;
+
+        $c7 = $r2[$i6];
+
+        $r1[$i5] = $c7;
+
+        $i5 = $i2 >> 6;
+
+        $i2 = $i1;
+
+        $i5 = $i5 & 63;
+
+        $c7 = $r2[$i5];
+
+        $r1[$i2] = $c7;
+
+        $i0 = $i0 + 3;
+
+        $i1 = $i1 + 4;
+
+        goto label1;
+
+     label7:
+        $i6 = 64;
+
+        goto label5;
+
+     label8:
+        $i6 = 64;
+
+        goto label6;
+    }
+
+    public static void clearCookies(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.webkit.CookieManager $r1;
+
+        $r0 := @parameter0: android.content.Context;
+
+        staticinvoke <android.webkit.CookieSyncManager: android.webkit.CookieSyncManager createInstance(android.content.Context)>($r0);
+
+        $r1 = staticinvoke <android.webkit.CookieManager: android.webkit.CookieManager getInstance()>();
+
+        virtualinvoke $r1.<android.webkit.CookieManager: void removeAllCookie()>();
+
+        return;
+    }
+
+    public static void clearRequestHeader()
+    {
+        com.weibo.net.WeiboParameters $r0;
+
+        $r0 = <com.weibo.net.Utility: com.weibo.net.WeiboParameters mRequestHeader>;
+
+        virtualinvoke $r0.<com.weibo.net.WeiboParameters: void clear()>();
+
+        return;
+    }
+
+    public static android.os.Bundle decodeUrl(java.lang.String)
+    {
+        java.lang.String $r0, $r4;
+        android.os.Bundle $r1;
+        int $i0, $i1;
+        java.lang.String[] $r2, $r3;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = new android.os.Bundle;
+
+        specialinvoke $r1.<android.os.Bundle: void <init>()>();
+
+        if $r0 == null goto label3;
+
+        $r2 = virtualinvoke $r0.<java.lang.String: java.lang.String[] split(java.lang.String)>("&");
+
+        $i0 = lengthof $r2;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 < $i0 goto label2;
+
+        return $r1;
+
+     label2:
+        $r0 = $r2[$i1];
+
+        $r3 = virtualinvoke $r0.<java.lang.String: java.lang.String[] split(java.lang.String)>("=");
+
+        $r0 = $r3[0];
+
+        $r0 = staticinvoke <java.net.URLDecoder: java.lang.String decode(java.lang.String)>($r0);
+
+        $r4 = $r3[1];
+
+        $r4 = staticinvoke <java.net.URLDecoder: java.lang.String decode(java.lang.String)>($r4);
+
+        virtualinvoke $r1.<android.os.Bundle: void putString(java.lang.String,java.lang.String)>($r0, $r4);
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        return $r1;
+    }
+
+    public static java.lang.String encodeParameters(com.weibo.net.WeiboParameters)
+    {
+        com.weibo.net.WeiboParameters $r0;
+        java.lang.StringBuilder $r1, $r4;
+        boolean $z0;
+        int $i0, $i1, $i2;
+        java.lang.String $r2, $r3, varReplacer4356, varReplacer4357, varReplacer4358, varReplacer4359, varReplacer4360;
+        java.lang.Throwable $r5;
+
+        nop;
+
+        $r0 := @parameter0: com.weibo.net.WeiboParameters;
+
+        if $r0 == null goto label1;
+
+        $z0 = staticinvoke <com.weibo.net.Utility: boolean isBundleEmpty(com.weibo.net.WeiboParameters)>($r0);
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        varReplacer4356 = "";
+
+        return varReplacer4356;
+
+     label2:
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $i0 = 0;
+
+        $i1 = 0;
+
+     label3:
+        $i2 = virtualinvoke $r0.<com.weibo.net.WeiboParameters: int size()>();
+
+        if $i1 < $i2 goto label4;
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r2;
+
+     label4:
+        $r2 = virtualinvoke $r0.<com.weibo.net.WeiboParameters: java.lang.String getKey(int)>($i1);
+
+        if $i0 == 0 goto label5;
+
+        varReplacer4357 = "&";
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4357);
+
+     label5:
+        varReplacer4359 = "UTF-8";
+
+        $r3 = staticinvoke <java.net.URLEncoder: java.lang.String encode(java.lang.String,java.lang.String)>($r2, varReplacer4359);
+
+        $r4 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer4358 = "=";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4358);
+
+        $r2 = virtualinvoke $r0.<com.weibo.net.WeiboParameters: java.lang.String getValue(java.lang.String)>($r2);
+
+        varReplacer4360 = "UTF-8";
+
+        $r2 = staticinvoke <java.net.URLEncoder: java.lang.String encode(java.lang.String,java.lang.String)>($r2, varReplacer4360);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+     label6:
+        $i0 = $i0 + 1;
+
+        $i1 = $i1 + 1;
+
+        goto label3;
+
+     label7:
+        $r5 := @caughtexception;
+
+        goto label6;
+
+        catch java.io.UnsupportedEncodingException from label5 to label6 with label7;
+    }
+
+    public static java.lang.String encodePostBody(android.os.Bundle, java.lang.String)
+    {
+        android.os.Bundle $r0;
+        java.lang.String $r1, $r6;
+        java.lang.StringBuilder $r2, $r8;
+        java.util.Set $r3;
+        java.util.Iterator $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+        byte[] $r7;
+
+        $r0 := @parameter0: android.os.Bundle;
+
+        $r1 := @parameter1: java.lang.String;
+
+        if $r0 != null goto label1;
+
+        return "";
+
+     label1:
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r0.<android.os.Bundle: java.util.Set keySet()>();
+
+        $r4 = interfaceinvoke $r3.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 != 0 goto label3;
+
+        $r1 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label3:
+        $r5 = interfaceinvoke $r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (java.lang.String) $r5;
+
+        $r7 = virtualinvoke $r0.<android.os.Bundle: byte[] getByteArray(java.lang.String)>($r6);
+
+        if $r7 != null goto label2;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>("Content-Disposition: form-data; name=\"");
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\"\r\n\r\n");
+
+        $r6 = virtualinvoke $r0.<android.os.Bundle: java.lang.String getString(java.lang.String)>($r6);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>("\r\n--");
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\r\n");
+
+        $r6 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        goto label2;
+    }
+
+    public static java.lang.String encodeUrl(com.weibo.net.WeiboParameters)
+    {
+        com.weibo.net.WeiboParameters $r0;
+        java.lang.StringBuilder $r1, $r3;
+        boolean $z0;
+        int $i0, $i1;
+        java.lang.String $r2, varReplacer4255, varReplacer4256, varReplacer4257;
+
+        nop;
+
+        $r0 := @parameter0: com.weibo.net.WeiboParameters;
+
+        if $r0 != null goto label1;
+
+        varReplacer4257 = "";
+
+        return varReplacer4257;
+
+     label1:
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $z0 = 1;
+
+        $i0 = 0;
+
+     label2:
+        $i1 = virtualinvoke $r0.<com.weibo.net.WeiboParameters: int size()>();
+
+        if $i0 < $i1 goto label3;
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r2;
+
+     label3:
+        if $z0 == 0 goto label5;
+
+        $z0 = 0;
+
+     label4:
+        $r3 = new java.lang.StringBuilder;
+
+        $r2 = virtualinvoke $r0.<com.weibo.net.WeiboParameters: java.lang.String getKey(int)>($i0);
+
+        $r2 = staticinvoke <java.net.URLEncoder: java.lang.String encode(java.lang.String)>($r2);
+
+        $r2 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r2);
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>($r2);
+
+        varReplacer4255 = "=";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4255);
+
+        $r2 = virtualinvoke $r0.<com.weibo.net.WeiboParameters: java.lang.String getValue(int)>($i0);
+
+        $r2 = staticinvoke <java.net.URLEncoder: java.lang.String encode(java.lang.String)>($r2);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $i0 = $i0 + 1;
+
+        goto label2;
+
+     label5:
+        varReplacer4256 = "&";
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4256);
+
+        goto label4;
+    }
+
+    public static org.apache.http.client.HttpClient getHttpClient(android.content.Context)
+    {
+        android.content.Context $r0;
+        org.apache.http.impl.client.DefaultHttpClient $r1, r12;
+        org.apache.http.params.BasicHttpParams $r2, r11;
+        java.lang.Object $r3;
+        android.net.wifi.WifiManager $r4;
+        boolean $z0;
+        android.net.Uri $r5;
+        android.content.ContentResolver $r6;
+        android.database.Cursor $r7;
+        int $i0;
+        java.lang.String $r8, $r9;
+        org.apache.http.params.HttpParams $r10;
+        org.apache.http.HttpHost r13;
+        org.apache.http.client.HttpClient r14;
+
+        $r0 := @parameter0: android.content.Context;
+
+        r11 = new org.apache.http.params.BasicHttpParams;
+
+        $r2 = r11;
+
+        specialinvoke r11.<org.apache.http.params.BasicHttpParams: void <init>()>();
+
+        $r10 = (org.apache.http.params.HttpParams) $r2;
+
+        staticinvoke <org.apache.http.params.HttpConnectionParams: void setConnectionTimeout(org.apache.http.params.HttpParams,int)>($r10, 50000);
+
+        $r10 = (org.apache.http.params.HttpParams) $r2;
+
+        staticinvoke <org.apache.http.params.HttpConnectionParams: void setSoTimeout(org.apache.http.params.HttpParams,int)>($r10, 200000);
+
+        r12 = new org.apache.http.impl.client.DefaultHttpClient;
+
+        $r1 = r12;
+
+        $r10 = (org.apache.http.params.HttpParams) $r2;
+
+        specialinvoke r12.<org.apache.http.impl.client.DefaultHttpClient: void <init>(org.apache.http.params.HttpParams)>($r10);
+
+        $r3 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("wifi");
+
+        $r4 = (android.net.wifi.WifiManager) $r3;
+
+        $z0 = virtualinvoke $r4.<android.net.wifi.WifiManager: boolean isWifiEnabled()>();
+
+        if $z0 != 0 goto label2;
+
+        $r5 = staticinvoke <android.net.Uri: android.net.Uri parse(java.lang.String)>("content://telephony/carriers/preferapn");
+
+        $r6 = virtualinvoke $r0.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $r7 = virtualinvoke $r6.<android.content.ContentResolver: android.database.Cursor query(android.net.Uri,java.lang.String[],java.lang.String,java.lang.String[],java.lang.String)>($r5, null, null, null, null);
+
+        if $r7 == null goto label3;
+
+        $z0 = interfaceinvoke $r7.<android.database.Cursor: boolean moveToFirst()>();
+
+        if $z0 == 0 goto label4;
+
+        $i0 = interfaceinvoke $r7.<android.database.Cursor: int getColumnIndex(java.lang.String)>("proxy");
+
+        $r8 = interfaceinvoke $r7.<android.database.Cursor: java.lang.String getString(int)>($i0);
+
+        if $r8 == null goto label1;
+
+        $r9 = virtualinvoke $r8.<java.lang.String: java.lang.String trim()>();
+
+        $i0 = virtualinvoke $r9.<java.lang.String: int length()>();
+
+        if $i0 <= 0 goto label1;
+
+        r13 = new org.apache.http.HttpHost;
+
+        specialinvoke r13.<org.apache.http.HttpHost: void <init>(java.lang.String,int)>($r8, 80);
+
+        r14 = (org.apache.http.client.HttpClient) $r1;
+
+        $r10 = interfaceinvoke r14.<org.apache.http.client.HttpClient: org.apache.http.params.HttpParams getParams()>();
+
+        interfaceinvoke $r10.<org.apache.http.params.HttpParams: org.apache.http.params.HttpParams setParameter(java.lang.String,java.lang.Object)>("http.route.default-proxy", r13);
+
+     label1:
+        interfaceinvoke $r7.<android.database.Cursor: void close()>();
+
+        r14 = (org.apache.http.client.HttpClient) $r1;
+
+        return r14;
+
+     label2:
+        r14 = (org.apache.http.client.HttpClient) $r1;
+
+        return r14;
+
+     label3:
+        r14 = (org.apache.http.client.HttpClient) $r1;
+
+        return r14;
+
+     label4:
+        r14 = (org.apache.http.client.HttpClient) $r1;
+
+        return r14;
+    }
+
+    public static org.apache.http.client.HttpClient getNewHttpClient(android.content.Context)
+    {
+        android.content.Context $r0;
+        org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager $r1, r25;
+        java.lang.Exception $r2;
+        org.apache.http.params.BasicHttpParams $r3, r22;
+        org.apache.http.HttpHost $r4, r27;
+        org.apache.http.conn.scheme.SchemeRegistry $r5, r23;
+        com.weibo.net.Utility$MySSLSocketFactory $r6, r21;
+        java.lang.String $r7, $r19, varReplacer4382, varReplacer4384, varReplacer4385, varReplacer4390, varReplacer4395, varReplacer4397, varReplacer4400;
+        java.security.KeyStore $r8;
+        org.apache.http.conn.ssl.X509HostnameVerifier $r9;
+        org.apache.http.HttpVersion $r10;
+        org.apache.http.conn.scheme.Scheme $r11, r24;
+        org.apache.http.conn.scheme.PlainSocketFactory $r12;
+        org.apache.http.impl.client.DefaultHttpClient $r13, r26;
+        java.lang.Object $r14;
+        android.net.wifi.WifiManager $r15;
+        boolean $z0;
+        android.net.Uri $r16;
+        android.content.ContentResolver $r17;
+        android.database.Cursor $r18;
+        int $i0, varReplacer4383, varReplacer4391, varReplacer4394, varReplacer4396, varReplacer4398, varReplacer4399, varReplacer4401;
+        org.apache.http.params.HttpParams $r20;
+        org.apache.http.conn.scheme.SocketFactory r28;
+        org.apache.http.conn.ClientConnectionManager r29;
+        org.apache.http.client.HttpClient r30;
+        null_type varReplacer4386, varReplacer4387, varReplacer4388, varReplacer4389, varReplacer4392, varReplacer4393;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+     label01:
+        $r7 = staticinvoke <java.security.KeyStore: java.lang.String getDefaultType()>();
+
+        $r8 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r7);
+
+        varReplacer4392 = null;
+
+        varReplacer4393 = null;
+
+        virtualinvoke $r8.<java.security.KeyStore: void load(java.io.InputStream,char[])>(varReplacer4392, varReplacer4392);
+
+     label02:
+        r21 = new com.weibo.net.Utility$MySSLSocketFactory;
+
+        $r6 = r21;
+
+     label03:
+        specialinvoke r21.<com.weibo.net.Utility$MySSLSocketFactory: void <init>(java.security.KeyStore)>($r8);
+
+     label04:
+        $r9 = <org.apache.http.conn.ssl.SSLSocketFactory: org.apache.http.conn.ssl.X509HostnameVerifier ALLOW_ALL_HOSTNAME_VERIFIER>;
+
+     label05:
+        virtualinvoke $r6.<org.apache.http.conn.ssl.SSLSocketFactory: void setHostnameVerifier(org.apache.http.conn.ssl.X509HostnameVerifier)>($r9);
+
+     label06:
+        r22 = new org.apache.http.params.BasicHttpParams;
+
+        $r3 = r22;
+
+     label07:
+        specialinvoke r22.<org.apache.http.params.BasicHttpParams: void <init>()>();
+
+        $r20 = (org.apache.http.params.HttpParams) $r3;
+
+        varReplacer4391 = 10000;
+
+        staticinvoke <org.apache.http.params.HttpConnectionParams: void setConnectionTimeout(org.apache.http.params.HttpParams,int)>($r20, varReplacer4391);
+
+        $r20 = (org.apache.http.params.HttpParams) $r3;
+
+        varReplacer4399 = 10000;
+
+        staticinvoke <org.apache.http.params.HttpConnectionParams: void setSoTimeout(org.apache.http.params.HttpParams,int)>($r20, varReplacer4399);
+
+     label08:
+        $r10 = <org.apache.http.HttpVersion: org.apache.http.HttpVersion HTTP_1_1>;
+
+     label09:
+        $r20 = (org.apache.http.params.HttpParams) $r3;
+
+        staticinvoke <org.apache.http.params.HttpProtocolParams: void setVersion(org.apache.http.params.HttpParams,org.apache.http.ProtocolVersion)>($r20, $r10);
+
+        $r20 = (org.apache.http.params.HttpParams) $r3;
+
+        varReplacer4384 = "UTF-8";
+
+        staticinvoke <org.apache.http.params.HttpProtocolParams: void setContentCharset(org.apache.http.params.HttpParams,java.lang.String)>($r20, varReplacer4384);
+
+     label10:
+        r23 = new org.apache.http.conn.scheme.SchemeRegistry;
+
+        $r5 = r23;
+
+     label11:
+        specialinvoke r23.<org.apache.http.conn.scheme.SchemeRegistry: void <init>()>();
+
+     label12:
+        r24 = new org.apache.http.conn.scheme.Scheme;
+
+        $r11 = r24;
+
+     label13:
+        $r12 = staticinvoke <org.apache.http.conn.scheme.PlainSocketFactory: org.apache.http.conn.scheme.PlainSocketFactory getSocketFactory()>();
+
+        r28 = (org.apache.http.conn.scheme.SocketFactory) $r12;
+
+        varReplacer4395 = "http";
+
+        varReplacer4396 = 80;
+
+        specialinvoke r24.<org.apache.http.conn.scheme.Scheme: void <init>(java.lang.String,org.apache.http.conn.scheme.SocketFactory,int)>(varReplacer4395, r28, varReplacer4396);
+
+        virtualinvoke $r5.<org.apache.http.conn.scheme.SchemeRegistry: org.apache.http.conn.scheme.Scheme register(org.apache.http.conn.scheme.Scheme)>($r11);
+
+     label14:
+        r24 = new org.apache.http.conn.scheme.Scheme;
+
+        $r11 = r24;
+
+     label15:
+        varReplacer4382 = "https";
+
+        varReplacer4383 = 443;
+
+        specialinvoke r24.<org.apache.http.conn.scheme.Scheme: void <init>(java.lang.String,org.apache.http.conn.scheme.SocketFactory,int)>(varReplacer4382, $r6, varReplacer4383);
+
+        virtualinvoke $r5.<org.apache.http.conn.scheme.SchemeRegistry: org.apache.http.conn.scheme.Scheme register(org.apache.http.conn.scheme.Scheme)>($r11);
+
+     label16:
+        r25 = new org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+
+        $r1 = r25;
+
+     label17:
+        $r20 = (org.apache.http.params.HttpParams) $r3;
+
+        specialinvoke r25.<org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager: void <init>(org.apache.http.params.HttpParams,org.apache.http.conn.scheme.SchemeRegistry)>($r20, $r5);
+
+        $r20 = (org.apache.http.params.HttpParams) $r3;
+
+        varReplacer4401 = 50000;
+
+        staticinvoke <org.apache.http.params.HttpConnectionParams: void setConnectionTimeout(org.apache.http.params.HttpParams,int)>($r20, varReplacer4401);
+
+        $r20 = (org.apache.http.params.HttpParams) $r3;
+
+        varReplacer4394 = 200000;
+
+        staticinvoke <org.apache.http.params.HttpConnectionParams: void setSoTimeout(org.apache.http.params.HttpParams,int)>($r20, varReplacer4394);
+
+     label18:
+        r26 = new org.apache.http.impl.client.DefaultHttpClient;
+
+        $r13 = r26;
+
+     label19:
+        r29 = (org.apache.http.conn.ClientConnectionManager) $r1;
+
+        $r20 = (org.apache.http.params.HttpParams) $r3;
+
+        specialinvoke r26.<org.apache.http.impl.client.DefaultHttpClient: void <init>(org.apache.http.conn.ClientConnectionManager,org.apache.http.params.HttpParams)>(r29, $r20);
+
+        varReplacer4400 = "wifi";
+
+        $r14 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer4400);
+
+        $r15 = (android.net.wifi.WifiManager) $r14;
+
+        $z0 = virtualinvoke $r15.<android.net.wifi.WifiManager: boolean isWifiEnabled()>();
+
+     label20:
+        if $z0 != 0 goto label33;
+
+     label21:
+        varReplacer4397 = "content://telephony/carriers/preferapn";
+
+        $r16 = staticinvoke <android.net.Uri: android.net.Uri parse(java.lang.String)>(varReplacer4397);
+
+        $r17 = virtualinvoke $r0.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        varReplacer4386 = null;
+
+        varReplacer4387 = null;
+
+        varReplacer4388 = null;
+
+        varReplacer4389 = null;
+
+        $r18 = virtualinvoke $r17.<android.content.ContentResolver: android.database.Cursor query(android.net.Uri,java.lang.String[],java.lang.String,java.lang.String[],java.lang.String)>($r16, varReplacer4386, varReplacer4386, varReplacer4386, varReplacer4386);
+
+     label22:
+        if $r18 == null goto label34;
+
+     label23:
+        $z0 = interfaceinvoke $r18.<android.database.Cursor: boolean moveToFirst()>();
+
+     label24:
+        if $z0 == 0 goto label35;
+
+     label25:
+        varReplacer4385 = "proxy";
+
+        $i0 = interfaceinvoke $r18.<android.database.Cursor: int getColumnIndex(java.lang.String)>(varReplacer4385);
+
+        $r7 = interfaceinvoke $r18.<android.database.Cursor: java.lang.String getString(int)>($i0);
+
+     label26:
+        if $r7 == null goto label30;
+
+     label27:
+        $r19 = virtualinvoke $r7.<java.lang.String: java.lang.String trim()>();
+
+        $i0 = virtualinvoke $r19.<java.lang.String: int length()>();
+
+     label28:
+        if $i0 <= 0 goto label30;
+
+        r27 = new org.apache.http.HttpHost;
+
+        $r4 = r27;
+
+     label29:
+        varReplacer4398 = 80;
+
+        specialinvoke r27.<org.apache.http.HttpHost: void <init>(java.lang.String,int)>($r7, varReplacer4398);
+
+        r30 = (org.apache.http.client.HttpClient) $r13;
+
+        $r20 = interfaceinvoke r30.<org.apache.http.client.HttpClient: org.apache.http.params.HttpParams getParams()>();
+
+        varReplacer4390 = "http.route.default-proxy";
+
+        interfaceinvoke $r20.<org.apache.http.params.HttpParams: org.apache.http.params.HttpParams setParameter(java.lang.String,java.lang.Object)>(varReplacer4390, $r4);
+
+     label30:
+        interfaceinvoke $r18.<android.database.Cursor: void close()>();
+
+     label31:
+        r30 = (org.apache.http.client.HttpClient) $r13;
+
+        return r30;
+
+     label32:
+        $r2 := @caughtexception;
+
+        r26 = new org.apache.http.impl.client.DefaultHttpClient;
+
+        specialinvoke r26.<org.apache.http.impl.client.DefaultHttpClient: void <init>()>();
+
+        r30 = (org.apache.http.client.HttpClient) r26;
+
+        return r30;
+
+     label33:
+        r30 = (org.apache.http.client.HttpClient) $r13;
+
+        return r30;
+
+     label34:
+        r30 = (org.apache.http.client.HttpClient) $r13;
+
+        return r30;
+
+     label35:
+        r30 = (org.apache.http.client.HttpClient) $r13;
+
+        return r30;
+
+        catch java.lang.Exception from label01 to label02 with label32;
+        catch java.lang.Exception from label03 to label04 with label32;
+        catch java.lang.Exception from label05 to label06 with label32;
+        catch java.lang.Exception from label07 to label08 with label32;
+        catch java.lang.Exception from label09 to label10 with label32;
+        catch java.lang.Exception from label11 to label12 with label32;
+        catch java.lang.Exception from label13 to label14 with label32;
+        catch java.lang.Exception from label15 to label16 with label32;
+        catch java.lang.Exception from label17 to label18 with label32;
+        catch java.lang.Exception from label19 to label20 with label32;
+        catch java.lang.Exception from label21 to label22 with label32;
+        catch java.lang.Exception from label23 to label24 with label32;
+        catch java.lang.Exception from label25 to label26 with label32;
+        catch java.lang.Exception from label27 to label28 with label32;
+        catch java.lang.Exception from label29 to label31 with label32;
+    }
+
+    public static org.apache.http.client.entity.UrlEncodedFormEntity getPostParamters(android.os.Bundle) throws com.weibo.net.WeiboException
+    {
+        android.os.Bundle $r0;
+        java.lang.Throwable $r1;
+        java.util.ArrayList $r2, r9;
+        boolean $z0;
+        java.util.Set $r3;
+        java.util.Iterator $r4;
+        java.lang.Object $r5;
+        java.lang.String $r6, $r8;
+        org.apache.http.message.BasicNameValuePair $r7, r11;
+        org.apache.http.client.entity.UrlEncodedFormEntity r10;
+        com.weibo.net.WeiboException r12;
+        java.lang.Exception r13;
+
+        $r0 := @parameter0: android.os.Bundle;
+
+        if $r0 == null goto label01;
+
+        $z0 = virtualinvoke $r0.<android.os.Bundle: boolean isEmpty()>();
+
+        if $z0 == 0 goto label02;
+
+     label01:
+        return null;
+
+     label02:
+        r9 = new java.util.ArrayList;
+
+        $r2 = r9;
+
+     label03:
+        specialinvoke r9.<java.util.ArrayList: void <init>()>();
+
+        $r3 = virtualinvoke $r0.<android.os.Bundle: java.util.Set keySet()>();
+
+        $r4 = interfaceinvoke $r3.<java.util.Set: java.util.Iterator iterator()>();
+
+     label04:
+        $z0 = interfaceinvoke $r4.<java.util.Iterator: boolean hasNext()>();
+
+     label05:
+        if $z0 != 0 goto label08;
+
+        r10 = new org.apache.http.client.entity.UrlEncodedFormEntity;
+
+     label06:
+        specialinvoke r10.<org.apache.http.client.entity.UrlEncodedFormEntity: void <init>(java.util.List,java.lang.String)>($r2, "UTF-8");
+
+     label07:
+        return r10;
+
+     label08:
+        $r5 = interfaceinvoke $r4.<java.util.Iterator: java.lang.Object next()>();
+
+     label09:
+        $r6 = (java.lang.String) $r5;
+
+        r11 = new org.apache.http.message.BasicNameValuePair;
+
+        $r7 = r11;
+
+     label10:
+        $r8 = virtualinvoke $r0.<android.os.Bundle: java.lang.String getString(java.lang.String)>($r6);
+
+        specialinvoke r11.<org.apache.http.message.BasicNameValuePair: void <init>(java.lang.String,java.lang.String)>($r6, $r8);
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>($r7);
+
+     label11:
+        goto label04;
+
+     label12:
+        $r1 := @caughtexception;
+
+        r12 = new com.weibo.net.WeiboException;
+
+        r13 = (java.lang.Exception) $r1;
+
+        specialinvoke r12.<com.weibo.net.WeiboException: void <init>(java.lang.Exception)>(r13);
+
+        throw r12;
+
+        catch java.io.UnsupportedEncodingException from label03 to label05 with label12;
+        catch java.io.UnsupportedEncodingException from label06 to label07 with label12;
+        catch java.io.UnsupportedEncodingException from label08 to label09 with label12;
+        catch java.io.UnsupportedEncodingException from label10 to label11 with label12;
+    }
+
+    private static void imageContentToUpload(java.io.OutputStream, android.graphics.Bitmap) throws com.weibo.net.WeiboException
+    {
+        java.io.OutputStream $r0;
+        android.graphics.Bitmap $r1;
+        java.lang.StringBuilder $r2, $r3;
+        java.lang.String $r4, varReplacer4361, varReplacer4362, varReplacer4363, varReplacer4364, varReplacer4365, varReplacer4366, varReplacer4367, varReplacer4369;
+        byte[] $r5;
+        android.graphics.Bitmap$CompressFormat $r6;
+        java.lang.Throwable $r7, $r9;
+        com.weibo.net.WeiboException $r8, r10;
+        java.lang.Exception r11;
+        int varReplacer4368;
+
+        nop;
+
+        $r0 := @parameter0: java.io.OutputStream;
+
+        $r1 := @parameter1: android.graphics.Bitmap;
+
+        $r3 = new java.lang.StringBuilder;
+
+        $r2 = $r3;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer4364 = "--7cd4a6d158c";
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4364);
+
+        varReplacer4366 = "\r\n";
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4366);
+
+        varReplacer4363 = "Content-Disposition: form-data; name=\"pic\"; filename=\"";
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4363);
+
+        varReplacer4365 = "news_image";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4365);
+
+        varReplacer4367 = "\"\r\n";
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4367);
+
+        varReplacer4361 = "Content-Type: ";
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4361);
+
+        varReplacer4362 = "image/png";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4362);
+
+        varReplacer4369 = "\r\n\r\n";
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4369);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.String: byte[] getBytes()>();
+
+     label01:
+        virtualinvoke $r0.<java.io.OutputStream: void write(byte[])>($r5);
+
+     label02:
+        $r6 = <android.graphics.Bitmap$CompressFormat: android.graphics.Bitmap$CompressFormat PNG>;
+
+     label03:
+        varReplacer4368 = 75;
+
+        virtualinvoke $r1.<android.graphics.Bitmap: boolean compress(android.graphics.Bitmap$CompressFormat,int,java.io.OutputStream)>($r6, varReplacer4368, $r0);
+
+     label04:
+        $r4 = "\r\n";
+
+     label05:
+        $r5 = virtualinvoke $r4.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r0.<java.io.OutputStream: void write(byte[])>($r5);
+
+     label06:
+        $r4 = "\r\n--7cd4a6d158c--";
+
+     label07:
+        $r5 = virtualinvoke $r4.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r0.<java.io.OutputStream: void write(byte[])>($r5);
+
+     label08:
+        goto label15;
+
+     label09:
+        $r7 := @caughtexception;
+
+     label10:
+        r10 = new com.weibo.net.WeiboException;
+
+     label11:
+        $r8 = r10;
+
+     label12:
+        r11 = (java.lang.Exception) $r7;
+
+        specialinvoke r10.<com.weibo.net.WeiboException: void <init>(java.lang.Exception)>(r11);
+
+        throw $r8;
+
+     label13:
+        $r9 := @caughtexception;
+
+        goto label14;
+
+     label14:
+        throw $r9;
+
+     label15:
+        return;
+
+        catch java.io.IOException from label01 to label02 with label09;
+        catch java.io.IOException from label03 to label04 with label09;
+        catch java.io.IOException from label05 to label06 with label09;
+        catch java.io.IOException from label07 to label08 with label09;
+        catch java.lang.Throwable from label01 to label04 with label13;
+        catch java.lang.Throwable from label05 to label06 with label13;
+        catch java.lang.Throwable from label07 to label08 with label13;
+        catch java.lang.Throwable from label10 to label11 with label13;
+        catch java.lang.Throwable from label12 to label13 with label13;
+    }
+
+    public static boolean isBundleEmpty(com.weibo.net.WeiboParameters)
+    {
+        com.weibo.net.WeiboParameters $r0;
+        int $i0, varReplacer4402, varReplacer4403;
+
+        nop;
+
+        $r0 := @parameter0: com.weibo.net.WeiboParameters;
+
+        if $r0 == null goto label1;
+
+        $i0 = virtualinvoke $r0.<com.weibo.net.WeiboParameters: int size()>();
+
+        if $i0 != 0 goto label2;
+
+     label1:
+        varReplacer4402 = 1;
+
+        return varReplacer4402;
+
+     label2:
+        varReplacer4403 = 0;
+
+        return varReplacer4403;
+    }
+
+    public static java.lang.String openUrl(android.content.Context, java.lang.String, java.lang.String, com.weibo.net.WeiboParameters, com.weibo.net.Token) throws com.weibo.net.WeiboException
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, $r2, $r5, $r6, varReplacer4336, varReplacer4338, varReplacer4339;
+        com.weibo.net.WeiboParameters $r3;
+        com.weibo.net.Token $r4;
+        int $i0, $i1;
+        boolean $z0;
+        null_type varReplacer4337;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: com.weibo.net.WeiboParameters;
+
+        $r4 := @parameter4: com.weibo.net.Token;
+
+        $r5 = "";
+
+        $i0 = 0;
+
+     label1:
+        $i1 = virtualinvoke $r3.<com.weibo.net.WeiboParameters: int size()>();
+
+        if $i0 < $i1 goto label2;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r5);
+
+        if $z0 == 0 goto label4;
+
+        varReplacer4336 = "POST";
+
+        varReplacer4337 = null;
+
+        $r1 = staticinvoke <com.weibo.net.Utility: java.lang.String openUrl(android.content.Context,java.lang.String,java.lang.String,com.weibo.net.WeiboParameters,java.lang.String,com.weibo.net.Token)>($r0, $r1, varReplacer4336, $r3, varReplacer4337, $r4);
+
+        return $r1;
+
+     label2:
+        $r6 = virtualinvoke $r3.<com.weibo.net.WeiboParameters: java.lang.String getKey(int)>($i0);
+
+        varReplacer4339 = "pic";
+
+        $z0 = virtualinvoke $r6.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer4339);
+
+        if $z0 == 0 goto label3;
+
+        $r5 = virtualinvoke $r3.<com.weibo.net.WeiboParameters: java.lang.String getValue(java.lang.String)>($r6);
+
+        virtualinvoke $r3.<com.weibo.net.WeiboParameters: void remove(java.lang.String)>($r6);
+
+     label3:
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label4:
+        varReplacer4338 = "POST";
+
+        $r1 = staticinvoke <com.weibo.net.Utility: java.lang.String openUrl(android.content.Context,java.lang.String,java.lang.String,com.weibo.net.WeiboParameters,java.lang.String,com.weibo.net.Token)>($r0, $r1, varReplacer4338, $r3, $r5, $r4);
+
+        return $r1;
+    }
+
+    public static java.lang.String openUrl(android.content.Context, java.lang.String, java.lang.String, com.weibo.net.WeiboParameters, java.lang.String, com.weibo.net.Token) throws com.weibo.net.WeiboException
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, $r3, $r7, varReplacer4340, varReplacer4341, varReplacer4342, varReplacer4343, varReplacer4344, varReplacer4345, varReplacer4346, varReplacer4348, varReplacer4349, varReplacer4350, varReplacer4351, varReplacer4352;
+        com.weibo.net.WeiboParameters $r2;
+        com.weibo.net.Token $r4;
+        org.json.JSONObject $r5, r21;
+        org.apache.http.client.methods.HttpPost $r6, r23;
+        org.apache.http.client.HttpClient $r8;
+        java.lang.Object $r9;
+        boolean $z0;
+        java.lang.StringBuilder $r10, r19;
+        org.apache.http.HttpResponse $r11;
+        org.apache.http.StatusLine $r12;
+        int $i0, $i1, varReplacer4347;
+        java.lang.Object[] $r13;
+        java.lang.Throwable $r14;
+        java.io.ByteArrayOutputStream $r15, r24;
+        android.graphics.Bitmap $r16;
+        byte[] $r17;
+        org.json.JSONException $r18;
+        org.apache.http.client.methods.HttpGet r20;
+        com.weibo.net.WeiboException r22;
+        org.apache.http.entity.ByteArrayEntity r25;
+        org.apache.http.client.methods.HttpDelete r26;
+        org.apache.http.client.methods.HttpUriRequest r27;
+        java.lang.Exception r28;
+        org.apache.http.HttpEntity r29;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r7 := @parameter1: java.lang.String;
+
+        $r1 := @parameter2: java.lang.String;
+
+        $r2 := @parameter3: com.weibo.net.WeiboParameters;
+
+        $r3 := @parameter4: java.lang.String;
+
+        $r4 := @parameter5: com.weibo.net.Token;
+
+     label01:
+        $r8 = staticinvoke <com.weibo.net.Utility: org.apache.http.client.HttpClient getNewHttpClient(android.content.Context)>($r0);
+
+     label02:
+        $r9 = null;
+
+     label03:
+        varReplacer4340 = "GET";
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer4340);
+
+     label04:
+        if $z0 == 0 goto label24;
+
+        r19 = new java.lang.StringBuilder;
+
+        $r10 = r19;
+
+     label05:
+        $r7 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r7);
+
+        specialinvoke r19.<java.lang.StringBuilder: void <init>(java.lang.String)>($r7);
+
+        varReplacer4350 = "?";
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4350);
+
+        $r7 = staticinvoke <com.weibo.net.Utility: java.lang.String encodeUrl(com.weibo.net.WeiboParameters)>($r2);
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r3 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label06:
+        $r7 = $r3;
+
+        r20 = new org.apache.http.client.methods.HttpGet;
+
+     label07:
+        specialinvoke r20.<org.apache.http.client.methods.HttpGet: void <init>(java.lang.String)>($r3);
+
+     label08:
+        $r9 = r20;
+
+     label09:
+        r27 = (org.apache.http.client.methods.HttpUriRequest) $r9;
+
+     label10:
+        varReplacer4341 = "POST";
+
+        staticinvoke <com.weibo.net.Utility: void setHeader(java.lang.String,org.apache.http.client.methods.HttpUriRequest,com.weibo.net.WeiboParameters,java.lang.String,com.weibo.net.Token)>(varReplacer4341, r27, $r2, $r7, $r4);
+
+     label11:
+        r27 = (org.apache.http.client.methods.HttpUriRequest) $r9;
+
+     label12:
+        $r11 = interfaceinvoke $r8.<org.apache.http.client.HttpClient: org.apache.http.HttpResponse execute(org.apache.http.client.methods.HttpUriRequest)>(r27);
+
+        $r12 = interfaceinvoke $r11.<org.apache.http.HttpResponse: org.apache.http.StatusLine getStatusLine()>();
+
+        $i0 = interfaceinvoke $r12.<org.apache.http.StatusLine: int getStatusCode()>();
+
+     label13:
+        if $i0 == 200 goto label46;
+
+     label14:
+        $r1 = staticinvoke <com.weibo.net.Utility: java.lang.String read(org.apache.http.HttpResponse)>($r11);
+
+     label15:
+        $r7 = null;
+
+        $i0 = 0;
+
+        r21 = new org.json.JSONObject;
+
+        $r5 = r21;
+
+     label16:
+        specialinvoke r21.<org.json.JSONObject: void <init>(java.lang.String)>($r1);
+
+        varReplacer4352 = "error";
+
+        $r1 = virtualinvoke $r5.<org.json.JSONObject: java.lang.String getString(java.lang.String)>(varReplacer4352);
+
+     label17:
+        $r7 = $r1;
+
+     label18:
+        varReplacer4344 = "error_code";
+
+        $i1 = virtualinvoke $r5.<org.json.JSONObject: int getInt(java.lang.String)>(varReplacer4344);
+
+     label19:
+        $i0 = $i1;
+
+     label20:
+        r22 = new com.weibo.net.WeiboException;
+
+        $r13 = newarray (java.lang.Object)[0];
+
+     label21:
+        $r7 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>($r7, $r13);
+
+        specialinvoke r22.<com.weibo.net.WeiboException: void <init>(java.lang.String,int)>($r7, $i0);
+
+     label22:
+        throw r22;
+
+     label23:
+        $r14 := @caughtexception;
+
+        r22 = new com.weibo.net.WeiboException;
+
+        r28 = (java.lang.Exception) $r14;
+
+        specialinvoke r22.<com.weibo.net.WeiboException: void <init>(java.lang.Exception)>(r28);
+
+        throw r22;
+
+     label24:
+        varReplacer4342 = "POST";
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer4342);
+
+     label25:
+        if $z0 == 0 goto label39;
+
+        r23 = new org.apache.http.client.methods.HttpPost;
+
+        $r6 = r23;
+
+     label26:
+        specialinvoke r23.<org.apache.http.client.methods.HttpPost: void <init>(java.lang.String)>($r7);
+
+     label27:
+        r24 = new java.io.ByteArrayOutputStream;
+
+        $r15 = r24;
+
+     label28:
+        varReplacer4347 = 51200;
+
+        specialinvoke r24.<java.io.ByteArrayOutputStream: void <init>(int)>(varReplacer4347);
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r3);
+
+     label29:
+        if $z0 != 0 goto label37;
+
+     label30:
+        staticinvoke <com.weibo.net.Utility: void paramToUpload(java.io.OutputStream,com.weibo.net.WeiboParameters)>($r15, $r2);
+
+        varReplacer4348 = "Content-Type";
+
+        varReplacer4349 = "multipart/form-data; boundary=7cd4a6d158c";
+
+        virtualinvoke $r6.<org.apache.http.client.methods.HttpPost: void setHeader(java.lang.String,java.lang.String)>(varReplacer4348, varReplacer4349);
+
+        $r16 = staticinvoke <android.graphics.BitmapFactory: android.graphics.Bitmap decodeFile(java.lang.String)>($r3);
+
+        staticinvoke <com.weibo.net.Utility: void imageContentToUpload(java.io.OutputStream,android.graphics.Bitmap)>($r15, $r16);
+
+     label31:
+        $r17 = virtualinvoke $r15.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        virtualinvoke $r15.<java.io.ByteArrayOutputStream: void close()>();
+
+     label32:
+        r25 = new org.apache.http.entity.ByteArrayEntity;
+
+     label33:
+        specialinvoke r25.<org.apache.http.entity.ByteArrayEntity: void <init>(byte[])>($r17);
+
+     label34:
+        r29 = (org.apache.http.HttpEntity) r25;
+
+     label35:
+        virtualinvoke $r6.<org.apache.http.client.methods.HttpPost: void setEntity(org.apache.http.HttpEntity)>(r29);
+
+     label36:
+        $r9 = $r6;
+
+        goto label09;
+
+     label37:
+        varReplacer4345 = "Content-Type";
+
+        varReplacer4346 = "application/x-www-form-urlencoded";
+
+        virtualinvoke $r6.<org.apache.http.client.methods.HttpPost: void setHeader(java.lang.String,java.lang.String)>(varReplacer4345, varReplacer4346);
+
+        $r3 = staticinvoke <com.weibo.net.Utility: java.lang.String encodeParameters(com.weibo.net.WeiboParameters)>($r2);
+
+        varReplacer4351 = "UTF-8";
+
+        $r17 = virtualinvoke $r3.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer4351);
+
+        virtualinvoke $r15.<java.io.ByteArrayOutputStream: void write(byte[])>($r17);
+
+     label38:
+        goto label31;
+
+     label39:
+        varReplacer4343 = "DELETE";
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer4343);
+
+     label40:
+        if $z0 == 0 goto label09;
+
+        r26 = new org.apache.http.client.methods.HttpDelete;
+
+        $r9 = r26;
+
+     label41:
+        specialinvoke r26.<org.apache.http.client.methods.HttpDelete: void <init>(java.lang.String)>($r7);
+
+     label42:
+        goto label09;
+
+     label43:
+        $r18 := @caughtexception;
+
+     label44:
+        virtualinvoke $r18.<org.json.JSONException: void printStackTrace()>();
+
+     label45:
+        goto label20;
+
+     label46:
+        $r7 = staticinvoke <com.weibo.net.Utility: java.lang.String read(org.apache.http.HttpResponse)>($r11);
+
+     label47:
+        return $r7;
+
+        catch java.io.IOException from label01 to label02 with label23;
+        catch java.io.IOException from label03 to label04 with label23;
+        catch java.io.IOException from label05 to label06 with label23;
+        catch java.io.IOException from label07 to label08 with label23;
+        catch java.io.IOException from label10 to label11 with label23;
+        catch java.io.IOException from label12 to label13 with label23;
+        catch java.io.IOException from label14 to label15 with label23;
+        catch org.json.JSONException from label16 to label17 with label43;
+        catch org.json.JSONException from label18 to label19 with label43;
+        catch java.io.IOException from label16 to label17 with label23;
+        catch java.io.IOException from label18 to label19 with label23;
+        catch java.io.IOException from label21 to label22 with label23;
+        catch java.io.IOException from label24 to label25 with label23;
+        catch java.io.IOException from label26 to label27 with label23;
+        catch java.io.IOException from label28 to label29 with label23;
+        catch java.io.IOException from label30 to label32 with label23;
+        catch java.io.IOException from label33 to label34 with label23;
+        catch java.io.IOException from label35 to label36 with label23;
+        catch java.io.IOException from label37 to label38 with label23;
+        catch java.io.IOException from label39 to label40 with label23;
+        catch java.io.IOException from label41 to label42 with label23;
+        catch java.io.IOException from label44 to label45 with label23;
+        catch java.io.IOException from label46 to label47 with label23;
+    }
+
+    private static void paramToUpload(java.io.OutputStream, com.weibo.net.WeiboParameters) throws com.weibo.net.WeiboException
+    {
+        java.io.OutputStream $r0;
+        com.weibo.net.WeiboParameters $r1;
+        java.lang.Throwable $r2;
+        java.lang.StringBuilder $r3, $r5;
+        int $i0, $i1, varReplacer4370, varReplacer4373;
+        java.lang.String $r4, varReplacer4371, varReplacer4372, varReplacer4374, varReplacer4375, varReplacer4376;
+        byte[] $r6;
+        com.weibo.net.WeiboException r7;
+        java.lang.Exception r8;
+
+        nop;
+
+        $r0 := @parameter0: java.io.OutputStream;
+
+        $r1 := @parameter1: com.weibo.net.WeiboParameters;
+
+        $i0 = 0;
+
+     label1:
+        $i1 = virtualinvoke $r1.<com.weibo.net.WeiboParameters: int size()>();
+
+        if $i0 < $i1 goto label2;
+
+        return;
+
+     label2:
+        $r4 = virtualinvoke $r1.<com.weibo.net.WeiboParameters: java.lang.String getKey(int)>($i0);
+
+        $r5 = new java.lang.StringBuilder;
+
+        $r3 = $r5;
+
+        varReplacer4370 = 10;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(int)>(varReplacer4370);
+
+        varReplacer4373 = 0;
+
+        virtualinvoke $r3.<java.lang.StringBuilder: void setLength(int)>(varReplacer4373);
+
+        varReplacer4371 = "--7cd4a6d158c";
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4371);
+
+        varReplacer4376 = "\r\n";
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4376);
+
+        varReplacer4372 = "content-disposition: form-data; name=\"";
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4372);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        varReplacer4374 = "\"\r\n\r\n";
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4374);
+
+        $r4 = virtualinvoke $r1.<com.weibo.net.WeiboParameters: java.lang.String getValue(java.lang.String)>($r4);
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        varReplacer4375 = "\r\n";
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4375);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = virtualinvoke $r4.<java.lang.String: byte[] getBytes()>();
+
+     label3:
+        virtualinvoke $r0.<java.io.OutputStream: void write(byte[])>($r6);
+
+     label4:
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label5:
+        $r2 := @caughtexception;
+
+        r7 = new com.weibo.net.WeiboException;
+
+        r8 = (java.lang.Exception) $r2;
+
+        specialinvoke r7.<com.weibo.net.WeiboException: void <init>(java.lang.Exception)>(r8);
+
+        throw r7;
+
+        catch java.io.IOException from label3 to label4 with label5;
+    }
+
+    public static android.os.Bundle parseUrl(java.lang.String)
+    {
+        java.lang.Throwable $r0;
+        java.net.URL $r1;
+        java.lang.String $r2;
+        android.os.Bundle $r3, $r4;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>("weiboconnect", "http");
+
+        $r1 = new java.net.URL;
+
+     label1:
+        specialinvoke $r1.<java.net.URL: void <init>(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r1.<java.net.URL: java.lang.String getQuery()>();
+
+        $r3 = staticinvoke <com.weibo.net.Utility: android.os.Bundle decodeUrl(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r1.<java.net.URL: java.lang.String getRef()>();
+
+        $r4 = staticinvoke <com.weibo.net.Utility: android.os.Bundle decodeUrl(java.lang.String)>($r2);
+
+        virtualinvoke $r3.<android.os.Bundle: void putAll(android.os.Bundle)>($r4);
+
+     label2:
+        return $r3;
+
+     label3:
+        $r0 := @caughtexception;
+
+        $r3 = new android.os.Bundle;
+
+        specialinvoke $r3.<android.os.Bundle: void <init>()>();
+
+        return $r3;
+
+        catch java.net.MalformedURLException from label1 to label2 with label3;
+    }
+
+    private static java.lang.String read(java.io.InputStream) throws java.io.IOException
+    {
+        java.io.InputStream $r0;
+        java.io.BufferedReader $r1;
+        java.lang.StringBuilder $r2;
+        java.io.InputStreamReader $r3;
+        java.lang.String $r4;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = new java.io.BufferedReader;
+
+        $r3 = new java.io.InputStreamReader;
+
+        specialinvoke $r3.<java.io.InputStreamReader: void <init>(java.io.InputStream)>($r0);
+
+        specialinvoke $r1.<java.io.BufferedReader: void <init>(java.io.Reader,int)>($r3, 1000);
+
+        $r4 = virtualinvoke $r1.<java.io.BufferedReader: java.lang.String readLine()>();
+
+     label1:
+        if $r4 != null goto label2;
+
+        virtualinvoke $r0.<java.io.InputStream: void close()>();
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r4;
+
+     label2:
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r1.<java.io.BufferedReader: java.lang.String readLine()>();
+
+        goto label1;
+    }
+
+    private static java.lang.String read(org.apache.http.HttpResponse) throws com.weibo.net.WeiboException
+    {
+        org.apache.http.HttpResponse $r0;
+        java.io.ByteArrayOutputStream $r1, r10;
+        byte[] $r2;
+        org.apache.http.HttpEntity $r3;
+        java.io.InputStream $r4;
+        java.lang.Object $r5;
+        org.apache.http.Header $r6;
+        java.lang.String $r7, r12, varReplacer4353, varReplacer4354;
+        int $i0, varReplacer4355;
+        java.lang.Throwable $r8, $r9;
+        java.util.zip.GZIPInputStream r11;
+        com.weibo.net.WeiboException r13;
+        java.lang.Exception r14;
+
+        nop;
+
+        $r0 := @parameter0: org.apache.http.HttpResponse;
+
+        $r3 = interfaceinvoke $r0.<org.apache.http.HttpResponse: org.apache.http.HttpEntity getEntity()>();
+
+     label01:
+        $r4 = interfaceinvoke $r3.<org.apache.http.HttpEntity: java.io.InputStream getContent()>();
+
+     label02:
+        $r5 = $r4;
+
+        r10 = new java.io.ByteArrayOutputStream;
+
+        $r1 = r10;
+
+     label03:
+        specialinvoke r10.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        varReplacer4354 = "Content-Encoding";
+
+        $r6 = interfaceinvoke $r0.<org.apache.http.HttpResponse: org.apache.http.Header getFirstHeader(java.lang.String)>(varReplacer4354);
+
+     label04:
+        if $r6 == null goto label09;
+
+     label05:
+        $r7 = interfaceinvoke $r6.<org.apache.http.Header: java.lang.String getValue()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.String: java.lang.String toLowerCase()>();
+
+        varReplacer4353 = "gzip";
+
+        $i0 = virtualinvoke $r7.<java.lang.String: int indexOf(java.lang.String)>(varReplacer4353);
+
+     label06:
+        if $i0 <= -1 goto label09;
+
+        r11 = new java.util.zip.GZIPInputStream;
+
+     label07:
+        specialinvoke r11.<java.util.zip.GZIPInputStream: void <init>(java.io.InputStream)>($r4);
+
+     label08:
+        $r5 = r11;
+
+     label09:
+        $r2 = newarray (byte)[512];
+
+     label10:
+        $r4 = (java.io.InputStream) $r5;
+
+     label11:
+        $i0 = virtualinvoke $r4.<java.io.InputStream: int read(byte[])>($r2);
+
+     label12:
+        if $i0 != -1 goto label15;
+
+        r12 = new java.lang.String;
+
+     label13:
+        $r2 = virtualinvoke $r1.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        specialinvoke r12.<java.lang.String: void <init>(byte[])>($r2);
+
+     label14:
+        return r12;
+
+     label15:
+        varReplacer4355 = 0;
+
+        virtualinvoke $r1.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r2, varReplacer4355, $i0);
+
+     label16:
+        goto label10;
+
+     label17:
+        $r8 := @caughtexception;
+
+        r13 = new com.weibo.net.WeiboException;
+
+        r14 = (java.lang.Exception) $r8;
+
+        specialinvoke r13.<com.weibo.net.WeiboException: void <init>(java.lang.Exception)>(r14);
+
+        throw r13;
+
+     label18:
+        $r9 := @caughtexception;
+
+        r13 = new com.weibo.net.WeiboException;
+
+        r14 = (java.lang.Exception) $r9;
+
+        specialinvoke r13.<com.weibo.net.WeiboException: void <init>(java.lang.Exception)>(r14);
+
+        throw r13;
+
+        catch java.lang.IllegalStateException from label01 to label02 with label17;
+        catch java.lang.IllegalStateException from label03 to label04 with label17;
+        catch java.lang.IllegalStateException from label05 to label06 with label17;
+        catch java.lang.IllegalStateException from label07 to label08 with label17;
+        catch java.lang.IllegalStateException from label11 to label12 with label17;
+        catch java.lang.IllegalStateException from label13 to label14 with label17;
+        catch java.lang.IllegalStateException from label15 to label16 with label17;
+        catch java.io.IOException from label01 to label02 with label18;
+        catch java.io.IOException from label03 to label04 with label18;
+        catch java.io.IOException from label05 to label06 with label18;
+        catch java.io.IOException from label07 to label08 with label18;
+        catch java.io.IOException from label11 to label12 with label18;
+        catch java.io.IOException from label13 to label14 with label18;
+        catch java.io.IOException from label15 to label16 with label18;
+    }
+
+    public static void setAuthorization(com.weibo.net.HttpHeaderFactory)
+    {
+        com.weibo.net.HttpHeaderFactory $r0;
+
+        nop;
+
+        $r0 := @parameter0: com.weibo.net.HttpHeaderFactory;
+
+        <com.weibo.net.Utility: com.weibo.net.HttpHeaderFactory mAuth> = $r0;
+
+        return;
+    }
+
+    public static void setHeader(java.lang.String, org.apache.http.client.methods.HttpUriRequest, com.weibo.net.WeiboParameters, java.lang.String, com.weibo.net.Token) throws com.weibo.net.WeiboException
+    {
+        java.lang.String $r0, $r3, $r7, $r8, varReplacer4377, varReplacer4378, varReplacer4379, varReplacer4380, varReplacer4381;
+        org.apache.http.client.methods.HttpUriRequest $r1;
+        com.weibo.net.WeiboParameters $r2, $r5;
+        com.weibo.net.Token $r4;
+        boolean $z0;
+        int $i0, $i1;
+        com.weibo.net.HttpHeaderFactory $r6;
+        java.lang.StringBuilder $r9;
+        java.util.Properties $r10;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: org.apache.http.client.methods.HttpUriRequest;
+
+        $r2 := @parameter2: com.weibo.net.WeiboParameters;
+
+        $r3 := @parameter3: java.lang.String;
+
+        $r4 := @parameter4: com.weibo.net.Token;
+
+        $r5 = <com.weibo.net.Utility: com.weibo.net.WeiboParameters mRequestHeader>;
+
+        $z0 = staticinvoke <com.weibo.net.Utility: boolean isBundleEmpty(com.weibo.net.WeiboParameters)>($r5);
+
+        if $z0 != 0 goto label2;
+
+        $i0 = 0;
+
+     label1:
+        $r5 = <com.weibo.net.Utility: com.weibo.net.WeiboParameters mRequestHeader>;
+
+        $i1 = virtualinvoke $r5.<com.weibo.net.WeiboParameters: int size()>();
+
+        if $i0 < $i1 goto label4;
+
+     label2:
+        $z0 = staticinvoke <com.weibo.net.Utility: boolean isBundleEmpty(com.weibo.net.WeiboParameters)>($r2);
+
+        if $z0 != 0 goto label3;
+
+        $r6 = <com.weibo.net.Utility: com.weibo.net.HttpHeaderFactory mAuth>;
+
+        if $r6 == null goto label3;
+
+        $r6 = <com.weibo.net.Utility: com.weibo.net.HttpHeaderFactory mAuth>;
+
+        $r7 = staticinvoke <com.weibo.net.Weibo: java.lang.String getAppKey()>();
+
+        $r8 = staticinvoke <com.weibo.net.Weibo: java.lang.String getAppSecret()>();
+
+        varReplacer4377 = "POST";
+
+        $r0 = virtualinvoke $r6.<com.weibo.net.HttpHeaderFactory: java.lang.String getWeiboAuthHeader(java.lang.String,java.lang.String,com.weibo.net.WeiboParameters,java.lang.String,java.lang.String,com.weibo.net.Token)>(varReplacer4377, $r3, $r2, $r7, $r8, $r4);
+
+        if $r0 == null goto label3;
+
+        varReplacer4380 = "Authorization";
+
+        interfaceinvoke $r1.<org.apache.http.client.methods.HttpUriRequest: void setHeader(java.lang.String,java.lang.String)>(varReplacer4380, $r0);
+
+     label3:
+        $r9 = new java.lang.StringBuilder;
+
+        $r10 = staticinvoke <java.lang.System: java.util.Properties getProperties()>();
+
+        varReplacer4378 = "http.agent";
+
+        $r0 = virtualinvoke $r10.<java.util.Properties: java.lang.String getProperty(java.lang.String)>(varReplacer4378);
+
+        $r0 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r0);
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>($r0);
+
+        varReplacer4381 = " WeiboAndroidSDK";
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4381);
+
+        $r0 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer4379 = "User-Agent";
+
+        interfaceinvoke $r1.<org.apache.http.client.methods.HttpUriRequest: void setHeader(java.lang.String,java.lang.String)>(varReplacer4379, $r0);
+
+        return;
+
+     label4:
+        $r5 = <com.weibo.net.Utility: com.weibo.net.WeiboParameters mRequestHeader>;
+
+        $r7 = virtualinvoke $r5.<com.weibo.net.WeiboParameters: java.lang.String getKey(int)>($i0);
+
+        $r5 = <com.weibo.net.Utility: com.weibo.net.WeiboParameters mRequestHeader>;
+
+        $r8 = virtualinvoke $r5.<com.weibo.net.WeiboParameters: java.lang.String getValue(java.lang.String)>($r7);
+
+        interfaceinvoke $r1.<org.apache.http.client.methods.HttpUriRequest: void setHeader(java.lang.String,java.lang.String)>($r7, $r8);
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+    }
+
+    public static void setRequestHeader(com.weibo.net.WeiboParameters)
+    {
+        com.weibo.net.WeiboParameters $r0, $r1;
+
+        $r0 := @parameter0: com.weibo.net.WeiboParameters;
+
+        $r1 = <com.weibo.net.Utility: com.weibo.net.WeiboParameters mRequestHeader>;
+
+        virtualinvoke $r1.<com.weibo.net.WeiboParameters: void addAll(com.weibo.net.WeiboParameters)>($r0);
+
+        return;
+    }
+
+    public static void setRequestHeader(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, varReplacer731, varReplacer732;
+        com.weibo.net.WeiboParameters $r2;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 = <com.weibo.net.Utility: com.weibo.net.WeiboParameters mRequestHeader>;
+
+        varReplacer731 = "Accept-Encoding";
+
+        varReplacer732 = "gzip";
+
+        virtualinvoke $r2.<com.weibo.net.WeiboParameters: void add(java.lang.String,java.lang.String)>(varReplacer731, varReplacer732);
+
+        return;
+    }
+
+    public static void setTokenObject(com.weibo.net.Token)
+    {
+        com.weibo.net.Token $r0;
+
+        nop;
+
+        $r0 := @parameter0: com.weibo.net.Token;
+
+        <com.weibo.net.Utility: com.weibo.net.Token mToken> = $r0;
+
+        return;
+    }
+
+    public static void showAlert(android.content.Context, java.lang.String, java.lang.String)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, $r2, varReplacer4253, varReplacer4254;
+        android.app.AlertDialog$Builder $r3;
+        android.app.AlertDialog $r4;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 = new android.app.AlertDialog$Builder;
+
+        specialinvoke $r3.<android.app.AlertDialog$Builder: void <init>(android.content.Context)>($r0);
+
+        varReplacer4253 = "Error";
+
+        virtualinvoke $r3.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setTitle(java.lang.CharSequence)>(varReplacer4253);
+
+        varReplacer4254 = "Application requires permission to access the Internet";
+
+        virtualinvoke $r3.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setMessage(java.lang.CharSequence)>(varReplacer4254);
+
+        $r4 = virtualinvoke $r3.<android.app.AlertDialog$Builder: android.app.AlertDialog create()>();
+
+        virtualinvoke $r4.<android.app.AlertDialog: void show()>();
+
+        return;
+    }
+}

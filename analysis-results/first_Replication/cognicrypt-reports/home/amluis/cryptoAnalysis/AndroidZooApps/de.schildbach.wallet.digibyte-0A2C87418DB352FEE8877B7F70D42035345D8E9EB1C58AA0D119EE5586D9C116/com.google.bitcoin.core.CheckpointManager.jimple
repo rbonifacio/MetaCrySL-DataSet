@@ -1,0 +1,570 @@
+public class com.google.bitcoin.core.CheckpointManager extends java.lang.Object
+{
+    private static final int MAX_SIGNATURES;
+    private static final org.slf4j.Logger log;
+    protected final java.util.TreeMap checkpoints;
+    protected final com.google.bitcoin.core.Sha256Hash dataHash;
+    protected final com.google.bitcoin.core.NetworkParameters params;
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        nop;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "Lcom/google/bitcoin/core/CheckpointManager;");
+
+        <com.google.bitcoin.core.CheckpointManager: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+
+    public void <init>(com.google.bitcoin.core.NetworkParameters, java.io.InputStream) throws java.io.IOException
+    {
+        com.google.bitcoin.core.CheckpointManager $r0;
+        com.google.bitcoin.core.NetworkParameters $r1, $r9;
+        java.io.InputStream $r2;
+        java.security.DigestInputStream $r3;
+        java.io.DataInputStream $r4, $r10;
+        byte[] $r5, $r12;
+        java.lang.String $r6, varReplacer1046, varReplacer1047, varReplacer1051, varReplacer1054, varReplacer1057, varReplacer1058;
+        java.util.TreeMap $r7;
+        java.lang.Object $r8;
+        java.security.MessageDigest $r11;
+        int $i0, $i1, $i2, varReplacer1048, varReplacer1049, varReplacer1050, varReplacer1052, varReplacer1053, varReplacer1055, varReplacer1056;
+        boolean $z0;
+        java.io.IOException $r13;
+        java.lang.Throwable $r14, $r16;
+        java.lang.RuntimeException $r15;
+        java.nio.ByteBuffer $r17;
+        com.google.bitcoin.core.ProtocolException $r18;
+        com.google.bitcoin.core.StoredBlock $r19;
+        com.google.bitcoin.core.Block $r20;
+        long $l3;
+        java.lang.Long $r21;
+        com.google.bitcoin.core.Sha256Hash $r22;
+        org.slf4j.Logger $r23;
+        java.lang.Integer $r24;
+
+        nop;
+
+        $r0 := @this: com.google.bitcoin.core.CheckpointManager;
+
+        $r1 := @parameter0: com.google.bitcoin.core.NetworkParameters;
+
+        $r2 := @parameter1: java.io.InputStream;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r7 = new java.util.TreeMap;
+
+        specialinvoke $r7.<java.util.TreeMap: void <init>()>();
+
+        $r0.<com.google.bitcoin.core.CheckpointManager: java.util.TreeMap checkpoints> = $r7;
+
+        $r8 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r1);
+
+        $r9 = (com.google.bitcoin.core.NetworkParameters) $r8;
+
+        $r0.<com.google.bitcoin.core.CheckpointManager: com.google.bitcoin.core.NetworkParameters params> = $r9;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r2);
+
+        $r10 = null;
+
+     label01:
+        varReplacer1046 = "SHA-256";
+
+        $r11 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1046);
+
+     label02:
+        $r3 = new java.security.DigestInputStream;
+
+     label03:
+        specialinvoke $r3.<java.security.DigestInputStream: void <init>(java.io.InputStream,java.security.MessageDigest)>($r2, $r11);
+
+     label04:
+        $r4 = new java.io.DataInputStream;
+
+     label05:
+        specialinvoke $r4.<java.io.DataInputStream: void <init>(java.io.InputStream)>($r3);
+
+     label06:
+        varReplacer1048 = 0;
+
+        virtualinvoke $r3.<java.security.DigestInputStream: void on(boolean)>(varReplacer1048);
+
+     label07:
+        $r6 = "CHECKPOINTS 1";
+
+     label08:
+        $i0 = virtualinvoke $r6.<java.lang.String: int length()>();
+
+     label09:
+        $r5 = newarray (byte)[$i0];
+
+     label10:
+        virtualinvoke $r4.<java.io.DataInputStream: void readFully(byte[])>($r5);
+
+        varReplacer1054 = "US-ASCII";
+
+        $r12 = virtualinvoke $r6.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer1054);
+
+        $z0 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>($r5, $r12);
+
+     label11:
+        if $z0 != 0 goto label20;
+
+     label12:
+        $r13 = new java.io.IOException;
+
+     label13:
+        varReplacer1047 = "Header bytes did not match expected version";
+
+        specialinvoke $r13.<java.io.IOException: void <init>(java.lang.String)>(varReplacer1047);
+
+     label14:
+        throw $r13;
+
+     label15:
+        $r14 := @caughtexception;
+
+        $r10 = $r4;
+
+     label16:
+        $r15 = new java.lang.RuntimeException;
+
+        specialinvoke $r15.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r14);
+
+        throw $r15;
+
+     label17:
+        $r16 := @caughtexception;
+
+     label18:
+        if $r10 == null goto label19;
+
+        virtualinvoke $r10.<java.io.DataInputStream: void close()>();
+
+     label19:
+        virtualinvoke $r2.<java.io.InputStream: void close()>();
+
+        throw $r16;
+
+     label20:
+        $i0 = virtualinvoke $r4.<java.io.DataInputStream: int readInt()>();
+
+        varReplacer1050 = 256;
+
+        varReplacer1051 = "Num signatures out of range";
+
+        $i0 = staticinvoke <com.google.common.base.Preconditions: int checkPositionIndex(int,int,java.lang.String)>($i0, varReplacer1050, varReplacer1051);
+
+     label21:
+        $i1 = 0;
+
+     label22:
+        if $i1 >= $i0 goto label26;
+
+     label23:
+        $r5 = newarray (byte)[65];
+
+     label24:
+        virtualinvoke $r4.<java.io.DataInputStream: void readFully(byte[])>($r5);
+
+     label25:
+        $i1 = $i1 + 1;
+
+        goto label22;
+
+     label26:
+        varReplacer1052 = 1;
+
+        virtualinvoke $r3.<java.security.DigestInputStream: void on(boolean)>(varReplacer1052);
+
+        $i0 = virtualinvoke $r4.<java.io.DataInputStream: int readInt()>();
+
+     label27:
+        if $i0 <= 0 goto label38;
+
+        $z0 = 1;
+
+     label28:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean)>($z0);
+
+        varReplacer1049 = 96;
+
+        $r17 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer allocate(int)>(varReplacer1049);
+
+     label29:
+        $i1 = 0;
+
+     label30:
+        if $i1 >= $i0 goto label43;
+
+     label31:
+        $r5 = virtualinvoke $r17.<java.nio.ByteBuffer: byte[] array()>();
+
+        varReplacer1055 = 0;
+
+        varReplacer1056 = 96;
+
+        $i2 = virtualinvoke $r4.<java.io.DataInputStream: int read(byte[],int,int)>($r5, varReplacer1055, varReplacer1056);
+
+     label32:
+        if $i2 >= 96 goto label39;
+
+     label33:
+        $r13 = new java.io.IOException;
+
+     label34:
+        varReplacer1057 = "Incomplete read whilst loading checkpoints.";
+
+        specialinvoke $r13.<java.io.IOException: void <init>(java.lang.String)>(varReplacer1057);
+
+     label35:
+        throw $r13;
+
+     label36:
+        $r18 := @caughtexception;
+
+        $r10 = $r4;
+
+     label37:
+        $r13 = new java.io.IOException;
+
+        specialinvoke $r13.<java.io.IOException: void <init>(java.lang.Throwable)>($r18);
+
+        throw $r13;
+
+     label38:
+        $z0 = 0;
+
+        goto label28;
+
+     label39:
+        $r19 = staticinvoke <com.google.bitcoin.core.StoredBlock: com.google.bitcoin.core.StoredBlock deserializeCompact(com.google.bitcoin.core.NetworkParameters,java.nio.ByteBuffer)>($r1, $r17);
+
+        varReplacer1053 = 0;
+
+        virtualinvoke $r17.<java.nio.ByteBuffer: java.nio.Buffer position(int)>(varReplacer1053);
+
+     label40:
+        $r7 = $r0.<com.google.bitcoin.core.CheckpointManager: java.util.TreeMap checkpoints>;
+
+     label41:
+        $r20 = virtualinvoke $r19.<com.google.bitcoin.core.StoredBlock: com.google.bitcoin.core.Block getHeader()>();
+
+        $l3 = virtualinvoke $r20.<com.google.bitcoin.core.Block: long getTimeSeconds()>();
+
+        $r21 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l3);
+
+        virtualinvoke $r7.<java.util.TreeMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r21, $r19);
+
+     label42:
+        $i1 = $i1 + 1;
+
+        goto label30;
+
+     label43:
+        $r22 = new com.google.bitcoin.core.Sha256Hash;
+
+     label44:
+        $r5 = virtualinvoke $r11.<java.security.MessageDigest: byte[] digest()>();
+
+        specialinvoke $r22.<com.google.bitcoin.core.Sha256Hash: void <init>(byte[])>($r5);
+
+     label45:
+        $r0.<com.google.bitcoin.core.CheckpointManager: com.google.bitcoin.core.Sha256Hash dataHash> = $r22;
+
+        $r23 = <com.google.bitcoin.core.CheckpointManager: org.slf4j.Logger log>;
+
+        $r7 = $r0.<com.google.bitcoin.core.CheckpointManager: java.util.TreeMap checkpoints>;
+
+     label46:
+        $i0 = virtualinvoke $r7.<java.util.TreeMap: int size()>();
+
+        $r24 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+     label47:
+        $r22 = $r0.<com.google.bitcoin.core.CheckpointManager: com.google.bitcoin.core.Sha256Hash dataHash>;
+
+     label48:
+        varReplacer1058 = "Read {} checkpoints, hash is {}";
+
+        interfaceinvoke $r23.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object,java.lang.Object)>(varReplacer1058, $r24, $r22);
+
+     label49:
+        if $r4 == null goto label50;
+
+        virtualinvoke $r4.<java.io.DataInputStream: void close()>();
+
+     label50:
+        virtualinvoke $r2.<java.io.InputStream: void close()>();
+
+        return;
+
+     label51:
+        $r16 := @caughtexception;
+
+        $r10 = $r4;
+
+        goto label18;
+
+     label52:
+        $r18 := @caughtexception;
+
+        goto label37;
+
+     label53:
+        $r14 := @caughtexception;
+
+        goto label16;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label53;
+        catch java.security.NoSuchAlgorithmException from label03 to label04 with label53;
+        catch java.security.NoSuchAlgorithmException from label05 to label06 with label53;
+        catch com.google.bitcoin.core.ProtocolException from label01 to label02 with label52;
+        catch com.google.bitcoin.core.ProtocolException from label03 to label04 with label52;
+        catch com.google.bitcoin.core.ProtocolException from label05 to label06 with label52;
+        catch java.lang.Throwable from label01 to label06 with label17;
+        catch java.security.NoSuchAlgorithmException from label06 to label07 with label15;
+        catch java.security.NoSuchAlgorithmException from label08 to label09 with label15;
+        catch java.security.NoSuchAlgorithmException from label10 to label11 with label15;
+        catch java.security.NoSuchAlgorithmException from label13 to label14 with label15;
+        catch com.google.bitcoin.core.ProtocolException from label06 to label07 with label36;
+        catch com.google.bitcoin.core.ProtocolException from label08 to label09 with label36;
+        catch com.google.bitcoin.core.ProtocolException from label10 to label11 with label36;
+        catch com.google.bitcoin.core.ProtocolException from label13 to label14 with label36;
+        catch java.lang.Throwable from label06 to label07 with label51;
+        catch java.lang.Throwable from label08 to label11 with label51;
+        catch java.lang.Throwable from label12 to label15 with label51;
+        catch java.lang.Throwable from label16 to label17 with label17;
+        catch java.security.NoSuchAlgorithmException from label20 to label21 with label15;
+        catch java.security.NoSuchAlgorithmException from label24 to label25 with label15;
+        catch java.security.NoSuchAlgorithmException from label26 to label27 with label15;
+        catch java.security.NoSuchAlgorithmException from label28 to label29 with label15;
+        catch java.security.NoSuchAlgorithmException from label31 to label32 with label15;
+        catch java.security.NoSuchAlgorithmException from label34 to label35 with label15;
+        catch com.google.bitcoin.core.ProtocolException from label20 to label21 with label36;
+        catch com.google.bitcoin.core.ProtocolException from label24 to label25 with label36;
+        catch com.google.bitcoin.core.ProtocolException from label26 to label27 with label36;
+        catch com.google.bitcoin.core.ProtocolException from label28 to label29 with label36;
+        catch com.google.bitcoin.core.ProtocolException from label31 to label32 with label36;
+        catch com.google.bitcoin.core.ProtocolException from label34 to label35 with label36;
+        catch java.lang.Throwable from label20 to label21 with label51;
+        catch java.lang.Throwable from label23 to label25 with label51;
+        catch java.lang.Throwable from label26 to label27 with label51;
+        catch java.lang.Throwable from label28 to label29 with label51;
+        catch java.lang.Throwable from label31 to label32 with label51;
+        catch java.lang.Throwable from label33 to label36 with label51;
+        catch java.lang.Throwable from label37 to label38 with label17;
+        catch java.security.NoSuchAlgorithmException from label39 to label40 with label15;
+        catch java.security.NoSuchAlgorithmException from label41 to label42 with label15;
+        catch java.security.NoSuchAlgorithmException from label44 to label45 with label15;
+        catch java.security.NoSuchAlgorithmException from label46 to label47 with label15;
+        catch java.security.NoSuchAlgorithmException from label48 to label49 with label15;
+        catch com.google.bitcoin.core.ProtocolException from label39 to label40 with label36;
+        catch com.google.bitcoin.core.ProtocolException from label41 to label42 with label36;
+        catch com.google.bitcoin.core.ProtocolException from label44 to label45 with label36;
+        catch com.google.bitcoin.core.ProtocolException from label46 to label47 with label36;
+        catch com.google.bitcoin.core.ProtocolException from label48 to label49 with label36;
+        catch java.lang.Throwable from label39 to label42 with label51;
+        catch java.lang.Throwable from label43 to label49 with label51;
+    }
+
+    public static void checkpoint(com.google.bitcoin.core.NetworkParameters, java.io.InputStream, com.google.bitcoin.store.BlockStore, long) throws java.io.IOException, com.google.bitcoin.store.BlockStoreException
+    {
+        com.google.bitcoin.core.NetworkParameters $r0;
+        java.io.InputStream $r1;
+        com.google.bitcoin.store.BlockStore $r2;
+        com.google.bitcoin.core.CheckpointManager $r3;
+        java.io.BufferedInputStream $r4;
+        com.google.bitcoin.core.StoredBlock $r5;
+        long $l0;
+        boolean $z0;
+        java.lang.String varReplacer595;
+
+        nop;
+
+        $r0 := @parameter0: com.google.bitcoin.core.NetworkParameters;
+
+        $r1 := @parameter1: java.io.InputStream;
+
+        $r2 := @parameter2: com.google.bitcoin.store.BlockStore;
+
+        $l0 := @parameter3: long;
+
+        $z0 = <com.google.bitcoin.core.CoinDefinition: boolean checkpointFileSupport>;
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r0);
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>($r2);
+
+        $z0 = $r2 instanceof com.google.bitcoin.store.FullPrunedBlockStore;
+
+        if $z0 != 0 goto label3;
+
+        $z0 = 1;
+
+     label2:
+        varReplacer595 = "You cannot use checkpointing with a full store.";
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, varReplacer595);
+
+        $l0 = $l0 - 604800L;
+
+        $r4 = new java.io.BufferedInputStream;
+
+        specialinvoke $r4.<java.io.BufferedInputStream: void <init>(java.io.InputStream)>($r1);
+
+        $r3 = new com.google.bitcoin.core.CheckpointManager;
+
+        specialinvoke $r3.<com.google.bitcoin.core.CheckpointManager: void <init>(com.google.bitcoin.core.NetworkParameters,java.io.InputStream)>($r0, $r4);
+
+        $r5 = virtualinvoke $r3.<com.google.bitcoin.core.CheckpointManager: com.google.bitcoin.core.StoredBlock getCheckpointBefore(long)>($l0);
+
+        interfaceinvoke $r2.<com.google.bitcoin.store.BlockStore: void put(com.google.bitcoin.core.StoredBlock)>($r5);
+
+        interfaceinvoke $r2.<com.google.bitcoin.store.BlockStore: void setChainHead(com.google.bitcoin.core.StoredBlock)>($r5);
+
+        return;
+
+     label3:
+        $z0 = 0;
+
+        goto label2;
+    }
+
+    public com.google.bitcoin.core.StoredBlock getCheckpointBefore(long)
+    {
+        com.google.bitcoin.core.CheckpointManager $r0;
+        long $l0, $l1;
+        com.google.bitcoin.core.VerificationException $r1;
+        boolean $z0;
+        com.google.bitcoin.core.NetworkParameters $r2;
+        com.google.bitcoin.core.Block $r3;
+        byte $b2;
+        java.util.TreeMap $r4;
+        java.lang.Long $r5;
+        java.util.Map$Entry $r6;
+        java.lang.Object $r7;
+        com.google.bitcoin.core.StoredBlock $r8;
+        java.math.BigInteger $r9;
+        java.lang.RuntimeException $r10;
+        int varReplacer1059;
+
+        nop;
+
+        $r0 := @this: com.google.bitcoin.core.CheckpointManager;
+
+        $l0 := @parameter0: long;
+
+        $z0 = 0;
+
+        $r2 = $r0.<com.google.bitcoin.core.CheckpointManager: com.google.bitcoin.core.NetworkParameters params>;
+
+     label01:
+        $r3 = virtualinvoke $r2.<com.google.bitcoin.core.NetworkParameters: com.google.bitcoin.core.Block getGenesisBlock()>();
+
+        $l1 = virtualinvoke $r3.<com.google.bitcoin.core.Block: long getTimeSeconds()>();
+
+     label02:
+        $b2 = $l0 cmp $l1;
+
+        if $b2 <= 0 goto label03;
+
+        $z0 = 1;
+
+     label03:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean)>($z0);
+
+     label04:
+        $r4 = $r0.<com.google.bitcoin.core.CheckpointManager: java.util.TreeMap checkpoints>;
+
+     label05:
+        $r5 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        $r6 = virtualinvoke $r4.<java.util.TreeMap: java.util.Map$Entry floorEntry(java.lang.Object)>($r5);
+
+     label06:
+        if $r6 == null goto label09;
+
+     label07:
+        $r7 = interfaceinvoke $r6.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+     label08:
+        $r8 = (com.google.bitcoin.core.StoredBlock) $r7;
+
+        return $r8;
+
+     label09:
+        $r2 = $r0.<com.google.bitcoin.core.CheckpointManager: com.google.bitcoin.core.NetworkParameters params>;
+
+     label10:
+        $r3 = virtualinvoke $r2.<com.google.bitcoin.core.NetworkParameters: com.google.bitcoin.core.Block getGenesisBlock()>();
+
+        $r3 = virtualinvoke $r3.<com.google.bitcoin.core.Block: com.google.bitcoin.core.Block cloneAsHeader()>();
+
+     label11:
+        $r8 = new com.google.bitcoin.core.StoredBlock;
+
+     label12:
+        $r9 = virtualinvoke $r3.<com.google.bitcoin.core.Block: java.math.BigInteger getWork()>();
+
+        varReplacer1059 = 0;
+
+        specialinvoke $r8.<com.google.bitcoin.core.StoredBlock: void <init>(com.google.bitcoin.core.Block,java.math.BigInteger,int)>($r3, $r9, varReplacer1059);
+
+     label13:
+        return $r8;
+
+     label14:
+        $r1 := @caughtexception;
+
+        $r10 = new java.lang.RuntimeException;
+
+        specialinvoke $r10.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r1);
+
+        throw $r10;
+
+        catch com.google.bitcoin.core.VerificationException from label01 to label02 with label14;
+        catch com.google.bitcoin.core.VerificationException from label03 to label04 with label14;
+        catch com.google.bitcoin.core.VerificationException from label05 to label06 with label14;
+        catch com.google.bitcoin.core.VerificationException from label07 to label08 with label14;
+        catch com.google.bitcoin.core.VerificationException from label10 to label11 with label14;
+        catch com.google.bitcoin.core.VerificationException from label12 to label13 with label14;
+    }
+
+    public com.google.bitcoin.core.Sha256Hash getDataHash()
+    {
+        com.google.bitcoin.core.CheckpointManager $r0;
+        com.google.bitcoin.core.Sha256Hash r1;
+
+        $r0 := @this: com.google.bitcoin.core.CheckpointManager;
+
+        r1 = $r0.<com.google.bitcoin.core.CheckpointManager: com.google.bitcoin.core.Sha256Hash dataHash>;
+
+        return r1;
+    }
+
+    public int numCheckpoints()
+    {
+        com.google.bitcoin.core.CheckpointManager $r0;
+        int $i0;
+        java.util.TreeMap $r1;
+
+        $r0 := @this: com.google.bitcoin.core.CheckpointManager;
+
+        $r1 = $r0.<com.google.bitcoin.core.CheckpointManager: java.util.TreeMap checkpoints>;
+
+        $i0 = virtualinvoke $r1.<java.util.TreeMap: int size()>();
+
+        return $i0;
+    }
+}

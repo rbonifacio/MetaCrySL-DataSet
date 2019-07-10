@@ -1,0 +1,321 @@
+public class com.braintreegateway.encryption.Aes extends java.lang.Object
+{
+    private final java.lang.String ALGORITHM;
+    private final int IV_LENGTH;
+    private final int KEY_LENGTH;
+    private final java.lang.String TRANSFORMATION;
+
+    public void <init>()
+    {
+        com.braintreegateway.encryption.Aes $r0;
+        java.lang.String varReplacer5935, varReplacer5936;
+        int varReplacer5937, varReplacer5938;
+
+        nop;
+
+        $r0 := @this: com.braintreegateway.encryption.Aes;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer5936 = "AES";
+
+        $r0.<com.braintreegateway.encryption.Aes: java.lang.String ALGORITHM> = varReplacer5936;
+
+        varReplacer5935 = "AES/CBC/PKCS5Padding";
+
+        $r0.<com.braintreegateway.encryption.Aes: java.lang.String TRANSFORMATION> = varReplacer5935;
+
+        varReplacer5937 = 32;
+
+        $r0.<com.braintreegateway.encryption.Aes: int KEY_LENGTH> = varReplacer5937;
+
+        varReplacer5938 = 16;
+
+        $r0.<com.braintreegateway.encryption.Aes: int IV_LENGTH> = varReplacer5938;
+
+        return;
+    }
+
+    private javax.crypto.Cipher aesCipher()
+    {
+        com.braintreegateway.encryption.Aes $r0;
+        javax.crypto.Cipher $r1;
+        java.lang.Throwable $r2, $r3;
+        java.security.NoSuchAlgorithmException r4;
+        javax.crypto.NoSuchPaddingException r5;
+        null_type varReplacer5946, varReplacer5948;
+        java.lang.String varReplacer5947;
+
+        nop;
+
+        $r0 := @this: com.braintreegateway.encryption.Aes;
+
+     label1:
+        varReplacer5947 = "AES/CBC/PKCS5Padding";
+
+        $r1 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer5947);
+
+     label2:
+        return $r1;
+
+     label3:
+        $r2 := @caughtexception;
+
+        r4 = (java.security.NoSuchAlgorithmException) $r2;
+
+        virtualinvoke r4.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        varReplacer5946 = null;
+
+        return varReplacer5946;
+
+     label4:
+        $r3 := @caughtexception;
+
+        r5 = (javax.crypto.NoSuchPaddingException) $r3;
+
+        virtualinvoke r5.<javax.crypto.NoSuchPaddingException: void printStackTrace()>();
+
+        varReplacer5948 = null;
+
+        return varReplacer5948;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+        catch javax.crypto.NoSuchPaddingException from label1 to label2 with label4;
+    }
+
+    private byte[] secureRandomBytes(int)
+    {
+        com.braintreegateway.encryption.Aes $r0;
+        int $i0;
+        byte[] $r1;
+        java.security.SecureRandom $r2;
+
+        nop;
+
+        $r0 := @this: com.braintreegateway.encryption.Aes;
+
+        $i0 := @parameter0: int;
+
+        $r2 = new java.security.SecureRandom;
+
+        specialinvoke $r2.<java.security.SecureRandom: void <init>()>();
+
+        $r1 = newarray (byte)[$i0];
+
+        virtualinvoke $r2.<java.security.SecureRandom: void nextBytes(byte[])>($r1);
+
+        return $r1;
+    }
+
+    public java.lang.String encrypt(java.lang.String, byte[])
+    {
+        com.braintreegateway.encryption.Aes $r0;
+        java.lang.String $r1;
+        byte[] $r2, $r3;
+
+        nop;
+
+        $r0 := @this: com.braintreegateway.encryption.Aes;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: byte[];
+
+        $r3 = virtualinvoke $r0.<com.braintreegateway.encryption.Aes: byte[] generateIV()>();
+
+        $r1 = virtualinvoke $r0.<com.braintreegateway.encryption.Aes: java.lang.String encrypt(java.lang.String,byte[],byte[])>($r1, $r2, $r3);
+
+        return $r1;
+    }
+
+    public java.lang.String encrypt(java.lang.String, byte[], byte[])
+    {
+        com.braintreegateway.encryption.Aes $r0;
+        java.lang.String $r1, r15, varReplacer5945;
+        byte[] $r2, $r3;
+        org.apache.http.util.ByteArrayBuffer $r4, r14;
+        javax.crypto.spec.IvParameterSpec $r5, r13;
+        javax.crypto.spec.SecretKeySpec $r6, r12;
+        javax.crypto.Cipher $r7;
+        int $i0, $i1, varReplacer5942, varReplacer5943, varReplacer5944;
+        java.lang.Throwable $r8, $r9, $r10, $r11;
+        java.security.InvalidKeyException r16;
+        javax.crypto.BadPaddingException r17;
+        javax.crypto.IllegalBlockSizeException r18;
+        java.security.InvalidAlgorithmParameterException r19;
+        null_type varReplacer5941;
+
+        nop;
+
+        $r0 := @this: com.braintreegateway.encryption.Aes;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: byte[];
+
+        $r3 := @parameter2: byte[];
+
+        r12 = new javax.crypto.spec.SecretKeySpec;
+
+        $r6 = r12;
+
+        varReplacer5945 = "AES";
+
+        specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, varReplacer5945);
+
+        $r7 = specialinvoke $r0.<com.braintreegateway.encryption.Aes: javax.crypto.Cipher aesCipher()>();
+
+        r13 = new javax.crypto.spec.IvParameterSpec;
+
+        $r5 = r13;
+
+     label01:
+        specialinvoke r13.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r3);
+
+        varReplacer5943 = 1;
+
+        virtualinvoke $r7.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer5943, $r6, $r5);
+
+        $r2 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        $r2 = virtualinvoke $r7.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r2);
+
+     label02:
+        r14 = new org.apache.http.util.ByteArrayBuffer;
+
+        $r4 = r14;
+
+        $i0 = lengthof $r2;
+
+        $i1 = lengthof $r3;
+
+        $i0 = $i0 + $i1;
+
+     label03:
+        specialinvoke r14.<org.apache.http.util.ByteArrayBuffer: void <init>(int)>($i0);
+
+     label04:
+        $i0 = lengthof $r3;
+
+     label05:
+        varReplacer5944 = 0;
+
+        virtualinvoke $r4.<org.apache.http.util.ByteArrayBuffer: void append(byte[],int,int)>($r3, varReplacer5944, $i0);
+
+     label06:
+        $i0 = lengthof $r2;
+
+     label07:
+        varReplacer5942 = 0;
+
+        virtualinvoke $r4.<org.apache.http.util.ByteArrayBuffer: void append(byte[],int,int)>($r2, varReplacer5942, $i0);
+
+     label08:
+        r15 = new java.lang.String;
+
+     label09:
+        $r2 = virtualinvoke $r4.<org.apache.http.util.ByteArrayBuffer: byte[] toByteArray()>();
+
+        $r2 = staticinvoke <com.braintree.org.bouncycastle.util.encoders.Base64: byte[] encode(byte[])>($r2);
+
+        specialinvoke r15.<java.lang.String: void <init>(byte[])>($r2);
+
+     label10:
+        return r15;
+
+     label11:
+        $r8 := @caughtexception;
+
+        r16 = (java.security.InvalidKeyException) $r8;
+
+        virtualinvoke r16.<java.security.InvalidKeyException: void printStackTrace()>();
+
+     label12:
+        varReplacer5941 = null;
+
+        return varReplacer5941;
+
+     label13:
+        $r9 := @caughtexception;
+
+        r17 = (javax.crypto.BadPaddingException) $r9;
+
+        virtualinvoke r17.<javax.crypto.BadPaddingException: void printStackTrace()>();
+
+        goto label12;
+
+     label14:
+        $r10 := @caughtexception;
+
+        r18 = (javax.crypto.IllegalBlockSizeException) $r10;
+
+        virtualinvoke r18.<javax.crypto.IllegalBlockSizeException: void printStackTrace()>();
+
+        goto label12;
+
+     label15:
+        $r11 := @caughtexception;
+
+        r19 = (java.security.InvalidAlgorithmParameterException) $r11;
+
+        virtualinvoke r19.<java.security.InvalidAlgorithmParameterException: void printStackTrace()>();
+
+        goto label12;
+
+        catch java.security.InvalidKeyException from label01 to label02 with label11;
+        catch java.security.InvalidKeyException from label03 to label04 with label11;
+        catch java.security.InvalidKeyException from label05 to label06 with label11;
+        catch java.security.InvalidKeyException from label07 to label08 with label11;
+        catch java.security.InvalidKeyException from label09 to label10 with label11;
+        catch javax.crypto.BadPaddingException from label01 to label02 with label13;
+        catch javax.crypto.BadPaddingException from label03 to label04 with label13;
+        catch javax.crypto.BadPaddingException from label05 to label06 with label13;
+        catch javax.crypto.BadPaddingException from label07 to label08 with label13;
+        catch javax.crypto.BadPaddingException from label09 to label10 with label13;
+        catch javax.crypto.IllegalBlockSizeException from label01 to label02 with label14;
+        catch javax.crypto.IllegalBlockSizeException from label03 to label04 with label14;
+        catch javax.crypto.IllegalBlockSizeException from label05 to label06 with label14;
+        catch javax.crypto.IllegalBlockSizeException from label07 to label08 with label14;
+        catch javax.crypto.IllegalBlockSizeException from label09 to label10 with label14;
+        catch java.security.InvalidAlgorithmParameterException from label01 to label02 with label15;
+        catch java.security.InvalidAlgorithmParameterException from label03 to label04 with label15;
+        catch java.security.InvalidAlgorithmParameterException from label05 to label06 with label15;
+        catch java.security.InvalidAlgorithmParameterException from label07 to label08 with label15;
+        catch java.security.InvalidAlgorithmParameterException from label09 to label10 with label15;
+    }
+
+    public byte[] generateIV()
+    {
+        com.braintreegateway.encryption.Aes $r0;
+        byte[] $r1;
+        int varReplacer5940;
+
+        nop;
+
+        $r0 := @this: com.braintreegateway.encryption.Aes;
+
+        varReplacer5940 = 16;
+
+        $r1 = specialinvoke $r0.<com.braintreegateway.encryption.Aes: byte[] secureRandomBytes(int)>(varReplacer5940);
+
+        return $r1;
+    }
+
+    public byte[] generateKey()
+    {
+        com.braintreegateway.encryption.Aes $r0;
+        byte[] $r1;
+        int varReplacer5939;
+
+        nop;
+
+        $r0 := @this: com.braintreegateway.encryption.Aes;
+
+        varReplacer5939 = 32;
+
+        $r1 = specialinvoke $r0.<com.braintreegateway.encryption.Aes: byte[] secureRandomBytes(int)>(varReplacer5939);
+
+        return $r1;
+    }
+}

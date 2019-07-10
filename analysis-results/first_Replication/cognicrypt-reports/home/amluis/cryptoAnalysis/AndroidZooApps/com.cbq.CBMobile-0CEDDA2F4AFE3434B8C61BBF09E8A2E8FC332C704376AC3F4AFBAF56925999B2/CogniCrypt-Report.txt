@@ -1,0 +1,92 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r8
+		Type: java.security.KeyStore
+		Statement: $r8 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer73)
+		Method: <com.cbq.CBMobile.CBQMainActivity: void onCreate(android.os.Bundle)>
+		SHA-256: deeda5982f7b78e623f684500df5480c00c7bfb5d858e4d335ca538f633cbd91
+		Secure: false
+	Object:
+		Variable: $r10
+		Type: javax.crypto.Cipher
+		Statement: $r10 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer103)
+		Method: <com.cbq.CBMobile.CBQMainActivity: void onCreate(android.os.Bundle)>
+		SHA-256: 9f9995926cd2b7b6f989dc24faaf64f3692a6cedd0728ef8fb98fc6923cd465e
+		Secure: false
+	Object:
+		Variable: $r9
+		Type: javax.crypto.KeyGenerator
+		Statement: $r9 = staticinvoke <javax.crypto.KeyGenerator: javax.crypto.KeyGenerator getInstance(java.lang.String,java.lang.String)>(varReplacer87, varReplacer88)
+		Method: <com.cbq.CBMobile.CBQMainActivity: void onCreate(android.os.Bundle)>
+		SHA-256: a02439b47de3ec2699cc0e32d98370fc00d5c1f00f497276c91c6b74e5a54443
+		Secure: false
+	Object:
+		Variable: $r10
+		Type: javax.crypto.Cipher
+		Statement: $r10 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer107)
+		Method: <com.cbq.CBMobile.CBQMainActivity: void onCreate(android.os.Bundle)>
+		SHA-256: 161ede6b4767c6624b910e2870913761247a78e40f5d8ad6af097a5c0004a559
+		Secure: true
+
+Findings in Java Class: com.cbq.CBMobile.CBQMainActivity
+
+	 in Method: void onCreate(android.os.Bundle)
+		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #deeda5982f7b78e623f684500df5480c00c7bfb5d858e4d335ca538f633cbd91)
+			Operation on object of type java.security.KeyStore object not completed. Expected call to load
+			at statement: $r8 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer73)
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.KeyGenerator (on Object #a02439b47de3ec2699cc0e32d98370fc00d5c1f00f497276c91c6b74e5a54443)
+			Operation on object of type javax.crypto.KeyGenerator object not completed. Expected call to generateKey, init
+			at statement: $r9 = staticinvoke <javax.crypto.KeyGenerator: javax.crypto.KeyGenerator getInstance(java.lang.String,java.lang.String)>(varReplacer87, varReplacer88)
+
+		ConstraintError violating CrySL rule for java.security.KeyStore (on Object #deeda5982f7b78e623f684500df5480c00c7bfb5d858e4d335ca538f633cbd91)
+			First parameter (with value "AndroidKeyStore") should be any of {BKS, PKCS12-DEF, BCPKCS12, PKCS12, BouncyCastle}
+			at statement: $r8 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer73)
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #9f9995926cd2b7b6f989dc24faaf64f3692a6cedd0728ef8fb98fc6923cd465e)
+			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
+			at statement: $r10 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer103)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 1
+	IncompleteOperationError: 3
+=====================================================================

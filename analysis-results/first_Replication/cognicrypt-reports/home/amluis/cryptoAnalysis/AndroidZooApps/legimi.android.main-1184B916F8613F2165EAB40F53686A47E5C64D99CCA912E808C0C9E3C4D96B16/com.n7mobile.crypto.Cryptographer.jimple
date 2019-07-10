@@ -1,0 +1,1651 @@
+public class com.n7mobile.crypto.Cryptographer extends java.lang.Object
+{
+    private static final java.lang.String TAG;
+    private javax.crypto.spec.SecretKeySpec mAesKey;
+    public java.security.PublicKey mRsaPublicKey;
+    private boolean mShouldReconnect;
+
+    public void <init>()
+    {
+        com.n7mobile.crypto.Cryptographer $r0;
+        int varReplacer1232;
+
+        nop;
+
+        $r0 := @this: com.n7mobile.crypto.Cryptographer;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer1232 = 1;
+
+        $r0.<com.n7mobile.crypto.Cryptographer: boolean mShouldReconnect> = varReplacer1232;
+
+        return;
+    }
+
+    public static java.lang.String generateRandomCharacters(int)
+    {
+        int $i0, $i1, $i2;
+        java.lang.String $r0;
+        java.util.Random $r1;
+        java.lang.StringBuffer $r2;
+        char $c3;
+
+        nop;
+
+        $i0 := @parameter0: int;
+
+        $r1 = new java.util.Random;
+
+        specialinvoke $r1.<java.util.Random: void <init>()>();
+
+        $r0 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&**()";
+
+        $r2 = new java.lang.StringBuffer;
+
+        specialinvoke $r2.<java.lang.StringBuffer: void <init>()>();
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label2;
+
+        $i2 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        $i2 = virtualinvoke $r1.<java.util.Random: int nextInt(int)>($i2);
+
+        $c3 = virtualinvoke $r0.<java.lang.String: char charAt(int)>($i2);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuffer: java.lang.StringBuffer append(char)>($c3);
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r0 = virtualinvoke $r2.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        return $r0;
+    }
+
+    private java.lang.String getDeviceIdForObfuscation(android.content.Context)
+    {
+        com.n7mobile.crypto.Cryptographer $r0;
+        android.content.Context $r1;
+        java.lang.String $r2, varReplacer1220;
+
+        nop;
+
+        $r0 := @this: com.n7mobile.crypto.Cryptographer;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 = specialinvoke $r0.<com.n7mobile.crypto.Cryptographer: java.lang.String getTelephonyDeviceId(android.content.Context)>($r1);
+
+        if $r2 == null goto label1;
+
+        return $r2;
+
+     label1:
+        $r2 = specialinvoke $r0.<com.n7mobile.crypto.Cryptographer: java.lang.String getSecureDeviceId(android.content.Context)>($r1);
+
+        if $r2 == null goto label2;
+
+        return $r2;
+
+     label2:
+        varReplacer1220 = "";
+
+        return varReplacer1220;
+    }
+
+    private java.lang.String getSecureDeviceId(android.content.Context)
+    {
+        com.n7mobile.crypto.Cryptographer $r0;
+        android.content.Context $r1;
+        android.content.ContentResolver $r2;
+        java.lang.String $r3, varReplacer1224;
+
+        nop;
+
+        $r0 := @this: com.n7mobile.crypto.Cryptographer;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 = virtualinvoke $r1.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        varReplacer1224 = "android_id";
+
+        $r3 = staticinvoke <android.provider.Settings$Secure: java.lang.String getString(android.content.ContentResolver,java.lang.String)>($r2, varReplacer1224);
+
+        return $r3;
+    }
+
+    private java.lang.String getTelephonyDeviceId(android.content.Context)
+    {
+        com.n7mobile.crypto.Cryptographer $r0;
+        android.content.Context $r1;
+        int $i0;
+        java.lang.Object $r2;
+        android.telephony.TelephonyManager $r3;
+        java.lang.String $r4, varReplacer1221, varReplacer1223;
+        null_type varReplacer1222;
+
+        nop;
+
+        $r0 := @this: com.n7mobile.crypto.Cryptographer;
+
+        $r1 := @parameter0: android.content.Context;
+
+        varReplacer1221 = "android.permission.READ_PHONE_STATE";
+
+        $i0 = staticinvoke <android.support.v4.content.PermissionChecker: int checkCallingOrSelfPermission(android.content.Context,java.lang.String)>($r1, varReplacer1221);
+
+        if $i0 != 0 goto label1;
+
+        varReplacer1223 = "phone";
+
+        $r2 = virtualinvoke $r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer1223);
+
+        $r3 = (android.telephony.TelephonyManager) $r2;
+
+        if $r3 == null goto label1;
+
+        $r4 = virtualinvoke $r3.<android.telephony.TelephonyManager: java.lang.String getDeviceId()>();
+
+        if $r4 == null goto label1;
+
+        return $r4;
+
+     label1:
+        varReplacer1222 = null;
+
+        return varReplacer1222;
+    }
+
+    private boolean loadRsaKeyBytes(byte[])
+    {
+        com.n7mobile.crypto.Cryptographer $r0;
+        byte[] $r1;
+        java.lang.Throwable $r2;
+        java.security.cert.CertificateFactory $r3;
+        java.io.ByteArrayInputStream $r4, r7;
+        java.security.cert.Certificate $r5;
+        java.security.PublicKey $r6;
+        java.security.cert.CertificateException r8;
+        int varReplacer1228, varReplacer1229;
+        java.lang.String varReplacer1230;
+
+        nop;
+
+        $r0 := @this: com.n7mobile.crypto.Cryptographer;
+
+        $r1 := @parameter0: byte[];
+
+     label1:
+        varReplacer1230 = "X509";
+
+        $r3 = staticinvoke <java.security.cert.CertificateFactory: java.security.cert.CertificateFactory getInstance(java.lang.String)>(varReplacer1230);
+
+     label2:
+        r7 = new java.io.ByteArrayInputStream;
+
+        $r4 = r7;
+
+     label3:
+        specialinvoke r7.<java.io.ByteArrayInputStream: void <init>(byte[])>($r1);
+
+        $r5 = virtualinvoke $r3.<java.security.cert.CertificateFactory: java.security.cert.Certificate generateCertificate(java.io.InputStream)>($r4);
+
+        $r6 = virtualinvoke $r5.<java.security.cert.Certificate: java.security.PublicKey getPublicKey()>();
+
+     label4:
+        $r0.<com.n7mobile.crypto.Cryptographer: java.security.PublicKey mRsaPublicKey> = $r6;
+
+        $r6 = $r0.<com.n7mobile.crypto.Cryptographer: java.security.PublicKey mRsaPublicKey>;
+
+        if $r6 == null goto label6;
+
+        varReplacer1228 = 1;
+
+        return varReplacer1228;
+
+     label5:
+        $r2 := @caughtexception;
+
+        r8 = (java.security.cert.CertificateException) $r2;
+
+        virtualinvoke r8.<java.security.cert.CertificateException: void printStackTrace()>();
+
+     label6:
+        varReplacer1229 = 0;
+
+        return varReplacer1229;
+
+        catch java.security.cert.CertificateException from label1 to label2 with label5;
+        catch java.security.cert.CertificateException from label3 to label4 with label5;
+    }
+
+    public java.lang.String decryptRsa(java.lang.String)
+    {
+        com.n7mobile.crypto.Cryptographer $r0;
+        java.lang.String $r1, $r6;
+        javax.crypto.Cipher $r2;
+        java.security.PublicKey $r3;
+        byte[] $r4;
+        java.lang.StringBuilder $r5, r12;
+        java.lang.Throwable $r7, $r8, $r9, $r10, $r11;
+        javax.crypto.IllegalBlockSizeException r13;
+        javax.crypto.BadPaddingException r14;
+        java.security.NoSuchAlgorithmException r15;
+        javax.crypto.NoSuchPaddingException r16;
+        java.security.InvalidKeyException r17;
+
+        $r0 := @this: com.n7mobile.crypto.Cryptographer;
+
+        $r1 := @parameter0: java.lang.String;
+
+     label01:
+        $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>("RSA/ECB/PKCS1Padding");
+
+     label02:
+        $r3 = $r0.<com.n7mobile.crypto.Cryptographer: java.security.PublicKey mRsaPublicKey>;
+
+     label03:
+        virtualinvoke $r2.<javax.crypto.Cipher: void init(int,java.security.Key)>(2, $r3);
+
+        $r4 = staticinvoke <com.n7mobile.crypto.Base64Coder: byte[] decode(java.lang.String)>($r1);
+
+        $r4 = virtualinvoke $r2.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r4);
+
+     label04:
+        $r6 = new java.lang.String;
+
+        $r1 = $r6;
+
+     label05:
+        specialinvoke $r6.<java.lang.String: void <init>(byte[])>($r4);
+
+     label06:
+        r12 = new java.lang.StringBuilder;
+
+        $r5 = r12;
+
+     label07:
+        specialinvoke r12.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("RSA Decoded: ");
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.n7mobile.cmg.common.Logz: void d(java.lang.String,java.lang.String)>("Cryptographer", $r6);
+
+     label08:
+        return $r1;
+
+     label09:
+        $r7 := @caughtexception;
+
+        r13 = (javax.crypto.IllegalBlockSizeException) $r7;
+
+        virtualinvoke r13.<javax.crypto.IllegalBlockSizeException: void printStackTrace()>();
+
+     label10:
+        return null;
+
+     label11:
+        $r8 := @caughtexception;
+
+        r14 = (javax.crypto.BadPaddingException) $r8;
+
+        virtualinvoke r14.<javax.crypto.BadPaddingException: void printStackTrace()>();
+
+        goto label10;
+
+     label12:
+        $r9 := @caughtexception;
+
+        r15 = (java.security.NoSuchAlgorithmException) $r9;
+
+        virtualinvoke r15.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        goto label10;
+
+     label13:
+        $r10 := @caughtexception;
+
+        r16 = (javax.crypto.NoSuchPaddingException) $r10;
+
+        virtualinvoke r16.<javax.crypto.NoSuchPaddingException: void printStackTrace()>();
+
+        goto label10;
+
+     label14:
+        $r11 := @caughtexception;
+
+        r17 = (java.security.InvalidKeyException) $r11;
+
+        virtualinvoke r17.<java.security.InvalidKeyException: void printStackTrace()>();
+
+        goto label10;
+
+        catch javax.crypto.IllegalBlockSizeException from label01 to label02 with label09;
+        catch javax.crypto.IllegalBlockSizeException from label03 to label04 with label09;
+        catch javax.crypto.IllegalBlockSizeException from label05 to label06 with label09;
+        catch javax.crypto.IllegalBlockSizeException from label07 to label08 with label09;
+        catch javax.crypto.BadPaddingException from label01 to label02 with label11;
+        catch javax.crypto.BadPaddingException from label03 to label04 with label11;
+        catch javax.crypto.BadPaddingException from label05 to label06 with label11;
+        catch javax.crypto.BadPaddingException from label07 to label08 with label11;
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label12;
+        catch java.security.NoSuchAlgorithmException from label03 to label04 with label12;
+        catch java.security.NoSuchAlgorithmException from label05 to label06 with label12;
+        catch java.security.NoSuchAlgorithmException from label07 to label08 with label12;
+        catch javax.crypto.NoSuchPaddingException from label01 to label02 with label13;
+        catch javax.crypto.NoSuchPaddingException from label03 to label04 with label13;
+        catch javax.crypto.NoSuchPaddingException from label05 to label06 with label13;
+        catch javax.crypto.NoSuchPaddingException from label07 to label08 with label13;
+        catch java.security.InvalidKeyException from label01 to label02 with label14;
+        catch java.security.InvalidKeyException from label03 to label04 with label14;
+        catch java.security.InvalidKeyException from label05 to label06 with label14;
+        catch java.security.InvalidKeyException from label07 to label08 with label14;
+    }
+
+    public void deleteCertificate(android.content.Context)
+    {
+        com.n7mobile.crypto.Cryptographer $r0;
+        android.content.Context $r1;
+        java.io.File $r2;
+        java.lang.String $r3;
+
+        nop;
+
+        $r0 := @this: com.n7mobile.crypto.Cryptographer;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 = new java.io.File;
+
+        $r3 = staticinvoke <com.n7mobile.cmg.common.Config: java.lang.String getCertificateStorageUrl(android.content.Context)>($r1);
+
+        specialinvoke $r2.<java.io.File: void <init>(java.lang.String)>($r3);
+
+        virtualinvoke $r2.<java.io.File: boolean delete()>();
+
+        return;
+    }
+
+    public boolean downloadCertificate(android.content.Context)
+    {
+        com.n7mobile.crypto.Cryptographer $r0;
+        android.content.Context $r1;
+        byte[] $r2;
+        java.io.DataInputStream $r3, r23;
+        java.io.File $r4, r24;
+        java.io.FileOutputStream $r5, $r7, r25;
+        java.net.URL $r6, r22;
+        java.lang.String $r8;
+        java.net.URLConnection $r9;
+        java.io.InputStream $r10;
+        int $i0, varReplacer1225, varReplacer1226, varReplacer1227;
+        java.lang.Throwable $r11, $r12, $r13, $r14, $r15, $r16, $r17, $r18, $r19, $r20, $r21;
+        java.io.FileNotFoundException r26;
+        java.io.IOException r27;
+        java.net.MalformedURLException r28;
+        java.lang.SecurityException r29;
+
+        nop;
+
+        $r0 := @this: com.n7mobile.crypto.Cryptographer;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r7 = null;
+
+     label01:
+        r22 = new java.net.URL;
+
+     label02:
+        $r6 = r22;
+
+     label03:
+        $r8 = staticinvoke <com.n7mobile.cmg.common.Config: java.lang.String getCMGCertURL(android.content.Context)>($r1);
+
+        specialinvoke r22.<java.net.URL: void <init>(java.lang.String)>($r8);
+
+        $r9 = virtualinvoke $r6.<java.net.URL: java.net.URLConnection openConnection()>();
+
+        $r10 = virtualinvoke $r9.<java.net.URLConnection: java.io.InputStream getInputStream()>();
+
+     label04:
+        r23 = new java.io.DataInputStream;
+
+     label05:
+        $r3 = r23;
+
+     label06:
+        specialinvoke r23.<java.io.DataInputStream: void <init>(java.io.InputStream)>($r10);
+
+     label07:
+        $r2 = newarray (byte)[1024];
+
+        r24 = new java.io.File;
+
+     label08:
+        $r4 = r24;
+
+     label09:
+        $r8 = staticinvoke <com.n7mobile.cmg.common.Config: java.lang.String getCertificateStorageUrl(android.content.Context)>($r1);
+
+        specialinvoke r24.<java.io.File: void <init>(java.lang.String)>($r8);
+
+     label10:
+        r25 = new java.io.FileOutputStream;
+
+     label11:
+        $r5 = r25;
+
+     label12:
+        specialinvoke r25.<java.io.FileOutputStream: void <init>(java.io.File)>($r4);
+
+     label13:
+        $i0 = virtualinvoke $r3.<java.io.DataInputStream: int read(byte[])>($r2);
+
+     label14:
+        if $i0 <= 0 goto label22;
+
+     label15:
+        varReplacer1227 = 0;
+
+        virtualinvoke $r5.<java.io.FileOutputStream: void write(byte[],int,int)>($r2, varReplacer1227, $i0);
+
+     label16:
+        goto label13;
+
+     label17:
+        $r11 := @caughtexception;
+
+        $r7 = $r5;
+
+     label18:
+        r26 = (java.io.FileNotFoundException) $r11;
+
+        virtualinvoke r26.<java.io.FileNotFoundException: void printStackTrace()>();
+
+     label19:
+        if $r7 == null goto label21;
+
+     label20:
+        virtualinvoke $r7.<java.io.FileOutputStream: void close()>();
+
+     label21:
+        varReplacer1226 = 0;
+
+        return varReplacer1226;
+
+     label22:
+        if $r5 == null goto label24;
+
+     label23:
+        virtualinvoke $r5.<java.io.FileOutputStream: void close()>();
+
+     label24:
+        varReplacer1225 = 1;
+
+        return varReplacer1225;
+
+     label25:
+        $r12 := @caughtexception;
+
+        r27 = (java.io.IOException) $r12;
+
+        virtualinvoke r27.<java.io.IOException: void printStackTrace()>();
+
+        goto label24;
+
+     label26:
+        $r13 := @caughtexception;
+
+        r27 = (java.io.IOException) $r13;
+
+        virtualinvoke r27.<java.io.IOException: void printStackTrace()>();
+
+        goto label21;
+
+     label27:
+        $r14 := @caughtexception;
+
+     label28:
+        r28 = (java.net.MalformedURLException) $r14;
+
+        virtualinvoke r28.<java.net.MalformedURLException: void printStackTrace()>();
+
+     label29:
+        if $r7 == null goto label21;
+
+     label30:
+        virtualinvoke $r7.<java.io.FileOutputStream: void close()>();
+
+     label31:
+        goto label21;
+
+     label32:
+        $r15 := @caughtexception;
+
+        r27 = (java.io.IOException) $r15;
+
+        virtualinvoke r27.<java.io.IOException: void printStackTrace()>();
+
+        goto label21;
+
+     label33:
+        $r16 := @caughtexception;
+
+     label34:
+        r27 = (java.io.IOException) $r16;
+
+        virtualinvoke r27.<java.io.IOException: void printStackTrace()>();
+
+     label35:
+        if $r7 == null goto label21;
+
+     label36:
+        virtualinvoke $r7.<java.io.FileOutputStream: void close()>();
+
+     label37:
+        goto label21;
+
+     label38:
+        $r17 := @caughtexception;
+
+        r27 = (java.io.IOException) $r17;
+
+        virtualinvoke r27.<java.io.IOException: void printStackTrace()>();
+
+        goto label21;
+
+     label39:
+        $r18 := @caughtexception;
+
+     label40:
+        r29 = (java.lang.SecurityException) $r18;
+
+        virtualinvoke r29.<java.lang.SecurityException: void printStackTrace()>();
+
+     label41:
+        if $r7 == null goto label21;
+
+     label42:
+        virtualinvoke $r7.<java.io.FileOutputStream: void close()>();
+
+     label43:
+        goto label21;
+
+     label44:
+        $r19 := @caughtexception;
+
+        r27 = (java.io.IOException) $r19;
+
+        virtualinvoke r27.<java.io.IOException: void printStackTrace()>();
+
+        goto label21;
+
+     label45:
+        $r20 := @caughtexception;
+
+     label46:
+        if $r7 == null goto label48;
+
+     label47:
+        virtualinvoke $r7.<java.io.FileOutputStream: void close()>();
+
+     label48:
+        throw $r20;
+
+     label49:
+        $r21 := @caughtexception;
+
+        r27 = (java.io.IOException) $r21;
+
+        virtualinvoke r27.<java.io.IOException: void printStackTrace()>();
+
+        goto label48;
+
+     label50:
+        $r20 := @caughtexception;
+
+        $r7 = $r5;
+
+        goto label46;
+
+     label51:
+        $r18 := @caughtexception;
+
+        $r7 = $r5;
+
+        goto label40;
+
+     label52:
+        $r16 := @caughtexception;
+
+        $r7 = $r5;
+
+        goto label34;
+
+     label53:
+        $r14 := @caughtexception;
+
+        $r7 = $r5;
+
+        goto label28;
+
+     label54:
+        $r11 := @caughtexception;
+
+        goto label18;
+
+        catch java.io.FileNotFoundException from label03 to label04 with label54;
+        catch java.io.FileNotFoundException from label06 to label07 with label54;
+        catch java.io.FileNotFoundException from label09 to label10 with label54;
+        catch java.io.FileNotFoundException from label12 to label13 with label54;
+        catch java.net.MalformedURLException from label03 to label04 with label27;
+        catch java.net.MalformedURLException from label06 to label07 with label27;
+        catch java.net.MalformedURLException from label09 to label10 with label27;
+        catch java.net.MalformedURLException from label12 to label13 with label27;
+        catch java.io.IOException from label03 to label04 with label33;
+        catch java.io.IOException from label06 to label07 with label33;
+        catch java.io.IOException from label09 to label10 with label33;
+        catch java.io.IOException from label12 to label13 with label33;
+        catch java.lang.SecurityException from label03 to label04 with label39;
+        catch java.lang.SecurityException from label06 to label07 with label39;
+        catch java.lang.SecurityException from label09 to label10 with label39;
+        catch java.lang.SecurityException from label12 to label13 with label39;
+        catch java.lang.Throwable from label01 to label02 with label45;
+        catch java.lang.Throwable from label03 to label05 with label45;
+        catch java.lang.Throwable from label06 to label08 with label45;
+        catch java.lang.Throwable from label09 to label11 with label45;
+        catch java.lang.Throwable from label12 to label13 with label45;
+        catch java.io.FileNotFoundException from label13 to label14 with label17;
+        catch java.io.FileNotFoundException from label15 to label16 with label17;
+        catch java.net.MalformedURLException from label13 to label14 with label53;
+        catch java.net.MalformedURLException from label15 to label16 with label53;
+        catch java.io.IOException from label13 to label14 with label52;
+        catch java.io.IOException from label15 to label16 with label52;
+        catch java.lang.SecurityException from label13 to label14 with label51;
+        catch java.lang.SecurityException from label15 to label16 with label51;
+        catch java.lang.Throwable from label13 to label14 with label50;
+        catch java.lang.Throwable from label15 to label16 with label50;
+        catch java.lang.Throwable from label18 to label19 with label45;
+        catch java.io.IOException from label20 to label21 with label26;
+        catch java.io.IOException from label23 to label24 with label25;
+        catch java.lang.Throwable from label28 to label29 with label45;
+        catch java.io.IOException from label30 to label31 with label32;
+        catch java.lang.Throwable from label34 to label35 with label45;
+        catch java.io.IOException from label36 to label37 with label38;
+        catch java.lang.Throwable from label40 to label41 with label45;
+        catch java.io.IOException from label42 to label43 with label44;
+        catch java.io.IOException from label47 to label48 with label49;
+    }
+
+    public java.lang.String encryptAes(java.lang.String)
+    {
+        com.n7mobile.crypto.Cryptographer $r0;
+        java.lang.String $r1, r15, varReplacer1208, varReplacer1210;
+        byte[] $r2;
+        javax.crypto.spec.SecretKeySpec $r3;
+        javax.crypto.spec.IvParameterSpec $r4, r14;
+        javax.crypto.Cipher $r5;
+        int $i0, varReplacer1211;
+        char[] $r6;
+        java.lang.Throwable $r7, $r8, $r9, $r10, $r11, $r12, $r13;
+        java.security.NoSuchAlgorithmException r16;
+        javax.crypto.NoSuchPaddingException r17;
+        java.security.InvalidKeyException r18;
+        javax.crypto.IllegalBlockSizeException r19;
+        javax.crypto.BadPaddingException r20;
+        java.security.InvalidAlgorithmParameterException r21;
+        java.io.UnsupportedEncodingException r22;
+        null_type varReplacer1209;
+
+        nop;
+
+        $r0 := @this: com.n7mobile.crypto.Cryptographer;
+
+        $r1 := @parameter0: java.lang.String;
+
+     label01:
+        varReplacer1208 = "AES/CBC/PKCS5Padding";
+
+        $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1208);
+
+     label02:
+        $r3 = $r0.<com.n7mobile.crypto.Cryptographer: javax.crypto.spec.SecretKeySpec mAesKey>;
+
+     label03:
+        $r2 = virtualinvoke $r3.<javax.crypto.spec.SecretKeySpec: byte[] getEncoded()>();
+
+     label04:
+        $i0 = lengthof $r2;
+
+        $r2 = newarray (byte)[$i0];
+
+        $r3 = $r0.<com.n7mobile.crypto.Cryptographer: javax.crypto.spec.SecretKeySpec mAesKey>;
+
+        r14 = new javax.crypto.spec.IvParameterSpec;
+
+        $r4 = r14;
+
+     label05:
+        specialinvoke r14.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r2);
+
+        varReplacer1211 = 1;
+
+        virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1211, $r3, $r4);
+
+        varReplacer1210 = "UTF-8";
+
+        $r2 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer1210);
+
+        $r2 = virtualinvoke $r5.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r2);
+
+     label06:
+        r15 = new java.lang.String;
+
+     label07:
+        $r6 = staticinvoke <com.n7mobile.crypto.Base64Coder: char[] encode(byte[])>($r2);
+
+        specialinvoke r15.<java.lang.String: void <init>(char[])>($r6);
+
+     label08:
+        return r15;
+
+     label09:
+        $r7 := @caughtexception;
+
+        r16 = (java.security.NoSuchAlgorithmException) $r7;
+
+        virtualinvoke r16.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+     label10:
+        varReplacer1209 = null;
+
+        return varReplacer1209;
+
+     label11:
+        $r8 := @caughtexception;
+
+        r17 = (javax.crypto.NoSuchPaddingException) $r8;
+
+        virtualinvoke r17.<javax.crypto.NoSuchPaddingException: void printStackTrace()>();
+
+        goto label10;
+
+     label12:
+        $r9 := @caughtexception;
+
+        r18 = (java.security.InvalidKeyException) $r9;
+
+        virtualinvoke r18.<java.security.InvalidKeyException: void printStackTrace()>();
+
+        goto label10;
+
+     label13:
+        $r10 := @caughtexception;
+
+        r19 = (javax.crypto.IllegalBlockSizeException) $r10;
+
+        virtualinvoke r19.<javax.crypto.IllegalBlockSizeException: void printStackTrace()>();
+
+        goto label10;
+
+     label14:
+        $r11 := @caughtexception;
+
+        r20 = (javax.crypto.BadPaddingException) $r11;
+
+        virtualinvoke r20.<javax.crypto.BadPaddingException: void printStackTrace()>();
+
+        goto label10;
+
+     label15:
+        $r12 := @caughtexception;
+
+        r21 = (java.security.InvalidAlgorithmParameterException) $r12;
+
+        virtualinvoke r21.<java.security.InvalidAlgorithmParameterException: void printStackTrace()>();
+
+        goto label10;
+
+     label16:
+        $r13 := @caughtexception;
+
+        r22 = (java.io.UnsupportedEncodingException) $r13;
+
+        virtualinvoke r22.<java.io.UnsupportedEncodingException: void printStackTrace()>();
+
+        goto label10;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label09;
+        catch java.security.NoSuchAlgorithmException from label03 to label04 with label09;
+        catch java.security.NoSuchAlgorithmException from label05 to label06 with label09;
+        catch java.security.NoSuchAlgorithmException from label07 to label08 with label09;
+        catch javax.crypto.NoSuchPaddingException from label01 to label02 with label11;
+        catch javax.crypto.NoSuchPaddingException from label03 to label04 with label11;
+        catch javax.crypto.NoSuchPaddingException from label05 to label06 with label11;
+        catch javax.crypto.NoSuchPaddingException from label07 to label08 with label11;
+        catch java.security.InvalidKeyException from label01 to label02 with label12;
+        catch java.security.InvalidKeyException from label03 to label04 with label12;
+        catch java.security.InvalidKeyException from label05 to label06 with label12;
+        catch java.security.InvalidKeyException from label07 to label08 with label12;
+        catch javax.crypto.IllegalBlockSizeException from label01 to label02 with label13;
+        catch javax.crypto.IllegalBlockSizeException from label03 to label04 with label13;
+        catch javax.crypto.IllegalBlockSizeException from label05 to label06 with label13;
+        catch javax.crypto.IllegalBlockSizeException from label07 to label08 with label13;
+        catch javax.crypto.BadPaddingException from label01 to label02 with label14;
+        catch javax.crypto.BadPaddingException from label03 to label04 with label14;
+        catch javax.crypto.BadPaddingException from label05 to label06 with label14;
+        catch javax.crypto.BadPaddingException from label07 to label08 with label14;
+        catch java.security.InvalidAlgorithmParameterException from label01 to label02 with label15;
+        catch java.security.InvalidAlgorithmParameterException from label03 to label04 with label15;
+        catch java.security.InvalidAlgorithmParameterException from label05 to label06 with label15;
+        catch java.security.InvalidAlgorithmParameterException from label07 to label08 with label15;
+        catch java.io.UnsupportedEncodingException from label01 to label02 with label16;
+        catch java.io.UnsupportedEncodingException from label03 to label04 with label16;
+        catch java.io.UnsupportedEncodingException from label05 to label06 with label16;
+        catch java.io.UnsupportedEncodingException from label07 to label08 with label16;
+    }
+
+    public java.lang.String encryptRsa(java.lang.String)
+    {
+        com.n7mobile.crypto.Cryptographer $r0;
+        java.lang.String $r1, r11;
+        java.security.PublicKey $r2;
+        javax.crypto.Cipher $r3;
+        byte[] $r4;
+        char[] $r5;
+        java.lang.Throwable $r6, $r7, $r8, $r9, $r10;
+        java.security.NoSuchAlgorithmException r12;
+        javax.crypto.NoSuchPaddingException r13;
+        java.security.InvalidKeyException r14;
+        javax.crypto.IllegalBlockSizeException r15;
+        javax.crypto.BadPaddingException r16;
+
+        $r0 := @this: com.n7mobile.crypto.Cryptographer;
+
+        $r1 := @parameter0: java.lang.String;
+
+     label01:
+        $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>("RSA/ECB/PKCS1Padding");
+
+     label02:
+        $r2 = $r0.<com.n7mobile.crypto.Cryptographer: java.security.PublicKey mRsaPublicKey>;
+
+     label03:
+        virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(1, $r2);
+
+        $r4 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        $r4 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r4);
+
+     label04:
+        r11 = new java.lang.String;
+
+     label05:
+        $r5 = staticinvoke <com.n7mobile.crypto.Base64Coder: char[] encode(byte[])>($r4);
+
+        specialinvoke r11.<java.lang.String: void <init>(char[])>($r5);
+
+     label06:
+        return r11;
+
+     label07:
+        $r6 := @caughtexception;
+
+        r12 = (java.security.NoSuchAlgorithmException) $r6;
+
+        virtualinvoke r12.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+     label08:
+        return null;
+
+     label09:
+        $r7 := @caughtexception;
+
+        r13 = (javax.crypto.NoSuchPaddingException) $r7;
+
+        virtualinvoke r13.<javax.crypto.NoSuchPaddingException: void printStackTrace()>();
+
+        goto label08;
+
+     label10:
+        $r8 := @caughtexception;
+
+        r14 = (java.security.InvalidKeyException) $r8;
+
+        virtualinvoke r14.<java.security.InvalidKeyException: void printStackTrace()>();
+
+        goto label08;
+
+     label11:
+        $r9 := @caughtexception;
+
+        r15 = (javax.crypto.IllegalBlockSizeException) $r9;
+
+        virtualinvoke r15.<javax.crypto.IllegalBlockSizeException: void printStackTrace()>();
+
+        goto label08;
+
+     label12:
+        $r10 := @caughtexception;
+
+        r16 = (javax.crypto.BadPaddingException) $r10;
+
+        virtualinvoke r16.<javax.crypto.BadPaddingException: void printStackTrace()>();
+
+        goto label08;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label07;
+        catch java.security.NoSuchAlgorithmException from label03 to label04 with label07;
+        catch java.security.NoSuchAlgorithmException from label05 to label06 with label07;
+        catch javax.crypto.NoSuchPaddingException from label01 to label02 with label09;
+        catch javax.crypto.NoSuchPaddingException from label03 to label04 with label09;
+        catch javax.crypto.NoSuchPaddingException from label05 to label06 with label09;
+        catch java.security.InvalidKeyException from label01 to label02 with label10;
+        catch java.security.InvalidKeyException from label03 to label04 with label10;
+        catch java.security.InvalidKeyException from label05 to label06 with label10;
+        catch javax.crypto.IllegalBlockSizeException from label01 to label02 with label11;
+        catch javax.crypto.IllegalBlockSizeException from label03 to label04 with label11;
+        catch javax.crypto.IllegalBlockSizeException from label05 to label06 with label11;
+        catch javax.crypto.BadPaddingException from label01 to label02 with label12;
+        catch javax.crypto.BadPaddingException from label03 to label04 with label12;
+        catch javax.crypto.BadPaddingException from label05 to label06 with label12;
+    }
+
+    public java.lang.String encryptRsaBytes(byte[])
+    {
+        com.n7mobile.crypto.Cryptographer $r0;
+        byte[] $r1;
+        java.security.PublicKey $r2;
+        javax.crypto.Cipher $r3;
+        char[] $r4;
+        java.lang.Throwable $r5, $r6, $r7, $r8, $r9;
+        java.lang.String r10, varReplacer1218;
+        java.security.NoSuchAlgorithmException r11;
+        javax.crypto.NoSuchPaddingException r12;
+        java.security.InvalidKeyException r13;
+        javax.crypto.IllegalBlockSizeException r14;
+        javax.crypto.BadPaddingException r15;
+        int varReplacer1217;
+        null_type varReplacer1219;
+
+        nop;
+
+        $r0 := @this: com.n7mobile.crypto.Cryptographer;
+
+        $r1 := @parameter0: byte[];
+
+     label01:
+        varReplacer1218 = "RSA/ECB/PKCS1Padding";
+
+        $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1218);
+
+     label02:
+        $r2 = $r0.<com.n7mobile.crypto.Cryptographer: java.security.PublicKey mRsaPublicKey>;
+
+     label03:
+        varReplacer1217 = 1;
+
+        virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1217, $r2);
+
+        $r1 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1);
+
+     label04:
+        r10 = new java.lang.String;
+
+     label05:
+        $r4 = staticinvoke <com.n7mobile.crypto.Base64Coder: char[] encode(byte[])>($r1);
+
+        specialinvoke r10.<java.lang.String: void <init>(char[])>($r4);
+
+     label06:
+        return r10;
+
+     label07:
+        $r5 := @caughtexception;
+
+        r11 = (java.security.NoSuchAlgorithmException) $r5;
+
+        virtualinvoke r11.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+     label08:
+        varReplacer1219 = null;
+
+        return varReplacer1219;
+
+     label09:
+        $r6 := @caughtexception;
+
+        r12 = (javax.crypto.NoSuchPaddingException) $r6;
+
+        virtualinvoke r12.<javax.crypto.NoSuchPaddingException: void printStackTrace()>();
+
+        goto label08;
+
+     label10:
+        $r7 := @caughtexception;
+
+        r13 = (java.security.InvalidKeyException) $r7;
+
+        virtualinvoke r13.<java.security.InvalidKeyException: void printStackTrace()>();
+
+        goto label08;
+
+     label11:
+        $r8 := @caughtexception;
+
+        r14 = (javax.crypto.IllegalBlockSizeException) $r8;
+
+        virtualinvoke r14.<javax.crypto.IllegalBlockSizeException: void printStackTrace()>();
+
+        goto label08;
+
+     label12:
+        $r9 := @caughtexception;
+
+        r15 = (javax.crypto.BadPaddingException) $r9;
+
+        virtualinvoke r15.<javax.crypto.BadPaddingException: void printStackTrace()>();
+
+        goto label08;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label07;
+        catch java.security.NoSuchAlgorithmException from label03 to label04 with label07;
+        catch java.security.NoSuchAlgorithmException from label05 to label06 with label07;
+        catch javax.crypto.NoSuchPaddingException from label01 to label02 with label09;
+        catch javax.crypto.NoSuchPaddingException from label03 to label04 with label09;
+        catch javax.crypto.NoSuchPaddingException from label05 to label06 with label09;
+        catch java.security.InvalidKeyException from label01 to label02 with label10;
+        catch java.security.InvalidKeyException from label03 to label04 with label10;
+        catch java.security.InvalidKeyException from label05 to label06 with label10;
+        catch javax.crypto.IllegalBlockSizeException from label01 to label02 with label11;
+        catch javax.crypto.IllegalBlockSizeException from label03 to label04 with label11;
+        catch javax.crypto.IllegalBlockSizeException from label05 to label06 with label11;
+        catch javax.crypto.BadPaddingException from label01 to label02 with label12;
+        catch javax.crypto.BadPaddingException from label03 to label04 with label12;
+        catch javax.crypto.BadPaddingException from label05 to label06 with label12;
+    }
+
+    public void generateAesKey(android.content.Context)
+    {
+        com.n7mobile.crypto.Cryptographer $r0;
+        android.content.Context $r1;
+        java.lang.String $r2, $r4, varReplacer1196, varReplacer1197, varReplacer1199, varReplacer1201, varReplacer1202, varReplacer1203, varReplacer1204, varReplacer1205, varReplacer1207;
+        java.lang.Throwable $r3;
+        java.security.SecureRandom $r5;
+        byte[] $r6;
+        javax.crypto.KeyGenerator $r7;
+        javax.crypto.spec.SecretKeySpec $r8, r12;
+        javax.crypto.SecretKey $r9;
+        char[] $r10;
+        java.lang.StringBuilder $r11, r13;
+        int $i0, varReplacer1198, varReplacer1206;
+        java.security.NoSuchAlgorithmException r14;
+        null_type varReplacer1200;
+
+        nop;
+
+        $r0 := @this: com.n7mobile.crypto.Cryptographer;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 = specialinvoke $r0.<com.n7mobile.crypto.Cryptographer: java.lang.String getDeviceIdForObfuscation(android.content.Context)>($r1);
+
+        varReplacer1198 = 128;
+
+        $r4 = staticinvoke <com.n7mobile.crypto.Cryptographer: java.lang.String generateRandomCharacters(int)>(varReplacer1198);
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String concat(java.lang.String)>($r4);
+
+        varReplacer1200 = null;
+
+        $r0.<com.n7mobile.crypto.Cryptographer: javax.crypto.spec.SecretKeySpec mAesKey> = varReplacer1200;
+
+     label1:
+        varReplacer1207 = "SHA1PRNG";
+
+        $r5 = staticinvoke <java.security.SecureRandom: java.security.SecureRandom getInstance(java.lang.String)>(varReplacer1207);
+
+        $r6 = virtualinvoke $r2.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r5.<java.security.SecureRandom: void setSeed(byte[])>($r6);
+
+        varReplacer1199 = "AES";
+
+        $r7 = staticinvoke <javax.crypto.KeyGenerator: javax.crypto.KeyGenerator getInstance(java.lang.String)>(varReplacer1199);
+
+        varReplacer1206 = 128;
+
+        virtualinvoke $r7.<javax.crypto.KeyGenerator: void init(int,java.security.SecureRandom)>(varReplacer1206, $r5);
+
+     label2:
+        r12 = new javax.crypto.spec.SecretKeySpec;
+
+     label3:
+        $r9 = virtualinvoke $r7.<javax.crypto.KeyGenerator: javax.crypto.SecretKey generateKey()>();
+
+        $r6 = interfaceinvoke $r9.<javax.crypto.SecretKey: byte[] getEncoded()>();
+
+        varReplacer1197 = "AES";
+
+        specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer1197);
+
+     label4:
+        $r0.<com.n7mobile.crypto.Cryptographer: javax.crypto.spec.SecretKeySpec mAesKey> = r12;
+
+     label5:
+        $r4 = new java.lang.String;
+
+        $r8 = $r0.<com.n7mobile.crypto.Cryptographer: javax.crypto.spec.SecretKeySpec mAesKey>;
+
+        $r6 = virtualinvoke $r8.<javax.crypto.spec.SecretKeySpec: byte[] getEncoded()>();
+
+        $r10 = staticinvoke <com.n7mobile.crypto.Base64Coder: char[] encode(byte[])>($r6);
+
+        specialinvoke $r4.<java.lang.String: void <init>(char[])>($r10);
+
+        varReplacer1202 = "Cryptographer";
+
+        varReplacer1203 = "AES Key Info: ";
+
+        staticinvoke <com.n7mobile.cmg.common.Logz: void i(java.lang.String,java.lang.String)>(varReplacer1202, varReplacer1203);
+
+        r13 = new java.lang.StringBuilder;
+
+        specialinvoke r13.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1204 = "Key = ";
+
+        $r11 = virtualinvoke r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1204);
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r2 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer1201 = "Cryptographer";
+
+        staticinvoke <com.n7mobile.cmg.common.Logz: void i(java.lang.String,java.lang.String)>(varReplacer1201, $r2);
+
+        r13 = new java.lang.StringBuilder;
+
+        specialinvoke r13.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1205 = "Key size = ";
+
+        $r11 = virtualinvoke r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1205);
+
+        $r8 = $r0.<com.n7mobile.crypto.Cryptographer: javax.crypto.spec.SecretKeySpec mAesKey>;
+
+        $r6 = virtualinvoke $r8.<javax.crypto.spec.SecretKeySpec: byte[] getEncoded()>();
+
+        $i0 = lengthof $r6;
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r2 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer1196 = "Cryptographer";
+
+        staticinvoke <com.n7mobile.cmg.common.Logz: void i(java.lang.String,java.lang.String)>(varReplacer1196, $r2);
+
+        return;
+
+     label6:
+        $r3 := @caughtexception;
+
+        r14 = (java.security.NoSuchAlgorithmException) $r3;
+
+        virtualinvoke r14.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        goto label5;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label6;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label6;
+    }
+
+    public java.lang.String getRsaEncryptedAesKey()
+    {
+        com.n7mobile.crypto.Cryptographer $r0;
+        javax.crypto.spec.SecretKeySpec $r1;
+        byte[] $r2;
+        java.lang.String $r3;
+
+        nop;
+
+        $r0 := @this: com.n7mobile.crypto.Cryptographer;
+
+        $r1 = $r0.<com.n7mobile.crypto.Cryptographer: javax.crypto.spec.SecretKeySpec mAesKey>;
+
+        $r2 = virtualinvoke $r1.<javax.crypto.spec.SecretKeySpec: byte[] getEncoded()>();
+
+        $r3 = virtualinvoke $r0.<com.n7mobile.crypto.Cryptographer: java.lang.String encryptRsaBytes(byte[])>($r2);
+
+        return $r3;
+    }
+
+    public java.lang.String hashUsingSha1(byte[])
+    {
+        com.n7mobile.crypto.Cryptographer $r0;
+        byte[] $r1;
+        java.lang.Throwable $r2;
+        java.security.MessageDigest $r3, $r4;
+        java.lang.StringBuilder $r5, r8;
+        int $i0, varReplacer1545;
+        java.lang.String $r6, varReplacer1544, varReplacer1546, varReplacer1547;
+        java.lang.Object[] $r7;
+        java.math.BigInteger r9;
+        java.security.NoSuchAlgorithmException r10;
+
+        nop;
+
+        $r0 := @this: com.n7mobile.crypto.Cryptographer;
+
+        $r1 := @parameter0: byte[];
+
+        $r3 = null;
+
+     label1:
+        varReplacer1546 = "SHA-1";
+
+        $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1546);
+
+     label2:
+        $r3 = $r4;
+
+     label3:
+        virtualinvoke $r3.<java.security.MessageDigest: void reset()>();
+
+        $r1 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r1);
+
+        r8 = new java.lang.StringBuilder;
+
+        specialinvoke r8.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1544 = "%0";
+
+        $r5 = virtualinvoke r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1544);
+
+        $i0 = lengthof $r1;
+
+        $i0 = $i0 * 2;
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1547 = "X";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1547);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r7 = newarray (java.lang.Object)[1];
+
+        r9 = new java.math.BigInteger;
+
+        varReplacer1545 = 1;
+
+        specialinvoke r9.<java.math.BigInteger: void <init>(int,byte[])>(varReplacer1545, $r1);
+
+        $r7[0] = r9;
+
+        $r6 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>($r6, $r7);
+
+        return $r6;
+
+     label4:
+        $r2 := @caughtexception;
+
+        r10 = (java.security.NoSuchAlgorithmException) $r2;
+
+        virtualinvoke r10.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        goto label3;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label4;
+    }
+
+    public boolean isCertificateLoaded()
+    {
+        com.n7mobile.crypto.Cryptographer $r0;
+        java.security.PublicKey $r1;
+        int varReplacer1542, varReplacer1543;
+
+        nop;
+
+        $r0 := @this: com.n7mobile.crypto.Cryptographer;
+
+        $r1 = $r0.<com.n7mobile.crypto.Cryptographer: java.security.PublicKey mRsaPublicKey>;
+
+        if $r1 != null goto label1;
+
+        varReplacer1542 = 0;
+
+        return varReplacer1542;
+
+     label1:
+        varReplacer1543 = 1;
+
+        return varReplacer1543;
+    }
+
+    public void loadRsaPublicKey(android.content.Context)
+    {
+        com.n7mobile.crypto.Cryptographer $r0;
+        android.content.Context $r1;
+        byte[] $r2;
+        java.io.FileInputStream $r3, $r5, r17;
+        java.io.ByteArrayOutputStream $r4, r18;
+        java.io.File $r6, r16;
+        java.lang.String $r7;
+        int $i0, varReplacer1194, varReplacer1195;
+        java.lang.Throwable $r8, $r9, $r10, $r11, $r12, $r13, $r14, $r15;
+        boolean $z0;
+        java.io.IOException r19;
+
+        nop;
+
+        $r0 := @this: com.n7mobile.crypto.Cryptographer;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r5 = null;
+
+     label01:
+        r17 = new java.io.FileInputStream;
+
+     label02:
+        $r3 = r17;
+
+     label03:
+        r16 = new java.io.File;
+
+     label04:
+        $r6 = r16;
+
+     label05:
+        $r7 = staticinvoke <com.n7mobile.cmg.common.Config: java.lang.String getCertificateStorageUrl(android.content.Context)>($r1);
+
+        specialinvoke r16.<java.io.File: void <init>(java.lang.String)>($r7);
+
+        specialinvoke r17.<java.io.FileInputStream: void <init>(java.io.File)>($r6);
+
+     label06:
+        r18 = new java.io.ByteArrayOutputStream;
+
+     label07:
+        $r4 = r18;
+
+     label08:
+        specialinvoke r18.<java.io.ByteArrayOutputStream: void <init>()>();
+
+     label09:
+        $r2 = newarray (byte)[1024];
+
+     label10:
+        $i0 = virtualinvoke $r3.<java.io.FileInputStream: int read(byte[])>($r2);
+
+     label11:
+        if $i0 == -1 goto label23;
+
+     label12:
+        varReplacer1195 = 0;
+
+        virtualinvoke $r4.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r2, varReplacer1195, $i0);
+
+     label13:
+        goto label10;
+
+     label14:
+        $r8 := @caughtexception;
+
+        $r5 = $r3;
+
+     label15:
+        $z0 = $r0.<com.n7mobile.crypto.Cryptographer: boolean mShouldReconnect>;
+
+     label16:
+        if $z0 == 0 goto label20;
+
+     label17:
+        varReplacer1194 = 0;
+
+        $r0.<com.n7mobile.crypto.Cryptographer: boolean mShouldReconnect> = varReplacer1194;
+
+        $z0 = virtualinvoke $r0.<com.n7mobile.crypto.Cryptographer: boolean downloadCertificate(android.content.Context)>($r1);
+
+     label18:
+        if $z0 == 0 goto label20;
+
+     label19:
+        virtualinvoke $r0.<com.n7mobile.crypto.Cryptographer: void loadRsaPublicKey(android.content.Context)>($r1);
+
+     label20:
+        if $r5 == null goto label43;
+
+     label21:
+        virtualinvoke $r5.<java.io.FileInputStream: void close()>();
+
+     label22:
+        return;
+
+     label23:
+        $r2 = virtualinvoke $r4.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        specialinvoke $r0.<com.n7mobile.crypto.Cryptographer: boolean loadRsaKeyBytes(byte[])>($r2);
+
+     label24:
+        if $r3 == null goto label26;
+
+     label25:
+        virtualinvoke $r3.<java.io.FileInputStream: void close()>();
+
+     label26:
+        return;
+
+     label27:
+        $r9 := @caughtexception;
+
+        r19 = (java.io.IOException) $r9;
+
+        virtualinvoke r19.<java.io.IOException: void printStackTrace()>();
+
+        return;
+
+     label28:
+        $r10 := @caughtexception;
+
+        r19 = (java.io.IOException) $r10;
+
+        virtualinvoke r19.<java.io.IOException: void printStackTrace()>();
+
+        return;
+
+     label29:
+        $r11 := @caughtexception;
+
+     label30:
+        r19 = (java.io.IOException) $r11;
+
+        virtualinvoke r19.<java.io.IOException: void printStackTrace()>();
+
+     label31:
+        if $r5 == null goto label43;
+
+     label32:
+        virtualinvoke $r5.<java.io.FileInputStream: void close()>();
+
+     label33:
+        return;
+
+     label34:
+        $r12 := @caughtexception;
+
+        r19 = (java.io.IOException) $r12;
+
+        virtualinvoke r19.<java.io.IOException: void printStackTrace()>();
+
+        return;
+
+     label35:
+        $r13 := @caughtexception;
+
+     label36:
+        if $r5 == null goto label38;
+
+     label37:
+        virtualinvoke $r5.<java.io.FileInputStream: void close()>();
+
+     label38:
+        throw $r13;
+
+     label39:
+        $r14 := @caughtexception;
+
+        r19 = (java.io.IOException) $r14;
+
+        virtualinvoke r19.<java.io.IOException: void printStackTrace()>();
+
+        goto label38;
+
+     label40:
+        $r13 := @caughtexception;
+
+        $r5 = $r3;
+
+        goto label36;
+
+     label41:
+        $r11 := @caughtexception;
+
+        $r5 = $r3;
+
+        goto label30;
+
+     label42:
+        $r15 := @caughtexception;
+
+        goto label15;
+
+     label43:
+        return;
+
+        catch java.io.FileNotFoundException from label05 to label06 with label42;
+        catch java.io.IOException from label05 to label06 with label29;
+        catch java.lang.Throwable from label01 to label02 with label35;
+        catch java.lang.Throwable from label03 to label04 with label35;
+        catch java.lang.Throwable from label05 to label06 with label35;
+        catch java.io.FileNotFoundException from label08 to label09 with label14;
+        catch java.io.FileNotFoundException from label10 to label11 with label14;
+        catch java.io.FileNotFoundException from label12 to label13 with label14;
+        catch java.io.IOException from label08 to label09 with label41;
+        catch java.io.IOException from label10 to label11 with label41;
+        catch java.io.IOException from label12 to label13 with label41;
+        catch java.lang.Throwable from label06 to label07 with label40;
+        catch java.lang.Throwable from label08 to label11 with label40;
+        catch java.lang.Throwable from label12 to label13 with label40;
+        catch java.lang.Throwable from label15 to label16 with label35;
+        catch java.lang.Throwable from label17 to label18 with label35;
+        catch java.lang.Throwable from label19 to label20 with label35;
+        catch java.io.IOException from label21 to label22 with label28;
+        catch java.io.FileNotFoundException from label23 to label24 with label14;
+        catch java.io.IOException from label23 to label24 with label41;
+        catch java.lang.Throwable from label23 to label24 with label40;
+        catch java.io.IOException from label25 to label26 with label27;
+        catch java.lang.Throwable from label30 to label31 with label35;
+        catch java.io.IOException from label32 to label33 with label34;
+        catch java.io.IOException from label37 to label38 with label39;
+    }
+
+    public void loadRsaPublicKeyFromResource(int, android.content.Context)
+    {
+        com.n7mobile.crypto.Cryptographer $r0;
+        int $i0;
+        android.content.Context $r1;
+        byte[] $r2;
+        java.lang.Throwable $r3;
+        java.io.ByteArrayOutputStream $r4, r9;
+        android.content.res.Resources $r5;
+        java.io.InputStream $r6;
+        java.lang.StringBuilder $r7, r10;
+        java.lang.String $r8;
+        java.io.IOException r11;
+
+        $r0 := @this: com.n7mobile.crypto.Cryptographer;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: android.content.Context;
+
+        $r5 = virtualinvoke $r1.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r6 = virtualinvoke $r5.<android.content.res.Resources: java.io.InputStream openRawResource(int)>($i0);
+
+        $r2 = newarray (byte)[4000];
+
+        r9 = new java.io.ByteArrayOutputStream;
+
+        $r4 = r9;
+
+        specialinvoke r9.<java.io.ByteArrayOutputStream: void <init>()>();
+
+     label1:
+        $i0 = virtualinvoke $r6.<java.io.InputStream: int read(byte[])>($r2);
+
+     label2:
+        if $i0 == -1 goto label8;
+
+     label3:
+        virtualinvoke $r4.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r2, 0, $i0);
+
+     label4:
+        r10 = new java.lang.StringBuilder;
+
+        $r7 = r10;
+
+     label5:
+        specialinvoke r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("bytes read: ");
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.n7mobile.cmg.common.Logz: void i(java.lang.String,java.lang.String)>("Cryptographer", $r8);
+
+     label6:
+        goto label1;
+
+     label7:
+        $r3 := @caughtexception;
+
+        r11 = (java.io.IOException) $r3;
+
+        virtualinvoke r11.<java.io.IOException: void printStackTrace()>();
+
+        return;
+
+     label8:
+        $r2 = virtualinvoke $r4.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        specialinvoke $r0.<com.n7mobile.crypto.Cryptographer: boolean loadRsaKeyBytes(byte[])>($r2);
+
+     label9:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label7;
+        catch java.io.IOException from label3 to label4 with label7;
+        catch java.io.IOException from label5 to label6 with label7;
+        catch java.io.IOException from label8 to label9 with label7;
+    }
+}

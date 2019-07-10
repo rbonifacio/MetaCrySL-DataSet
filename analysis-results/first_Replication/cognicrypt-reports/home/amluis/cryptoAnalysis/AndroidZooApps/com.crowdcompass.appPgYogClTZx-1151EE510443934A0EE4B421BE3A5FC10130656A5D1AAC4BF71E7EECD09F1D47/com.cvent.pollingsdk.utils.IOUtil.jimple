@@ -1,0 +1,582 @@
+public class com.cvent.pollingsdk.utils.IOUtil extends java.lang.Object
+{
+    private static final java.lang.String TAG;
+
+    static void <clinit>()
+    {
+        java.lang.StringBuilder $r0;
+        java.lang.String $r1, varReplacer1055;
+
+        nop;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1055 = "CVT_Polling";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1055);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(class "Lcom/cvent/pollingsdk/utils/IOUtil;");
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <com.cvent.pollingsdk.utils.IOUtil: java.lang.String TAG> = $r1;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.cvent.pollingsdk.utils.IOUtil $r0;
+
+        $r0 := @this: com.cvent.pollingsdk.utils.IOUtil;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void copyAndCloseBinary(java.io.InputStream, java.io.OutputStream, int) throws java.io.IOException
+    {
+        java.io.InputStream $r0;
+        int $i0, varReplacer7837;
+        byte[] $r1;
+        java.io.BufferedOutputStream $r2;
+        java.io.OutputStream $r3;
+        java.lang.Throwable $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+        $r3 := @parameter1: java.io.OutputStream;
+
+        $i0 := @parameter2: int;
+
+     label01:
+        $r2 = new java.io.BufferedOutputStream;
+
+        specialinvoke $r2.<java.io.BufferedOutputStream: void <init>(java.io.OutputStream)>($r3);
+
+     label02:
+        $r1 = newarray (byte)[8192];
+
+     label03:
+        $i0 = virtualinvoke $r0.<java.io.InputStream: int read(byte[])>($r1);
+
+     label04:
+        if $i0 == -1 goto label09;
+
+     label05:
+        varReplacer7837 = 0;
+
+        virtualinvoke $r2.<java.io.OutputStream: void write(byte[],int,int)>($r1, varReplacer7837, $i0);
+
+     label06:
+        goto label03;
+
+     label07:
+        $r4 := @caughtexception;
+
+     label08:
+        virtualinvoke $r0.<java.io.InputStream: void close()>();
+
+        throw $r4;
+
+     label09:
+        virtualinvoke $r2.<java.io.OutputStream: void flush()>();
+
+     label10:
+        virtualinvoke $r0.<java.io.InputStream: void close()>();
+
+        return;
+
+     label11:
+        $r4 := @caughtexception;
+
+        goto label08;
+
+        catch java.lang.Throwable from label01 to label02 with label11;
+        catch java.lang.Throwable from label02 to label04 with label07;
+        catch java.lang.Throwable from label05 to label06 with label07;
+        catch java.lang.Throwable from label09 to label10 with label07;
+    }
+
+    public static void copyFile(java.io.File, java.io.File) throws java.io.IOException
+    {
+        java.io.File $r0, $r1;
+        byte[] $r2;
+        java.lang.Throwable $r3;
+        java.io.FileInputStream $r4;
+        java.io.FileOutputStream $r5;
+        boolean $z0;
+        int $i0, varReplacer1037;
+        java.lang.String $r6, $r8, varReplacer1036;
+        java.lang.StringBuilder $r7;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $r1 := @parameter1: java.io.File;
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        virtualinvoke $r1.<java.io.File: boolean createNewFile()>();
+
+     label2:
+        $r2 = newarray (byte)[8192];
+
+        $r4 = new java.io.FileInputStream;
+
+        specialinvoke $r4.<java.io.FileInputStream: void <init>(java.io.File)>($r0);
+
+        $r5 = new java.io.FileOutputStream;
+
+        specialinvoke $r5.<java.io.FileOutputStream: void <init>(java.io.File)>($r1);
+
+     label3:
+        $i0 = virtualinvoke $r4.<java.io.FileInputStream: int read(byte[])>($r2);
+
+        if -1 == $i0 goto label6;
+
+        varReplacer1037 = 0;
+
+        virtualinvoke $r5.<java.io.FileOutputStream: void write(byte[],int,int)>($r2, varReplacer1037, $i0);
+
+        goto label3;
+
+     label4:
+        $r3 := @caughtexception;
+
+        $z0 = <com.cvent.pollingsdk.utils.Logger: boolean E>;
+
+        if $z0 == 0 goto label5;
+
+        $r6 = <com.cvent.pollingsdk.utils.IOUtil: java.lang.String TAG>;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1036 = "unable to create backup file ";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1036);
+
+        $r8 = virtualinvoke $r1.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r6, $r8, $r3);
+
+     label5:
+        throw $r3;
+
+     label6:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label4;
+    }
+
+    public static java.lang.String readAndClose(java.io.InputStream) throws java.io.IOException
+    {
+        java.io.InputStream $r0;
+        java.lang.String $r1;
+        int varReplacer1160, varReplacer1161;
+
+        nop;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+        varReplacer1160 = 8192;
+
+        varReplacer1161 = -1;
+
+        $r1 = staticinvoke <com.cvent.pollingsdk.utils.IOUtil: java.lang.String readAndClose(java.io.InputStream,int,int)>($r0, varReplacer1160, varReplacer1161);
+
+        return $r1;
+    }
+
+    public static java.lang.String readAndClose(java.io.InputStream, int, int) throws java.io.IOException
+    {
+        java.io.InputStream $r0;
+        int $i0, $i1, varReplacer1209;
+        byte[] $r1;
+        java.io.ByteArrayOutputStream $r2;
+        java.lang.Throwable $r3;
+        java.lang.String $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r2 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r2.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        $r1 = newarray (byte)[8192];
+
+     label1:
+        $i0 = virtualinvoke $r0.<java.io.InputStream: int read(byte[])>($r1);
+
+     label2:
+        if $i0 == -1 goto label6;
+
+     label3:
+        varReplacer1209 = 0;
+
+        virtualinvoke $r2.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r1, varReplacer1209, $i0);
+
+     label4:
+        goto label1;
+
+     label5:
+        $r3 := @caughtexception;
+
+        virtualinvoke $r0.<java.io.InputStream: void close()>();
+
+        throw $r3;
+
+     label6:
+        virtualinvoke $r0.<java.io.InputStream: void close()>();
+
+        $r4 = new java.lang.String;
+
+        $r1 = virtualinvoke $r2.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        specialinvoke $r4.<java.lang.String: void <init>(byte[])>($r1);
+
+        return $r4;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+    }
+
+    public static byte[] readAndCloseBinary(java.io.InputStream, int) throws java.io.IOException
+    {
+        java.io.InputStream $r0;
+        int $i0, $i1, $i2, varReplacer3998, varReplacer4000, varReplacer4002;
+        byte[] $r1;
+        java.io.ByteArrayOutputStream $r2;
+        java.io.IOException $r3;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5, varReplacer3999, varReplacer4001;
+        java.lang.Throwable $r6;
+
+        nop;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+        $i0 := @parameter1: int;
+
+     label01:
+        $r2 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r2.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        $i1 = virtualinvoke $r0.<java.io.InputStream: int available()>();
+
+     label02:
+        if $i1 <= 128 goto label05;
+
+     label03:
+        $r3 = new java.io.IOException;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer4001 = "Size Exceeded:";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4001);
+
+        varReplacer3998 = 128;
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(varReplacer3998);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.io.IOException: void <init>(java.lang.String)>($r5);
+
+        throw $r3;
+
+     label04:
+        $r6 := @caughtexception;
+
+        virtualinvoke $r0.<java.io.InputStream: void close()>();
+
+        throw $r6;
+
+     label05:
+        $i1 = 0;
+
+     label06:
+        $r1 = newarray (byte)[8192];
+
+     label07:
+        $i2 = virtualinvoke $r0.<java.io.InputStream: int read(byte[])>($r1);
+
+     label08:
+        if $i2 == -1 goto label12;
+
+     label09:
+        varReplacer4000 = 0;
+
+        virtualinvoke $r2.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r1, varReplacer4000, $i2);
+
+     label10:
+        $i1 = $i1 + $i2;
+
+        if $i1 <= 128 goto label07;
+
+     label11:
+        $r3 = new java.io.IOException;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer3999 = "Size Exceeded:";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3999);
+
+        varReplacer4002 = 128;
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(varReplacer4002);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.io.IOException: void <init>(java.lang.String)>($r5);
+
+        throw $r3;
+
+     label12:
+        $r1 = virtualinvoke $r2.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+     label13:
+        virtualinvoke $r0.<java.io.InputStream: void close()>();
+
+        return $r1;
+
+        catch java.lang.Throwable from label01 to label02 with label04;
+        catch java.lang.Throwable from label03 to label04 with label04;
+        catch java.lang.Throwable from label06 to label08 with label04;
+        catch java.lang.Throwable from label09 to label10 with label04;
+        catch java.lang.Throwable from label11 to label13 with label04;
+    }
+
+    public static void store(java.io.File, byte[]) throws com.cvent.pollingsdk.exception.FailedToSave
+    {
+        java.io.File $r0;
+        byte[] $r1;
+        java.io.FileOutputStream $r2, $r3, r12;
+        java.lang.Throwable $r4, $r8, $r10, $r11;
+        boolean $z0;
+        java.lang.String $r5, $r7, varReplacer4003, varReplacer4004, varReplacer4005, varReplacer4006, varReplacer4007;
+        java.lang.StringBuilder $r6, r13;
+        com.cvent.pollingsdk.exception.FailedToSave $r9, r14;
+        java.io.IOException r15;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $r1 := @parameter1: byte[];
+
+        $r3 = null;
+
+     label01:
+        r12 = new java.io.FileOutputStream;
+
+     label02:
+        $r2 = r12;
+
+     label03:
+        specialinvoke r12.<java.io.FileOutputStream: void <init>(java.io.File)>($r0);
+
+     label04:
+        virtualinvoke $r2.<java.io.FileOutputStream: void write(byte[])>($r1);
+
+        virtualinvoke $r2.<java.io.FileOutputStream: void close()>();
+
+     label05:
+        if $r2 == null goto label27;
+
+     label06:
+        virtualinvoke $r2.<java.io.FileOutputStream: void close()>();
+
+     label07:
+        return;
+
+     label08:
+        $r4 := @caughtexception;
+
+        $z0 = <com.cvent.pollingsdk.utils.Logger: boolean E>;
+
+        if $z0 == 0 goto label27;
+
+        $r5 = <com.cvent.pollingsdk.utils.IOUtil: java.lang.String TAG>;
+
+        r13 = new java.lang.StringBuilder;
+
+        specialinvoke r13.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer4003 = "Failed to close FileOutputStream for file:";
+
+        $r6 = virtualinvoke r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4003);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r5, $r7, $r4);
+
+        return;
+
+     label09:
+        $r8 := @caughtexception;
+
+     label10:
+        $z0 = <com.cvent.pollingsdk.utils.Logger: boolean E>;
+
+     label11:
+        if $z0 == 0 goto label15;
+
+     label12:
+        $r5 = <com.cvent.pollingsdk.utils.IOUtil: java.lang.String TAG>;
+
+        r13 = new java.lang.StringBuilder;
+
+     label13:
+        $r6 = r13;
+
+     label14:
+        specialinvoke r13.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer4005 = "Failed to write to file:";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4005);
+
+        $r7 = virtualinvoke $r0.<java.io.File: java.lang.String getName()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r5, $r7, $r8);
+
+     label15:
+        r14 = new com.cvent.pollingsdk.exception.FailedToSave;
+
+     label16:
+        $r9 = r14;
+
+     label17:
+        r13 = new java.lang.StringBuilder;
+
+     label18:
+        $r6 = r13;
+
+     label19:
+        specialinvoke r13.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer4007 = "Failed to save into file ";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4007);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        varReplacer4004 = ". Error: ";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4004);
+
+        r15 = (java.io.IOException) $r8;
+
+        $r5 = virtualinvoke r15.<java.io.IOException: java.lang.String getMessage()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r14.<com.cvent.pollingsdk.exception.FailedToSave: void <init>(java.lang.String)>($r5);
+
+        throw $r9;
+
+     label20:
+        $r10 := @caughtexception;
+
+     label21:
+        if $r3 == null goto label23;
+
+     label22:
+        virtualinvoke $r3.<java.io.FileOutputStream: void close()>();
+
+     label23:
+        throw $r10;
+
+     label24:
+        $r11 := @caughtexception;
+
+        $z0 = <com.cvent.pollingsdk.utils.Logger: boolean E>;
+
+        if $z0 == 0 goto label23;
+
+        $r5 = <com.cvent.pollingsdk.utils.IOUtil: java.lang.String TAG>;
+
+        r13 = new java.lang.StringBuilder;
+
+        specialinvoke r13.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer4006 = "Failed to close FileOutputStream for file:";
+
+        $r6 = virtualinvoke r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4006);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r5, $r7, $r11);
+
+        goto label23;
+
+     label25:
+        $r10 := @caughtexception;
+
+        $r3 = $r2;
+
+        goto label21;
+
+     label26:
+        $r8 := @caughtexception;
+
+        $r3 = $r2;
+
+        goto label10;
+
+     label27:
+        return;
+
+        catch java.io.IOException from label03 to label04 with label09;
+        catch java.lang.Throwable from label01 to label02 with label20;
+        catch java.lang.Throwable from label03 to label04 with label20;
+        catch java.io.IOException from label04 to label05 with label26;
+        catch java.lang.Throwable from label04 to label05 with label25;
+        catch java.io.IOException from label06 to label07 with label08;
+        catch java.lang.Throwable from label10 to label11 with label20;
+        catch java.lang.Throwable from label12 to label13 with label20;
+        catch java.lang.Throwable from label14 to label16 with label20;
+        catch java.lang.Throwable from label17 to label18 with label20;
+        catch java.lang.Throwable from label19 to label20 with label20;
+        catch java.io.IOException from label22 to label23 with label24;
+    }
+}

@@ -1,0 +1,449 @@
+public class com.umeng.socialize.net.utils.AesHelper extends java.lang.Object
+{
+    private static final java.lang.String UTF_8;
+    private static byte[] iv;
+    private static byte[] pwd;
+
+    static void <clinit>()
+    {
+        byte[] $r0;
+        java.lang.String $r1;
+        null_type varReplacer1028;
+
+        nop;
+
+        varReplacer1028 = null;
+
+        <com.umeng.socialize.net.utils.AesHelper: byte[] pwd> = varReplacer1028;
+
+        $r1 = "nmeug.f9/Om+L823";
+
+        $r0 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        <com.umeng.socialize.net.utils.AesHelper: byte[] iv> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.umeng.socialize.net.utils.AesHelper $r0;
+
+        $r0 := @this: com.umeng.socialize.net.utils.AesHelper;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String decryptNoPadding(java.lang.String, java.lang.String) throws java.lang.Exception
+    {
+        java.lang.String $r0, $r1, varReplacer1029, varReplacer1031, varReplacer1032;
+        javax.crypto.Cipher $r2;
+        javax.crypto.spec.SecretKeySpec $r3;
+        byte[] $r4;
+        javax.crypto.spec.IvParameterSpec $r5;
+        int varReplacer1030;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        varReplacer1029 = "AES/CBC/NoPadding";
+
+        $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1029);
+
+        $r3 = new javax.crypto.spec.SecretKeySpec;
+
+        $r4 = <com.umeng.socialize.net.utils.AesHelper: byte[] pwd>;
+
+        varReplacer1032 = "AES";
+
+        specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1032);
+
+        $r5 = new javax.crypto.spec.IvParameterSpec;
+
+        $r4 = <com.umeng.socialize.net.utils.AesHelper: byte[] iv>;
+
+        specialinvoke $r5.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4);
+
+        varReplacer1030 = 2;
+
+        virtualinvoke $r2.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1030, $r3, $r5);
+
+        $r4 = staticinvoke <com.umeng.socialize.net.utils.Base64: byte[] decodeBase64(java.lang.String)>($r0);
+
+        $r4 = virtualinvoke $r2.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r4);
+
+        $r0 = new java.lang.String;
+
+        varReplacer1031 = "UTF-8";
+
+        specialinvoke $r0.<java.lang.String: void <init>(byte[],java.lang.String)>($r4, varReplacer1031);
+
+        return $r0;
+    }
+
+    public static java.lang.String encryptNoPadding(java.lang.String, java.lang.String) throws java.lang.Exception
+    {
+        java.lang.String $r0, $r1, varReplacer1137, varReplacer1139, varReplacer1140;
+        javax.crypto.Cipher $r2;
+        int $i0, $i1, $i2, varReplacer1135, varReplacer1136, varReplacer1138;
+        byte[] $r3, $r4;
+        javax.crypto.spec.SecretKeySpec $r5;
+        javax.crypto.spec.IvParameterSpec $r6;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        varReplacer1139 = "AES/CBC/NoPadding";
+
+        $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1139);
+
+        $i0 = virtualinvoke $r2.<javax.crypto.Cipher: int getBlockSize()>();
+
+        varReplacer1140 = "UTF-8";
+
+        $r3 = virtualinvoke $r0.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer1140);
+
+        $i1 = lengthof $r3;
+
+        $i2 = $i1 % $i0;
+
+        if $i2 == 0 goto label1;
+
+        $i2 = $i1 % $i0;
+
+        $i0 = $i0 - $i2;
+
+        $i1 = $i1 + $i0;
+
+     label1:
+        $r4 = newarray (byte)[$i1];
+
+        $i1 = lengthof $r3;
+
+        varReplacer1135 = 0;
+
+        varReplacer1136 = 0;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r3, varReplacer1135, $r4, varReplacer1135, $i1);
+
+        $r5 = new javax.crypto.spec.SecretKeySpec;
+
+        $r3 = <com.umeng.socialize.net.utils.AesHelper: byte[] pwd>;
+
+        varReplacer1137 = "AES";
+
+        specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer1137);
+
+        $r6 = new javax.crypto.spec.IvParameterSpec;
+
+        $r3 = <com.umeng.socialize.net.utils.AesHelper: byte[] iv>;
+
+        specialinvoke $r6.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r3);
+
+        varReplacer1138 = 1;
+
+        virtualinvoke $r2.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1138, $r5, $r6);
+
+        $r4 = virtualinvoke $r2.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r4);
+
+        $r0 = staticinvoke <com.umeng.socialize.net.utils.Base64: java.lang.String encodeBase64String(byte[])>($r4);
+
+        return $r0;
+    }
+
+    public static byte[] getBytesUnchecked(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, varReplacer1035, varReplacer1036;
+        byte[] $r2;
+        java.lang.Throwable $r3;
+        java.lang.IllegalStateException $r4;
+        java.io.UnsupportedEncodingException r5;
+        null_type varReplacer1037;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        if $r0 != null goto label1;
+
+        varReplacer1037 = null;
+
+        return varReplacer1037;
+
+     label1:
+        varReplacer1036 = "UTF-8";
+
+        $r2 = virtualinvoke $r0.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer1036);
+
+     label2:
+        return $r2;
+
+     label3:
+        $r3 := @caughtexception;
+
+        r5 = (java.io.UnsupportedEncodingException) $r3;
+
+        varReplacer1035 = "UTF-8";
+
+        $r4 = staticinvoke <com.umeng.socialize.net.utils.AesHelper: java.lang.IllegalStateException newIllegalStateException(java.lang.String,java.io.UnsupportedEncodingException)>(varReplacer1035, r5);
+
+        throw $r4;
+
+        catch java.io.UnsupportedEncodingException from label1 to label2 with label3;
+    }
+
+    public static byte[] getBytesUtf8(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer1034;
+        byte[] $r1;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        varReplacer1034 = "UTF-8";
+
+        $r1 = staticinvoke <com.umeng.socialize.net.utils.AesHelper: byte[] getBytesUnchecked(java.lang.String,java.lang.String)>($r0, varReplacer1034);
+
+        return $r1;
+    }
+
+    public static java.lang.String md5(java.lang.String)
+    {
+        java.lang.String $r0, $r6, varReplacer1217, varReplacer1218, varReplacer1219, varReplacer1220;
+        int $i0, $i1;
+        byte[] $r1;
+        java.security.MessageDigest $r2;
+        java.lang.StringBuffer $r3;
+        java.lang.Object[] $r4;
+        byte $b2;
+        java.lang.Byte $r5;
+        java.lang.Exception $r7;
+        null_type varReplacer1221;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 = 0;
+
+        if $r0 != null goto label01;
+
+        varReplacer1221 = null;
+
+        return varReplacer1221;
+
+     label01:
+        $r1 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        varReplacer1220 = "MD5";
+
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1220);
+
+        virtualinvoke $r2.<java.security.MessageDigest: void reset()>();
+
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte[])>($r1);
+
+        $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>();
+
+     label02:
+        $r3 = new java.lang.StringBuffer;
+
+     label03:
+        specialinvoke $r3.<java.lang.StringBuffer: void <init>()>();
+
+     label04:
+        $i1 = lengthof $r1;
+
+     label05:
+        if $i0 >= $i1 goto label08;
+
+     label06:
+        $r4 = newarray (java.lang.Object)[1];
+
+        $b2 = $r1[$i0];
+
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b2);
+
+        $r4[0] = $r5;
+
+        varReplacer1217 = "%02X";
+
+        $r6 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer1217, $r4);
+
+        virtualinvoke $r3.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>($r6);
+
+     label07:
+        $i0 = $i0 + 1;
+
+        goto label04;
+
+     label08:
+        $r6 = virtualinvoke $r3.<java.lang.StringBuffer: java.lang.String toString()>();
+
+     label09:
+        return $r6;
+
+     label10:
+        $r7 := @caughtexception;
+
+        varReplacer1218 = "[^[a-z][A-Z][0-9][.][_]]";
+
+        varReplacer1219 = "";
+
+        $r0 = virtualinvoke $r0.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>(varReplacer1218, varReplacer1219);
+
+        return $r0;
+
+        catch java.lang.Exception from label01 to label02 with label10;
+        catch java.lang.Exception from label03 to label05 with label10;
+        catch java.lang.Exception from label06 to label07 with label10;
+        catch java.lang.Exception from label08 to label09 with label10;
+    }
+
+    private static java.lang.IllegalStateException newIllegalStateException(java.lang.String, java.io.UnsupportedEncodingException)
+    {
+        java.lang.String $r0, varReplacer1038, varReplacer1039;
+        java.io.UnsupportedEncodingException $r1;
+        java.lang.IllegalStateException $r2;
+        java.lang.StringBuilder $r3;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.io.UnsupportedEncodingException;
+
+        $r2 = new java.lang.IllegalStateException;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1038 = "UTF-8";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1038);
+
+        varReplacer1039 = ": ";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1039);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r0 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r0);
+
+        return $r2;
+    }
+
+    public static java.lang.String newString(byte[], java.lang.String)
+    {
+        byte[] $r0;
+        java.lang.String $r1, r4, varReplacer1076, varReplacer1077;
+        java.lang.IllegalStateException $r2;
+        java.lang.Throwable $r3;
+        java.io.UnsupportedEncodingException r5;
+        null_type varReplacer1078;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: java.lang.String;
+
+        if $r0 != null goto label1;
+
+        varReplacer1078 = null;
+
+        return varReplacer1078;
+
+     label1:
+        r4 = new java.lang.String;
+
+     label2:
+        varReplacer1076 = "UTF-8";
+
+        specialinvoke r4.<java.lang.String: void <init>(byte[],java.lang.String)>($r0, varReplacer1076);
+
+     label3:
+        return r4;
+
+     label4:
+        $r3 := @caughtexception;
+
+        r5 = (java.io.UnsupportedEncodingException) $r3;
+
+        varReplacer1077 = "UTF-8";
+
+        $r2 = staticinvoke <com.umeng.socialize.net.utils.AesHelper: java.lang.IllegalStateException newIllegalStateException(java.lang.String,java.io.UnsupportedEncodingException)>(varReplacer1077, r5);
+
+        throw $r2;
+
+        catch java.io.UnsupportedEncodingException from label2 to label3 with label4;
+    }
+
+    public static java.lang.String newStringUtf8(byte[])
+    {
+        byte[] $r0;
+        java.lang.String $r1, varReplacer1075;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        varReplacer1075 = "UTF-8";
+
+        $r1 = staticinvoke <com.umeng.socialize.net.utils.AesHelper: java.lang.String newString(byte[],java.lang.String)>($r0, varReplacer1075);
+
+        return $r1;
+    }
+
+    public static void setPassword(java.lang.String)
+    {
+        java.lang.String $r0, $r1;
+        boolean $z0;
+        int $i0, varReplacer1321, varReplacer1322;
+        byte[] $r2;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r0);
+
+        if $z0 != 0 goto label2;
+
+        $r0 = staticinvoke <com.umeng.socialize.net.utils.AesHelper: java.lang.String md5(java.lang.String)>($r0);
+
+        $r1 = $r0;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i0 < 16 goto label1;
+
+        varReplacer1321 = 0;
+
+        varReplacer1322 = 16;
+
+        $r1 = virtualinvoke $r0.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1321, varReplacer1322);
+
+     label1:
+        $r2 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        <com.umeng.socialize.net.utils.AesHelper: byte[] pwd> = $r2;
+
+     label2:
+        return;
+    }
+}

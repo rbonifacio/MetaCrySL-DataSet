@@ -1,0 +1,453 @@
+class com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer extends java.lang.Object
+{
+    private static final java.lang.String TAG;
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+        java.lang.Class $r1;
+
+        nop;
+
+        $r1 = class "Lcom/threatmetrix/TrustDefenderMobile/ApplicationInfoGatherer;";
+
+        $r0 = virtualinvoke $r1.<java.lang.Class: java.lang.String getSimpleName()>();
+
+        <com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer: java.lang.String TAG> = $r0;
+
+        return;
+    }
+
+    void <init>()
+    {
+        com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer $r0;
+
+        $r0 := @this: com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static void checkInstalledPackages(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.content.pm.PackageManager $r1;
+        java.util.List $r2;
+        java.util.Iterator $r3;
+        boolean $z0;
+        java.lang.Object $r4;
+        android.content.pm.ApplicationInfo $r5;
+        java.lang.String $r6;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        if $r1 == null goto label2;
+
+        $r2 = virtualinvoke $r1.<android.content.pm.PackageManager: java.util.List getInstalledApplications(int)>(0);
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (android.content.pm.ApplicationInfo) $r4;
+
+        $r6 = $r5.<android.content.pm.ApplicationInfo: java.lang.String sourceDir>;
+
+        staticinvoke <com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer: java.lang.String getHashForPackage(java.lang.String)>($r6);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private static void checkRunningPackages(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.content.pm.ApplicationInfo $r1;
+        java.lang.Throwable $r2, $r13;
+        java.lang.Object $r3;
+        android.app.ActivityManager $r4;
+        java.util.List $r5;
+        android.content.pm.PackageManager $r6;
+        java.util.Iterator $r7;
+        boolean $z0;
+        android.app.ActivityManager$RunningTaskInfo $r8;
+        android.content.ComponentName $r9;
+        java.lang.String $r10;
+        java.lang.StringBuilder $r11;
+        int $i0;
+        android.content.pm.PackageInfo $r12;
+
+        $r0 := @parameter0: android.content.Context;
+
+     label01:
+        $r3 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("activity");
+
+     label02:
+        $r4 = (android.app.ActivityManager) $r3;
+
+     label03:
+        $r5 = virtualinvoke $r4.<android.app.ActivityManager: java.util.List getRunningTasks(int)>(2147483647);
+
+        $r6 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r7 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label04:
+        $z0 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+     label05:
+        if $z0 == 0 goto label23;
+
+     label06:
+        $r3 = interfaceinvoke $r7.<java.util.Iterator: java.lang.Object next()>();
+
+     label07:
+        $r8 = (android.app.ActivityManager$RunningTaskInfo) $r3;
+
+        $r9 = $r8.<android.app.ActivityManager$RunningTaskInfo: android.content.ComponentName baseActivity>;
+
+        if $r9 == null goto label21;
+
+        $r9 = $r8.<android.app.ActivityManager$RunningTaskInfo: android.content.ComponentName baseActivity>;
+
+     label08:
+        $r10 = virtualinvoke $r9.<android.content.ComponentName: java.lang.String toShortString()>();
+
+     label09:
+        $r11 = new java.lang.StringBuilder;
+
+     label10:
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>(java.lang.String)>("Application executed : ");
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\t\t ID: ");
+
+     label11:
+        $i0 = $r8.<android.app.ActivityManager$RunningTaskInfo: int id>;
+
+     label12:
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+     label13:
+        $r9 = $r8.<android.app.ActivityManager$RunningTaskInfo: android.content.ComponentName baseActivity>;
+
+     label14:
+        $r10 = virtualinvoke $r9.<android.content.ComponentName: java.lang.String getPackageName()>();
+
+     label15:
+        if $r6 == null goto label04;
+
+     label16:
+        $r12 = virtualinvoke $r6.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>($r10, 0);
+
+     label17:
+        $r1 = $r12.<android.content.pm.PackageInfo: android.content.pm.ApplicationInfo applicationInfo>;
+
+        if $r1 == null goto label04;
+
+        $r10 = $r1.<android.content.pm.ApplicationInfo: java.lang.String sourceDir>;
+
+     label18:
+        staticinvoke <com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer: java.lang.String getHashForPackage(java.lang.String)>($r10);
+
+     label19:
+        goto label04;
+
+     label20:
+        $r13 := @caughtexception;
+
+        $r10 = <com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer: java.lang.String TAG>;
+
+        goto label04;
+
+     label21:
+        $r10 = "none";
+
+        goto label09;
+
+     label22:
+        $r2 := @caughtexception;
+
+        $r10 = <com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer: java.lang.String TAG>;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r10, "No perms: ", $r2);
+
+     label23:
+        return;
+
+        catch java.lang.SecurityException from label01 to label02 with label22;
+        catch java.lang.SecurityException from label03 to label05 with label22;
+        catch java.lang.SecurityException from label06 to label07 with label22;
+        catch java.lang.SecurityException from label08 to label09 with label22;
+        catch java.lang.SecurityException from label10 to label11 with label22;
+        catch java.lang.SecurityException from label12 to label13 with label22;
+        catch java.lang.SecurityException from label14 to label15 with label22;
+        catch android.content.pm.PackageManager$NameNotFoundException from label16 to label17 with label20;
+        catch android.content.pm.PackageManager$NameNotFoundException from label18 to label19 with label20;
+        catch java.lang.SecurityException from label16 to label17 with label22;
+        catch java.lang.SecurityException from label18 to label19 with label22;
+    }
+
+    static java.lang.String checkThisPackage(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, $r3, varReplacer5887;
+        android.content.pm.ApplicationInfo $r2;
+        java.lang.StringBuilder $r4;
+        null_type varReplacer5886;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.pm.ApplicationInfo getApplicationInfo()>();
+
+        if $r2 == null goto label1;
+
+        $r1 = $r2.<android.content.pm.ApplicationInfo: java.lang.String sourceDir>;
+
+        $r3 = <com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer: java.lang.String TAG>;
+
+        $r4 = new java.lang.StringBuilder;
+
+        varReplacer5887 = "sourceDir: ";
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer5887);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = staticinvoke <com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer: java.lang.String getHashForPackage(java.lang.String)>($r1);
+
+        return $r1;
+
+     label1:
+        varReplacer5886 = null;
+
+        return varReplacer5886;
+    }
+
+    private static java.lang.String getHashForPackage(java.lang.String)
+    {
+        java.lang.String $r0, $r5, varReplacer5971, varReplacer5973, varReplacer5977, varReplacer5978, varReplacer5979, varReplacer5981, varReplacer5982, varReplacer5983, varReplacer5984;
+        java.math.BigInteger $r1;
+        byte[] $r2;
+        java.io.FileInputStream $r3;
+        com.threatmetrix.TrustDefenderMobile.NativeGatherer $r4;
+        boolean $z0;
+        java.security.MessageDigest $r6;
+        int $i0, varReplacer5972, varReplacer5974, varReplacer5975, varReplacer5976, varReplacer5980;
+        java.lang.Throwable $r7, $r9, $r10, $r12, $r13, $r14, $r15;
+        java.lang.StringBuilder $r8;
+        java.lang.Object[] $r11;
+        null_type varReplacer5985, varReplacer5986;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r4 = <com.threatmetrix.TrustDefenderMobile.NativeGatherer: com.threatmetrix.TrustDefenderMobile.NativeGatherer INSTANCE>;
+
+        $z0 = virtualinvoke $r4.<com.threatmetrix.TrustDefenderMobile.NativeGatherer: boolean isAvailable()>();
+
+        if $z0 == 0 goto label01;
+
+        $r4 = <com.threatmetrix.TrustDefenderMobile.NativeGatherer: com.threatmetrix.TrustDefenderMobile.NativeGatherer INSTANCE>;
+
+        $r0 = virtualinvoke $r4.<com.threatmetrix.TrustDefenderMobile.NativeGatherer: java.lang.String hashFile(java.lang.String)>($r0);
+
+        return $r0;
+
+     label01:
+        $r5 = <com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer: java.lang.String TAG>;
+
+     label02:
+        varReplacer5971 = "MD5";
+
+        $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5971);
+
+     label03:
+        $r3 = new java.io.FileInputStream;
+
+     label04:
+        specialinvoke $r3.<java.io.FileInputStream: void <init>(java.lang.String)>($r0);
+
+     label05:
+        $r0 = null;
+
+        $r2 = newarray (byte)[8192];
+
+     label06:
+        $i0 = virtualinvoke $r3.<java.io.InputStream: int read(byte[])>($r2);
+
+     label07:
+        if $i0 <= 0 goto label16;
+
+     label08:
+        varReplacer5972 = 0;
+
+        virtualinvoke $r6.<java.security.MessageDigest: void update(byte[],int,int)>($r2, varReplacer5972, $i0);
+
+     label09:
+        goto label06;
+
+     label10:
+        $r7 := @caughtexception;
+
+     label11:
+        $r5 = <com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer: java.lang.String TAG>;
+
+        varReplacer5984 = "Unable to process file for MD5";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r5, varReplacer5984, $r7);
+
+     label12:
+        virtualinvoke $r3.<java.io.InputStream: void close()>();
+
+     label13:
+        $r5 = <com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer: java.lang.String TAG>;
+
+        $r8 = new java.lang.StringBuilder;
+
+        varReplacer5982 = "Got : ";
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer5982);
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        return $r0;
+
+     label14:
+        $r9 := @caughtexception;
+
+        $r0 = <com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer: java.lang.String TAG>;
+
+        varReplacer5977 = "Exception while getting digest";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r0, varReplacer5977, $r9);
+
+        varReplacer5985 = null;
+
+        return varReplacer5985;
+
+     label15:
+        $r10 := @caughtexception;
+
+        $r0 = <com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer: java.lang.String TAG>;
+
+        varReplacer5978 = "Exception while getting FileInputStream";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r0, varReplacer5978, $r10);
+
+        varReplacer5986 = null;
+
+        return varReplacer5986;
+
+     label16:
+        $r2 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>();
+
+     label17:
+        $r1 = new java.math.BigInteger;
+
+     label18:
+        varReplacer5976 = 1;
+
+        specialinvoke $r1.<java.math.BigInteger: void <init>(int,byte[])>(varReplacer5976, $r2);
+
+        varReplacer5980 = 16;
+
+        $r5 = virtualinvoke $r1.<java.math.BigInteger: java.lang.String toString(int)>(varReplacer5980);
+
+     label19:
+        $r11 = newarray (java.lang.Object)[1];
+
+        $r11[0] = $r5;
+
+     label20:
+        varReplacer5979 = "%32s";
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer5979, $r11);
+
+        varReplacer5974 = 32;
+
+        varReplacer5975 = 48;
+
+        $r5 = virtualinvoke $r5.<java.lang.String: java.lang.String replace(char,char)>(varReplacer5974, varReplacer5975);
+
+     label21:
+        $r0 = $r5;
+
+     label22:
+        virtualinvoke $r3.<java.io.InputStream: void close()>();
+
+     label23:
+        goto label13;
+
+     label24:
+        $r12 := @caughtexception;
+
+        $r5 = <com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer: java.lang.String TAG>;
+
+        varReplacer5973 = "Exception on closing MD5 input stream";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r5, varReplacer5973, $r12);
+
+        goto label13;
+
+     label25:
+        $r13 := @caughtexception;
+
+        $r5 = <com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer: java.lang.String TAG>;
+
+        varReplacer5981 = "Exception on closing MD5 input stream";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r5, varReplacer5981, $r13);
+
+        goto label13;
+
+     label26:
+        $r14 := @caughtexception;
+
+     label27:
+        virtualinvoke $r3.<java.io.InputStream: void close()>();
+
+     label28:
+        throw $r14;
+
+     label29:
+        $r15 := @caughtexception;
+
+        $r0 = <com.threatmetrix.TrustDefenderMobile.ApplicationInfoGatherer: java.lang.String TAG>;
+
+        varReplacer5983 = "Exception on closing MD5 input stream";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r0, varReplacer5983, $r15);
+
+        goto label28;
+
+        catch java.security.NoSuchAlgorithmException from label02 to label03 with label14;
+        catch java.io.FileNotFoundException from label04 to label05 with label15;
+        catch java.io.IOException from label06 to label07 with label10;
+        catch java.io.IOException from label08 to label09 with label10;
+        catch java.lang.Throwable from label06 to label07 with label26;
+        catch java.lang.Throwable from label08 to label09 with label26;
+        catch java.lang.Throwable from label11 to label12 with label26;
+        catch java.io.IOException from label12 to label13 with label25;
+        catch java.io.IOException from label16 to label17 with label10;
+        catch java.io.IOException from label18 to label19 with label10;
+        catch java.io.IOException from label20 to label21 with label10;
+        catch java.lang.Throwable from label16 to label21 with label26;
+        catch java.io.IOException from label22 to label23 with label24;
+        catch java.io.IOException from label27 to label28 with label29;
+    }
+}

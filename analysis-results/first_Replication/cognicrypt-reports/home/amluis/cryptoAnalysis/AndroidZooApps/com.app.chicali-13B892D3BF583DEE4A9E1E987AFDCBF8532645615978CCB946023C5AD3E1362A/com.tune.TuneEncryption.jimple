@@ -1,0 +1,271 @@
+public class com.tune.TuneEncryption extends java.lang.Object
+{
+    private javax.crypto.Cipher cipher;
+    private javax.crypto.spec.IvParameterSpec ivspec;
+    private javax.crypto.spec.SecretKeySpec keyspec;
+
+    public void <init>(java.lang.String, java.lang.String)
+    {
+        com.tune.TuneEncryption $r0;
+        java.lang.String $r1, $r2, varReplacer2460, varReplacer2461;
+        byte[] $r3;
+        javax.crypto.Cipher $r4;
+        java.lang.Throwable $r5, $r6;
+        javax.crypto.spec.IvParameterSpec r7;
+        javax.crypto.spec.SecretKeySpec r8;
+        java.security.NoSuchAlgorithmException r9;
+        javax.crypto.NoSuchPaddingException r10;
+
+        nop;
+
+        $r0 := @this: com.tune.TuneEncryption;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        r7 = new javax.crypto.spec.IvParameterSpec;
+
+        $r3 = virtualinvoke $r2.<java.lang.String: byte[] getBytes()>();
+
+        specialinvoke r7.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r3);
+
+        $r0.<com.tune.TuneEncryption: javax.crypto.spec.IvParameterSpec ivspec> = r7;
+
+        r8 = new javax.crypto.spec.SecretKeySpec;
+
+        $r3 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        varReplacer2461 = "AES";
+
+        specialinvoke r8.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer2461);
+
+        $r0.<com.tune.TuneEncryption: javax.crypto.spec.SecretKeySpec keyspec> = r8;
+
+     label1:
+        varReplacer2460 = "AES/CBC/NoPadding";
+
+        $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2460);
+
+     label2:
+        $r0.<com.tune.TuneEncryption: javax.crypto.Cipher cipher> = $r4;
+
+        return;
+
+     label3:
+        $r5 := @caughtexception;
+
+        r9 = (java.security.NoSuchAlgorithmException) $r5;
+
+        virtualinvoke r9.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        return;
+
+     label4:
+        $r6 := @caughtexception;
+
+        r10 = (javax.crypto.NoSuchPaddingException) $r6;
+
+        virtualinvoke r10.<javax.crypto.NoSuchPaddingException: void printStackTrace()>();
+
+        return;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+        catch javax.crypto.NoSuchPaddingException from label1 to label2 with label4;
+    }
+
+    private static java.lang.String padString(java.lang.String)
+    {
+        int $i0, $i1, varReplacer10979;
+        java.lang.String $r0;
+        java.lang.StringBuilder $r1;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        $i0 = $i0 % 16;
+
+        $i0 = 16 - $i0;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label2;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        varReplacer10979 = 32;
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(varReplacer10979);
+
+        $r0 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        return $r0;
+    }
+
+    public byte[] decrypt(java.lang.String) throws java.lang.Exception
+    {
+        com.tune.TuneEncryption $r0;
+        java.lang.String $r1;
+        java.lang.Exception $r2, $r7;
+        javax.crypto.spec.IvParameterSpec $r3;
+        int $i0;
+        javax.crypto.Cipher $r4;
+        javax.crypto.spec.SecretKeySpec $r5;
+        byte[] $r6;
+        java.lang.StringBuilder $r8;
+
+        $r0 := @this: com.tune.TuneEncryption;
+
+        $r1 := @parameter0: java.lang.String;
+
+        if $r1 == null goto label1;
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int length()>();
+
+        if $i0 != 0 goto label2;
+
+     label1:
+        $r2 = new java.lang.Exception;
+
+        specialinvoke $r2.<java.lang.Exception: void <init>(java.lang.String)>("Empty string");
+
+        throw $r2;
+
+     label2:
+        $r4 = $r0.<com.tune.TuneEncryption: javax.crypto.Cipher cipher>;
+
+        $r5 = $r0.<com.tune.TuneEncryption: javax.crypto.spec.SecretKeySpec keyspec>;
+
+        $r3 = $r0.<com.tune.TuneEncryption: javax.crypto.spec.IvParameterSpec ivspec>;
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(2, $r5, $r3);
+
+        $r4 = $r0.<com.tune.TuneEncryption: javax.crypto.Cipher cipher>;
+
+        $r6 = staticinvoke <com.tune.TuneUtils: byte[] hexToBytes(java.lang.String)>($r1);
+
+        $r6 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6);
+
+     label3:
+        return $r6;
+
+     label4:
+        $r2 := @caughtexception;
+
+        $r7 = new java.lang.Exception;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("[decrypt] ");
+
+        $r1 = virtualinvoke $r2.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r7.<java.lang.Exception: void <init>(java.lang.String)>($r1);
+
+        throw $r7;
+
+        catch java.lang.Exception from label2 to label3 with label4;
+    }
+
+    public byte[] encrypt(java.lang.String) throws java.lang.Exception
+    {
+        com.tune.TuneEncryption $r0;
+        java.lang.String $r1, varReplacer10976, varReplacer10978;
+        java.lang.Exception $r2, $r7;
+        javax.crypto.spec.IvParameterSpec $r3;
+        int $i0, varReplacer10977;
+        javax.crypto.Cipher $r4;
+        javax.crypto.spec.SecretKeySpec $r5;
+        byte[] $r6;
+        java.lang.StringBuilder $r8;
+
+        nop;
+
+        $r0 := @this: com.tune.TuneEncryption;
+
+        $r1 := @parameter0: java.lang.String;
+
+        if $r1 == null goto label1;
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int length()>();
+
+        if $i0 != 0 goto label2;
+
+     label1:
+        $r2 = new java.lang.Exception;
+
+        varReplacer10976 = "Empty string";
+
+        specialinvoke $r2.<java.lang.Exception: void <init>(java.lang.String)>(varReplacer10976);
+
+        throw $r2;
+
+     label2:
+        $r4 = $r0.<com.tune.TuneEncryption: javax.crypto.Cipher cipher>;
+
+        $r5 = $r0.<com.tune.TuneEncryption: javax.crypto.spec.SecretKeySpec keyspec>;
+
+        $r3 = $r0.<com.tune.TuneEncryption: javax.crypto.spec.IvParameterSpec ivspec>;
+
+        varReplacer10977 = 1;
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer10977, $r5, $r3);
+
+        $r4 = $r0.<com.tune.TuneEncryption: javax.crypto.Cipher cipher>;
+
+        $r1 = staticinvoke <com.tune.TuneEncryption: java.lang.String padString(java.lang.String)>($r1);
+
+        $r6 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        $r6 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6);
+
+     label3:
+        return $r6;
+
+     label4:
+        $r2 := @caughtexception;
+
+        $r7 = new java.lang.Exception;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer10978 = "[encrypt] ";
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer10978);
+
+        $r1 = virtualinvoke $r2.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r7.<java.lang.Exception: void <init>(java.lang.String)>($r1);
+
+        throw $r7;
+
+        catch java.lang.Exception from label2 to label3 with label4;
+    }
+}

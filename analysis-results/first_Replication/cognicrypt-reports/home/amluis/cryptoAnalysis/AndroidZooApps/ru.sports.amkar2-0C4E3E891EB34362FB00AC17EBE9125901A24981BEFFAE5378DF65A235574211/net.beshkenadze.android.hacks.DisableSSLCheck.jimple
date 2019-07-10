@@ -1,0 +1,242 @@
+public class net.beshkenadze.android.hacks.DisableSSLCheck extends java.lang.Object
+{
+    public static final javax.net.ssl.HostnameVerifier DO_NOT_VERIFY;
+
+    static void <clinit>()
+    {
+        net.beshkenadze.android.hacks.DisableSSLCheck$1 $r0;
+
+        nop;
+
+        $r0 = new net.beshkenadze.android.hacks.DisableSSLCheck$1;
+
+        specialinvoke $r0.<net.beshkenadze.android.hacks.DisableSSLCheck$1: void <init>()>();
+
+        <net.beshkenadze.android.hacks.DisableSSLCheck: javax.net.ssl.HostnameVerifier DO_NOT_VERIFY> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        net.beshkenadze.android.hacks.DisableSSLCheck $r0;
+
+        $r0 := @this: net.beshkenadze.android.hacks.DisableSSLCheck;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static org.apache.http.client.HttpClient getNewHttpClient(org.apache.http.params.HttpParams, int)
+    {
+        org.apache.http.params.HttpParams $r0, r21;
+        int $i0, $i1, varReplacer3464, varReplacer3467;
+        org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager $r1, r19;
+        java.lang.Exception $r2;
+        org.apache.http.params.BasicHttpParams $r3, r16;
+        org.apache.http.conn.scheme.SchemeRegistry $r4, r17;
+        net.beshkenadze.android.hacks.MySSLSocketFactory $r5, r15;
+        javax.net.ssl.TrustManager[] $r6;
+        java.lang.String $r7, varReplacer3460, varReplacer3461, varReplacer3462, varReplacer3463, varReplacer3465, varReplacer3466;
+        java.security.KeyStore $r8;
+        javax.net.ssl.SSLContext $r9;
+        java.security.SecureRandom $r10, r14;
+        org.apache.http.HttpVersion $r11;
+        org.apache.http.conn.scheme.Scheme $r12, r18;
+        org.apache.http.conn.scheme.PlainSocketFactory $r13;
+        org.apache.http.impl.client.DefaultHttpClient r20;
+        org.apache.http.conn.scheme.SocketFactory r22;
+        null_type varReplacer3458, varReplacer3459, varReplacer3468;
+
+        nop;
+
+        $r0 := @parameter0: org.apache.http.params.HttpParams;
+
+        $i0 := @parameter1: int;
+
+        $r6 = staticinvoke <net.beshkenadze.android.hacks.DisableSSLCheck: javax.net.ssl.TrustManager[] getTrustCerts()>();
+
+     label01:
+        $r7 = staticinvoke <java.security.KeyStore: java.lang.String getDefaultType()>();
+
+        $r8 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r7);
+
+        varReplacer3458 = null;
+
+        varReplacer3459 = null;
+
+        virtualinvoke $r8.<java.security.KeyStore: void load(java.io.InputStream,char[])>(varReplacer3458, varReplacer3458);
+
+        varReplacer3465 = "TLS";
+
+        $r9 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer3465);
+
+     label02:
+        r14 = new java.security.SecureRandom;
+
+        $r10 = r14;
+
+     label03:
+        specialinvoke r14.<java.security.SecureRandom: void <init>()>();
+
+        varReplacer3468 = null;
+
+        virtualinvoke $r9.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer3468, $r6, $r10);
+
+     label04:
+        r15 = new net.beshkenadze.android.hacks.MySSLSocketFactory;
+
+        $r5 = r15;
+
+     label05:
+        specialinvoke r15.<net.beshkenadze.android.hacks.MySSLSocketFactory: void <init>(java.security.KeyStore)>($r8);
+
+     label06:
+        r16 = new org.apache.http.params.BasicHttpParams;
+
+        $r3 = r16;
+
+     label07:
+        specialinvoke r16.<org.apache.http.params.BasicHttpParams: void <init>()>();
+
+     label08:
+        $r11 = <org.apache.http.HttpVersion: org.apache.http.HttpVersion HTTP_1_1>;
+
+     label09:
+        r21 = (org.apache.http.params.HttpParams) $r3;
+
+        staticinvoke <org.apache.http.params.HttpProtocolParams: void setVersion(org.apache.http.params.HttpParams,org.apache.http.ProtocolVersion)>(r21, $r11);
+
+        r21 = (org.apache.http.params.HttpParams) $r3;
+
+        varReplacer3460 = "UTF-8";
+
+        staticinvoke <org.apache.http.params.HttpProtocolParams: void setContentCharset(org.apache.http.params.HttpParams,java.lang.String)>(r21, varReplacer3460);
+
+     label10:
+        if $i0 <= 0 goto label12;
+
+     label11:
+        varReplacer3462 = "http.connection.timeout";
+
+        $i1 = interfaceinvoke $r0.<org.apache.http.params.HttpParams: int getIntParameter(java.lang.String,int)>(varReplacer3462, $i0);
+
+        varReplacer3461 = "http.socket.timeout";
+
+        $i0 = interfaceinvoke $r0.<org.apache.http.params.HttpParams: int getIntParameter(java.lang.String,int)>(varReplacer3461, $i0);
+
+        r21 = (org.apache.http.params.HttpParams) $r3;
+
+        staticinvoke <org.apache.http.params.HttpConnectionParams: void setConnectionTimeout(org.apache.http.params.HttpParams,int)>(r21, $i1);
+
+        r21 = (org.apache.http.params.HttpParams) $r3;
+
+        staticinvoke <org.apache.http.params.HttpConnectionParams: void setSoTimeout(org.apache.http.params.HttpParams,int)>(r21, $i0);
+
+     label12:
+        r17 = new org.apache.http.conn.scheme.SchemeRegistry;
+
+        $r4 = r17;
+
+     label13:
+        specialinvoke r17.<org.apache.http.conn.scheme.SchemeRegistry: void <init>()>();
+
+     label14:
+        r18 = new org.apache.http.conn.scheme.Scheme;
+
+        $r12 = r18;
+
+     label15:
+        $r13 = staticinvoke <org.apache.http.conn.scheme.PlainSocketFactory: org.apache.http.conn.scheme.PlainSocketFactory getSocketFactory()>();
+
+        r22 = (org.apache.http.conn.scheme.SocketFactory) $r13;
+
+        varReplacer3466 = "http";
+
+        varReplacer3467 = 80;
+
+        specialinvoke r18.<org.apache.http.conn.scheme.Scheme: void <init>(java.lang.String,org.apache.http.conn.scheme.SocketFactory,int)>(varReplacer3466, r22, varReplacer3467);
+
+        virtualinvoke $r4.<org.apache.http.conn.scheme.SchemeRegistry: org.apache.http.conn.scheme.Scheme register(org.apache.http.conn.scheme.Scheme)>($r12);
+
+     label16:
+        r18 = new org.apache.http.conn.scheme.Scheme;
+
+        $r12 = r18;
+
+     label17:
+        varReplacer3463 = "https";
+
+        varReplacer3464 = 443;
+
+        specialinvoke r18.<org.apache.http.conn.scheme.Scheme: void <init>(java.lang.String,org.apache.http.conn.scheme.SocketFactory,int)>(varReplacer3463, $r5, varReplacer3464);
+
+        virtualinvoke $r4.<org.apache.http.conn.scheme.SchemeRegistry: org.apache.http.conn.scheme.Scheme register(org.apache.http.conn.scheme.Scheme)>($r12);
+
+     label18:
+        r19 = new org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+
+        $r1 = r19;
+
+     label19:
+        r21 = (org.apache.http.params.HttpParams) $r3;
+
+        specialinvoke r19.<org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager: void <init>(org.apache.http.params.HttpParams,org.apache.http.conn.scheme.SchemeRegistry)>(r21, $r4);
+
+     label20:
+        r20 = new org.apache.http.impl.client.DefaultHttpClient;
+
+     label21:
+        r21 = (org.apache.http.params.HttpParams) $r3;
+
+        specialinvoke r20.<org.apache.http.impl.client.DefaultHttpClient: void <init>(org.apache.http.conn.ClientConnectionManager,org.apache.http.params.HttpParams)>($r1, r21);
+
+     label22:
+        return r20;
+
+     label23:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r2.<java.lang.Exception: void printStackTrace()>();
+
+        r20 = new org.apache.http.impl.client.DefaultHttpClient;
+
+        specialinvoke r20.<org.apache.http.impl.client.DefaultHttpClient: void <init>(org.apache.http.params.HttpParams)>($r0);
+
+        return r20;
+
+        catch java.lang.Exception from label01 to label02 with label23;
+        catch java.lang.Exception from label03 to label04 with label23;
+        catch java.lang.Exception from label05 to label06 with label23;
+        catch java.lang.Exception from label07 to label08 with label23;
+        catch java.lang.Exception from label09 to label10 with label23;
+        catch java.lang.Exception from label11 to label12 with label23;
+        catch java.lang.Exception from label13 to label14 with label23;
+        catch java.lang.Exception from label15 to label16 with label23;
+        catch java.lang.Exception from label17 to label18 with label23;
+        catch java.lang.Exception from label19 to label20 with label23;
+        catch java.lang.Exception from label21 to label22 with label23;
+    }
+
+    private static javax.net.ssl.TrustManager[] getTrustCerts()
+    {
+        java.lang.Object[] $r0;
+        net.beshkenadze.android.hacks.DisableSSLCheck$2 r1;
+        javax.net.ssl.TrustManager[] r2;
+
+        nop;
+
+        $r0 = newarray (javax.net.ssl.TrustManager)[1];
+
+        r1 = new net.beshkenadze.android.hacks.DisableSSLCheck$2;
+
+        specialinvoke r1.<net.beshkenadze.android.hacks.DisableSSLCheck$2: void <init>()>();
+
+        $r0[0] = r1;
+
+        r2 = (javax.net.ssl.TrustManager[]) $r0;
+
+        return r2;
+    }
+}

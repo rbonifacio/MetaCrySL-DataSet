@@ -1,0 +1,221 @@
+public class com.midnight.showLove.Encrypt extends java.lang.Object
+{
+    public static final java.lang.String SEED_16_CHARACTER;
+    private final javax.crypto.Cipher cipher;
+    private final javax.crypto.spec.SecretKeySpec key;
+    private java.security.spec.AlgorithmParameterSpec spec;
+
+    static void <clinit>()
+    {
+        java.lang.String $r0, varReplacer2944;
+        java.lang.String[] $r1;
+
+        nop;
+
+        $r0 = staticinvoke <com.midnight.showLove.Global: java.lang.String HelloJNI()>();
+
+        varReplacer2944 = "228";
+
+        $r1 = virtualinvoke $r0.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer2944);
+
+        $r0 = $r1[0];
+
+        <com.midnight.showLove.Encrypt: java.lang.String SEED_16_CHARACTER> = $r0;
+
+        return;
+    }
+
+    public void <init>() throws java.lang.Exception
+    {
+        com.midnight.showLove.Encrypt $r0;
+        byte[] $r1, $r4;
+        java.security.MessageDigest $r2;
+        java.lang.String $r3, varReplacer3246, varReplacer3247, varReplacer3250, varReplacer3251;
+        int $i0, varReplacer3248, varReplacer3249;
+        javax.crypto.Cipher $r5;
+        javax.crypto.spec.SecretKeySpec $r6;
+        java.security.spec.AlgorithmParameterSpec $r7;
+
+        nop;
+
+        $r0 := @this: com.midnight.showLove.Encrypt;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer3250 = "SHA-256";
+
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3250);
+
+        $r3 = <com.midnight.showLove.Encrypt: java.lang.String SEED_16_CHARACTER>;
+
+        varReplacer3246 = "UTF-8";
+
+        $r1 = virtualinvoke $r3.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer3246);
+
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte[])>($r1);
+
+        $r1 = newarray (byte)[32];
+
+        $r4 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>();
+
+        $i0 = lengthof $r1;
+
+        varReplacer3248 = 0;
+
+        varReplacer3249 = 0;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r4, varReplacer3248, $r1, varReplacer3248, $i0);
+
+        varReplacer3247 = "AES/CBC/PKCS7Padding";
+
+        $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer3247);
+
+        $r0.<com.midnight.showLove.Encrypt: javax.crypto.Cipher cipher> = $r5;
+
+        $r6 = new javax.crypto.spec.SecretKeySpec;
+
+        varReplacer3251 = "AES";
+
+        specialinvoke $r6.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer3251);
+
+        $r0.<com.midnight.showLove.Encrypt: javax.crypto.spec.SecretKeySpec key> = $r6;
+
+        $r7 = virtualinvoke $r0.<com.midnight.showLove.Encrypt: java.security.spec.AlgorithmParameterSpec getIV()>();
+
+        $r0.<com.midnight.showLove.Encrypt: java.security.spec.AlgorithmParameterSpec spec> = $r7;
+
+        return;
+    }
+
+    public java.lang.String decrypt(java.lang.String) throws java.lang.Exception
+    {
+        com.midnight.showLove.Encrypt $r0;
+        java.lang.String $r1;
+        javax.crypto.spec.SecretKeySpec $r2;
+        java.security.spec.AlgorithmParameterSpec $r3;
+        javax.crypto.Cipher $r4;
+        byte[] $r5;
+
+        $r0 := @this: com.midnight.showLove.Encrypt;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r4 = $r0.<com.midnight.showLove.Encrypt: javax.crypto.Cipher cipher>;
+
+        $r2 = $r0.<com.midnight.showLove.Encrypt: javax.crypto.spec.SecretKeySpec key>;
+
+        $r3 = $r0.<com.midnight.showLove.Encrypt: java.security.spec.AlgorithmParameterSpec spec>;
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(2, $r2, $r3);
+
+        $r5 = staticinvoke <android.util.Base64: byte[] decode(java.lang.String,int)>($r1, 0);
+
+        $r4 = $r0.<com.midnight.showLove.Encrypt: javax.crypto.Cipher cipher>;
+
+        $r5 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r5);
+
+        $r1 = new java.lang.String;
+
+        specialinvoke $r1.<java.lang.String: void <init>(byte[],java.lang.String)>($r5, "UTF-8");
+
+        return $r1;
+    }
+
+    public java.lang.String encrypt(java.lang.String) throws java.lang.Exception
+    {
+        com.midnight.showLove.Encrypt $r0;
+        java.lang.String $r1, varReplacer3252, varReplacer3254;
+        javax.crypto.spec.SecretKeySpec $r2;
+        java.security.spec.AlgorithmParameterSpec $r3;
+        javax.crypto.Cipher $r4;
+        byte[] $r5;
+        int varReplacer3253, varReplacer3255;
+
+        nop;
+
+        $r0 := @this: com.midnight.showLove.Encrypt;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r4 = $r0.<com.midnight.showLove.Encrypt: javax.crypto.Cipher cipher>;
+
+        $r2 = $r0.<com.midnight.showLove.Encrypt: javax.crypto.spec.SecretKeySpec key>;
+
+        $r3 = $r0.<com.midnight.showLove.Encrypt: java.security.spec.AlgorithmParameterSpec spec>;
+
+        varReplacer3255 = 1;
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer3255, $r2, $r3);
+
+        $r4 = $r0.<com.midnight.showLove.Encrypt: javax.crypto.Cipher cipher>;
+
+        varReplacer3252 = "UTF-8";
+
+        $r5 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer3252);
+
+        $r5 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r5);
+
+        $r1 = new java.lang.String;
+
+        varReplacer3253 = 0;
+
+        $r5 = staticinvoke <android.util.Base64: byte[] encode(byte[],int)>($r5, varReplacer3253);
+
+        varReplacer3254 = "UTF-8";
+
+        specialinvoke $r1.<java.lang.String: void <init>(byte[],java.lang.String)>($r5, varReplacer3254);
+
+        return $r1;
+    }
+
+    public java.security.spec.AlgorithmParameterSpec getIV()
+    {
+        com.midnight.showLove.Encrypt $r0;
+        byte[] $r1;
+        javax.crypto.spec.IvParameterSpec $r2;
+
+        nop;
+
+        $r0 := @this: com.midnight.showLove.Encrypt;
+
+        $r1 = newarray (byte)[16];
+
+        $r1[0] = 0;
+
+        $r1[1] = 0;
+
+        $r1[2] = 0;
+
+        $r1[3] = 0;
+
+        $r1[4] = 0;
+
+        $r1[5] = 0;
+
+        $r1[6] = 0;
+
+        $r1[7] = 0;
+
+        $r1[8] = 0;
+
+        $r1[9] = 0;
+
+        $r1[10] = 0;
+
+        $r1[11] = 0;
+
+        $r1[12] = 0;
+
+        $r1[13] = 0;
+
+        $r1[14] = 0;
+
+        $r1[15] = 0;
+
+        $r2 = new javax.crypto.spec.IvParameterSpec;
+
+        specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r1);
+
+        return $r2;
+    }
+}

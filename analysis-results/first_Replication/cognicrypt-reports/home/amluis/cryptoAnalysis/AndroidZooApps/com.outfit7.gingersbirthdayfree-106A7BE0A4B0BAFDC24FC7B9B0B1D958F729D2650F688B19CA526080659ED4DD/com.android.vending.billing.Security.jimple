@@ -1,0 +1,260 @@
+public class com.android.vending.billing.Security extends java.lang.Object
+{
+    private static final java.lang.String KEY_FACTORY_ALGORITHM;
+    private static final java.lang.String SIGNATURE_ALGORITHM;
+    private static final java.lang.String TAG;
+
+    public void <init>()
+    {
+        com.android.vending.billing.Security $r0;
+
+        $r0 := @this: com.android.vending.billing.Security;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.security.PublicKey generatePublicKey(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer7881, varReplacer7882, varReplacer7883, varReplacer7884, varReplacer7885;
+        byte[] $r1;
+        java.security.KeyFactory $r2;
+        java.security.spec.X509EncodedKeySpec $r3;
+        java.security.PublicKey $r4;
+        java.lang.Throwable $r5, $r7;
+        java.lang.RuntimeException $r6;
+        java.lang.IllegalArgumentException $r8;
+        com.android.vending.billing.Base64DecoderException $r9;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        $r1 = staticinvoke <com.android.vending.billing.Base64: byte[] decode(java.lang.String)>($r0);
+
+        varReplacer7885 = "RSA";
+
+        $r2 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer7885);
+
+     label2:
+        $r3 = new java.security.spec.X509EncodedKeySpec;
+
+     label3:
+        specialinvoke $r3.<java.security.spec.X509EncodedKeySpec: void <init>(byte[])>($r1);
+
+        $r4 = virtualinvoke $r2.<java.security.KeyFactory: java.security.PublicKey generatePublic(java.security.spec.KeySpec)>($r3);
+
+     label4:
+        return $r4;
+
+     label5:
+        $r5 := @caughtexception;
+
+        $r6 = new java.lang.RuntimeException;
+
+        specialinvoke $r6.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r5);
+
+        throw $r6;
+
+     label6:
+        $r7 := @caughtexception;
+
+        varReplacer7883 = "IABUtil/Security";
+
+        varReplacer7884 = "Invalid key specification.";
+
+        staticinvoke <com.outfit7.funnetworks.util.Log: void e(java.lang.String,java.lang.String)>(varReplacer7883, varReplacer7884);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r7);
+
+        throw $r8;
+
+     label7:
+        $r9 := @caughtexception;
+
+        varReplacer7881 = "IABUtil/Security";
+
+        varReplacer7882 = "Base64 decoding failed.";
+
+        staticinvoke <com.outfit7.funnetworks.util.Log: void e(java.lang.String,java.lang.String)>(varReplacer7881, varReplacer7882);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r9);
+
+        throw $r8;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label5;
+        catch java.security.spec.InvalidKeySpecException from label1 to label2 with label6;
+        catch java.security.spec.InvalidKeySpecException from label3 to label4 with label6;
+        catch com.android.vending.billing.Base64DecoderException from label1 to label2 with label7;
+        catch com.android.vending.billing.Base64DecoderException from label3 to label4 with label7;
+    }
+
+    public static boolean verify(java.security.PublicKey, java.lang.String, java.lang.String)
+    {
+        java.security.PublicKey $r0;
+        java.lang.String $r1, $r2, varReplacer7864, varReplacer7865, varReplacer7870, varReplacer7871, varReplacer7872, varReplacer7873, varReplacer7874, varReplacer7875, varReplacer7877, varReplacer7878, varReplacer7879;
+        java.security.Signature $r3;
+        byte[] $r4;
+        boolean $z0;
+        java.lang.Throwable $r5, $r6, $r7;
+        com.android.vending.billing.Base64DecoderException $r8;
+        int varReplacer7866, varReplacer7867, varReplacer7868, varReplacer7869, varReplacer7876, varReplacer7880;
+
+        nop;
+
+        $r0 := @parameter0: java.security.PublicKey;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+     label1:
+        varReplacer7877 = "SHA1withRSA";
+
+        $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer7877);
+
+        virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0);
+
+        $r4 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r3.<java.security.Signature: void update(byte[])>($r4);
+
+        $r4 = staticinvoke <com.android.vending.billing.Base64: byte[] decode(java.lang.String)>($r2);
+
+        $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4);
+
+     label2:
+        if $z0 != 0 goto label5;
+
+     label3:
+        varReplacer7878 = "IABUtil/Security";
+
+        varReplacer7879 = "Signature verification failed.";
+
+        staticinvoke <com.outfit7.funnetworks.util.Log: void e(java.lang.String,java.lang.String)>(varReplacer7878, varReplacer7879);
+
+     label4:
+        varReplacer7880 = 0;
+
+        return varReplacer7880;
+
+     label5:
+        varReplacer7868 = 1;
+
+        return varReplacer7868;
+
+     label6:
+        $r5 := @caughtexception;
+
+        varReplacer7864 = "IABUtil/Security";
+
+        varReplacer7865 = "NoSuchAlgorithmException.";
+
+        staticinvoke <com.outfit7.funnetworks.util.Log: void e(java.lang.String,java.lang.String)>(varReplacer7864, varReplacer7865);
+
+        varReplacer7869 = 0;
+
+        return varReplacer7869;
+
+     label7:
+        $r6 := @caughtexception;
+
+        varReplacer7872 = "IABUtil/Security";
+
+        varReplacer7873 = "Invalid key specification.";
+
+        staticinvoke <com.outfit7.funnetworks.util.Log: void e(java.lang.String,java.lang.String)>(varReplacer7872, varReplacer7873);
+
+        varReplacer7867 = 0;
+
+        return varReplacer7867;
+
+     label8:
+        $r7 := @caughtexception;
+
+        varReplacer7870 = "IABUtil/Security";
+
+        varReplacer7871 = "Signature exception.";
+
+        staticinvoke <com.outfit7.funnetworks.util.Log: void e(java.lang.String,java.lang.String)>(varReplacer7870, varReplacer7871);
+
+        varReplacer7866 = 0;
+
+        return varReplacer7866;
+
+     label9:
+        $r8 := @caughtexception;
+
+        varReplacer7874 = "IABUtil/Security";
+
+        varReplacer7875 = "Base64 decoding failed.";
+
+        staticinvoke <com.outfit7.funnetworks.util.Log: void e(java.lang.String,java.lang.String)>(varReplacer7874, varReplacer7875);
+
+        varReplacer7876 = 0;
+
+        return varReplacer7876;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label6;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label6;
+        catch java.security.InvalidKeyException from label1 to label2 with label7;
+        catch java.security.InvalidKeyException from label3 to label4 with label7;
+        catch java.security.SignatureException from label1 to label2 with label8;
+        catch java.security.SignatureException from label3 to label4 with label8;
+        catch com.android.vending.billing.Base64DecoderException from label1 to label2 with label9;
+        catch com.android.vending.billing.Base64DecoderException from label3 to label4 with label9;
+    }
+
+    public static boolean verifyPurchase(java.lang.String, java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, $r2, varReplacer7861, varReplacer7862;
+        boolean $z0;
+        java.security.PublicKey $r3;
+        int varReplacer7863;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r0);
+
+        if $z0 != 0 goto label1;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        varReplacer7861 = "IABUtil/Security";
+
+        varReplacer7862 = "Purchase verification failed: missing data.";
+
+        staticinvoke <com.outfit7.funnetworks.util.Log: void e(java.lang.String,java.lang.String)>(varReplacer7861, varReplacer7862);
+
+        varReplacer7863 = 0;
+
+        return varReplacer7863;
+
+     label2:
+        $r3 = staticinvoke <com.android.vending.billing.Security: java.security.PublicKey generatePublicKey(java.lang.String)>($r0);
+
+        $z0 = staticinvoke <com.android.vending.billing.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>($r3, $r1, $r2);
+
+        return $z0;
+    }
+}

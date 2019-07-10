@@ -1,0 +1,135 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r7
+		Type: javax.crypto.Mac
+		Statement: $r7 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer4323)
+		Method: <oauth.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(oauth.signpost.http.HttpRequest,oauth.signpost.http.HttpParameters)>
+		SHA-256: 47d2cdfe93a7d588c315ee5a3a0cf63b9f1e7fd4c83588a42487a6981cb2320
+		Secure: true
+	Object:
+		Variable: $r8
+		Type: java.security.KeyStore
+		Statement: $r8 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r7)
+		Method: <com.weibo.net.Utility: org.apache.http.client.HttpClient getNewHttpClient(android.content.Context)>
+		SHA-256: 79f58ad3ff6efc51c424beac8867f9e8c8a8507c66b8a595b89a1bfa56d8ceb0
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: java.security.SecureRandom
+		Statement: specialinvoke $r2.<java.security.SecureRandom: void <init>()>()
+		Method: <com.weibo.net.Utility$MySSLSocketFactory: void <init>(java.security.KeyStore)>
+		SHA-256: ccc8907951e3e3e487e42d123991f9c79ba48fcf58aa0aa133bdbb8fbccc1af0
+		Secure: true
+	Object:
+		Variable: $r6
+		Type: byte[]
+		Statement: $r6 = virtualinvoke $r7.<javax.crypto.Mac: byte[] doFinal(byte[])>($r6)
+		Method: <oauth.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(oauth.signpost.http.HttpRequest,oauth.signpost.http.HttpParameters)>
+		SHA-256: 60029a1b2e5ee22a3931915434a5fa44cf27db5eb408040851f105ce7e16415b
+		Secure: true
+	Object:
+		Variable: r12
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer4320)
+		Method: <oauth.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(oauth.signpost.http.HttpRequest,oauth.signpost.http.HttpParameters)>
+		SHA-256: a4b55afa7d6d557b1fa7a80853217a9b47afe126311751f7b93496de1135a753
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.SecureRandom
+		Statement: specialinvoke $r1.<java.security.SecureRandom: void <init>()>()
+		Method: <com.google.analytics.tracking.android.GAThread: java.lang.String generateClientId()>
+		SHA-256: ee0368bfc9737d4afa73398426e9b14cd7b26ad5ce6e84b01bdbbf2e0afc376b
+		Secure: true
+	Object:
+		Variable: varReplacer4320
+		Type: java.lang.String
+		Statement: specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer4320)
+		Method: <oauth.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(oauth.signpost.http.HttpRequest,oauth.signpost.http.HttpParameters)>
+		SHA-256: 2bbb39803dd3cbda495875a44df2273316beb2d9f46b875facdc38ca888ed4f4
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.net.ssl.SSLContext
+		Statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer4405)
+		Method: <com.weibo.net.Utility$MySSLSocketFactory: void <init>(java.security.KeyStore)>
+		SHA-256: b0c2b14e944ed8ef8bd7b00a753261926bbf854c061b2d097f8fad4a42f19801
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.net.ssl.SSLContext
+		Statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer4406)
+		Method: <com.weibo.net.Utility$MySSLSocketFactory: void <init>(java.security.KeyStore)>
+		SHA-256: 37af1959d2efc28ed3365e2c1462b334ac701ce9eaff169d281fa8acd74c98f8
+		Secure: false
+
+Findings in Java Class: com.weibo.net.Utility
+
+	 in Method: org.apache.http.client.HttpClient getNewHttpClient(android.content.Context)
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #37af1959d2efc28ed3365e2c1462b334ac701ce9eaff169d281fa8acd74c98f8)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to init
+			at statement: specialinvoke r21.<com.weibo.net.Utility$MySSLSocketFactory: void <init>(java.security.KeyStore)>($r8)
+
+
+Findings in Java Class: oauth.signpost.signature.HmacSha1MessageSigner
+
+	 in Method: java.lang.String sign(oauth.signpost.http.HttpRequest,oauth.signpost.http.HttpParameters)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer4320)
+
+
+Findings in Java Class: com.weibo.net.Utility$MySSLSocketFactory
+
+	 in Method: void <init>(java.security.KeyStore)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer4404, $r6, $r2)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer4404, $r6, $r2)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 9
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 1
+	RequiredPredicateError: 3
+=====================================================================

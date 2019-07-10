@@ -1,0 +1,119 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.simplifica.logicsat-012652A6408D0472FAB567E504FC6D1609DD6A406DF4AD84525BFB8247373180.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1934)
+		Method: <com.google.ads.util.AdUtil: java.lang.String a(java.lang.String)>
+		SHA-256: afe1520747f72f06afdb566d568f9b76dd4fc0800031bc157fc5ba819eeeec83
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: javax.crypto.Cipher
+		Statement: $r1 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer9667)
+		Method: <com.google.ads.util.AdUtil: java.lang.String b(java.lang.String)>
+		SHA-256: 33301c0d20ace4bd9c48142b97a51d1e1e73844703b344ed54e4c0fca3abfa16
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.ads.util.AdUtil: java.lang.String a(java.lang.String)>
+		SHA-256: bd6d5e04115821b3f530dbac4c50a92c76cf5d38f3f031e2a3004f2b6ef5f95b
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r1.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r4)
+		Method: <com.google.ads.util.AdUtil: java.lang.String b(java.lang.String)>
+		SHA-256: a15231244af41fbecd41ef72892f81a9afa941b7963ad989570c41f0d5017c4
+		Secure: false
+	Object:
+		Variable: varReplacer9669
+		Type: java.lang.String
+		Statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer9669)
+		Method: <com.google.ads.util.AdUtil: java.lang.String b(java.lang.String)>
+		SHA-256: b4ce7b6dc31661740eecfdc6bd29c6cc1a058cc6f359347368063797b70904c4
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer9669)
+		Method: <com.google.ads.util.AdUtil: java.lang.String b(java.lang.String)>
+		SHA-256: 3844bbdd191e4c52f60d3303b93f9e3cc061900b1014b74600217f1ade290f64
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: javax.net.ssl.SSLContext
+		Statement: $r1 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer8711)
+		Method: <com.codebutler.android_websockets.WebSocketClient: javax.net.ssl.SSLSocketFactory getSSLSocketFactory()>
+		SHA-256: d2a371b23936d3fecf2c698a84d8808e1c8fbc2e2e19ccc39a2f45bde1012892
+		Secure: false
+
+Findings in Java Class: com.google.ads.util.AdUtil
+
+	 in Method: java.lang.String b(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer9669)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r1.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer9668, $r2)
+
+
+Findings in Java Class: com.codebutler.android_websockets.WebSocketClient
+
+	 in Method: javax.net.ssl.SSLSocketFactory getSSLSocketFactory()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer8709, $r2, varReplacer8709)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer8709, $r2, varReplacer8709)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 7
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 4
+=====================================================================
