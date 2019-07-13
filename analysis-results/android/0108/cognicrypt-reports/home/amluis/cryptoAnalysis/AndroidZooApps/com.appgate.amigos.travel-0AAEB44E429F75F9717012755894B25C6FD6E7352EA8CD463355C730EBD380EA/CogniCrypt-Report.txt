@@ -1,0 +1,94 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3496)
+		Method: <correct.org.apache.commons.codec.digest.DigestUtils: java.security.MessageDigest getDigest(java.lang.String)>
+		SHA-256: 8d1a2c4d32ffc42b1509995185c3e7a2a78f1ecdb987bf2384b2afe9e9cdf308
+		Secure: true
+	Object:
+		Variable: $r9
+		Type: javax.net.ssl.KeyManager[]
+		Statement: $r9 = virtualinvoke $r7.<javax.net.ssl.KeyManagerFactory: javax.net.ssl.KeyManager[] getKeyManagers()>()
+		Method: <correct.org.apache.http.conn.ssl.SSLSocketFactory: javax.net.ssl.SSLContext createSSLContext(java.lang.String,java.security.KeyStore,java.lang.String,java.security.KeyStore,java.security.SecureRandom,correct.org.apache.http.conn.ssl.TrustStrategy)>
+		SHA-256: b07fc18ceeed623d450f52d4b88f3c69dec88fdee4664f0ee48c5d0ef47e78b9
+		Secure: false
+	Object:
+		Variable: $r7
+		Type: javax.net.ssl.KeyManagerFactory
+		Statement: $r7 = staticinvoke <javax.net.ssl.KeyManagerFactory: javax.net.ssl.KeyManagerFactory getInstance(java.lang.String)>($r6)
+		Method: <correct.org.apache.http.conn.ssl.SSLSocketFactory: javax.net.ssl.SSLContext createSSLContext(java.lang.String,java.security.KeyStore,java.lang.String,java.security.KeyStore,java.security.SecureRandom,correct.org.apache.http.conn.ssl.TrustStrategy)>
+		SHA-256: ee9c68ae3d0e944a421448e57a29446cf8b04465bc56a92746318371451ca8ff
+		Secure: false
+	Object:
+		Variable: $r12
+		Type: javax.net.ssl.SSLContext
+		Statement: $r12 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>($r5)
+		Method: <correct.org.apache.http.conn.ssl.SSLSocketFactory: javax.net.ssl.SSLContext createSSLContext(java.lang.String,java.security.KeyStore,java.lang.String,java.security.KeyStore,java.security.SecureRandom,correct.org.apache.http.conn.ssl.TrustStrategy)>
+		SHA-256: 628d469cc0612db0307a5cd73dc19baff3a389d26ca35cca298e81111320cc3f
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r0)
+		Method: <correct.org.apache.commons.codec.digest.DigestUtils: byte[] md5(byte[])>
+		SHA-256: b832aa670c828e2ede739dc34ac5c16bb43a49eaa1e85346ac40adef288109f1
+		Secure: true
+
+Findings in Java Class: correct.org.apache.http.conn.ssl.SSLSocketFactory
+
+	 in Method: javax.net.ssl.SSLContext createSSLContext(java.lang.String,java.security.KeyStore,java.lang.String,java.security.KeyStore,java.security.SecureRandom,correct.org.apache.http.conn.ssl.TrustStrategy)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.KeyManagerFactory
+			First parameter was not properly generated as generated Key Store
+			at statement: virtualinvoke $r7.<javax.net.ssl.KeyManagerFactory: void init(java.security.KeyStore,char[])>(varReplacer3354, $r8)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r12.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>($r9, r16, varReplacer3356)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r12.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>($r9, r16, varReplacer3356)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 5
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 3
+=====================================================================

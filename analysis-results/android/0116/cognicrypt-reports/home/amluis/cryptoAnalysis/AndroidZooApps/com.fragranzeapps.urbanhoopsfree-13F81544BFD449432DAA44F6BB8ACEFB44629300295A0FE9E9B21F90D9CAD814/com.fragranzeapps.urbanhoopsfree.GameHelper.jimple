@@ -1,0 +1,3511 @@
+public class com.fragranzeapps.urbanhoopsfree.GameHelper extends java.lang.Object implements com.google.android.gms.common.GooglePlayServicesClient$ConnectionCallbacks, com.google.android.gms.common.GooglePlayServicesClient$OnConnectionFailedListener
+{
+    public static final int CLIENT_ALL;
+    public static final int CLIENT_APPSTATE;
+    public static final int CLIENT_GAMES;
+    public static final int CLIENT_NONE;
+    public static final int CLIENT_PLUS;
+    static final int RC_RESOLVE;
+    static final int RC_UNUSED;
+    public static final int STATE_CONNECTED;
+    public static final int STATE_CONNECTING;
+    public static final int STATE_DISCONNECTED;
+    public static final java.lang.String[] STATE_NAMES;
+    public static final int STATE_UNCONFIGURED;
+    private static final int TYPE_DEVELOPER_ERROR;
+    private static final int TYPE_GAMEHELPER_BUG;
+    android.app.Activity mActivity;
+    com.google.android.gms.appstate.AppStateClient mAppStateClient;
+    boolean mAutoSignIn;
+    int mClientCurrentlyConnecting;
+    int mConnectedClients;
+    com.google.android.gms.common.ConnectionResult mConnectionResult;
+    boolean mDebugLog;
+    java.lang.String mDebugTag;
+    boolean mExpectingResolution;
+    com.google.android.gms.games.GamesClient mGamesClient;
+    java.lang.String mInvitationId;
+    com.fragranzeapps.urbanhoopsfree.GameHelper$GameHelperListener mListener;
+    com.google.android.gms.plus.PlusClient mPlusClient;
+    int mRequestedClients;
+    java.lang.String[] mScopes;
+    com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason mSignInFailureReason;
+    int mState;
+    boolean mUserInitiatedSignIn;
+
+    static void <clinit>()
+    {
+        java.lang.String[] $r0;
+
+        nop;
+
+        $r0 = newarray (java.lang.String)[4];
+
+        $r0[0] = "UNCONFIGURED";
+
+        $r0[1] = "DISCONNECTED";
+
+        $r0[2] = "CONNECTING";
+
+        $r0[3] = "CONNECTED";
+
+        <com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] STATE_NAMES> = $r0;
+
+        return;
+    }
+
+    public void <init>(android.app.Activity)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        android.app.Activity $r1;
+        null_type varReplacer552, varReplacer554, varReplacer557, varReplacer560, varReplacer561, varReplacer565, varReplacer567;
+        int varReplacer553, varReplacer555, varReplacer556, varReplacer558, varReplacer559, varReplacer562, varReplacer563, varReplacer566;
+        java.lang.String varReplacer564;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 := @parameter0: android.app.Activity;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer559 = 0;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState> = varReplacer559;
+
+        varReplacer566 = 0;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mExpectingResolution> = varReplacer566;
+
+        varReplacer560 = null;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.app.Activity mActivity> = varReplacer560;
+
+        varReplacer561 = null;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.games.GamesClient mGamesClient> = varReplacer561;
+
+        varReplacer554 = null;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient> = varReplacer554;
+
+        varReplacer567 = null;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient> = varReplacer567;
+
+        varReplacer556 = 0;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mRequestedClients> = varReplacer556;
+
+        varReplacer555 = 0;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients> = varReplacer555;
+
+        varReplacer562 = 0;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mClientCurrentlyConnecting> = varReplacer562;
+
+        varReplacer563 = 1;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mAutoSignIn> = varReplacer563;
+
+        varReplacer558 = 0;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mUserInitiatedSignIn> = varReplacer558;
+
+        varReplacer552 = null;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult> = varReplacer552;
+
+        varReplacer557 = null;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason mSignInFailureReason> = varReplacer557;
+
+        varReplacer553 = 0;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mDebugLog> = varReplacer553;
+
+        varReplacer564 = "GameHelper";
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String mDebugTag> = varReplacer564;
+
+        varReplacer565 = null;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$GameHelperListener mListener> = varReplacer565;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.app.Activity mActivity> = $r1;
+
+        return;
+    }
+
+    static java.lang.String activityResponseCodeToString(int)
+    {
+        int $i0;
+        java.lang.String $r0, varReplacer1218, varReplacer1219, varReplacer1220, varReplacer1221, varReplacer1222, varReplacer1223, varReplacer1224;
+
+        nop;
+
+        $i0 := @parameter0: int;
+
+        lookupswitch($i0)
+        {
+            case -1: goto label2;
+            case 0: goto label3;
+            case 10001: goto label7;
+            case 10002: goto label8;
+            case 10003: goto label6;
+            case 10004: goto label4;
+            case 10005: goto label5;
+            default: goto label1;
+        };
+
+     label1:
+        $r0 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+        return $r0;
+
+     label2:
+        varReplacer1218 = "RESULT_OK";
+
+        return varReplacer1218;
+
+     label3:
+        varReplacer1222 = "RESULT_CANCELED";
+
+        return varReplacer1222;
+
+     label4:
+        varReplacer1221 = "RESULT_APP_MISCONFIGURED";
+
+        return varReplacer1221;
+
+     label5:
+        varReplacer1223 = "RESULT_LEFT_ROOM";
+
+        return varReplacer1223;
+
+     label6:
+        varReplacer1219 = "RESULT_LICENSE_FAILED";
+
+        return varReplacer1219;
+
+     label7:
+        varReplacer1220 = "RESULT_RECONNECT_REQUIRED";
+
+        return varReplacer1220;
+
+     label8:
+        varReplacer1224 = "SIGN_IN_FAILED";
+
+        return varReplacer1224;
+    }
+
+    static java.lang.String errorCodeToString(int)
+    {
+        int $i0;
+        java.lang.StringBuilder $r0;
+        java.lang.String $r1, varReplacer1253, varReplacer1254, varReplacer1255, varReplacer1256, varReplacer1257, varReplacer1258, varReplacer1259, varReplacer1260, varReplacer1261, varReplacer1262, varReplacer1263, varReplacer1264, varReplacer1265, varReplacer1266, varReplacer1267, varReplacer1268, varReplacer1269, varReplacer1270, varReplacer1271, varReplacer1272, varReplacer1273, varReplacer1274, varReplacer1275, varReplacer1276, varReplacer1277;
+
+        nop;
+
+        $i0 := @parameter0: int;
+
+        lookupswitch($i0)
+        {
+            case 0: goto label13;
+            case 1: goto label10;
+            case 2: goto label11;
+            case 3: goto label08;
+            case 4: goto label12;
+            case 5: goto label04;
+            case 6: goto label07;
+            case 7: goto label06;
+            case 8: goto label03;
+            case 9: goto label09;
+            case 10: goto label02;
+            case 11: goto label05;
+            default: goto label01;
+        };
+
+     label01:
+        $r0 = new java.lang.StringBuilder;
+
+        varReplacer1254 = "Unknown error code ";
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1254);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label02:
+        $r0 = new java.lang.StringBuilder;
+
+        varReplacer1253 = "DEVELOPER_ERROR(";
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1253);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1256 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1256);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label03:
+        $r0 = new java.lang.StringBuilder;
+
+        varReplacer1259 = "INTERNAL_ERROR(";
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1259);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1262 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1262);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label04:
+        $r0 = new java.lang.StringBuilder;
+
+        varReplacer1261 = "INVALID_ACCOUNT(";
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1261);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1255 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1255);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label05:
+        $r0 = new java.lang.StringBuilder;
+
+        varReplacer1266 = "LICENSE_CHECK_FAILED(";
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1266);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1267 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1267);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label06:
+        $r0 = new java.lang.StringBuilder;
+
+        varReplacer1270 = "NETWORK_ERROR(";
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1270);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1271 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1271);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label07:
+        $r0 = new java.lang.StringBuilder;
+
+        varReplacer1263 = "RESOLUTION_REQUIRED(";
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1263);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1275 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1275);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label08:
+        $r0 = new java.lang.StringBuilder;
+
+        varReplacer1277 = "SERVICE_DISABLED(";
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1277);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1272 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1272);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label09:
+        $r0 = new java.lang.StringBuilder;
+
+        varReplacer1257 = "SERVICE_INVALID(";
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1257);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1274 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1274);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label10:
+        $r0 = new java.lang.StringBuilder;
+
+        varReplacer1260 = "SERVICE_MISSING(";
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1260);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1273 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1273);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label11:
+        $r0 = new java.lang.StringBuilder;
+
+        varReplacer1269 = "SERVICE_VERSION_UPDATE_REQUIRED(";
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1269);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1258 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1258);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label12:
+        $r0 = new java.lang.StringBuilder;
+
+        varReplacer1268 = "SIGN_IN_REQUIRED(";
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1268);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1264 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1264);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label13:
+        $r0 = new java.lang.StringBuilder;
+
+        varReplacer1276 = "SUCCESS(";
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1276);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1265 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1265);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    void addToScope(java.lang.StringBuilder, java.lang.String)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2;
+        int $i0;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 := @parameter0: java.lang.StringBuilder;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $i0 = virtualinvoke $r1.<java.lang.StringBuilder: int length()>();
+
+        if $i0 != 0 goto label2;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("oauth2:");
+
+     label1:
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        return;
+
+     label2:
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ");
+
+        goto label1;
+    }
+
+    void assertConfigured(java.lang.String)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        java.lang.String $r1, varReplacer1046, varReplacer1047;
+        int $i0;
+        java.lang.StringBuilder $r2;
+        java.lang.IllegalStateException $r3;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        if $i0 != 0 goto label1;
+
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer1047 = "GameHelper error: Operation attempted without setup: ";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1047);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer1046 = ". The setup() method must be called before attempting any other operation.";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1046);
+
+        $r1 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void logError(java.lang.String)>($r1);
+
+        $r3 = new java.lang.IllegalStateException;
+
+        specialinvoke $r3.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r1);
+
+        throw $r3;
+
+     label1:
+        return;
+    }
+
+    public void beginUserInitiatedSignIn()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        int $i0;
+        android.content.Context $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3;
+        com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason $r4;
+        com.google.android.gms.common.ConnectionResult $r5;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        if $i0 != 3 goto label1;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void logWarn(java.lang.String)>("beginUserInitiatedSignIn() called when already connected. Calling listener directly to notify of success.");
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void notifyListener(boolean)>(1);
+
+        return;
+
+     label1:
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        if $i0 != 2 goto label2;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void logWarn(java.lang.String)>("beginUserInitiatedSignIn() called when already connecting. Be patient! You can only call this method after you get an onSignInSucceeded() or onSignInFailed() callback. Suggestion: disable the sign-in button on startup and also when it\'s clicked, and re-enable when you get the callback.");
+
+        return;
+
+     label2:
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("Starting USER-INITIATED sign-in flow.");
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mAutoSignIn> = 1;
+
+        $r1 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.content.Context getContext()>();
+
+        $i0 = staticinvoke <com.google.android.gms.common.GooglePlayServicesUtil: int isGooglePlayServicesAvailable(android.content.Context)>($r1);
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("isGooglePlayServicesAvailable returned ");
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        if $i0 == 0 goto label3;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("Google Play services not available. Show error dialog.");
+
+        $r4 = new com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason;
+
+        specialinvoke $r4.<com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason: void <init>(int,int)>($i0, 0);
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason mSignInFailureReason> = $r4;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void showFailureDialog()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void notifyListener(boolean)>(0);
+
+        return;
+
+     label3:
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mUserInitiatedSignIn> = 1;
+
+        $r5 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        if $r5 == null goto label4;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("beginUserInitiatedSignIn: continuing pending sign-in flow.");
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void setState(int)>(2);
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void resolveConnectionResult()>();
+
+        return;
+
+     label4:
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("beginUserInitiatedSignIn: starting new sign-in flow.");
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void startConnections()>();
+
+        return;
+    }
+
+    void byteToString(java.lang.StringBuilder, byte)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        java.lang.StringBuilder $r1;
+        byte $b0;
+        int $i1, $i2, $i3;
+        java.lang.String $r2;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 := @parameter0: java.lang.StringBuilder;
+
+        $b0 := @parameter1: byte;
+
+        if $b0 >= 0 goto label2;
+
+        $i2 = $b0 + 256;
+
+     label1:
+        $i1 = $i2 / 16;
+
+        $i2 = $i2 % 16;
+
+        $r2 = "0123456789ABCDEF";
+
+        $i3 = $i1 + 1;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>($i1, $i3);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = "0123456789ABCDEF";
+
+        $i1 = $i2 + 1;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>($i2, $i1);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        return;
+
+     label2:
+        $i2 = $b0;
+
+        goto label1;
+    }
+
+    transient boolean checkState(int, java.lang.String, java.lang.String, int[])
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        int $i0, $i1, $i2, $i3, $i4, varReplacer1066, varReplacer1069;
+        java.lang.String $r1, $r2, varReplacer1054, varReplacer1055, varReplacer1056, varReplacer1057, varReplacer1058, varReplacer1059, varReplacer1060, varReplacer1061, varReplacer1062, varReplacer1063, varReplacer1064, varReplacer1065, varReplacer1067, varReplacer1068;
+        int[] $r3;
+        java.lang.StringBuilder $r4, $r5;
+        java.lang.String[] $r6;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: int[];
+
+        $i1 = lengthof $r3;
+
+        $i2 = 0;
+
+     label1:
+        if $i2 < $i1 goto label4;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        goto label5;
+
+     label2:
+        varReplacer1061 = "Explanation: ";
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1061);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        varReplacer1062 = "Operation: ";
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1062);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer1060 = ". ";
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1060);
+
+        varReplacer1056 = "State: ";
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1056);
+
+        $r6 = <com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        $r1 = $r6[$i0];
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer1054 = ". ";
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1054);
+
+        $i0 = lengthof $r3;
+
+        if $i0 != 1 goto label6;
+
+        varReplacer1067 = "Expected state: ";
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1067);
+
+        $r6 = <com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $i0 = $r3[0];
+
+        $r1 = $r6[$i0];
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer1055 = ".";
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1055);
+
+     label3:
+        $r1 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void logWarn(java.lang.String)>($r1);
+
+        varReplacer1069 = 0;
+
+        return varReplacer1069;
+
+     label4:
+        $i3 = $r3[$i2];
+
+        $i4 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        if $i4 == $i3 goto label9;
+
+        $i2 = $i2 + 1;
+
+        goto label1;
+
+     label5:
+        varReplacer1058 = "GameHelper: bug detected. Please report it at our bug tracker ";
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1058);
+
+        varReplacer1063 = "https://github.com/playgameservices/android-samples/issues. ";
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1063);
+
+        varReplacer1057 = "Please include the last couple hundred lines of logcat output ";
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1057);
+
+        varReplacer1065 = "and describe the operation that caused this. ";
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1065);
+
+        goto label2;
+
+     label6:
+        varReplacer1068 = "Expected states:";
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1068);
+
+        $i0 = lengthof $r3;
+
+        $i1 = 0;
+
+     label7:
+        if $i1 < $i0 goto label8;
+
+        varReplacer1064 = ".";
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1064);
+
+        goto label3;
+
+     label8:
+        $i2 = $r3[$i1];
+
+        varReplacer1059 = " ";
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1059);
+
+        $r6 = <com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $r1 = $r6[$i2];
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $i1 = $i1 + 1;
+
+        goto label7;
+
+     label9:
+        varReplacer1066 = 1;
+
+        return varReplacer1066;
+    }
+
+    void connectCurrentClient()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        boolean $z0;
+        int $i0, varReplacer1098;
+        int[] $r1;
+        com.google.android.gms.games.GamesClient $r2;
+        com.google.android.gms.appstate.AppStateClient $r3;
+        com.google.android.gms.plus.PlusClient $r4;
+        java.lang.String varReplacer1097, varReplacer1099, varReplacer1100;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        if $i0 != 1 goto label1;
+
+        varReplacer1097 = "GameHelper got disconnected during connection process. Aborting.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void logWarn(java.lang.String)>(varReplacer1097);
+
+        return;
+
+     label1:
+        $r1 = newarray (int)[1];
+
+        $r1[0] = 2;
+
+        varReplacer1098 = 1002;
+
+        varReplacer1099 = "connectCurrentClient";
+
+        varReplacer1100 = "connectCurrentClient should only get called when connecting.";
+
+        $z0 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean checkState(int,java.lang.String,java.lang.String,int[])>(varReplacer1098, varReplacer1099, varReplacer1100, $r1);
+
+        if $z0 == 0 goto label6;
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mClientCurrentlyConnecting>;
+
+        lookupswitch($i0)
+        {
+            case 1: goto label3;
+            case 2: goto label5;
+            case 3: goto label2;
+            case 4: goto label4;
+            default: goto label2;
+        };
+
+     label2:
+        return;
+
+     label3:
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        virtualinvoke $r2.<com.google.android.gms.games.GamesClient: void connect()>();
+
+        return;
+
+     label4:
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        virtualinvoke $r3.<com.google.android.gms.appstate.AppStateClient: void connect()>();
+
+        return;
+
+     label5:
+        $r4 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        virtualinvoke $r4.<com.google.android.gms.plus.PlusClient: void connect()>();
+
+     label6:
+        return;
+    }
+
+    void connectNextClient()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        int $i0, $i1, varReplacer1079, varReplacer1081, varReplacer1082;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2, varReplacer1070, varReplacer1071, varReplacer1072, varReplacer1073, varReplacer1074, varReplacer1075, varReplacer1076, varReplacer1077, varReplacer1078, varReplacer1080, varReplacer1083, varReplacer1084;
+        com.google.android.gms.games.GamesClient $r3;
+        boolean $z0;
+        com.google.android.gms.plus.PlusClient $r4;
+        com.google.android.gms.appstate.AppStateClient $r5;
+        java.lang.AssertionError $r6;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 = new java.lang.StringBuilder;
+
+        varReplacer1083 = "connectNextClient: requested clients: ";
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1083);
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mRequestedClients>;
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1084 = ", connected clients: ";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1084);
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients>;
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r2);
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        if $r3 == null goto label1;
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        $z0 = virtualinvoke $r3.<com.google.android.gms.games.GamesClient: boolean isConnected()>();
+
+        if $z0 == 0 goto label1;
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients>;
+
+        $i0 = $i0 & 1;
+
+        if $i0 != 0 goto label1;
+
+        varReplacer1072 = "GamesClient was already connected. Fixing.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void logWarn(java.lang.String)>(varReplacer1072);
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients>;
+
+        $i0 = $i0 | 1;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients> = $i0;
+
+     label1:
+        $r4 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        if $r4 == null goto label2;
+
+        $r4 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        $z0 = virtualinvoke $r4.<com.google.android.gms.plus.PlusClient: boolean isConnected()>();
+
+        if $z0 == 0 goto label2;
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients>;
+
+        $i0 = $i0 & 2;
+
+        if $i0 != 0 goto label2;
+
+        varReplacer1077 = "PlusClient was already connected. Fixing.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void logWarn(java.lang.String)>(varReplacer1077);
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients>;
+
+        $i0 = $i0 | 2;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients> = $i0;
+
+     label2:
+        $r5 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        if $r5 == null goto label3;
+
+        $r5 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        $z0 = virtualinvoke $r5.<com.google.android.gms.appstate.AppStateClient: boolean isConnected()>();
+
+        if $z0 == 0 goto label3;
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients>;
+
+        $i0 = $i0 & 4;
+
+        if $i0 != 0 goto label3;
+
+        varReplacer1080 = "AppStateClient was already connected. Fixing";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void logWarn(java.lang.String)>(varReplacer1080);
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients>;
+
+        $i0 = $i0 | 4;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients> = $i0;
+
+     label3:
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mRequestedClients>;
+
+        $i1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients>;
+
+        $i1 = $i1 ^ -1;
+
+        $i0 = $i0 & $i1;
+
+        $r1 = new java.lang.StringBuilder;
+
+        varReplacer1075 = "Pending clients: ";
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1075);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r2);
+
+        if $i0 != 0 goto label4;
+
+        varReplacer1074 = "All clients now connected. Sign-in successful!";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1074);
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void succeedSignIn()>();
+
+        return;
+
+     label4:
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        if $r3 == null goto label6;
+
+        $i1 = $i0 & 1;
+
+        if $i1 == 0 goto label6;
+
+        varReplacer1070 = "Connecting GamesClient.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1070);
+
+        varReplacer1079 = 1;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mClientCurrentlyConnecting> = varReplacer1079;
+
+     label5:
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void connectCurrentClient()>();
+
+        return;
+
+     label6:
+        $r4 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        if $r4 == null goto label7;
+
+        $i1 = $i0 & 2;
+
+        if $i1 == 0 goto label7;
+
+        varReplacer1071 = "Connecting PlusClient.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1071);
+
+        varReplacer1081 = 2;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mClientCurrentlyConnecting> = varReplacer1081;
+
+        goto label5;
+
+     label7:
+        $r5 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        if $r5 == null goto label8;
+
+        $i0 = $i0 & 4;
+
+        if $i0 == 0 goto label8;
+
+        varReplacer1076 = "Connecting AppStateClient.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1076);
+
+        varReplacer1082 = 4;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mClientCurrentlyConnecting> = varReplacer1082;
+
+        goto label5;
+
+     label8:
+        $r6 = new java.lang.AssertionError;
+
+        $r1 = new java.lang.StringBuilder;
+
+        varReplacer1078 = "Not all clients connected, yet no one is next. R=";
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1078);
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mRequestedClients>;
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1073 = ", C=";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1073);
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients>;
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r6.<java.lang.AssertionError: void <init>(java.lang.Object)>($r2);
+
+        throw $r6;
+    }
+
+    void debugLog(java.lang.String)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        java.lang.String $r1, $r2, varReplacer634;
+        boolean $z0;
+        java.lang.StringBuilder $r3;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mDebugLog>;
+
+        if $z0 == 0 goto label1;
+
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String mDebugTag>;
+
+        $r3 = new java.lang.StringBuilder;
+
+        varReplacer634 = "GameHelper: ";
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer634);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r2, $r1);
+
+     label1:
+        return;
+    }
+
+    public void enableDebugLog(boolean, java.lang.String)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        boolean $z0;
+        java.lang.String $r1, varReplacer568;
+        java.lang.StringBuilder $r2;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mDebugLog> = $z0;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String mDebugTag> = $r1;
+
+        if $z0 == 0 goto label1;
+
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer568 = "Debug log enabled, tag: ";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer568);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r1);
+
+     label1:
+        return;
+    }
+
+    java.lang.String getAppIdFromResource()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        java.lang.Exception $r1;
+        android.content.Context $r2;
+        android.content.res.Resources $r3;
+        java.lang.String $r4, varReplacer1311, varReplacer1312, varReplacer1313;
+        int $i0;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+     label1:
+        $r2 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.content.Context getContext()>();
+
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r2 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.content.Context getContext()>();
+
+        $r4 = virtualinvoke $r2.<android.content.Context: java.lang.String getPackageName()>();
+
+        varReplacer1312 = "app_id";
+
+        varReplacer1313 = "string";
+
+        $i0 = virtualinvoke $r3.<android.content.res.Resources: int getIdentifier(java.lang.String,java.lang.String,java.lang.String)>(varReplacer1312, varReplacer1313, $r4);
+
+        $r4 = virtualinvoke $r3.<android.content.res.Resources: java.lang.String getString(int)>($i0);
+
+     label2:
+        return $r4;
+
+     label3:
+        $r1 := @caughtexception;
+
+        virtualinvoke $r1.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer1311 = "??? (failed to retrieve APP ID)";
+
+        return varReplacer1311;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public com.google.android.gms.appstate.AppStateClient getAppStateClient()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        com.google.android.gms.appstate.AppStateClient $r1;
+        java.lang.IllegalStateException $r2;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        if $r1 != null goto label1;
+
+        $r2 = new java.lang.IllegalStateException;
+
+        specialinvoke $r2.<java.lang.IllegalStateException: void <init>(java.lang.String)>("No AppStateClient. Did you request it at setup?");
+
+        throw $r2;
+
+     label1:
+        $r1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        return $r1;
+    }
+
+    android.content.Context getContext()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        android.app.Activity r1;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        r1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.app.Activity mActivity>;
+
+        return r1;
+    }
+
+    public com.google.android.gms.games.GamesClient getGamesClient()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        com.google.android.gms.games.GamesClient $r1;
+        java.lang.IllegalStateException $r2;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        if $r1 != null goto label1;
+
+        $r2 = new java.lang.IllegalStateException;
+
+        specialinvoke $r2.<java.lang.IllegalStateException: void <init>(java.lang.String)>("No GamesClient. Did you request it at setup?");
+
+        throw $r2;
+
+     label1:
+        $r1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        return $r1;
+    }
+
+    public java.lang.String getInvitationId()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        boolean $z0;
+        int[] $r1;
+        java.lang.String r2;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 = newarray (int)[1];
+
+        $r1[0] = 3;
+
+        $z0 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean checkState(int,java.lang.String,java.lang.String,int[])>(1001, "getInvitationId", "Invitation ID is only available when connected (after getting the onSignInSucceeded callback).", $r1);
+
+        if $z0 != 0 goto label1;
+
+        return null;
+
+     label1:
+        r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String mInvitationId>;
+
+        return r2;
+    }
+
+    public com.google.android.gms.plus.PlusClient getPlusClient()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        com.google.android.gms.plus.PlusClient $r1;
+        java.lang.IllegalStateException $r2;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        if $r1 != null goto label1;
+
+        $r2 = new java.lang.IllegalStateException;
+
+        specialinvoke $r2.<java.lang.IllegalStateException: void <init>(java.lang.String)>("No PlusClient. Did you request it at setup?");
+
+        throw $r2;
+
+     label1:
+        $r1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        return $r1;
+    }
+
+    java.lang.String getSHA1CertFingerprint()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        java.lang.StringBuilder $r1, r12;
+        android.content.pm.Signature[] $r2;
+        android.content.Context $r3;
+        android.content.pm.PackageManager $r4;
+        java.lang.String $r5, varReplacer1304, varReplacer1305, varReplacer1306, varReplacer1307, varReplacer1309, varReplacer1310;
+        android.content.pm.PackageInfo $r6;
+        int $i0, $i1, varReplacer1308;
+        java.security.MessageDigest $r7;
+        android.content.pm.Signature $r8;
+        byte[] $r9;
+        byte $b2;
+        java.lang.Throwable $r10, $r11;
+        android.content.pm.PackageManager$NameNotFoundException r13;
+        java.security.NoSuchAlgorithmException r14;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+     label01:
+        $r3 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.content.Context getContext()>();
+
+        $r4 = virtualinvoke $r3.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r3 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.content.Context getContext()>();
+
+        $r5 = virtualinvoke $r3.<android.content.Context: java.lang.String getPackageName()>();
+
+        varReplacer1308 = 64;
+
+        $r6 = virtualinvoke $r4.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>($r5, varReplacer1308);
+
+     label02:
+        $r2 = $r6.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        $i0 = lengthof $r2;
+
+        if $i0 != 0 goto label03;
+
+        varReplacer1309 = "ERROR: NO SIGNATURE.";
+
+        return varReplacer1309;
+
+     label03:
+        $i0 = lengthof $r2;
+
+        if $i0 <= 1 goto label04;
+
+        varReplacer1310 = "ERROR: MULTIPLE SIGNATURES";
+
+        return varReplacer1310;
+
+     label04:
+        varReplacer1304 = "SHA1";
+
+        $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1304);
+
+     label05:
+        $r8 = $r2[0];
+
+     label06:
+        $r9 = virtualinvoke $r8.<android.content.pm.Signature: byte[] toByteArray()>();
+
+        $r9 = virtualinvoke $r7.<java.security.MessageDigest: byte[] digest(byte[])>($r9);
+
+     label07:
+        r12 = new java.lang.StringBuilder;
+
+        $r1 = r12;
+
+     label08:
+        specialinvoke r12.<java.lang.StringBuilder: void <init>()>();
+
+     label09:
+        $i0 = 0;
+
+     label10:
+        $i1 = lengthof $r9;
+
+        if $i0 < $i1 goto label13;
+
+     label11:
+        $r5 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label12:
+        return $r5;
+
+     label13:
+        if $i0 <= 0 goto label15;
+
+     label14:
+        varReplacer1305 = ":";
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1305);
+
+     label15:
+        $b2 = $r9[$i0];
+
+     label16:
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void byteToString(java.lang.StringBuilder,byte)>($r1, $b2);
+
+     label17:
+        $i0 = $i0 + 1;
+
+        goto label10;
+
+     label18:
+        $r10 := @caughtexception;
+
+        r13 = (android.content.pm.PackageManager$NameNotFoundException) $r10;
+
+        virtualinvoke r13.<android.content.pm.PackageManager$NameNotFoundException: void printStackTrace()>();
+
+        varReplacer1306 = "(ERROR: package not found)";
+
+        return varReplacer1306;
+
+     label19:
+        $r11 := @caughtexception;
+
+        r14 = (java.security.NoSuchAlgorithmException) $r11;
+
+        virtualinvoke r14.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        varReplacer1307 = "(ERROR: SHA1 algorithm not found)";
+
+        return varReplacer1307;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label01 to label02 with label18;
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label19;
+        catch android.content.pm.PackageManager$NameNotFoundException from label04 to label05 with label18;
+        catch android.content.pm.PackageManager$NameNotFoundException from label06 to label07 with label18;
+        catch android.content.pm.PackageManager$NameNotFoundException from label08 to label09 with label18;
+        catch android.content.pm.PackageManager$NameNotFoundException from label11 to label12 with label18;
+        catch android.content.pm.PackageManager$NameNotFoundException from label14 to label15 with label18;
+        catch android.content.pm.PackageManager$NameNotFoundException from label16 to label17 with label18;
+        catch java.security.NoSuchAlgorithmException from label04 to label05 with label19;
+        catch java.security.NoSuchAlgorithmException from label06 to label07 with label19;
+        catch java.security.NoSuchAlgorithmException from label08 to label09 with label19;
+        catch java.security.NoSuchAlgorithmException from label11 to label12 with label19;
+        catch java.security.NoSuchAlgorithmException from label14 to label15 with label19;
+        catch java.security.NoSuchAlgorithmException from label16 to label17 with label19;
+    }
+
+    public java.lang.String getScopes()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        java.lang.String $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String[] $r3;
+        int $i0, $i1;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] mScopes>;
+
+        if $r3 == null goto label2;
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] mScopes>;
+
+        $i0 = lengthof $r3;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 < $i0 goto label3;
+
+     label2:
+        $r1 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label3:
+        $r1 = $r3[$i1];
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void addToScope(java.lang.StringBuilder,java.lang.String)>($r2, $r1);
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+    }
+
+    public java.lang.String[] getScopesArray()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        java.lang.String[] r1;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        r1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] mScopes>;
+
+        return r1;
+    }
+
+    public com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason getSignInError()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason r1;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        r1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason mSignInFailureReason>;
+
+        return r1;
+    }
+
+    void giveUp(com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason $r1;
+        int[] $r2;
+        int varReplacer1239, varReplacer1242, varReplacer1243;
+        java.lang.String varReplacer1240, varReplacer1241;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 := @parameter0: com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason;
+
+        $r2 = newarray (int)[1];
+
+        $r2[0] = 2;
+
+        varReplacer1239 = 1002;
+
+        varReplacer1240 = "giveUp";
+
+        varReplacer1241 = "giveUp should only be called when connecting. Proceeding anyway.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean checkState(int,java.lang.String,java.lang.String,int[])>(varReplacer1239, varReplacer1240, varReplacer1241, $r2);
+
+        varReplacer1243 = 0;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mAutoSignIn> = varReplacer1243;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void killConnections()>();
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason mSignInFailureReason> = $r1;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void showFailureDialog()>();
+
+        varReplacer1242 = 0;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void notifyListener(boolean)>(varReplacer1242);
+
+        return;
+    }
+
+    public boolean hasSignInError()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason $r1;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason mSignInFailureReason>;
+
+        if $r1 == null goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public boolean isSignedIn()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        int $i0;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        if $i0 != 3 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    void killConnections()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        int[] $r1;
+        boolean $z0;
+        com.google.android.gms.games.GamesClient $r2;
+        com.google.android.gms.plus.PlusClient $r3;
+        com.google.android.gms.appstate.AppStateClient $r4;
+        int varReplacer1227, varReplacer1232, varReplacer1238;
+        null_type varReplacer1228, varReplacer1231;
+        java.lang.String varReplacer1229, varReplacer1230, varReplacer1233, varReplacer1234, varReplacer1235, varReplacer1236, varReplacer1237;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 = newarray (int)[2];
+
+        $r1[0] = 3;
+
+        $r1[1] = 2;
+
+        varReplacer1232 = 1002;
+
+        varReplacer1233 = "killConnections";
+
+        varReplacer1234 = "killConnections() should only get called while connected or connecting.";
+
+        $z0 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean checkState(int,java.lang.String,java.lang.String,int[])>(varReplacer1232, varReplacer1233, varReplacer1234, $r1);
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        varReplacer1230 = "killConnections: killing connections.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1230);
+
+        varReplacer1228 = null;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult> = varReplacer1228;
+
+        varReplacer1231 = null;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason mSignInFailureReason> = varReplacer1231;
+
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        if $r2 == null goto label2;
+
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        $z0 = virtualinvoke $r2.<com.google.android.gms.games.GamesClient: boolean isConnected()>();
+
+        if $z0 == 0 goto label2;
+
+        varReplacer1229 = "Disconnecting GamesClient.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1229);
+
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        virtualinvoke $r2.<com.google.android.gms.games.GamesClient: void disconnect()>();
+
+     label2:
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        if $r3 == null goto label3;
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        $z0 = virtualinvoke $r3.<com.google.android.gms.plus.PlusClient: boolean isConnected()>();
+
+        if $z0 == 0 goto label3;
+
+        varReplacer1235 = "Disconnecting PlusClient.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1235);
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        virtualinvoke $r3.<com.google.android.gms.plus.PlusClient: void disconnect()>();
+
+     label3:
+        $r4 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        if $r4 == null goto label4;
+
+        $r4 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        $z0 = virtualinvoke $r4.<com.google.android.gms.appstate.AppStateClient: boolean isConnected()>();
+
+        if $z0 == 0 goto label4;
+
+        varReplacer1237 = "Disconnecting AppStateClient.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1237);
+
+        $r4 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        virtualinvoke $r4.<com.google.android.gms.appstate.AppStateClient: void disconnect()>();
+
+     label4:
+        varReplacer1238 = 0;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients> = varReplacer1238;
+
+        varReplacer1236 = "killConnections: all clients disconnected.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1236);
+
+        varReplacer1227 = 1;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void setState(int)>(varReplacer1227);
+
+        return;
+    }
+
+    void logError(java.lang.String)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        java.lang.String $r1, $r2, varReplacer633;
+        java.lang.StringBuilder $r3;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String mDebugTag>;
+
+        $r3 = new java.lang.StringBuilder;
+
+        varReplacer633 = "*** GameHelper ERROR: ";
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer633);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r2, $r1);
+
+        return;
+    }
+
+    void logWarn(java.lang.String)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        java.lang.String $r1, $r2, varReplacer1087;
+        java.lang.StringBuilder $r3;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String mDebugTag>;
+
+        $r3 = new java.lang.StringBuilder;
+
+        varReplacer1087 = "!!! GameHelper WARNING: ";
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1087);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>($r2, $r1);
+
+        return;
+    }
+
+    android.app.Dialog makeSimpleDialog(java.lang.String)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        java.lang.String $r1;
+        android.app.AlertDialog$Builder $r2;
+        android.content.Context $r3;
+        android.app.AlertDialog $r4;
+        int varReplacer1278;
+        null_type varReplacer1279;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = new android.app.AlertDialog$Builder;
+
+        $r3 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.content.Context getContext()>();
+
+        specialinvoke $r2.<android.app.AlertDialog$Builder: void <init>(android.content.Context)>($r3);
+
+        $r2 = virtualinvoke $r2.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setMessage(java.lang.CharSequence)>($r1);
+
+        varReplacer1278 = 17039370;
+
+        varReplacer1279 = null;
+
+        $r2 = virtualinvoke $r2.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setNeutralButton(int,android.content.DialogInterface$OnClickListener)>(varReplacer1278, varReplacer1279);
+
+        $r4 = virtualinvoke $r2.<android.app.AlertDialog$Builder: android.app.AlertDialog create()>();
+
+        return $r4;
+    }
+
+    void notifyListener(boolean)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        boolean $z0;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2, varReplacer1202;
+        com.fragranzeapps.urbanhoopsfree.GameHelper$GameHelperListener $r3;
+        com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason $r4;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = new java.lang.StringBuilder;
+
+        varReplacer1202 = "Notifying LISTENER of sign-in ";
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1202);
+
+        if $z0 == 0 goto label2;
+
+        $r2 = "SUCCESS";
+
+     label1:
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r2);
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$GameHelperListener mListener>;
+
+        if $r3 == null goto label5;
+
+        if $z0 == 0 goto label4;
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$GameHelperListener mListener>;
+
+        interfaceinvoke $r3.<com.fragranzeapps.urbanhoopsfree.GameHelper$GameHelperListener: void onSignInSucceeded()>();
+
+        return;
+
+     label2:
+        $r4 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason mSignInFailureReason>;
+
+        if $r4 == null goto label3;
+
+        $r2 = "FAILURE (error)";
+
+        goto label1;
+
+     label3:
+        $r2 = "FAILURE (no error)";
+
+        goto label1;
+
+     label4:
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$GameHelperListener mListener>;
+
+        interfaceinvoke $r3.<com.fragranzeapps.urbanhoopsfree.GameHelper$GameHelperListener: void onSignInFailed()>();
+
+     label5:
+        return;
+    }
+
+    public void onActivityResult(int, int, android.content.Intent)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        int $i0, $i1, varReplacer1203, varReplacer1206, varReplacer1208, varReplacer1211;
+        android.content.Intent $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3, varReplacer1205, varReplacer1207, varReplacer1209, varReplacer1210, varReplacer1212, varReplacer1213, varReplacer1214, varReplacer1215, varReplacer1216, varReplacer1217;
+        java.lang.String[] $r4;
+        com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason $r5;
+        com.google.android.gms.common.ConnectionResult $r6;
+        null_type varReplacer1204;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        $r1 := @parameter2: android.content.Intent;
+
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer1214 = "onActivityResult: req=";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1214);
+
+        if $i0 != 9001 goto label2;
+
+        $r3 = "RC_RESOLVE";
+
+     label1:
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer1205 = ", resp=";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1205);
+
+        $r3 = staticinvoke <com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String activityResponseCodeToString(int)>($i1);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        if $i0 == 9001 goto label3;
+
+        varReplacer1210 = "onActivityResult: request code not meant for us. Ignoring.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1210);
+
+        return;
+
+     label2:
+        $r3 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+        goto label1;
+
+     label3:
+        varReplacer1211 = 0;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mExpectingResolution> = varReplacer1211;
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        if $i0 == 2 goto label4;
+
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer1215 = "onActivityResult: ignoring because state isn\'t STATE_CONNECTING (it\'s ";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1215);
+
+        $r4 = <com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        $r3 = $r4[$i0];
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer1216 = ")";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1216);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        return;
+
+     label4:
+        if $i1 != -1 goto label5;
+
+        varReplacer1212 = "onAR: Resolution was RESULT_OK, so connecting current client again.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1212);
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void connectCurrentClient()>();
+
+        return;
+
+     label5:
+        if $i1 != 10001 goto label6;
+
+        varReplacer1213 = "onAR: Resolution was RECONNECT_REQUIRED, so reconnecting.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1213);
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void connectCurrentClient()>();
+
+        return;
+
+     label6:
+        if $i1 != 0 goto label7;
+
+        varReplacer1209 = "onAR: Got a cancellation result, so disconnecting.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1209);
+
+        varReplacer1208 = 0;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mAutoSignIn> = varReplacer1208;
+
+        varReplacer1203 = 0;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mUserInitiatedSignIn> = varReplacer1203;
+
+        varReplacer1204 = null;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason mSignInFailureReason> = varReplacer1204;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void killConnections()>();
+
+        varReplacer1206 = 0;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void notifyListener(boolean)>(varReplacer1206);
+
+        return;
+
+     label7:
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer1207 = "onAR: responseCode=";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1207);
+
+        $r3 = staticinvoke <com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String activityResponseCodeToString(int)>($i1);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer1217 = ", so giving up.";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1217);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        $r5 = new com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason;
+
+        $r6 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        $i0 = virtualinvoke $r6.<com.google.android.gms.common.ConnectionResult: int getErrorCode()>();
+
+        specialinvoke $r5.<com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason: void <init>(int,int)>($i0, $i1);
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void giveUp(com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason)>($r5);
+
+        return;
+    }
+
+    public void onConnected(android.os.Bundle)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        android.os.Bundle $r1;
+        java.lang.StringBuilder $r2;
+        int $i0, $i1;
+        java.lang.String $r3;
+        android.os.Parcelable $r4;
+        com.google.android.gms.games.multiplayer.Invitation $r5;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 := @parameter0: android.os.Bundle;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("onConnected: connected! client=");
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mClientCurrentlyConnecting>;
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients>;
+
+        $i1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mClientCurrentlyConnecting>;
+
+        $i0 = $i0 | $i1;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients> = $i0;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("Connected clients updated to: ");
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients>;
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mClientCurrentlyConnecting>;
+
+        if $i0 != 1 goto label1;
+
+        if $r1 == null goto label1;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("onConnected: connection hint provided. Checking for invite.");
+
+        $r4 = virtualinvoke $r1.<android.os.Bundle: android.os.Parcelable getParcelable(java.lang.String)>("invitation");
+
+        $r5 = (com.google.android.gms.games.multiplayer.Invitation) $r4;
+
+        if $r5 == null goto label1;
+
+        $r3 = interfaceinvoke $r5.<com.google.android.gms.games.multiplayer.Invitation: java.lang.String getInvitationId()>();
+
+        if $r3 == null goto label1;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("onConnected: connection hint has a room invite!");
+
+        $r3 = interfaceinvoke $r5.<com.google.android.gms.games.multiplayer.Invitation: java.lang.String getInvitationId()>();
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String mInvitationId> = $r3;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("Invitation ID: ");
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String mInvitationId>;
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r3);
+
+     label1:
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void connectNextClient()>();
+
+        return;
+    }
+
+    public void onConnectionFailed(com.google.android.gms.common.ConnectionResult)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        com.google.android.gms.common.ConnectionResult $r1, $r3;
+        java.lang.StringBuilder $r2;
+        int $i0;
+        java.lang.String $r4;
+        boolean $z0;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 := @parameter0: com.google.android.gms.common.ConnectionResult;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("onConnectionFailed");
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult> = $r1;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("Connection failure:");
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("   - code: ");
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        $i0 = virtualinvoke $r3.<com.google.android.gms.common.ConnectionResult: int getErrorCode()>();
+
+        $r4 = staticinvoke <com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String errorCodeToString(int)>($i0);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r4);
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("   - resolvable: ");
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        $z0 = virtualinvoke $r3.<com.google.android.gms.common.ConnectionResult: boolean hasResolution()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r4);
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("   - details: ");
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        $r4 = virtualinvoke $r3.<com.google.android.gms.common.ConnectionResult: java.lang.String toString()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r4);
+
+        $z0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mUserInitiatedSignIn>;
+
+        if $z0 != 0 goto label1;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("onConnectionFailed: since user didn\'t initiate sign-in, failing now.");
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult> = $r1;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void setState(int)>(1);
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void notifyListener(boolean)>(0);
+
+        return;
+
+     label1:
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("onConnectionFailed: since user initiated sign-in, resolving problem.");
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void resolveConnectionResult()>();
+
+        return;
+    }
+
+    public void onDisconnected()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        int $i0;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("onDisconnected.");
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        if $i0 != 1 goto label1;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("onDisconnected is expected, so no action taken.");
+
+        return;
+
+     label1:
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void logWarn(java.lang.String)>("Unexpectedly disconnected. Severing remaining connections.");
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void killConnections()>();
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason mSignInFailureReason> = null;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("Making extraordinary call to onSignInFailed callback");
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void notifyListener(boolean)>(0);
+
+        return;
+    }
+
+    public void onStart(android.app.Activity)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        android.app.Activity $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String[] $r3;
+        int $i0;
+        java.lang.String $r4, varReplacer1039, varReplacer1040, varReplacer1041, varReplacer1042, varReplacer1043, varReplacer1044, varReplacer1045;
+        java.lang.IllegalStateException $r5;
+        boolean $z0;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 := @parameter0: android.app.Activity;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.app.Activity mActivity> = $r1;
+
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer1044 = "onStart, state = ";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1044);
+
+        $r3 = <com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        $r4 = $r3[$i0];
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r4);
+
+        varReplacer1043 = "onStart";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void assertConfigured(java.lang.String)>(varReplacer1043);
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        lookupswitch($i0)
+        {
+            case 1: goto label2;
+            case 2: goto label4;
+            case 3: goto label5;
+            default: goto label1;
+        };
+
+     label1:
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer1045 = "onStart: BUG: unexpected state ";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1045);
+
+        $r3 = <com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        $r4 = $r3[$i0];
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void logError(java.lang.String)>($r4);
+
+        $r5 = new java.lang.IllegalStateException;
+
+        specialinvoke $r5.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r4);
+
+        throw $r5;
+
+     label2:
+        $z0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mAutoSignIn>;
+
+        if $z0 == 0 goto label3;
+
+        varReplacer1039 = "onStart: Now connecting clients.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1039);
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void startConnections()>();
+
+        return;
+
+     label3:
+        varReplacer1041 = "onStart: Not connecting (user specifically signed out).";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1041);
+
+        return;
+
+     label4:
+        varReplacer1040 = "onStart: connection process in progress, no action taken.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1040);
+
+        return;
+
+     label5:
+        varReplacer1042 = "onStart: already connected (unusual, but ok).";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1042);
+
+        return;
+    }
+
+    public void onStop()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        java.lang.StringBuilder $r1;
+        java.lang.String[] $r2;
+        int $i0;
+        java.lang.String $r3, varReplacer1324, varReplacer1325, varReplacer1326, varReplacer1327, varReplacer1328;
+        java.lang.IllegalStateException $r4;
+        null_type varReplacer1329;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 = new java.lang.StringBuilder;
+
+        varReplacer1324 = "onStop, state = ";
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1324);
+
+        $r2 = <com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        $r3 = $r2[$i0];
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        varReplacer1328 = "onStop";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void assertConfigured(java.lang.String)>(varReplacer1328);
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        lookupswitch($i0)
+        {
+            case 1: goto label4;
+            case 2: goto label2;
+            case 3: goto label2;
+            default: goto label1;
+        };
+
+     label1:
+        $r1 = new java.lang.StringBuilder;
+
+        varReplacer1327 = "onStop: BUG: unexpected state ";
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1327);
+
+        $r2 = <com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        $r3 = $r2[$i0];
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void logError(java.lang.String)>($r3);
+
+        $r4 = new java.lang.IllegalStateException;
+
+        specialinvoke $r4.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r3);
+
+        throw $r4;
+
+     label2:
+        varReplacer1326 = "onStop: Killing connections";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1326);
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void killConnections()>();
+
+     label3:
+        varReplacer1329 = null;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.app.Activity mActivity> = varReplacer1329;
+
+        return;
+
+     label4:
+        varReplacer1325 = "onStop: not connected, so no action taken.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1325);
+
+        goto label3;
+    }
+
+    void printMisconfiguredDebugInfo()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        android.content.Context $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3, varReplacer1280, varReplacer1281, varReplacer1282, varReplacer1283, varReplacer1284, varReplacer1285, varReplacer1286, varReplacer1287, varReplacer1288, varReplacer1289, varReplacer1290, varReplacer1291, varReplacer1292, varReplacer1293, varReplacer1294, varReplacer1295, varReplacer1296, varReplacer1297, varReplacer1298, varReplacer1299, varReplacer1300, varReplacer1301, varReplacer1302, varReplacer1303;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        varReplacer1280 = "****";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1280);
+
+        varReplacer1291 = "****";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1291);
+
+        varReplacer1293 = "**** APP NOT CORRECTLY CONFIGURED TO USE GOOGLE PLAY GAME SERVICES";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1293);
+
+        varReplacer1283 = "**** This is usually caused by one of these reasons:";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1283);
+
+        varReplacer1298 = "**** (1) Your package name and certificate fingerprint do not match";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1298);
+
+        varReplacer1294 = "****     the client ID you registered in Developer Console.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1294);
+
+        varReplacer1285 = "**** (2) Your App ID was incorrectly entered.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1285);
+
+        varReplacer1282 = "**** (3) Your game settings have not been published and you are ";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1282);
+
+        varReplacer1299 = "****     trying to log in with an account that is not listed as";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1299);
+
+        varReplacer1302 = "****     a test account.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1302);
+
+        varReplacer1284 = "****";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1284);
+
+        $r1 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.content.Context getContext()>();
+
+        if $r1 != null goto label1;
+
+        varReplacer1292 = "*** (no Context, so can\'t print more debug info)";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1292);
+
+        return;
+
+     label1:
+        varReplacer1286 = "**** To help you debug, here is the information about this app";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1286);
+
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer1281 = "**** Package name         : ";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1281);
+
+        $r1 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.content.Context getContext()>();
+
+        $r3 = virtualinvoke $r1.<android.content.Context: java.lang.String getPackageName()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer1295 = "**** Cert SHA1 fingerprint: ";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1295);
+
+        $r3 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String getSHA1CertFingerprint()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer1300 = "**** App ID from          : ";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1300);
+
+        $r3 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String getAppIdFromResource()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        varReplacer1288 = "****";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1288);
+
+        varReplacer1303 = "**** Check that the above information matches your setup in ";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1303);
+
+        varReplacer1287 = "**** Developer Console. Also, check that you\'re logging in with the";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1287);
+
+        varReplacer1296 = "**** right account (it should be listed in the Testers section if";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1296);
+
+        varReplacer1290 = "**** your project is not yet published).";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1290);
+
+        varReplacer1301 = "****";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1301);
+
+        varReplacer1289 = "**** For more information, refer to the troubleshooting guide:";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1289);
+
+        varReplacer1297 = "****   http://developers.google.com/games/services/android/troubleshooting";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1297);
+
+        return;
+    }
+
+    public void reconnectClients(int)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        int $i0, $i1;
+        int[] $r1;
+        boolean $z0, $z1;
+        com.google.android.gms.games.GamesClient $r2;
+        com.google.android.gms.appstate.AppStateClient $r3;
+        com.google.android.gms.plus.PlusClient $r4;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $i0 := @parameter0: int;
+
+        $r1 = newarray (int)[1];
+
+        $r1[0] = 3;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean checkState(int,java.lang.String,java.lang.String,int[])>(1001, "reconnectClients", "reconnectClients should only be called when connected. Proceeding anyway.", $r1);
+
+        $z0 = 0;
+
+        $i1 = $i0 & 1;
+
+        if $i1 == 0 goto label1;
+
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        if $r2 == null goto label1;
+
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        $z1 = virtualinvoke $r2.<com.google.android.gms.games.GamesClient: boolean isConnected()>();
+
+        if $z1 == 0 goto label1;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("Reconnecting GamesClient.");
+
+        $z0 = 1;
+
+        $i1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients>;
+
+        $i1 = $i1 & -2;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients> = $i1;
+
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        virtualinvoke $r2.<com.google.android.gms.games.GamesClient: void reconnect()>();
+
+     label1:
+        $i1 = $i0 & 4;
+
+        if $i1 == 0 goto label2;
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        if $r3 == null goto label2;
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        $z1 = virtualinvoke $r3.<com.google.android.gms.appstate.AppStateClient: boolean isConnected()>();
+
+        if $z1 == 0 goto label2;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("Reconnecting AppStateClient.");
+
+        $z0 = 1;
+
+        $i1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients>;
+
+        $i1 = $i1 & -5;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mConnectedClients> = $i1;
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        virtualinvoke $r3.<com.google.android.gms.appstate.AppStateClient: void reconnect()>();
+
+     label2:
+        $i0 = $i0 & 2;
+
+        if $i0 == 0 goto label3;
+
+        $r4 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        if $r4 == null goto label3;
+
+        $r4 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        $z1 = virtualinvoke $r4.<com.google.android.gms.plus.PlusClient: boolean isConnected()>();
+
+        if $z1 == 0 goto label3;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void logWarn(java.lang.String)>("GameHelper is ignoring your request to reconnect PlusClient because this is unnecessary.");
+
+     label3:
+        if $z0 == 0 goto label4;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void setState(int)>(2);
+
+        return;
+
+     label4:
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("No reconnections needed, so behaving as if sign in just succeeded");
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void notifyListener(boolean)>(1);
+
+        return;
+    }
+
+    void resolveConnectionResult()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        java.lang.Throwable $r1;
+        int[] $r2;
+        boolean $z0;
+        java.lang.StringBuilder $r3;
+        com.google.android.gms.common.ConnectionResult $r4;
+        java.lang.String $r5;
+        android.app.Activity $r6;
+        com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason $r7;
+        int $i0;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r2 = newarray (int)[1];
+
+        $r2[0] = 2;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean checkState(int,java.lang.String,java.lang.String,int[])>(1002, "resolveConnectionResult", "resolveConnectionResult should only be called when connecting. Proceeding anyway.", $r2);
+
+        $z0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mExpectingResolution>;
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("We\'re already expecting the result of a previous resolution.");
+
+        return;
+
+     label1:
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("resolveConnectionResult: trying to resolve result: ");
+
+        $r4 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r5);
+
+        $r4 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        $z0 = virtualinvoke $r4.<com.google.android.gms.common.ConnectionResult: boolean hasResolution()>();
+
+        if $z0 == 0 goto label5;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("Result has resolution. Starting it.");
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mExpectingResolution> = 1;
+
+        $r4 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        $r6 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.app.Activity mActivity>;
+
+     label2:
+        virtualinvoke $r4.<com.google.android.gms.common.ConnectionResult: void startResolutionForResult(android.app.Activity,int)>($r6, 9001);
+
+     label3:
+        return;
+
+     label4:
+        $r1 := @caughtexception;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("SendIntentException, so connecting again.");
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void connectCurrentClient()>();
+
+        return;
+
+     label5:
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("resolveConnectionResult: result has no resolution. Giving up.");
+
+        $r7 = new com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason;
+
+        $r4 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        $i0 = virtualinvoke $r4.<com.google.android.gms.common.ConnectionResult: int getErrorCode()>();
+
+        specialinvoke $r7.<com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason: void <init>(int)>($i0);
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void giveUp(com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason)>($r7);
+
+        return;
+
+        catch android.content.IntentSender$SendIntentException from label2 to label3 with label4;
+    }
+
+    void setState(int)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        int $i0, $i1;
+        java.lang.String $r1, $r2, varReplacer635, varReplacer636;
+        java.lang.String[] $r3;
+        java.lang.StringBuilder $r4;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $i0 := @parameter0: int;
+
+        $r3 = <com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $i1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        $r2 = $r3[$i1];
+
+        $r3 = <com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $r1 = $r3[$i0];
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState> = $i0;
+
+        $r4 = new java.lang.StringBuilder;
+
+        varReplacer636 = "State change ";
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer636);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        varReplacer635 = " -> ";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer635);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r1);
+
+        return;
+    }
+
+    public void setup(com.fragranzeapps.urbanhoopsfree.GameHelper$GameHelperListener)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        com.fragranzeapps.urbanhoopsfree.GameHelper$GameHelperListener $r1;
+        java.lang.String[] $r2;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 := @parameter0: com.fragranzeapps.urbanhoopsfree.GameHelper$GameHelperListener;
+
+        $r2 = newarray (java.lang.String)[0];
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void setup(com.fragranzeapps.urbanhoopsfree.GameHelper$GameHelperListener,int,java.lang.String[])>($r1, 1, $r2);
+
+        return;
+    }
+
+    public transient void setup(com.fragranzeapps.urbanhoopsfree.GameHelper$GameHelperListener, int, java.lang.String[])
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        com.fragranzeapps.urbanhoopsfree.GameHelper$GameHelperListener $r1;
+        int $i0, $i1, $i2, $i3, varReplacer573, varReplacer576;
+        java.lang.String[] $r2;
+        java.util.Vector $r3;
+        java.lang.IllegalStateException $r4;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r6, varReplacer569, varReplacer570, varReplacer571, varReplacer572, varReplacer574, varReplacer575, varReplacer577, varReplacer578, varReplacer579, varReplacer580, varReplacer581;
+        com.google.android.gms.games.GamesClient$Builder $r7;
+        android.content.Context $r8;
+        com.google.android.gms.games.GamesClient $r9;
+        com.google.android.gms.plus.PlusClient$Builder $r10;
+        com.google.android.gms.plus.PlusClient $r11;
+        com.google.android.gms.appstate.AppStateClient$Builder $r12;
+        com.google.android.gms.appstate.AppStateClient $r13;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 := @parameter0: com.fragranzeapps.urbanhoopsfree.GameHelper$GameHelperListener;
+
+        $i0 := @parameter1: int;
+
+        $r2 := @parameter2: java.lang.String[];
+
+        $i1 = 0;
+
+        $i2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        if $i2 == 0 goto label01;
+
+        varReplacer578 = "GameHelper: you called GameHelper.setup() twice. You can only call it once.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void logError(java.lang.String)>(varReplacer578);
+
+        $r4 = new java.lang.IllegalStateException;
+
+        varReplacer572 = "GameHelper: you called GameHelper.setup() twice. You can only call it once.";
+
+        specialinvoke $r4.<java.lang.IllegalStateException: void <init>(java.lang.String)>(varReplacer572);
+
+        throw $r4;
+
+     label01:
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$GameHelperListener mListener> = $r1;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mRequestedClients> = $i0;
+
+        $r5 = new java.lang.StringBuilder;
+
+        varReplacer574 = "Setup: requested clients: ";
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer574);
+
+        $i2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mRequestedClients>;
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i2);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r6);
+
+        $r3 = new java.util.Vector;
+
+        specialinvoke $r3.<java.util.Vector: void <init>()>();
+
+        $i2 = $i0 & 1;
+
+        if $i2 == 0 goto label02;
+
+        varReplacer570 = "https://www.googleapis.com/auth/games";
+
+        virtualinvoke $r3.<java.util.Vector: boolean add(java.lang.Object)>(varReplacer570);
+
+     label02:
+        $i2 = $i0 & 2;
+
+        if $i2 == 0 goto label03;
+
+        varReplacer579 = "https://www.googleapis.com/auth/plus.login";
+
+        virtualinvoke $r3.<java.util.Vector: boolean add(java.lang.Object)>(varReplacer579);
+
+     label03:
+        $i2 = $i0 & 4;
+
+        if $i2 == 0 goto label04;
+
+        varReplacer575 = "https://www.googleapis.com/auth/appstate";
+
+        virtualinvoke $r3.<java.util.Vector: boolean add(java.lang.Object)>(varReplacer575);
+
+     label04:
+        if $r2 == null goto label06;
+
+        $i2 = lengthof $r2;
+
+        $i3 = 0;
+
+     label05:
+        if $i3 < $i2 goto label11;
+
+     label06:
+        $i2 = virtualinvoke $r3.<java.util.Vector: int size()>();
+
+        $r2 = newarray (java.lang.String)[$i2];
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] mScopes> = $r2;
+
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] mScopes>;
+
+        virtualinvoke $r3.<java.util.Vector: void copyInto(java.lang.Object[])>($r2);
+
+        varReplacer571 = "setup: scopes:";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer571);
+
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] mScopes>;
+
+        $i2 = lengthof $r2;
+
+     label07:
+        if $i1 < $i2 goto label12;
+
+        $i1 = $i0 & 1;
+
+        if $i1 == 0 goto label08;
+
+        varReplacer580 = "setup: creating GamesClient";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer580);
+
+        $r7 = new com.google.android.gms.games.GamesClient$Builder;
+
+        $r8 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.content.Context getContext()>();
+
+        specialinvoke $r7.<com.google.android.gms.games.GamesClient$Builder: void <init>(android.content.Context,com.google.android.gms.common.GooglePlayServicesClient$ConnectionCallbacks,com.google.android.gms.common.GooglePlayServicesClient$OnConnectionFailedListener)>($r8, $r0, $r0);
+
+        varReplacer573 = 49;
+
+        $r7 = virtualinvoke $r7.<com.google.android.gms.games.GamesClient$Builder: com.google.android.gms.games.GamesClient$Builder setGravityForPopups(int)>(varReplacer573);
+
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] mScopes>;
+
+        $r7 = virtualinvoke $r7.<com.google.android.gms.games.GamesClient$Builder: com.google.android.gms.games.GamesClient$Builder setScopes(java.lang.String[])>($r2);
+
+        $r9 = virtualinvoke $r7.<com.google.android.gms.games.GamesClient$Builder: com.google.android.gms.games.GamesClient create()>();
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.games.GamesClient mGamesClient> = $r9;
+
+     label08:
+        $i1 = $i0 & 2;
+
+        if $i1 == 0 goto label09;
+
+        varReplacer569 = "setup: creating GamesPlusClient";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer569);
+
+        $r10 = new com.google.android.gms.plus.PlusClient$Builder;
+
+        $r8 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.content.Context getContext()>();
+
+        specialinvoke $r10.<com.google.android.gms.plus.PlusClient$Builder: void <init>(android.content.Context,com.google.android.gms.common.GooglePlayServicesClient$ConnectionCallbacks,com.google.android.gms.common.GooglePlayServicesClient$OnConnectionFailedListener)>($r8, $r0, $r0);
+
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] mScopes>;
+
+        $r10 = virtualinvoke $r10.<com.google.android.gms.plus.PlusClient$Builder: com.google.android.gms.plus.PlusClient$Builder setScopes(java.lang.String[])>($r2);
+
+        $r11 = virtualinvoke $r10.<com.google.android.gms.plus.PlusClient$Builder: com.google.android.gms.plus.PlusClient build()>();
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient> = $r11;
+
+     label09:
+        $i0 = $i0 & 4;
+
+        if $i0 == 0 goto label10;
+
+        varReplacer577 = "setup: creating AppStateClient";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer577);
+
+        $r12 = new com.google.android.gms.appstate.AppStateClient$Builder;
+
+        $r8 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.content.Context getContext()>();
+
+        specialinvoke $r12.<com.google.android.gms.appstate.AppStateClient$Builder: void <init>(android.content.Context,com.google.android.gms.common.GooglePlayServicesClient$ConnectionCallbacks,com.google.android.gms.common.GooglePlayServicesClient$OnConnectionFailedListener)>($r8, $r0, $r0);
+
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String[] mScopes>;
+
+        $r12 = virtualinvoke $r12.<com.google.android.gms.appstate.AppStateClient$Builder: com.google.android.gms.appstate.AppStateClient$Builder setScopes(java.lang.String[])>($r2);
+
+        $r13 = virtualinvoke $r12.<com.google.android.gms.appstate.AppStateClient$Builder: com.google.android.gms.appstate.AppStateClient create()>();
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient> = $r13;
+
+     label10:
+        varReplacer576 = 1;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void setState(int)>(varReplacer576);
+
+        return;
+
+     label11:
+        $r6 = $r2[$i3];
+
+        virtualinvoke $r3.<java.util.Vector: boolean add(java.lang.Object)>($r6);
+
+        $i3 = $i3 + 1;
+
+        goto label05;
+
+     label12:
+        $r6 = $r2[$i1];
+
+        $r5 = new java.lang.StringBuilder;
+
+        varReplacer581 = "  - ";
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer581);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r6);
+
+        $i1 = $i1 + 1;
+
+        goto label07;
+    }
+
+    public void showAlert(java.lang.String)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        java.lang.String $r1;
+        android.app.AlertDialog$Builder $r2;
+        android.content.Context $r3;
+        android.app.AlertDialog $r4;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = new android.app.AlertDialog$Builder;
+
+        $r3 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.content.Context getContext()>();
+
+        specialinvoke $r2.<android.app.AlertDialog$Builder: void <init>(android.content.Context)>($r3);
+
+        $r2 = virtualinvoke $r2.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setMessage(java.lang.CharSequence)>($r1);
+
+        $r2 = virtualinvoke $r2.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setNeutralButton(int,android.content.DialogInterface$OnClickListener)>(17039370, null);
+
+        $r4 = virtualinvoke $r2.<android.app.AlertDialog$Builder: android.app.AlertDialog create()>();
+
+        virtualinvoke $r4.<android.app.AlertDialog: void show()>();
+
+        return;
+    }
+
+    public void showAlert(java.lang.String, java.lang.String)
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        java.lang.String $r1, $r2;
+        android.app.AlertDialog$Builder $r3;
+        android.content.Context $r4;
+        android.app.AlertDialog $r5;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 = new android.app.AlertDialog$Builder;
+
+        $r4 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.content.Context getContext()>();
+
+        specialinvoke $r3.<android.app.AlertDialog$Builder: void <init>(android.content.Context)>($r4);
+
+        $r3 = virtualinvoke $r3.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setTitle(java.lang.CharSequence)>($r1);
+
+        $r3 = virtualinvoke $r3.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setMessage(java.lang.CharSequence)>($r2);
+
+        $r3 = virtualinvoke $r3.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setNeutralButton(int,android.content.DialogInterface$OnClickListener)>(17039370, null);
+
+        $r5 = virtualinvoke $r3.<android.app.AlertDialog$Builder: android.app.AlertDialog create()>();
+
+        virtualinvoke $r5.<android.app.AlertDialog: void show()>();
+
+        return;
+    }
+
+    void showFailureDialog()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        android.content.Context $r1;
+        java.lang.StringBuilder $r2;
+        com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason $r3;
+        java.lang.String $r4, varReplacer1244, varReplacer1245, varReplacer1248, varReplacer1249, varReplacer1250;
+        android.app.Dialog $r5;
+        int $i0, $i1, varReplacer1246, varReplacer1247, varReplacer1251, varReplacer1252;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.content.Context getContext()>();
+
+        if $r1 != null goto label1;
+
+        varReplacer1245 = "*** No context. Can\'t show failure dialog.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1245);
+
+        return;
+
+     label1:
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer1244 = "Making error dialog for failure: ";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1244);
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason mSignInFailureReason>;
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>($r4);
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason mSignInFailureReason>;
+
+        $i0 = virtualinvoke $r3.<com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason: int getServiceErrorCode()>();
+
+        $r3 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason mSignInFailureReason>;
+
+        $i1 = virtualinvoke $r3.<com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason: int getActivityResultCode()>();
+
+        lookupswitch($i1)
+        {
+            case 10002: goto label5;
+            case 10003: goto label6;
+            case 10004: goto label4;
+            default: goto label2;
+        };
+
+     label2:
+        varReplacer1250 = "No standard error dialog available. Making fallback dialog.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1250);
+
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer1247 = 2130903043;
+
+        $r4 = virtualinvoke $r1.<android.content.Context: java.lang.String getString(int)>(varReplacer1247);
+
+        $r4 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r4);
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>($r4);
+
+        varReplacer1248 = " ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1248);
+
+        $r4 = staticinvoke <com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String errorCodeToString(int)>($i0);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r5 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.app.Dialog makeSimpleDialog(java.lang.String)>($r4);
+
+     label3:
+        varReplacer1249 = "Showing error dialog.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1249);
+
+        virtualinvoke $r5.<android.app.Dialog: void show()>();
+
+        return;
+
+     label4:
+        varReplacer1251 = 2130903041;
+
+        $r4 = virtualinvoke $r1.<android.content.Context: java.lang.String getString(int)>(varReplacer1251);
+
+        $r5 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.app.Dialog makeSimpleDialog(java.lang.String)>($r4);
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void printMisconfiguredDebugInfo()>();
+
+        goto label3;
+
+     label5:
+        varReplacer1246 = 2130903040;
+
+        $r4 = virtualinvoke $r1.<android.content.Context: java.lang.String getString(int)>(varReplacer1246);
+
+        $r5 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.app.Dialog makeSimpleDialog(java.lang.String)>($r4);
+
+        goto label3;
+
+     label6:
+        varReplacer1252 = 2130903042;
+
+        $r4 = virtualinvoke $r1.<android.content.Context: java.lang.String getString(int)>(varReplacer1252);
+
+        $r5 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: android.app.Dialog makeSimpleDialog(java.lang.String)>($r4);
+
+        goto label3;
+    }
+
+    public void signOut()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        int $i0;
+        com.google.android.gms.plus.PlusClient $r1;
+        boolean $z0;
+        com.google.android.gms.games.GamesClient $r2;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $i0 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: int mState>;
+
+        if $i0 != 1 goto label1;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("signOut: state was already DISCONNECTED, ignoring.");
+
+        return;
+
+     label1:
+        $r1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        if $r1 == null goto label2;
+
+        $r1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        $z0 = virtualinvoke $r1.<com.google.android.gms.plus.PlusClient: boolean isConnected()>();
+
+        if $z0 == 0 goto label2;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("Clearing default account on PlusClient.");
+
+        $r1 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        virtualinvoke $r1.<com.google.android.gms.plus.PlusClient: void clearDefaultAccount()>();
+
+     label2:
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        if $r2 == null goto label3;
+
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        $z0 = virtualinvoke $r2.<com.google.android.gms.games.GamesClient: boolean isConnected()>();
+
+        if $z0 == 0 goto label3;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("Signing out from GamesClient.");
+
+        $r2 = $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        virtualinvoke $r2.<com.google.android.gms.games.GamesClient: void signOut()>();
+
+     label3:
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>("Proceeding with disconnection.");
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void killConnections()>();
+
+        return;
+    }
+
+    void startConnections()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        int[] $r1;
+        boolean $z0;
+        int varReplacer1048, varReplacer1049;
+        java.lang.String varReplacer1050, varReplacer1051, varReplacer1053;
+        null_type varReplacer1052;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 = newarray (int)[1];
+
+        $r1[0] = 1;
+
+        varReplacer1049 = 1002;
+
+        varReplacer1050 = "startConnections";
+
+        varReplacer1051 = "startConnections should only get called when disconnected.";
+
+        $z0 = virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean checkState(int,java.lang.String,java.lang.String,int[])>(varReplacer1049, varReplacer1050, varReplacer1051, $r1);
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        varReplacer1053 = "Starting connections.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1053);
+
+        varReplacer1048 = 2;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void setState(int)>(varReplacer1048);
+
+        varReplacer1052 = null;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: java.lang.String mInvitationId> = varReplacer1052;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void connectNextClient()>();
+
+        return;
+    }
+
+    void succeedSignIn()
+    {
+        com.fragranzeapps.urbanhoopsfree.GameHelper $r0;
+        int[] $r1;
+        int varReplacer1088, varReplacer1089, varReplacer1090, varReplacer1093, varReplacer1096;
+        java.lang.String varReplacer1091, varReplacer1094, varReplacer1095;
+        null_type varReplacer1092;
+
+        nop;
+
+        $r0 := @this: com.fragranzeapps.urbanhoopsfree.GameHelper;
+
+        $r1 = newarray (int)[2];
+
+        $r1[0] = 2;
+
+        $r1[1] = 3;
+
+        varReplacer1093 = 1002;
+
+        varReplacer1094 = "succeedSignIn";
+
+        varReplacer1095 = "succeedSignIn should only get called in the connecting or connected state. Proceeding anyway.";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean checkState(int,java.lang.String,java.lang.String,int[])>(varReplacer1093, varReplacer1094, varReplacer1095, $r1);
+
+        varReplacer1091 = "All requested clients connected. Sign-in succeeded!";
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void debugLog(java.lang.String)>(varReplacer1091);
+
+        varReplacer1089 = 3;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void setState(int)>(varReplacer1089);
+
+        varReplacer1092 = null;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: com.fragranzeapps.urbanhoopsfree.GameHelper$SignInFailureReason mSignInFailureReason> = varReplacer1092;
+
+        varReplacer1090 = 1;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mAutoSignIn> = varReplacer1090;
+
+        varReplacer1096 = 0;
+
+        $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: boolean mUserInitiatedSignIn> = varReplacer1096;
+
+        varReplacer1088 = 1;
+
+        virtualinvoke $r0.<com.fragranzeapps.urbanhoopsfree.GameHelper: void notifyListener(boolean)>(varReplacer1088);
+
+        return;
+    }
+}

@@ -1,0 +1,91 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6948)
+		Method: <com.futuremark.cryptoutil.SecureHashSha512: byte[] hashStringToBytesInternal(java.lang.String)>
+		SHA-256: cc8d007ad4038df1efb56688abde87b18150f6f60bed20c1d5288669d0f99751
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r3)
+		Method: <com.futuremark.cryptoutil.SecureHashSha512: byte[] hashStringToBytesInternal(java.lang.String)>
+		SHA-256: a1f3c0dba121e0ee9395c6fea2f484faa772429009a76dc02135f782d141053a
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1540)
+		Method: <com.flurry.sdk.fh: byte[] d(java.lang.String)>
+		SHA-256: ce44db852283b66d712c8d1bac139d681fd4383d4b62093aa9143562af002581
+		Secure: true
+	Object:
+		Variable: $r8
+		Type: java.security.DigestOutputStream
+		Statement: specialinvoke $r8.<java.security.DigestOutputStream: void <init>(java.io.OutputStream,java.security.MessageDigest)>($r11, $r10)
+		Method: <com.flurry.sdk.cc: void <init>(java.lang.String,java.lang.String,java.lang.String,boolean,long,long,java.util.List,java.util.Map,java.util.Map,java.util.Map,long)>
+		SHA-256: edccaad4fca6b1fc5ebc921b996a09a8b4f1fde8e59be24a82b707fbe56c4825
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.flurry.sdk.fh: byte[] d(java.lang.String)>
+		SHA-256: bdf1bd7d2798466c205c3d96aa7542716f106fff18aaf9304bba8907c09bf51d
+		Secure: true
+
+Findings in Java Class: com.flurry.sdk.cc
+
+	 in Method: void <init>(java.lang.String,java.lang.String,java.lang.String,boolean,long,long,java.util.List,java.util.Map,java.util.Map,java.util.Map,long)
+		ForbiddenMethodError violating CrySL rule for java.security.DigestOutputStream
+			Detected call to forbidden method void on(boolean) of class java.security.DigestOutputStream
+			at statement: virtualinvoke $r8.<java.security.DigestOutputStream: void on(boolean)>(varReplacer1586)
+
+		IncompleteOperationError violating CrySL rule for java.security.DigestOutputStream (on Object #edccaad4fca6b1fc5ebc921b996a09a8b4f1fde8e59be24a82b707fbe56c4825)
+			Operation on object of type java.security.DigestOutputStream object not completed. Expected call to write
+			at statement: virtualinvoke $r8.<java.security.DigestOutputStream: void on(boolean)>(varReplacer1586)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 5
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 1
+	ForbiddenMethodError: 1
+=====================================================================

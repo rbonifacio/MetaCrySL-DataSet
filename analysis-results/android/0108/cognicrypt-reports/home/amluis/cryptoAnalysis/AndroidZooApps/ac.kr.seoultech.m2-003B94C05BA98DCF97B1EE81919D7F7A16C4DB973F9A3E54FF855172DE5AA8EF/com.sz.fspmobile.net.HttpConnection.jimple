@@ -1,0 +1,1089 @@
+public class com.sz.fspmobile.net.HttpConnection extends java.lang.Object
+{
+    public static final java.lang.String CONTENT_TYPE_COMPRESS;
+    public static final java.lang.String CONTENT_TYPE_JSON;
+    public static final int GET;
+    public static final java.lang.String HEADER_CONTENT_ENCRYPT_TYPE;
+    public static final java.lang.String HEADER_SITE_KEY;
+    public static final int POST;
+    private java.lang.String mCookie;
+
+    public void <init>()
+    {
+        com.sz.fspmobile.net.HttpConnection $r0;
+        null_type varReplacer1077;
+
+        nop;
+
+        $r0 := @this: com.sz.fspmobile.net.HttpConnection;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer1077 = null;
+
+        $r0.<com.sz.fspmobile.net.HttpConnection: java.lang.String mCookie> = varReplacer1077;
+
+        return;
+    }
+
+    private static void disableConnectionReuseIfNecessary()
+    {
+        java.lang.String varReplacer990, varReplacer991;
+
+        nop;
+
+        varReplacer990 = "http.keepAlive";
+
+        varReplacer991 = "false";
+
+        staticinvoke <java.lang.System: java.lang.String setProperty(java.lang.String,java.lang.String)>(varReplacer990, varReplacer991);
+
+        return;
+    }
+
+    public static java.net.HttpURLConnection makeUrlConnection(java.net.URL) throws java.io.IOException
+    {
+        java.net.URL $r0;
+        java.security.SecureRandom $r1, r11;
+        java.lang.String $r2, varReplacer986, varReplacer987;
+        boolean $z0;
+        java.lang.Object[] $r3;
+        javax.net.ssl.SSLContext $r4;
+        javax.net.ssl.SSLSocketFactory $r5;
+        java.net.URLConnection $r6;
+        javax.net.ssl.HttpsURLConnection $r7;
+        java.net.HttpURLConnection $r8;
+        java.lang.Exception $r9;
+        com.sz.fspmobile.net.HttpConnection$1 r10;
+        com.sz.fspmobile.net.HttpConnection$2 r12;
+        javax.net.ssl.TrustManager[] r13;
+        null_type varReplacer985;
+
+        nop;
+
+        $r0 := @parameter0: java.net.URL;
+
+        $r2 = virtualinvoke $r0.<java.net.URL: java.lang.String getProtocol()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String toLowerCase()>();
+
+        varReplacer986 = "https";
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer986);
+
+        if $z0 == 0 goto label5;
+
+        staticinvoke <com.sz.fspmobile.net.HttpConnection: void disableConnectionReuseIfNecessary()>();
+
+        $r3 = newarray (javax.net.ssl.TrustManager)[1];
+
+        r10 = new com.sz.fspmobile.net.HttpConnection$1;
+
+        specialinvoke r10.<com.sz.fspmobile.net.HttpConnection$1: void <init>()>();
+
+        $r3[0] = r10;
+
+     label1:
+        varReplacer987 = "TLS";
+
+        $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer987);
+
+     label2:
+        r11 = new java.security.SecureRandom;
+
+        $r1 = r11;
+
+     label3:
+        specialinvoke r11.<java.security.SecureRandom: void <init>()>();
+
+        r13 = (javax.net.ssl.TrustManager[]) $r3;
+
+        varReplacer985 = null;
+
+        virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer985, r13, $r1);
+
+        $r5 = virtualinvoke $r4.<javax.net.ssl.SSLContext: javax.net.ssl.SSLSocketFactory getSocketFactory()>();
+
+        staticinvoke <javax.net.ssl.HttpsURLConnection: void setDefaultSSLSocketFactory(javax.net.ssl.SSLSocketFactory)>($r5);
+
+     label4:
+        $r6 = virtualinvoke $r0.<java.net.URL: java.net.URLConnection openConnection()>();
+
+        $r7 = (javax.net.ssl.HttpsURLConnection) $r6;
+
+        r12 = new com.sz.fspmobile.net.HttpConnection$2;
+
+        specialinvoke r12.<com.sz.fspmobile.net.HttpConnection$2: void <init>()>();
+
+        virtualinvoke $r7.<javax.net.ssl.HttpsURLConnection: void setHostnameVerifier(javax.net.ssl.HostnameVerifier)>(r12);
+
+        return $r7;
+
+     label5:
+        $r6 = virtualinvoke $r0.<java.net.URL: java.net.URLConnection openConnection()>();
+
+        $r8 = (java.net.HttpURLConnection) $r6;
+
+        return $r8;
+
+     label6:
+        $r9 := @caughtexception;
+
+        goto label4;
+
+        catch java.lang.Exception from label1 to label2 with label6;
+        catch java.lang.Exception from label3 to label4 with label6;
+    }
+
+    public java.lang.String getCookieValue(java.lang.String)
+    {
+        com.sz.fspmobile.net.HttpConnection $r0;
+        java.lang.String $r1, $r4;
+        java.lang.StringBuffer $r2, $r3;
+        boolean $z0;
+        int $i0, $i1;
+        char $c2;
+
+        $r0 := @this: com.sz.fspmobile.net.HttpConnection;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r4 = $r0.<com.sz.fspmobile.net.HttpConnection: java.lang.String mCookie>;
+
+        if $r4 == null goto label01;
+
+        $r4 = $r0.<com.sz.fspmobile.net.HttpConnection: java.lang.String mCookie>;
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>("");
+
+        if $z0 == 0 goto label02;
+
+     label01:
+        return null;
+
+     label02:
+        $r4 = $r0.<com.sz.fspmobile.net.HttpConnection: java.lang.String mCookie>;
+
+        $i0 = virtualinvoke $r4.<java.lang.String: int indexOf(java.lang.String)>($r1);
+
+        if $i0 >= 0 goto label03;
+
+        return null;
+
+     label03:
+        $r2 = new java.lang.StringBuffer;
+
+        specialinvoke $r2.<java.lang.StringBuffer: void <init>()>();
+
+        $r3 = new java.lang.StringBuffer;
+
+        specialinvoke $r3.<java.lang.StringBuffer: void <init>()>();
+
+        $i0 = 0;
+
+        $z0 = 0;
+
+     label04:
+        $r4 = $r0.<com.sz.fspmobile.net.HttpConnection: java.lang.String mCookie>;
+
+        $i1 = virtualinvoke $r4.<java.lang.String: int length()>();
+
+        if $i0 >= $i1 goto label12;
+
+        $r4 = $r0.<com.sz.fspmobile.net.HttpConnection: java.lang.String mCookie>;
+
+        $c2 = virtualinvoke $r4.<java.lang.String: char charAt(int)>($i0);
+
+        lookupswitch($c2)
+        {
+            case 59: goto label09;
+            case 60: goto label05;
+            case 61: goto label07;
+            default: goto label05;
+        };
+
+     label05:
+        if $z0 == 0 goto label11;
+
+        virtualinvoke $r2.<java.lang.StringBuffer: java.lang.StringBuffer append(char)>($c2);
+
+     label06:
+        $i0 = $i0 + 1;
+
+        goto label04;
+
+     label07:
+        if $z0 != 0 goto label08;
+
+        $z0 = 1;
+
+        goto label06;
+
+     label08:
+        virtualinvoke $r2.<java.lang.StringBuffer: java.lang.StringBuffer append(char)>($c2);
+
+        goto label06;
+
+     label09:
+        $r4 = virtualinvoke $r3.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label10;
+
+        $r1 = virtualinvoke $r2.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        return $r1;
+
+     label10:
+        virtualinvoke $r2.<java.lang.StringBuffer: void setLength(int)>(0);
+
+        virtualinvoke $r3.<java.lang.StringBuffer: void setLength(int)>(0);
+
+        $z0 = 0;
+
+        goto label06;
+
+     label11:
+        if $c2 == 32 goto label06;
+
+        virtualinvoke $r3.<java.lang.StringBuffer: java.lang.StringBuffer append(char)>($c2);
+
+        goto label06;
+
+     label12:
+        return null;
+    }
+
+    public java.lang.String post(java.lang.String, java.lang.String) throws com.sz.fspmobile.net.InvalidHttpException, com.sz.fspmobile.net.InvalidHttpResponseException
+    {
+        com.sz.fspmobile.net.HttpConnection $r0;
+        java.lang.String $r1, $r2, varReplacer1222;
+        null_type varReplacer1223;
+
+        nop;
+
+        $r0 := @this: com.sz.fspmobile.net.HttpConnection;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        varReplacer1222 = "application/json";
+
+        varReplacer1223 = null;
+
+        $r1 = virtualinvoke $r0.<com.sz.fspmobile.net.HttpConnection: java.lang.String post(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>($r1, $r2, varReplacer1222, varReplacer1223);
+
+        return $r1;
+    }
+
+    public java.lang.String post(java.lang.String, java.lang.String, java.lang.String, java.lang.String) throws com.sz.fspmobile.net.InvalidHttpException, com.sz.fspmobile.net.InvalidHttpResponseException
+    {
+        com.sz.fspmobile.net.HttpConnection $r0;
+        java.lang.String $r1, $r2, $r3, $r4, varReplacer1224;
+        null_type varReplacer1225;
+        int varReplacer1226;
+
+        nop;
+
+        $r0 := @this: com.sz.fspmobile.net.HttpConnection;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 := @parameter3: java.lang.String;
+
+        varReplacer1224 = "application/json";
+
+        varReplacer1225 = null;
+
+        varReplacer1226 = 0;
+
+        $r1 = virtualinvoke $r0.<com.sz.fspmobile.net.HttpConnection: java.lang.String post(java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean)>($r1, $r2, varReplacer1224, varReplacer1225, varReplacer1226);
+
+        return $r1;
+    }
+
+    public java.lang.String post(java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean) throws com.sz.fspmobile.net.InvalidHttpException, com.sz.fspmobile.net.InvalidHttpResponseException
+    {
+        com.sz.fspmobile.net.HttpConnection $r0;
+        java.lang.String $r1, $r2, $r3, $r4, varReplacer1147;
+        boolean $z0;
+        null_type varReplacer1148;
+
+        nop;
+
+        $r0 := @this: com.sz.fspmobile.net.HttpConnection;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 := @parameter3: java.lang.String;
+
+        $z0 := @parameter4: boolean;
+
+        varReplacer1147 = "application/json";
+
+        varReplacer1148 = null;
+
+        $r1 = virtualinvoke $r0.<com.sz.fspmobile.net.HttpConnection: java.lang.String post(java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,java.lang.String)>($r1, $r2, varReplacer1147, $r4, $z0, varReplacer1148);
+
+        return $r1;
+    }
+
+    public java.lang.String post(java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.String) throws com.sz.fspmobile.net.InvalidHttpException, com.sz.fspmobile.net.InvalidHttpResponseException
+    {
+        com.sz.fspmobile.net.HttpConnection $r0;
+        java.lang.String $r1, $r2, $r3, $r4, $r5, varReplacer1081, varReplacer1082, varReplacer1084, varReplacer1085, varReplacer1086, varReplacer1087, varReplacer1088, varReplacer1089, varReplacer1090, varReplacer1091, varReplacer1092, varReplacer1094, varReplacer1095, varReplacer1096, varReplacer1097, varReplacer1098, varReplacer1099, varReplacer1100, varReplacer1101, varReplacer1102, varReplacer1103, varReplacer1104, varReplacer1105, varReplacer1106, varReplacer1107, varReplacer1108, varReplacer1109, varReplacer1110, varReplacer1111, varReplacer1112, varReplacer1113, varReplacer1114, varReplacer1115, varReplacer1116, varReplacer1117, varReplacer1119, varReplacer1122, varReplacer1123, varReplacer1124;
+        boolean $z0, $z1;
+        com.sz.fspmobile.net.InvalidHttpException $r6, r27;
+        com.sz.fspmobile.config.AppConfig $r7;
+        com.sz.fspmobile.app.FSPGlobalApplication $r8;
+        com.sz.fspmobile.config.ServerConfig $r9;
+        com.sz.fspmobile.log.Logger $r10;
+        java.net.URL $r11, r28;
+        java.net.HttpURLConnection $r12;
+        int $i0, varReplacer1083, varReplacer1093, varReplacer1118, varReplacer1120, varReplacer1121;
+        byte[] $r13, $r14;
+        java.lang.Object $r15;
+        java.io.OutputStream $r16;
+        java.lang.StringBuffer $r17, r30;
+        java.lang.Object[] $r18;
+        java.lang.StringBuilder $r19, r31;
+        com.sz.fspmobile.net.InvalidHttpResponseException $r20, r32;
+        java.lang.Exception $r21;
+        java.lang.Throwable $r22;
+        java.io.InputStream $r23;
+        java.io.ByteArrayOutputStream $r24, r34;
+        java.io.BufferedReader $r25, r37;
+        java.io.InputStreamReader $r26, r36;
+        java.util.zip.GZIPOutputStream r29;
+        java.util.zip.GZIPInputStream r33;
+        java.io.ByteArrayInputStream r35;
+
+        nop;
+
+        $r0 := @this: com.sz.fspmobile.net.HttpConnection;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r4 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: java.lang.String;
+
+        $z0 := @parameter4: boolean;
+
+        $r5 := @parameter5: java.lang.String;
+
+        if $r1 != null goto label01;
+
+        r27 = new com.sz.fspmobile.net.InvalidHttpException;
+
+        varReplacer1116 = "HTTP URL must be specified.(empty string)";
+
+        specialinvoke r27.<com.sz.fspmobile.net.InvalidHttpException: void <init>(java.lang.String)>(varReplacer1116);
+
+        throw r27;
+
+     label01:
+        if $r4 != null goto label02;
+
+        $r4 = "";
+
+     label02:
+        $r7 = staticinvoke <com.sz.fspmobile.config.AppConfig: com.sz.fspmobile.config.AppConfig getSharedInstance()>();
+
+        $r8 = staticinvoke <com.sz.fspmobile.app.FSPGlobalApplication: com.sz.fspmobile.app.FSPGlobalApplication getGlobalApplicationContext()>();
+
+        $r9 = virtualinvoke $r8.<com.sz.fspmobile.app.FSPGlobalApplication: com.sz.fspmobile.config.ServerConfig getServerConfig()>();
+
+        $r10 = staticinvoke <com.sz.fspmobile.log.Logger: com.sz.fspmobile.log.Logger getLogger()>();
+
+     label03:
+        varReplacer1088 = "#";
+
+        varReplacer1089 = "%23";
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1088, varReplacer1089);
+
+     label04:
+        r28 = new java.net.URL;
+
+        $r11 = r28;
+
+     label05:
+        specialinvoke r28.<java.net.URL: void <init>(java.lang.String)>($r1);
+
+        $r12 = staticinvoke <com.sz.fspmobile.net.HttpConnection: java.net.HttpURLConnection makeUrlConnection(java.net.URL)>($r11);
+
+        varReplacer1096 = "User-Agent";
+
+        varReplacer1097 = "FSPMobile On Android";
+
+        virtualinvoke $r12.<java.net.HttpURLConnection: void addRequestProperty(java.lang.String,java.lang.String)>(varReplacer1096, varReplacer1097);
+
+        varReplacer1105 = "Accept";
+
+        varReplacer1106 = "text/xml,text/html,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
+
+        virtualinvoke $r12.<java.net.HttpURLConnection: void addRequestProperty(java.lang.String,java.lang.String)>(varReplacer1105, varReplacer1106);
+
+        varReplacer1093 = 1;
+
+        virtualinvoke $r12.<java.net.HttpURLConnection: void setDoInput(boolean)>(varReplacer1093);
+
+        varReplacer1118 = 1;
+
+        virtualinvoke $r12.<java.net.HttpURLConnection: void setDoOutput(boolean)>(varReplacer1118);
+
+        varReplacer1120 = 0;
+
+        virtualinvoke $r12.<java.net.HttpURLConnection: void setUseCaches(boolean)>(varReplacer1120);
+
+        varReplacer1083 = 0;
+
+        virtualinvoke $r12.<java.net.HttpURLConnection: void setDefaultUseCaches(boolean)>(varReplacer1083);
+
+        $i0 = virtualinvoke $r7.<com.sz.fspmobile.config.AppConfig: int getHttpTimeOut()>();
+
+        virtualinvoke $r12.<java.net.HttpURLConnection: void setConnectTimeout(int)>($i0);
+
+        $i0 = virtualinvoke $r7.<com.sz.fspmobile.config.AppConfig: int getHttpReadTimeOut()>();
+
+        virtualinvoke $r12.<java.net.HttpURLConnection: void setReadTimeout(int)>($i0);
+
+        varReplacer1121 = 0;
+
+        virtualinvoke $r12.<java.net.HttpURLConnection: void setAllowUserInteraction(boolean)>(varReplacer1121);
+
+        varReplacer1082 = "POST";
+
+        virtualinvoke $r12.<java.net.HttpURLConnection: void setRequestMethod(java.lang.String)>(varReplacer1082);
+
+     label06:
+        if $z0 == 0 goto label08;
+
+     label07:
+        varReplacer1107 = "Content-Encoding";
+
+        varReplacer1108 = "gzip";
+
+        virtualinvoke $r12.<java.net.HttpURLConnection: void addRequestProperty(java.lang.String,java.lang.String)>(varReplacer1107, varReplacer1108);
+
+     label08:
+        varReplacer1112 = "";
+
+        $z1 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1112);
+
+     label09:
+        if $z1 == 0 goto label38;
+
+     label10:
+        varReplacer1102 = "Content-Type";
+
+        varReplacer1103 = "application/x-www-form-urlencoded";
+
+        virtualinvoke $r12.<java.net.HttpURLConnection: void addRequestProperty(java.lang.String,java.lang.String)>(varReplacer1102, varReplacer1103);
+
+     label11:
+        $r2 = "FMHTP00001";
+
+        if $r3 == null goto label14;
+
+     label12:
+        varReplacer1095 = "";
+
+        $z1 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1095);
+
+     label13:
+        if $z1 != 0 goto label14;
+
+        $r2 = "FMHTP00004";
+
+     label14:
+        $r3 = virtualinvoke $r7.<com.sz.fspmobile.config.AppConfig: java.lang.String getHttpEncoding()>();
+
+        $r13 = virtualinvoke $r4.<java.lang.String: byte[] getBytes(java.lang.String)>($r3);
+
+     label15:
+        $r14 = $r13;
+
+        if $r5 == null goto label46;
+
+     label16:
+        varReplacer1091 = "AES";
+
+        $z1 = virtualinvoke $r5.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1091);
+
+     label17:
+        if $z1 == 0 goto label46;
+
+     label18:
+        $r3 = virtualinvoke $r9.<com.sz.fspmobile.config.ServerConfig: java.lang.String getAESMasterKey()>();
+
+     label19:
+        if $r3 == null goto label44;
+
+     label20:
+        varReplacer1104 = "";
+
+        $z1 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1104);
+
+     label21:
+        if $z1 != 0 goto label44;
+
+     label22:
+        $r13 = staticinvoke <com.sz.fspmobile.util.AESHelper: byte[] encryptByte(java.lang.String,byte[])>($r3, $r13);
+
+     label23:
+        $r14 = $r13;
+
+     label24:
+        varReplacer1100 = "FSP_CompressType";
+
+        varReplacer1101 = "AES";
+
+        virtualinvoke $r12.<java.net.HttpURLConnection: void addRequestProperty(java.lang.String,java.lang.String)>(varReplacer1100, varReplacer1101);
+
+        $r3 = virtualinvoke $r7.<com.sz.fspmobile.config.AppConfig: java.lang.String getSiteKey()>();
+
+        varReplacer1084 = "FSP_SiteKey";
+
+        virtualinvoke $r12.<java.net.HttpURLConnection: void addRequestProperty(java.lang.String,java.lang.String)>(varReplacer1084, $r3);
+
+     label25:
+        $r13 = $r14;
+
+        $r3 = $r5;
+
+     label26:
+        virtualinvoke $r12.<java.net.HttpURLConnection: void connect()>();
+
+     label27:
+        if $z0 == 0 goto label57;
+
+        r29 = new java.util.zip.GZIPOutputStream;
+
+        $r15 = r29;
+
+     label28:
+        $r16 = virtualinvoke $r12.<java.net.HttpURLConnection: java.io.OutputStream getOutputStream()>();
+
+        specialinvoke r29.<java.util.zip.GZIPOutputStream: void <init>(java.io.OutputStream)>($r16);
+
+     label29:
+        r30 = new java.lang.StringBuffer;
+
+        $r17 = r30;
+
+     label30:
+        specialinvoke r30.<java.lang.StringBuffer: void <init>()>();
+
+        $r18 = newarray (java.lang.Object)[2];
+
+     label31:
+        r31 = new java.lang.StringBuilder;
+
+        $r19 = r31;
+
+     label32:
+        specialinvoke r31.<java.lang.StringBuilder: void <init>()>();
+
+        $r19 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer1094 = ",compress=";
+
+        $r19 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1094);
+
+        $r19 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        varReplacer1085 = ",encryptType=";
+
+        $r19 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1085);
+
+     label33:
+        if $r3 != null goto label34;
+
+        $r3 = "";
+
+     label34:
+        $r19 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r18[0] = $r3;
+
+        $r18[1] = $r4;
+
+        virtualinvoke $r10.<com.sz.fspmobile.log.Logger: void write(java.lang.String,java.lang.Object[])>($r2, $r18);
+
+        $r16 = (java.io.OutputStream) $r15;
+
+        virtualinvoke $r16.<java.io.OutputStream: void write(byte[])>($r13);
+
+        $r16 = (java.io.OutputStream) $r15;
+
+        virtualinvoke $r16.<java.io.OutputStream: void flush()>();
+
+        $r16 = (java.io.OutputStream) $r15;
+
+        virtualinvoke $r16.<java.io.OutputStream: void close()>();
+
+        $i0 = virtualinvoke $r12.<java.net.HttpURLConnection: int getResponseCode()>();
+
+     label35:
+        if $i0 == 200 goto label59;
+
+        r32 = new com.sz.fspmobile.net.InvalidHttpResponseException;
+
+        $r20 = r32;
+
+     label36:
+        $i0 = virtualinvoke $r12.<java.net.HttpURLConnection: int getResponseCode()>();
+
+        specialinvoke r32.<com.sz.fspmobile.net.InvalidHttpResponseException: void <init>(int,java.lang.String,java.lang.String)>($i0, $r1, $r4);
+
+        throw $r20;
+
+     label37:
+        $r21 := @caughtexception;
+
+        varReplacer1111 = "HttpConnection#post";
+
+        virtualinvoke $r10.<com.sz.fspmobile.log.Logger: void writeException(java.lang.String,java.lang.Throwable)>(varReplacer1111, $r21);
+
+        r27 = new com.sz.fspmobile.net.InvalidHttpException;
+
+        specialinvoke r27.<com.sz.fspmobile.net.InvalidHttpException: void <init>(java.lang.Throwable)>($r21);
+
+        throw r27;
+
+     label38:
+        varReplacer1086 = "Content-Type";
+
+        varReplacer1087 = "application/json";
+
+        virtualinvoke $r12.<java.net.HttpURLConnection: void addRequestProperty(java.lang.String,java.lang.String)>(varReplacer1086, varReplacer1087);
+
+     label39:
+        goto label11;
+
+     label40:
+        $r22 := @caughtexception;
+
+        r30 = new java.lang.StringBuffer;
+
+        $r17 = r30;
+
+     label41:
+        varReplacer1114 = "Invalid encoding [";
+
+        specialinvoke r30.<java.lang.StringBuffer: void <init>(java.lang.String)>(varReplacer1114);
+
+        $r7 = staticinvoke <com.sz.fspmobile.config.AppConfig: com.sz.fspmobile.config.AppConfig getSharedInstance()>();
+
+        $r1 = virtualinvoke $r7.<com.sz.fspmobile.config.AppConfig: java.lang.String getHttpEncoding()>();
+
+        $r17 = virtualinvoke $r17.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>($r1);
+
+        varReplacer1090 = "]";
+
+        $r17 = virtualinvoke $r17.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>(varReplacer1090);
+
+     label42:
+        r27 = new com.sz.fspmobile.net.InvalidHttpException;
+
+        $r6 = r27;
+
+     label43:
+        $r1 = virtualinvoke $r17.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        specialinvoke r27.<com.sz.fspmobile.net.InvalidHttpException: void <init>(java.lang.String,java.lang.Throwable)>($r1, $r22);
+
+        throw $r6;
+
+     label44:
+        varReplacer1122 = "AES Key is empty.";
+
+        virtualinvoke $r10.<com.sz.fspmobile.log.Logger: void debug(java.lang.String)>(varReplacer1122);
+
+     label45:
+        $r5 = null;
+
+        goto label25;
+
+     label46:
+        if $r5 == null goto label94;
+
+     label47:
+        varReplacer1109 = "RSA";
+
+        $z1 = virtualinvoke $r5.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1109);
+
+     label48:
+        if $z1 == 0 goto label94;
+
+     label49:
+        $r3 = virtualinvoke $r9.<com.sz.fspmobile.config.ServerConfig: java.lang.String getCryptoRSAPublicKey()>();
+
+     label50:
+        if $r3 == null goto label55;
+
+     label51:
+        varReplacer1081 = "";
+
+        $z1 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1081);
+
+     label52:
+        if $z1 != 0 goto label55;
+
+     label53:
+        $r13 = staticinvoke <com.sz.fspmobile.util.RSAHelper: byte[] encryptByte(java.lang.String,byte[])>($r3, $r13);
+
+        varReplacer1098 = "FSP_CompressType";
+
+        varReplacer1099 = "RSA";
+
+        virtualinvoke $r12.<java.net.HttpURLConnection: void addRequestProperty(java.lang.String,java.lang.String)>(varReplacer1098, varReplacer1099);
+
+        $r3 = virtualinvoke $r7.<com.sz.fspmobile.config.AppConfig: java.lang.String getSiteKey()>();
+
+        varReplacer1110 = "FSP_SiteKey";
+
+        virtualinvoke $r12.<java.net.HttpURLConnection: void addRequestProperty(java.lang.String,java.lang.String)>(varReplacer1110, $r3);
+
+     label54:
+        $r3 = $r5;
+
+        goto label26;
+
+     label55:
+        varReplacer1119 = "RSA Key is empty.";
+
+        virtualinvoke $r10.<com.sz.fspmobile.log.Logger: void debug(java.lang.String)>(varReplacer1119);
+
+     label56:
+        $r3 = null;
+
+        goto label26;
+
+     label57:
+        $r16 = virtualinvoke $r12.<java.net.HttpURLConnection: java.io.OutputStream getOutputStream()>();
+
+     label58:
+        $r15 = $r16;
+
+        goto label29;
+
+     label59:
+        varReplacer1115 = "Content-Encoding";
+
+        $r4 = virtualinvoke $r12.<java.net.HttpURLConnection: java.lang.String getHeaderField(java.lang.String)>(varReplacer1115);
+
+     label60:
+        if $r4 == null goto label73;
+
+     label61:
+        varReplacer1117 = "gzip";
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>(varReplacer1117);
+
+     label62:
+        if $z0 == 0 goto label73;
+
+        r33 = new java.util.zip.GZIPInputStream;
+
+        $r15 = r33;
+
+     label63:
+        $r23 = virtualinvoke $r12.<java.net.HttpURLConnection: java.io.InputStream getInputStream()>();
+
+        specialinvoke r33.<java.util.zip.GZIPInputStream: void <init>(java.io.InputStream)>($r23);
+
+     label64:
+        varReplacer1092 = "FSP_CompressType";
+
+        $r4 = virtualinvoke $r12.<java.net.HttpURLConnection: java.lang.String getHeaderField(java.lang.String)>(varReplacer1092);
+
+     label65:
+        if $r4 == null goto label78;
+
+     label66:
+        varReplacer1123 = "AES";
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1123);
+
+     label67:
+        if $z0 == 0 goto label78;
+
+        r34 = new java.io.ByteArrayOutputStream;
+
+        $r24 = r34;
+
+     label68:
+        specialinvoke r34.<java.io.ByteArrayOutputStream: void <init>()>();
+
+     label69:
+        $r23 = (java.io.InputStream) $r15;
+
+        $i0 = virtualinvoke $r23.<java.io.InputStream: int read()>();
+
+     label70:
+        if $i0 == -1 goto label75;
+
+     label71:
+        virtualinvoke $r24.<java.io.ByteArrayOutputStream: void write(int)>($i0);
+
+     label72:
+        goto label69;
+
+     label73:
+        $r23 = virtualinvoke $r12.<java.net.HttpURLConnection: java.io.InputStream getInputStream()>();
+
+     label74:
+        $r15 = $r23;
+
+        goto label64;
+
+     label75:
+        $r4 = virtualinvoke $r9.<com.sz.fspmobile.config.ServerConfig: java.lang.String getAESMasterKey()>();
+
+        $r13 = virtualinvoke $r24.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        $r13 = staticinvoke <com.sz.fspmobile.util.AESHelper: byte[] decrypt(java.lang.String,byte[])>($r4, $r13);
+
+     label76:
+        r35 = new java.io.ByteArrayInputStream;
+
+        $r15 = r35;
+
+     label77:
+        specialinvoke r35.<java.io.ByteArrayInputStream: void <init>(byte[])>($r13);
+
+     label78:
+        r37 = new java.io.BufferedReader;
+
+        $r25 = r37;
+
+        r36 = new java.io.InputStreamReader;
+
+        $r26 = r36;
+
+     label79:
+        $r4 = virtualinvoke $r7.<com.sz.fspmobile.config.AppConfig: java.lang.String getHttpEncoding()>();
+
+        $r23 = (java.io.InputStream) $r15;
+
+        specialinvoke r36.<java.io.InputStreamReader: void <init>(java.io.InputStream,java.lang.String)>($r23, $r4);
+
+        specialinvoke r37.<java.io.BufferedReader: void <init>(java.io.Reader)>($r26);
+
+     label80:
+        $r4 = virtualinvoke $r25.<java.io.BufferedReader: java.lang.String readLine()>();
+
+     label81:
+        if $r4 == null goto label84;
+
+     label82:
+        virtualinvoke $r17.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>($r4);
+
+     label83:
+        goto label80;
+
+     label84:
+        virtualinvoke $r25.<java.io.BufferedReader: void close()>();
+
+        $r23 = (java.io.InputStream) $r15;
+
+        virtualinvoke $r23.<java.io.InputStream: void close()>();
+
+     label85:
+        $i0 = 1;
+
+     label86:
+        $r4 = virtualinvoke $r12.<java.net.HttpURLConnection: java.lang.String getHeaderFieldKey(int)>($i0);
+
+     label87:
+        if $r4 == null goto label91;
+
+     label88:
+        $r4 = virtualinvoke $r4.<java.lang.String: java.lang.String toLowerCase()>();
+
+        varReplacer1124 = "set-cookie";
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1124);
+
+     label89:
+        if $z0 == 0 goto label93;
+
+     label90:
+        $r4 = virtualinvoke $r12.<java.net.HttpURLConnection: java.lang.String getHeaderField(int)>($i0);
+
+        $r0.<com.sz.fspmobile.net.HttpConnection: java.lang.String mCookie> = $r4;
+
+     label91:
+        virtualinvoke $r12.<java.net.HttpURLConnection: void disconnect()>();
+
+        $r18 = newarray (java.lang.Object)[2];
+
+        $r18[0] = $r1;
+
+        $r1 = virtualinvoke $r17.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        $r18[1] = $r1;
+
+        varReplacer1113 = "FMHTP00002";
+
+        virtualinvoke $r10.<com.sz.fspmobile.log.Logger: void write(java.lang.String,java.lang.Object[])>(varReplacer1113, $r18);
+
+        $r1 = virtualinvoke $r17.<java.lang.StringBuffer: java.lang.String toString()>();
+
+     label92:
+        return $r1;
+
+     label93:
+        $i0 = $i0 + 1;
+
+        goto label86;
+
+     label94:
+        $r3 = $r5;
+
+        goto label26;
+
+        catch java.lang.Exception from label03 to label04 with label37;
+        catch java.lang.Exception from label05 to label06 with label37;
+        catch java.lang.Exception from label07 to label08 with label37;
+        catch java.lang.Exception from label08 to label09 with label37;
+        catch java.lang.Exception from label10 to label11 with label37;
+        catch java.lang.Exception from label12 to label13 with label37;
+        catch java.io.UnsupportedEncodingException from label14 to label15 with label40;
+        catch java.lang.Exception from label14 to label15 with label37;
+        catch java.lang.Exception from label16 to label17 with label37;
+        catch java.lang.Exception from label18 to label19 with label37;
+        catch java.lang.Exception from label20 to label21 with label37;
+        catch java.lang.Exception from label22 to label23 with label37;
+        catch java.lang.Exception from label24 to label25 with label37;
+        catch java.lang.Exception from label26 to label27 with label37;
+        catch java.lang.Exception from label28 to label29 with label37;
+        catch java.lang.Exception from label30 to label31 with label37;
+        catch java.lang.Exception from label32 to label33 with label37;
+        catch java.lang.Exception from label34 to label35 with label37;
+        catch java.lang.Exception from label36 to label37 with label37;
+        catch java.lang.Exception from label38 to label39 with label37;
+        catch java.lang.Exception from label41 to label42 with label37;
+        catch java.lang.Exception from label43 to label45 with label37;
+        catch java.lang.Exception from label47 to label48 with label37;
+        catch java.lang.Exception from label49 to label50 with label37;
+        catch java.lang.Exception from label51 to label52 with label37;
+        catch java.lang.Exception from label53 to label54 with label37;
+        catch java.lang.Exception from label55 to label56 with label37;
+        catch java.lang.Exception from label57 to label58 with label37;
+        catch java.lang.Exception from label59 to label60 with label37;
+        catch java.lang.Exception from label61 to label62 with label37;
+        catch java.lang.Exception from label63 to label65 with label37;
+        catch java.lang.Exception from label66 to label67 with label37;
+        catch java.lang.Exception from label68 to label70 with label37;
+        catch java.lang.Exception from label71 to label72 with label37;
+        catch java.lang.Exception from label73 to label74 with label37;
+        catch java.lang.Exception from label75 to label76 with label37;
+        catch java.lang.Exception from label77 to label78 with label37;
+        catch java.lang.Exception from label79 to label81 with label37;
+        catch java.lang.Exception from label82 to label83 with label37;
+        catch java.lang.Exception from label84 to label85 with label37;
+        catch java.lang.Exception from label86 to label87 with label37;
+        catch java.lang.Exception from label88 to label89 with label37;
+        catch java.lang.Exception from label90 to label92 with label37;
+    }
+
+    public java.lang.String post(java.lang.String, java.lang.String, boolean, java.lang.String) throws com.sz.fspmobile.net.InvalidHttpException, com.sz.fspmobile.net.InvalidHttpResponseException
+    {
+        com.sz.fspmobile.net.HttpConnection $r0;
+        java.lang.String $r1, $r2, $r3, varReplacer1079;
+        boolean $z0;
+        null_type varReplacer1080;
+
+        nop;
+
+        $r0 := @this: com.sz.fspmobile.net.HttpConnection;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $z0 := @parameter2: boolean;
+
+        $r3 := @parameter3: java.lang.String;
+
+        varReplacer1079 = "application/json";
+
+        varReplacer1080 = null;
+
+        $r1 = virtualinvoke $r0.<com.sz.fspmobile.net.HttpConnection: java.lang.String post(java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,java.lang.String)>($r1, $r2, varReplacer1079, varReplacer1080, $z0, $r3);
+
+        return $r1;
+    }
+
+    public java.lang.String postAuth(java.lang.String, java.lang.String) throws com.sz.fspmobile.net.InvalidHttpException, com.sz.fspmobile.net.InvalidHttpResponseException
+    {
+        com.sz.fspmobile.net.HttpConnection $r0;
+        java.lang.String $r1, $r2;
+        int varReplacer1220;
+        null_type varReplacer1221;
+
+        nop;
+
+        $r0 := @this: com.sz.fspmobile.net.HttpConnection;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        varReplacer1220 = 0;
+
+        varReplacer1221 = null;
+
+        $r1 = virtualinvoke $r0.<com.sz.fspmobile.net.HttpConnection: java.lang.String postAuth(java.lang.String,java.lang.String,boolean,java.lang.String)>($r1, $r2, varReplacer1220, varReplacer1221);
+
+        return $r1;
+    }
+
+    public java.lang.String postAuth(java.lang.String, java.lang.String, boolean, java.lang.String) throws com.sz.fspmobile.net.InvalidHttpException, com.sz.fspmobile.net.InvalidHttpResponseException
+    {
+        com.sz.fspmobile.net.HttpConnection $r0;
+        java.lang.String $r1, $r2, $r3, varReplacer1078;
+        boolean $z0;
+        com.sz.fspmobile.config.UserConfig $r4;
+
+        nop;
+
+        $r0 := @this: com.sz.fspmobile.net.HttpConnection;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $z0 := @parameter2: boolean;
+
+        $r3 := @parameter3: java.lang.String;
+
+        $r4 = staticinvoke <com.sz.fspmobile.config.UserConfig: com.sz.fspmobile.config.UserConfig getSharedInstance()>();
+
+        $r3 = virtualinvoke $r4.<com.sz.fspmobile.config.UserConfig: java.lang.String getSessionId()>();
+
+        varReplacer1078 = "application/json";
+
+        $r1 = virtualinvoke $r0.<com.sz.fspmobile.net.HttpConnection: java.lang.String post(java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean)>($r1, $r2, varReplacer1078, $r3, $z0);
+
+        return $r1;
+    }
+}

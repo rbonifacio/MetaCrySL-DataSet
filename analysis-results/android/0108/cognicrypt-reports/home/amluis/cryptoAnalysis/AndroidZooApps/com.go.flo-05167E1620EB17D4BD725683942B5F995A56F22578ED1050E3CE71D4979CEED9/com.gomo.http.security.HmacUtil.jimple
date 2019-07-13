@@ -1,0 +1,208 @@
+public class com.gomo.http.security.HmacUtil extends java.lang.Object
+{
+
+    public void <init>()
+    {
+        com.gomo.http.security.HmacUtil $r0;
+
+        $r0 := @this: com.gomo.http.security.HmacUtil;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static byte[] getBytes(java.lang.String, java.nio.charset.Charset)
+    {
+        java.lang.String $r0;
+        java.nio.charset.Charset $r1;
+        byte[] $r2;
+        null_type varReplacer1201;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.nio.charset.Charset;
+
+        if $r0 != null goto label1;
+
+        varReplacer1201 = null;
+
+        return varReplacer1201;
+
+     label1:
+        $r2 = virtualinvoke $r0.<java.lang.String: byte[] getBytes(java.nio.charset.Charset)>($r1);
+
+        return $r2;
+    }
+
+    public static byte[] getBytesUtf8(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer1200;
+        java.nio.charset.Charset $r1;
+        byte[] $r2;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        varReplacer1200 = "UTF-8";
+
+        $r1 = staticinvoke <java.nio.charset.Charset: java.nio.charset.Charset forName(java.lang.String)>(varReplacer1200);
+
+        $r2 = staticinvoke <com.gomo.http.security.HmacUtil: byte[] getBytes(java.lang.String,java.nio.charset.Charset)>($r0, $r1);
+
+        return $r2;
+    }
+
+    public static javax.crypto.Mac getHmacSha256(byte[])
+    {
+        byte[] $r0;
+        javax.crypto.Mac $r1;
+        com.gomo.http.security.HmacAlgorithms $r2;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r2 = <com.gomo.http.security.HmacAlgorithms: com.gomo.http.security.HmacAlgorithms HMAC_SHA_256>;
+
+        $r1 = staticinvoke <com.gomo.http.security.HmacUtil: javax.crypto.Mac getInitializedMac(com.gomo.http.security.HmacAlgorithms,byte[])>($r2, $r0);
+
+        return $r1;
+    }
+
+    public static javax.crypto.Mac getInitializedMac(com.gomo.http.security.HmacAlgorithms, byte[])
+    {
+        com.gomo.http.security.HmacAlgorithms $r0;
+        byte[] $r1;
+        java.lang.String $r2;
+        javax.crypto.Mac $r3;
+
+        nop;
+
+        $r0 := @parameter0: com.gomo.http.security.HmacAlgorithms;
+
+        $r1 := @parameter1: byte[];
+
+        $r2 = virtualinvoke $r0.<com.gomo.http.security.HmacAlgorithms: java.lang.String toString()>();
+
+        $r3 = staticinvoke <com.gomo.http.security.HmacUtil: javax.crypto.Mac getInitializedMac(java.lang.String,byte[])>($r2, $r1);
+
+        return $r3;
+    }
+
+    public static javax.crypto.Mac getInitializedMac(java.lang.String, byte[])
+    {
+        java.lang.String $r0, varReplacer1205;
+        byte[] $r1;
+        javax.crypto.Mac $r2;
+        java.lang.IllegalArgumentException $r3;
+        javax.crypto.spec.SecretKeySpec $r4;
+        java.lang.Throwable $r5, $r6;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: byte[];
+
+        if $r1 != null goto label1;
+
+        $r3 = new java.lang.IllegalArgumentException;
+
+        varReplacer1205 = "Null key";
+
+        specialinvoke $r3.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer1205);
+
+        throw $r3;
+
+     label1:
+        $r4 = new javax.crypto.spec.SecretKeySpec;
+
+     label2:
+        specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, $r0);
+
+        $r2 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>($r0);
+
+        virtualinvoke $r2.<javax.crypto.Mac: void init(java.security.Key)>($r4);
+
+     label3:
+        return $r2;
+
+     label4:
+        $r5 := @caughtexception;
+
+        $r3 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r3.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r5);
+
+        throw $r3;
+
+     label5:
+        $r6 := @caughtexception;
+
+        $r3 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r3.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r6);
+
+        throw $r3;
+
+        catch java.security.NoSuchAlgorithmException from label2 to label3 with label4;
+        catch java.security.InvalidKeyException from label2 to label3 with label5;
+    }
+
+    public static byte[] hmacSha256(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1;
+        byte[] $r2, $r3;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 = staticinvoke <com.gomo.http.security.HmacUtil: byte[] getBytesUtf8(java.lang.String)>($r0);
+
+        $r3 = staticinvoke <com.gomo.http.security.HmacUtil: byte[] getBytesUtf8(java.lang.String)>($r1);
+
+        $r2 = staticinvoke <com.gomo.http.security.HmacUtil: byte[] hmacSha256(byte[],byte[])>($r2, $r3);
+
+        return $r2;
+    }
+
+    public static byte[] hmacSha256(byte[], byte[])
+    {
+        byte[] $r0, $r1;
+        java.lang.IllegalArgumentException $r2;
+        javax.crypto.Mac $r3;
+        java.lang.Throwable $r4;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: byte[];
+
+     label1:
+        $r3 = staticinvoke <com.gomo.http.security.HmacUtil: javax.crypto.Mac getHmacSha256(byte[])>($r0);
+
+        $r0 = virtualinvoke $r3.<javax.crypto.Mac: byte[] doFinal(byte[])>($r1);
+
+     label2:
+        return $r0;
+
+     label3:
+        $r4 := @caughtexception;
+
+        $r2 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r4);
+
+        throw $r2;
+
+        catch java.lang.IllegalStateException from label1 to label2 with label3;
+    }
+}

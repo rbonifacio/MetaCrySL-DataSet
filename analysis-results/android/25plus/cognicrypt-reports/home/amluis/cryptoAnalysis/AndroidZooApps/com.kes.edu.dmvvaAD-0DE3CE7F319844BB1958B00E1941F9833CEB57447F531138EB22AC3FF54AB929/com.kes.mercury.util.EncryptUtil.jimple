@@ -1,0 +1,292 @@
+public class com.kes.mercury.util.EncryptUtil extends java.lang.Object
+{
+    private static final java.lang.String HEX;
+
+    public void <init>()
+    {
+        com.kes.mercury.util.EncryptUtil $r0;
+
+        $r0 := @this: com.kes.mercury.util.EncryptUtil;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static void appendHex(java.lang.StringBuffer, byte)
+    {
+        java.lang.StringBuffer $r0;
+        byte $b0, $b1;
+        java.lang.String $r1;
+        char $c2;
+
+        $r0 := @parameter0: java.lang.StringBuffer;
+
+        $b0 := @parameter1: byte;
+
+        $r1 = "0123456789ABCDEF";
+
+        $b1 = $b0 >> 4;
+
+        $b1 = $b1 & 15;
+
+        $c2 = virtualinvoke $r1.<java.lang.String: char charAt(int)>($b1);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuffer: java.lang.StringBuffer append(char)>($c2);
+
+        $r1 = "0123456789ABCDEF";
+
+        $b0 = $b0 & 15;
+
+        $c2 = virtualinvoke $r1.<java.lang.String: char charAt(int)>($b0);
+
+        virtualinvoke $r0.<java.lang.StringBuffer: java.lang.StringBuffer append(char)>($c2);
+
+        return;
+    }
+
+    public static java.lang.String decrypt(java.lang.String, java.lang.String) throws java.lang.Exception
+    {
+        java.lang.String $r0, $r1;
+        byte[] $r2, $r3;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        $r2 = staticinvoke <com.kes.mercury.util.EncryptUtil: byte[] getRawKey(byte[])>($r2);
+
+        $r3 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        $r3 = staticinvoke <com.kes.mercury.util.Base64Str: byte[] decode(byte[])>($r3);
+
+        $r2 = staticinvoke <com.kes.mercury.util.EncryptUtil: byte[] decrypt(byte[],byte[])>($r2, $r3);
+
+        $r0 = new java.lang.String;
+
+        specialinvoke $r0.<java.lang.String: void <init>(byte[])>($r2);
+
+        return $r0;
+    }
+
+    private static byte[] decrypt(byte[], byte[]) throws java.lang.Exception
+    {
+        byte[] $r0, $r1;
+        javax.crypto.spec.SecretKeySpec $r2;
+        javax.crypto.Cipher $r3;
+        java.lang.String varReplacer295, varReplacer296;
+        int varReplacer297;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: byte[];
+
+        $r2 = new javax.crypto.spec.SecretKeySpec;
+
+        varReplacer295 = "AES";
+
+        specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer295);
+
+        varReplacer296 = "AES";
+
+        $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer296);
+
+        varReplacer297 = 2;
+
+        virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer297, $r2);
+
+        $r0 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1);
+
+        return $r0;
+    }
+
+    public static java.lang.String encrypt(java.lang.String, java.lang.String) throws java.lang.Exception
+    {
+        java.lang.String $r0, $r1;
+        byte[] $r2, $r3;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        $r2 = staticinvoke <com.kes.mercury.util.EncryptUtil: byte[] getRawKey(byte[])>($r2);
+
+        $r3 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        $r2 = staticinvoke <com.kes.mercury.util.EncryptUtil: byte[] encrypt(byte[],byte[])>($r2, $r3);
+
+        $r0 = new java.lang.String;
+
+        $r2 = staticinvoke <com.kes.mercury.util.Base64Str: byte[] encode(byte[])>($r2);
+
+        specialinvoke $r0.<java.lang.String: void <init>(byte[])>($r2);
+
+        return $r0;
+    }
+
+    private static byte[] encrypt(byte[], byte[]) throws java.lang.Exception
+    {
+        byte[] $r0, $r1;
+        javax.crypto.spec.SecretKeySpec $r2;
+        javax.crypto.Cipher $r3;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: byte[];
+
+        $r2 = new javax.crypto.spec.SecretKeySpec;
+
+        specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, "AES");
+
+        $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>("AES");
+
+        virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(1, $r2);
+
+        $r0 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1);
+
+        return $r0;
+    }
+
+    public static java.lang.String fromHex(java.lang.String)
+    {
+        java.lang.String $r0, $r1;
+        byte[] $r2;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = new java.lang.String;
+
+        $r2 = staticinvoke <com.kes.mercury.util.EncryptUtil: byte[] toByte(java.lang.String)>($r0);
+
+        specialinvoke $r1.<java.lang.String: void <init>(byte[])>($r2);
+
+        return $r1;
+    }
+
+    private static byte[] getRawKey(byte[]) throws java.lang.Exception
+    {
+        byte[] $r0;
+        java.lang.String $r1;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 = "sdK2/RycmuacAckgOJnzbw==";
+
+        $r0 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        $r0 = staticinvoke <com.kes.mercury.util.Base64Str: byte[] decode(byte[])>($r0);
+
+        return $r0;
+    }
+
+    public static byte[] toByte(java.lang.String)
+    {
+        java.lang.String $r0, $r2;
+        int $i0, $i1, $i2, $i3;
+        byte[] $r1;
+        java.lang.Integer $r3;
+        byte $b4;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        $i0 = $i0 / 2;
+
+        $r1 = newarray (byte)[$i0];
+
+        $i1 = 0;
+
+     label1:
+        if $i1 < $i0 goto label2;
+
+        return $r1;
+
+     label2:
+        $i2 = $i1 * 2;
+
+        $i3 = $i1 * 2;
+
+        $i3 = $i3 + 2;
+
+        $r2 = virtualinvoke $r0.<java.lang.String: java.lang.String substring(int,int)>($i2, $i3);
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(java.lang.String,int)>($r2, 16);
+
+        $b4 = virtualinvoke $r3.<java.lang.Integer: byte byteValue()>();
+
+        $r1[$i1] = $b4;
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+    }
+
+    public static java.lang.String toHex(java.lang.String)
+    {
+        java.lang.String $r0;
+        byte[] $r1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        $r0 = staticinvoke <com.kes.mercury.util.EncryptUtil: java.lang.String toHex(byte[])>($r1);
+
+        return $r0;
+    }
+
+    public static java.lang.String toHex(byte[])
+    {
+        byte[] $r0;
+        java.lang.StringBuffer $r1;
+        java.lang.String $r2;
+        int $i0, $i1;
+        byte $b2;
+
+        $r0 := @parameter0: byte[];
+
+        if $r0 != null goto label1;
+
+        return "";
+
+     label1:
+        $r1 = new java.lang.StringBuffer;
+
+        $i0 = lengthof $r0;
+
+        $i0 = $i0 * 2;
+
+        specialinvoke $r1.<java.lang.StringBuffer: void <init>(int)>($i0);
+
+        $i0 = 0;
+
+     label2:
+        $i1 = lengthof $r0;
+
+        if $i0 < $i1 goto label3;
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        return $r2;
+
+     label3:
+        $b2 = $r0[$i0];
+
+        staticinvoke <com.kes.mercury.util.EncryptUtil: void appendHex(java.lang.StringBuffer,byte)>($r1, $b2);
+
+        $i0 = $i0 + 1;
+
+        goto label2;
+    }
+}

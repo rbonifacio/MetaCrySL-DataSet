@@ -1,0 +1,799 @@
+public class com.avos.avoscloud.AVPushWebSocketClient extends com.avos.avoscloud.java_websocket.client.WebSocketClient
+{
+    private static final java.lang.String HEADER_SUB_PROTOCOL;
+    private static final int PING_TIMEOUT_CODE;
+    private static final java.util.concurrent.ScheduledThreadPoolExecutor executor;
+    long DEFAULT_LIVE_INTERNAL;
+    long HEALTHY_THRESHOLD;
+    java.util.concurrent.atomic.AtomicBoolean destroyed;
+    java.util.concurrent.Future healthFuture;
+    java.lang.Runnable healthMonitor;
+    long lastLiveTS;
+    long lastPingTS;
+    com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener listener;
+    long reconnectInterval;
+    java.lang.Runnable reconnectTask;
+
+    static void <clinit>()
+    {
+        java.util.concurrent.ScheduledThreadPoolExecutor $r0;
+        int varReplacer7476;
+
+        nop;
+
+        $r0 = new java.util.concurrent.ScheduledThreadPoolExecutor;
+
+        varReplacer7476 = 1;
+
+        specialinvoke $r0.<java.util.concurrent.ScheduledThreadPoolExecutor: void <init>(int)>(varReplacer7476);
+
+        <com.avos.avoscloud.AVPushWebSocketClient: java.util.concurrent.ScheduledThreadPoolExecutor executor> = $r0;
+
+        return;
+    }
+
+    public void <init>(java.net.URI, com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener, java.lang.String, boolean)
+    {
+        com.avos.avoscloud.AVPushWebSocketClient $r0;
+        java.net.URI $r1;
+        com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener $r2;
+        java.lang.String $r3, varReplacer7483;
+        boolean $z0, $z1;
+        com.avos.avoscloud.java_websocket.drafts.Draft_17 $r4;
+        com.avos.avoscloud.AVPushWebSocketClient$3 $r5;
+        com.avos.avoscloud.AVPushWebSocketClient$1 $r6;
+        com.avos.avoscloud.AVPushWebSocketClient$2 $r7;
+        java.util.concurrent.atomic.AtomicBoolean $r8;
+        java.lang.StringBuilder $r9;
+        long varReplacer7479, varReplacer7480, varReplacer7481;
+        int varReplacer7482, varReplacer7484;
+
+        nop;
+
+        $r0 := @this: com.avos.avoscloud.AVPushWebSocketClient;
+
+        $r1 := @parameter0: java.net.URI;
+
+        $r2 := @parameter1: com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $z0 := @parameter3: boolean;
+
+        $r4 = new com.avos.avoscloud.java_websocket.drafts.Draft_17;
+
+        specialinvoke $r4.<com.avos.avoscloud.java_websocket.drafts.Draft_17: void <init>()>();
+
+        $r5 = new com.avos.avoscloud.AVPushWebSocketClient$3;
+
+        specialinvoke $r5.<com.avos.avoscloud.AVPushWebSocketClient$3: void <init>(java.lang.String)>($r3);
+
+        varReplacer7482 = 0;
+
+        specialinvoke $r0.<com.avos.avoscloud.java_websocket.client.WebSocketClient: void <init>(java.net.URI,com.avos.avoscloud.java_websocket.drafts.Draft,java.util.Map,int)>($r1, $r4, $r5, varReplacer7482);
+
+        varReplacer7479 = 30000L;
+
+        $r0.<com.avos.avoscloud.AVPushWebSocketClient: long DEFAULT_LIVE_INTERNAL> = varReplacer7479;
+
+        varReplacer7480 = 60000L;
+
+        $r0.<com.avos.avoscloud.AVPushWebSocketClient: long HEALTHY_THRESHOLD> = varReplacer7480;
+
+        varReplacer7481 = 10000L;
+
+        $r0.<com.avos.avoscloud.AVPushWebSocketClient: long reconnectInterval> = varReplacer7481;
+
+        $r6 = new com.avos.avoscloud.AVPushWebSocketClient$1;
+
+        specialinvoke $r6.<com.avos.avoscloud.AVPushWebSocketClient$1: void <init>(com.avos.avoscloud.AVPushWebSocketClient)>($r0);
+
+        $r0.<com.avos.avoscloud.AVPushWebSocketClient: java.lang.Runnable reconnectTask> = $r6;
+
+        $r7 = new com.avos.avoscloud.AVPushWebSocketClient$2;
+
+        specialinvoke $r7.<com.avos.avoscloud.AVPushWebSocketClient$2: void <init>(com.avos.avoscloud.AVPushWebSocketClient)>($r0);
+
+        $r0.<com.avos.avoscloud.AVPushWebSocketClient: java.lang.Runnable healthMonitor> = $r7;
+
+        $r8 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        varReplacer7484 = 0;
+
+        specialinvoke $r8.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(varReplacer7484);
+
+        $r0.<com.avos.avoscloud.AVPushWebSocketClient: java.util.concurrent.atomic.AtomicBoolean destroyed> = $r8;
+
+        $z1 = staticinvoke <com.avos.avoscloud.AVOSCloud: boolean showInternalDebugLog()>();
+
+        if $z1 == 0 goto label1;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer7483 = "trying to connect ";
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7483);
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r3 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.avos.avoscloud.LogUtil$avlog: void d(java.lang.String)>($r3);
+
+     label1:
+        specialinvoke $r0.<com.avos.avoscloud.AVPushWebSocketClient: void setSocket()>();
+
+        $r0.<com.avos.avoscloud.AVPushWebSocketClient: com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener listener> = $r2;
+
+        return;
+    }
+
+    static boolean access$000(com.avos.avoscloud.AVPushWebSocketClient)
+    {
+        com.avos.avoscloud.AVPushWebSocketClient $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.avos.avoscloud.AVPushWebSocketClient;
+
+        $z0 = specialinvoke $r0.<com.avos.avoscloud.AVPushWebSocketClient: boolean isPingNeeded()>();
+
+        return $z0;
+    }
+
+    private boolean isPingNeeded()
+    {
+        com.avos.avoscloud.AVPushWebSocketClient $r0;
+        long $l0, $l1;
+        byte $b2;
+
+        $r0 := @this: com.avos.avoscloud.AVPushWebSocketClient;
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $l1 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: long lastLiveTS>;
+
+        $l1 = $l0 - $l1;
+
+        $l0 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: long DEFAULT_LIVE_INTERNAL>;
+
+        $b2 = $l1 cmp $l0;
+
+        if $b2 <= 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    private void setSocket()
+    {
+        com.avos.avoscloud.AVPushWebSocketClient $r0;
+        javax.net.ssl.SSLContext $r1;
+        javax.net.ssl.SSLSocketFactory $r2;
+        java.net.Socket $r3;
+        java.lang.Throwable $r4, $r6;
+        com.avos.avoscloud.AVException $r5;
+        java.lang.String varReplacer7535, varReplacer7536;
+
+        nop;
+
+        $r0 := @this: com.avos.avoscloud.AVPushWebSocketClient;
+
+     label1:
+        $r1 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getDefault()>();
+
+        $r2 = virtualinvoke $r1.<javax.net.ssl.SSLContext: javax.net.ssl.SSLSocketFactory getSocketFactory()>();
+
+        $r3 = virtualinvoke $r2.<javax.net.ssl.SSLSocketFactory: java.net.Socket createSocket()>();
+
+        virtualinvoke $r0.<com.avos.avoscloud.AVPushWebSocketClient: void setSocket(java.net.Socket)>($r3);
+
+     label2:
+        return;
+
+     label3:
+        $r4 := @caughtexception;
+
+        $r5 = new com.avos.avoscloud.AVException;
+
+        specialinvoke $r5.<com.avos.avoscloud.AVException: void <init>(java.lang.Throwable)>($r4);
+
+        varReplacer7535 = "Socket Error";
+
+        staticinvoke <com.avos.avoscloud.LogUtil$avlog: void e(java.lang.String,java.lang.Exception)>(varReplacer7535, $r5);
+
+        return;
+
+     label4:
+        $r6 := @caughtexception;
+
+        $r5 = new com.avos.avoscloud.AVException;
+
+        specialinvoke $r5.<com.avos.avoscloud.AVException: void <init>(java.lang.Throwable)>($r6);
+
+        varReplacer7536 = "Socket Error";
+
+        staticinvoke <com.avos.avoscloud.LogUtil$avlog: void e(java.lang.String,java.lang.Exception)>(varReplacer7536, $r5);
+
+        return;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+        catch java.io.IOException from label1 to label2 with label4;
+    }
+
+    protected void cancelReconnect()
+    {
+        com.avos.avoscloud.AVPushWebSocketClient $r0;
+        android.os.Handler $r1;
+        java.lang.Runnable $r2;
+
+        nop;
+
+        $r0 := @this: com.avos.avoscloud.AVPushWebSocketClient;
+
+        $r1 = <com.avos.avoscloud.AVOSCloud: android.os.Handler handler>;
+
+        $r2 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: java.lang.Runnable reconnectTask>;
+
+        virtualinvoke $r1.<android.os.Handler: void removeCallbacks(java.lang.Runnable)>($r2);
+
+        return;
+    }
+
+    protected void destroy()
+    {
+        com.avos.avoscloud.AVPushWebSocketClient $r0;
+        java.util.concurrent.atomic.AtomicBoolean $r1;
+        java.util.concurrent.Future $r2;
+        int varReplacer7477, varReplacer7478;
+
+        nop;
+
+        $r0 := @this: com.avos.avoscloud.AVPushWebSocketClient;
+
+        $r1 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: java.util.concurrent.atomic.AtomicBoolean destroyed>;
+
+        varReplacer7477 = 1;
+
+        virtualinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(varReplacer7477);
+
+        virtualinvoke $r0.<com.avos.avoscloud.AVPushWebSocketClient: void cancelReconnect()>();
+
+        $r2 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: java.util.concurrent.Future healthFuture>;
+
+        if $r2 == null goto label1;
+
+        $r2 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: java.util.concurrent.Future healthFuture>;
+
+        varReplacer7478 = 1;
+
+        interfaceinvoke $r2.<java.util.concurrent.Future: boolean cancel(boolean)>(varReplacer7478);
+
+     label1:
+        return;
+    }
+
+    protected boolean isHealthy()
+    {
+        com.avos.avoscloud.AVPushWebSocketClient $r0;
+        long $l0, $l1, $l2;
+        byte $b3;
+
+        $r0 := @this: com.avos.avoscloud.AVPushWebSocketClient;
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $l1 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: long lastPingTS>;
+
+        $l2 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: long lastLiveTS>;
+
+        $b3 = $l1 cmp $l2;
+
+        if $b3 > 0 goto label1;
+
+        return 1;
+
+     label1:
+        $l1 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: long lastLiveTS>;
+
+        $l0 = $l0 - $l1;
+
+        $l1 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: long HEALTHY_THRESHOLD>;
+
+        $b3 = $l0 cmp $l1;
+
+        if $b3 <= 0 goto label2;
+
+        return 0;
+
+     label2:
+        return 1;
+    }
+
+    public void onClose(int, java.lang.String, boolean)
+    {
+        com.avos.avoscloud.AVPushWebSocketClient $r0;
+        int $i0, varReplacer9372, varReplacer9373;
+        java.lang.String $r1, varReplacer9369, varReplacer9370, varReplacer9371, varReplacer9374, varReplacer9375;
+        boolean $z0;
+        java.util.concurrent.Future $r2;
+        com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener $r3;
+        com.avos.avoscloud.AVException $r4;
+        java.lang.StringBuilder $r5;
+
+        nop;
+
+        $r0 := @this: com.avos.avoscloud.AVPushWebSocketClient;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $z0 := @parameter2: boolean;
+
+        $r2 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: java.util.concurrent.Future healthFuture>;
+
+        if $r2 == null goto label1;
+
+        $r2 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: java.util.concurrent.Future healthFuture>;
+
+        varReplacer9372 = 1;
+
+        interfaceinvoke $r2.<java.util.concurrent.Future: boolean cancel(boolean)>(varReplacer9372);
+
+     label1:
+        $r3 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener listener>;
+
+        if $r3 == null goto label2;
+
+        $r3 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener listener>;
+
+        varReplacer9373 = 1;
+
+        interfaceinvoke $r3.<com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener: void processSessionsStatus(boolean)>(varReplacer9373);
+
+     label2:
+        $r3 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener listener>;
+
+        if $r3 == null goto label3;
+
+        $r3 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener listener>;
+
+        $r4 = new com.avos.avoscloud.AVException;
+
+        specialinvoke $r4.<com.avos.avoscloud.AVException: void <init>(int,java.lang.String)>($i0, $r1);
+
+        interfaceinvoke $r3.<com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener: void processConnectionStatus(com.avos.avoscloud.AVException)>($r4);
+
+     label3:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer9370 = "local disconnection:";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer9370);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer9371 = "  ";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer9371);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer9375 = " :";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer9375);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        $r1 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.avos.avoscloud.LogUtil$avlog: void d(java.lang.String)>($r1);
+
+        lookupswitch($i0)
+        {
+            case -1: goto label5;
+            case 1006: goto label7;
+            case 3000: goto label8;
+            default: goto label4;
+        };
+
+     label4:
+        virtualinvoke $r0.<com.avos.avoscloud.AVPushWebSocketClient: void scheduleReconnect()>();
+
+        return;
+
+     label5:
+        varReplacer9369 = "connection refused";
+
+        staticinvoke <com.avos.avoscloud.LogUtil$avlog: void d(java.lang.String)>(varReplacer9369);
+
+        if $z0 == 0 goto label6;
+
+        $r3 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener listener>;
+
+        if $r3 == null goto label9;
+
+        $r3 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener listener>;
+
+        interfaceinvoke $r3.<com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener: void processRemoteServerNotAvailable()>();
+
+        return;
+
+     label6:
+        virtualinvoke $r0.<com.avos.avoscloud.AVPushWebSocketClient: void scheduleReconnect()>();
+
+        return;
+
+     label7:
+        virtualinvoke $r0.<com.avos.avoscloud.AVPushWebSocketClient: void scheduleReconnect()>();
+
+        return;
+
+     label8:
+        varReplacer9374 = "connection unhealthy";
+
+        staticinvoke <com.avos.avoscloud.LogUtil$avlog: void d(java.lang.String)>(varReplacer9374);
+
+        virtualinvoke $r0.<com.avos.avoscloud.AVPushWebSocketClient: void reconnect()>();
+
+     label9:
+        return;
+    }
+
+    public void onError(java.lang.Exception)
+    {
+        com.avos.avoscloud.AVPushWebSocketClient $r0;
+        java.lang.Exception $r1;
+        boolean $z0;
+        com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener $r2;
+        android.content.Context $r3;
+
+        nop;
+
+        $r0 := @this: com.avos.avoscloud.AVPushWebSocketClient;
+
+        $r1 := @parameter0: java.lang.Exception;
+
+        virtualinvoke $r1.<java.lang.Exception: void printStackTrace()>();
+
+        $r2 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener listener>;
+
+        if $r2 == null goto label1;
+
+        $r3 = <com.avos.avoscloud.AVOSCloud: android.content.Context applicationContext>;
+
+        $z0 = staticinvoke <com.avos.avoscloud.AVUtils: boolean isConnected(android.content.Context)>($r3);
+
+        if $z0 == 0 goto label1;
+
+        $r2 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener listener>;
+
+        interfaceinvoke $r2.<com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener: void processRemoteServerNotAvailable()>();
+
+     label1:
+        return;
+    }
+
+    public void onMessage(java.lang.String)
+    {
+        com.avos.avoscloud.AVPushWebSocketClient $r0;
+        java.lang.String $r1;
+        long $l0;
+
+        nop;
+
+        $r0 := @this: com.avos.avoscloud.AVPushWebSocketClient;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $r0.<com.avos.avoscloud.AVPushWebSocketClient: long lastLiveTS> = $l0;
+
+        return;
+    }
+
+    public void onMessage(java.nio.ByteBuffer)
+    {
+        com.avos.avoscloud.AVPushWebSocketClient $r0;
+        java.nio.ByteBuffer $r1;
+        long $l0;
+        com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener $r2;
+
+        nop;
+
+        $r0 := @this: com.avos.avoscloud.AVPushWebSocketClient;
+
+        $r1 := @parameter0: java.nio.ByteBuffer;
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $r0.<com.avos.avoscloud.AVPushWebSocketClient: long lastLiveTS> = $l0;
+
+        $r2 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener listener>;
+
+        if $r2 == null goto label1;
+
+        $r2 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener listener>;
+
+        interfaceinvoke $r2.<com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener: void processCommand(java.nio.ByteBuffer)>($r1);
+
+     label1:
+        return;
+    }
+
+    public void onOpen(com.avos.avoscloud.java_websocket.handshake.ServerHandshake)
+    {
+        com.avos.avoscloud.AVPushWebSocketClient $r0;
+        com.avos.avoscloud.java_websocket.handshake.ServerHandshake $r1;
+        long $l0, $l1;
+        java.util.concurrent.TimeUnit $r2;
+        java.util.concurrent.ScheduledThreadPoolExecutor $r3;
+        java.lang.Runnable $r4;
+        java.util.concurrent.ScheduledFuture $r5;
+        com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener $r6;
+        int varReplacer10379;
+        null_type varReplacer10380;
+
+        nop;
+
+        $r0 := @this: com.avos.avoscloud.AVPushWebSocketClient;
+
+        $r1 := @parameter0: com.avos.avoscloud.java_websocket.handshake.ServerHandshake;
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $r0.<com.avos.avoscloud.AVPushWebSocketClient: long lastLiveTS> = $l0;
+
+        virtualinvoke $r0.<com.avos.avoscloud.AVPushWebSocketClient: void cancelReconnect()>();
+
+        $r3 = <com.avos.avoscloud.AVPushWebSocketClient: java.util.concurrent.ScheduledThreadPoolExecutor executor>;
+
+        $r4 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: java.lang.Runnable healthMonitor>;
+
+        $l0 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: long DEFAULT_LIVE_INTERNAL>;
+
+        $l1 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: long DEFAULT_LIVE_INTERNAL>;
+
+        $r2 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        $r5 = virtualinvoke $r3.<java.util.concurrent.ScheduledThreadPoolExecutor: java.util.concurrent.ScheduledFuture scheduleAtFixedRate(java.lang.Runnable,long,long,java.util.concurrent.TimeUnit)>($r4, $l0, $l1, $r2);
+
+        $r0.<com.avos.avoscloud.AVPushWebSocketClient: java.util.concurrent.Future healthFuture> = $r5;
+
+        $r6 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener listener>;
+
+        if $r6 == null goto label1;
+
+        $r6 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener listener>;
+
+        interfaceinvoke $r6.<com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener: void loginCmd()>();
+
+        $r6 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener listener>;
+
+        varReplacer10380 = null;
+
+        interfaceinvoke $r6.<com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener: void processConnectionStatus(com.avos.avoscloud.AVException)>(varReplacer10380);
+
+        $r6 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener listener>;
+
+        varReplacer10379 = 0;
+
+        interfaceinvoke $r6.<com.avos.avoscloud.AVPushWebSocketClient$AVSocketListener: void processSessionsStatus(boolean)>(varReplacer10379);
+
+     label1:
+        return;
+    }
+
+    public void onWebsocketPong(com.avos.avoscloud.java_websocket.WebSocket, com.avos.avoscloud.java_websocket.framing.Framedata)
+    {
+        com.avos.avoscloud.AVPushWebSocketClient $r0;
+        com.avos.avoscloud.java_websocket.WebSocket $r1;
+        com.avos.avoscloud.java_websocket.framing.Framedata $r2;
+        long $l0;
+
+        nop;
+
+        $r0 := @this: com.avos.avoscloud.AVPushWebSocketClient;
+
+        $r1 := @parameter0: com.avos.avoscloud.java_websocket.WebSocket;
+
+        $r2 := @parameter1: com.avos.avoscloud.java_websocket.framing.Framedata;
+
+        specialinvoke $r0.<com.avos.avoscloud.java_websocket.client.WebSocketClient: void onWebsocketPong(com.avos.avoscloud.java_websocket.WebSocket,com.avos.avoscloud.java_websocket.framing.Framedata)>($r1, $r2);
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $r0.<com.avos.avoscloud.AVPushWebSocketClient: long lastLiveTS> = $l0;
+
+        return;
+    }
+
+    protected void ping()
+    {
+        com.avos.avoscloud.AVPushWebSocketClient $r0;
+        com.avos.avoscloud.java_websocket.framing.FramedataImpl1 $r1;
+        long $l0;
+        com.avos.avoscloud.java_websocket.framing.Framedata$Opcode $r2;
+
+        $r0 := @this: com.avos.avoscloud.AVPushWebSocketClient;
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $r0.<com.avos.avoscloud.AVPushWebSocketClient: long lastPingTS> = $l0;
+
+        $r1 = new com.avos.avoscloud.java_websocket.framing.FramedataImpl1;
+
+        $r2 = <com.avos.avoscloud.java_websocket.framing.Framedata$Opcode: com.avos.avoscloud.java_websocket.framing.Framedata$Opcode PING>;
+
+        specialinvoke $r1.<com.avos.avoscloud.java_websocket.framing.FramedataImpl1: void <init>(com.avos.avoscloud.java_websocket.framing.Framedata$Opcode)>($r2);
+
+        virtualinvoke $r1.<com.avos.avoscloud.java_websocket.framing.FramedataImpl1: void setFin(boolean)>(1);
+
+        virtualinvoke $r0.<com.avos.avoscloud.AVPushWebSocketClient: void sendFrame(com.avos.avoscloud.java_websocket.framing.Framedata)>($r1);
+
+        return;
+    }
+
+    protected void reconnect()
+    {
+        com.avos.avoscloud.AVPushWebSocketClient $r0;
+        boolean $z0;
+        android.content.Context $r1;
+        java.lang.Throwable $r2;
+        java.util.concurrent.atomic.AtomicBoolean $r3;
+
+        nop;
+
+        $r0 := @this: com.avos.avoscloud.AVPushWebSocketClient;
+
+        entermonitor $r0;
+
+     label1:
+        $z0 = virtualinvoke $r0.<com.avos.avoscloud.AVPushWebSocketClient: boolean isConnecting()>();
+
+        if $z0 != 0 goto label3;
+
+        $z0 = virtualinvoke $r0.<com.avos.avoscloud.AVPushWebSocketClient: boolean isOpen()>();
+
+     label2:
+        if $z0 == 0 goto label4;
+
+     label3:
+        exitmonitor $r0;
+
+        return;
+
+     label4:
+        $r1 = <com.avos.avoscloud.AVOSCloud: android.content.Context applicationContext>;
+
+        $z0 = staticinvoke <com.avos.avoscloud.AVUtils: boolean isConnected(android.content.Context)>($r1);
+
+        if $z0 == 0 goto label7;
+
+        virtualinvoke $r0.<com.avos.avoscloud.AVPushWebSocketClient: void connect()>();
+
+     label5:
+        goto label3;
+
+     label6:
+        $r2 := @caughtexception;
+
+        exitmonitor $r0;
+
+        throw $r2;
+
+     label7:
+        $r3 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: java.util.concurrent.atomic.AtomicBoolean destroyed>;
+
+        $z0 = virtualinvoke $r3.<java.util.concurrent.atomic.AtomicBoolean: boolean get()>();
+
+        if $z0 != 0 goto label3;
+
+        virtualinvoke $r0.<com.avos.avoscloud.AVPushWebSocketClient: void scheduleReconnect()>();
+
+     label8:
+        goto label3;
+
+        catch java.lang.Throwable from label1 to label2 with label6;
+        catch java.lang.Throwable from label4 to label5 with label6;
+        catch java.lang.Throwable from label7 to label8 with label6;
+    }
+
+    protected void scheduleReconnect()
+    {
+        com.avos.avoscloud.AVPushWebSocketClient $r0;
+        java.lang.Runnable $r1;
+        long $l0;
+        byte $b1;
+        android.os.Handler $r2;
+
+        nop;
+
+        $r0 := @this: com.avos.avoscloud.AVPushWebSocketClient;
+
+        $l0 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: long reconnectInterval>;
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 <= 0 goto label1;
+
+        $r2 = <com.avos.avoscloud.AVOSCloud: android.os.Handler handler>;
+
+        $r1 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: java.lang.Runnable reconnectTask>;
+
+        $l0 = $r0.<com.avos.avoscloud.AVPushWebSocketClient: long reconnectInterval>;
+
+        virtualinvoke $r2.<android.os.Handler: boolean postDelayed(java.lang.Runnable,long)>($r1, $l0);
+
+     label1:
+        return;
+    }
+
+    public void send(com.avos.avospush.session.CommandPacket)
+    {
+        com.avos.avoscloud.AVPushWebSocketClient $r0;
+        com.avos.avospush.session.CommandPacket $r1;
+        java.lang.Exception $r2;
+        boolean $z0;
+        java.lang.StringBuilder $r3;
+        com.avos.avoscloud.Messages$GenericCommand $r4;
+        java.lang.String $r5, varReplacer9445;
+        byte[] $r6;
+
+        nop;
+
+        $r0 := @this: com.avos.avoscloud.AVPushWebSocketClient;
+
+        $r1 := @parameter0: com.avos.avospush.session.CommandPacket;
+
+        $z0 = staticinvoke <com.avos.avoscloud.AVOSCloud: boolean isDebugLogEnabled()>();
+
+        if $z0 == 0 goto label1;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer9445 = "uplink : ";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer9445);
+
+        $r4 = virtualinvoke $r1.<com.avos.avospush.session.CommandPacket: com.avos.avoscloud.Messages$GenericCommand getGenericCommand()>();
+
+        $r5 = virtualinvoke $r4.<com.avos.avoscloud.Messages$GenericCommand: java.lang.String toString()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.avos.avoscloud.LogUtil$avlog: void d(java.lang.String)>($r5);
+
+     label1:
+        $r4 = virtualinvoke $r1.<com.avos.avospush.session.CommandPacket: com.avos.avoscloud.Messages$GenericCommand getGenericCommand()>();
+
+        $r6 = virtualinvoke $r4.<com.avos.avoscloud.Messages$GenericCommand: byte[] toByteArray()>();
+
+        virtualinvoke $r0.<com.avos.avoscloud.AVPushWebSocketClient: void send(byte[])>($r6);
+
+     label2:
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        $r5 = virtualinvoke $r2.<java.lang.Exception: java.lang.String getMessage()>();
+
+        staticinvoke <com.avos.avoscloud.LogUtil$avlog: void e(java.lang.String)>($r5);
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+}

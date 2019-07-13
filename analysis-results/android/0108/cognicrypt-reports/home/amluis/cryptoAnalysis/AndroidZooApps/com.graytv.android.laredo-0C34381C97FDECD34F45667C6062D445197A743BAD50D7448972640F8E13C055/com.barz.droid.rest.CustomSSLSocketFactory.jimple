@@ -1,0 +1,564 @@
+public class com.barz.droid.rest.CustomSSLSocketFactory extends javax.net.ssl.SSLSocketFactory
+{
+    javax.net.ssl.SSLContext context;
+    javax.net.ssl.SSLSocketFactory factory;
+    java.lang.String type;
+
+    public void <init>()
+    {
+        com.barz.droid.rest.CustomSSLSocketFactory $r0;
+        java.lang.Throwable $r1, $r2;
+        java.security.KeyManagementException r3;
+        java.security.NoSuchAlgorithmException r4;
+
+        nop;
+
+        $r0 := @this: com.barz.droid.rest.CustomSSLSocketFactory;
+
+        specialinvoke $r0.<javax.net.ssl.SSLSocketFactory: void <init>()>();
+
+     label1:
+        virtualinvoke $r0.<com.barz.droid.rest.CustomSSLSocketFactory: void init()>();
+
+     label2:
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        r3 = (java.security.KeyManagementException) $r1;
+
+        virtualinvoke r3.<java.security.KeyManagementException: void printStackTrace()>();
+
+        return;
+
+     label4:
+        $r2 := @caughtexception;
+
+        r4 = (java.security.NoSuchAlgorithmException) $r2;
+
+        virtualinvoke r4.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        return;
+
+        catch java.security.KeyManagementException from label1 to label2 with label3;
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label4;
+    }
+
+    java.net.Socket configCipherSuites(java.net.Socket)
+    {
+        com.barz.droid.rest.CustomSSLSocketFactory $r0;
+        java.net.Socket $r1;
+        java.lang.Throwable $r2;
+        boolean $z0;
+        javax.net.ssl.SSLSocket $r3;
+        java.util.Set $r4;
+        int $i0;
+        java.lang.String[] $r5;
+        java.lang.Object[] $r6;
+        java.lang.String $r7, $r10, $r12, $r13;
+        java.util.Iterator $r8;
+        java.lang.Object $r9;
+        java.util.Locale $r11;
+        java.lang.StringBuilder $r14;
+
+        $r0 := @this: com.barz.droid.rest.CustomSSLSocketFactory;
+
+        $r1 := @parameter0: java.net.Socket;
+
+        $z0 = $r1 instanceof javax.net.ssl.SSLSocket;
+
+        if $z0 != 0 goto label1;
+
+        return $r1;
+
+     label1:
+        $r3 = (javax.net.ssl.SSLSocket) $r1;
+
+        $r4 = virtualinvoke $r0.<com.barz.droid.rest.CustomSSLSocketFactory: java.util.Set getCipherSuites()>();
+
+        interfaceinvoke $r4.<java.util.Set: java.lang.Object[] toArray()>();
+
+     label2:
+        $i0 = interfaceinvoke $r4.<java.util.Set: int size()>();
+
+        if $i0 <= 0 goto label7;
+
+     label3:
+        $i0 = interfaceinvoke $r4.<java.util.Set: int size()>();
+
+        $r5 = newarray (java.lang.String)[$i0];
+
+        $r6 = interfaceinvoke $r4.<java.util.Set: java.lang.Object[] toArray(java.lang.Object[])>($r5);
+
+        $r5 = (java.lang.String[]) $r6;
+
+        virtualinvoke $r3.<javax.net.ssl.SSLSocket: void setEnabledCipherSuites(java.lang.String[])>($r5);
+
+     label4:
+        return $r1;
+
+     label5:
+        $r2 := @caughtexception;
+
+        $r7 = virtualinvoke $r2.<java.lang.Throwable: java.lang.String getMessage()>();
+
+        $r8 = interfaceinvoke $r4.<java.util.Set: java.util.Iterator iterator()>();
+
+     label6:
+        $z0 = interfaceinvoke $r8.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r9 = interfaceinvoke $r8.<java.util.Iterator: java.lang.Object next()>();
+
+        $r10 = (java.lang.String) $r9;
+
+        $r11 = <java.util.Locale: java.util.Locale ENGLISH>;
+
+        $r12 = virtualinvoke $r7.<java.lang.String: java.lang.String toLowerCase(java.util.Locale)>($r11);
+
+        $r13 = virtualinvoke $r10.<java.lang.String: java.lang.String toLowerCase()>();
+
+        $z0 = virtualinvoke $r12.<java.lang.String: boolean contains(java.lang.CharSequence)>($r13);
+
+        if $z0 == 0 goto label6;
+
+        interfaceinvoke $r4.<java.util.Set: boolean remove(java.lang.Object)>($r10);
+
+        $r14 = new java.lang.StringBuilder;
+
+        specialinvoke $r14.<java.lang.StringBuilder: void <init>(java.lang.String)>("Cipher suite ");
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" has been removed.");
+
+        $r7 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.barz.droid.util.L: void p(java.lang.String)>($r7);
+
+        goto label2;
+
+     label7:
+        return $r1;
+
+        catch java.lang.Throwable from label3 to label4 with label5;
+    }
+
+    public java.net.Socket createSocket(java.lang.String, int) throws java.io.IOException, java.net.UnknownHostException
+    {
+        com.barz.droid.rest.CustomSSLSocketFactory $r0;
+        java.lang.String $r1;
+        int $i0;
+        javax.net.ssl.SSLSocketFactory $r2;
+        java.net.Socket $r3;
+
+        $r0 := @this: com.barz.droid.rest.CustomSSLSocketFactory;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        $r2 = $r0.<com.barz.droid.rest.CustomSSLSocketFactory: javax.net.ssl.SSLSocketFactory factory>;
+
+        $r3 = virtualinvoke $r2.<javax.net.ssl.SSLSocketFactory: java.net.Socket createSocket(java.lang.String,int)>($r1, $i0);
+
+        $r3 = virtualinvoke $r0.<com.barz.droid.rest.CustomSSLSocketFactory: java.net.Socket configCipherSuites(java.net.Socket)>($r3);
+
+        return $r3;
+    }
+
+    public java.net.Socket createSocket(java.lang.String, int, java.net.InetAddress, int) throws java.io.IOException, java.net.UnknownHostException
+    {
+        com.barz.droid.rest.CustomSSLSocketFactory $r0;
+        java.lang.String $r1;
+        int $i0, $i1;
+        java.net.InetAddress $r2;
+        javax.net.ssl.SSLSocketFactory $r3;
+        java.net.Socket $r4;
+
+        $r0 := @this: com.barz.droid.rest.CustomSSLSocketFactory;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        $r2 := @parameter2: java.net.InetAddress;
+
+        $i1 := @parameter3: int;
+
+        $r3 = $r0.<com.barz.droid.rest.CustomSSLSocketFactory: javax.net.ssl.SSLSocketFactory factory>;
+
+        $r4 = virtualinvoke $r3.<javax.net.ssl.SSLSocketFactory: java.net.Socket createSocket(java.lang.String,int,java.net.InetAddress,int)>($r1, $i0, $r2, $i1);
+
+        $r4 = virtualinvoke $r0.<com.barz.droid.rest.CustomSSLSocketFactory: java.net.Socket configCipherSuites(java.net.Socket)>($r4);
+
+        return $r4;
+    }
+
+    public java.net.Socket createSocket(java.net.InetAddress, int) throws java.io.IOException
+    {
+        com.barz.droid.rest.CustomSSLSocketFactory $r0;
+        java.net.InetAddress $r1;
+        int $i0;
+        javax.net.ssl.SSLSocketFactory $r2;
+        java.net.Socket $r3;
+
+        $r0 := @this: com.barz.droid.rest.CustomSSLSocketFactory;
+
+        $r1 := @parameter0: java.net.InetAddress;
+
+        $i0 := @parameter1: int;
+
+        $r2 = $r0.<com.barz.droid.rest.CustomSSLSocketFactory: javax.net.ssl.SSLSocketFactory factory>;
+
+        $r3 = virtualinvoke $r2.<javax.net.ssl.SSLSocketFactory: java.net.Socket createSocket(java.net.InetAddress,int)>($r1, $i0);
+
+        $r3 = virtualinvoke $r0.<com.barz.droid.rest.CustomSSLSocketFactory: java.net.Socket configCipherSuites(java.net.Socket)>($r3);
+
+        return $r3;
+    }
+
+    public java.net.Socket createSocket(java.net.InetAddress, int, java.net.InetAddress, int) throws java.io.IOException
+    {
+        com.barz.droid.rest.CustomSSLSocketFactory $r0;
+        java.net.InetAddress $r1, $r2;
+        int $i0, $i1;
+        javax.net.ssl.SSLSocketFactory $r3;
+        java.net.Socket $r4;
+
+        $r0 := @this: com.barz.droid.rest.CustomSSLSocketFactory;
+
+        $r1 := @parameter0: java.net.InetAddress;
+
+        $i0 := @parameter1: int;
+
+        $r2 := @parameter2: java.net.InetAddress;
+
+        $i1 := @parameter3: int;
+
+        $r3 = $r0.<com.barz.droid.rest.CustomSSLSocketFactory: javax.net.ssl.SSLSocketFactory factory>;
+
+        $r4 = virtualinvoke $r3.<javax.net.ssl.SSLSocketFactory: java.net.Socket createSocket(java.net.InetAddress,int,java.net.InetAddress,int)>($r1, $i0, $r2, $i1);
+
+        $r4 = virtualinvoke $r0.<com.barz.droid.rest.CustomSSLSocketFactory: java.net.Socket configCipherSuites(java.net.Socket)>($r4);
+
+        return $r4;
+    }
+
+    public java.net.Socket createSocket(java.net.Socket, java.lang.String, int, boolean) throws java.io.IOException
+    {
+        com.barz.droid.rest.CustomSSLSocketFactory $r0;
+        java.net.Socket $r1;
+        java.lang.String $r2;
+        int $i0;
+        boolean $z0;
+        javax.net.ssl.SSLSocketFactory $r3;
+
+        $r0 := @this: com.barz.droid.rest.CustomSSLSocketFactory;
+
+        $r1 := @parameter0: java.net.Socket;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $i0 := @parameter2: int;
+
+        $z0 := @parameter3: boolean;
+
+        $r3 = $r0.<com.barz.droid.rest.CustomSSLSocketFactory: javax.net.ssl.SSLSocketFactory factory>;
+
+        $r1 = virtualinvoke $r3.<javax.net.ssl.SSLSocketFactory: java.net.Socket createSocket(java.net.Socket,java.lang.String,int,boolean)>($r1, $r2, $i0, $z0);
+
+        $r1 = virtualinvoke $r0.<com.barz.droid.rest.CustomSSLSocketFactory: java.net.Socket configCipherSuites(java.net.Socket)>($r1);
+
+        return $r1;
+    }
+
+    java.util.Set getCipherSuites()
+    {
+        com.barz.droid.rest.CustomSSLSocketFactory $r0;
+        java.util.HashSet $r1;
+
+        $r0 := @this: com.barz.droid.rest.CustomSSLSocketFactory;
+
+        $r1 = new java.util.HashSet;
+
+        specialinvoke $r1.<java.util.HashSet: void <init>()>();
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_DHE_DSS_WITH_DES_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_DHE_RSA_WITH_DES_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_DH_anon_EXPORT_WITH_DES40_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_DH_anon_EXPORT_WITH_RC4_40_MD5");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_DH_anon_WITH_3DES_EDE_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_DH_anon_WITH_DES_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_DH_anon_WITH_RC4_128_MD5");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_RSA_EXPORT_WITH_DES40_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_RSA_EXPORT_WITH_RC4_40_MD5");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_RSA_WITH_3DES_EDE_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_RSA_WITH_DES_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_RSA_WITH_NULL_MD5");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_RSA_WITH_NULL_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_RSA_WITH_RC4_128_MD5");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("SSL_RSA_WITH_RC4_128_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DHE_DSS_WITH_AES_128_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DHE_DSS_WITH_AES_128_CBC_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DHE_DSS_WITH_AES_128_GCM_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DHE_DSS_WITH_AES_256_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DHE_DSS_WITH_AES_256_CBC_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DHE_DSS_WITH_AES_256_GCM_SHA384");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DHE_RSA_WITH_AES_128_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DHE_RSA_WITH_AES_128_CBC_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DHE_RSA_WITH_AES_128_GCM_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DHE_RSA_WITH_AES_256_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DHE_RSA_WITH_AES_256_CBC_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DHE_RSA_WITH_AES_256_GCM_SHA384");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DH_anon_WITH_AES_128_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DH_anon_WITH_AES_128_CBC_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DH_anon_WITH_AES_128_GCM_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DH_anon_WITH_AES_256_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DH_anon_WITH_AES_256_CBC_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_DH_anon_WITH_AES_256_GCM_SHA384");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_ECDSA_WITH_NULL_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_ECDSA_WITH_RC4_128_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_PSK_WITH_AES_128_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_PSK_WITH_AES_256_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_RSA_WITH_NULL_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDHE_RSA_WITH_RC4_128_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_ECDSA_WITH_3DES_EDE_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_ECDSA_WITH_NULL_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_ECDSA_WITH_RC4_128_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_RSA_WITH_3DES_EDE_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_RSA_WITH_AES_128_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_RSA_WITH_AES_256_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_RSA_WITH_NULL_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_RSA_WITH_RC4_128_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_anon_WITH_3DES_EDE_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_anon_WITH_AES_128_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_anon_WITH_AES_256_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_anon_WITH_NULL_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_ECDH_anon_WITH_RC4_128_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_EMPTY_RENEGOTIATION_INFO_SCSV");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_FALLBACK_SCSV");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_PSK_WITH_3DES_EDE_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_PSK_WITH_AES_128_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_PSK_WITH_AES_256_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_PSK_WITH_RC4_128_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_RSA_WITH_AES_128_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_RSA_WITH_AES_128_CBC_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_RSA_WITH_AES_128_GCM_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_RSA_WITH_AES_256_CBC_SHA");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_RSA_WITH_AES_256_CBC_SHA256");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_RSA_WITH_AES_256_GCM_SHA384");
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>("TLS_RSA_WITH_NULL_SHA256");
+
+        return $r1;
+    }
+
+    public java.lang.String[] getDefaultCipherSuites()
+    {
+        com.barz.droid.rest.CustomSSLSocketFactory $r0;
+        java.util.Set $r1;
+        java.lang.Object[] $r2;
+        java.lang.String[] $r3;
+
+        $r0 := @this: com.barz.droid.rest.CustomSSLSocketFactory;
+
+        $r1 = virtualinvoke $r0.<com.barz.droid.rest.CustomSSLSocketFactory: java.util.Set getCipherSuites()>();
+
+        $r2 = interfaceinvoke $r1.<java.util.Set: java.lang.Object[] toArray()>();
+
+        $r3 = (java.lang.String[]) $r2;
+
+        return $r3;
+    }
+
+    public java.lang.String[] getSupportedCipherSuites()
+    {
+        com.barz.droid.rest.CustomSSLSocketFactory $r0;
+        java.util.Set $r1;
+        java.lang.Object[] $r2;
+        java.lang.String[] $r3;
+
+        $r0 := @this: com.barz.droid.rest.CustomSSLSocketFactory;
+
+        $r1 = virtualinvoke $r0.<com.barz.droid.rest.CustomSSLSocketFactory: java.util.Set getCipherSuites()>();
+
+        $r2 = interfaceinvoke $r1.<java.util.Set: java.lang.Object[] toArray()>();
+
+        $r3 = (java.lang.String[]) $r2;
+
+        return $r3;
+    }
+
+    void init() throws java.security.KeyManagementException, java.security.NoSuchAlgorithmException
+    {
+        com.barz.droid.rest.CustomSSLSocketFactory $r0;
+        javax.net.ssl.SSLContext $r1;
+        java.lang.Object[] $r2;
+        javax.net.ssl.SSLSocketFactory $r3;
+        com.barz.droid.rest.CustomSSLSocketFactory$1 r4;
+        java.security.SecureRandom r5;
+        javax.net.ssl.TrustManager[] r6;
+        java.lang.String varReplacer3291;
+        null_type varReplacer3292;
+
+        nop;
+
+        $r0 := @this: com.barz.droid.rest.CustomSSLSocketFactory;
+
+        varReplacer3291 = "SSL";
+
+        $r1 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer3291);
+
+        $r0.<com.barz.droid.rest.CustomSSLSocketFactory: javax.net.ssl.SSLContext context> = $r1;
+
+        $r1 = $r0.<com.barz.droid.rest.CustomSSLSocketFactory: javax.net.ssl.SSLContext context>;
+
+        $r2 = newarray (javax.net.ssl.TrustManager)[1];
+
+        r4 = new com.barz.droid.rest.CustomSSLSocketFactory$1;
+
+        specialinvoke r4.<com.barz.droid.rest.CustomSSLSocketFactory$1: void <init>(com.barz.droid.rest.CustomSSLSocketFactory)>($r0);
+
+        $r2[0] = r4;
+
+        r5 = new java.security.SecureRandom;
+
+        specialinvoke r5.<java.security.SecureRandom: void <init>()>();
+
+        r6 = (javax.net.ssl.TrustManager[]) $r2;
+
+        varReplacer3292 = null;
+
+        virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer3292, r6, r5);
+
+        $r1 = $r0.<com.barz.droid.rest.CustomSSLSocketFactory: javax.net.ssl.SSLContext context>;
+
+        $r3 = virtualinvoke $r1.<javax.net.ssl.SSLContext: javax.net.ssl.SSLSocketFactory getSocketFactory()>();
+
+        $r0.<com.barz.droid.rest.CustomSSLSocketFactory: javax.net.ssl.SSLSocketFactory factory> = $r3;
+
+        return;
+    }
+}

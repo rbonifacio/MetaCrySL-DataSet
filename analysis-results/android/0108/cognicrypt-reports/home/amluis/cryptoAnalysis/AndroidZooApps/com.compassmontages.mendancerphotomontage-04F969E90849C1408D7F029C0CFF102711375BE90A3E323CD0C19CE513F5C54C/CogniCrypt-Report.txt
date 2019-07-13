@@ -1,0 +1,118 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5064)
+		Method: <com.facebook.ads.internal.h.a.o: java.lang.String a(byte[],java.lang.String)>
+		SHA-256: 60a45fef7136cf9c01d4ce94dbe2532acc5900da832a3312708d7fcf966570e4
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: javax.net.ssl.SSLContext
+		Statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer7372)
+		Method: <com.squareup.okhttp.OkHttpClient: javax.net.ssl.SSLSocketFactory getDefaultSSLSocketFactory()>
+		SHA-256: 1007fa9783654702e50e02e1b8823f060613ab6e8cded678bcb343bd8926228f
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r0)
+		Method: <com.facebook.ads.internal.h.a.o: java.lang.String a(byte[],java.lang.String)>
+		SHA-256: 8b3145b340a6eb159a4d880bda44d3cff594af2332e72af75d6e28d17186dbf7
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7522)
+		Method: <com.squareup.okhttp.internal.Util: java.lang.String hash(java.lang.String)>
+		SHA-256: 1c2d48b0732201a9beecc177a02bb5976d0323687c12752ba399e6936553bcee
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
+		Method: <com.facebook.ads.internal.util.s: java.lang.String a(java.lang.String)>
+		SHA-256: 2125805d03a1e43489bdecc5db182c9da3fb7141e4e8c4afb45e18805c8edeaa
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
+		Method: <com.squareup.okhttp.internal.Util: java.lang.String hash(java.lang.String)>
+		SHA-256: 2965f53e7f9220d8d3259bdd740dde1fad0747667d1dd582f181e028c0a382a5
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2098)
+		Method: <com.facebook.ads.internal.util.s: java.lang.String a(java.lang.String)>
+		SHA-256: c3a06ac2d8f9031f4fc49d5cb47fda9414d6d83814e3882e6ea2b460a15892a9
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzdf(java.lang.String)>
+		SHA-256: dabf5790d0fd52ef6c92a09ab640520148d9177b7c3eeb674c2565f9ede2b001
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7198)
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzdf(java.lang.String)>
+		SHA-256: 92e77dacfe750058480e60e858282edf7c6d370a2957a0f8a930abb298d8668d
+		Secure: true
+
+Findings in Java Class: com.squareup.okhttp.OkHttpClient
+
+	 in Method: javax.net.ssl.SSLSocketFactory getDefaultSSLSocketFactory()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer7369, varReplacer7369, varReplacer7369)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer7369, varReplacer7369, varReplacer7369)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 9
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 2
+=====================================================================

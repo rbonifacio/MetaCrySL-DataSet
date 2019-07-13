@@ -1,0 +1,983 @@
+public class org.bitcoinj.protocols.payments.PaymentProtocol extends java.lang.Object
+{
+
+    public static org.bitcoin.protocols.payments.Protos$Output createPayToAddressOutput(org.bitcoinj.core.Coin, org.bitcoinj.core.Address)
+    {
+        org.bitcoinj.core.Coin $r0, $r4;
+        org.bitcoinj.core.Address $r1;
+        org.bitcoin.protocols.payments.Protos$Output$Builder $r2;
+        org.bitcoinj.core.NetworkParameters $r3;
+        boolean $z0;
+        int $i0;
+        java.lang.IllegalArgumentException $r5;
+        java.lang.StringBuilder $r6;
+        java.lang.String $r7, varReplacer5475;
+        long $l1, varReplacer5474;
+        org.bitcoinj.script.Script $r8;
+        byte[] $r9;
+        com.google.protobuf.ByteString $r10;
+        org.bitcoin.protocols.payments.Protos$Output $r11;
+
+        nop;
+
+        $r0 := @parameter0: org.bitcoinj.core.Coin;
+
+        $r1 := @parameter1: org.bitcoinj.core.Address;
+
+        $r2 = staticinvoke <org.bitcoin.protocols.payments.Protos$Output: org.bitcoin.protocols.payments.Protos$Output$Builder newBuilder()>();
+
+        if $r0 == null goto label3;
+
+        $r3 = virtualinvoke $r1.<org.bitcoinj.core.Address: org.bitcoinj.core.NetworkParameters getParameters()>();
+
+        $z0 = virtualinvoke $r3.<org.bitcoinj.core.NetworkParameters: boolean hasMaxMoney()>();
+
+        if $z0 == 0 goto label1;
+
+        $r4 = virtualinvoke $r3.<org.bitcoinj.core.NetworkParameters: org.bitcoinj.core.Coin getMaxMoney()>();
+
+        $i0 = virtualinvoke $r0.<org.bitcoinj.core.Coin: int compareTo(org.bitcoinj.core.Coin)>($r4);
+
+        if $i0 <= 0 goto label1;
+
+        $r5 = new java.lang.IllegalArgumentException;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer5475 = "Amount too big: ";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer5475);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r7);
+
+        throw $r5;
+
+     label1:
+        $l1 = $r0.<org.bitcoinj.core.Coin: long value>;
+
+        virtualinvoke $r2.<org.bitcoin.protocols.payments.Protos$Output$Builder: org.bitcoin.protocols.payments.Protos$Output$Builder setAmount(long)>($l1);
+
+     label2:
+        $r8 = staticinvoke <org.bitcoinj.script.ScriptBuilder: org.bitcoinj.script.Script createOutputScript(org.bitcoinj.core.Address)>($r1);
+
+        $r9 = virtualinvoke $r8.<org.bitcoinj.script.Script: byte[] getProgram()>();
+
+        $r10 = staticinvoke <com.google.protobuf.ByteString: com.google.protobuf.ByteString copyFrom(byte[])>($r9);
+
+        virtualinvoke $r2.<org.bitcoin.protocols.payments.Protos$Output$Builder: org.bitcoin.protocols.payments.Protos$Output$Builder setScript(com.google.protobuf.ByteString)>($r10);
+
+        $r11 = virtualinvoke $r2.<org.bitcoin.protocols.payments.Protos$Output$Builder: org.bitcoin.protocols.payments.Protos$Output build()>();
+
+        return $r11;
+
+     label3:
+        varReplacer5474 = 0L;
+
+        virtualinvoke $r2.<org.bitcoin.protocols.payments.Protos$Output$Builder: org.bitcoin.protocols.payments.Protos$Output$Builder setAmount(long)>(varReplacer5474);
+
+        goto label2;
+    }
+
+    public static org.bitcoin.protocols.payments.Protos$PaymentACK createPaymentAck(org.bitcoin.protocols.payments.Protos$Payment, java.lang.String)
+    {
+        org.bitcoin.protocols.payments.Protos$Payment $r0;
+        java.lang.String $r1;
+        org.bitcoin.protocols.payments.Protos$PaymentACK$Builder $r2;
+        org.bitcoin.protocols.payments.Protos$PaymentACK $r3;
+
+        nop;
+
+        $r0 := @parameter0: org.bitcoin.protocols.payments.Protos$Payment;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 = staticinvoke <org.bitcoin.protocols.payments.Protos$PaymentACK: org.bitcoin.protocols.payments.Protos$PaymentACK$Builder newBuilder()>();
+
+        virtualinvoke $r2.<org.bitcoin.protocols.payments.Protos$PaymentACK$Builder: org.bitcoin.protocols.payments.Protos$PaymentACK$Builder setPayment(org.bitcoin.protocols.payments.Protos$Payment)>($r0);
+
+        if $r1 == null goto label1;
+
+        virtualinvoke $r2.<org.bitcoin.protocols.payments.Protos$PaymentACK$Builder: org.bitcoin.protocols.payments.Protos$PaymentACK$Builder setMemo(java.lang.String)>($r1);
+
+     label1:
+        $r3 = virtualinvoke $r2.<org.bitcoin.protocols.payments.Protos$PaymentACK$Builder: org.bitcoin.protocols.payments.Protos$PaymentACK build()>();
+
+        return $r3;
+    }
+
+    public static org.bitcoin.protocols.payments.Protos$Payment createPaymentMessage(java.util.List, java.util.List, java.lang.String, byte[])
+    {
+        java.util.List $r0, $r1;
+        java.lang.String $r2;
+        byte[] $r3, $r8;
+        org.bitcoin.protocols.payments.Protos$Payment$Builder $r4;
+        java.util.Iterator $r5;
+        boolean $z0;
+        java.lang.Object $r6;
+        org.bitcoinj.core.Transaction $r7;
+        com.google.protobuf.ByteString $r9;
+        org.bitcoin.protocols.payments.Protos$Output $r10;
+        org.bitcoin.protocols.payments.Protos$Payment $r11;
+
+        $r0 := @parameter0: java.util.List;
+
+        $r1 := @parameter1: java.util.List;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: byte[];
+
+        $r4 = staticinvoke <org.bitcoin.protocols.payments.Protos$Payment: org.bitcoin.protocols.payments.Protos$Payment$Builder newBuilder()>();
+
+        $r5 = interfaceinvoke $r0.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (org.bitcoinj.core.Transaction) $r6;
+
+        virtualinvoke $r7.<org.bitcoinj.core.Transaction: void verify()>();
+
+        $r8 = virtualinvoke $r7.<org.bitcoinj.core.Transaction: byte[] unsafeBitcoinSerialize()>();
+
+        $r9 = staticinvoke <com.google.protobuf.ByteString: com.google.protobuf.ByteString copyFrom(byte[])>($r8);
+
+        virtualinvoke $r4.<org.bitcoin.protocols.payments.Protos$Payment$Builder: org.bitcoin.protocols.payments.Protos$Payment$Builder addTransactions(com.google.protobuf.ByteString)>($r9);
+
+        goto label1;
+
+     label2:
+        if $r1 == null goto label4;
+
+        $r5 = interfaceinvoke $r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r10 = (org.bitcoin.protocols.payments.Protos$Output) $r6;
+
+        virtualinvoke $r4.<org.bitcoin.protocols.payments.Protos$Payment$Builder: org.bitcoin.protocols.payments.Protos$Payment$Builder addRefundTo(org.bitcoin.protocols.payments.Protos$Output)>($r10);
+
+        goto label3;
+
+     label4:
+        if $r2 == null goto label5;
+
+        virtualinvoke $r4.<org.bitcoin.protocols.payments.Protos$Payment$Builder: org.bitcoin.protocols.payments.Protos$Payment$Builder setMemo(java.lang.String)>($r2);
+
+     label5:
+        if $r3 == null goto label6;
+
+        $r9 = staticinvoke <com.google.protobuf.ByteString: com.google.protobuf.ByteString copyFrom(byte[])>($r3);
+
+        virtualinvoke $r4.<org.bitcoin.protocols.payments.Protos$Payment$Builder: org.bitcoin.protocols.payments.Protos$Payment$Builder setMerchantData(com.google.protobuf.ByteString)>($r9);
+
+     label6:
+        $r11 = virtualinvoke $r4.<org.bitcoin.protocols.payments.Protos$Payment$Builder: org.bitcoin.protocols.payments.Protos$Payment build()>();
+
+        return $r11;
+    }
+
+    public static org.bitcoin.protocols.payments.Protos$Payment createPaymentMessage(java.util.List, org.bitcoinj.core.Coin, org.bitcoinj.core.Address, java.lang.String, byte[])
+    {
+        java.util.List $r0;
+        org.bitcoinj.core.Coin $r1;
+        org.bitcoinj.core.Address $r2;
+        java.lang.String $r3;
+        byte[] $r4;
+        java.lang.IllegalArgumentException $r5;
+        org.bitcoin.protocols.payments.Protos$Output $r6;
+        com.google.common.collect.ImmutableList $r7;
+        org.bitcoin.protocols.payments.Protos$Payment $r8;
+
+        $r0 := @parameter0: java.util.List;
+
+        $r1 := @parameter1: org.bitcoinj.core.Coin;
+
+        $r2 := @parameter2: org.bitcoinj.core.Address;
+
+        $r3 := @parameter3: java.lang.String;
+
+        $r4 := @parameter4: byte[];
+
+        if $r2 == null goto label2;
+
+        if $r1 != null goto label1;
+
+        $r5 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r5.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Specify refund amount if refund address is specified.");
+
+        throw $r5;
+
+     label1:
+        $r6 = staticinvoke <org.bitcoinj.protocols.payments.PaymentProtocol: org.bitcoin.protocols.payments.Protos$Output createPayToAddressOutput(org.bitcoinj.core.Coin,org.bitcoinj.core.Address)>($r1, $r2);
+
+        $r7 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList of(java.lang.Object)>($r6);
+
+        $r8 = staticinvoke <org.bitcoinj.protocols.payments.PaymentProtocol: org.bitcoin.protocols.payments.Protos$Payment createPaymentMessage(java.util.List,java.util.List,java.lang.String,byte[])>($r0, $r7, $r3, $r4);
+
+        return $r8;
+
+     label2:
+        $r8 = staticinvoke <org.bitcoinj.protocols.payments.PaymentProtocol: org.bitcoin.protocols.payments.Protos$Payment createPaymentMessage(java.util.List,java.util.List,java.lang.String,byte[])>($r0, null, $r3, $r4);
+
+        return $r8;
+    }
+
+    public static org.bitcoin.protocols.payments.Protos$PaymentRequest$Builder createPaymentRequest(org.bitcoinj.core.NetworkParameters, java.util.List, java.lang.String, java.lang.String, byte[])
+    {
+        org.bitcoinj.core.NetworkParameters $r0;
+        java.util.List $r1;
+        java.lang.String $r2, $r3, $r6;
+        byte[] $r4;
+        org.bitcoin.protocols.payments.Protos$PaymentDetails$Builder $r5;
+        java.util.Iterator $r7;
+        boolean $z0;
+        java.lang.Object $r8;
+        org.bitcoin.protocols.payments.Protos$Output $r9;
+        com.google.protobuf.ByteString $r10;
+        long $l0;
+        org.bitcoin.protocols.payments.Protos$PaymentRequest$Builder $r11;
+        org.bitcoin.protocols.payments.Protos$PaymentDetails $r12;
+
+        nop;
+
+        $r0 := @parameter0: org.bitcoinj.core.NetworkParameters;
+
+        $r1 := @parameter1: java.util.List;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: java.lang.String;
+
+        $r4 := @parameter4: byte[];
+
+        $r5 = staticinvoke <org.bitcoin.protocols.payments.Protos$PaymentDetails: org.bitcoin.protocols.payments.Protos$PaymentDetails$Builder newBuilder()>();
+
+        $r6 = virtualinvoke $r0.<org.bitcoinj.core.NetworkParameters: java.lang.String getPaymentProtocolId()>();
+
+        virtualinvoke $r5.<org.bitcoin.protocols.payments.Protos$PaymentDetails$Builder: org.bitcoin.protocols.payments.Protos$PaymentDetails$Builder setNetwork(java.lang.String)>($r6);
+
+        $r7 = interfaceinvoke $r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r8 = interfaceinvoke $r7.<java.util.Iterator: java.lang.Object next()>();
+
+        $r9 = (org.bitcoin.protocols.payments.Protos$Output) $r8;
+
+        virtualinvoke $r5.<org.bitcoin.protocols.payments.Protos$PaymentDetails$Builder: org.bitcoin.protocols.payments.Protos$PaymentDetails$Builder addOutputs(org.bitcoin.protocols.payments.Protos$Output)>($r9);
+
+        goto label1;
+
+     label2:
+        if $r2 == null goto label3;
+
+        virtualinvoke $r5.<org.bitcoin.protocols.payments.Protos$PaymentDetails$Builder: org.bitcoin.protocols.payments.Protos$PaymentDetails$Builder setMemo(java.lang.String)>($r2);
+
+     label3:
+        if $r3 == null goto label4;
+
+        virtualinvoke $r5.<org.bitcoin.protocols.payments.Protos$PaymentDetails$Builder: org.bitcoin.protocols.payments.Protos$PaymentDetails$Builder setPaymentUrl(java.lang.String)>($r3);
+
+     label4:
+        goto label5;
+
+     label5:
+        $l0 = staticinvoke <org.bitcoinj.core.Utils: long currentTimeSeconds()>();
+
+        virtualinvoke $r5.<org.bitcoin.protocols.payments.Protos$PaymentDetails$Builder: org.bitcoin.protocols.payments.Protos$PaymentDetails$Builder setTime(long)>($l0);
+
+        $r11 = staticinvoke <org.bitcoin.protocols.payments.Protos$PaymentRequest: org.bitcoin.protocols.payments.Protos$PaymentRequest$Builder newBuilder()>();
+
+        $r12 = virtualinvoke $r5.<org.bitcoin.protocols.payments.Protos$PaymentDetails$Builder: org.bitcoin.protocols.payments.Protos$PaymentDetails build()>();
+
+        $r10 = virtualinvoke $r12.<org.bitcoin.protocols.payments.Protos$PaymentDetails: com.google.protobuf.ByteString toByteString()>();
+
+        virtualinvoke $r11.<org.bitcoin.protocols.payments.Protos$PaymentRequest$Builder: org.bitcoin.protocols.payments.Protos$PaymentRequest$Builder setSerializedPaymentDetails(com.google.protobuf.ByteString)>($r10);
+
+        return $r11;
+    }
+
+    public static org.bitcoin.protocols.payments.Protos$PaymentRequest$Builder createPaymentRequest(org.bitcoinj.core.NetworkParameters, org.bitcoinj.core.Coin, org.bitcoinj.core.Address, java.lang.String, java.lang.String, byte[])
+    {
+        org.bitcoinj.core.NetworkParameters $r0;
+        org.bitcoinj.core.Coin $r1;
+        org.bitcoinj.core.Address $r2;
+        java.lang.String $r3, $r4;
+        byte[] $r5;
+        org.bitcoin.protocols.payments.Protos$Output $r6;
+        com.google.common.collect.ImmutableList $r7;
+        org.bitcoin.protocols.payments.Protos$PaymentRequest$Builder $r8;
+        null_type varReplacer5463;
+
+        nop;
+
+        $r0 := @parameter0: org.bitcoinj.core.NetworkParameters;
+
+        $r1 := @parameter1: org.bitcoinj.core.Coin;
+
+        $r2 := @parameter2: org.bitcoinj.core.Address;
+
+        $r3 := @parameter3: java.lang.String;
+
+        $r4 := @parameter4: java.lang.String;
+
+        $r5 := @parameter5: byte[];
+
+        $r6 = staticinvoke <org.bitcoinj.protocols.payments.PaymentProtocol: org.bitcoin.protocols.payments.Protos$Output createPayToAddressOutput(org.bitcoinj.core.Coin,org.bitcoinj.core.Address)>($r1, $r2);
+
+        $r7 = staticinvoke <com.google.common.collect.ImmutableList: com.google.common.collect.ImmutableList of(java.lang.Object)>($r6);
+
+        varReplacer5463 = null;
+
+        $r8 = staticinvoke <org.bitcoinj.protocols.payments.PaymentProtocol: org.bitcoin.protocols.payments.Protos$PaymentRequest$Builder createPaymentRequest(org.bitcoinj.core.NetworkParameters,java.util.List,java.lang.String,java.lang.String,byte[])>($r0, $r7, $r3, $r4, varReplacer5463);
+
+        return $r8;
+    }
+
+    public static org.bitcoinj.protocols.payments.PaymentProtocol$Ack parsePaymentAck(org.bitcoin.protocols.payments.Protos$PaymentACK)
+    {
+        org.bitcoin.protocols.payments.Protos$PaymentACK $r0;
+        boolean $z0;
+        java.lang.String $r1;
+        org.bitcoinj.protocols.payments.PaymentProtocol$Ack $r2;
+
+        $r0 := @parameter0: org.bitcoin.protocols.payments.Protos$PaymentACK;
+
+        $z0 = virtualinvoke $r0.<org.bitcoin.protocols.payments.Protos$PaymentACK: boolean hasMemo()>();
+
+        if $z0 == 0 goto label2;
+
+        $r1 = virtualinvoke $r0.<org.bitcoin.protocols.payments.Protos$PaymentACK: java.lang.String getMemo()>();
+
+     label1:
+        $r2 = new org.bitcoinj.protocols.payments.PaymentProtocol$Ack;
+
+        specialinvoke $r2.<org.bitcoinj.protocols.payments.PaymentProtocol$Ack: void <init>(java.lang.String)>($r1);
+
+        return $r2;
+
+     label2:
+        $r1 = null;
+
+        goto label1;
+    }
+
+    public static org.bitcoinj.protocols.payments.PaymentSession parsePaymentRequest(org.bitcoin.protocols.payments.Protos$PaymentRequest) throws org.bitcoinj.protocols.payments.PaymentProtocolException
+    {
+        org.bitcoin.protocols.payments.Protos$PaymentRequest $r0;
+        org.bitcoinj.protocols.payments.PaymentSession $r1;
+        int varReplacer2410;
+        null_type varReplacer2411;
+
+        nop;
+
+        $r0 := @parameter0: org.bitcoin.protocols.payments.Protos$PaymentRequest;
+
+        $r1 = new org.bitcoinj.protocols.payments.PaymentSession;
+
+        varReplacer2410 = 0;
+
+        varReplacer2411 = null;
+
+        specialinvoke $r1.<org.bitcoinj.protocols.payments.PaymentSession: void <init>(org.bitcoin.protocols.payments.Protos$PaymentRequest,boolean,org.bitcoinj.crypto.TrustStoreLoader)>($r0, varReplacer2410, varReplacer2411);
+
+        return $r1;
+    }
+
+    public static java.util.List parseTransactionsFromPaymentMessage(org.bitcoinj.core.NetworkParameters, org.bitcoin.protocols.payments.Protos$Payment)
+    {
+        org.bitcoinj.core.NetworkParameters $r0;
+        org.bitcoin.protocols.payments.Protos$Payment $r1;
+        java.util.ArrayList $r2;
+        int $i0;
+        java.util.List $r3;
+        java.util.Iterator $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+        com.google.protobuf.ByteString $r6;
+        org.bitcoinj.core.MessageSerializer $r7;
+        byte[] $r8;
+        org.bitcoinj.core.Transaction $r9;
+
+        nop;
+
+        $r0 := @parameter0: org.bitcoinj.core.NetworkParameters;
+
+        $r1 := @parameter1: org.bitcoin.protocols.payments.Protos$Payment;
+
+        $r2 = new java.util.ArrayList;
+
+        $i0 = virtualinvoke $r1.<org.bitcoin.protocols.payments.Protos$Payment: int getTransactionsCount()>();
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>(int)>($i0);
+
+        $r3 = virtualinvoke $r1.<org.bitcoin.protocols.payments.Protos$Payment: java.util.List getTransactionsList()>();
+
+        $r4 = interfaceinvoke $r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke $r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (com.google.protobuf.ByteString) $r5;
+
+        $r7 = virtualinvoke $r0.<org.bitcoinj.core.NetworkParameters: org.bitcoinj.core.MessageSerializer getDefaultSerializer()>();
+
+        $r8 = virtualinvoke $r6.<com.google.protobuf.ByteString: byte[] toByteArray()>();
+
+        $r9 = virtualinvoke $r7.<org.bitcoinj.core.MessageSerializer: org.bitcoinj.core.Transaction makeTransaction(byte[])>($r8);
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>($r9);
+
+        goto label1;
+
+     label2:
+        return $r2;
+    }
+
+    public static org.bitcoinj.protocols.payments.PaymentProtocol$PkiVerificationData verifyPaymentRequestPki(org.bitcoin.protocols.payments.Protos$PaymentRequest, java.security.KeyStore) throws org.bitcoinj.protocols.payments.PaymentProtocolException
+    {
+        org.bitcoin.protocols.payments.Protos$PaymentRequest $r0, $r27;
+        java.security.KeyStore $r1;
+        java.security.cert.PKIXParameters $r2, r40;
+        java.util.ArrayList $r3, $r12;
+        java.lang.String $r4, $r5, varReplacer2413, varReplacer2415, varReplacer2416, varReplacer2418, varReplacer2419, varReplacer2422;
+        boolean $z0;
+        com.google.protobuf.ByteString $r6;
+        org.bitcoin.protocols.payments.Protos$X509Certificates $r7;
+        int $i0, varReplacer2417, varReplacer2420, varReplacer2421;
+        com.google.protobuf.InvalidProtocolBufferException $r8;
+        java.lang.StringBuilder $r9, r36;
+        java.lang.Throwable $r10, $r19, $r29, $r30, $r32, $r33, $r34;
+        java.security.cert.CertificateFactory $r11;
+        java.util.List $r13;
+        java.util.Iterator $r14;
+        java.lang.Object $r15;
+        java.io.InputStream $r16;
+        java.security.cert.Certificate $r17;
+        java.security.cert.X509Certificate $r18;
+        java.security.cert.CertPath $r20;
+        java.security.cert.CertPathValidator $r21;
+        java.security.cert.CertPathValidatorResult $r22;
+        java.security.cert.PKIXCertPathValidatorResult $r23;
+        java.security.PublicKey $r24;
+        java.security.Signature $r25;
+        org.bitcoin.protocols.payments.Protos$PaymentRequest$Builder $r26;
+        byte[] $r28;
+        java.security.cert.TrustAnchor $r31;
+        org.bitcoinj.protocols.payments.PaymentProtocolException$InvalidPkiData r35;
+        org.bitcoinj.protocols.payments.PaymentProtocolException$InvalidPkiType r37;
+        org.bitcoinj.protocols.payments.PaymentProtocolException$PkiVerificationException r38;
+        java.lang.RuntimeException r39;
+        org.bitcoinj.protocols.payments.PaymentProtocol$PkiVerificationData r41;
+        java.lang.Exception r42;
+        null_type varReplacer2412, varReplacer2414;
+
+        nop;
+
+        $r0 := @parameter0: org.bitcoin.protocols.payments.Protos$PaymentRequest;
+
+        $r1 := @parameter1: java.security.KeyStore;
+
+        $r3 = null;
+
+     label01:
+        $r4 = virtualinvoke $r0.<org.bitcoin.protocols.payments.Protos$PaymentRequest: java.lang.String getPkiType()>();
+
+     label02:
+        $r5 = "none";
+
+     label03:
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean equals(java.lang.Object)>($r4);
+
+     label04:
+        if $z0 == 0 goto label05;
+
+        varReplacer2412 = null;
+
+        return varReplacer2412;
+
+     label05:
+        $r5 = "x509+sha256";
+
+     label06:
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean equals(java.lang.Object)>($r4);
+
+     label07:
+        if $z0 == 0 goto label13;
+
+        $r4 = "SHA256withRSA";
+
+     label08:
+        $r6 = virtualinvoke $r0.<org.bitcoin.protocols.payments.Protos$PaymentRequest: com.google.protobuf.ByteString getPkiData()>();
+
+        $r7 = staticinvoke <org.bitcoin.protocols.payments.Protos$X509Certificates: org.bitcoin.protocols.payments.Protos$X509Certificates parseFrom(com.google.protobuf.ByteString)>($r6);
+
+        $i0 = virtualinvoke $r7.<org.bitcoin.protocols.payments.Protos$X509Certificates: int getCertificateCount()>();
+
+     label09:
+        if $i0 != 0 goto label20;
+
+        r35 = new org.bitcoinj.protocols.payments.PaymentProtocolException$InvalidPkiData;
+
+     label10:
+        varReplacer2422 = "No certificates provided in message: server config error";
+
+        specialinvoke r35.<org.bitcoinj.protocols.payments.PaymentProtocolException$InvalidPkiData: void <init>(java.lang.String)>(varReplacer2422);
+
+     label11:
+        throw r35;
+
+     label12:
+        $r8 := @caughtexception;
+
+        r35 = new org.bitcoinj.protocols.payments.PaymentProtocolException$InvalidPkiData;
+
+        specialinvoke r35.<org.bitcoinj.protocols.payments.PaymentProtocolException$InvalidPkiData: void <init>(java.lang.Exception)>($r8);
+
+        throw r35;
+
+     label13:
+        $r5 = "x509+sha1";
+
+     label14:
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean equals(java.lang.Object)>($r4);
+
+     label15:
+        if $z0 == 0 goto label16;
+
+        $r4 = "SHA1withRSA";
+
+        goto label08;
+
+     label16:
+        r37 = new org.bitcoinj.protocols.payments.PaymentProtocolException$InvalidPkiType;
+
+        r36 = new java.lang.StringBuilder;
+
+        $r9 = r36;
+
+     label17:
+        specialinvoke r36.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer2413 = "Unsupported PKI type: ";
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer2413);
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r37.<org.bitcoinj.protocols.payments.PaymentProtocolException$InvalidPkiType: void <init>(java.lang.String)>($r4);
+
+     label18:
+        throw r37;
+
+     label19:
+        $r10 := @caughtexception;
+
+        r38 = new org.bitcoinj.protocols.payments.PaymentProtocolException$PkiVerificationException;
+
+        r42 = (java.lang.Exception) $r10;
+
+        specialinvoke r38.<org.bitcoinj.protocols.payments.PaymentProtocolException$PkiVerificationException: void <init>(java.lang.Exception)>(r42);
+
+        throw r38;
+
+     label20:
+        varReplacer2418 = "X.509";
+
+        $r11 = staticinvoke <java.security.cert.CertificateFactory: java.security.cert.CertificateFactory getInstance(java.lang.String)>(varReplacer2418);
+
+        $r12 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList()>();
+
+     label21:
+        $r3 = $r12;
+
+     label22:
+        $r13 = virtualinvoke $r7.<org.bitcoin.protocols.payments.Protos$X509Certificates: java.util.List getCertificateList()>();
+
+        $r14 = interfaceinvoke $r13.<java.util.List: java.util.Iterator iterator()>();
+
+     label23:
+        $z0 = interfaceinvoke $r14.<java.util.Iterator: boolean hasNext()>();
+
+     label24:
+        if $z0 == 0 goto label32;
+
+     label25:
+        $r15 = interfaceinvoke $r14.<java.util.Iterator: java.lang.Object next()>();
+
+     label26:
+        $r6 = (com.google.protobuf.ByteString) $r15;
+
+     label27:
+        $r16 = virtualinvoke $r6.<com.google.protobuf.ByteString: java.io.InputStream newInput()>();
+
+        $r17 = virtualinvoke $r11.<java.security.cert.CertificateFactory: java.security.cert.Certificate generateCertificate(java.io.InputStream)>($r16);
+
+     label28:
+        $r18 = (java.security.cert.X509Certificate) $r17;
+
+     label29:
+        interfaceinvoke $r12.<java.util.List: boolean add(java.lang.Object)>($r18);
+
+     label30:
+        goto label23;
+
+     label31:
+        $r19 := @caughtexception;
+
+        r39 = new java.lang.RuntimeException;
+
+        specialinvoke r39.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r19);
+
+        throw r39;
+
+     label32:
+        $r20 = virtualinvoke $r11.<java.security.cert.CertificateFactory: java.security.cert.CertPath generateCertPath(java.util.List)>($r12);
+
+     label33:
+        r40 = new java.security.cert.PKIXParameters;
+
+        $r2 = r40;
+
+     label34:
+        specialinvoke r40.<java.security.cert.PKIXParameters: void <init>(java.security.KeyStore)>($r1);
+
+        varReplacer2420 = 0;
+
+        virtualinvoke $r2.<java.security.cert.PKIXParameters: void setRevocationEnabled(boolean)>(varReplacer2420);
+
+        varReplacer2415 = "PKIX";
+
+        $r21 = staticinvoke <java.security.cert.CertPathValidator: java.security.cert.CertPathValidator getInstance(java.lang.String)>(varReplacer2415);
+
+        $r22 = virtualinvoke $r21.<java.security.cert.CertPathValidator: java.security.cert.CertPathValidatorResult validate(java.security.cert.CertPath,java.security.cert.CertPathParameters)>($r20, $r2);
+
+     label35:
+        $r23 = (java.security.cert.PKIXCertPathValidatorResult) $r22;
+
+     label36:
+        $r24 = virtualinvoke $r23.<java.security.cert.PKIXCertPathValidatorResult: java.security.PublicKey getPublicKey()>();
+
+        $r25 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r4);
+
+        virtualinvoke $r25.<java.security.Signature: void initVerify(java.security.PublicKey)>($r24);
+
+        $r26 = virtualinvoke $r0.<org.bitcoin.protocols.payments.Protos$PaymentRequest: org.bitcoin.protocols.payments.Protos$PaymentRequest$Builder toBuilder()>();
+
+     label37:
+        $r6 = <com.google.protobuf.ByteString: com.google.protobuf.ByteString EMPTY>;
+
+     label38:
+        virtualinvoke $r26.<org.bitcoin.protocols.payments.Protos$PaymentRequest$Builder: org.bitcoin.protocols.payments.Protos$PaymentRequest$Builder setSignature(com.google.protobuf.ByteString)>($r6);
+
+        $r27 = virtualinvoke $r26.<org.bitcoin.protocols.payments.Protos$PaymentRequest$Builder: org.bitcoin.protocols.payments.Protos$PaymentRequest build()>();
+
+        $r28 = virtualinvoke $r27.<org.bitcoin.protocols.payments.Protos$PaymentRequest: byte[] toByteArray()>();
+
+        virtualinvoke $r25.<java.security.Signature: void update(byte[])>($r28);
+
+        $r6 = virtualinvoke $r0.<org.bitcoin.protocols.payments.Protos$PaymentRequest: com.google.protobuf.ByteString getSignature()>();
+
+        $r28 = virtualinvoke $r6.<com.google.protobuf.ByteString: byte[] toByteArray()>();
+
+        $z0 = virtualinvoke $r25.<java.security.Signature: boolean verify(byte[])>($r28);
+
+     label39:
+        if $z0 != 0 goto label43;
+
+        r38 = new org.bitcoinj.protocols.payments.PaymentProtocolException$PkiVerificationException;
+
+     label40:
+        varReplacer2416 = "Invalid signature, this payment request is not valid.";
+
+        specialinvoke r38.<org.bitcoinj.protocols.payments.PaymentProtocolException$PkiVerificationException: void <init>(java.lang.String)>(varReplacer2416);
+
+     label41:
+        throw r38;
+
+     label42:
+        $r29 := @caughtexception;
+
+        r39 = new java.lang.RuntimeException;
+
+        specialinvoke r39.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r29);
+
+        throw r39;
+
+     label43:
+        varReplacer2421 = 0;
+
+        $r15 = interfaceinvoke $r12.<java.util.List: java.lang.Object get(int)>(varReplacer2421);
+
+     label44:
+        $r18 = (java.security.cert.X509Certificate) $r15;
+
+     label45:
+        varReplacer2417 = 1;
+
+        $r4 = staticinvoke <org.bitcoinj.crypto.X509Utils: java.lang.String getDisplayNameFromCertificate(java.security.cert.X509Certificate,boolean)>($r18, varReplacer2417);
+
+     label46:
+        if $r4 != null goto label50;
+
+        r38 = new org.bitcoinj.protocols.payments.PaymentProtocolException$PkiVerificationException;
+
+     label47:
+        varReplacer2419 = "Could not extract name from certificate";
+
+        specialinvoke r38.<org.bitcoinj.protocols.payments.PaymentProtocolException$PkiVerificationException: void <init>(java.lang.String)>(varReplacer2419);
+
+     label48:
+        throw r38;
+
+     label49:
+        $r30 := @caughtexception;
+
+        r38 = new org.bitcoinj.protocols.payments.PaymentProtocolException$PkiVerificationException;
+
+        r42 = (java.lang.Exception) $r30;
+
+        specialinvoke r38.<org.bitcoinj.protocols.payments.PaymentProtocolException$PkiVerificationException: void <init>(java.lang.Exception,java.util.List)>(r42, $r3);
+
+        throw r38;
+
+     label50:
+        r41 = new org.bitcoinj.protocols.payments.PaymentProtocol$PkiVerificationData;
+
+     label51:
+        $r31 = virtualinvoke $r23.<java.security.cert.PKIXCertPathValidatorResult: java.security.cert.TrustAnchor getTrustAnchor()>();
+
+        varReplacer2414 = null;
+
+        specialinvoke r41.<org.bitcoinj.protocols.payments.PaymentProtocol$PkiVerificationData: void <init>(java.lang.String,java.security.PublicKey,java.security.cert.TrustAnchor,org.bitcoinj.protocols.payments.PaymentProtocol$1)>($r4, $r24, $r31, varReplacer2414);
+
+     label52:
+        return r41;
+
+     label53:
+        $r32 := @caughtexception;
+
+        r38 = new org.bitcoinj.protocols.payments.PaymentProtocolException$PkiVerificationException;
+
+        r42 = (java.lang.Exception) $r32;
+
+        specialinvoke r38.<org.bitcoinj.protocols.payments.PaymentProtocolException$PkiVerificationException: void <init>(java.lang.Exception)>(r42);
+
+        throw r38;
+
+     label54:
+        $r33 := @caughtexception;
+
+        r38 = new org.bitcoinj.protocols.payments.PaymentProtocolException$PkiVerificationException;
+
+        r42 = (java.lang.Exception) $r33;
+
+        specialinvoke r38.<org.bitcoinj.protocols.payments.PaymentProtocolException$PkiVerificationException: void <init>(java.lang.Exception)>(r42);
+
+        throw r38;
+
+     label55:
+        $r34 := @caughtexception;
+
+        r39 = new java.lang.RuntimeException;
+
+        specialinvoke r39.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r34);
+
+        throw r39;
+
+        catch com.google.protobuf.InvalidProtocolBufferException from label01 to label02 with label12;
+        catch com.google.protobuf.InvalidProtocolBufferException from label03 to label04 with label12;
+        catch com.google.protobuf.InvalidProtocolBufferException from label06 to label07 with label12;
+        catch com.google.protobuf.InvalidProtocolBufferException from label08 to label09 with label12;
+        catch com.google.protobuf.InvalidProtocolBufferException from label10 to label11 with label12;
+        catch java.security.cert.CertificateException from label01 to label02 with label19;
+        catch java.security.cert.CertificateException from label03 to label04 with label19;
+        catch java.security.cert.CertificateException from label06 to label07 with label19;
+        catch java.security.cert.CertificateException from label08 to label09 with label19;
+        catch java.security.cert.CertificateException from label10 to label11 with label19;
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label31;
+        catch java.security.NoSuchAlgorithmException from label03 to label04 with label31;
+        catch java.security.NoSuchAlgorithmException from label06 to label07 with label31;
+        catch java.security.NoSuchAlgorithmException from label08 to label09 with label31;
+        catch java.security.NoSuchAlgorithmException from label10 to label11 with label31;
+        catch java.security.InvalidAlgorithmParameterException from label01 to label02 with label42;
+        catch java.security.InvalidAlgorithmParameterException from label03 to label04 with label42;
+        catch java.security.InvalidAlgorithmParameterException from label06 to label07 with label42;
+        catch java.security.InvalidAlgorithmParameterException from label08 to label09 with label42;
+        catch java.security.InvalidAlgorithmParameterException from label10 to label11 with label42;
+        catch java.security.cert.CertPathValidatorException from label01 to label02 with label49;
+        catch java.security.cert.CertPathValidatorException from label03 to label04 with label49;
+        catch java.security.cert.CertPathValidatorException from label06 to label07 with label49;
+        catch java.security.cert.CertPathValidatorException from label08 to label09 with label49;
+        catch java.security.cert.CertPathValidatorException from label10 to label11 with label49;
+        catch java.security.InvalidKeyException from label01 to label02 with label53;
+        catch java.security.InvalidKeyException from label03 to label04 with label53;
+        catch java.security.InvalidKeyException from label06 to label07 with label53;
+        catch java.security.InvalidKeyException from label08 to label09 with label53;
+        catch java.security.InvalidKeyException from label10 to label11 with label53;
+        catch java.security.SignatureException from label01 to label02 with label54;
+        catch java.security.SignatureException from label03 to label04 with label54;
+        catch java.security.SignatureException from label06 to label07 with label54;
+        catch java.security.SignatureException from label08 to label09 with label54;
+        catch java.security.SignatureException from label10 to label11 with label54;
+        catch java.security.KeyStoreException from label01 to label02 with label55;
+        catch java.security.KeyStoreException from label03 to label04 with label55;
+        catch java.security.KeyStoreException from label06 to label07 with label55;
+        catch java.security.KeyStoreException from label08 to label09 with label55;
+        catch java.security.KeyStoreException from label10 to label11 with label55;
+        catch com.google.protobuf.InvalidProtocolBufferException from label14 to label15 with label12;
+        catch com.google.protobuf.InvalidProtocolBufferException from label17 to label18 with label12;
+        catch java.security.cert.CertificateException from label14 to label15 with label19;
+        catch java.security.cert.CertificateException from label17 to label18 with label19;
+        catch java.security.NoSuchAlgorithmException from label14 to label15 with label31;
+        catch java.security.NoSuchAlgorithmException from label17 to label18 with label31;
+        catch java.security.InvalidAlgorithmParameterException from label14 to label15 with label42;
+        catch java.security.InvalidAlgorithmParameterException from label17 to label18 with label42;
+        catch java.security.cert.CertPathValidatorException from label14 to label15 with label49;
+        catch java.security.cert.CertPathValidatorException from label17 to label18 with label49;
+        catch java.security.InvalidKeyException from label14 to label15 with label53;
+        catch java.security.InvalidKeyException from label17 to label18 with label53;
+        catch java.security.SignatureException from label14 to label15 with label54;
+        catch java.security.SignatureException from label17 to label18 with label54;
+        catch java.security.KeyStoreException from label14 to label15 with label55;
+        catch java.security.KeyStoreException from label17 to label18 with label55;
+        catch com.google.protobuf.InvalidProtocolBufferException from label20 to label21 with label12;
+        catch com.google.protobuf.InvalidProtocolBufferException from label22 to label24 with label12;
+        catch com.google.protobuf.InvalidProtocolBufferException from label25 to label26 with label12;
+        catch com.google.protobuf.InvalidProtocolBufferException from label27 to label28 with label12;
+        catch com.google.protobuf.InvalidProtocolBufferException from label29 to label30 with label12;
+        catch java.security.cert.CertificateException from label20 to label21 with label19;
+        catch java.security.cert.CertificateException from label22 to label24 with label19;
+        catch java.security.cert.CertificateException from label25 to label26 with label19;
+        catch java.security.cert.CertificateException from label27 to label28 with label19;
+        catch java.security.cert.CertificateException from label29 to label30 with label19;
+        catch java.security.NoSuchAlgorithmException from label20 to label21 with label31;
+        catch java.security.NoSuchAlgorithmException from label22 to label24 with label31;
+        catch java.security.NoSuchAlgorithmException from label25 to label26 with label31;
+        catch java.security.NoSuchAlgorithmException from label27 to label28 with label31;
+        catch java.security.NoSuchAlgorithmException from label29 to label30 with label31;
+        catch java.security.InvalidAlgorithmParameterException from label20 to label21 with label42;
+        catch java.security.InvalidAlgorithmParameterException from label22 to label24 with label42;
+        catch java.security.InvalidAlgorithmParameterException from label25 to label26 with label42;
+        catch java.security.InvalidAlgorithmParameterException from label27 to label28 with label42;
+        catch java.security.InvalidAlgorithmParameterException from label29 to label30 with label42;
+        catch java.security.cert.CertPathValidatorException from label20 to label21 with label49;
+        catch java.security.cert.CertPathValidatorException from label22 to label24 with label49;
+        catch java.security.cert.CertPathValidatorException from label25 to label26 with label49;
+        catch java.security.cert.CertPathValidatorException from label27 to label28 with label49;
+        catch java.security.cert.CertPathValidatorException from label29 to label30 with label49;
+        catch java.security.InvalidKeyException from label20 to label21 with label53;
+        catch java.security.InvalidKeyException from label22 to label24 with label53;
+        catch java.security.InvalidKeyException from label25 to label26 with label53;
+        catch java.security.InvalidKeyException from label27 to label28 with label53;
+        catch java.security.InvalidKeyException from label29 to label30 with label53;
+        catch java.security.SignatureException from label20 to label21 with label54;
+        catch java.security.SignatureException from label22 to label24 with label54;
+        catch java.security.SignatureException from label25 to label26 with label54;
+        catch java.security.SignatureException from label27 to label28 with label54;
+        catch java.security.SignatureException from label29 to label30 with label54;
+        catch java.security.KeyStoreException from label20 to label21 with label55;
+        catch java.security.KeyStoreException from label22 to label24 with label55;
+        catch java.security.KeyStoreException from label25 to label26 with label55;
+        catch java.security.KeyStoreException from label27 to label28 with label55;
+        catch java.security.KeyStoreException from label29 to label30 with label55;
+        catch com.google.protobuf.InvalidProtocolBufferException from label32 to label33 with label12;
+        catch com.google.protobuf.InvalidProtocolBufferException from label34 to label35 with label12;
+        catch com.google.protobuf.InvalidProtocolBufferException from label36 to label37 with label12;
+        catch com.google.protobuf.InvalidProtocolBufferException from label38 to label39 with label12;
+        catch com.google.protobuf.InvalidProtocolBufferException from label40 to label41 with label12;
+        catch java.security.cert.CertificateException from label32 to label33 with label19;
+        catch java.security.cert.CertificateException from label34 to label35 with label19;
+        catch java.security.cert.CertificateException from label36 to label37 with label19;
+        catch java.security.cert.CertificateException from label38 to label39 with label19;
+        catch java.security.cert.CertificateException from label40 to label41 with label19;
+        catch java.security.NoSuchAlgorithmException from label32 to label33 with label31;
+        catch java.security.NoSuchAlgorithmException from label34 to label35 with label31;
+        catch java.security.NoSuchAlgorithmException from label36 to label37 with label31;
+        catch java.security.NoSuchAlgorithmException from label38 to label39 with label31;
+        catch java.security.NoSuchAlgorithmException from label40 to label41 with label31;
+        catch java.security.InvalidAlgorithmParameterException from label32 to label33 with label42;
+        catch java.security.InvalidAlgorithmParameterException from label34 to label35 with label42;
+        catch java.security.InvalidAlgorithmParameterException from label36 to label37 with label42;
+        catch java.security.InvalidAlgorithmParameterException from label38 to label39 with label42;
+        catch java.security.InvalidAlgorithmParameterException from label40 to label41 with label42;
+        catch java.security.cert.CertPathValidatorException from label32 to label33 with label49;
+        catch java.security.cert.CertPathValidatorException from label34 to label35 with label49;
+        catch java.security.cert.CertPathValidatorException from label36 to label37 with label49;
+        catch java.security.cert.CertPathValidatorException from label38 to label39 with label49;
+        catch java.security.cert.CertPathValidatorException from label40 to label41 with label49;
+        catch java.security.InvalidKeyException from label32 to label33 with label53;
+        catch java.security.InvalidKeyException from label34 to label35 with label53;
+        catch java.security.InvalidKeyException from label36 to label37 with label53;
+        catch java.security.InvalidKeyException from label38 to label39 with label53;
+        catch java.security.InvalidKeyException from label40 to label41 with label53;
+        catch java.security.SignatureException from label32 to label33 with label54;
+        catch java.security.SignatureException from label34 to label35 with label54;
+        catch java.security.SignatureException from label36 to label37 with label54;
+        catch java.security.SignatureException from label38 to label39 with label54;
+        catch java.security.SignatureException from label40 to label41 with label54;
+        catch java.security.KeyStoreException from label32 to label33 with label55;
+        catch java.security.KeyStoreException from label34 to label35 with label55;
+        catch java.security.KeyStoreException from label36 to label37 with label55;
+        catch java.security.KeyStoreException from label38 to label39 with label55;
+        catch java.security.KeyStoreException from label40 to label41 with label55;
+        catch com.google.protobuf.InvalidProtocolBufferException from label43 to label44 with label12;
+        catch com.google.protobuf.InvalidProtocolBufferException from label45 to label46 with label12;
+        catch com.google.protobuf.InvalidProtocolBufferException from label47 to label48 with label12;
+        catch java.security.cert.CertificateException from label43 to label44 with label19;
+        catch java.security.cert.CertificateException from label45 to label46 with label19;
+        catch java.security.cert.CertificateException from label47 to label48 with label19;
+        catch java.security.NoSuchAlgorithmException from label43 to label44 with label31;
+        catch java.security.NoSuchAlgorithmException from label45 to label46 with label31;
+        catch java.security.NoSuchAlgorithmException from label47 to label48 with label31;
+        catch java.security.InvalidAlgorithmParameterException from label43 to label44 with label42;
+        catch java.security.InvalidAlgorithmParameterException from label45 to label46 with label42;
+        catch java.security.InvalidAlgorithmParameterException from label47 to label48 with label42;
+        catch java.security.cert.CertPathValidatorException from label43 to label44 with label49;
+        catch java.security.cert.CertPathValidatorException from label45 to label46 with label49;
+        catch java.security.cert.CertPathValidatorException from label47 to label48 with label49;
+        catch java.security.InvalidKeyException from label43 to label44 with label53;
+        catch java.security.InvalidKeyException from label45 to label46 with label53;
+        catch java.security.InvalidKeyException from label47 to label48 with label53;
+        catch java.security.SignatureException from label43 to label44 with label54;
+        catch java.security.SignatureException from label45 to label46 with label54;
+        catch java.security.SignatureException from label47 to label48 with label54;
+        catch java.security.KeyStoreException from label43 to label44 with label55;
+        catch java.security.KeyStoreException from label45 to label46 with label55;
+        catch java.security.KeyStoreException from label47 to label48 with label55;
+        catch com.google.protobuf.InvalidProtocolBufferException from label51 to label52 with label12;
+        catch java.security.cert.CertificateException from label51 to label52 with label19;
+        catch java.security.NoSuchAlgorithmException from label51 to label52 with label31;
+        catch java.security.InvalidAlgorithmParameterException from label51 to label52 with label42;
+        catch java.security.cert.CertPathValidatorException from label51 to label52 with label49;
+        catch java.security.InvalidKeyException from label51 to label52 with label53;
+        catch java.security.SignatureException from label51 to label52 with label54;
+        catch java.security.KeyStoreException from label51 to label52 with label55;
+    }
+}

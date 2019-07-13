@@ -1,0 +1,158 @@
+public class org.piwik.sdk.tools.Checksum extends java.lang.Object
+{
+    private static final java.lang.String HEXES;
+
+    public void <init>()
+    {
+        org.piwik.sdk.tools.Checksum $r0;
+
+        $r0 := @this: org.piwik.sdk.tools.Checksum;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String getHex(byte[])
+    {
+        byte[] $r0;
+        byte $b0;
+        java.lang.StringBuilder $r1, $r3;
+        int $i1, $i2;
+        java.lang.String $r2;
+        short $s3;
+        char $c4;
+        null_type varReplacer3209;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        if $r0 != null goto label1;
+
+        varReplacer3209 = null;
+
+        return varReplacer3209;
+
+     label1:
+        $r1 = new java.lang.StringBuilder;
+
+        $i1 = lengthof $r0;
+
+        $i1 = $i1 * 2;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(int)>($i1);
+
+        $i1 = lengthof $r0;
+
+        $i2 = 0;
+
+     label2:
+        if $i2 >= $i1 goto label3;
+
+        $b0 = $r0[$i2];
+
+        $r2 = "0123456789ABCDEF";
+
+        $s3 = $b0 & 240;
+
+        $s3 = $s3 >> 4;
+
+        $c4 = virtualinvoke $r2.<java.lang.String: char charAt(int)>($s3);
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>($c4);
+
+        $r2 = "0123456789ABCDEF";
+
+        $b0 = $b0 & 15;
+
+        $c4 = virtualinvoke $r2.<java.lang.String: char charAt(int)>($b0);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>($c4);
+
+        $i2 = $i2 + 1;
+
+        goto label2;
+
+     label3:
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r2;
+    }
+
+    public static java.lang.String getMD5Checksum(java.io.File) throws java.lang.Exception
+    {
+        java.io.File $r0;
+        byte[] $r1;
+        java.io.FileInputStream $r2;
+        boolean $z0;
+        java.security.MessageDigest $r3;
+        int $i0, varReplacer3206;
+        java.lang.String $r4, varReplacer3208;
+        null_type varReplacer3207;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $z0 = virtualinvoke $r0.<java.io.File: boolean isFile()>();
+
+        if $z0 != 0 goto label1;
+
+        varReplacer3207 = null;
+
+        return varReplacer3207;
+
+     label1:
+        $r2 = new java.io.FileInputStream;
+
+        specialinvoke $r2.<java.io.FileInputStream: void <init>(java.io.File)>($r0);
+
+        $r1 = newarray (byte)[1024];
+
+        varReplacer3208 = "MD5";
+
+        $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3208);
+
+     label2:
+        $i0 = virtualinvoke $r2.<java.io.InputStream: int read(byte[])>($r1);
+
+        if $i0 <= 0 goto label3;
+
+        varReplacer3206 = 0;
+
+        virtualinvoke $r3.<java.security.MessageDigest: void update(byte[],int,int)>($r1, varReplacer3206, $i0);
+
+     label3:
+        if $i0 != -1 goto label2;
+
+        virtualinvoke $r2.<java.io.InputStream: void close()>();
+
+        $r1 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>();
+
+        $r4 = staticinvoke <org.piwik.sdk.tools.Checksum: java.lang.String getHex(byte[])>($r1);
+
+        return $r4;
+    }
+
+    public static java.lang.String getMD5Checksum(java.lang.String) throws java.lang.Exception
+    {
+        java.lang.String $r0;
+        java.security.MessageDigest $r1;
+        byte[] $r2;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("MD5");
+
+        $r2 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r1.<java.security.MessageDigest: void update(byte[])>($r2);
+
+        $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>();
+
+        $r0 = staticinvoke <org.piwik.sdk.tools.Checksum: java.lang.String getHex(byte[])>($r2);
+
+        return $r0;
+    }
+}

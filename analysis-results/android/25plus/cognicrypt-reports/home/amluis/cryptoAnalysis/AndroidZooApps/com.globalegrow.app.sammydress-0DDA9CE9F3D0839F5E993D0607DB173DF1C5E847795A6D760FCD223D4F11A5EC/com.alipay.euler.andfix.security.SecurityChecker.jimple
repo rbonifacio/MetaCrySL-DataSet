@@ -1,0 +1,828 @@
+public class com.alipay.euler.andfix.security.SecurityChecker extends java.lang.Object
+{
+    private static final java.lang.String CLASSES_DEX;
+    private static final javax.security.auth.x500.X500Principal DEBUG_DN;
+    private static final java.lang.String SP_MD5;
+    private static final java.lang.String SP_NAME;
+    private static final java.lang.String TAG;
+    private final android.content.Context mContext;
+    private boolean mDebuggable;
+    private java.security.PublicKey mPublicKey;
+
+    static void <clinit>()
+    {
+        javax.security.auth.x500.X500Principal $r0;
+        java.lang.String varReplacer12699;
+
+        nop;
+
+        $r0 = new javax.security.auth.x500.X500Principal;
+
+        varReplacer12699 = "CN=Android Debug,O=Android,C=US";
+
+        specialinvoke $r0.<javax.security.auth.x500.X500Principal: void <init>(java.lang.String)>(varReplacer12699);
+
+        <com.alipay.euler.andfix.security.SecurityChecker: javax.security.auth.x500.X500Principal DEBUG_DN> = $r0;
+
+        return;
+    }
+
+    public void <init>(android.content.Context)
+    {
+        com.alipay.euler.andfix.security.SecurityChecker $r0;
+        android.content.Context $r1;
+
+        nop;
+
+        $r0 := @this: com.alipay.euler.andfix.security.SecurityChecker;
+
+        $r1 := @parameter0: android.content.Context;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<com.alipay.euler.andfix.security.SecurityChecker: android.content.Context mContext> = $r1;
+
+        $r1 = $r0.<com.alipay.euler.andfix.security.SecurityChecker: android.content.Context mContext>;
+
+        specialinvoke $r0.<com.alipay.euler.andfix.security.SecurityChecker: void init(android.content.Context)>($r1);
+
+        return;
+    }
+
+    private boolean check(java.io.File, java.security.cert.Certificate[])
+    {
+        com.alipay.euler.andfix.security.SecurityChecker $r0;
+        java.io.File $r1;
+        java.security.cert.Certificate[] $r2;
+        java.lang.String $r3, varReplacer12802;
+        int $i0, varReplacer12801, varReplacer12803;
+        java.security.cert.Certificate $r4;
+        java.security.PublicKey $r5;
+        java.lang.Exception $r6;
+
+        nop;
+
+        $r0 := @this: com.alipay.euler.andfix.security.SecurityChecker;
+
+        $r1 := @parameter0: java.io.File;
+
+        $r2 := @parameter1: java.security.cert.Certificate[];
+
+        $i0 = lengthof $r2;
+
+        if $i0 <= 0 goto label5;
+
+        $i0 = lengthof $r2;
+
+        $i0 = $i0 + -1;
+
+     label1:
+        if $i0 < 0 goto label5;
+
+     label2:
+        $r4 = $r2[$i0];
+
+        $r5 = $r0.<com.alipay.euler.andfix.security.SecurityChecker: java.security.PublicKey mPublicKey>;
+
+        virtualinvoke $r4.<java.security.cert.Certificate: void verify(java.security.PublicKey)>($r5);
+
+     label3:
+        varReplacer12801 = 1;
+
+        return varReplacer12801;
+
+     label4:
+        $r6 := @caughtexception;
+
+        $r3 = virtualinvoke $r1.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        varReplacer12802 = "SecurityChecker";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer12802, $r3, $r6);
+
+        $i0 = $i0 + -1;
+
+        goto label1;
+
+     label5:
+        varReplacer12803 = 0;
+
+        return varReplacer12803;
+
+        catch java.lang.Exception from label2 to label3 with label4;
+    }
+
+    private java.lang.String getFileMD5(java.io.File)
+    {
+        com.alipay.euler.andfix.security.SecurityChecker $r0;
+        java.io.File $r1;
+        boolean $z0;
+        byte[] $r2;
+        java.security.MessageDigest $r3;
+        java.io.FileInputStream $r4;
+        int $i0, varReplacer12781;
+        java.lang.Exception $r5;
+        java.lang.Throwable $r6, $r9, $r10, $r11, $r12;
+        java.math.BigInteger $r7;
+        java.lang.String $r8, varReplacer12782, varReplacer12783, varReplacer12784, varReplacer12785, varReplacer12786, varReplacer12787, varReplacer12790, varReplacer12792, varReplacer12793;
+        null_type varReplacer12780, varReplacer12788, varReplacer12789, varReplacer12791;
+
+        nop;
+
+        $r0 := @this: com.alipay.euler.andfix.security.SecurityChecker;
+
+        $r1 := @parameter0: java.io.File;
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean isFile()>();
+
+        if $z0 != 0 goto label01;
+
+        varReplacer12780 = null;
+
+        return varReplacer12780;
+
+     label01:
+        $r2 = newarray (byte)[8192];
+
+     label02:
+        varReplacer12790 = "MD5";
+
+        $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer12790);
+
+     label03:
+        $r4 = new java.io.FileInputStream;
+
+     label04:
+        specialinvoke $r4.<java.io.FileInputStream: void <init>(java.io.File)>($r1);
+
+     label05:
+        $i0 = virtualinvoke $r4.<java.io.FileInputStream: int read(byte[])>($r2);
+
+     label06:
+        if $i0 == -1 goto label15;
+
+     label07:
+        varReplacer12781 = 0;
+
+        virtualinvoke $r3.<java.security.MessageDigest: void update(byte[],int,int)>($r2, varReplacer12781, $i0);
+
+     label08:
+        goto label05;
+
+     label09:
+        $r5 := @caughtexception;
+
+     label10:
+        varReplacer12782 = "SecurityChecker";
+
+        varReplacer12783 = "getFileMD5";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer12782, varReplacer12783, $r5);
+
+     label11:
+        if $r4 == null goto label26;
+
+     label12:
+        virtualinvoke $r4.<java.io.FileInputStream: void close()>();
+
+     label13:
+        varReplacer12791 = null;
+
+        return varReplacer12791;
+
+     label14:
+        $r6 := @caughtexception;
+
+        varReplacer12792 = "SecurityChecker";
+
+        varReplacer12793 = "getFileMD5";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer12792, varReplacer12793, $r6);
+
+        varReplacer12788 = null;
+
+        return varReplacer12788;
+
+     label15:
+        if $r4 == null goto label17;
+
+     label16:
+        virtualinvoke $r4.<java.io.FileInputStream: void close()>();
+
+     label17:
+        $r7 = new java.math.BigInteger;
+
+        $r2 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>();
+
+        specialinvoke $r7.<java.math.BigInteger: void <init>(byte[])>($r2);
+
+        $r8 = virtualinvoke $r7.<java.math.BigInteger: java.lang.String toString()>();
+
+        return $r8;
+
+     label18:
+        $r9 := @caughtexception;
+
+        varReplacer12784 = "SecurityChecker";
+
+        varReplacer12785 = "getFileMD5";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer12784, varReplacer12785, $r9);
+
+        goto label17;
+
+     label19:
+        $r10 := @caughtexception;
+
+        $r4 = null;
+
+        $r11 = $r10;
+
+     label20:
+        if $r4 == null goto label22;
+
+     label21:
+        virtualinvoke $r4.<java.io.FileInputStream: void close()>();
+
+     label22:
+        throw $r11;
+
+     label23:
+        $r12 := @caughtexception;
+
+        varReplacer12786 = "SecurityChecker";
+
+        varReplacer12787 = "getFileMD5";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer12786, varReplacer12787, $r12);
+
+        goto label22;
+
+     label24:
+        $r11 := @caughtexception;
+
+        goto label20;
+
+     label25:
+        $r5 := @caughtexception;
+
+        $r4 = null;
+
+        goto label10;
+
+     label26:
+        varReplacer12789 = null;
+
+        return varReplacer12789;
+
+        catch java.lang.Exception from label02 to label03 with label25;
+        catch java.lang.Exception from label04 to label05 with label25;
+        catch java.lang.Throwable from label02 to label05 with label19;
+        catch java.lang.Exception from label05 to label06 with label09;
+        catch java.lang.Exception from label07 to label08 with label09;
+        catch java.lang.Throwable from label05 to label06 with label24;
+        catch java.lang.Throwable from label07 to label08 with label24;
+        catch java.lang.Throwable from label10 to label11 with label24;
+        catch java.io.IOException from label12 to label13 with label14;
+        catch java.io.IOException from label16 to label17 with label18;
+        catch java.io.IOException from label21 to label22 with label23;
+    }
+
+    private java.lang.String getFingerprint(java.lang.String)
+    {
+        com.alipay.euler.andfix.security.SecurityChecker $r0;
+        java.lang.String $r1, varReplacer12797, varReplacer12798;
+        android.content.Context $r2;
+        android.content.SharedPreferences $r3;
+        java.lang.StringBuilder $r4;
+        int varReplacer12799;
+        null_type varReplacer12800;
+
+        nop;
+
+        $r0 := @this: com.alipay.euler.andfix.security.SecurityChecker;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = $r0.<com.alipay.euler.andfix.security.SecurityChecker: android.content.Context mContext>;
+
+        varReplacer12798 = "_andfix_";
+
+        varReplacer12799 = 0;
+
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>(varReplacer12798, varReplacer12799);
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer12797 = "-md5";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer12797);
+
+        $r1 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer12800 = null;
+
+        $r1 = interfaceinvoke $r3.<android.content.SharedPreferences: java.lang.String getString(java.lang.String,java.lang.String)>($r1, varReplacer12800);
+
+        return $r1;
+    }
+
+    private void init(android.content.Context)
+    {
+        com.alipay.euler.andfix.security.SecurityChecker $r0;
+        android.content.Context $r1;
+        android.content.pm.PackageManager $r2;
+        java.lang.String $r3, varReplacer12718, varReplacer12719, varReplacer12720, varReplacer12722, varReplacer12723;
+        android.content.pm.PackageInfo $r4;
+        java.security.cert.CertificateFactory $r5;
+        java.io.ByteArrayInputStream $r6;
+        android.content.pm.Signature[] $r7;
+        android.content.pm.Signature $r8;
+        byte[] $r9;
+        java.security.cert.Certificate $r10;
+        java.security.cert.X509Certificate $r11;
+        javax.security.auth.x500.X500Principal $r12, $r13;
+        boolean $z0;
+        java.security.PublicKey $r14;
+        java.lang.Throwable $r15, $r16;
+        int varReplacer12721;
+
+        nop;
+
+        $r0 := @this: com.alipay.euler.andfix.security.SecurityChecker;
+
+        $r1 := @parameter0: android.content.Context;
+
+     label01:
+        $r2 = virtualinvoke $r1.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r3 = virtualinvoke $r1.<android.content.Context: java.lang.String getPackageName()>();
+
+        varReplacer12721 = 64;
+
+        $r4 = virtualinvoke $r2.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>($r3, varReplacer12721);
+
+        varReplacer12718 = "X.509";
+
+        $r5 = staticinvoke <java.security.cert.CertificateFactory: java.security.cert.CertificateFactory getInstance(java.lang.String)>(varReplacer12718);
+
+     label02:
+        $r6 = new java.io.ByteArrayInputStream;
+
+        $r7 = $r4.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        $r8 = $r7[0];
+
+     label03:
+        $r9 = virtualinvoke $r8.<android.content.pm.Signature: byte[] toByteArray()>();
+
+        specialinvoke $r6.<java.io.ByteArrayInputStream: void <init>(byte[])>($r9);
+
+        $r10 = virtualinvoke $r5.<java.security.cert.CertificateFactory: java.security.cert.Certificate generateCertificate(java.io.InputStream)>($r6);
+
+     label04:
+        $r11 = (java.security.cert.X509Certificate) $r10;
+
+     label05:
+        $r12 = virtualinvoke $r11.<java.security.cert.X509Certificate: javax.security.auth.x500.X500Principal getSubjectX500Principal()>();
+
+     label06:
+        $r13 = <com.alipay.euler.andfix.security.SecurityChecker: javax.security.auth.x500.X500Principal DEBUG_DN>;
+
+     label07:
+        $z0 = virtualinvoke $r12.<javax.security.auth.x500.X500Principal: boolean equals(java.lang.Object)>($r13);
+
+     label08:
+        $r0.<com.alipay.euler.andfix.security.SecurityChecker: boolean mDebuggable> = $z0;
+
+     label09:
+        $r14 = virtualinvoke $r11.<java.security.cert.X509Certificate: java.security.PublicKey getPublicKey()>();
+
+     label10:
+        $r0.<com.alipay.euler.andfix.security.SecurityChecker: java.security.PublicKey mPublicKey> = $r14;
+
+        return;
+
+     label11:
+        $r15 := @caughtexception;
+
+        varReplacer12722 = "SecurityChecker";
+
+        varReplacer12723 = "init";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer12722, varReplacer12723, $r15);
+
+        return;
+
+     label12:
+        $r16 := @caughtexception;
+
+        varReplacer12719 = "SecurityChecker";
+
+        varReplacer12720 = "init";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer12719, varReplacer12720, $r16);
+
+        return;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label01 to label02 with label11;
+        catch android.content.pm.PackageManager$NameNotFoundException from label03 to label04 with label11;
+        catch android.content.pm.PackageManager$NameNotFoundException from label05 to label06 with label11;
+        catch android.content.pm.PackageManager$NameNotFoundException from label07 to label08 with label11;
+        catch android.content.pm.PackageManager$NameNotFoundException from label09 to label10 with label11;
+        catch java.security.cert.CertificateException from label01 to label02 with label12;
+        catch java.security.cert.CertificateException from label03 to label04 with label12;
+        catch java.security.cert.CertificateException from label05 to label06 with label12;
+        catch java.security.cert.CertificateException from label07 to label08 with label12;
+        catch java.security.cert.CertificateException from label09 to label10 with label12;
+    }
+
+    private void loadDigestes(java.util.jar.JarFile, java.util.jar.JarEntry) throws java.io.IOException
+    {
+        com.alipay.euler.andfix.security.SecurityChecker $r0;
+        java.util.jar.JarFile $r1;
+        java.util.jar.JarEntry $r2;
+        java.io.InputStream $r3, $r4;
+        byte[] $r5;
+        int $i0;
+        java.lang.Throwable $r6;
+
+        nop;
+
+        $r0 := @this: com.alipay.euler.andfix.security.SecurityChecker;
+
+        $r1 := @parameter0: java.util.jar.JarFile;
+
+        $r2 := @parameter1: java.util.jar.JarEntry;
+
+        $r3 = null;
+
+     label1:
+        $r4 = virtualinvoke $r1.<java.util.jar.JarFile: java.io.InputStream getInputStream(java.util.zip.ZipEntry)>($r2);
+
+     label2:
+        $r3 = $r4;
+
+     label3:
+        $r5 = newarray (byte)[8192];
+
+     label4:
+        $i0 = virtualinvoke $r4.<java.io.InputStream: int read(byte[])>($r5);
+
+     label5:
+        if $i0 > 0 goto label4;
+
+        if $r4 == null goto label8;
+
+        virtualinvoke $r4.<java.io.InputStream: void close()>();
+
+        return;
+
+     label6:
+        $r6 := @caughtexception;
+
+        if $r3 == null goto label7;
+
+        virtualinvoke $r3.<java.io.InputStream: void close()>();
+
+     label7:
+        throw $r6;
+
+     label8:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label6;
+        catch java.lang.Throwable from label3 to label5 with label6;
+    }
+
+    private void saveFingerprint(java.lang.String, java.lang.String)
+    {
+        com.alipay.euler.andfix.security.SecurityChecker $r0;
+        java.lang.String $r1, $r2, varReplacer12794, varReplacer12795;
+        android.content.Context $r3;
+        android.content.SharedPreferences $r4;
+        android.content.SharedPreferences$Editor $r5;
+        java.lang.StringBuilder $r6;
+        int varReplacer12796;
+
+        nop;
+
+        $r0 := @this: com.alipay.euler.andfix.security.SecurityChecker;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 = $r0.<com.alipay.euler.andfix.security.SecurityChecker: android.content.Context mContext>;
+
+        varReplacer12795 = "_andfix_";
+
+        varReplacer12796 = 0;
+
+        $r4 = virtualinvoke $r3.<android.content.Context: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>(varReplacer12795, varReplacer12796);
+
+        $r5 = interfaceinvoke $r4.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer12794 = "-md5";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer12794);
+
+        $r1 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        interfaceinvoke $r5.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putString(java.lang.String,java.lang.String)>($r1, $r2);
+
+        interfaceinvoke $r5.<android.content.SharedPreferences$Editor: boolean commit()>();
+
+        return;
+    }
+
+    public void saveOptSig(java.io.File)
+    {
+        com.alipay.euler.andfix.security.SecurityChecker $r0;
+        java.io.File $r1;
+        java.lang.String $r2, $r3;
+
+        nop;
+
+        $r0 := @this: com.alipay.euler.andfix.security.SecurityChecker;
+
+        $r1 := @parameter0: java.io.File;
+
+        $r2 = specialinvoke $r0.<com.alipay.euler.andfix.security.SecurityChecker: java.lang.String getFileMD5(java.io.File)>($r1);
+
+        $r3 = virtualinvoke $r1.<java.io.File: java.lang.String getName()>();
+
+        specialinvoke $r0.<com.alipay.euler.andfix.security.SecurityChecker: void saveFingerprint(java.lang.String,java.lang.String)>($r3, $r2);
+
+        return;
+    }
+
+    public boolean verifyApk(java.io.File)
+    {
+        com.alipay.euler.andfix.security.SecurityChecker $r0;
+        java.io.File $r1;
+        boolean $z0;
+        java.util.jar.JarFile $r2;
+        java.util.jar.JarEntry $r3;
+        java.lang.Throwable $r4, $r7, $r8, $r9, $r10, $r11, $r12;
+        java.lang.String $r5, varReplacer12760, varReplacer12761, varReplacer12762, varReplacer12765, varReplacer12768, varReplacer12769, varReplacer12771, varReplacer12773, varReplacer12777;
+        java.security.cert.Certificate[] $r6;
+        int varReplacer12763, varReplacer12764, varReplacer12766, varReplacer12767, varReplacer12770, varReplacer12772, varReplacer12774, varReplacer12775, varReplacer12776;
+
+        nop;
+
+        $r0 := @this: com.alipay.euler.andfix.security.SecurityChecker;
+
+        $r1 := @parameter0: java.io.File;
+
+        $z0 = $r0.<com.alipay.euler.andfix.security.SecurityChecker: boolean mDebuggable>;
+
+        if $z0 == 0 goto label01;
+
+        varReplacer12768 = "SecurityChecker";
+
+        varReplacer12769 = "mDebuggable = true";
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>(varReplacer12768, varReplacer12769);
+
+        varReplacer12775 = 1;
+
+        return varReplacer12775;
+
+     label01:
+        $r2 = new java.util.jar.JarFile;
+
+     label02:
+        specialinvoke $r2.<java.util.jar.JarFile: void <init>(java.io.File)>($r1);
+
+     label03:
+        varReplacer12765 = "classes.dex";
+
+        $r3 = virtualinvoke $r2.<java.util.jar.JarFile: java.util.jar.JarEntry getJarEntry(java.lang.String)>(varReplacer12765);
+
+     label04:
+        if $r3 != null goto label08;
+
+        if $r2 == null goto label31;
+
+     label05:
+        virtualinvoke $r2.<java.util.jar.JarFile: void close()>();
+
+     label06:
+        varReplacer12776 = 0;
+
+        return varReplacer12776;
+
+     label07:
+        $r4 := @caughtexception;
+
+        $r5 = virtualinvoke $r1.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        varReplacer12771 = "SecurityChecker";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer12771, $r5, $r4);
+
+        varReplacer12763 = 0;
+
+        return varReplacer12763;
+
+     label08:
+        specialinvoke $r0.<com.alipay.euler.andfix.security.SecurityChecker: void loadDigestes(java.util.jar.JarFile,java.util.jar.JarEntry)>($r2, $r3);
+
+        $r6 = virtualinvoke $r3.<java.util.jar.JarEntry: java.security.cert.Certificate[] getCertificates()>();
+
+     label09:
+        if $r6 != null goto label13;
+
+        if $r2 == null goto label31;
+
+     label10:
+        virtualinvoke $r2.<java.util.jar.JarFile: void close()>();
+
+     label11:
+        varReplacer12772 = 0;
+
+        return varReplacer12772;
+
+     label12:
+        $r7 := @caughtexception;
+
+        $r5 = virtualinvoke $r1.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        varReplacer12761 = "SecurityChecker";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer12761, $r5, $r7);
+
+        varReplacer12770 = 0;
+
+        return varReplacer12770;
+
+     label13:
+        $z0 = specialinvoke $r0.<com.alipay.euler.andfix.security.SecurityChecker: boolean check(java.io.File,java.security.cert.Certificate[])>($r1, $r6);
+
+     label14:
+        if $r2 == null goto label32;
+
+     label15:
+        virtualinvoke $r2.<java.util.jar.JarFile: void close()>();
+
+     label16:
+        return $z0;
+
+     label17:
+        $r8 := @caughtexception;
+
+        $r5 = virtualinvoke $r1.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        varReplacer12777 = "SecurityChecker";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer12777, $r5, $r8);
+
+        return $z0;
+
+     label18:
+        $r9 := @caughtexception;
+
+        $r2 = null;
+
+     label19:
+        $r5 = virtualinvoke $r1.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        varReplacer12762 = "SecurityChecker";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer12762, $r5, $r9);
+
+     label20:
+        if $r2 == null goto label33;
+
+     label21:
+        virtualinvoke $r2.<java.util.jar.JarFile: void close()>();
+
+     label22:
+        varReplacer12766 = 0;
+
+        return varReplacer12766;
+
+     label23:
+        $r10 := @caughtexception;
+
+        $r5 = virtualinvoke $r1.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        varReplacer12773 = "SecurityChecker";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer12773, $r5, $r10);
+
+        varReplacer12764 = 0;
+
+        return varReplacer12764;
+
+     label24:
+        $r11 := @caughtexception;
+
+        $r2 = null;
+
+     label25:
+        if $r2 == null goto label27;
+
+     label26:
+        virtualinvoke $r2.<java.util.jar.JarFile: void close()>();
+
+     label27:
+        throw $r11;
+
+     label28:
+        $r12 := @caughtexception;
+
+        $r5 = virtualinvoke $r1.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        varReplacer12760 = "SecurityChecker";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer12760, $r5, $r12);
+
+        goto label27;
+
+     label29:
+        $r11 := @caughtexception;
+
+        goto label25;
+
+     label30:
+        $r9 := @caughtexception;
+
+        goto label19;
+
+     label31:
+        varReplacer12767 = 0;
+
+        return varReplacer12767;
+
+     label32:
+        return $z0;
+
+     label33:
+        varReplacer12774 = 0;
+
+        return varReplacer12774;
+
+        catch java.io.IOException from label02 to label03 with label18;
+        catch java.lang.Throwable from label01 to label03 with label24;
+        catch java.io.IOException from label03 to label04 with label30;
+        catch java.lang.Throwable from label03 to label04 with label29;
+        catch java.io.IOException from label05 to label06 with label07;
+        catch java.io.IOException from label08 to label09 with label30;
+        catch java.lang.Throwable from label08 to label09 with label29;
+        catch java.io.IOException from label10 to label11 with label12;
+        catch java.io.IOException from label13 to label14 with label30;
+        catch java.lang.Throwable from label13 to label14 with label29;
+        catch java.io.IOException from label15 to label16 with label17;
+        catch java.lang.Throwable from label19 to label20 with label29;
+        catch java.io.IOException from label21 to label22 with label23;
+        catch java.io.IOException from label26 to label27 with label28;
+    }
+
+    public boolean verifyOpt(java.io.File)
+    {
+        com.alipay.euler.andfix.security.SecurityChecker $r0;
+        java.io.File $r1;
+        java.lang.String $r2, $r3;
+        boolean $z0;
+        int varReplacer12778, varReplacer12779;
+
+        nop;
+
+        $r0 := @this: com.alipay.euler.andfix.security.SecurityChecker;
+
+        $r1 := @parameter0: java.io.File;
+
+        $r2 = specialinvoke $r0.<com.alipay.euler.andfix.security.SecurityChecker: java.lang.String getFileMD5(java.io.File)>($r1);
+
+        $r3 = virtualinvoke $r1.<java.io.File: java.lang.String getName()>();
+
+        $r3 = specialinvoke $r0.<com.alipay.euler.andfix.security.SecurityChecker: java.lang.String getFingerprint(java.lang.String)>($r3);
+
+        if $r2 == null goto label1;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean equals(java.lang.CharSequence,java.lang.CharSequence)>($r2, $r3);
+
+        if $z0 == 0 goto label1;
+
+        varReplacer12779 = 1;
+
+        return varReplacer12779;
+
+     label1:
+        varReplacer12778 = 0;
+
+        return varReplacer12778;
+    }
+}

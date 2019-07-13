@@ -1,0 +1,296 @@
+public class com.joymeng.PaymentSdkV2.util.EncryptUtil extends java.lang.Object
+{
+
+    public void <init>()
+    {
+        com.joymeng.PaymentSdkV2.util.EncryptUtil $r0;
+
+        $r0 := @this: com.joymeng.PaymentSdkV2.util.EncryptUtil;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static java.lang.String convertByteToHexString(byte[])
+    {
+        byte[] $r0;
+        java.lang.StringBuffer $r1, $r3;
+        int $i0, $i1;
+        java.lang.String $r2;
+        byte $b2;
+        char $c3;
+
+        $r0 := @parameter0: byte[];
+
+        if $r0 != null goto label1;
+
+        return "";
+
+     label1:
+        $r1 = new java.lang.StringBuffer;
+
+        $i0 = lengthof $r0;
+
+        $i0 = $i0 * 2;
+
+        specialinvoke $r1.<java.lang.StringBuffer: void <init>(int)>($i0);
+
+        $i0 = 0;
+
+     label2:
+        $i1 = lengthof $r0;
+
+        if $i0 < $i1 goto label3;
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        return $r2;
+
+     label3:
+        $r2 = "0123456789ABCDEF";
+
+        $b2 = $r0[$i0];
+
+        $b2 = $b2 >> 4;
+
+        $b2 = $b2 & 15;
+
+        $c3 = virtualinvoke $r2.<java.lang.String: char charAt(int)>($b2);
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuffer: java.lang.StringBuffer append(char)>($c3);
+
+        $r2 = "0123456789ABCDEF";
+
+        $b2 = $r0[$i0];
+
+        $b2 = $b2 & 15;
+
+        $c3 = virtualinvoke $r2.<java.lang.String: char charAt(int)>($b2);
+
+        virtualinvoke $r3.<java.lang.StringBuffer: java.lang.StringBuffer append(char)>($c3);
+
+        $i0 = $i0 + 1;
+
+        goto label2;
+    }
+
+    private static byte[] convertHexStringtoByte(java.lang.String)
+    {
+        java.lang.String $r0, $r2;
+        int $i0, $i1, $i2, $i3, varReplacer884;
+        byte[] $r1;
+        java.lang.Integer $r3;
+        byte $b4;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        $i0 = $i0 / 2;
+
+        $r1 = newarray (byte)[$i0];
+
+        $i1 = 0;
+
+     label1:
+        if $i1 < $i0 goto label2;
+
+        return $r1;
+
+     label2:
+        $i2 = $i1 * 2;
+
+        $i3 = $i1 * 2;
+
+        $i3 = $i3 + 2;
+
+        $r2 = virtualinvoke $r0.<java.lang.String: java.lang.String substring(int,int)>($i2, $i3);
+
+        varReplacer884 = 16;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(java.lang.String,int)>($r2, varReplacer884);
+
+        $b4 = virtualinvoke $r3.<java.lang.Integer: byte byteValue()>();
+
+        $r1[$i1] = $b4;
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+    }
+
+    private static byte[] decrypt(java.lang.String, byte[]) throws java.lang.Exception
+    {
+        java.lang.String $r0, varReplacer880, varReplacer882, varReplacer883;
+        byte[] $r1, $r3;
+        javax.crypto.spec.SecretKeySpec $r2;
+        javax.crypto.Cipher $r4;
+        int varReplacer881;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: byte[];
+
+        $r2 = new javax.crypto.spec.SecretKeySpec;
+
+        varReplacer880 = "joy";
+
+        $r3 = staticinvoke <com.joymeng.PaymentSdkV2.util.EncryptUtil: byte[] getRawKey(java.lang.String)>(varReplacer880);
+
+        varReplacer883 = "AES";
+
+        specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer883);
+
+        varReplacer882 = "AES/ECB/PKCS5Padding";
+
+        $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer882);
+
+        varReplacer881 = 2;
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer881, $r2);
+
+        $r1 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1);
+
+        return $r1;
+    }
+
+    public static java.lang.String decryptText(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, varReplacer878, varReplacer879;
+        java.lang.Exception $r2;
+        byte[] $r3;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+     label1:
+        $r3 = staticinvoke <com.joymeng.PaymentSdkV2.util.EncryptUtil: byte[] convertHexStringtoByte(java.lang.String)>($r1);
+
+        varReplacer878 = "joy";
+
+        $r3 = staticinvoke <com.joymeng.PaymentSdkV2.util.EncryptUtil: byte[] decrypt(java.lang.String,byte[])>(varReplacer878, $r3);
+
+     label2:
+        $r0 = new java.lang.String;
+
+     label3:
+        specialinvoke $r0.<java.lang.String: void <init>(byte[])>($r3);
+
+     label4:
+        return $r0;
+
+     label5:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r2.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer879 = "";
+
+        return varReplacer879;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    private static byte[] encrypt(java.lang.String, byte[]) throws java.lang.Exception
+    {
+        java.lang.String $r0;
+        byte[] $r1, $r3;
+        javax.crypto.spec.SecretKeySpec $r2;
+        javax.crypto.Cipher $r4;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: byte[];
+
+        $r2 = new javax.crypto.spec.SecretKeySpec;
+
+        $r3 = staticinvoke <com.joymeng.PaymentSdkV2.util.EncryptUtil: byte[] getRawKey(java.lang.String)>($r0);
+
+        specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, "AES");
+
+        $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>("AES/ECB/PKCS5Padding");
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key)>(1, $r2);
+
+        $r1 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1);
+
+        return $r1;
+    }
+
+    public static java.lang.String encryptText(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1;
+        java.lang.Exception $r2;
+        byte[] $r3;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+     label1:
+        $r3 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        $r3 = staticinvoke <com.joymeng.PaymentSdkV2.util.EncryptUtil: byte[] encrypt(java.lang.String,byte[])>($r0, $r3);
+
+        $r0 = staticinvoke <com.joymeng.PaymentSdkV2.util.EncryptUtil: java.lang.String convertByteToHexString(byte[])>($r3);
+
+     label2:
+        return $r0;
+
+     label3:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r2.<java.lang.Exception: void printStackTrace()>();
+
+        return "";
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    private static byte[] getRawKey(java.lang.String) throws java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException
+    {
+        java.lang.String $r0, varReplacer886, varReplacer887, varReplacer888;
+        javax.crypto.KeyGenerator $r1;
+        java.security.SecureRandom $r2;
+        byte[] $r3;
+        javax.crypto.SecretKey $r4;
+        int varReplacer885;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        varReplacer888 = "AES";
+
+        $r1 = staticinvoke <javax.crypto.KeyGenerator: javax.crypto.KeyGenerator getInstance(java.lang.String)>(varReplacer888);
+
+        varReplacer886 = "SHA1PRNG";
+
+        varReplacer887 = "Crypto";
+
+        $r2 = staticinvoke <java.security.SecureRandom: java.security.SecureRandom getInstance(java.lang.String,java.lang.String)>(varReplacer886, varReplacer887);
+
+        $r3 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r2.<java.security.SecureRandom: void setSeed(byte[])>($r3);
+
+        varReplacer885 = 128;
+
+        virtualinvoke $r1.<javax.crypto.KeyGenerator: void init(int,java.security.SecureRandom)>(varReplacer885, $r2);
+
+        $r4 = virtualinvoke $r1.<javax.crypto.KeyGenerator: javax.crypto.SecretKey generateKey()>();
+
+        $r3 = interfaceinvoke $r4.<javax.crypto.SecretKey: byte[] getEncoded()>();
+
+        return $r3;
+    }
+}

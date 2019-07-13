@@ -1,0 +1,257 @@
+public class com.android.vending.billing.utils.Security extends java.lang.Object
+{
+
+    public void <init>()
+    {
+        com.android.vending.billing.utils.Security $r0;
+
+        $r0 := @this: com.android.vending.billing.utils.Security;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static java.security.PublicKey a(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer3474, varReplacer3475, varReplacer3476, varReplacer3477, varReplacer3478;
+        byte[] $r1;
+        java.security.KeyFactory $r2;
+        java.security.spec.X509EncodedKeySpec $r3;
+        java.security.PublicKey $r4;
+        java.lang.Throwable $r5, $r7;
+        java.lang.RuntimeException $r6;
+        java.lang.IllegalArgumentException $r8;
+        com.android.vending.billing.utils.Base64DecoderException $r9;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        $r1 = staticinvoke <com.android.vending.billing.utils.Base64: byte[] a(java.lang.String)>($r0);
+
+        varReplacer3478 = "RSA";
+
+        $r2 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer3478);
+
+     label2:
+        $r3 = new java.security.spec.X509EncodedKeySpec;
+
+     label3:
+        specialinvoke $r3.<java.security.spec.X509EncodedKeySpec: void <init>(byte[])>($r1);
+
+        $r4 = virtualinvoke $r2.<java.security.KeyFactory: java.security.PublicKey generatePublic(java.security.spec.KeySpec)>($r3);
+
+     label4:
+        return $r4;
+
+     label5:
+        $r5 := @caughtexception;
+
+        $r6 = new java.lang.RuntimeException;
+
+        specialinvoke $r6.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r5);
+
+        throw $r6;
+
+     label6:
+        $r7 := @caughtexception;
+
+        varReplacer3474 = "IABUtil/Security";
+
+        varReplacer3475 = "Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer3474, varReplacer3475);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r7);
+
+        throw $r8;
+
+     label7:
+        $r9 := @caughtexception;
+
+        varReplacer3476 = "IABUtil/Security";
+
+        varReplacer3477 = "Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer3476, varReplacer3477);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r9);
+
+        throw $r8;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label5;
+        catch java.security.spec.InvalidKeySpecException from label1 to label2 with label6;
+        catch java.security.spec.InvalidKeySpecException from label3 to label4 with label6;
+        catch com.android.vending.billing.utils.Base64DecoderException from label1 to label2 with label7;
+        catch com.android.vending.billing.utils.Base64DecoderException from label3 to label4 with label7;
+    }
+
+    public static boolean a(java.lang.String, java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, $r2, varReplacer3454, varReplacer3455;
+        boolean $z0;
+        java.security.PublicKey $r3;
+        int varReplacer3456;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r0);
+
+        if $z0 != 0 goto label1;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        varReplacer3454 = "IABUtil/Security";
+
+        varReplacer3455 = "Purchase verification failed: missing data.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer3454, varReplacer3455);
+
+        varReplacer3456 = 0;
+
+        return varReplacer3456;
+
+     label2:
+        $r3 = staticinvoke <com.android.vending.billing.utils.Security: java.security.PublicKey a(java.lang.String)>($r0);
+
+        $z0 = staticinvoke <com.android.vending.billing.utils.Security: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)>($r3, $r1, $r2);
+
+        return $z0;
+    }
+
+    private static boolean a(java.security.PublicKey, java.lang.String, java.lang.String)
+    {
+        java.security.PublicKey $r0;
+        java.lang.String $r1, $r2, varReplacer3460, varReplacer3461, varReplacer3462, varReplacer3463, varReplacer3464, varReplacer3465, varReplacer3466, varReplacer3467, varReplacer3469, varReplacer3472, varReplacer3473;
+        java.security.Signature $r3;
+        byte[] $r4;
+        boolean $z0;
+        java.lang.Throwable $r5, $r6, $r7;
+        com.android.vending.billing.utils.Base64DecoderException $r8;
+        int varReplacer3457, varReplacer3458, varReplacer3459, varReplacer3468, varReplacer3470, varReplacer3471;
+
+        nop;
+
+        $r0 := @parameter0: java.security.PublicKey;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+     label1:
+        varReplacer3469 = "SHA1withRSA";
+
+        $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer3469);
+
+        virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0);
+
+        $r4 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r3.<java.security.Signature: void update(byte[])>($r4);
+
+        $r4 = staticinvoke <com.android.vending.billing.utils.Base64: byte[] a(java.lang.String)>($r2);
+
+        $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4);
+
+     label2:
+        if $z0 != 0 goto label5;
+
+     label3:
+        varReplacer3462 = "IABUtil/Security";
+
+        varReplacer3463 = "Signature verification failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer3462, varReplacer3463);
+
+     label4:
+        varReplacer3458 = 0;
+
+        return varReplacer3458;
+
+     label5:
+        varReplacer3459 = 1;
+
+        return varReplacer3459;
+
+     label6:
+        $r5 := @caughtexception;
+
+        varReplacer3466 = "IABUtil/Security";
+
+        varReplacer3467 = "NoSuchAlgorithmException.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer3466, varReplacer3467);
+
+        varReplacer3468 = 0;
+
+        return varReplacer3468;
+
+     label7:
+        $r6 := @caughtexception;
+
+        varReplacer3460 = "IABUtil/Security";
+
+        varReplacer3461 = "Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer3460, varReplacer3461);
+
+        varReplacer3470 = 0;
+
+        return varReplacer3470;
+
+     label8:
+        $r7 := @caughtexception;
+
+        varReplacer3464 = "IABUtil/Security";
+
+        varReplacer3465 = "Signature exception.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer3464, varReplacer3465);
+
+        varReplacer3471 = 0;
+
+        return varReplacer3471;
+
+     label9:
+        $r8 := @caughtexception;
+
+        varReplacer3472 = "IABUtil/Security";
+
+        varReplacer3473 = "Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer3472, varReplacer3473);
+
+        varReplacer3457 = 0;
+
+        return varReplacer3457;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label6;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label6;
+        catch java.security.InvalidKeyException from label1 to label2 with label7;
+        catch java.security.InvalidKeyException from label3 to label4 with label7;
+        catch java.security.SignatureException from label1 to label2 with label8;
+        catch java.security.SignatureException from label3 to label4 with label8;
+        catch com.android.vending.billing.utils.Base64DecoderException from label1 to label2 with label9;
+        catch com.android.vending.billing.utils.Base64DecoderException from label3 to label4 with label9;
+    }
+}

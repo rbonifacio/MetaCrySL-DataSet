@@ -1,0 +1,116 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer3847)
+		Method: <com.facebook.ads.internal.util.g: void b()>
+		SHA-256: 7e0e89b3eb508743793fcfe9898ec84750ece49b3a2fb9942c335198b21b0422
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4705)
+		Method: <com.immersion.hapticmediasdk.utils.FileManager: java.lang.String getUniqueFileName(java.lang.String)>
+		SHA-256: 64bb0322b648a9e152af8381c36d0a2ec59a8aad00ab78d735757a361873bdf8
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.common.android.analytics.AnalyticsUtils: java.lang.String SHA1(java.lang.String)>
+		SHA-256: 7e33722323081c37ad251b8dec5141ef56198aac6439b0023bf80aad6329ed91
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3104)
+		Method: <com.common.android.analytics.AnalyticsUtils: java.lang.String MD5(java.lang.String)>
+		SHA-256: 5540a4e4ebfe5ac1494b6fc8d0a7c1c64278589462da7414558bb60a8aaf762c
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2822)
+		Method: <com.common.android.analytics.AnalyticsUtils: java.lang.String SHA1(java.lang.String)>
+		SHA-256: f46c63dc5b2e8148d387831b2911354f7d37b5481193407ad1775ae76034f2d3
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.common.android.analytics.AnalyticsUtils: java.lang.String MD5(java.lang.String)>
+		SHA-256: 771b54515e3a5e827526b9382bc1fc52019d9c823d5a02c31c5545175568b8bc
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.immersion.hapticmediasdk.utils.FileManager: java.lang.String getUniqueFileName(java.lang.String)>
+		SHA-256: 60094877678a6cfe02028ceaff580697009c76d513bd885f3bb0e4545bbe8212
+		Secure: true
+	Object:
+		Variable: r10
+		Type: java.security.SecureRandom
+		Statement: specialinvoke r10.<java.security.SecureRandom: void <init>()>()
+		Method: <com.facebook.ads.internal.util.g: void b()>
+		SHA-256: c49baf8b2831a2be9aa3b8b2b456003f3087b1f5f20fd8411803ca8aa53c7285
+		Secure: true
+
+Findings in Java Class: com.facebook.ads.internal.util.g
+
+	 in Method: void b()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer3845, r12, $r3)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer3845, r12, $r3)
+
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #7e0e89b3eb508743793fcfe9898ec84750ece49b3a2fb9942c335198b21b0422)
+			First parameter (with value "SSL") should be any of {TLS}
+			at statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer3847)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 8
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 2
+	ConstraintError: 1
+=====================================================================

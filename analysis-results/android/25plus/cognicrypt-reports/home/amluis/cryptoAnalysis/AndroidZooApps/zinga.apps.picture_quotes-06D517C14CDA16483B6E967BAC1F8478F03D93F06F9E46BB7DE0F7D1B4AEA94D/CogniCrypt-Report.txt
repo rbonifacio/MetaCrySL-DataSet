@@ -1,0 +1,112 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzcu(java.lang.String)>
+		SHA-256: a107f0a15b16b8e021c95c077590c48b5b253ddc4b8bda38bce253162a9875cd
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer430)
+		Method: <com.mopub.common.util.Utils: java.lang.String sha1(java.lang.String)>
+		SHA-256: 17d692d21fdd79dffd79b7881066f71c0dfacfc4d587a1e30303f4f4dc72db62
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: java.security.Signature
+		Statement: $r4 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer12581)
+		Method: <adroit.com.hundred_in_1.IapUtil.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 12c2ce16a860fc2f353bcfdc7a158d5cc2f81d59ee200476f528a6b51c362c3a
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.mopub.common.util.Utils: java.lang.String sha1(java.lang.String)>
+		SHA-256: 7a74e8fbde4cb7f3c5f100dc4c6bc0d46ff7409fd74d931edb087eb017f74545
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer12236)
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzcu(java.lang.String)>
+		SHA-256: adc9d43f9bcc0de80310143e946b73fad4aca26186092cd83cf8af6d8d6bb9f7
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: javax.net.ssl.SSLContext
+		Statement: $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer13381)
+		Method: <com.appodeal.ads.u: javax.net.ssl.SSLSocketFactory d()>
+		SHA-256: e3871177a403500f00e3aeec7f112f09329e5343f0b79c49ab5d522f999cf5e5
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r4.<java.security.Signature: boolean verify(byte[])>($r3)
+		Method: <adroit.com.hundred_in_1.IapUtil.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: c678472b4c19c53650e756c77dab364889209724da847a2f30c698a83517174f
+		Secure: false
+
+Findings in Java Class: adroit.com.hundred_in_1.IapUtil.Security
+
+	 in Method: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r4.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
+
+
+Findings in Java Class: com.appodeal.ads.u
+
+	 in Method: javax.net.ssl.SSLSocketFactory d()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer13382, r8, varReplacer13382)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer13382, r8, varReplacer13382)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 7
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 3
+=====================================================================

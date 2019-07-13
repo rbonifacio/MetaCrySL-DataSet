@@ -1,0 +1,520 @@
+public class com.desjardins.mobile.fingerprint.vault.Vault extends java.lang.Object
+{
+    private static final java.lang.String ANDROID_KEY_STORE;
+    private static final java.lang.String DEFAULT_KEY_NAME;
+    private static final java.lang.String TEMPORARY_KEY_NAME;
+    private com.desjardins.mobile.fingerprint.vault.VaultConfiguration config;
+    private java.lang.Boolean isSecure;
+
+    public void <init>(com.desjardins.mobile.fingerprint.vault.VaultConfiguration)
+    {
+        com.desjardins.mobile.fingerprint.vault.Vault $r0;
+        com.desjardins.mobile.fingerprint.vault.VaultConfiguration $r1;
+        null_type varReplacer2053, varReplacer2054;
+
+        nop;
+
+        $r0 := @this: com.desjardins.mobile.fingerprint.vault.Vault;
+
+        $r1 := @parameter0: com.desjardins.mobile.fingerprint.vault.VaultConfiguration;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer2053 = null;
+
+        $r0.<com.desjardins.mobile.fingerprint.vault.Vault: java.lang.Boolean isSecure> = varReplacer2053;
+
+        $r0.<com.desjardins.mobile.fingerprint.vault.Vault: com.desjardins.mobile.fingerprint.vault.VaultConfiguration config> = $r1;
+
+        varReplacer2054 = null;
+
+        $r0.<com.desjardins.mobile.fingerprint.vault.Vault: java.lang.Boolean isSecure> = varReplacer2054;
+
+        return;
+    }
+
+    private boolean isKeySecure(java.security.PrivateKey)
+    {
+        com.desjardins.mobile.fingerprint.vault.Vault $r0;
+        java.security.PrivateKey $r1;
+        java.lang.String $r2, varReplacer2033;
+        java.security.KeyFactory $r3;
+        java.security.spec.KeySpec $r4;
+        android.security.keystore.KeyInfo $r5;
+        boolean $z0;
+        java.lang.Throwable $r6, $r7, $r8;
+        int varReplacer2034;
+
+        nop;
+
+        $r0 := @this: com.desjardins.mobile.fingerprint.vault.Vault;
+
+        $r1 := @parameter0: java.security.PrivateKey;
+
+     label1:
+        $r2 = interfaceinvoke $r1.<java.security.PrivateKey: java.lang.String getAlgorithm()>();
+
+        varReplacer2033 = "AndroidKeyStore";
+
+        $r3 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String,java.lang.String)>($r2, varReplacer2033);
+
+        $r4 = virtualinvoke $r3.<java.security.KeyFactory: java.security.spec.KeySpec getKeySpec(java.security.Key,java.lang.Class)>($r1, class "Landroid/security/keystore/KeyInfo;");
+
+     label2:
+        $r5 = (android.security.keystore.KeyInfo) $r4;
+
+     label3:
+        $z0 = virtualinvoke $r5.<android.security.keystore.KeyInfo: boolean isInsideSecureHardware()>();
+
+     label4:
+        return $z0;
+
+     label5:
+        $r6 := @caughtexception;
+
+     label6:
+        varReplacer2034 = 0;
+
+        return varReplacer2034;
+
+     label7:
+        $r7 := @caughtexception;
+
+        goto label6;
+
+     label8:
+        $r8 := @caughtexception;
+
+        goto label6;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label7;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label7;
+        catch java.security.NoSuchProviderException from label1 to label2 with label5;
+        catch java.security.NoSuchProviderException from label3 to label4 with label5;
+        catch java.security.spec.InvalidKeySpecException from label1 to label2 with label8;
+        catch java.security.spec.InvalidKeySpecException from label3 to label4 with label8;
+    }
+
+    public java.security.KeyPair createKeyPair() throws com.desjardins.mobile.fingerprint.vault.UnableToCreateKeyPairException
+    {
+        com.desjardins.mobile.fingerprint.vault.Vault $r0;
+        java.security.KeyPair $r1;
+
+        $r0 := @this: com.desjardins.mobile.fingerprint.vault.Vault;
+
+        $r1 = virtualinvoke $r0.<com.desjardins.mobile.fingerprint.vault.Vault: java.security.KeyPair createKeyPair(java.lang.String)>("Vault.DEFAULT_KEY_NAME");
+
+        return $r1;
+    }
+
+    public java.security.KeyPair createKeyPair(java.lang.String) throws com.desjardins.mobile.fingerprint.vault.UnableToCreateKeyPairException
+    {
+        com.desjardins.mobile.fingerprint.vault.Vault $r0;
+        java.lang.String $r1, $r3, varReplacer2031, varReplacer2032;
+        com.desjardins.mobile.fingerprint.vault.VaultConfiguration $r2;
+        java.security.KeyPairGenerator $r4;
+        android.security.keystore.KeyGenParameterSpec$Builder $r5;
+        int $i0;
+        java.lang.String[] $r6;
+        java.security.spec.AlgorithmParameterSpec $r7;
+        boolean $z0;
+        android.security.keystore.KeyGenParameterSpec $r8;
+        java.security.KeyPair $r9;
+        java.lang.Throwable $r10;
+        com.desjardins.mobile.fingerprint.vault.UnableToCreateKeyPairException $r11;
+
+        nop;
+
+        $r0 := @this: com.desjardins.mobile.fingerprint.vault.Vault;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = $r0.<com.desjardins.mobile.fingerprint.vault.Vault: com.desjardins.mobile.fingerprint.vault.VaultConfiguration config>;
+
+        $r3 = $r2.<com.desjardins.mobile.fingerprint.vault.VaultConfiguration: java.lang.String ALGORITHM>;
+
+     label01:
+        varReplacer2031 = "AndroidKeyStore";
+
+        $r4 = staticinvoke <java.security.KeyPairGenerator: java.security.KeyPairGenerator getInstance(java.lang.String,java.lang.String)>($r3, varReplacer2031);
+
+     label02:
+        $r5 = new android.security.keystore.KeyGenParameterSpec$Builder;
+
+        $r2 = $r0.<com.desjardins.mobile.fingerprint.vault.Vault: com.desjardins.mobile.fingerprint.vault.VaultConfiguration config>;
+
+        $i0 = $r2.<com.desjardins.mobile.fingerprint.vault.VaultConfiguration: int PURPOSES>;
+
+     label03:
+        varReplacer2032 = "Vault.TEMPORARY_KEY_NAME";
+
+        specialinvoke $r5.<android.security.keystore.KeyGenParameterSpec$Builder: void <init>(java.lang.String,int)>(varReplacer2032, $i0);
+
+     label04:
+        $r6 = newarray (java.lang.String)[1];
+
+        $r2 = $r0.<com.desjardins.mobile.fingerprint.vault.Vault: com.desjardins.mobile.fingerprint.vault.VaultConfiguration config>;
+
+        $r1 = $r2.<com.desjardins.mobile.fingerprint.vault.VaultConfiguration: java.lang.String DIGESTS>;
+
+        $r6[0] = $r1;
+
+     label05:
+        $r5 = virtualinvoke $r5.<android.security.keystore.KeyGenParameterSpec$Builder: android.security.keystore.KeyGenParameterSpec$Builder setDigests(java.lang.String[])>($r6);
+
+     label06:
+        $r2 = $r0.<com.desjardins.mobile.fingerprint.vault.Vault: com.desjardins.mobile.fingerprint.vault.VaultConfiguration config>;
+
+        $r7 = $r2.<com.desjardins.mobile.fingerprint.vault.VaultConfiguration: java.security.spec.AlgorithmParameterSpec ALGORITHM_PARAMETER_SPEC>;
+
+     label07:
+        $r5 = virtualinvoke $r5.<android.security.keystore.KeyGenParameterSpec$Builder: android.security.keystore.KeyGenParameterSpec$Builder setAlgorithmParameterSpec(java.security.spec.AlgorithmParameterSpec)>($r7);
+
+     label08:
+        $r2 = $r0.<com.desjardins.mobile.fingerprint.vault.Vault: com.desjardins.mobile.fingerprint.vault.VaultConfiguration config>;
+
+        $z0 = $r2.<com.desjardins.mobile.fingerprint.vault.VaultConfiguration: boolean USER_AUTHENTICATION_REQUIRED>;
+
+     label09:
+        $r5 = virtualinvoke $r5.<android.security.keystore.KeyGenParameterSpec$Builder: android.security.keystore.KeyGenParameterSpec$Builder setUserAuthenticationRequired(boolean)>($z0);
+
+        $r8 = virtualinvoke $r5.<android.security.keystore.KeyGenParameterSpec$Builder: android.security.keystore.KeyGenParameterSpec build()>();
+
+        virtualinvoke $r4.<java.security.KeyPairGenerator: void initialize(java.security.spec.AlgorithmParameterSpec)>($r8);
+
+        $r9 = virtualinvoke $r4.<java.security.KeyPairGenerator: java.security.KeyPair generateKeyPair()>();
+
+     label10:
+        return $r9;
+
+     label11:
+        $r10 := @caughtexception;
+
+     label12:
+        $r11 = new com.desjardins.mobile.fingerprint.vault.UnableToCreateKeyPairException;
+
+        specialinvoke $r11.<com.desjardins.mobile.fingerprint.vault.UnableToCreateKeyPairException: void <init>(java.lang.Throwable)>($r10);
+
+        throw $r11;
+
+     label13:
+        $r10 := @caughtexception;
+
+        goto label12;
+
+     label14:
+        $r10 := @caughtexception;
+
+        goto label12;
+
+        catch java.security.NoSuchProviderException from label01 to label02 with label11;
+        catch java.security.NoSuchProviderException from label03 to label04 with label11;
+        catch java.security.NoSuchProviderException from label05 to label06 with label11;
+        catch java.security.NoSuchProviderException from label07 to label08 with label11;
+        catch java.security.NoSuchProviderException from label09 to label10 with label11;
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label14;
+        catch java.security.NoSuchAlgorithmException from label03 to label04 with label14;
+        catch java.security.NoSuchAlgorithmException from label05 to label06 with label14;
+        catch java.security.NoSuchAlgorithmException from label07 to label08 with label14;
+        catch java.security.NoSuchAlgorithmException from label09 to label10 with label14;
+        catch java.security.InvalidAlgorithmParameterException from label01 to label02 with label13;
+        catch java.security.InvalidAlgorithmParameterException from label03 to label04 with label13;
+        catch java.security.InvalidAlgorithmParameterException from label05 to label06 with label13;
+        catch java.security.InvalidAlgorithmParameterException from label07 to label08 with label13;
+        catch java.security.InvalidAlgorithmParameterException from label09 to label10 with label13;
+    }
+
+    public boolean deleteKeyPair()
+    {
+        com.desjardins.mobile.fingerprint.vault.Vault $r0;
+        boolean $z0;
+
+        $r0 := @this: com.desjardins.mobile.fingerprint.vault.Vault;
+
+        $z0 = virtualinvoke $r0.<com.desjardins.mobile.fingerprint.vault.Vault: boolean deleteKeyPair(java.lang.String)>("Vault.DEFAULT_KEY_NAME");
+
+        return $z0;
+    }
+
+    public boolean deleteKeyPair(java.lang.String)
+    {
+        com.desjardins.mobile.fingerprint.vault.Vault $r0;
+        java.lang.String $r1, varReplacer2035, varReplacer2039;
+        java.security.KeyStore $r2;
+        java.lang.Throwable $r3, $r4, $r5, $r6;
+        null_type varReplacer2036;
+        int varReplacer2037, varReplacer2038;
+
+        nop;
+
+        $r0 := @this: com.desjardins.mobile.fingerprint.vault.Vault;
+
+        $r1 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer2039 = "AndroidKeyStore";
+
+        $r2 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer2039);
+
+        varReplacer2036 = null;
+
+        virtualinvoke $r2.<java.security.KeyStore: void load(java.security.KeyStore$LoadStoreParameter)>(varReplacer2036);
+
+        varReplacer2035 = "Vault.TEMPORARY_KEY_NAME";
+
+        virtualinvoke $r2.<java.security.KeyStore: void deleteEntry(java.lang.String)>(varReplacer2035);
+
+     label2:
+        varReplacer2037 = 1;
+
+        return varReplacer2037;
+
+     label3:
+        $r3 := @caughtexception;
+
+     label4:
+        varReplacer2038 = 0;
+
+        return varReplacer2038;
+
+     label5:
+        $r4 := @caughtexception;
+
+        goto label4;
+
+     label6:
+        $r5 := @caughtexception;
+
+        goto label4;
+
+     label7:
+        $r6 := @caughtexception;
+
+        goto label4;
+
+        catch java.security.KeyStoreException from label1 to label2 with label3;
+        catch java.io.IOException from label1 to label2 with label7;
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+        catch java.security.cert.CertificateException from label1 to label2 with label6;
+    }
+
+    public java.security.PrivateKey getPrivateKey()
+    {
+        com.desjardins.mobile.fingerprint.vault.Vault $r0;
+        java.security.PrivateKey $r1;
+        java.lang.String varReplacer2041;
+
+        nop;
+
+        $r0 := @this: com.desjardins.mobile.fingerprint.vault.Vault;
+
+        varReplacer2041 = "Vault.DEFAULT_KEY_NAME";
+
+        $r1 = virtualinvoke $r0.<com.desjardins.mobile.fingerprint.vault.Vault: java.security.PrivateKey getPrivateKey(java.lang.String)>(varReplacer2041);
+
+        return $r1;
+    }
+
+    public java.security.PrivateKey getPrivateKey(java.lang.String)
+    {
+        com.desjardins.mobile.fingerprint.vault.Vault $r0;
+        java.lang.String $r1, varReplacer2044, varReplacer2046;
+        java.security.KeyStore $r2;
+        java.security.Key $r3;
+        java.security.PrivateKey $r4;
+        java.lang.Throwable $r5, $r6, $r7, $r8, $r9;
+        null_type varReplacer2042, varReplacer2043, varReplacer2045;
+
+        nop;
+
+        $r0 := @this: com.desjardins.mobile.fingerprint.vault.Vault;
+
+        $r1 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer2046 = "AndroidKeyStore";
+
+        $r2 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer2046);
+
+        varReplacer2042 = null;
+
+        virtualinvoke $r2.<java.security.KeyStore: void load(java.security.KeyStore$LoadStoreParameter)>(varReplacer2042);
+
+        varReplacer2044 = "Vault.DEFAULT_KEY_NAME";
+
+        varReplacer2045 = null;
+
+        $r3 = virtualinvoke $r2.<java.security.KeyStore: java.security.Key getKey(java.lang.String,char[])>(varReplacer2044, varReplacer2045);
+
+     label2:
+        $r4 = (java.security.PrivateKey) $r3;
+
+        return $r4;
+
+     label3:
+        $r5 := @caughtexception;
+
+     label4:
+        varReplacer2043 = null;
+
+        return varReplacer2043;
+
+     label5:
+        $r6 := @caughtexception;
+
+        goto label4;
+
+     label6:
+        $r7 := @caughtexception;
+
+        goto label4;
+
+     label7:
+        $r8 := @caughtexception;
+
+        goto label4;
+
+     label8:
+        $r9 := @caughtexception;
+
+        goto label4;
+
+        catch java.security.KeyStoreException from label1 to label2 with label3;
+        catch java.io.IOException from label1 to label2 with label7;
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+        catch java.security.cert.CertificateException from label1 to label2 with label6;
+        catch java.security.UnrecoverableKeyException from label1 to label2 with label8;
+    }
+
+    public java.security.PublicKey getPublicKey()
+    {
+        com.desjardins.mobile.fingerprint.vault.Vault $r0;
+        java.security.PublicKey $r1;
+
+        $r0 := @this: com.desjardins.mobile.fingerprint.vault.Vault;
+
+        $r1 = virtualinvoke $r0.<com.desjardins.mobile.fingerprint.vault.Vault: java.security.PublicKey getPublicKey(java.lang.String)>("Vault.DEFAULT_KEY_NAME");
+
+        return $r1;
+    }
+
+    public java.security.PublicKey getPublicKey(java.lang.String)
+    {
+        com.desjardins.mobile.fingerprint.vault.Vault $r0;
+        java.lang.String $r1;
+        java.security.KeyStore $r2;
+        java.security.cert.Certificate $r3;
+        java.security.PublicKey $r4;
+        java.lang.Throwable $r5, $r6, $r7, $r8;
+
+        $r0 := @this: com.desjardins.mobile.fingerprint.vault.Vault;
+
+        $r1 := @parameter0: java.lang.String;
+
+     label1:
+        $r2 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>("AndroidKeyStore");
+
+        virtualinvoke $r2.<java.security.KeyStore: void load(java.security.KeyStore$LoadStoreParameter)>(null);
+
+        $r3 = virtualinvoke $r2.<java.security.KeyStore: java.security.cert.Certificate getCertificate(java.lang.String)>($r1);
+
+     label2:
+        if $r3 == null goto label9;
+
+     label3:
+        $r4 = virtualinvoke $r3.<java.security.cert.Certificate: java.security.PublicKey getPublicKey()>();
+
+     label4:
+        return $r4;
+
+     label5:
+        $r5 := @caughtexception;
+
+        return null;
+
+     label6:
+        $r6 := @caughtexception;
+
+        return null;
+
+     label7:
+        $r7 := @caughtexception;
+
+        return null;
+
+     label8:
+        $r8 := @caughtexception;
+
+     label9:
+        return null;
+
+        catch java.security.KeyStoreException from label1 to label2 with label5;
+        catch java.security.KeyStoreException from label3 to label4 with label5;
+        catch java.io.IOException from label1 to label2 with label8;
+        catch java.io.IOException from label3 to label4 with label8;
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label6;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label6;
+        catch java.security.cert.CertificateException from label1 to label2 with label7;
+        catch java.security.cert.CertificateException from label3 to label4 with label7;
+    }
+
+    public boolean isSecure()
+    {
+        com.desjardins.mobile.fingerprint.vault.Vault $r0;
+        com.desjardins.mobile.fingerprint.vault.UnableToCreateKeyPairException $r1;
+        java.lang.Boolean $r2;
+        java.security.KeyPair $r3;
+        java.security.PrivateKey $r4;
+        boolean $z0;
+        int varReplacer2028;
+        java.lang.String varReplacer2029, varReplacer2030;
+
+        nop;
+
+        $r0 := @this: com.desjardins.mobile.fingerprint.vault.Vault;
+
+        $r2 = $r0.<com.desjardins.mobile.fingerprint.vault.Vault: java.lang.Boolean isSecure>;
+
+        if $r2 != null goto label4;
+
+     label1:
+        varReplacer2030 = "Vault.TEMPORARY_KEY_NAME";
+
+        $r3 = virtualinvoke $r0.<com.desjardins.mobile.fingerprint.vault.Vault: java.security.KeyPair createKeyPair(java.lang.String)>(varReplacer2030);
+
+        $r4 = virtualinvoke $r3.<java.security.KeyPair: java.security.PrivateKey getPrivate()>();
+
+        $z0 = specialinvoke $r0.<com.desjardins.mobile.fingerprint.vault.Vault: boolean isKeySecure(java.security.PrivateKey)>($r4);
+
+        $r2 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z0);
+
+     label2:
+        $r0.<com.desjardins.mobile.fingerprint.vault.Vault: java.lang.Boolean isSecure> = $r2;
+
+     label3:
+        varReplacer2029 = "Vault.TEMPORARY_KEY_NAME";
+
+        virtualinvoke $r0.<com.desjardins.mobile.fingerprint.vault.Vault: boolean deleteKeyPair(java.lang.String)>(varReplacer2029);
+
+     label4:
+        $r2 = $r0.<com.desjardins.mobile.fingerprint.vault.Vault: java.lang.Boolean isSecure>;
+
+        $z0 = virtualinvoke $r2.<java.lang.Boolean: boolean booleanValue()>();
+
+        return $z0;
+
+     label5:
+        $r1 := @caughtexception;
+
+        varReplacer2028 = 0;
+
+        $r2 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(varReplacer2028);
+
+        $r0.<com.desjardins.mobile.fingerprint.vault.Vault: java.lang.Boolean isSecure> = $r2;
+
+        goto label4;
+
+        catch com.desjardins.mobile.fingerprint.vault.UnableToCreateKeyPairException from label1 to label2 with label5;
+        catch com.desjardins.mobile.fingerprint.vault.UnableToCreateKeyPairException from label3 to label4 with label5;
+    }
+}

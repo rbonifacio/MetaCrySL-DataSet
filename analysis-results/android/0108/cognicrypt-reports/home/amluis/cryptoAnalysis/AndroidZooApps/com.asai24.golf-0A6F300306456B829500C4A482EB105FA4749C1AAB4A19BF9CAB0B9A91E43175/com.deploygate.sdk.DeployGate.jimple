@@ -1,0 +1,1615 @@
+public class com.deploygate.sdk.DeployGate extends java.lang.Object
+{
+    private static final java.lang.String ACTION_DEPLOYGATE_STARTED;
+    private static final java.lang.String[] DEPLOYGATE_FINGERPRINTS;
+    private static final java.lang.String DEPLOYGATE_PACKAGE;
+    private static final int SDK_VERSION;
+    private static final java.lang.String TAG;
+    private static com.deploygate.sdk.DeployGate sInstance;
+    private boolean mAppIsAuthorized;
+    private boolean mAppIsManaged;
+    private boolean mAppIsStopRequested;
+    private boolean mAppUpdateAvailable;
+    private int mAppUpdateRevision;
+    private int mAppUpdateVersionCode;
+    private java.lang.String mAppUpdateVersionName;
+    private final android.content.Context mApplicationContext;
+    private java.lang.String mAuthor;
+    private final java.util.HashSet mCallbacks;
+    private java.lang.String mExpectedAuthor;
+    private final android.os.Handler mHandler;
+    private java.util.concurrent.CountDownLatch mInitializedLatch;
+    private boolean mIsDeployGateAvailable;
+    private java.lang.Thread mLogcatThread;
+    private com.deploygate.sdk.DeployGate$LogCatTranportWorker mLogcatWorker;
+    private java.lang.String mLoginUsername;
+    private final com.deploygate.service.IDeployGateSdkServiceCallback mRemoteCallback;
+    private com.deploygate.service.IDeployGateSdkService mRemoteService;
+
+    static void <clinit>()
+    {
+        java.lang.String[] $r0;
+
+        nop;
+
+        $r0 = newarray (java.lang.String)[3];
+
+        $r0[0] = "2f97f647645cb762bf5fc1445599a954e6ad76e7";
+
+        $r0[1] = "c1f285f69cc02a397135ed182aa79af53d5d20a1";
+
+        $r0[2] = "234eff4a1600a7aa78bf68adfbb15786e886ae1a";
+
+        <com.deploygate.sdk.DeployGate: java.lang.String[] DEPLOYGATE_FINGERPRINTS> = $r0;
+
+        return;
+    }
+
+    private void <init>(android.content.Context, java.lang.String, com.deploygate.sdk.DeployGateCallback)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        android.content.Context $r1;
+        java.lang.String $r2;
+        com.deploygate.sdk.DeployGateCallback $r3;
+        boolean $z0;
+        com.deploygate.sdk.DeployGate$1 $r4;
+        android.os.Handler $r5;
+        java.util.HashSet $r6;
+        java.util.concurrent.CountDownLatch $r7;
+        null_type varReplacer5908;
+        int varReplacer5909, varReplacer5910;
+
+        nop;
+
+        $r0 := @this: com.deploygate.sdk.DeployGate;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: com.deploygate.sdk.DeployGateCallback;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r4 = new com.deploygate.sdk.DeployGate$1;
+
+        specialinvoke $r4.<com.deploygate.sdk.DeployGate$1: void <init>(com.deploygate.sdk.DeployGate)>($r0);
+
+        $r0.<com.deploygate.sdk.DeployGate: com.deploygate.service.IDeployGateSdkServiceCallback mRemoteCallback> = $r4;
+
+        $r5 = new android.os.Handler;
+
+        specialinvoke $r5.<android.os.Handler: void <init>()>();
+
+        $r0.<com.deploygate.sdk.DeployGate: android.os.Handler mHandler> = $r5;
+
+        $r0.<com.deploygate.sdk.DeployGate: android.content.Context mApplicationContext> = $r1;
+
+        $r6 = new java.util.HashSet;
+
+        specialinvoke $r6.<java.util.HashSet: void <init>()>();
+
+        $r0.<com.deploygate.sdk.DeployGate: java.util.HashSet mCallbacks> = $r6;
+
+        varReplacer5908 = null;
+
+        $r0.<com.deploygate.sdk.DeployGate: java.lang.String mExpectedAuthor> = varReplacer5908;
+
+        specialinvoke $r0.<com.deploygate.sdk.DeployGate: void prepareBroadcastReceiver()>();
+
+        goto label1;
+
+     label1:
+        $r7 = new java.util.concurrent.CountDownLatch;
+
+        varReplacer5909 = 1;
+
+        specialinvoke $r7.<java.util.concurrent.CountDownLatch: void <init>(int)>(varReplacer5909);
+
+        $r0.<com.deploygate.sdk.DeployGate: java.util.concurrent.CountDownLatch mInitializedLatch> = $r7;
+
+        varReplacer5910 = 1;
+
+        $z0 = specialinvoke $r0.<com.deploygate.sdk.DeployGate: boolean initService(boolean)>(varReplacer5910);
+
+        if $z0 != 0 goto label2;
+
+        goto label2;
+
+     label2:
+        return;
+    }
+
+    static java.lang.Thread access$0(com.deploygate.sdk.DeployGate)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        java.lang.Thread r1;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        r1 = $r0.<com.deploygate.sdk.DeployGate: java.lang.Thread mLogcatThread>;
+
+        return r1;
+    }
+
+    static android.content.Context access$1(com.deploygate.sdk.DeployGate)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        android.content.Context r1;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        r1 = $r0.<com.deploygate.sdk.DeployGate: android.content.Context mApplicationContext>;
+
+        return r1;
+    }
+
+    static void access$10(com.deploygate.sdk.DeployGate, java.lang.String)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        java.lang.String $r1;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r0.<com.deploygate.sdk.DeployGate: java.lang.String mAuthor> = $r1;
+
+        return;
+    }
+
+    static android.os.Handler access$11(com.deploygate.sdk.DeployGate)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        android.os.Handler r1;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        r1 = $r0.<com.deploygate.sdk.DeployGate: android.os.Handler mHandler>;
+
+        return r1;
+    }
+
+    static java.util.HashSet access$12(com.deploygate.sdk.DeployGate)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        java.util.HashSet r1;
+
+        nop;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        r1 = $r0.<com.deploygate.sdk.DeployGate: java.util.HashSet mCallbacks>;
+
+        return r1;
+    }
+
+    static void access$13(com.deploygate.sdk.DeployGate, boolean)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.deploygate.sdk.DeployGate: boolean mIsDeployGateAvailable> = $z0;
+
+        return;
+    }
+
+    static java.util.concurrent.CountDownLatch access$14(com.deploygate.sdk.DeployGate)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        java.util.concurrent.CountDownLatch r1;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        r1 = $r0.<com.deploygate.sdk.DeployGate: java.util.concurrent.CountDownLatch mInitializedLatch>;
+
+        return r1;
+    }
+
+    static void access$15(com.deploygate.sdk.DeployGate, boolean)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.deploygate.sdk.DeployGate: boolean mAppUpdateAvailable> = $z0;
+
+        return;
+    }
+
+    static void access$16(com.deploygate.sdk.DeployGate, int)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        int $i0;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        $i0 := @parameter1: int;
+
+        $r0.<com.deploygate.sdk.DeployGate: int mAppUpdateRevision> = $i0;
+
+        return;
+    }
+
+    static void access$17(com.deploygate.sdk.DeployGate, java.lang.String)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        java.lang.String $r1;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r0.<com.deploygate.sdk.DeployGate: java.lang.String mAppUpdateVersionName> = $r1;
+
+        return;
+    }
+
+    static void access$18(com.deploygate.sdk.DeployGate, int)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        int $i0;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        $i0 := @parameter1: int;
+
+        $r0.<com.deploygate.sdk.DeployGate: int mAppUpdateVersionCode> = $i0;
+
+        return;
+    }
+
+    static boolean access$19(com.deploygate.sdk.DeployGate)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        boolean $z0;
+
+        nop;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        $z0 = specialinvoke $r0.<com.deploygate.sdk.DeployGate: boolean isDeployGateAvailable()>();
+
+        return $z0;
+    }
+
+    static com.deploygate.service.IDeployGateSdkService access$2(com.deploygate.sdk.DeployGate)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        com.deploygate.service.IDeployGateSdkService r1;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        r1 = $r0.<com.deploygate.sdk.DeployGate: com.deploygate.service.IDeployGateSdkService mRemoteService>;
+
+        return r1;
+    }
+
+    static void access$20(com.deploygate.sdk.DeployGate, boolean)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        boolean $z0;
+        int varReplacer4426;
+
+        nop;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        $z0 := @parameter1: boolean;
+
+        varReplacer4426 = 0;
+
+        specialinvoke $r0.<com.deploygate.sdk.DeployGate: void bindToService(boolean)>(varReplacer4426);
+
+        return;
+    }
+
+    static void access$21(com.deploygate.sdk.DeployGate, com.deploygate.service.IDeployGateSdkService)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        com.deploygate.service.IDeployGateSdkService $r1;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        $r1 := @parameter1: com.deploygate.service.IDeployGateSdkService;
+
+        $r0.<com.deploygate.sdk.DeployGate: com.deploygate.service.IDeployGateSdkService mRemoteService> = $r1;
+
+        return;
+    }
+
+    static void access$22(com.deploygate.sdk.DeployGate, boolean)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        $z0 := @parameter1: boolean;
+
+        specialinvoke $r0.<com.deploygate.sdk.DeployGate: void requestServiceInit(boolean)>($z0);
+
+        return;
+    }
+
+    static void access$3(com.deploygate.sdk.DeployGate, com.deploygate.sdk.DeployGate$LogCatTranportWorker)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        com.deploygate.sdk.DeployGate$LogCatTranportWorker $r1;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        $r1 := @parameter1: com.deploygate.sdk.DeployGate$LogCatTranportWorker;
+
+        $r0.<com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate$LogCatTranportWorker mLogcatWorker> = $r1;
+
+        return;
+    }
+
+    static com.deploygate.sdk.DeployGate$LogCatTranportWorker access$4(com.deploygate.sdk.DeployGate)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        com.deploygate.sdk.DeployGate$LogCatTranportWorker r1;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        r1 = $r0.<com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate$LogCatTranportWorker mLogcatWorker>;
+
+        return r1;
+    }
+
+    static void access$5(com.deploygate.sdk.DeployGate, java.lang.Thread)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        java.lang.Thread $r1;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        $r1 := @parameter1: java.lang.Thread;
+
+        $r0.<com.deploygate.sdk.DeployGate: java.lang.Thread mLogcatThread> = $r1;
+
+        return;
+    }
+
+    static void access$6(com.deploygate.sdk.DeployGate, boolean)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.deploygate.sdk.DeployGate: boolean mAppIsManaged> = $z0;
+
+        return;
+    }
+
+    static void access$7(com.deploygate.sdk.DeployGate, boolean)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.deploygate.sdk.DeployGate: boolean mAppIsAuthorized> = $z0;
+
+        return;
+    }
+
+    static void access$8(com.deploygate.sdk.DeployGate, boolean)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<com.deploygate.sdk.DeployGate: boolean mAppIsStopRequested> = $z0;
+
+        return;
+    }
+
+    static void access$9(com.deploygate.sdk.DeployGate, java.lang.String)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        java.lang.String $r1;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGate;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r0.<com.deploygate.sdk.DeployGate: java.lang.String mLoginUsername> = $r1;
+
+        return;
+    }
+
+    private void bindToService(boolean)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        boolean $z0;
+        android.content.Intent $r1;
+        com.deploygate.sdk.DeployGate$4 $r2;
+        java.lang.String $r3, varReplacer5925;
+        java.lang.Class $r4;
+        android.content.Context $r5;
+        int varReplacer5924;
+
+        nop;
+
+        $r0 := @this: com.deploygate.sdk.DeployGate;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = new android.content.Intent;
+
+        $r4 = class "Lcom/deploygate/service/IDeployGateSdkService;";
+
+        $r3 = virtualinvoke $r4.<java.lang.Class: java.lang.String getName()>();
+
+        specialinvoke $r1.<android.content.Intent: void <init>(java.lang.String)>($r3);
+
+        varReplacer5925 = "com.deploygate";
+
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent setPackage(java.lang.String)>(varReplacer5925);
+
+        $r5 = $r0.<com.deploygate.sdk.DeployGate: android.content.Context mApplicationContext>;
+
+        $r2 = new com.deploygate.sdk.DeployGate$4;
+
+        specialinvoke $r2.<com.deploygate.sdk.DeployGate$4: void <init>(com.deploygate.sdk.DeployGate,boolean)>($r0, $z0);
+
+        varReplacer5924 = 1;
+
+        virtualinvoke $r5.<android.content.Context: boolean bindService(android.content.Intent,android.content.ServiceConnection,int)>($r1, $r2, varReplacer5924);
+
+        return;
+    }
+
+    public static java.lang.String getAuthorUsername()
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        java.lang.String r1;
+
+        $r0 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        if $r0 == null goto label1;
+
+        staticinvoke <com.deploygate.sdk.DeployGate: void waitForInitialized()>();
+
+        $r0 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        r1 = $r0.<com.deploygate.sdk.DeployGate: java.lang.String mAuthor>;
+
+        return r1;
+
+     label1:
+        return null;
+    }
+
+    private java.lang.String getDeployGatePackageSignature()
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        java.lang.StringBuilder $r1;
+        android.content.Context $r2;
+        android.content.pm.PackageManager $r3;
+        android.content.pm.PackageInfo $r4;
+        android.content.pm.Signature[] $r5;
+        int $i0, $i1, varReplacer5931, varReplacer5932, varReplacer5935, varReplacer5937;
+        java.lang.Throwable $r6, $r11;
+        java.security.MessageDigest $r7;
+        android.content.pm.Signature $r8;
+        byte[] $r9;
+        java.lang.String $r10, varReplacer5934, varReplacer5936, varReplacer5938, varReplacer5939;
+        byte $b2;
+        short $s3;
+        null_type varReplacer5933, varReplacer5940, varReplacer5941, varReplacer5942;
+
+        nop;
+
+        $r0 := @this: com.deploygate.sdk.DeployGate;
+
+        $r2 = $r0.<com.deploygate.sdk.DeployGate: android.content.Context mApplicationContext>;
+
+     label1:
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        varReplacer5936 = "com.deploygate";
+
+        varReplacer5937 = 64;
+
+        $r4 = virtualinvoke $r3.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>(varReplacer5936, varReplacer5937);
+
+     label2:
+        if $r4 == null goto label9;
+
+        $r5 = $r4.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        $i0 = lengthof $r5;
+
+        if $i0 != 0 goto label4;
+
+        varReplacer5940 = null;
+
+        return varReplacer5940;
+
+     label3:
+        $r6 := @caughtexception;
+
+        varReplacer5942 = null;
+
+        return varReplacer5942;
+
+     label4:
+        varReplacer5934 = "SHA1";
+
+        $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5934);
+
+     label5:
+        $r5 = $r4.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        $r8 = $r5[0];
+
+        $r9 = virtualinvoke $r8.<android.content.pm.Signature: byte[] toByteArray()>();
+
+        $r9 = virtualinvoke $r7.<java.security.MessageDigest: byte[] digest(byte[])>($r9);
+
+        $r1 = new java.lang.StringBuilder;
+
+        varReplacer5931 = 40;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(int)>(varReplacer5931);
+
+        $i0 = 0;
+
+     label6:
+        $i1 = lengthof $r9;
+
+        if $i0 < $i1 goto label8;
+
+        $r10 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r10;
+
+     label7:
+        $r11 := @caughtexception;
+
+        varReplacer5938 = "DeployGate";
+
+        varReplacer5939 = "SHA1 is not supported on this platform?";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer5938, varReplacer5939, $r11);
+
+        varReplacer5933 = null;
+
+        return varReplacer5933;
+
+     label8:
+        $b2 = $r9[$i0];
+
+        $s3 = $b2 & 255;
+
+        $i1 = $s3 + 256;
+
+        varReplacer5935 = 16;
+
+        $r10 = staticinvoke <java.lang.Integer: java.lang.String toString(int,int)>($i1, varReplacer5935);
+
+        varReplacer5932 = 1;
+
+        $r10 = virtualinvoke $r10.<java.lang.String: java.lang.String substring(int)>(varReplacer5932);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        $i0 = $i0 + 1;
+
+        goto label6;
+
+     label9:
+        varReplacer5941 = null;
+
+        return varReplacer5941;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label3;
+        catch java.security.NoSuchAlgorithmException from label4 to label5 with label7;
+    }
+
+    static com.deploygate.sdk.DeployGate getInstance()
+    {
+        com.deploygate.sdk.DeployGate r0;
+
+        r0 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        return r0;
+    }
+
+    public static java.lang.String getLoginUsername()
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        java.lang.String r1;
+
+        $r0 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        if $r0 == null goto label1;
+
+        staticinvoke <com.deploygate.sdk.DeployGate: void waitForInitialized()>();
+
+        $r0 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        r1 = $r0.<com.deploygate.sdk.DeployGate: java.lang.String mLoginUsername>;
+
+        return r1;
+
+     label1:
+        return null;
+    }
+
+    private boolean initService(boolean)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        boolean $z0, $z1;
+        java.util.concurrent.CountDownLatch $r1;
+        int varReplacer5913, varReplacer5914, varReplacer5915, varReplacer5918;
+        java.lang.String varReplacer5916, varReplacer5917, varReplacer5919, varReplacer5920;
+
+        nop;
+
+        $r0 := @this: com.deploygate.sdk.DeployGate;
+
+        $z0 := @parameter0: boolean;
+
+        $z1 = specialinvoke $r0.<com.deploygate.sdk.DeployGate: boolean isDeployGateAvailable()>();
+
+        if $z1 == 0 goto label1;
+
+        varReplacer5919 = "DeployGate";
+
+        varReplacer5920 = "DeployGate installation detected. Initializing.";
+
+        staticinvoke <android.util.Log: int v(java.lang.String,java.lang.String)>(varReplacer5919, varReplacer5920);
+
+        varReplacer5913 = 1;
+
+        specialinvoke $r0.<com.deploygate.sdk.DeployGate: void bindToService(boolean)>(varReplacer5913);
+
+        varReplacer5914 = 1;
+
+        return varReplacer5914;
+
+     label1:
+        varReplacer5916 = "DeployGate";
+
+        varReplacer5917 = "DeployGate is not available on this device.";
+
+        staticinvoke <android.util.Log: int v(java.lang.String,java.lang.String)>(varReplacer5916, varReplacer5917);
+
+        $r1 = $r0.<com.deploygate.sdk.DeployGate: java.util.concurrent.CountDownLatch mInitializedLatch>;
+
+        virtualinvoke $r1.<java.util.concurrent.CountDownLatch: void countDown()>();
+
+        varReplacer5918 = 0;
+
+        $r0.<com.deploygate.sdk.DeployGate: boolean mIsDeployGateAvailable> = varReplacer5918;
+
+        virtualinvoke $r0.<com.deploygate.sdk.DeployGate: void callbackDeployGateUnavailable()>();
+
+        varReplacer5915 = 0;
+
+        return varReplacer5915;
+    }
+
+    public static void install(android.app.Application)
+    {
+        android.app.Application $r0;
+        null_type varReplacer5892;
+
+        nop;
+
+        $r0 := @parameter0: android.app.Application;
+
+        varReplacer5892 = null;
+
+        staticinvoke <com.deploygate.sdk.DeployGate: void install(android.app.Application,java.lang.String)>($r0, varReplacer5892);
+
+        return;
+    }
+
+    public static void install(android.app.Application, com.deploygate.sdk.DeployGateCallback)
+    {
+        android.app.Application $r0;
+        com.deploygate.sdk.DeployGateCallback $r1;
+
+        $r0 := @parameter0: android.app.Application;
+
+        $r1 := @parameter1: com.deploygate.sdk.DeployGateCallback;
+
+        staticinvoke <com.deploygate.sdk.DeployGate: void install(android.app.Application,java.lang.String,com.deploygate.sdk.DeployGateCallback)>($r0, null, $r1);
+
+        return;
+    }
+
+    public static void install(android.app.Application, com.deploygate.sdk.DeployGateCallback, boolean)
+    {
+        android.app.Application $r0;
+        com.deploygate.sdk.DeployGateCallback $r1;
+        boolean $z0;
+        null_type varReplacer5897, varReplacer5898;
+        int varReplacer5899;
+
+        nop;
+
+        $r0 := @parameter0: android.app.Application;
+
+        $r1 := @parameter1: com.deploygate.sdk.DeployGateCallback;
+
+        $z0 := @parameter2: boolean;
+
+        varReplacer5897 = null;
+
+        varReplacer5898 = null;
+
+        varReplacer5899 = 0;
+
+        staticinvoke <com.deploygate.sdk.DeployGate: void install(android.app.Application,java.lang.String,com.deploygate.sdk.DeployGateCallback,boolean)>($r0, varReplacer5897, varReplacer5897, varReplacer5899);
+
+        return;
+    }
+
+    public static void install(android.app.Application, java.lang.String)
+    {
+        android.app.Application $r0;
+        java.lang.String $r1;
+        null_type varReplacer5893, varReplacer5894;
+
+        nop;
+
+        $r0 := @parameter0: android.app.Application;
+
+        $r1 := @parameter1: java.lang.String;
+
+        varReplacer5893 = null;
+
+        varReplacer5894 = null;
+
+        staticinvoke <com.deploygate.sdk.DeployGate: void install(android.app.Application,java.lang.String,com.deploygate.sdk.DeployGateCallback)>($r0, varReplacer5893, varReplacer5893);
+
+        return;
+    }
+
+    public static void install(android.app.Application, java.lang.String, com.deploygate.sdk.DeployGateCallback)
+    {
+        android.app.Application $r0;
+        java.lang.String $r1;
+        com.deploygate.sdk.DeployGateCallback $r2;
+        null_type varReplacer5895;
+        int varReplacer5896;
+
+        nop;
+
+        $r0 := @parameter0: android.app.Application;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: com.deploygate.sdk.DeployGateCallback;
+
+        varReplacer5895 = null;
+
+        varReplacer5896 = 0;
+
+        staticinvoke <com.deploygate.sdk.DeployGate: void install(android.app.Application,com.deploygate.sdk.DeployGateCallback,boolean)>($r0, varReplacer5895, varReplacer5896);
+
+        return;
+    }
+
+    public static void install(android.app.Application, java.lang.String, com.deploygate.sdk.DeployGateCallback, boolean)
+    {
+        android.app.Application $r0;
+        java.lang.String $r1, varReplacer5900;
+        com.deploygate.sdk.DeployGateCallback $r2;
+        boolean $z0;
+        com.deploygate.sdk.DeployGate $r3;
+        java.lang.IllegalStateException $r4;
+        android.content.Context $r5;
+        com.deploygate.sdk.DeployGateUncaughtExceptionHandler $r6;
+        java.lang.Thread$UncaughtExceptionHandler $r7;
+        null_type varReplacer5901, varReplacer5902;
+
+        nop;
+
+        $r0 := @parameter0: android.app.Application;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: com.deploygate.sdk.DeployGateCallback;
+
+        $z0 := @parameter3: boolean;
+
+        $r3 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        if $r3 == null goto label1;
+
+        $r4 = new java.lang.IllegalStateException;
+
+        varReplacer5900 = "install already called";
+
+        specialinvoke $r4.<java.lang.IllegalStateException: void <init>(java.lang.String)>(varReplacer5900);
+
+        throw $r4;
+
+     label1:
+        $r5 = virtualinvoke $r0.<android.app.Application: android.content.Context getApplicationContext()>();
+
+        $z0 = staticinvoke <com.deploygate.sdk.DeployGate: boolean isDebuggable(android.content.Context)>($r5);
+
+        if $z0 != 0 goto label2;
+
+        return;
+
+     label2:
+        $r6 = new com.deploygate.sdk.DeployGateUncaughtExceptionHandler;
+
+        $r7 = staticinvoke <java.lang.Thread: java.lang.Thread$UncaughtExceptionHandler getDefaultUncaughtExceptionHandler()>();
+
+        specialinvoke $r6.<com.deploygate.sdk.DeployGateUncaughtExceptionHandler: void <init>(java.lang.Thread$UncaughtExceptionHandler)>($r7);
+
+        staticinvoke <java.lang.Thread: void setDefaultUncaughtExceptionHandler(java.lang.Thread$UncaughtExceptionHandler)>($r6);
+
+        $r3 = new com.deploygate.sdk.DeployGate;
+
+        $r5 = virtualinvoke $r0.<android.app.Application: android.content.Context getApplicationContext()>();
+
+        varReplacer5901 = null;
+
+        varReplacer5902 = null;
+
+        specialinvoke $r3.<com.deploygate.sdk.DeployGate: void <init>(android.content.Context,java.lang.String,com.deploygate.sdk.DeployGateCallback)>($r5, varReplacer5901, varReplacer5901);
+
+        <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance> = $r3;
+
+        return;
+    }
+
+    public static boolean isAuthorized()
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        boolean z0;
+
+        $r0 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        if $r0 == null goto label1;
+
+        staticinvoke <com.deploygate.sdk.DeployGate: void waitForInitialized()>();
+
+        $r0 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        z0 = $r0.<com.deploygate.sdk.DeployGate: boolean mAppIsAuthorized>;
+
+        return z0;
+
+     label1:
+        return 0;
+    }
+
+    private static boolean isDebuggable(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.Throwable $r1;
+        android.content.pm.PackageManager $r2;
+        java.lang.String $r3;
+        android.content.pm.ApplicationInfo $r4;
+        int $i0, varReplacer5905, varReplacer5906, varReplacer5907;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+     label1:
+        $r3 = virtualinvoke $r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        varReplacer5906 = 0;
+
+        $r4 = virtualinvoke $r2.<android.content.pm.PackageManager: android.content.pm.ApplicationInfo getApplicationInfo(java.lang.String,int)>($r3, varReplacer5906);
+
+     label2:
+        $i0 = $r4.<android.content.pm.ApplicationInfo: int flags>;
+
+        $i0 = $i0 & 2;
+
+        if $i0 != 2 goto label4;
+
+        varReplacer5905 = 1;
+
+        return varReplacer5905;
+
+     label3:
+        $r1 := @caughtexception;
+
+     label4:
+        varReplacer5907 = 0;
+
+        return varReplacer5907;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label3;
+    }
+
+    private boolean isDeployGateAvailable()
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        java.lang.String $r1, $r3;
+        java.lang.String[] $r2;
+        int $i0, $i1, varReplacer5921, varReplacer5922, varReplacer5923;
+        boolean $z0;
+
+        nop;
+
+        $r0 := @this: com.deploygate.sdk.DeployGate;
+
+        $r3 = specialinvoke $r0.<com.deploygate.sdk.DeployGate: java.lang.String getDeployGatePackageSignature()>();
+
+        if $r3 != null goto label1;
+
+        varReplacer5922 = 0;
+
+        return varReplacer5922;
+
+     label1:
+        $r2 = <com.deploygate.sdk.DeployGate: java.lang.String[] DEPLOYGATE_FINGERPRINTS>;
+
+        $i0 = lengthof $r2;
+
+        $i1 = 0;
+
+     label2:
+        if $i1 >= $i0 goto label4;
+
+        $r1 = $r2[$i1];
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>($r3);
+
+        if $z0 == 0 goto label3;
+
+        varReplacer5921 = 1;
+
+        return varReplacer5921;
+
+     label3:
+        $i1 = $i1 + 1;
+
+        goto label2;
+
+     label4:
+        varReplacer5923 = 0;
+
+        return varReplacer5923;
+    }
+
+    public static boolean isDeployGateAvaliable()
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        boolean z0;
+
+        $r0 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        if $r0 == null goto label1;
+
+        staticinvoke <com.deploygate.sdk.DeployGate: void waitForInitialized()>();
+
+        $r0 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        z0 = $r0.<com.deploygate.sdk.DeployGate: boolean mIsDeployGateAvailable>;
+
+        return z0;
+
+     label1:
+        return 0;
+    }
+
+    public static boolean isInitialized()
+    {
+        long $l0;
+        com.deploygate.sdk.DeployGate $r0;
+        java.util.concurrent.CountDownLatch $r1;
+        byte $b1;
+
+        $r0 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        if $r0 == null goto label1;
+
+        $r0 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        $r1 = $r0.<com.deploygate.sdk.DeployGate: java.util.concurrent.CountDownLatch mInitializedLatch>;
+
+        $l0 = virtualinvoke $r1.<java.util.concurrent.CountDownLatch: long getCount()>();
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 != 0 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public static boolean isManaged()
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        boolean z0;
+
+        $r0 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        if $r0 == null goto label1;
+
+        staticinvoke <com.deploygate.sdk.DeployGate: void waitForInitialized()>();
+
+        $r0 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        z0 = $r0.<com.deploygate.sdk.DeployGate: boolean mAppIsManaged>;
+
+        return z0;
+
+     label1:
+        return 0;
+    }
+
+    private static boolean isStopRequested()
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        boolean z0;
+
+        $r0 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        if $r0 == null goto label1;
+
+        staticinvoke <com.deploygate.sdk.DeployGate: void waitForInitialized()>();
+
+        $r0 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        z0 = $r0.<com.deploygate.sdk.DeployGate: boolean mAppIsStopRequested>;
+
+        return z0;
+
+     label1:
+        return 0;
+    }
+
+    public static void logDebug(java.lang.String)
+    {
+        java.lang.String $r0;
+        com.deploygate.sdk.DeployGate $r1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        if $r1 == null goto label1;
+
+        $r1 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        virtualinvoke $r1.<com.deploygate.sdk.DeployGate: void sendLog(java.lang.String,java.lang.String)>("debug", $r0);
+
+     label1:
+        return;
+    }
+
+    public static void logError(java.lang.String)
+    {
+        java.lang.String $r0;
+        com.deploygate.sdk.DeployGate $r1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        if $r1 == null goto label1;
+
+        $r1 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        virtualinvoke $r1.<com.deploygate.sdk.DeployGate: void sendLog(java.lang.String,java.lang.String)>("error", $r0);
+
+     label1:
+        return;
+    }
+
+    public static void logInfo(java.lang.String)
+    {
+        java.lang.String $r0;
+        com.deploygate.sdk.DeployGate $r1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        if $r1 == null goto label1;
+
+        $r1 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        virtualinvoke $r1.<com.deploygate.sdk.DeployGate: void sendLog(java.lang.String,java.lang.String)>("info", $r0);
+
+     label1:
+        return;
+    }
+
+    public static void logVerbose(java.lang.String)
+    {
+        java.lang.String $r0;
+        com.deploygate.sdk.DeployGate $r1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        if $r1 == null goto label1;
+
+        $r1 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        virtualinvoke $r1.<com.deploygate.sdk.DeployGate: void sendLog(java.lang.String,java.lang.String)>("verbose", $r0);
+
+     label1:
+        return;
+    }
+
+    public static void logWarn(java.lang.String)
+    {
+        java.lang.String $r0;
+        com.deploygate.sdk.DeployGate $r1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        if $r1 == null goto label1;
+
+        $r1 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        virtualinvoke $r1.<com.deploygate.sdk.DeployGate: void sendLog(java.lang.String,java.lang.String)>("warn", $r0);
+
+     label1:
+        return;
+    }
+
+    private void prepareBroadcastReceiver()
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        android.content.IntentFilter $r1;
+        com.deploygate.sdk.DeployGate$3 $r2;
+        android.content.Context $r3;
+        java.lang.String varReplacer5912;
+
+        nop;
+
+        $r0 := @this: com.deploygate.sdk.DeployGate;
+
+        $r1 = new android.content.IntentFilter;
+
+        varReplacer5912 = "com.deploygate.action.ServiceStarted";
+
+        specialinvoke $r1.<android.content.IntentFilter: void <init>(java.lang.String)>(varReplacer5912);
+
+        $r3 = $r0.<com.deploygate.sdk.DeployGate: android.content.Context mApplicationContext>;
+
+        $r2 = new com.deploygate.sdk.DeployGate$3;
+
+        specialinvoke $r2.<com.deploygate.sdk.DeployGate$3: void <init>(com.deploygate.sdk.DeployGate)>($r0);
+
+        virtualinvoke $r3.<android.content.Context: android.content.Intent registerReceiver(android.content.BroadcastReceiver,android.content.IntentFilter)>($r2, $r1);
+
+        return;
+    }
+
+    public static void refresh()
+    {
+        com.deploygate.sdk.DeployGate $r0;
+
+        $r0 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        if $r0 == null goto label1;
+
+        $r0 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        specialinvoke $r0.<com.deploygate.sdk.DeployGate: void refreshInternal()>();
+
+     label1:
+        return;
+    }
+
+    private void refreshInternal()
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        long $l0;
+        java.util.concurrent.CountDownLatch $r1;
+        byte $b1;
+        com.deploygate.service.IDeployGateSdkService $r2;
+
+        $r0 := @this: com.deploygate.sdk.DeployGate;
+
+        $r1 = $r0.<com.deploygate.sdk.DeployGate: java.util.concurrent.CountDownLatch mInitializedLatch>;
+
+        $l0 = virtualinvoke $r1.<java.util.concurrent.CountDownLatch: long getCount()>();
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 != 0 goto label2;
+
+        $r1 = new java.util.concurrent.CountDownLatch;
+
+        specialinvoke $r1.<java.util.concurrent.CountDownLatch: void <init>(int)>(1);
+
+        $r0.<com.deploygate.sdk.DeployGate: java.util.concurrent.CountDownLatch mInitializedLatch> = $r1;
+
+        $r2 = $r0.<com.deploygate.sdk.DeployGate: com.deploygate.service.IDeployGateSdkService mRemoteService>;
+
+        if $r2 != null goto label1;
+
+        specialinvoke $r0.<com.deploygate.sdk.DeployGate: boolean initService(boolean)>(0);
+
+        return;
+
+     label1:
+        specialinvoke $r0.<com.deploygate.sdk.DeployGate: void requestServiceInit(boolean)>(0);
+
+     label2:
+        return;
+    }
+
+    public static void registerCallback(com.deploygate.sdk.DeployGateCallback, boolean)
+    {
+        com.deploygate.sdk.DeployGateCallback $r0;
+        boolean $z0;
+        com.deploygate.sdk.DeployGate $r1;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGateCallback;
+
+        $z0 := @parameter1: boolean;
+
+        $r1 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        if $r0 == null goto label2;
+
+        $r1 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        specialinvoke $r1.<com.deploygate.sdk.DeployGate: void registerCallbackInternal(com.deploygate.sdk.DeployGateCallback,boolean)>($r0, $z0);
+
+     label2:
+        return;
+    }
+
+    private void registerCallbackInternal(com.deploygate.sdk.DeployGateCallback, boolean)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        com.deploygate.sdk.DeployGateCallback $r1;
+        boolean $z0;
+        java.util.HashSet $r2;
+
+        $r0 := @this: com.deploygate.sdk.DeployGate;
+
+        $r1 := @parameter0: com.deploygate.sdk.DeployGateCallback;
+
+        $z0 := @parameter1: boolean;
+
+        $r2 = $r0.<com.deploygate.sdk.DeployGate: java.util.HashSet mCallbacks>;
+
+        virtualinvoke $r2.<java.util.HashSet: boolean add(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <com.deploygate.sdk.DeployGate: void refresh()>();
+
+     label1:
+        return;
+    }
+
+    private void requestServiceInit(boolean)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        boolean $z0;
+        android.os.Bundle $r1;
+        java.lang.Throwable $r2;
+        java.lang.String $r3;
+        com.deploygate.service.IDeployGateSdkService $r4;
+        com.deploygate.service.IDeployGateSdkServiceCallback $r5;
+        android.content.Context $r6;
+
+        $r0 := @this: com.deploygate.sdk.DeployGate;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = new android.os.Bundle;
+
+        specialinvoke $r1.<android.os.Bundle: void <init>()>();
+
+        virtualinvoke $r1.<android.os.Bundle: void putBoolean(java.lang.String,boolean)>("isBoot", $z0);
+
+        $z0 = virtualinvoke $r0.<com.deploygate.sdk.DeployGate: boolean canLogCat()>();
+
+        virtualinvoke $r1.<android.os.Bundle: void putBoolean(java.lang.String,boolean)>("canLogCat", $z0);
+
+        $r3 = $r0.<com.deploygate.sdk.DeployGate: java.lang.String mExpectedAuthor>;
+
+        virtualinvoke $r1.<android.os.Bundle: void putString(java.lang.String,java.lang.String)>("expectedAuthor", $r3);
+
+        virtualinvoke $r1.<android.os.Bundle: void putInt(java.lang.String,int)>("sdkVersion", 2);
+
+        $r4 = $r0.<com.deploygate.sdk.DeployGate: com.deploygate.service.IDeployGateSdkService mRemoteService>;
+
+        $r5 = $r0.<com.deploygate.sdk.DeployGate: com.deploygate.service.IDeployGateSdkServiceCallback mRemoteCallback>;
+
+        $r6 = $r0.<com.deploygate.sdk.DeployGate: android.content.Context mApplicationContext>;
+
+     label1:
+        $r3 = virtualinvoke $r6.<android.content.Context: java.lang.String getPackageName()>();
+
+        interfaceinvoke $r4.<com.deploygate.service.IDeployGateSdkService: void init(com.deploygate.service.IDeployGateSdkServiceCallback,java.lang.String,android.os.Bundle)>($r5, $r3, $r1);
+
+     label2:
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("DeployGate", "DeployGate service failed to be initialized.");
+
+        return;
+
+        catch android.os.RemoteException from label1 to label2 with label3;
+    }
+
+    public static void unregisterCallback(com.deploygate.sdk.DeployGateCallback)
+    {
+        com.deploygate.sdk.DeployGateCallback $r0;
+        com.deploygate.sdk.DeployGate $r1;
+        java.util.HashSet $r2;
+
+        $r0 := @parameter0: com.deploygate.sdk.DeployGateCallback;
+
+        $r1 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        if $r0 == null goto label2;
+
+        $r1 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        $r2 = $r1.<com.deploygate.sdk.DeployGate: java.util.HashSet mCallbacks>;
+
+        virtualinvoke $r2.<java.util.HashSet: boolean remove(java.lang.Object)>($r0);
+
+     label2:
+        return;
+    }
+
+    private static void waitForInitialized()
+    {
+        java.lang.Throwable $r0;
+        com.deploygate.sdk.DeployGate $r1;
+        java.util.concurrent.CountDownLatch $r2;
+
+        $r1 = <com.deploygate.sdk.DeployGate: com.deploygate.sdk.DeployGate sInstance>;
+
+        $r2 = $r1.<com.deploygate.sdk.DeployGate: java.util.concurrent.CountDownLatch mInitializedLatch>;
+
+     label1:
+        virtualinvoke $r2.<java.util.concurrent.CountDownLatch: void await()>();
+
+     label2:
+        return;
+
+     label3:
+        $r0 := @caughtexception;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("DeployGate", "Interrupted while waiting initialization");
+
+        return;
+
+        catch java.lang.InterruptedException from label1 to label2 with label3;
+    }
+
+    void callbackDeployGateUnavailable()
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        android.os.Handler $r1;
+        com.deploygate.sdk.DeployGate$2 $r2;
+
+        nop;
+
+        $r0 := @this: com.deploygate.sdk.DeployGate;
+
+        $r1 = $r0.<com.deploygate.sdk.DeployGate: android.os.Handler mHandler>;
+
+        $r2 = new com.deploygate.sdk.DeployGate$2;
+
+        specialinvoke $r2.<com.deploygate.sdk.DeployGate$2: void <init>(com.deploygate.sdk.DeployGate)>($r0);
+
+        virtualinvoke $r1.<android.os.Handler: boolean post(java.lang.Runnable)>($r2);
+
+        return;
+    }
+
+    protected boolean canLogCat()
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        int $i0;
+        android.content.Context $r1;
+        android.content.pm.PackageManager $r2;
+        java.lang.String $r3;
+
+        $r0 := @this: com.deploygate.sdk.DeployGate;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 16 goto label1;
+
+        return 1;
+
+     label1:
+        $r1 = $r0.<com.deploygate.sdk.DeployGate: android.content.Context mApplicationContext>;
+
+        $r2 = virtualinvoke $r1.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r1 = $r0.<com.deploygate.sdk.DeployGate: android.content.Context mApplicationContext>;
+
+        $r3 = virtualinvoke $r1.<android.content.Context: java.lang.String getPackageName()>();
+
+        $i0 = virtualinvoke $r2.<android.content.pm.PackageManager: int checkPermission(java.lang.String,java.lang.String)>("android.permission.READ_LOGS", $r3);
+
+        if $i0 == 0 goto label2;
+
+        return 0;
+
+     label2:
+        return 1;
+    }
+
+    void sendCrashReport(java.lang.Throwable)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        java.lang.Throwable $r1, $r2;
+        android.os.Bundle $r3, r8;
+        com.deploygate.service.IDeployGateSdkService $r4;
+        android.content.Context $r5;
+        java.lang.String $r6;
+        java.lang.StringBuilder $r7, r9;
+        android.os.RemoteException r10;
+
+        $r0 := @this: com.deploygate.sdk.DeployGate;
+
+        $r1 := @parameter0: java.lang.Throwable;
+
+        $r4 = $r0.<com.deploygate.sdk.DeployGate: com.deploygate.service.IDeployGateSdkService mRemoteService>;
+
+        if $r4 != null goto label1;
+
+        return;
+
+     label1:
+        r8 = new android.os.Bundle;
+
+        $r3 = r8;
+
+        specialinvoke r8.<android.os.Bundle: void <init>()>();
+
+        virtualinvoke $r3.<android.os.Bundle: void putSerializable(java.lang.String,java.io.Serializable)>("exception", $r1);
+
+        $r4 = $r0.<com.deploygate.sdk.DeployGate: com.deploygate.service.IDeployGateSdkService mRemoteService>;
+
+        $r5 = $r0.<com.deploygate.sdk.DeployGate: android.content.Context mApplicationContext>;
+
+     label2:
+        $r6 = virtualinvoke $r5.<android.content.Context: java.lang.String getPackageName()>();
+
+        interfaceinvoke $r4.<com.deploygate.service.IDeployGateSdkService: void sendEvent(java.lang.String,java.lang.String,android.os.Bundle)>($r6, "reportCrash", $r3);
+
+     label3:
+        return;
+
+     label4:
+        $r2 := @caughtexception;
+
+        r9 = new java.lang.StringBuilder;
+
+        specialinvoke r9.<java.lang.StringBuilder: void <init>(java.lang.String)>("failed to send crash report: ");
+
+        r10 = (android.os.RemoteException) $r2;
+
+        $r6 = virtualinvoke r10.<android.os.RemoteException: java.lang.String getMessage()>();
+
+        $r7 = virtualinvoke r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("DeployGate", $r6);
+
+        return;
+
+        catch android.os.RemoteException from label2 to label3 with label4;
+    }
+
+    void sendLog(java.lang.String, java.lang.String)
+    {
+        com.deploygate.sdk.DeployGate $r0;
+        java.lang.String $r1, $r2;
+        java.lang.Throwable $r3;
+        android.os.Bundle $r4, r8;
+        com.deploygate.service.IDeployGateSdkService $r5;
+        android.content.Context $r6;
+        java.lang.StringBuilder $r7, r9;
+        android.os.RemoteException r10;
+
+        $r0 := @this: com.deploygate.sdk.DeployGate;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r5 = $r0.<com.deploygate.sdk.DeployGate: com.deploygate.service.IDeployGateSdkService mRemoteService>;
+
+        if $r5 != null goto label1;
+
+        return;
+
+     label1:
+        r8 = new android.os.Bundle;
+
+        $r4 = r8;
+
+        specialinvoke r8.<android.os.Bundle: void <init>()>();
+
+        virtualinvoke $r4.<android.os.Bundle: void putSerializable(java.lang.String,java.io.Serializable)>("log", $r2);
+
+        virtualinvoke $r4.<android.os.Bundle: void putSerializable(java.lang.String,java.io.Serializable)>("logType", $r1);
+
+        $r5 = $r0.<com.deploygate.sdk.DeployGate: com.deploygate.service.IDeployGateSdkService mRemoteService>;
+
+        $r6 = $r0.<com.deploygate.sdk.DeployGate: android.content.Context mApplicationContext>;
+
+     label2:
+        $r1 = virtualinvoke $r6.<android.content.Context: java.lang.String getPackageName()>();
+
+        interfaceinvoke $r5.<com.deploygate.service.IDeployGateSdkService: void sendEvent(java.lang.String,java.lang.String,android.os.Bundle)>($r1, "customLog", $r4);
+
+     label3:
+        return;
+
+     label4:
+        $r3 := @caughtexception;
+
+        r9 = new java.lang.StringBuilder;
+
+        specialinvoke r9.<java.lang.StringBuilder: void <init>(java.lang.String)>("failed to send custom log: ");
+
+        r10 = (android.os.RemoteException) $r3;
+
+        $r1 = virtualinvoke r10.<android.os.RemoteException: java.lang.String getMessage()>();
+
+        $r7 = virtualinvoke r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>("DeployGate", $r1);
+
+        return;
+
+        catch android.os.RemoteException from label2 to label3 with label4;
+    }
+}

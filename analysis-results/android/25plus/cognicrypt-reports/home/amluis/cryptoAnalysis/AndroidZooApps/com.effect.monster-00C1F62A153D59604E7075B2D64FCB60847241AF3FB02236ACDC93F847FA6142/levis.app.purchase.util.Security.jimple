@@ -1,0 +1,255 @@
+public class levis.app.purchase.util.Security extends java.lang.Object
+{
+
+    public void <init>()
+    {
+        levis.app.purchase.util.Security $r0;
+
+        $r0 := @this: levis.app.purchase.util.Security;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static java.security.PublicKey a(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer2469, varReplacer2470, varReplacer2471, varReplacer2472, varReplacer2473;
+        java.security.KeyFactory $r1;
+        java.security.spec.X509EncodedKeySpec $r2;
+        byte[] $r3;
+        java.security.PublicKey $r4;
+        java.lang.Throwable $r5, $r7;
+        java.lang.RuntimeException $r6;
+        java.lang.IllegalArgumentException $r8;
+        levis.app.purchase.util.Base64DecoderException $r9;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer2471 = "RSA";
+
+        $r1 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer2471);
+
+     label2:
+        $r2 = new java.security.spec.X509EncodedKeySpec;
+
+     label3:
+        $r3 = staticinvoke <levis.app.purchase.util.Base64: byte[] a(java.lang.String)>($r0);
+
+        specialinvoke $r2.<java.security.spec.X509EncodedKeySpec: void <init>(byte[])>($r3);
+
+        $r4 = virtualinvoke $r1.<java.security.KeyFactory: java.security.PublicKey generatePublic(java.security.spec.KeySpec)>($r2);
+
+     label4:
+        return $r4;
+
+     label5:
+        $r5 := @caughtexception;
+
+        $r6 = new java.lang.RuntimeException;
+
+        specialinvoke $r6.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r5);
+
+        throw $r6;
+
+     label6:
+        $r7 := @caughtexception;
+
+        varReplacer2472 = "IABUtil/Security";
+
+        varReplacer2473 = "Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer2472, varReplacer2473);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r7);
+
+        throw $r8;
+
+     label7:
+        $r9 := @caughtexception;
+
+        varReplacer2469 = "IABUtil/Security";
+
+        varReplacer2470 = "Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer2469, varReplacer2470);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r9);
+
+        throw $r8;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label5;
+        catch java.security.spec.InvalidKeySpecException from label1 to label2 with label6;
+        catch java.security.spec.InvalidKeySpecException from label3 to label4 with label6;
+        catch levis.app.purchase.util.Base64DecoderException from label1 to label2 with label7;
+        catch levis.app.purchase.util.Base64DecoderException from label3 to label4 with label7;
+    }
+
+    public static boolean a(java.lang.String, java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, $r2, varReplacer2449, varReplacer2450;
+        boolean $z0;
+        java.security.PublicKey $r3;
+        int varReplacer2451;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r0);
+
+        if $z0 != 0 goto label1;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 != 0 goto label1;
+
+        $r3 = staticinvoke <levis.app.purchase.util.Security: java.security.PublicKey a(java.lang.String)>($r0);
+
+        $z0 = staticinvoke <levis.app.purchase.util.Security: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)>($r3, $r1, $r2);
+
+        return $z0;
+
+     label1:
+        varReplacer2449 = "IABUtil/Security";
+
+        varReplacer2450 = "Purchase verification failed: missing data.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer2449, varReplacer2450);
+
+        varReplacer2451 = 0;
+
+        return varReplacer2451;
+    }
+
+    private static boolean a(java.security.PublicKey, java.lang.String, java.lang.String)
+    {
+        java.security.PublicKey $r0;
+        java.lang.String $r1, $r2, varReplacer2453, varReplacer2454, varReplacer2456, varReplacer2457, varReplacer2459, varReplacer2460, varReplacer2461, varReplacer2462, varReplacer2463, varReplacer2466, varReplacer2467;
+        java.security.Signature $r3;
+        byte[] $r4;
+        boolean $z0;
+        java.lang.Throwable $r5, $r6, $r7;
+        levis.app.purchase.util.Base64DecoderException $r8;
+        int varReplacer2452, varReplacer2455, varReplacer2458, varReplacer2464, varReplacer2465, varReplacer2468;
+
+        nop;
+
+        $r0 := @parameter0: java.security.PublicKey;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+     label1:
+        varReplacer2459 = "SHA1withRSA";
+
+        $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer2459);
+
+        virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0);
+
+        $r4 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r3.<java.security.Signature: void update(byte[])>($r4);
+
+        $r4 = staticinvoke <levis.app.purchase.util.Base64: byte[] a(java.lang.String)>($r2);
+
+        $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4);
+
+     label2:
+        if $z0 == 0 goto label3;
+
+        varReplacer2452 = 1;
+
+        return varReplacer2452;
+
+     label3:
+        varReplacer2456 = "IABUtil/Security";
+
+        varReplacer2457 = "Signature verification failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer2456, varReplacer2457);
+
+     label4:
+        varReplacer2468 = 0;
+
+        return varReplacer2468;
+
+     label5:
+        $r5 := @caughtexception;
+
+        varReplacer2453 = "IABUtil/Security";
+
+        varReplacer2454 = "NoSuchAlgorithmException.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer2453, varReplacer2454);
+
+        varReplacer2464 = 0;
+
+        return varReplacer2464;
+
+     label6:
+        $r6 := @caughtexception;
+
+        varReplacer2466 = "IABUtil/Security";
+
+        varReplacer2467 = "Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer2466, varReplacer2467);
+
+        varReplacer2458 = 0;
+
+        return varReplacer2458;
+
+     label7:
+        $r7 := @caughtexception;
+
+        varReplacer2462 = "IABUtil/Security";
+
+        varReplacer2463 = "Signature exception.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer2462, varReplacer2463);
+
+        varReplacer2455 = 0;
+
+        return varReplacer2455;
+
+     label8:
+        $r8 := @caughtexception;
+
+        varReplacer2460 = "IABUtil/Security";
+
+        varReplacer2461 = "Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer2460, varReplacer2461);
+
+        varReplacer2465 = 0;
+
+        return varReplacer2465;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label5;
+        catch java.security.InvalidKeyException from label1 to label2 with label6;
+        catch java.security.InvalidKeyException from label3 to label4 with label6;
+        catch java.security.SignatureException from label1 to label2 with label7;
+        catch java.security.SignatureException from label3 to label4 with label7;
+        catch levis.app.purchase.util.Base64DecoderException from label1 to label2 with label8;
+        catch levis.app.purchase.util.Base64DecoderException from label3 to label4 with label8;
+    }
+}

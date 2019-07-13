@@ -1,0 +1,127 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: r10
+		Type: java.security.SecureRandom
+		Statement: specialinvoke r10.<java.security.SecureRandom: void <init>()>()
+		Method: <com.facebook.ads.internal.util.g: void b()>
+		SHA-256: c49baf8b2831a2be9aa3b8b2b456003f3087b1f5f20fd8411803ca8aa53c7285
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.unity3d.ads.android.UnityAdsUtils: java.lang.String Md5(java.lang.String)>
+		SHA-256: c1aaa01502d984ac29fe74c3ad6cd3934fd83543f2e575f2ded336e401c8a9ba
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4181)
+		Method: <com.unity3d.ads.android.UnityAdsUtils: java.lang.String Md5(java.lang.String)>
+		SHA-256: d101dd5f2eb2bbb3520822cc01735b72e91d0fb9311dd46acf70e9c0111ef7f0
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.KeyStore
+		Statement: $r1 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r0)
+		Method: <shared_presage.com.loopj.android.http.MySSLSocketFactory: java.security.KeyStore getKeystore()>
+		SHA-256: dcef7a7bfef72014085a819893da3ed2ca9574467701dd493dd2b162153c050d
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1001)
+		Method: <shared_presage.com.loopj.android.http.MySSLSocketFactory: void <init>(java.security.KeyStore)>
+		SHA-256: a293966ea10ca2a695d9945f3e61dbff5fbf8868f1f684c67367899aa420a857
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1876)
+		Method: <com.facebook.ads.internal.util.g: void b()>
+		SHA-256: 82285df6131ba2ab648a67a1bed3feb4f98b6084c8404592718b076cbd04bc65
+		Secure: false
+
+Findings in Java Class: com.facebook.ads.internal.util.g
+
+	 in Method: void b()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1877, r12, $r3)
+
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #82285df6131ba2ab648a67a1bed3feb4f98b6084c8404592718b076cbd04bc65)
+			First parameter (with value "SSL") should be any of {TLS}
+			at statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1876)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1877, r12, $r3)
+
+
+Findings in Java Class: com.unity3d.ads.android.UnityAdsUtils
+
+	 in Method: java.lang.String Md5(java.lang.String)
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #d101dd5f2eb2bbb3520822cc01735b72e91d0fb9311dd46acf70e9c0111ef7f0)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4181)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #d101dd5f2eb2bbb3520822cc01735b72e91d0fb9311dd46acf70e9c0111ef7f0)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r1 = null
+
+
+Findings in Java Class: shared_presage.com.loopj.android.http.MySSLSocketFactory
+
+	 in Method: void <init>(java.security.KeyStore)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1002, r5, varReplacer1002)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1002, r5, varReplacer1002)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 2
+	RequiredPredicateError: 4
+	ConstraintError: 1
+=====================================================================

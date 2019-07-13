@@ -1,0 +1,88 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r8.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1)
+		Method: <com.amazon.device.ads.DebugProperties: byte[] decrypt(byte[])>
+		SHA-256: 78aa0526a800bf71c5e314ba5fcd40400c911438f10b199aac7ad9c52d88a29b
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2125)
+		Method: <com.chartboost.sdk.Libraries.b: byte[] a(byte[])>
+		SHA-256: b45720cdc09177ba3d99d11ef9deb3e72260df23a296fdb1f988448003873acc
+		Secure: true
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.chartboost.sdk.Libraries.b: byte[] a(byte[])>
+		SHA-256: c0cb1f3950d1c303a878b272d33cc6b233c283f11853d4c605a6892d1b773e17
+		Secure: true
+	Object:
+		Variable: $r8
+		Type: javax.crypto.Cipher
+		Statement: $r8 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer321)
+		Method: <com.amazon.device.ads.DebugProperties: byte[] decrypt(byte[])>
+		SHA-256: c65aaf3b481adc8015135bd9f0d4a24f76b92c954f393da36af044bdc958abfa
+		Secure: false
+
+Findings in Java Class: com.amazon.device.ads.DebugProperties
+
+	 in Method: byte[] decrypt(byte[])
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer325, $r7)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #c65aaf3b481adc8015135bd9f0d4a24f76b92c954f393da36af044bdc958abfa)
+			First parameter (with value "RSA") should be any of {OAEPwithSHA-512andMGF1Padding, OAEPwithSHA-224andMGF1Padding, OAEPPadding, NoPadding, PKCS1Padding, OAEPwithSHA-256andMGF1Padding, OAEPwithSHA-1andMGF1Padding, OAEPwithSHA-384andMGF1Padding}
+			at statement: $r8 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer321)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #c65aaf3b481adc8015135bd9f0d4a24f76b92c954f393da36af044bdc958abfa)
+			First parameter (with value "RSA") should be any of {OAEPwithSHA-512andMGF1Padding, OAEPwithSHA-224andMGF1Padding, OAEPPadding, NoPadding, PKCS1Padding, OAEPwithSHA-256andMGF1Padding, OAEPwithSHA-1andMGF1Padding, OAEPwithSHA-384andMGF1Padding}
+			at statement: $r8 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer321)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
+	RequiredPredicateError: 1
+=====================================================================

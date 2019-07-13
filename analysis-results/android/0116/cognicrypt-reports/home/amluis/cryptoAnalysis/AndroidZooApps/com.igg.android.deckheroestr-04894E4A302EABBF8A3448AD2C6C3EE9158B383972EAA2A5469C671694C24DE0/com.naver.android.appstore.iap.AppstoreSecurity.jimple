@@ -1,0 +1,286 @@
+public class com.naver.android.appstore.iap.AppstoreSecurity extends java.lang.Object
+{
+    private static final java.lang.String KEY_ALGORITHM;
+    private static final java.lang.String SIGNATURE_ALGORITHM;
+    private static final java.lang.String TAG;
+
+    public void <init>()
+    {
+        com.naver.android.appstore.iap.AppstoreSecurity $r0;
+
+        $r0 := @this: com.naver.android.appstore.iap.AppstoreSecurity;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static java.security.PublicKey generatePublicKey(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer6287, varReplacer6288, varReplacer6289, varReplacer6290, varReplacer6291;
+        byte[] $r1;
+        java.security.KeyFactory $r2;
+        java.security.spec.X509EncodedKeySpec $r3;
+        java.security.PublicKey $r4;
+        java.lang.Throwable $r5, $r7;
+        java.lang.RuntimeException $r6;
+        java.lang.IllegalArgumentException $r8;
+        com.naver.android.appstore.iap.Base64DecoderException $r9;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        $r1 = staticinvoke <com.naver.android.appstore.iap.Base64: byte[] decode(java.lang.String)>($r0);
+
+        varReplacer6287 = "RSA";
+
+        $r2 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer6287);
+
+     label2:
+        $r3 = new java.security.spec.X509EncodedKeySpec;
+
+     label3:
+        specialinvoke $r3.<java.security.spec.X509EncodedKeySpec: void <init>(byte[])>($r1);
+
+        $r4 = virtualinvoke $r2.<java.security.KeyFactory: java.security.PublicKey generatePublic(java.security.spec.KeySpec)>($r3);
+
+     label4:
+        return $r4;
+
+     label5:
+        $r5 := @caughtexception;
+
+        $r6 = new java.lang.RuntimeException;
+
+        specialinvoke $r6.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r5);
+
+        throw $r6;
+
+     label6:
+        $r7 := @caughtexception;
+
+        varReplacer6290 = "NIAP/AppstoreSecurity";
+
+        varReplacer6291 = "[Appstore Security] Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer6290, varReplacer6291, $r7);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r7);
+
+        throw $r8;
+
+     label7:
+        $r9 := @caughtexception;
+
+        varReplacer6288 = "NIAP/AppstoreSecurity";
+
+        varReplacer6289 = "[Appstore Security] Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer6288, varReplacer6289, $r9);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r9);
+
+        throw $r8;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label5;
+        catch java.security.spec.InvalidKeySpecException from label1 to label2 with label6;
+        catch java.security.spec.InvalidKeySpecException from label3 to label4 with label6;
+        catch com.naver.android.appstore.iap.Base64DecoderException from label1 to label2 with label7;
+        catch com.naver.android.appstore.iap.Base64DecoderException from label3 to label4 with label7;
+    }
+
+    public static boolean verify(java.lang.String, java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, $r2, varReplacer6248, varReplacer6249, varReplacer6252, varReplacer6253, varReplacer6254, varReplacer6255;
+        java.lang.Exception $r3;
+        boolean $z0;
+        java.security.PublicKey $r4;
+        int varReplacer6250, varReplacer6251, varReplacer6256, varReplacer6257;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        if $r1 != null goto label1;
+
+        varReplacer6248 = "NIAP/AppstoreSecurity";
+
+        varReplacer6249 = "\uacb0\uacfc \ub370\uc774\ud130\uac00 \ube44\uc5b4(null) \uc788\uc2b5\ub2c8\ub2e4.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer6248, varReplacer6249);
+
+        varReplacer6251 = 0;
+
+        return varReplacer6251;
+
+     label1:
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 != 0 goto label5;
+
+     label2:
+        $r4 = staticinvoke <com.naver.android.appstore.iap.AppstoreSecurity: java.security.PublicKey generatePublicKey(java.lang.String)>($r0);
+
+        $z0 = staticinvoke <com.naver.android.appstore.iap.AppstoreSecurity: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>($r4, $r1, $r2);
+
+     label3:
+        if $z0 != 0 goto label5;
+
+        varReplacer6252 = "NIAP/AppstoreSecurity";
+
+        varReplacer6253 = "[Appstore Security] verification failed!";
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>(varReplacer6252, varReplacer6253);
+
+        varReplacer6256 = 0;
+
+        return varReplacer6256;
+
+     label4:
+        $r3 := @caughtexception;
+
+        varReplacer6254 = "NIAP/AppstoreSecurity";
+
+        varReplacer6255 = "appstore purchase verification exception has occured!";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer6254, varReplacer6255, $r3);
+
+        varReplacer6257 = 0;
+
+        return varReplacer6257;
+
+     label5:
+        varReplacer6250 = 1;
+
+        return varReplacer6250;
+
+        catch java.lang.Exception from label2 to label3 with label4;
+    }
+
+    private static boolean verify(java.security.PublicKey, java.lang.String, java.lang.String)
+    {
+        java.security.PublicKey $r0;
+        java.lang.String $r1, $r2, varReplacer6270, varReplacer6272, varReplacer6273, varReplacer6278, varReplacer6279, varReplacer6280, varReplacer6281, varReplacer6283, varReplacer6284, varReplacer6285, varReplacer6286;
+        java.security.Signature $r3;
+        byte[] $r4;
+        boolean $z0;
+        java.lang.Throwable $r5, $r6, $r7;
+        com.naver.android.appstore.iap.Base64DecoderException $r8;
+        int varReplacer6271, varReplacer6274, varReplacer6275, varReplacer6276, varReplacer6277, varReplacer6282;
+
+        nop;
+
+        $r0 := @parameter0: java.security.PublicKey;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+     label1:
+        varReplacer6270 = "SHA1withRSA";
+
+        $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer6270);
+
+        virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0);
+
+        $r4 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r3.<java.security.Signature: void update(byte[])>($r4);
+
+        $r4 = staticinvoke <com.naver.android.appstore.iap.Base64: byte[] decode(java.lang.String)>($r2);
+
+        $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4);
+
+     label2:
+        if $z0 != 0 goto label5;
+
+     label3:
+        varReplacer6280 = "NIAP/AppstoreSecurity";
+
+        varReplacer6281 = "[Appstore Security] verification failed!";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer6280, varReplacer6281);
+
+     label4:
+        varReplacer6276 = 0;
+
+        return varReplacer6276;
+
+     label5:
+        varReplacer6282 = 1;
+
+        return varReplacer6282;
+
+     label6:
+        $r5 := @caughtexception;
+
+        varReplacer6283 = "NIAP/AppstoreSecurity";
+
+        varReplacer6284 = "[Appstore Security] NoSuchAlgorithmException.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer6283, varReplacer6284, $r5);
+
+        varReplacer6277 = 0;
+
+        return varReplacer6277;
+
+     label7:
+        $r6 := @caughtexception;
+
+        varReplacer6272 = "NIAP/AppstoreSecurity";
+
+        varReplacer6273 = "[Appstore Security] Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer6272, varReplacer6273, $r6);
+
+        varReplacer6274 = 0;
+
+        return varReplacer6274;
+
+     label8:
+        $r7 := @caughtexception;
+
+        varReplacer6278 = "NIAP/AppstoreSecurity";
+
+        varReplacer6279 = "[Appstore Security] Signature exception.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer6278, varReplacer6279, $r7);
+
+        varReplacer6271 = 0;
+
+        return varReplacer6271;
+
+     label9:
+        $r8 := @caughtexception;
+
+        varReplacer6285 = "NIAP/AppstoreSecurity";
+
+        varReplacer6286 = "[Appstore Security] Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer6285, varReplacer6286, $r8);
+
+        varReplacer6275 = 0;
+
+        return varReplacer6275;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label6;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label6;
+        catch java.security.InvalidKeyException from label1 to label2 with label7;
+        catch java.security.InvalidKeyException from label3 to label4 with label7;
+        catch java.security.SignatureException from label1 to label2 with label8;
+        catch java.security.SignatureException from label3 to label4 with label8;
+        catch com.naver.android.appstore.iap.Base64DecoderException from label1 to label2 with label9;
+        catch com.naver.android.appstore.iap.Base64DecoderException from label3 to label4 with label9;
+    }
+}

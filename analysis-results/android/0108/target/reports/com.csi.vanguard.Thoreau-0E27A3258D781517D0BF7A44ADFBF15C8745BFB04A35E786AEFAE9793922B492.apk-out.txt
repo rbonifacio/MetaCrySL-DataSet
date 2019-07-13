@@ -1,0 +1,113 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.csi.vanguard.Thoreau-0E27A3258D781517D0BF7A44ADFBF15C8745BFB04A35E786AEFAE9793922B492.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: javax.crypto.Cipher
+		Statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer12528)
+		Method: <com.csi.vanguard.utils.RSAAlgoConst: byte[] encryptWithPublicKey(byte[],java.security.PublicKey)>
+		SHA-256: b5236bf75d1cddddb86572b757052f3deb0df4b217f17f9f4d0df2a990cb932d
+		Secure: false
+	Object:
+		Variable: $r7
+		Type: java.lang.String
+		Statement: specialinvoke $r1.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r16, $r7)
+		Method: <com.microsoft.windowsazure.messaging.Connection: java.lang.String generateAuthToken(java.lang.String)>
+		SHA-256: 8806ff3adc05f4c2f9a9d933bfd55481b4ee9a00db4a6591d9807db7577995a7
+		Secure: false
+	Object:
+		Variable: $r13
+		Type: byte[]
+		Statement: $r13 = virtualinvoke $r14.<javax.crypto.Mac: byte[] doFinal(byte[])>($r13)
+		Method: <com.microsoft.windowsazure.messaging.Connection: java.lang.String generateAuthToken(java.lang.String)>
+		SHA-256: ebbd13338a06aad827a829e3381ff1c8bdccd590b8ba4174cf43e82fcad48a6f
+		Secure: true
+	Object:
+		Variable: $r15
+		Type: javax.crypto.Mac
+		Statement: $r15 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer11865)
+		Method: <com.microsoft.windowsazure.messaging.Connection: java.lang.String generateAuthToken(java.lang.String)>
+		SHA-256: e80d3075627c3cb909fcbe23d11b43c5ffcecfc526f1f485a259c00f89e8823f
+		Secure: true
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r2.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r0)
+		Method: <com.csi.vanguard.utils.RSAAlgoConst: byte[] encryptWithPublicKey(byte[],java.security.PublicKey)>
+		SHA-256: b788078ce610e84c4c1813de36416e14e3dfefde7d878d84c7feab14ccffc398
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r1.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r16, $r7)
+		Method: <com.microsoft.windowsazure.messaging.Connection: java.lang.String generateAuthToken(java.lang.String)>
+		SHA-256: 29e31e4d03f3025574f54a19510d6e74b8a22040ab4d776c55e0e6eb9c399d50
+		Secure: false
+
+Findings in Java Class: com.csi.vanguard.utils.RSAAlgoConst
+
+	 in Method: byte[] encryptWithPublicKey(byte[],java.security.PublicKey)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #b5236bf75d1cddddb86572b757052f3deb0df4b217f17f9f4d0df2a990cb932d)
+			First parameter (with value "RSA/None/PKCS1PADDING") should be any of RSA/{ECB, Empty String}
+			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer12528)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #b5236bf75d1cddddb86572b757052f3deb0df4b217f17f9f4d0df2a990cb932d)
+			First parameter (with value "RSA/None/PKCS1PADDING") should be any of RSA/{ECB, Empty String}
+			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer12528)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r2.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer12529, $r1)
+
+
+Findings in Java Class: com.microsoft.windowsazure.messaging.Connection
+
+	 in Method: java.lang.String generateAuthToken(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r1.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r16, $r7)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 2
+	ConstraintError: 2
+=====================================================================

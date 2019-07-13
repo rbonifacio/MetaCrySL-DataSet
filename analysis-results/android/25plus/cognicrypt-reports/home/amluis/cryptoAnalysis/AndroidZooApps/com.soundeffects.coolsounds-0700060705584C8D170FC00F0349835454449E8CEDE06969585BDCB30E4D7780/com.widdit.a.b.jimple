@@ -1,0 +1,340 @@
+public class com.widdit.a.b extends java.lang.Object
+{
+    private final java.lang.String a;
+    private java.io.File b;
+    private java.lang.String c;
+
+    public void <init>(java.lang.String)
+    {
+        com.widdit.a.b $r0;
+        java.lang.String $r1;
+
+        nop;
+
+        $r0 := @this: com.widdit.a.b;
+
+        $r1 := @parameter0: java.lang.String;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<com.widdit.a.b: java.lang.String a> = $r1;
+
+        return;
+    }
+
+    private static java.lang.String a(java.security.MessageDigest)
+    {
+        java.security.MessageDigest $r0;
+        java.lang.StringBuffer $r1;
+        byte[] $r2;
+        int $i0, $i1, varReplacer7219;
+        byte $b2;
+        short $s3;
+        java.lang.String $r3, varReplacer7220, varReplacer7221, varReplacer7222;
+        java.lang.StringBuilder $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.security.MessageDigest;
+
+        $r2 = virtualinvoke $r0.<java.security.MessageDigest: byte[] digest()>();
+
+        $r1 = new java.lang.StringBuffer;
+
+        specialinvoke $r1.<java.lang.StringBuffer: void <init>()>();
+
+        $i0 = 0;
+
+     label1:
+        $i1 = lengthof $r2;
+
+        if $i0 >= $i1 goto label4;
+
+        $b2 = $r2[$i0];
+
+        $s3 = $b2 & 255;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s3);
+
+     label2:
+        $i1 = virtualinvoke $r3.<java.lang.String: int length()>();
+
+        if $i1 >= 2 goto label3;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer7220 = "0";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7220);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        goto label2;
+
+     label3:
+        virtualinvoke $r1.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>($r3);
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label4:
+        $r3 = virtualinvoke $r1.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        $r2 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        $r3 = new java.lang.String;
+
+        varReplacer7219 = 0;
+
+        $r2 = staticinvoke <android.util.Base64: byte[] encode(byte[],int)>($r2, varReplacer7219);
+
+        specialinvoke $r3.<java.lang.String: void <init>(byte[])>($r2);
+
+        varReplacer7221 = "\n";
+
+        varReplacer7222 = "";
+
+        $r3 = virtualinvoke $r3.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer7221, varReplacer7222);
+
+        return $r3;
+    }
+
+    private static void a(java.io.File, java.lang.String, java.security.MessageDigest)
+    {
+        java.io.File $r0;
+        java.lang.String $r1;
+        java.security.MessageDigest $r2;
+        java.io.FileOutputStream $r3;
+        java.net.URL $r4;
+        java.net.URLConnection $r5;
+        java.net.HttpURLConnection $r6;
+        java.io.InputStream $r7;
+        byte[] $r8;
+        int $i0, varReplacer7223, varReplacer7224, varReplacer7225, varReplacer7226;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.security.MessageDigest;
+
+        $r3 = new java.io.FileOutputStream;
+
+        specialinvoke $r3.<java.io.FileOutputStream: void <init>(java.io.File)>($r0);
+
+        $r4 = new java.net.URL;
+
+        specialinvoke $r4.<java.net.URL: void <init>(java.lang.String)>($r1);
+
+        $r5 = virtualinvoke $r4.<java.net.URL: java.net.URLConnection openConnection()>();
+
+        $r6 = (java.net.HttpURLConnection) $r5;
+
+        varReplacer7225 = 40000;
+
+        virtualinvoke $r6.<java.net.HttpURLConnection: void setConnectTimeout(int)>(varReplacer7225);
+
+        varReplacer7226 = 60000;
+
+        virtualinvoke $r6.<java.net.HttpURLConnection: void setReadTimeout(int)>(varReplacer7226);
+
+        $r7 = virtualinvoke $r6.<java.net.HttpURLConnection: java.io.InputStream getInputStream()>();
+
+        $r8 = newarray (byte)[4096];
+
+     label1:
+        $i0 = virtualinvoke $r7.<java.io.InputStream: int read(byte[])>($r8);
+
+        if $i0 == -1 goto label2;
+
+        varReplacer7224 = 0;
+
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r8, varReplacer7224, $i0);
+
+        varReplacer7223 = 0;
+
+        virtualinvoke $r3.<java.io.OutputStream: void write(byte[],int,int)>($r8, varReplacer7223, $i0);
+
+        goto label1;
+
+     label2:
+        virtualinvoke $r3.<java.io.OutputStream: void flush()>();
+
+        virtualinvoke $r3.<java.io.OutputStream: void close()>();
+
+        virtualinvoke $r6.<java.net.HttpURLConnection: void disconnect()>();
+
+        return;
+    }
+
+    public java.lang.String a()
+    {
+        com.widdit.a.b $r0;
+        java.lang.String r1;
+
+        nop;
+
+        $r0 := @this: com.widdit.a.b;
+
+        r1 = $r0.<com.widdit.a.b: java.lang.String c>;
+
+        return r1;
+    }
+
+    public boolean a(int)
+    {
+        com.widdit.a.b $r0;
+        int $i0, varReplacer7208, varReplacer7209, varReplacer7215, varReplacer7216;
+        java.security.MessageDigest $r1;
+        java.io.File $r2;
+        java.lang.String $r3, varReplacer7210, varReplacer7211, varReplacer7212, varReplacer7213, varReplacer7217, varReplacer7218;
+        java.lang.Throwable $r4, $r5, $r8;
+        java.lang.StringBuilder $r6, r9;
+        java.lang.Class $r7;
+        java.io.IOException r10;
+        null_type varReplacer7214;
+
+        nop;
+
+        $r0 := @this: com.widdit.a.b;
+
+        $i0 := @parameter0: int;
+
+     label01:
+        varReplacer7212 = "MD5";
+
+        $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7212);
+
+     label02:
+        varReplacer7213 = "temp";
+
+        varReplacer7214 = null;
+
+        $r2 = staticinvoke <java.io.File: java.io.File createTempFile(java.lang.String,java.lang.String)>(varReplacer7213, varReplacer7214);
+
+     label03:
+        $r0.<com.widdit.a.b: java.io.File b> = $r2;
+
+     label04:
+        $r2 = $r0.<com.widdit.a.b: java.io.File b>;
+
+        $r3 = $r0.<com.widdit.a.b: java.lang.String a>;
+
+     label05:
+        staticinvoke <com.widdit.a.b: void a(java.io.File,java.lang.String,java.security.MessageDigest)>($r2, $r3, $r1);
+
+     label06:
+        $r3 = staticinvoke <com.widdit.a.b: java.lang.String a(java.security.MessageDigest)>($r1);
+
+        $r0.<com.widdit.a.b: java.lang.String c> = $r3;
+
+        varReplacer7216 = 1;
+
+        return varReplacer7216;
+
+     label07:
+        $r4 := @caughtexception;
+
+        varReplacer7208 = 0;
+
+        return varReplacer7208;
+
+     label08:
+        $r5 := @caughtexception;
+
+        r9 = new java.lang.StringBuilder;
+
+        specialinvoke r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r5.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r3 = virtualinvoke $r7.<java.lang.Class: java.lang.String getSimpleName()>();
+
+        $r6 = virtualinvoke r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer7210 = " while creating temp file : ";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7210);
+
+        r10 = (java.io.IOException) $r5;
+
+        $r3 = virtualinvoke r10.<java.io.IOException: java.lang.String getMessage()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer7218 = "HomeBaseSDK";
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>(varReplacer7218, $r3);
+
+        varReplacer7209 = 0;
+
+        return varReplacer7209;
+
+     label09:
+        $r8 := @caughtexception;
+
+        r9 = new java.lang.StringBuilder;
+
+        specialinvoke r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r8.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r3 = virtualinvoke $r7.<java.lang.Class: java.lang.String getSimpleName()>();
+
+        $r6 = virtualinvoke r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer7217 = " while downloading code jar : ";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7217);
+
+        r10 = (java.io.IOException) $r8;
+
+        $r3 = virtualinvoke r10.<java.io.IOException: java.lang.String getMessage()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer7211 = "HomeBaseSDK";
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>(varReplacer7211, $r3);
+
+        if $i0 >= 1 goto label10;
+
+        varReplacer7215 = 0;
+
+        return varReplacer7215;
+
+     label10:
+        $i0 = $i0 + -1;
+
+        goto label04;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label07;
+        catch java.io.IOException from label02 to label03 with label08;
+        catch java.io.IOException from label05 to label06 with label09;
+    }
+
+    public java.io.File b()
+    {
+        com.widdit.a.b $r0;
+        java.io.File r1;
+
+        nop;
+
+        $r0 := @this: com.widdit.a.b;
+
+        r1 = $r0.<com.widdit.a.b: java.io.File b>;
+
+        return r1;
+    }
+}

@@ -1,0 +1,197 @@
+public class com.fmj.android.security.StringEncrypter extends java.lang.Object
+{
+    private javax.crypto.spec.IvParameterSpec initalVector;
+    private javax.crypto.spec.SecretKeySpec key;
+    private javax.crypto.Cipher rijndael;
+
+    public void <init>(java.lang.String, java.lang.String) throws java.lang.Exception
+    {
+        com.fmj.android.security.StringEncrypter $r0;
+        java.lang.String $r1, $r2, varReplacer7634, varReplacer7635, varReplacer7636, varReplacer7637, varReplacer7638, varReplacer7639, varReplacer7640, varReplacer7641, varReplacer7642;
+        boolean $z0;
+        java.lang.Exception $r3;
+        javax.crypto.Cipher $r4;
+        java.security.MessageDigest $r5;
+        javax.crypto.spec.SecretKeySpec $r6;
+        byte[] $r7;
+        javax.crypto.spec.IvParameterSpec $r8;
+
+        nop;
+
+        $r0 := @this: com.fmj.android.security.StringEncrypter;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        if $r1 == null goto label1;
+
+        varReplacer7637 = "";
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer7637);
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        $r3 = new java.lang.Exception;
+
+        varReplacer7640 = "The key can not be null or an empty string.";
+
+        specialinvoke $r3.<java.lang.Exception: void <init>(java.lang.String)>(varReplacer7640);
+
+        throw $r3;
+
+     label2:
+        if $r2 == null goto label3;
+
+        varReplacer7638 = "";
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer7638);
+
+        if $z0 == 0 goto label4;
+
+     label3:
+        $r3 = new java.lang.Exception;
+
+        varReplacer7634 = "The initial vector can not be null or an empty string.";
+
+        specialinvoke $r3.<java.lang.Exception: void <init>(java.lang.String)>(varReplacer7634);
+
+        throw $r3;
+
+     label4:
+        varReplacer7639 = "AES/CBC/PKCS5Padding";
+
+        $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7639);
+
+        $r0.<com.fmj.android.security.StringEncrypter: javax.crypto.Cipher rijndael> = $r4;
+
+        varReplacer7636 = "MD5";
+
+        $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7636);
+
+        $r6 = new javax.crypto.spec.SecretKeySpec;
+
+        varReplacer7635 = "UTF8";
+
+        $r7 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer7635);
+
+        $r7 = virtualinvoke $r5.<java.security.MessageDigest: byte[] digest(byte[])>($r7);
+
+        varReplacer7642 = "AES";
+
+        specialinvoke $r6.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r7, varReplacer7642);
+
+        $r0.<com.fmj.android.security.StringEncrypter: javax.crypto.spec.SecretKeySpec key> = $r6;
+
+        $r8 = new javax.crypto.spec.IvParameterSpec;
+
+        varReplacer7641 = "UTF8";
+
+        $r7 = virtualinvoke $r2.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer7641);
+
+        $r7 = virtualinvoke $r5.<java.security.MessageDigest: byte[] digest(byte[])>($r7);
+
+        specialinvoke $r8.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r7);
+
+        $r0.<com.fmj.android.security.StringEncrypter: javax.crypto.spec.IvParameterSpec initalVector> = $r8;
+
+        return;
+    }
+
+    public java.lang.String decrypt(java.lang.String) throws java.lang.Exception
+    {
+        com.fmj.android.security.StringEncrypter $r0;
+        java.lang.String $r1;
+        javax.crypto.spec.SecretKeySpec $r2;
+        javax.crypto.spec.IvParameterSpec $r3;
+        boolean $z0;
+        java.lang.Exception $r4;
+        javax.crypto.Cipher $r5;
+        byte[] $r6;
+
+        $r0 := @this: com.fmj.android.security.StringEncrypter;
+
+        $r1 := @parameter0: java.lang.String;
+
+        if $r1 == null goto label1;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("");
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        $r4 = new java.lang.Exception;
+
+        specialinvoke $r4.<java.lang.Exception: void <init>(java.lang.String)>("The cipher string can not be null or an empty string.");
+
+        throw $r4;
+
+     label2:
+        $r5 = $r0.<com.fmj.android.security.StringEncrypter: javax.crypto.Cipher rijndael>;
+
+        $r2 = $r0.<com.fmj.android.security.StringEncrypter: javax.crypto.spec.SecretKeySpec key>;
+
+        $r3 = $r0.<com.fmj.android.security.StringEncrypter: javax.crypto.spec.IvParameterSpec initalVector>;
+
+        virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(2, $r2, $r3);
+
+        $r6 = staticinvoke <com.fmj.android.net.Base64Encoder: byte[] decode(java.lang.String)>($r1);
+
+        $r5 = $r0.<com.fmj.android.security.StringEncrypter: javax.crypto.Cipher rijndael>;
+
+        $r6 = virtualinvoke $r5.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6);
+
+        $r1 = new java.lang.String;
+
+        specialinvoke $r1.<java.lang.String: void <init>(byte[],java.lang.String)>($r6, "UTF8");
+
+        return $r1;
+    }
+
+    public java.lang.String encrypt(java.lang.String) throws java.lang.Exception
+    {
+        com.fmj.android.security.StringEncrypter $r0;
+        javax.crypto.spec.SecretKeySpec $r1;
+        javax.crypto.spec.IvParameterSpec $r2;
+        java.lang.String $r3, varReplacer7644;
+        javax.crypto.Cipher $r4;
+        byte[] $r5;
+        int varReplacer7643;
+
+        nop;
+
+        $r0 := @this: com.fmj.android.security.StringEncrypter;
+
+        $r3 := @parameter0: java.lang.String;
+
+        if $r3 != null goto label1;
+
+        $r3 = "";
+
+     label1:
+        $r4 = $r0.<com.fmj.android.security.StringEncrypter: javax.crypto.Cipher rijndael>;
+
+        $r1 = $r0.<com.fmj.android.security.StringEncrypter: javax.crypto.spec.SecretKeySpec key>;
+
+        $r2 = $r0.<com.fmj.android.security.StringEncrypter: javax.crypto.spec.IvParameterSpec initalVector>;
+
+        varReplacer7643 = 1;
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7643, $r1, $r2);
+
+        varReplacer7644 = "UTF8";
+
+        $r5 = virtualinvoke $r3.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer7644);
+
+        $r4 = $r0.<com.fmj.android.security.StringEncrypter: javax.crypto.Cipher rijndael>;
+
+        $r5 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r5);
+
+        $r3 = staticinvoke <com.fmj.android.net.Base64Encoder: java.lang.String encode(byte[])>($r5);
+
+        return $r3;
+    }
+}

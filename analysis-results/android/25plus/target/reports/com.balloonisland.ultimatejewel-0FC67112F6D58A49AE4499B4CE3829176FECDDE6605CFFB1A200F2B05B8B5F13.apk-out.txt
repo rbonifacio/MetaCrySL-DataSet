@@ -1,0 +1,100 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.balloonisland.ultimatejewel-0FC67112F6D58A49AE4499B4CE3829176FECDDE6605CFFB1A200F2B05B8B5F13.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer278)
+		Method: <com.mopub.common.util.Utils: java.lang.String sha1(java.lang.String)>
+		SHA-256: 3db219d2ecf2aa8a3efe03819457111bb0fdf58c09d52ec30f0c0698d809ebf2
+		Secure: true
+	Object:
+		Variable: $r9
+		Type: byte[]
+		Statement: $r9 = virtualinvoke $r10.<java.security.MessageDigest: byte[] digest(byte[])>($r9)
+		Method: <com.balloonisland.ultimatejewel.UltimateJewel: void checkKey()>
+		SHA-256: 8a92b1836f57cae6128914cbca45ef536b0b4948ed58be208fd593cd4671ae66
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.mopub.common.util.Utils: java.lang.String sha1(java.lang.String)>
+		SHA-256: b1475ecb277cf44c18e504f1be84657ccb3a6b602605d56eb56e04862a5c2552
+		Secure: true
+	Object:
+		Variable: $r11
+		Type: java.security.MessageDigest
+		Statement: $r11 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1417)
+		Method: <com.balloonisland.ultimatejewel.UltimateJewel: void checkKey()>
+		SHA-256: db472ac4bc70f051ac1cf5582c08962370700482f427cc39b847da12053a9f29
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2158)
+		Method: <com.facebook.internal.Utility: java.lang.String md5hash(java.lang.String)>
+		SHA-256: 20d4b9f9336de26d7bd8c73e531682f2b37dd08b72984f942e7da924505a42e4
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.facebook.internal.Utility: java.lang.String md5hash(java.lang.String)>
+		SHA-256: 2927e1a5cb224287b03f6dd515d016a63eb5cb0704288180ae31d42a6182fe4b
+		Secure: true
+
+Findings in Java Class: com.balloonisland.ultimatejewel.UltimateJewel
+
+	 in Method: void checkKey()
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #db472ac4bc70f051ac1cf5582c08962370700482f427cc39b847da12053a9f29)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r10 = $r11
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #db472ac4bc70f051ac1cf5582c08962370700482f427cc39b847da12053a9f29)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to update, java.security.MessageDigest: byte[] digest(byte[])
+			at statement: $r9 = virtualinvoke $r10.<java.security.MessageDigest: byte[] digest(byte[])>($r9)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 2
+=====================================================================

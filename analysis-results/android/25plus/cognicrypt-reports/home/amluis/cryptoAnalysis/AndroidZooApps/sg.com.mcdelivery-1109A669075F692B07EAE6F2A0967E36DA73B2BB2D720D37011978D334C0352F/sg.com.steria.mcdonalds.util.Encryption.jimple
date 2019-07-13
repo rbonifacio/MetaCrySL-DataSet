@@ -1,0 +1,419 @@
+public class sg.com.steria.mcdonalds.util.Encryption extends java.lang.Object
+{
+    static final char[] HEX_TABLE;
+    private java.lang.String algorithm;
+    private int base64Mode;
+    private java.lang.String charsetName;
+
+    static void <clinit>()
+    {
+        char[] $r0;
+
+        nop;
+
+        $r0 = newarray (char)[16];
+
+        $r0[0] = 48;
+
+        $r0[1] = 49;
+
+        $r0[2] = 50;
+
+        $r0[3] = 51;
+
+        $r0[4] = 52;
+
+        $r0[5] = 53;
+
+        $r0[6] = 54;
+
+        $r0[7] = 55;
+
+        $r0[8] = 56;
+
+        $r0[9] = 57;
+
+        $r0[10] = 65;
+
+        $r0[11] = 66;
+
+        $r0[12] = 67;
+
+        $r0[13] = 68;
+
+        $r0[14] = 69;
+
+        $r0[15] = 70;
+
+        <sg.com.steria.mcdonalds.util.Encryption: char[] HEX_TABLE> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        sg.com.steria.mcdonalds.util.Encryption $r0;
+        java.lang.String varReplacer1049, varReplacer1050;
+        int varReplacer1051;
+
+        nop;
+
+        $r0 := @this: sg.com.steria.mcdonalds.util.Encryption;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer1049 = "UTF8";
+
+        $r0.<sg.com.steria.mcdonalds.util.Encryption: java.lang.String charsetName> = varReplacer1049;
+
+        varReplacer1050 = "DES";
+
+        $r0.<sg.com.steria.mcdonalds.util.Encryption: java.lang.String algorithm> = varReplacer1050;
+
+        varReplacer1051 = 0;
+
+        $r0.<sg.com.steria.mcdonalds.util.Encryption: int base64Mode> = varReplacer1051;
+
+        return;
+    }
+
+    protected static java.lang.String hex(byte[])
+    {
+        byte[] $r0;
+        java.lang.StringBuffer $r1;
+        java.lang.String $r2;
+        int $i0, $i1;
+        char[] $r3;
+        byte $b2;
+        char $c3;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 = new java.lang.StringBuffer;
+
+        $i0 = lengthof $r0;
+
+        $i0 = $i0 * 2;
+
+        specialinvoke $r1.<java.lang.StringBuffer: void <init>(int)>($i0);
+
+        $i0 = 0;
+
+     label1:
+        $i1 = lengthof $r0;
+
+        if $i0 >= $i1 goto label2;
+
+        $r3 = <sg.com.steria.mcdonalds.util.Encryption: char[] HEX_TABLE>;
+
+        $b2 = $r0[$i0];
+
+        $b2 = $b2 >> 4;
+
+        $b2 = $b2 & 15;
+
+        $c3 = $r3[$b2];
+
+        virtualinvoke $r1.<java.lang.StringBuffer: java.lang.StringBuffer append(char)>($c3);
+
+        $r3 = <sg.com.steria.mcdonalds.util.Encryption: char[] HEX_TABLE>;
+
+        $b2 = $r0[$i0];
+
+        $b2 = $b2 & 15;
+
+        $c3 = $r3[$b2];
+
+        virtualinvoke $r1.<java.lang.StringBuffer: java.lang.StringBuffer append(char)>($c3);
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label2:
+        $r2 = virtualinvoke $r1.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        return $r2;
+    }
+
+    public java.lang.String decrypt(java.lang.String, java.lang.String)
+    {
+        sg.com.steria.mcdonalds.util.Encryption $r0;
+        java.lang.String $r1, $r2;
+        int $i0, varReplacer1054;
+        byte[] $r3, $r5;
+        javax.crypto.spec.DESKeySpec $r4;
+        javax.crypto.SecretKeyFactory $r6;
+        javax.crypto.SecretKey $r7;
+        javax.crypto.Cipher $r8;
+        java.lang.Exception $r9;
+        null_type varReplacer1052, varReplacer1053;
+
+        nop;
+
+        $r0 := @this: sg.com.steria.mcdonalds.util.Encryption;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        if $r1 == null goto label1;
+
+        if $r2 != null goto label2;
+
+     label1:
+        varReplacer1052 = null;
+
+        return varReplacer1052;
+
+     label2:
+        $i0 = $r0.<sg.com.steria.mcdonalds.util.Encryption: int base64Mode>;
+
+        $r3 = staticinvoke <android.util.Base64: byte[] decode(java.lang.String,int)>($r2, $i0);
+
+     label3:
+        $r4 = new javax.crypto.spec.DESKeySpec;
+
+     label4:
+        $r2 = $r0.<sg.com.steria.mcdonalds.util.Encryption: java.lang.String charsetName>;
+
+        $r5 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>($r2);
+
+        specialinvoke $r4.<javax.crypto.spec.DESKeySpec: void <init>(byte[])>($r5);
+
+        $r1 = $r0.<sg.com.steria.mcdonalds.util.Encryption: java.lang.String algorithm>;
+
+        $r6 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>($r1);
+
+        $r7 = virtualinvoke $r6.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r4);
+
+        $r1 = $r0.<sg.com.steria.mcdonalds.util.Encryption: java.lang.String algorithm>;
+
+        $r8 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>($r1);
+
+        varReplacer1054 = 2;
+
+        virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1054, $r7);
+
+        $r3 = virtualinvoke $r8.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r3);
+
+     label5:
+        $r1 = new java.lang.String;
+
+     label6:
+        specialinvoke $r1.<java.lang.String: void <init>(byte[])>($r3);
+
+     label7:
+        return $r1;
+
+     label8:
+        $r9 := @caughtexception;
+
+        varReplacer1053 = null;
+
+        return varReplacer1053;
+
+        catch java.lang.Exception from label2 to label3 with label8;
+        catch java.lang.Exception from label4 to label5 with label8;
+        catch java.lang.Exception from label6 to label7 with label8;
+    }
+
+    public java.lang.String encrypt(java.lang.String, java.lang.String)
+    {
+        sg.com.steria.mcdonalds.util.Encryption $r0;
+        java.lang.String $r1, $r2, $r4;
+        javax.crypto.spec.DESKeySpec $r3;
+        byte[] $r5;
+        javax.crypto.SecretKeyFactory $r6;
+        javax.crypto.SecretKey $r7;
+        javax.crypto.Cipher $r8;
+        int $i0, varReplacer1058;
+        java.lang.Exception $r9;
+        null_type varReplacer1059, varReplacer1060;
+
+        nop;
+
+        $r0 := @this: sg.com.steria.mcdonalds.util.Encryption;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        if $r1 == null goto label5;
+
+        if $r2 != null goto label1;
+
+        varReplacer1060 = null;
+
+        return varReplacer1060;
+
+     label1:
+        $r3 = new javax.crypto.spec.DESKeySpec;
+
+     label2:
+        $r4 = $r0.<sg.com.steria.mcdonalds.util.Encryption: java.lang.String charsetName>;
+
+        $r5 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>($r4);
+
+        specialinvoke $r3.<javax.crypto.spec.DESKeySpec: void <init>(byte[])>($r5);
+
+        $r1 = $r0.<sg.com.steria.mcdonalds.util.Encryption: java.lang.String algorithm>;
+
+        $r6 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>($r1);
+
+        $r7 = virtualinvoke $r6.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r3);
+
+        $r1 = $r0.<sg.com.steria.mcdonalds.util.Encryption: java.lang.String charsetName>;
+
+        $r5 = virtualinvoke $r2.<java.lang.String: byte[] getBytes(java.lang.String)>($r1);
+
+        $r1 = $r0.<sg.com.steria.mcdonalds.util.Encryption: java.lang.String algorithm>;
+
+        $r8 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>($r1);
+
+        varReplacer1058 = 1;
+
+        virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1058, $r7);
+
+        $r5 = virtualinvoke $r8.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r5);
+
+        $i0 = $r0.<sg.com.steria.mcdonalds.util.Encryption: int base64Mode>;
+
+        $r1 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r5, $i0);
+
+     label3:
+        return $r1;
+
+     label4:
+        $r9 := @caughtexception;
+
+     label5:
+        varReplacer1059 = null;
+
+        return varReplacer1059;
+
+        catch java.lang.Exception from label2 to label3 with label4;
+    }
+
+    public java.lang.String encryptCustomerId()
+    {
+        sg.com.steria.mcdonalds.util.Encryption $r0;
+        java.lang.String $r1, $r4, $r5, varReplacer6187, varReplacer6188;
+        sg.com.steria.mcdonalds.dataholder.UserSessionDataHolder $r2;
+        sg.com.steria.wos.rests.v2.data.business.CustomerInfo $r3;
+        byte[] $r6;
+        java.lang.Exception $r7;
+        int varReplacer6186;
+
+        nop;
+
+        $r0 := @this: sg.com.steria.mcdonalds.util.Encryption;
+
+        $r1 = "";
+
+     label1:
+        $r2 = staticinvoke <sg.com.steria.mcdonalds.dataholder.UserSessionDataHolder: sg.com.steria.mcdonalds.dataholder.UserSessionDataHolder instance()>();
+
+        $r3 = virtualinvoke $r2.<sg.com.steria.mcdonalds.dataholder.UserSessionDataHolder: sg.com.steria.wos.rests.v2.data.business.CustomerInfo getCustomerInfo()>();
+
+        $r4 = virtualinvoke $r3.<sg.com.steria.wos.rests.v2.data.business.CustomerInfo: java.lang.String getUserName()>();
+
+     label2:
+        $r5 = <sg.com.steria.mcdonalds.util.Constants: java.lang.String UTF8>;
+
+     label3:
+        $r6 = virtualinvoke $r4.<java.lang.String: byte[] getBytes(java.lang.String)>($r5);
+
+        varReplacer6186 = 0;
+
+        $r4 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r6, varReplacer6186);
+
+     label4:
+        $r1 = $r4;
+
+     label5:
+        varReplacer6187 = "\\r|\\n";
+
+        varReplacer6188 = "";
+
+        $r4 = virtualinvoke $r4.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>(varReplacer6187, varReplacer6188);
+
+     label6:
+        return $r4;
+
+     label7:
+        $r7 := @caughtexception;
+
+        return $r1;
+
+        catch java.lang.Exception from label1 to label2 with label7;
+        catch java.lang.Exception from label3 to label4 with label7;
+        catch java.lang.Exception from label5 to label6 with label7;
+    }
+
+    public java.lang.String sign()
+    {
+        sg.com.steria.mcdonalds.util.Encryption $r0;
+        byte[] $r1, $r6;
+        java.security.MessageDigest $r2;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r4, $r5, varReplacer6189, varReplacer6190;
+        java.lang.Exception $r7;
+
+        nop;
+
+        $r0 := @this: sg.com.steria.mcdonalds.util.Encryption;
+
+        $r1 = null;
+
+     label1:
+        varReplacer6189 = "MD5";
+
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6189);
+
+     label2:
+        $r3 = new java.lang.StringBuilder;
+
+     label3:
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer6190 = "N5F41769";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer6190);
+
+        $r4 = virtualinvoke $r0.<sg.com.steria.mcdonalds.util.Encryption: java.lang.String encryptCustomerId()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.String: java.lang.String toString()>();
+
+     label4:
+        $r5 = <sg.com.steria.mcdonalds.util.Constants: java.lang.String UTF8>;
+
+     label5:
+        $r6 = virtualinvoke $r4.<java.lang.String: byte[] getBytes(java.lang.String)>($r5);
+
+        $r6 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r6);
+
+     label6:
+        $r1 = $r6;
+
+     label7:
+        $r4 = staticinvoke <sg.com.steria.mcdonalds.util.Encryption: java.lang.String hex(byte[])>($r1);
+
+        return $r4;
+
+     label8:
+        $r7 := @caughtexception;
+
+        goto label7;
+
+        catch java.lang.Exception from label1 to label2 with label8;
+        catch java.lang.Exception from label3 to label4 with label8;
+        catch java.lang.Exception from label5 to label6 with label8;
+    }
+}

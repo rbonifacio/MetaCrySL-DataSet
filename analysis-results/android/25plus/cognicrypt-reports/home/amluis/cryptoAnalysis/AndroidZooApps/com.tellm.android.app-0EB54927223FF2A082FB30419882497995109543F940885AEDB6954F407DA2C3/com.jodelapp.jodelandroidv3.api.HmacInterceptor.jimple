@@ -1,0 +1,742 @@
+public class com.jodelapp.jodelandroidv3.api.HmacInterceptor extends java.lang.Object implements com.jodelapp.jodelandroidv3.api.IHmacInterceptor
+{
+    private static final java.lang.String API_VERSION;
+    private static final java.lang.String CONFIG_HMAC_ENABLED;
+    private static final java.lang.String CONFIG_SERVER_TIMESTAMP_THRESHOLD;
+    private static final long CONFIG_SERVER_TIMESTAMP_THRESHOLD_DEFAULT;
+    private static final long CONFIG_SERVER_TIMESTAMP_THRESHOLD_MAX;
+    private static final long CONFIG_SERVER_TIMESTAMP_THRESHOLD_MIN;
+    private static final org.joda.time.format.DateTimeFormatter DATE_TIME_FORMATTER;
+    private static final java.lang.String SEPARATOR;
+    private static final java.lang.String TAG;
+    private static final java.lang.String UTF8;
+    private final java.lang.String clientType;
+    private final com.rubylight.android.config.rest.Config config;
+    private final int port;
+    private final java.lang.String saltHash;
+    private final com.jodelapp.jodelandroidv3.model.Storage storage;
+    private long timeDiff;
+
+    static void <clinit>()
+    {
+        org.joda.time.format.DateTimeFormatter $r0;
+        java.util.concurrent.TimeUnit $r1;
+        long $l0, varReplacer7997;
+        java.lang.String varReplacer7996;
+
+        nop;
+
+        $r0 = staticinvoke <org.joda.time.format.ISODateTimeFormat: org.joda.time.format.DateTimeFormatter aeJ()>();
+
+        $r0 = virtualinvoke $r0.<org.joda.time.format.DateTimeFormatter: org.joda.time.format.DateTimeFormatter aej()>();
+
+        <com.jodelapp.jodelandroidv3.api.HmacInterceptor: org.joda.time.format.DateTimeFormatter DATE_TIME_FORMATTER> = $r0;
+
+        $r1 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit DAYS>;
+
+        varReplacer7997 = 1L;
+
+        $l0 = virtualinvoke $r1.<java.util.concurrent.TimeUnit: long toSeconds(long)>(varReplacer7997);
+
+        <com.jodelapp.jodelandroidv3.api.HmacInterceptor: long CONFIG_SERVER_TIMESTAMP_THRESHOLD_MAX> = $l0;
+
+        varReplacer7996 = "hmac";
+
+        staticinvoke <java.lang.System: void loadLibrary(java.lang.String)>(varReplacer7996);
+
+        return;
+    }
+
+    public void <init>(android.content.Context, com.rubylight.android.config.rest.Config, com.jodelapp.jodelandroidv3.model.Storage, java.lang.String)
+    {
+        com.jodelapp.jodelandroidv3.api.HmacInterceptor $r0;
+        android.content.Context $r1;
+        com.rubylight.android.config.rest.Config $r2;
+        com.jodelapp.jodelandroidv3.model.Storage $r3;
+        java.lang.String $r4, $r5, varReplacer8116;
+        int $i0;
+        long $l1;
+
+        nop;
+
+        $r0 := @this: com.jodelapp.jodelandroidv3.api.HmacInterceptor;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: com.rubylight.android.config.rest.Config;
+
+        $r3 := @parameter2: com.jodelapp.jodelandroidv3.model.Storage;
+
+        $r4 := @parameter3: java.lang.String;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: com.rubylight.android.config.rest.Config config> = $r2;
+
+        $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: com.jodelapp.jodelandroidv3.model.Storage storage> = $r3;
+
+        $r5 = staticinvoke <com.jodelapp.jodelandroidv3.api.HmacInterceptor: java.lang.String getClientType()>();
+
+        $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: java.lang.String clientType> = $r5;
+
+        varReplacer8116 = "https://api.go-tellm.com:443/api";
+
+        $i0 = staticinvoke <com.jodelapp.jodelandroidv3.api.HmacInterceptor: int getPort(java.lang.String)>(varReplacer8116);
+
+        $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: int port> = $i0;
+
+        $r4 = staticinvoke <com.jodelapp.jodelandroidv3.api.HmacInterceptor: java.lang.String calculateSaltHash(android.content.Context)>($r1);
+
+        $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: java.lang.String saltHash> = $r4;
+
+        $l1 = virtualinvoke $r3.<com.jodelapp.jodelandroidv3.model.Storage: long Nz()>();
+
+        $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: long timeDiff> = $l1;
+
+        specialinvoke $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: void init()>();
+
+        return;
+    }
+
+    private static void appendBody(java.lang.StringBuilder, com.squareup.okhttp.Request)
+    {
+        java.lang.StringBuilder $r0;
+        com.squareup.okhttp.Request $r1;
+        okio.Buffer $r2;
+        com.squareup.okhttp.RequestBody $r3;
+        java.lang.String $r4;
+        java.lang.Throwable $r5;
+
+        $r0 := @parameter0: java.lang.StringBuilder;
+
+        $r1 := @parameter1: com.squareup.okhttp.Request;
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("%");
+
+        $r3 = virtualinvoke $r1.<com.squareup.okhttp.Request: com.squareup.okhttp.RequestBody Uq()>();
+
+        if $r3 == null goto label4;
+
+     label1:
+        $r2 = new okio.Buffer;
+
+        specialinvoke $r2.<okio.Buffer: void <init>()>();
+
+        virtualinvoke $r3.<com.squareup.okhttp.RequestBody: void writeTo(okio.BufferedSink)>($r2);
+
+        $r4 = virtualinvoke $r2.<okio.Buffer: java.lang.String abb()>();
+
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+     label2:
+        return;
+
+     label3:
+        $r5 := @caughtexception;
+
+        staticinvoke <com.crashlytics.android.Crashlytics: void logException(java.lang.Throwable)>($r5);
+
+     label4:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    private static void appendQuery(java.lang.StringBuilder, java.lang.String)
+    {
+        java.lang.StringBuilder $r0, $r10;
+        java.lang.String $r1;
+        boolean $z0;
+        com.google.common.base.Splitter $r2;
+        com.google.common.base.Splitter$MapSplitter $r3;
+        java.util.Map $r4;
+        java.util.ArrayList $r5;
+        int $i0;
+        java.util.Set $r6;
+        java.util.Iterator $r7;
+        java.lang.Object $r8;
+        java.util.Map$Entry $r9;
+
+        $r0 := @parameter0: java.lang.StringBuilder;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+        if $z0 != 0 goto label4;
+
+        $r2 = staticinvoke <com.google.common.base.Splitter: com.google.common.base.Splitter f(char)>(38);
+
+        $r2 = virtualinvoke $r2.<com.google.common.base.Splitter: com.google.common.base.Splitter Df()>();
+
+        $r3 = virtualinvoke $r2.<com.google.common.base.Splitter: com.google.common.base.Splitter$MapSplitter cR(java.lang.String)>("=");
+
+        $r4 = virtualinvoke $r3.<com.google.common.base.Splitter$MapSplitter: java.util.Map A(java.lang.CharSequence)>($r1);
+
+        $r5 = new java.util.ArrayList;
+
+        $i0 = interfaceinvoke $r4.<java.util.Map: int size()>();
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>(int)>($i0);
+
+        $r6 = interfaceinvoke $r4.<java.util.Map: java.util.Set entrySet()>();
+
+        $r7 = interfaceinvoke $r6.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r8 = interfaceinvoke $r7.<java.util.Iterator: java.lang.Object next()>();
+
+        $r9 = (java.util.Map$Entry) $r8;
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = interfaceinvoke $r9.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r1 = (java.lang.String) $r8;
+
+        $r1 = staticinvoke <com.jodelapp.jodelandroidv3.api.HmacInterceptor: java.lang.String encode(java.lang.String)>($r1);
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("%");
+
+        $r8 = interfaceinvoke $r9.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r1 = (java.lang.String) $r8;
+
+        $r1 = staticinvoke <com.jodelapp.jodelandroidv3.api.HmacInterceptor: java.lang.String encode(java.lang.String)>($r1);
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        interfaceinvoke $r5.<java.util.List: boolean add(java.lang.Object)>($r1);
+
+        goto label1;
+
+     label2:
+        staticinvoke <java.util.Collections: void sort(java.util.List)>($r5);
+
+        $r7 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r8 = interfaceinvoke $r7.<java.util.Iterator: java.lang.Object next()>();
+
+        $r1 = (java.lang.String) $r8;
+
+        $r10 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("%");
+
+        virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        goto label3;
+
+     label4:
+        virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("%");
+
+     label5:
+        return;
+    }
+
+    private java.lang.String calculateHMac(com.squareup.okhttp.Request, java.lang.String)
+    {
+        com.jodelapp.jodelandroidv3.api.HmacInterceptor $r0;
+        com.squareup.okhttp.Request $r1;
+        java.lang.String $r2, $r5, $r9;
+        java.net.URI $r3;
+        java.lang.StringBuilder $r4, $r6, $r8;
+        int $i0;
+        boolean $z0;
+        java.lang.String[] $r7;
+        byte[] $r10;
+        java.lang.Throwable $r11;
+
+        $r0 := @this: com.jodelapp.jodelandroidv3.api.HmacInterceptor;
+
+        $r1 := @parameter0: com.squareup.okhttp.Request;
+
+        $r2 := @parameter1: java.lang.String;
+
+     label1:
+        $r3 = virtualinvoke $r1.<com.squareup.okhttp.Request: java.net.URI TL()>();
+
+        $r4 = new java.lang.StringBuilder;
+
+        $r5 = virtualinvoke $r1.<com.squareup.okhttp.Request: java.lang.String Uo()>();
+
+        $r5 = virtualinvoke $r5.<java.lang.String: java.lang.String toUpperCase()>();
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>($r5);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("@");
+
+        $r5 = virtualinvoke $r3.<java.net.URI: java.lang.String getPath()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r6 = new java.lang.StringBuilder;
+
+        $r5 = virtualinvoke $r1.<com.squareup.okhttp.Request: java.lang.String Uo()>();
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>($r5);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("%");
+
+        $r5 = virtualinvoke $r3.<java.net.URI: java.lang.String getHost()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("%");
+
+        $i0 = $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: int port>;
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("%");
+
+        $r5 = virtualinvoke $r3.<java.net.URI: java.lang.String getPath()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("%");
+
+        $r5 = virtualinvoke $r1.<com.squareup.okhttp.Request: java.lang.String gb(java.lang.String)>("Authorization");
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r5);
+
+     label2:
+        if $z0 != 0 goto label4;
+
+     label3:
+        $r7 = virtualinvoke $r5.<java.lang.String: java.lang.String[] split(java.lang.String)>(" ");
+
+        $r5 = $r7[1];
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+     label4:
+        $r8 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("%");
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r3.<java.net.URI: java.lang.String getQuery()>();
+
+        staticinvoke <com.jodelapp.jodelandroidv3.api.HmacInterceptor: void appendQuery(java.lang.StringBuilder,java.lang.String)>($r6, $r2);
+
+        staticinvoke <com.jodelapp.jodelandroidv3.api.HmacInterceptor: void appendBody(java.lang.StringBuilder,com.squareup.okhttp.Request)>($r6, $r1);
+
+        $r2 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r5 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r9 = $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: java.lang.String saltHash>;
+
+        $r10 = virtualinvoke $r5.<java.lang.String: byte[] getBytes(java.lang.String)>("UTF-8");
+
+        $r10 = specialinvoke $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: byte[] sign(java.lang.String,java.lang.String,byte[])>($r9, $r2, $r10);
+
+        $r2 = staticinvoke <com.jodelapp.jodelandroidv3.api.HmacInterceptor: java.lang.String hex(byte[])>($r10);
+
+     label5:
+        return $r2;
+
+     label6:
+        $r11 := @caughtexception;
+
+        staticinvoke <com.crashlytics.android.Crashlytics: void logException(java.lang.Throwable)>($r11);
+
+        return "";
+
+        catch java.lang.Throwable from label1 to label2 with label6;
+        catch java.lang.Throwable from label3 to label5 with label6;
+    }
+
+    private static java.lang.String calculateSaltHash(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.content.pm.PackageManager $r1;
+        java.lang.String $r2, varReplacer8117;
+        android.content.pm.PackageInfo $r3;
+        android.content.pm.Signature[] $r4;
+        android.content.pm.Signature $r5;
+        java.security.MessageDigest $r6;
+        byte[] $r7;
+        java.lang.Throwable $r8;
+        int varReplacer8118;
+        null_type varReplacer8119;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+     label1:
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r2 = virtualinvoke $r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        varReplacer8118 = 64;
+
+        $r3 = virtualinvoke $r1.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>($r2, varReplacer8118);
+
+        $r4 = $r3.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        $r5 = $r4[0];
+
+        varReplacer8117 = "SHA1";
+
+        $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer8117);
+
+        $r7 = virtualinvoke $r5.<android.content.pm.Signature: byte[] toByteArray()>();
+
+        virtualinvoke $r6.<java.security.MessageDigest: void update(byte[])>($r7);
+
+        $r7 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>();
+
+        $r2 = staticinvoke <com.jodelapp.jodelandroidv3.api.HmacInterceptor: java.lang.String hex(byte[])>($r7);
+
+     label2:
+        return $r2;
+
+     label3:
+        $r8 := @caughtexception;
+
+        staticinvoke <com.crashlytics.android.Crashlytics: void logException(java.lang.Throwable)>($r8);
+
+        varReplacer8119 = null;
+
+        return varReplacer8119;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    private static java.lang.String encode(java.lang.String)
+    {
+        java.lang.String $r0, $r1;
+        boolean $z0;
+        java.lang.Throwable $r2;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r0);
+
+        if $z0 != 0 goto label4;
+
+     label1:
+        $r1 = staticinvoke <java.net.URLEncoder: java.lang.String encode(java.lang.String,java.lang.String)>($r0, "UTF-8");
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>("\\+", "%20");
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>("%21", "!");
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>("%27", "\'");
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>("%28", "(");
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>("%29", ")");
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>("%7E", "~");
+
+     label2:
+        return $r1;
+
+     label3:
+        $r2 := @caughtexception;
+
+        staticinvoke <com.crashlytics.android.Crashlytics: void logException(java.lang.Throwable)>($r2);
+
+     label4:
+        return $r0;
+
+        catch java.io.UnsupportedEncodingException from label1 to label2 with label3;
+    }
+
+    private static java.lang.String getClientType()
+    {
+        java.lang.String varReplacer8122;
+
+        nop;
+
+        varReplacer8122 = "android_4.37.5";
+
+        return varReplacer8122;
+    }
+
+    private static int getPort(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer8120;
+        int $i0, varReplacer8121;
+        java.net.URL $r1;
+        java.lang.Throwable $r2;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = new java.net.URL;
+
+     label1:
+        varReplacer8120 = "https://api.go-tellm.com:443/api";
+
+        specialinvoke $r1.<java.net.URL: void <init>(java.lang.String)>(varReplacer8120);
+
+        $i0 = virtualinvoke $r1.<java.net.URL: int getPort()>();
+
+     label2:
+        return $i0;
+
+     label3:
+        $r2 := @caughtexception;
+
+        staticinvoke <com.crashlytics.android.Crashlytics: void logException(java.lang.Throwable)>($r2);
+
+        varReplacer8121 = 0;
+
+        return varReplacer8121;
+
+        catch java.net.MalformedURLException from label1 to label2 with label3;
+    }
+
+    private com.squareup.okhttp.Request handle(com.squareup.okhttp.Request)
+    {
+        com.jodelapp.jodelandroidv3.api.HmacInterceptor $r0;
+        com.squareup.okhttp.Request $r1;
+        com.rubylight.android.config.rest.Config $r2;
+        boolean $z0;
+        org.joda.time.format.DateTimeFormatter $r3;
+        long $l0, $l1;
+        java.lang.String $r4, $r6;
+        com.squareup.okhttp.Request$Builder $r5;
+        java.lang.StringBuilder $r7;
+
+        $r0 := @this: com.jodelapp.jodelandroidv3.api.HmacInterceptor;
+
+        $r1 := @parameter0: com.squareup.okhttp.Request;
+
+        $r2 = $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: com.rubylight.android.config.rest.Config config>;
+
+        $z0 = virtualinvoke $r2.<com.rubylight.android.config.rest.Config: boolean getBoolean(java.lang.String,boolean)>("security.hmac.enabled", 1);
+
+        if $z0 != 0 goto label1;
+
+        return $r1;
+
+     label1:
+        $r3 = <com.jodelapp.jodelandroidv3.api.HmacInterceptor: org.joda.time.format.DateTimeFormatter DATE_TIME_FORMATTER>;
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $l1 = $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: long timeDiff>;
+
+        $l0 = $l0 + $l1;
+
+        $r4 = virtualinvoke $r3.<org.joda.time.format.DateTimeFormatter: java.lang.String bH(long)>($l0);
+
+        $r5 = virtualinvoke $r1.<com.squareup.okhttp.Request: com.squareup.okhttp.Request$Builder Ur()>();
+
+        $r6 = $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: java.lang.String clientType>;
+
+        $r5 = virtualinvoke $r5.<com.squareup.okhttp.Request$Builder: com.squareup.okhttp.Request$Builder ap(java.lang.String,java.lang.String)>("X-Client-Type", $r6);
+
+        $r5 = virtualinvoke $r5.<com.squareup.okhttp.Request$Builder: com.squareup.okhttp.Request$Builder ap(java.lang.String,java.lang.String)>("X-Api-Version", "0.2");
+
+        $r5 = virtualinvoke $r5.<com.squareup.okhttp.Request$Builder: com.squareup.okhttp.Request$Builder ap(java.lang.String,java.lang.String)>("X-Timestamp", $r4);
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("HMAC ");
+
+        $r4 = specialinvoke $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: java.lang.String calculateHMac(com.squareup.okhttp.Request,java.lang.String)>($r1, $r4);
+
+        $r4 = virtualinvoke $r4.<java.lang.String: java.lang.String toUpperCase()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r5 = virtualinvoke $r5.<com.squareup.okhttp.Request$Builder: com.squareup.okhttp.Request$Builder ap(java.lang.String,java.lang.String)>("X-Authorization", $r4);
+
+        $r1 = virtualinvoke $r5.<com.squareup.okhttp.Request$Builder: com.squareup.okhttp.Request Ut()>();
+
+        return $r1;
+    }
+
+    private static java.lang.String hex(byte[])
+    {
+        byte[] $r0;
+        okio.ByteString $r1;
+        java.lang.String $r2;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 = staticinvoke <okio.ByteString: okio.ByteString q(byte[])>($r0);
+
+        $r2 = virtualinvoke $r1.<okio.ByteString: java.lang.String abj()>();
+
+        return $r2;
+    }
+
+    private native void init();
+
+    private synchronized native void register(java.lang.String);
+
+    private synchronized native byte[] sign(java.lang.String, java.lang.String, byte[]);
+
+    private void syncTime(com.squareup.okhttp.Response)
+    {
+        com.jodelapp.jodelandroidv3.api.HmacInterceptor $r0;
+        com.squareup.okhttp.Response $r1;
+        long $l0, $l1, $l2;
+        java.util.concurrent.TimeUnit $r2;
+        java.lang.String $r3;
+        boolean $z0;
+        org.joda.time.format.DateTimeFormatter $r4;
+        org.joda.time.DateTime $r5;
+        com.rubylight.android.config.rest.Config $r6;
+        byte $b3;
+        com.jodelapp.jodelandroidv3.model.Storage $r7;
+        java.lang.Throwable $r8;
+
+        $r0 := @this: com.jodelapp.jodelandroidv3.api.HmacInterceptor;
+
+        $r1 := @parameter0: com.squareup.okhttp.Response;
+
+     label01:
+        $r3 = virtualinvoke $r1.<com.squareup.okhttp.Response: java.lang.String aq(java.lang.String,java.lang.String)>("X-Timestamp", null);
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r3);
+
+     label02:
+        if $z0 != 0 goto label12;
+
+     label03:
+        $r4 = <com.jodelapp.jodelandroidv3.api.HmacInterceptor: org.joda.time.format.DateTimeFormatter DATE_TIME_FORMATTER>;
+
+        $r5 = virtualinvoke $r4.<org.joda.time.format.DateTimeFormatter: org.joda.time.DateTime hK(java.lang.String)>($r3);
+
+        $l1 = virtualinvoke $r5.<org.joda.time.DateTime: long getMillis()>();
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+     label04:
+        $l1 = $l1 - $l0;
+
+     label05:
+        $r2 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $r6 = $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: com.rubylight.android.config.rest.Config config>;
+
+        $l0 = <com.jodelapp.jodelandroidv3.api.HmacInterceptor: long CONFIG_SERVER_TIMESTAMP_THRESHOLD_MAX>;
+
+        $l0 = virtualinvoke $r6.<com.rubylight.android.config.rest.Config: long a(java.lang.String,long,long,long)>("server.timestamp.threshold", 10L, 1L, $l0);
+
+        $l0 = virtualinvoke $r2.<java.util.concurrent.TimeUnit: long toMillis(long)>($l0);
+
+        $l2 = $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: long timeDiff>;
+
+     label06:
+        $l2 = $l2 - $l1;
+
+     label07:
+        $l2 = staticinvoke <java.lang.Math: long abs(long)>($l2);
+
+     label08:
+        $b3 = $l2 cmp $l0;
+
+        if $b3 <= 0 goto label12;
+
+     label09:
+        $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: long timeDiff> = $l1;
+
+        $r7 = $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: com.jodelapp.jodelandroidv3.model.Storage storage>;
+
+        $l1 = $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: long timeDiff>;
+
+        virtualinvoke $r7.<com.jodelapp.jodelandroidv3.model.Storage: void au(long)>($l1);
+
+        $l1 = $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: long timeDiff>;
+
+        staticinvoke <com.jodelapp.jodelandroidv3.utilities.AnalyticsUtil: void ay(long)>($l1);
+
+     label10:
+        return;
+
+     label11:
+        $r8 := @caughtexception;
+
+        staticinvoke <com.crashlytics.android.Crashlytics: void logException(java.lang.Throwable)>($r8);
+
+     label12:
+        return;
+
+        catch java.lang.Throwable from label01 to label02 with label11;
+        catch java.lang.Throwable from label03 to label04 with label11;
+        catch java.lang.Throwable from label05 to label06 with label11;
+        catch java.lang.Throwable from label07 to label08 with label11;
+        catch java.lang.Throwable from label09 to label10 with label11;
+    }
+
+    public long getTimeDiff()
+    {
+        com.jodelapp.jodelandroidv3.api.HmacInterceptor $r0;
+        long l0;
+
+        $r0 := @this: com.jodelapp.jodelandroidv3.api.HmacInterceptor;
+
+        l0 = $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: long timeDiff>;
+
+        return l0;
+    }
+
+    public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor$Chain)
+    {
+        com.jodelapp.jodelandroidv3.api.HmacInterceptor $r0;
+        com.squareup.okhttp.Interceptor$Chain $r1;
+        com.squareup.okhttp.Request $r2;
+        com.squareup.okhttp.Response $r3;
+
+        $r0 := @this: com.jodelapp.jodelandroidv3.api.HmacInterceptor;
+
+        $r1 := @parameter0: com.squareup.okhttp.Interceptor$Chain;
+
+        $r2 = interfaceinvoke $r1.<com.squareup.okhttp.Interceptor$Chain: com.squareup.okhttp.Request Tx()>();
+
+        $r2 = specialinvoke $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: com.squareup.okhttp.Request handle(com.squareup.okhttp.Request)>($r2);
+
+        $r3 = interfaceinvoke $r1.<com.squareup.okhttp.Interceptor$Chain: com.squareup.okhttp.Response d(com.squareup.okhttp.Request)>($r2);
+
+        specialinvoke $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: void syncTime(com.squareup.okhttp.Response)>($r3);
+
+        return $r3;
+    }
+
+    public void registerKey(java.lang.String)
+    {
+        com.jodelapp.jodelandroidv3.api.HmacInterceptor $r0;
+        java.lang.String $r1;
+
+        nop;
+
+        $r0 := @this: com.jodelapp.jodelandroidv3.api.HmacInterceptor;
+
+        $r1 := @parameter0: java.lang.String;
+
+        specialinvoke $r0.<com.jodelapp.jodelandroidv3.api.HmacInterceptor: void register(java.lang.String)>($r1);
+
+        return;
+    }
+}

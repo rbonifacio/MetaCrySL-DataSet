@@ -1,0 +1,84 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3950)
+		Method: <com.adcolony.sdk.au: boolean a(java.lang.String,java.io.File)>
+		SHA-256: d2ab42e9e9bd25368e454f46d9532994041468c60113079d10e4a83a5b8ff081
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.adcolony.sdk.ba: java.lang.String a(java.lang.String)>
+		SHA-256: 375abe268650a8d55eb22df8c75fdf2f65b54a2c7e43a7671b56bef36f8a89ff
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.adcolony.sdk.au: boolean a(java.lang.String,java.io.File)>
+		SHA-256: d6036aca31367e5de9645cd202b969f7a1228535bcb94f0708f483bbb991fa83
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4035)
+		Method: <com.adcolony.sdk.ba: java.lang.String a(java.lang.String)>
+		SHA-256: c442a6bcfde5923e190994f3fa7b5b24555cd9bd5cefbdb5b53e72954c510cee
+		Secure: true
+
+Findings in Java Class: com.adcolony.sdk.au
+
+	 in Method: boolean a(java.lang.String,java.io.File)
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #d2ab42e9e9bd25368e454f46d9532994041468c60113079d10e4a83a5b8ff081)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte),java.security.MessageDigest: void update(byte[])
+			at statement: $r4 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #d2ab42e9e9bd25368e454f46d9532994041468c60113079d10e4a83a5b8ff081)
+			First parameter (with value "SHA1") should be any of {SHA-224, SHA-256, SHA-1, SHA-384, SHA-512, MD5}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3950)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 1
+	TypestateError: 1
+=====================================================================

@@ -1,0 +1,145 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.esri.arcgis.collector-08C83E778554B0055BB2D0FACAE3D525CE8BF42D01287E3A65FC2861CE490DD1.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.spec.PBEParameterSpec.PBEParameterSpec( salt iterationCount paramSpec);
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r7
+		Type: javax.crypto.Cipher
+		Statement: $r7 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer220)
+		Method: <kw: void a(char[],byte[],int)>
+		SHA-256: 9403d3f60a27f42972b991d58e81b2da74a4d9fad280e8c127e80d5833e5cc16
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.crypto.spec.PBEParameterSpec
+		Statement: specialinvoke $r3.<javax.crypto.spec.PBEParameterSpec: void <init>(byte[],int)>($r2, varReplacer218)
+		Method: <kw: void a(char[],byte[],int)>
+		SHA-256: 45150ba2139b72b80e0cbe0ddb4d0900f9f463451bd8e0eaaaf81c2cff025abb
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer572)
+		Method: <do: java.lang.String b(java.lang.String)>
+		SHA-256: b875fda5423932c1024f1e7da583083270ca15bd85dba98a0896d9243d10ec63
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: javax.net.ssl.SSLContext
+		Statement: $r1 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer3265)
+		Method: <com.esri.core.internal.io.handler.m: javax.net.ssl.SSLContext a()>
+		SHA-256: daf2e7ef14b860c9598065c20dceff7eee2c3c9f42fc82b0d3a568e69194e3c
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <do: java.lang.String b(java.lang.String)>
+		SHA-256: 38b4c65cda23b5629b2e096bbe35a619ccc6f45979d24964db1f2ed165eed5c3
+		Secure: true
+	Object:
+		Variable: $r6
+		Type: javax.crypto.SecretKey
+		Statement: $r6 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r5)
+		Method: <kw: void a(char[],byte[],int)>
+		SHA-256: b994bb6bdf191dc97e1140a507efd8d7379a90191de60b22230315488b73ef1f
+		Secure: false
+	Object:
+		Variable: $r7
+		Type: javax.crypto.Cipher
+		Statement: $r7 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer224)
+		Method: <kw: void a(char[],byte[],int)>
+		SHA-256: d254dd778e77348b6ead5d826f7c24c18f4ef49af252ad8d9b230a631bc67dc3
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: javax.crypto.SecretKeyFactory
+		Statement: $r4 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer223)
+		Method: <kw: void a(char[],byte[],int)>
+		SHA-256: 600495618ff8396c0491302de6a9e31de79a97b7c1e9716c95fe439ea9bc1c4
+		Secure: false
+
+Findings in Java Class: kw
+
+	 in Method: void a(char[],byte[],int)
+		ConstraintError violating CrySL rule for javax.crypto.spec.PBEParameterSpec (on Object #45150ba2139b72b80e0cbe0ddb4d0900f9f463451bd8e0eaaaf81c2cff025abb)
+			Second parameter (with value 1023)Variable iterationCountmust be  at least 10000
+			at statement: specialinvoke $r3.<javax.crypto.spec.PBEParameterSpec: void <init>(byte[],int)>($r2, varReplacer218)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r3.<javax.crypto.spec.PBEParameterSpec: void <init>(byte[],int)>($r2, varReplacer218)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #9403d3f60a27f42972b991d58e81b2da74a4d9fad280e8c127e80d5833e5cc16)
+			First parameter (with value "PBEWithMD5AndDES/CBC/PKCS5Padding") should be any of {AES_128, ARC4, AES, BLOWFISH, DESede, AES_256, ChaCha20, RSA}
+			at statement: $r7 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer220)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #d254dd778e77348b6ead5d826f7c24c18f4ef49af252ad8d9b230a631bc67dc3)
+			First parameter (with value "PBEWithMD5AndDES/CBC/PKCS5Padding") should be any of {AES_128, ARC4, AES, BLOWFISH, DESede, AES_256, ChaCha20, RSA}
+			at statement: $r7 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer224)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
+			First parameter was not properly generated as specced Key
+			at statement: $r6 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r5)
+
+		ForbiddenMethodError violating CrySL rule for javax.crypto.spec.PBEKeySpec
+			Detected call to forbidden method void <init>(char[]) of class javax.crypto.spec.PBEKeySpec. Instead, call method <javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>.
+			at statement: specialinvoke $r5.<javax.crypto.spec.PBEKeySpec: void <init>(char[])>($r1)
+
+
+Findings in Java Class: com.esri.core.internal.io.handler.m
+
+	 in Method: javax.net.ssl.SSLContext a()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer3262, r7, varReplacer3262)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer3262, r7, varReplacer3262)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 8
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 3
+	RequiredPredicateError: 4
+	ForbiddenMethodError: 1
+=====================================================================

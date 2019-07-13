@@ -1,0 +1,70 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.baimobile.android.enterprise.credential.service.LicenseID: void <init>(java.lang.String,java.lang.String)>
+		SHA-256: 47edb94a5fa585ef756138030868f3aba1996481cf27869d5c07bce554c7c687
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer346)
+		Method: <com.baimobile.android.enterprise.credential.service.LicenseID: void <init>(java.lang.String,java.lang.String)>
+		SHA-256: 12379f1304a7a61ee72f20c98c0d8e07ac268f26b324f0a7946b636cc688194c
+		Secure: false
+
+Findings in Java Class: com.baimobile.android.enterprise.credential.service.LicenseID
+
+	 in Method: void <init>(java.lang.String,java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #12379f1304a7a61ee72f20c98c0d8e07ac268f26b324f0a7946b636cc688194c)
+			First parameter (with value "SHA") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer346)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #12379f1304a7a61ee72f20c98c0d8e07ac268f26b324f0a7946b636cc688194c)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer346)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 2
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 1
+	ConstraintError: 1
+=====================================================================

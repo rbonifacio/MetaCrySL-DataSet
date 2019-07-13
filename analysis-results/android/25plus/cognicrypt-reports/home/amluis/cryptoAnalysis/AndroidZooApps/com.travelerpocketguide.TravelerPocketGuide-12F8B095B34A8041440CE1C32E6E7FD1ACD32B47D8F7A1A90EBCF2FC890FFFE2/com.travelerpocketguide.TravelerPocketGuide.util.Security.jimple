@@ -1,0 +1,260 @@
+public class com.travelerpocketguide.TravelerPocketGuide.util.Security extends java.lang.Object
+{
+    private static final java.lang.String KEY_FACTORY_ALGORITHM;
+    private static final java.lang.String SIGNATURE_ALGORITHM;
+    private static final java.lang.String TAG;
+
+    public void <init>()
+    {
+        com.travelerpocketguide.TravelerPocketGuide.util.Security $r0;
+
+        $r0 := @this: com.travelerpocketguide.TravelerPocketGuide.util.Security;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.security.PublicKey generatePublicKey(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer5131, varReplacer5132, varReplacer5133, varReplacer5134, varReplacer5135;
+        byte[] $r1;
+        java.security.KeyFactory $r2;
+        java.security.spec.X509EncodedKeySpec $r3;
+        java.security.PublicKey $r4;
+        java.lang.Throwable $r5, $r7;
+        java.lang.RuntimeException $r6;
+        java.lang.IllegalArgumentException $r8;
+        com.travelerpocketguide.TravelerPocketGuide.util.Base64DecoderException $r9;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        $r1 = staticinvoke <com.travelerpocketguide.TravelerPocketGuide.util.Base64: byte[] decode(java.lang.String)>($r0);
+
+        varReplacer5131 = "RSA";
+
+        $r2 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer5131);
+
+     label2:
+        $r3 = new java.security.spec.X509EncodedKeySpec;
+
+     label3:
+        specialinvoke $r3.<java.security.spec.X509EncodedKeySpec: void <init>(byte[])>($r1);
+
+        $r4 = virtualinvoke $r2.<java.security.KeyFactory: java.security.PublicKey generatePublic(java.security.spec.KeySpec)>($r3);
+
+     label4:
+        return $r4;
+
+     label5:
+        $r5 := @caughtexception;
+
+        $r6 = new java.lang.RuntimeException;
+
+        specialinvoke $r6.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r5);
+
+        throw $r6;
+
+     label6:
+        $r7 := @caughtexception;
+
+        varReplacer5132 = "IABUtil/Security";
+
+        varReplacer5133 = "Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer5132, varReplacer5133);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r7);
+
+        throw $r8;
+
+     label7:
+        $r9 := @caughtexception;
+
+        varReplacer5134 = "IABUtil/Security";
+
+        varReplacer5135 = "Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer5134, varReplacer5135);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r9);
+
+        throw $r8;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label5;
+        catch java.security.spec.InvalidKeySpecException from label1 to label2 with label6;
+        catch java.security.spec.InvalidKeySpecException from label3 to label4 with label6;
+        catch com.travelerpocketguide.TravelerPocketGuide.util.Base64DecoderException from label1 to label2 with label7;
+        catch com.travelerpocketguide.TravelerPocketGuide.util.Base64DecoderException from label3 to label4 with label7;
+    }
+
+    public static boolean verify(java.security.PublicKey, java.lang.String, java.lang.String)
+    {
+        java.security.PublicKey $r0;
+        java.lang.String $r1, $r2, varReplacer5114, varReplacer5115, varReplacer5116, varReplacer5118, varReplacer5119, varReplacer5120, varReplacer5121, varReplacer5125, varReplacer5126, varReplacer5129, varReplacer5130;
+        java.security.Signature $r3;
+        byte[] $r4;
+        boolean $z0;
+        java.lang.Throwable $r5, $r6, $r7;
+        com.travelerpocketguide.TravelerPocketGuide.util.Base64DecoderException $r8;
+        int varReplacer5117, varReplacer5122, varReplacer5123, varReplacer5124, varReplacer5127, varReplacer5128;
+
+        nop;
+
+        $r0 := @parameter0: java.security.PublicKey;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+     label1:
+        varReplacer5114 = "SHA1withRSA";
+
+        $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer5114);
+
+        virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0);
+
+        $r4 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r3.<java.security.Signature: void update(byte[])>($r4);
+
+        $r4 = staticinvoke <com.travelerpocketguide.TravelerPocketGuide.util.Base64: byte[] decode(java.lang.String)>($r2);
+
+        $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4);
+
+     label2:
+        if $z0 != 0 goto label5;
+
+     label3:
+        varReplacer5115 = "IABUtil/Security";
+
+        varReplacer5116 = "Signature verification failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer5115, varReplacer5116);
+
+     label4:
+        varReplacer5124 = 0;
+
+        return varReplacer5124;
+
+     label5:
+        varReplacer5127 = 1;
+
+        return varReplacer5127;
+
+     label6:
+        $r5 := @caughtexception;
+
+        varReplacer5120 = "IABUtil/Security";
+
+        varReplacer5121 = "NoSuchAlgorithmException.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer5120, varReplacer5121);
+
+        varReplacer5128 = 0;
+
+        return varReplacer5128;
+
+     label7:
+        $r6 := @caughtexception;
+
+        varReplacer5129 = "IABUtil/Security";
+
+        varReplacer5130 = "Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer5129, varReplacer5130);
+
+        varReplacer5117 = 0;
+
+        return varReplacer5117;
+
+     label8:
+        $r7 := @caughtexception;
+
+        varReplacer5125 = "IABUtil/Security";
+
+        varReplacer5126 = "Signature exception.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer5125, varReplacer5126);
+
+        varReplacer5122 = 0;
+
+        return varReplacer5122;
+
+     label9:
+        $r8 := @caughtexception;
+
+        varReplacer5118 = "IABUtil/Security";
+
+        varReplacer5119 = "Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer5118, varReplacer5119);
+
+        varReplacer5123 = 0;
+
+        return varReplacer5123;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label6;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label6;
+        catch java.security.InvalidKeyException from label1 to label2 with label7;
+        catch java.security.InvalidKeyException from label3 to label4 with label7;
+        catch java.security.SignatureException from label1 to label2 with label8;
+        catch java.security.SignatureException from label3 to label4 with label8;
+        catch com.travelerpocketguide.TravelerPocketGuide.util.Base64DecoderException from label1 to label2 with label9;
+        catch com.travelerpocketguide.TravelerPocketGuide.util.Base64DecoderException from label3 to label4 with label9;
+    }
+
+    public static boolean verifyPurchase(java.lang.String, java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, $r2, varReplacer5112, varReplacer5113;
+        boolean $z0;
+        java.security.PublicKey $r3;
+        int varReplacer5111;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r0);
+
+        if $z0 != 0 goto label1;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        varReplacer5112 = "IABUtil/Security";
+
+        varReplacer5113 = "Purchase verification failed: missing data.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer5112, varReplacer5113);
+
+        varReplacer5111 = 0;
+
+        return varReplacer5111;
+
+     label2:
+        $r3 = staticinvoke <com.travelerpocketguide.TravelerPocketGuide.util.Security: java.security.PublicKey generatePublicKey(java.lang.String)>($r0);
+
+        $z0 = staticinvoke <com.travelerpocketguide.TravelerPocketGuide.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>($r3, $r1, $r2);
+
+        return $z0;
+    }
+}

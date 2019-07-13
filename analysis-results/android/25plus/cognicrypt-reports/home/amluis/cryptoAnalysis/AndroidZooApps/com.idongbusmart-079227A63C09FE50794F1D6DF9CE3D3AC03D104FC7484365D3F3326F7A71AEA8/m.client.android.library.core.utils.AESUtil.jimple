@@ -1,0 +1,1711 @@
+public class m.client.android.library.core.utils.AESUtil extends java.lang.Object
+{
+    private static final java.lang.String aes128Type;
+    private static final java.lang.String aes256Prefix;
+    private static final java.lang.String aes256Type;
+    private static final java.lang.String algorithm;
+    private static final java.lang.String autoType;
+    static javax.crypto.Cipher g_cipher;
+    private static final java.lang.String transformationECB;
+    private m.client.android.library.core.common.CommonLibHandler commHandle;
+    private java.lang.String currentTransfomation;
+    private java.lang.String keyValue;
+
+    static void <clinit>()
+    {
+        null_type varReplacer1706;
+
+        nop;
+
+        varReplacer1706 = null;
+
+        <m.client.android.library.core.utils.AESUtil: javax.crypto.Cipher g_cipher> = varReplacer1706;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        m.client.android.library.core.common.CommonLibHandler $r1;
+        java.lang.String varReplacer1727;
+        null_type varReplacer1728;
+
+        nop;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer1727 = "AES/ECB/PKCS5Padding";
+
+        $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String currentTransfomation> = varReplacer1727;
+
+        $r1 = staticinvoke <m.client.android.library.core.common.CommonLibHandler: m.client.android.library.core.common.CommonLibHandler getInstance()>();
+
+        $r0.<m.client.android.library.core.utils.AESUtil: m.client.android.library.core.common.CommonLibHandler commHandle> = $r1;
+
+        varReplacer1728 = null;
+
+        $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String keyValue> = varReplacer1728;
+
+        specialinvoke $r0.<m.client.android.library.core.utils.AESUtil: void initKey()>();
+
+        return;
+    }
+
+    public void <init>(android.content.Context)
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        android.content.Context $r1;
+        java.lang.Exception $r2;
+        m.client.android.library.core.common.CommonLibHandler $r3;
+        java.lang.String $r4, $r8;
+        boolean $z0;
+        int $i0, $i1;
+        java.lang.String[] $r5;
+        m.client.android.library.core.common.Parameters $r6;
+        java.lang.Object $r7;
+        byte[] $r9;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $r1 := @parameter0: android.content.Context;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String currentTransfomation> = "AES/ECB/PKCS5Padding";
+
+        $r3 = staticinvoke <m.client.android.library.core.common.CommonLibHandler: m.client.android.library.core.common.CommonLibHandler getInstance()>();
+
+        $r0.<m.client.android.library.core.utils.AESUtil: m.client.android.library.core.common.CommonLibHandler commHandle> = $r3;
+
+        $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String keyValue> = null;
+
+        $r3 = $r0.<m.client.android.library.core.utils.AESUtil: m.client.android.library.core.common.CommonLibHandler commHandle>;
+
+        $r4 = $r3.<m.client.android.library.core.common.CommonLibHandler: java.lang.String g_strDummyN>;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r4);
+
+        if $z0 == 0 goto label05;
+
+        $r4 = null;
+
+        $i0 = 0;
+
+     label01:
+        $r5 = <m.client.android.library.core.common.LibDefinitions$strings: java.lang.String[] APP_LICENSE_PATH>;
+
+     label02:
+        $i1 = lengthof $r5;
+
+     label03:
+        if $i0 < $i1 goto label06;
+
+     label04:
+        $r6 = staticinvoke <m.client.android.library.core.utils.FileUtil: m.client.android.library.core.common.Parameters readFileByLineFromAsset(android.content.Context,java.lang.String)>($r1, $r4);
+
+        $r3 = $r0.<m.client.android.library.core.utils.AESUtil: m.client.android.library.core.common.CommonLibHandler commHandle>;
+
+        $r7 = virtualinvoke $r6.<m.client.android.library.core.common.Parameters: java.lang.Object getParam(java.lang.String)>("sn");
+
+        $r4 = (java.lang.String) $r7;
+
+        $r3.<m.client.android.library.core.common.CommonLibHandler: java.lang.String g_strDummyN> = $r4;
+
+     label05:
+        specialinvoke $r0.<m.client.android.library.core.utils.AESUtil: void initKey()>();
+
+        return;
+
+     label06:
+        $r5 = <m.client.android.library.core.common.LibDefinitions$strings: java.lang.String[] APP_LICENSE_PATH>;
+
+     label07:
+        $r8 = $r5[$i0];
+
+        $r9 = staticinvoke <m.client.android.library.core.utils.IOUtils: byte[] getBytesFromAsset(android.content.Context,java.lang.String)>($r1, $r8);
+
+     label08:
+        if $r9 == null goto label11;
+
+        $r5 = <m.client.android.library.core.common.LibDefinitions$strings: java.lang.String[] APP_LICENSE_PATH>;
+
+     label09:
+        $r4 = $r5[$i0];
+
+     label10:
+        goto label04;
+
+     label11:
+        $i0 = $i0 + 1;
+
+        goto label01;
+
+     label12:
+        $r2 := @caughtexception;
+
+        staticinvoke <m.client.android.library.core.utils.PLog: void d(java.lang.String,java.lang.String)>("AESUtil", "strLicenseFilePath error.");
+
+        goto label05;
+
+        catch java.lang.Exception from label02 to label03 with label12;
+        catch java.lang.Exception from label04 to label05 with label12;
+        catch java.lang.Exception from label07 to label08 with label12;
+        catch java.lang.Exception from label09 to label10 with label12;
+    }
+
+    public static java.lang.String byteArrayToHex(byte[])
+    {
+        byte[] $r0;
+        java.lang.StringBuffer $r1;
+        int $i0, $i1;
+        java.lang.String $r2, varReplacer1751;
+        java.lang.StringBuilder $r3;
+        byte $b2;
+        short $s3;
+        null_type varReplacer1750;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        if $r0 == null goto label1;
+
+        $i0 = lengthof $r0;
+
+        if $i0 != 0 goto label2;
+
+     label1:
+        varReplacer1750 = null;
+
+        return varReplacer1750;
+
+     label2:
+        $r1 = new java.lang.StringBuffer;
+
+        $i0 = lengthof $r0;
+
+        $i0 = $i0 * 2;
+
+        specialinvoke $r1.<java.lang.StringBuffer: void <init>(int)>($i0);
+
+        $i0 = 0;
+
+     label3:
+        $i1 = lengthof $r0;
+
+        if $i0 < $i1 goto label4;
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        return $r2;
+
+     label4:
+        $r3 = new java.lang.StringBuilder;
+
+        varReplacer1751 = "0";
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1751);
+
+        $b2 = $r0[$i0];
+
+        $s3 = $b2 & 255;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s3);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $i1 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        $i1 = $i1 + -2;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int)>($i1);
+
+        virtualinvoke $r1.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>($r2);
+
+        $i0 = $i0 + 1;
+
+        goto label3;
+    }
+
+    private java.lang.String crypt(int, java.io.File) throws java.lang.Exception
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        int $i0;
+        java.io.File $r1;
+        byte[] $r2, $r10;
+        java.io.BufferedInputStream $r3, $r8;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+        javax.crypto.Cipher $r6;
+        java.security.Key $r7;
+        java.io.FileInputStream $r9;
+        java.lang.Throwable $r11, $r12, $r13;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.io.File;
+
+        $r5 = $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String currentTransfomation>;
+
+        $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>($r5, "BC");
+
+        $r7 = specialinvoke $r0.<m.client.android.library.core.utils.AESUtil: java.security.Key generateKey()>();
+
+        virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key)>($i0, $r7);
+
+        $r8 = null;
+
+     label01:
+        $r3 = new java.io.BufferedInputStream;
+
+        $r9 = new java.io.FileInputStream;
+
+        specialinvoke $r9.<java.io.FileInputStream: void <init>(java.io.File)>($r1);
+
+        specialinvoke $r3.<java.io.BufferedInputStream: void <init>(java.io.InputStream)>($r9);
+
+     label02:
+        $r2 = newarray (byte)[8192];
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+     label03:
+        $i0 = virtualinvoke $r3.<java.io.InputStream: int read(byte[])>($r2);
+
+     label04:
+        if $i0 != -1 goto label10;
+
+     label05:
+        $r2 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] doFinal()>();
+
+        $r5 = new java.lang.String;
+
+        specialinvoke $r5.<java.lang.String: void <init>(byte[])>($r2);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+     label06:
+        goto label07;
+
+     label07:
+        if $r3 == null goto label09;
+
+     label08:
+        virtualinvoke $r3.<java.io.InputStream: void close()>();
+
+     label09:
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r5;
+
+     label10:
+        $r10 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] update(byte[],int,int)>($r2, 0, $i0);
+
+        $r5 = new java.lang.String;
+
+        specialinvoke $r5.<java.lang.String: void <init>(byte[])>($r10);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+     label11:
+        goto label03;
+
+     label12:
+        $r11 := @caughtexception;
+
+        $r8 = $r3;
+
+     label13:
+        goto label14;
+
+     label14:
+        if $r8 == null goto label16;
+
+     label15:
+        virtualinvoke $r8.<java.io.InputStream: void close()>();
+
+     label16:
+        throw $r11;
+
+     label17:
+        $r12 := @caughtexception;
+
+        goto label16;
+
+     label18:
+        $r13 := @caughtexception;
+
+        goto label09;
+
+     label19:
+        $r11 := @caughtexception;
+
+        goto label13;
+
+        catch java.lang.Throwable from label01 to label02 with label19;
+        catch java.lang.Throwable from label02 to label04 with label12;
+        catch java.lang.Throwable from label05 to label06 with label12;
+        catch java.io.IOException from label08 to label09 with label18;
+        catch java.lang.Throwable from label10 to label11 with label12;
+        catch java.io.IOException from label15 to label16 with label17;
+    }
+
+    private void crypt(int, java.io.File, java.io.File) throws java.lang.Exception
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        int $i0, varReplacer1972, varReplacer1973;
+        java.io.File $r1, $r2;
+        byte[] $r3, $r13;
+        java.io.BufferedInputStream $r4, $r9;
+        java.io.BufferedOutputStream $r5, $r10;
+        java.lang.String $r6, varReplacer1974;
+        javax.crypto.Cipher $r7;
+        java.security.Key $r8;
+        java.io.FileInputStream $r11;
+        java.io.FileOutputStream $r12;
+        java.lang.Exception $r14, $r22, $r23;
+        java.lang.Throwable $r15, $r16, $r17, $r18, $r19, $r20, $r21;
+
+        nop;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.io.File;
+
+        $r2 := @parameter2: java.io.File;
+
+        $r6 = $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String currentTransfomation>;
+
+        varReplacer1974 = "BC";
+
+        $r7 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>($r6, varReplacer1974);
+
+        $r8 = specialinvoke $r0.<m.client.android.library.core.utils.AESUtil: java.security.Key generateKey()>();
+
+        varReplacer1972 = 2;
+
+        virtualinvoke $r7.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1972, $r8);
+
+        $r9 = null;
+
+        $r10 = null;
+
+     label01:
+        $r4 = new java.io.BufferedInputStream;
+
+        $r11 = new java.io.FileInputStream;
+
+     label02:
+        specialinvoke $r11.<java.io.FileInputStream: void <init>(java.io.File)>($r1);
+
+        specialinvoke $r4.<java.io.BufferedInputStream: void <init>(java.io.InputStream)>($r11);
+
+     label03:
+        $r5 = new java.io.BufferedOutputStream;
+
+        $r12 = new java.io.FileOutputStream;
+
+     label04:
+        specialinvoke $r12.<java.io.FileOutputStream: void <init>(java.io.File)>($r2);
+
+        specialinvoke $r5.<java.io.BufferedOutputStream: void <init>(java.io.OutputStream)>($r12);
+
+     label05:
+        $r3 = newarray (byte)[1024];
+
+     label06:
+        $i0 = virtualinvoke $r4.<java.io.InputStream: int read(byte[])>($r3);
+
+     label07:
+        if $i0 != -1 goto label14;
+
+     label08:
+        $r3 = virtualinvoke $r7.<javax.crypto.Cipher: byte[] doFinal()>();
+
+        virtualinvoke $r5.<java.io.OutputStream: void write(byte[])>($r3);
+
+     label09:
+        if $r5 == null goto label11;
+
+     label10:
+        virtualinvoke $r5.<java.io.OutputStream: void close()>();
+
+     label11:
+        if $r4 == null goto label38;
+
+     label12:
+        virtualinvoke $r4.<java.io.InputStream: void close()>();
+
+     label13:
+        return;
+
+     label14:
+        varReplacer1973 = 0;
+
+        $r13 = virtualinvoke $r7.<javax.crypto.Cipher: byte[] update(byte[],int,int)>($r3, varReplacer1973, $i0);
+
+        virtualinvoke $r5.<java.io.OutputStream: void write(byte[])>($r13);
+
+     label15:
+        goto label06;
+
+     label16:
+        $r14 := @caughtexception;
+
+        $r10 = $r5;
+
+        $r9 = $r4;
+
+     label17:
+        if $r10 == null goto label19;
+
+     label18:
+        virtualinvoke $r10.<java.io.OutputStream: void close()>();
+
+     label19:
+        if $r9 == null goto label38;
+
+     label20:
+        virtualinvoke $r9.<java.io.InputStream: void close()>();
+
+     label21:
+        return;
+
+     label22:
+        $r15 := @caughtexception;
+
+        return;
+
+     label23:
+        $r16 := @caughtexception;
+
+     label24:
+        if $r10 == null goto label26;
+
+     label25:
+        virtualinvoke $r10.<java.io.OutputStream: void close()>();
+
+     label26:
+        if $r9 == null goto label28;
+
+     label27:
+        virtualinvoke $r9.<java.io.InputStream: void close()>();
+
+     label28:
+        throw $r16;
+
+     label29:
+        $r17 := @caughtexception;
+
+        return;
+
+     label30:
+        $r18 := @caughtexception;
+
+        goto label19;
+
+     label31:
+        $r19 := @caughtexception;
+
+        goto label26;
+
+     label32:
+        $r20 := @caughtexception;
+
+        goto label28;
+
+     label33:
+        $r21 := @caughtexception;
+
+        goto label11;
+
+     label34:
+        $r16 := @caughtexception;
+
+        $r9 = $r4;
+
+        goto label24;
+
+     label35:
+        $r16 := @caughtexception;
+
+        $r10 = $r5;
+
+        $r9 = $r4;
+
+        goto label24;
+
+     label36:
+        $r22 := @caughtexception;
+
+        goto label17;
+
+     label37:
+        $r23 := @caughtexception;
+
+        $r9 = $r4;
+
+        goto label17;
+
+     label38:
+        return;
+
+        catch java.lang.Exception from label02 to label03 with label36;
+        catch java.lang.Throwable from label01 to label03 with label23;
+        catch java.lang.Exception from label04 to label05 with label37;
+        catch java.lang.Throwable from label03 to label05 with label34;
+        catch java.lang.Exception from label05 to label07 with label16;
+        catch java.lang.Exception from label08 to label09 with label16;
+        catch java.lang.Throwable from label06 to label07 with label35;
+        catch java.lang.Throwable from label08 to label09 with label35;
+        catch java.io.IOException from label10 to label11 with label33;
+        catch java.io.IOException from label12 to label13 with label29;
+        catch java.lang.Exception from label14 to label15 with label16;
+        catch java.lang.Throwable from label14 to label15 with label35;
+        catch java.io.IOException from label18 to label19 with label30;
+        catch java.io.IOException from label20 to label21 with label22;
+        catch java.io.IOException from label25 to label26 with label31;
+        catch java.io.IOException from label27 to label28 with label32;
+    }
+
+    private byte[] cryptToBytes(int, java.io.File) throws java.lang.Exception
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        int $i0;
+        java.io.File $r1;
+        byte[] $r2, $r9, $r11;
+        java.io.ByteArrayOutputStream $r3;
+        java.io.BufferedInputStream $r4, $r8;
+        java.lang.String $r5;
+        javax.crypto.Cipher $r6;
+        java.security.Key $r7;
+        java.io.FileInputStream $r10;
+        long $l1;
+        java.lang.Exception $r12, $r14;
+        java.lang.Throwable $r13;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.io.File;
+
+        $r5 = $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String currentTransfomation>;
+
+        $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>($r5, "BC");
+
+        $r7 = specialinvoke $r0.<m.client.android.library.core.utils.AESUtil: java.security.Key generateKey()>();
+
+        virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key)>($i0, $r7);
+
+        $r8 = null;
+
+        $r9 = null;
+
+     label01:
+        $r4 = new java.io.BufferedInputStream;
+
+        $r10 = new java.io.FileInputStream;
+
+     label02:
+        specialinvoke $r10.<java.io.FileInputStream: void <init>(java.io.File)>($r1);
+
+        specialinvoke $r4.<java.io.BufferedInputStream: void <init>(java.io.InputStream)>($r10);
+
+     label03:
+        $r3 = new java.io.ByteArrayOutputStream;
+
+     label04:
+        $l1 = virtualinvoke $r1.<java.io.File: long length()>();
+
+     label05:
+        $i0 = (int) $l1;
+
+     label06:
+        specialinvoke $r3.<java.io.ByteArrayOutputStream: void <init>(int)>($i0);
+
+     label07:
+        $r2 = newarray (byte)[8192];
+
+     label08:
+        $i0 = virtualinvoke $r4.<java.io.InputStream: int read(byte[])>($r2);
+
+     label09:
+        if $i0 != -1 goto label16;
+
+     label10:
+        $r2 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] doFinal()>();
+
+     label11:
+        $i0 = lengthof $r2;
+
+     label12:
+        virtualinvoke $r3.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r2, 0, $i0);
+
+        $r2 = virtualinvoke $r3.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+     label13:
+        $r9 = $r2;
+
+     label14:
+        virtualinvoke $r3.<java.io.ByteArrayOutputStream: void close()>();
+
+     label15:
+        if $r4 == null goto label27;
+
+        virtualinvoke $r4.<java.io.InputStream: void close()>();
+
+        return $r2;
+
+     label16:
+        $r11 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] update(byte[],int,int)>($r2, 0, $i0);
+
+     label17:
+        $i0 = lengthof $r11;
+
+     label18:
+        virtualinvoke $r3.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r11, 0, $i0);
+
+     label19:
+        goto label08;
+
+     label20:
+        $r12 := @caughtexception;
+
+        $r8 = $r4;
+
+     label21:
+        if $r8 == null goto label28;
+
+        virtualinvoke $r8.<java.io.InputStream: void close()>();
+
+        return $r9;
+
+     label22:
+        $r13 := @caughtexception;
+
+     label23:
+        if $r8 == null goto label24;
+
+        virtualinvoke $r8.<java.io.InputStream: void close()>();
+
+     label24:
+        throw $r13;
+
+     label25:
+        $r13 := @caughtexception;
+
+        $r8 = $r4;
+
+        goto label23;
+
+     label26:
+        $r14 := @caughtexception;
+
+        goto label21;
+
+     label27:
+        return $r2;
+
+     label28:
+        return $r9;
+
+        catch java.lang.Exception from label02 to label03 with label26;
+        catch java.lang.Throwable from label01 to label03 with label22;
+        catch java.lang.Exception from label04 to label05 with label20;
+        catch java.lang.Exception from label06 to label09 with label20;
+        catch java.lang.Exception from label10 to label13 with label20;
+        catch java.lang.Exception from label14 to label15 with label20;
+        catch java.lang.Throwable from label03 to label05 with label25;
+        catch java.lang.Throwable from label06 to label07 with label25;
+        catch java.lang.Throwable from label08 to label09 with label25;
+        catch java.lang.Throwable from label10 to label11 with label25;
+        catch java.lang.Throwable from label12 to label13 with label25;
+        catch java.lang.Throwable from label14 to label15 with label25;
+        catch java.lang.Exception from label16 to label19 with label20;
+        catch java.lang.Throwable from label16 to label17 with label25;
+        catch java.lang.Throwable from label18 to label19 with label25;
+    }
+
+    private byte[] cryptToBytes(int, java.io.InputStream) throws java.lang.Exception
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        int $i0, varReplacer2311, varReplacer2313, varReplacer2314, varReplacer2315;
+        java.io.InputStream $r1;
+        byte[] $r2, $r8;
+        java.io.ByteArrayOutputStream $r3;
+        java.lang.String $r4, varReplacer2312;
+        javax.crypto.Cipher $r5;
+        java.security.Key $r6;
+        java.io.BufferedInputStream $r7;
+
+        nop;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.io.InputStream;
+
+        $r4 = $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String currentTransfomation>;
+
+        varReplacer2312 = "BC";
+
+        $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>($r4, varReplacer2312);
+
+        $r6 = specialinvoke $r0.<m.client.android.library.core.utils.AESUtil: java.security.Key generateKey()>();
+
+        varReplacer2311 = 2;
+
+        virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer2311, $r6);
+
+        $r3 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r3.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        $r7 = new java.io.BufferedInputStream;
+
+        specialinvoke $r7.<java.io.BufferedInputStream: void <init>(java.io.InputStream)>($r1);
+
+        $r2 = newarray (byte)[16384];
+
+     label1:
+        $i0 = virtualinvoke $r7.<java.io.InputStream: int read(byte[])>($r2);
+
+        if $i0 != -1 goto label2;
+
+        $r2 = virtualinvoke $r5.<javax.crypto.Cipher: byte[] doFinal()>();
+
+        $i0 = lengthof $r2;
+
+        varReplacer2313 = 0;
+
+        virtualinvoke $r3.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r2, varReplacer2313, $i0);
+
+        $r2 = virtualinvoke $r3.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        return $r2;
+
+     label2:
+        varReplacer2315 = 0;
+
+        $r8 = virtualinvoke $r5.<javax.crypto.Cipher: byte[] update(byte[],int,int)>($r2, varReplacer2315, $i0);
+
+        $i0 = lengthof $r8;
+
+        varReplacer2314 = 0;
+
+        virtualinvoke $r3.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r8, varReplacer2314, $i0);
+
+        goto label1;
+    }
+
+    private java.security.Key generateKey() throws java.lang.Exception
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        javax.crypto.spec.SecretKeySpec $r1;
+        byte[] $r2;
+        java.lang.String $r3, varReplacer1759, varReplacer1760;
+
+        nop;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $r1 = new javax.crypto.spec.SecretKeySpec;
+
+        $r3 = $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String keyValue>;
+
+        varReplacer1759 = "utf-8";
+
+        $r2 = virtualinvoke $r3.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer1759);
+
+        varReplacer1760 = "AES";
+
+        specialinvoke $r1.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, varReplacer1760);
+
+        return $r1;
+    }
+
+    public static byte[] hexToByteArray(java.lang.String)
+    {
+        java.lang.String $r0, $r2;
+        int $i0, $i1, $i2, varReplacer1752;
+        byte[] $r1;
+        byte $b3;
+        null_type varReplacer1753;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        if $r0 == null goto label1;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i0 != 0 goto label2;
+
+     label1:
+        varReplacer1753 = null;
+
+        return varReplacer1753;
+
+     label2:
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        $i0 = $i0 / 2;
+
+        $r1 = newarray (byte)[$i0];
+
+        $i0 = 0;
+
+     label3:
+        $i1 = lengthof $r1;
+
+        if $i0 >= $i1 goto label4;
+
+        $i1 = $i0 * 2;
+
+        $i2 = $i0 * 2;
+
+        $i2 = $i2 + 2;
+
+        $r2 = virtualinvoke $r0.<java.lang.String: java.lang.String substring(int,int)>($i1, $i2);
+
+        varReplacer1752 = 16;
+
+        $i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String,int)>($r2, varReplacer1752);
+
+        $b3 = (byte) $i1;
+
+        $r1[$i0] = $b3;
+
+        $i0 = $i0 + 1;
+
+        goto label3;
+
+     label4:
+        return $r1;
+    }
+
+    private void initKey()
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        java.lang.StringBuffer $r1;
+        m.client.android.library.core.common.CommonLibHandler $r2;
+        java.lang.String $r3, varReplacer1764, varReplacer1765, varReplacer1766, varReplacer1767, varReplacer1768, varReplacer1769, varReplacer1770;
+        java.lang.String[] $r4, $r5;
+        int $i0, $i1;
+        boolean $z0;
+        java.lang.StringBuilder $r6;
+
+        nop;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $r2 = $r0.<m.client.android.library.core.utils.AESUtil: m.client.android.library.core.common.CommonLibHandler commHandle>;
+
+        $r3 = $r2.<m.client.android.library.core.common.CommonLibHandler: java.lang.String g_strDummyN>;
+
+        varReplacer1764 = "";
+
+        $r4 = virtualinvoke $r3.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer1764);
+
+        $r1 = new java.lang.StringBuffer;
+
+        specialinvoke $r1.<java.lang.StringBuffer: void <init>()>();
+
+        $r2 = $r0.<m.client.android.library.core.utils.AESUtil: m.client.android.library.core.common.CommonLibHandler commHandle>;
+
+        $r3 = $r2.<m.client.android.library.core.common.CommonLibHandler: java.lang.String g_arrDummy>;
+
+        varReplacer1769 = "[";
+
+        varReplacer1770 = "";
+
+        $r3 = virtualinvoke $r3.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1769, varReplacer1770);
+
+        varReplacer1767 = "]";
+
+        varReplacer1768 = "";
+
+        $r3 = virtualinvoke $r3.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1767, varReplacer1768);
+
+        varReplacer1765 = ",";
+
+        $r5 = virtualinvoke $r3.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer1765);
+
+        $i0 = 0;
+
+     label1:
+        $i1 = lengthof $r5;
+
+        if $i0 < $i1 goto label2;
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String keyValue> = $r3;
+
+        $r3 = $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String keyValue>;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r3);
+
+        if $z0 != 0 goto label3;
+
+        $r3 = $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String keyValue>;
+
+        $i0 = virtualinvoke $r3.<java.lang.String: int length()>();
+
+        if $i0 != 32 goto label3;
+
+        varReplacer1766 = "AES/ECB/PKCS5Padding";
+
+        $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String currentTransfomation> = varReplacer1766;
+
+        return;
+
+     label2:
+        $r6 = new java.lang.StringBuilder;
+
+        $r3 = $r5[$i0];
+
+        $r3 = virtualinvoke $r3.<java.lang.String: java.lang.String trim()>();
+
+        $i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r3);
+
+        $i1 = $i1 + 1;
+
+        $r3 = $r4[$i1];
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r3);
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r1.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>($r3);
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    public static byte[] toBytes(java.lang.String) throws java.lang.IllegalArgumentException, java.lang.NumberFormatException
+    {
+        java.lang.String $r0, $r2;
+        int $i0, $i1, $i2, $i3;
+        byte[] $r1;
+        java.lang.Integer $r3;
+        byte $b4;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        $i0 = $i0 / 2;
+
+        $r1 = newarray (byte)[$i0];
+
+        $i1 = 0;
+
+     label1:
+        if $i1 < $i0 goto label2;
+
+        return $r1;
+
+     label2:
+        $i2 = $i1 * 2;
+
+        $i3 = $i1 * 2;
+
+        $i3 = $i3 + 2;
+
+        $r2 = virtualinvoke $r0.<java.lang.String: java.lang.String substring(int,int)>($i2, $i3);
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(java.lang.String,int)>($r2, 16);
+
+        $b4 = virtualinvoke $r3.<java.lang.Integer: byte byteValue()>();
+
+        $r1[$i1] = $b4;
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+    }
+
+    byte[] appendByteArrays(byte[], byte[])
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        byte[] $r1, $r2, $r3;
+        int $i0, $i1, varReplacer1761, varReplacer1762, varReplacer1763;
+
+        nop;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 := @parameter1: byte[];
+
+        $i0 = lengthof $r1;
+
+        $i1 = lengthof $r2;
+
+        $i0 = $i0 + $i1;
+
+        $r3 = newarray (byte)[$i0];
+
+        $i0 = lengthof $r1;
+
+        varReplacer1762 = 0;
+
+        varReplacer1763 = 0;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r1, varReplacer1762, $r3, varReplacer1762, $i0);
+
+        $i0 = lengthof $r1;
+
+        $i1 = lengthof $r2;
+
+        varReplacer1761 = 0;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r2, varReplacer1761, $r3, $i0, $i1);
+
+        return $r3;
+    }
+
+    public java.lang.String decrypt(java.io.File) throws java.lang.Exception
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        java.io.File $r1;
+        java.lang.String $r2;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $r1 := @parameter0: java.io.File;
+
+        $r2 = specialinvoke $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String crypt(int,java.io.File)>(2, $r1);
+
+        return $r2;
+    }
+
+    public java.lang.String decrypt(java.lang.String) throws java.lang.Exception
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        java.lang.String $r1, $r2, $r6, varReplacer1734, varReplacer1735, varReplacer1736, varReplacer1737, varReplacer1740, varReplacer1741, varReplacer1742, varReplacer1745, varReplacer1747, varReplacer1749;
+        byte[] $r3;
+        boolean $z0;
+        javax.crypto.Cipher $r4;
+        javax.crypto.spec.SecretKeySpec $r5;
+        int varReplacer1738, varReplacer1739, varReplacer1743, varReplacer1744, varReplacer1746, varReplacer1748;
+
+        nop;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = "AES256PD";
+
+        varReplacer1741 = "utf-8";
+
+        $r3 = virtualinvoke $r2.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer1741);
+
+        $r2 = staticinvoke <m.client.android.library.core.utils.AESUtil: java.lang.String byteArrayToHex(byte[])>($r3);
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean startsWith(java.lang.String)>($r2);
+
+        if $z0 == 0 goto label1;
+
+        varReplacer1734 = "AES/ECB/PKCS5Padding";
+
+        varReplacer1735 = "BC";
+
+        $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>(varReplacer1734, varReplacer1735);
+
+        $r5 = new javax.crypto.spec.SecretKeySpec;
+
+        $r6 = $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String keyValue>;
+
+        varReplacer1743 = 0;
+
+        varReplacer1744 = 32;
+
+        $r6 = virtualinvoke $r6.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1743, varReplacer1744);
+
+        varReplacer1747 = "utf-8";
+
+        $r3 = virtualinvoke $r6.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer1747);
+
+        varReplacer1745 = "AES";
+
+        specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer1745);
+
+        varReplacer1746 = 2;
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1746, $r5);
+
+        varReplacer1749 = "";
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String replaceFirst(java.lang.String,java.lang.String)>($r2, varReplacer1749);
+
+        $r3 = staticinvoke <m.client.android.library.core.utils.AESUtil: byte[] hexToByteArray(java.lang.String)>($r1);
+
+        $r3 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r3);
+
+        $r1 = new java.lang.String;
+
+        specialinvoke $r1.<java.lang.String: void <init>(byte[])>($r3);
+
+        return $r1;
+
+     label1:
+        varReplacer1736 = "AES/ECB/PKCS5Padding";
+
+        varReplacer1737 = "BC";
+
+        $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>(varReplacer1736, varReplacer1737);
+
+        $r5 = new javax.crypto.spec.SecretKeySpec;
+
+        $r2 = $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String keyValue>;
+
+        varReplacer1738 = 0;
+
+        varReplacer1739 = 16;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1738, varReplacer1739);
+
+        varReplacer1740 = "utf-8";
+
+        $r3 = virtualinvoke $r2.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer1740);
+
+        varReplacer1742 = "AES";
+
+        specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer1742);
+
+        varReplacer1748 = 2;
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1748, $r5);
+
+        $r3 = staticinvoke <m.client.android.library.core.utils.AESUtil: byte[] hexToByteArray(java.lang.String)>($r1);
+
+        $r3 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r3);
+
+        $r1 = new java.lang.String;
+
+        specialinvoke $r1.<java.lang.String: void <init>(byte[])>($r3);
+
+        return $r1;
+    }
+
+    public java.lang.String decrypt(java.lang.String, java.lang.String, java.lang.String) throws java.lang.Exception
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        java.lang.String $r1, $r2, $r3;
+        boolean $z0;
+        int $i0;
+        javax.crypto.Cipher $r4;
+        java.security.Key $r5;
+        byte[] $r6;
+        javax.crypto.spec.SecretKeySpec $r7;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>("AES-128");
+
+        if $z0 == 0 goto label1;
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        if $i0 < 16 goto label2;
+
+     label1:
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>("AES-256");
+
+        if $z0 == 0 goto label3;
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        if $i0 >= 32 goto label3;
+
+     label2:
+        staticinvoke <m.client.android.library.core.utils.PLog: void d(java.lang.String,java.lang.String)>("AESUtil", "Decrypt key mismatch.");
+
+        return null;
+
+     label3:
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r3);
+
+        if $z0 != 0 goto label4;
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>("AUTO");
+
+        if $z0 == 0 goto label5;
+
+     label4:
+        $r2 = $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String currentTransfomation>;
+
+        $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>($r2, "BC");
+
+        $r5 = specialinvoke $r0.<m.client.android.library.core.utils.AESUtil: java.security.Key generateKey()>();
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key)>(1, $r5);
+
+        $r6 = staticinvoke <m.client.android.library.core.utils.AESUtil: byte[] hexToByteArray(java.lang.String)>($r1);
+
+        $r6 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6);
+
+        $r1 = new java.lang.String;
+
+        specialinvoke $r1.<java.lang.String: void <init>(byte[])>($r6);
+
+        return $r1;
+
+     label5:
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>("AES-128");
+
+        if $z0 == 0 goto label6;
+
+        $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>("AES/ECB/PKCS5Padding", "BC");
+
+        $r7 = new javax.crypto.spec.SecretKeySpec;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(0, 16);
+
+        $r6 = virtualinvoke $r2.<java.lang.String: byte[] getBytes(java.lang.String)>("utf-8");
+
+        specialinvoke $r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, "AES");
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key)>(1, $r7);
+
+        $r6 = staticinvoke <m.client.android.library.core.utils.AESUtil: byte[] hexToByteArray(java.lang.String)>($r1);
+
+        $r6 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6);
+
+        $r1 = new java.lang.String;
+
+        specialinvoke $r1.<java.lang.String: void <init>(byte[])>($r6);
+
+        return $r1;
+
+     label6:
+        $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>("AES/ECB/PKCS5Padding", "BC");
+
+        $r7 = new javax.crypto.spec.SecretKeySpec;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(0, 32);
+
+        $r6 = virtualinvoke $r2.<java.lang.String: byte[] getBytes(java.lang.String)>("utf-8");
+
+        specialinvoke $r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, "AES");
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key)>(1, $r7);
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String replaceFirst(java.lang.String,java.lang.String)>("AES256PD", "");
+
+        $r6 = staticinvoke <m.client.android.library.core.utils.AESUtil: byte[] hexToByteArray(java.lang.String)>($r1);
+
+        $r6 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6);
+
+        $r1 = new java.lang.String;
+
+        specialinvoke $r1.<java.lang.String: void <init>(byte[])>($r6);
+
+        return $r1;
+    }
+
+    public void decrypt(java.io.File, java.io.File) throws java.lang.Exception
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        java.io.File $r1, $r2;
+        int varReplacer1971;
+
+        nop;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $r1 := @parameter0: java.io.File;
+
+        $r2 := @parameter1: java.io.File;
+
+        varReplacer1971 = 2;
+
+        specialinvoke $r0.<m.client.android.library.core.utils.AESUtil: void crypt(int,java.io.File,java.io.File)>(varReplacer1971, $r1, $r2);
+
+        return;
+    }
+
+    public byte[] decryptToBytes(java.io.File) throws java.lang.Exception
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        java.io.File $r1;
+        byte[] $r2;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $r1 := @parameter0: java.io.File;
+
+        $r2 = specialinvoke $r0.<m.client.android.library.core.utils.AESUtil: byte[] cryptToBytes(int,java.io.File)>(2, $r1);
+
+        return $r2;
+    }
+
+    public byte[] decryptToBytes(java.io.InputStream) throws java.lang.Exception
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        java.io.InputStream $r1;
+        byte[] $r2;
+        int varReplacer2310;
+
+        nop;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $r1 := @parameter0: java.io.InputStream;
+
+        varReplacer2310 = 2;
+
+        $r2 = specialinvoke $r0.<m.client.android.library.core.utils.AESUtil: byte[] cryptToBytes(int,java.io.InputStream)>(varReplacer2310, $r1);
+
+        return $r2;
+    }
+
+    public java.lang.String encrypt(java.lang.String) throws java.lang.Exception
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        java.lang.String $r1, $r2, varReplacer1729, varReplacer1730, varReplacer1731, varReplacer1733;
+        javax.crypto.Cipher $r3;
+        java.security.Key $r4;
+        boolean $z0;
+        int $i0, varReplacer1732;
+        byte[] $r5, $r6;
+
+        nop;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String currentTransfomation>;
+
+        varReplacer1730 = "BC";
+
+        $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>($r2, varReplacer1730);
+
+        $r4 = specialinvoke $r0.<m.client.android.library.core.utils.AESUtil: java.security.Key generateKey()>();
+
+        varReplacer1732 = 1;
+
+        virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1732, $r4);
+
+        $r2 = $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String keyValue>;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 != 0 goto label1;
+
+        $r2 = $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String keyValue>;
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        if $i0 != 32 goto label1;
+
+        varReplacer1729 = "utf-8";
+
+        $r5 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer1729);
+
+        $r5 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r5);
+
+        $r1 = "AES256PD";
+
+        varReplacer1731 = "utf-8";
+
+        $r6 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer1731);
+
+        $r5 = virtualinvoke $r0.<m.client.android.library.core.utils.AESUtil: byte[] appendByteArrays(byte[],byte[])>($r6, $r5);
+
+        $r1 = staticinvoke <m.client.android.library.core.utils.AESUtil: java.lang.String byteArrayToHex(byte[])>($r5);
+
+        return $r1;
+
+     label1:
+        varReplacer1733 = "utf-8";
+
+        $r5 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer1733);
+
+        $r5 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r5);
+
+        $r1 = staticinvoke <m.client.android.library.core.utils.AESUtil: java.lang.String byteArrayToHex(byte[])>($r5);
+
+        return $r1;
+    }
+
+    public java.lang.String encrypt(java.lang.String, java.lang.String, java.lang.String) throws java.lang.Exception
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        java.lang.String $r1, $r2, $r3;
+        boolean $z0;
+        int $i0;
+        javax.crypto.Cipher $r4;
+        java.security.Key $r5;
+        byte[] $r6, $r8;
+        javax.crypto.spec.SecretKeySpec $r7;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>("AES-128");
+
+        if $z0 == 0 goto label1;
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        if $i0 < 16 goto label2;
+
+     label1:
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>("AES-256");
+
+        if $z0 == 0 goto label3;
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        if $i0 >= 32 goto label3;
+
+     label2:
+        staticinvoke <m.client.android.library.core.utils.PLog: void d(java.lang.String,java.lang.String)>("AESUtil", "Encrypt key mismatch.");
+
+        return null;
+
+     label3:
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r3);
+
+        if $z0 != 0 goto label4;
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>("AUTO");
+
+        if $z0 == 0 goto label5;
+
+     label4:
+        $r2 = $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String currentTransfomation>;
+
+        $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>($r2, "BC");
+
+        $r5 = specialinvoke $r0.<m.client.android.library.core.utils.AESUtil: java.security.Key generateKey()>();
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key)>(1, $r5);
+
+        $r6 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>("utf-8");
+
+        $r6 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6);
+
+        $r1 = staticinvoke <m.client.android.library.core.utils.AESUtil: java.lang.String byteArrayToHex(byte[])>($r6);
+
+        return $r1;
+
+     label5:
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>("AES-128");
+
+        if $z0 == 0 goto label6;
+
+        $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>("AES/ECB/PKCS5Padding", "BC");
+
+        $r7 = new javax.crypto.spec.SecretKeySpec;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(0, 16);
+
+        $r6 = virtualinvoke $r2.<java.lang.String: byte[] getBytes(java.lang.String)>("utf-8");
+
+        specialinvoke $r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, "AES");
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key)>(1, $r7);
+
+        $r6 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>("utf-8");
+
+        $r6 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6);
+
+        $r1 = staticinvoke <m.client.android.library.core.utils.AESUtil: java.lang.String byteArrayToHex(byte[])>($r6);
+
+        return $r1;
+
+     label6:
+        $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>("AES/ECB/PKCS5Padding", "BC");
+
+        $r7 = new javax.crypto.spec.SecretKeySpec;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(0, 32);
+
+        $r6 = virtualinvoke $r2.<java.lang.String: byte[] getBytes(java.lang.String)>("utf-8");
+
+        specialinvoke $r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, "AES");
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key)>(1, $r7);
+
+        $r6 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>("utf-8");
+
+        $r6 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6);
+
+        $r1 = "AES256PD";
+
+        $r8 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>("utf-8");
+
+        $r6 = virtualinvoke $r0.<m.client.android.library.core.utils.AESUtil: byte[] appendByteArrays(byte[],byte[])>($r8, $r6);
+
+        $r1 = staticinvoke <m.client.android.library.core.utils.AESUtil: java.lang.String byteArrayToHex(byte[])>($r6);
+
+        return $r1;
+    }
+
+    public void encrypt(java.io.File, java.io.File) throws java.lang.Exception
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        java.io.File $r1, $r2;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $r1 := @parameter0: java.io.File;
+
+        $r2 := @parameter1: java.io.File;
+
+        specialinvoke $r0.<m.client.android.library.core.utils.AESUtil: void crypt(int,java.io.File,java.io.File)>(1, $r1, $r2);
+
+        return;
+    }
+
+    public javax.crypto.Cipher getDecryptCipher()
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        javax.crypto.Cipher $r1;
+        java.lang.String $r2;
+        java.security.Key $r3;
+        java.lang.Throwable $r4, $r5, $r6, $r7;
+        java.lang.Exception $r8;
+        java.security.NoSuchAlgorithmException r9;
+        java.security.NoSuchProviderException r10;
+        javax.crypto.NoSuchPaddingException r11;
+        java.security.InvalidKeyException r12;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $r1 = <m.client.android.library.core.utils.AESUtil: javax.crypto.Cipher g_cipher>;
+
+        if $r1 == null goto label01;
+
+        $r1 = <m.client.android.library.core.utils.AESUtil: javax.crypto.Cipher g_cipher>;
+
+        return $r1;
+
+     label01:
+        $r2 = $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String currentTransfomation>;
+
+     label02:
+        $r1 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>($r2, "BC");
+
+     label03:
+        <m.client.android.library.core.utils.AESUtil: javax.crypto.Cipher g_cipher> = $r1;
+
+        $r1 = <m.client.android.library.core.utils.AESUtil: javax.crypto.Cipher g_cipher>;
+
+     label04:
+        $r3 = specialinvoke $r0.<m.client.android.library.core.utils.AESUtil: java.security.Key generateKey()>();
+
+        virtualinvoke $r1.<javax.crypto.Cipher: void init(int,java.security.Key)>(2, $r3);
+
+     label05:
+        $r1 = <m.client.android.library.core.utils.AESUtil: javax.crypto.Cipher g_cipher>;
+
+        return $r1;
+
+     label06:
+        $r4 := @caughtexception;
+
+        r9 = (java.security.NoSuchAlgorithmException) $r4;
+
+        virtualinvoke r9.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        goto label05;
+
+     label07:
+        $r5 := @caughtexception;
+
+        r10 = (java.security.NoSuchProviderException) $r5;
+
+        virtualinvoke r10.<java.security.NoSuchProviderException: void printStackTrace()>();
+
+        goto label05;
+
+     label08:
+        $r6 := @caughtexception;
+
+        r11 = (javax.crypto.NoSuchPaddingException) $r6;
+
+        virtualinvoke r11.<javax.crypto.NoSuchPaddingException: void printStackTrace()>();
+
+        goto label05;
+
+     label09:
+        $r7 := @caughtexception;
+
+        r12 = (java.security.InvalidKeyException) $r7;
+
+        virtualinvoke r12.<java.security.InvalidKeyException: void printStackTrace()>();
+
+        goto label05;
+
+     label10:
+        $r8 := @caughtexception;
+
+        virtualinvoke $r8.<java.lang.Exception: void printStackTrace()>();
+
+        goto label05;
+
+        catch java.security.NoSuchAlgorithmException from label02 to label03 with label06;
+        catch java.security.NoSuchAlgorithmException from label04 to label05 with label06;
+        catch java.security.NoSuchProviderException from label02 to label03 with label07;
+        catch java.security.NoSuchProviderException from label04 to label05 with label07;
+        catch javax.crypto.NoSuchPaddingException from label02 to label03 with label08;
+        catch javax.crypto.NoSuchPaddingException from label04 to label05 with label08;
+        catch java.security.InvalidKeyException from label02 to label03 with label09;
+        catch java.security.InvalidKeyException from label04 to label05 with label09;
+        catch java.lang.Exception from label01 to label03 with label10;
+        catch java.lang.Exception from label04 to label05 with label10;
+    }
+
+    public void setKey(java.lang.String)
+    {
+        m.client.android.library.core.utils.AESUtil $r0;
+        java.lang.String $r1;
+
+        $r0 := @this: m.client.android.library.core.utils.AESUtil;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r0.<m.client.android.library.core.utils.AESUtil: java.lang.String keyValue> = $r1;
+
+        return;
+    }
+}

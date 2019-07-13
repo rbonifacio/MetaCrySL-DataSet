@@ -1,0 +1,4122 @@
+public class com.lynda.course.download.DownloadService extends android.app.Service
+{
+    private static boolean f;
+    com.lynda.infra.event.Bus a;
+    com.lynda.infra.storage.DownloadDB b;
+    com.lynda.Session c;
+    com.lynda.infra.api.API d;
+    com.lynda.infra.network.WebClient e;
+    private final java.util.Vector g;
+    private final android.util.SparseBooleanArray h;
+    private int i;
+    private java.net.HttpURLConnection j;
+    private android.app.NotificationManager k;
+    private android.support.v4.app.NotificationCompat$Builder l;
+    private com.lynda.course.download.DownloadService$VideoStatus m;
+    private java.util.concurrent.atomic.AtomicBoolean n;
+    private java.util.concurrent.atomic.AtomicBoolean o;
+    private com.lynda.course.download.tasks.ResumeAllInterruptedDownloadsTask p;
+    private com.lynda.course.download.tasks.PauseAllDownloadTask q;
+    public android.content.Intent ipcIntent;
+    public android.os.IBinder ipcBinder_0;
+
+    public void <init>()
+    {
+        com.lynda.course.download.DownloadService $r0;
+        java.util.Vector $r1;
+        android.util.SparseBooleanArray $r2;
+
+        nop;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        specialinvoke $r0.<android.app.Service: void <init>()>();
+
+        $r1 = new java.util.Vector;
+
+        specialinvoke $r1.<java.util.Vector: void <init>()>();
+
+        $r0.<com.lynda.course.download.DownloadService: java.util.Vector g> = $r1;
+
+        $r2 = new android.util.SparseBooleanArray;
+
+        specialinvoke $r2.<android.util.SparseBooleanArray: void <init>()>();
+
+        $r0.<com.lynda.course.download.DownloadService: android.util.SparseBooleanArray h> = $r2;
+
+        return;
+    }
+
+    static int a(com.lynda.course.download.DownloadService, int)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        int $i0;
+
+        nop;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        $i0 := @parameter1: int;
+
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+        return $i0;
+    }
+
+    static com.lynda.course.download.DownloadService$VideoStatus a(com.lynda.course.download.DownloadService, com.lynda.course.download.DownloadService$VideoStatus)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.course.download.DownloadService$VideoStatus $r1;
+
+        nop;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter1: com.lynda.course.download.DownloadService$VideoStatus;
+
+        $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.DownloadService$VideoStatus m> = $r1;
+
+        return $r1;
+    }
+
+    static java.util.ArrayList a(java.util.ArrayList)
+    {
+        java.util.ArrayList $r0, $r1;
+        int $i0, $i1;
+        java.lang.Object $r2;
+        com.lynda.infra.model.Video $r3;
+
+        $r0 := @parameter0: java.util.ArrayList;
+
+        $r1 = new java.util.ArrayList;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>()>();
+
+        $i0 = 0;
+
+     label1:
+        $i1 = virtualinvoke $r0.<java.util.ArrayList: int size()>();
+
+        if $i0 >= $i1 goto label2;
+
+        $r2 = virtualinvoke $r0.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r3 = (com.lynda.infra.model.Video) $r2;
+
+        $r3 = virtualinvoke $r3.<com.lynda.infra.model.Video: com.lynda.infra.model.Video duplicate()>();
+
+        virtualinvoke $r1.<java.util.ArrayList: boolean add(java.lang.Object)>($r3);
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label2:
+        return $r1;
+    }
+
+    static java.util.Vector a(com.lynda.course.download.DownloadService)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        java.util.Vector r1;
+
+        nop;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        r1 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        return r1;
+    }
+
+    static void a(com.lynda.course.download.DownloadService, int, java.util.ArrayList)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        int $i0, $i1;
+        java.util.ArrayList $r1;
+        java.util.Vector $r2, $r4;
+        com.lynda.course.download.DownloadService$VideoStatus $r3;
+        java.util.Iterator $r5;
+        boolean $z0;
+        java.lang.Object $r6;
+        com.lynda.infra.model.Video $r7;
+        java.lang.Throwable $r8;
+        android.util.SparseBooleanArray $r9;
+        com.lynda.course.download.DownloadEvents$UpdateMultiVideoStatusEvent $r10;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        $i0 := @parameter1: int;
+
+        $r1 := @parameter2: java.util.ArrayList;
+
+        $r3 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.DownloadService$VideoStatus m>;
+
+        if $r3 == null goto label1;
+
+        $r3 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.DownloadService$VideoStatus m>;
+
+        $i1 = $r3.<com.lynda.course.download.DownloadService$VideoStatus: int b>;
+
+        if $i1 != $i0 goto label1;
+
+        $i1 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i1 = $i1 | 2;
+
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i1;
+
+     label1:
+        $r2 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        entermonitor $r2;
+
+     label2:
+        $r4 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        $r5 = virtualinvoke $r4.<java.util.Vector: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label6;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (com.lynda.infra.model.Video) $r6;
+
+        $i1 = $r7.<com.lynda.infra.model.Video: int CourseID>;
+
+        if $i1 != $i0 goto label3;
+
+        interfaceinvoke $r5.<java.util.Iterator: void remove()>();
+
+        goto label3;
+
+     label4:
+        $r8 := @caughtexception;
+
+        exitmonitor $r2;
+
+     label5:
+        throw $r8;
+
+     label6:
+        exitmonitor $r2;
+
+     label7:
+        $r9 = $r0.<com.lynda.course.download.DownloadService: android.util.SparseBooleanArray h>;
+
+        virtualinvoke $r9.<android.util.SparseBooleanArray: void clear()>();
+
+        $r10 = new com.lynda.course.download.DownloadEvents$UpdateMultiVideoStatusEvent;
+
+        specialinvoke $r10.<com.lynda.course.download.DownloadEvents$UpdateMultiVideoStatusEvent: void <init>(int,java.util.ArrayList)>($i0, $r1);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r10);
+
+        return;
+
+        catch java.lang.Throwable from label2 to label5 with label4;
+        catch java.lang.Throwable from label6 to label7 with label4;
+    }
+
+    static void a(com.lynda.course.download.DownloadService, com.lynda.infra.model.Video)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.infra.model.Video $r1;
+        int $i0, $i1, varReplacer6625, varReplacer6630, varReplacer6631;
+        com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent $r2;
+        com.lynda.course.download.DownloadService$DownloadResponseHandler $r3;
+        com.lynda.infra.network.WebClient $r4;
+        java.lang.String $r5, varReplacer6626, varReplacer6627, varReplacer6632;
+        com.lynda.infra.api.BatchRequest $r6;
+        com.lynda.infra.api.RequestParams $r7;
+        java.util.Map $r8;
+        com.lynda.Settings $r9;
+        com.squareup.okhttp.Request $r10;
+        com.lynda.infra.network.WebClient$ResponseCallback $r11;
+        android.content.Context $r12;
+        com.squareup.okhttp.OkHttpClient $r13;
+        com.squareup.okhttp.Call $r14;
+        com.squareup.okhttp.Response $r15;
+        boolean $z0;
+        java.io.IOException $r16;
+        java.lang.StringBuilder $r17;
+        java.lang.Exception $r18;
+        null_type varReplacer6628, varReplacer6629;
+
+        nop;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter1: com.lynda.infra.model.Video;
+
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 | 4096;
+
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+        varReplacer6625 = 2;
+
+        virtualinvoke $r1.<com.lynda.infra.model.Video: void setDownloadProgress(int)>(varReplacer6625);
+
+        varReplacer6630 = 2;
+
+        virtualinvoke $r1.<com.lynda.infra.model.Video: void setDownloadStatus(int)>(varReplacer6630);
+
+        $r2 = new com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent;
+
+        specialinvoke $r2.<com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent: void <init>(com.lynda.infra.model.Video)>($r1);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r2);
+
+        $r3 = new com.lynda.course.download.DownloadService$DownloadResponseHandler;
+
+        specialinvoke $r3.<com.lynda.course.download.DownloadService$DownloadResponseHandler: void <init>(com.lynda.course.download.DownloadService,android.content.Context,com.lynda.infra.model.Video)>($r0, $r0, $r1);
+
+        $r4 = $r0.<com.lynda.course.download.DownloadService: com.lynda.infra.network.WebClient e>;
+
+        staticinvoke <FLOWDROID_EXCEPTIONS: void throw1()>();
+
+        $r5 = "/batch2";
+
+        $i0 = $r1.<com.lynda.infra.model.Video: int CourseID>;
+
+        $i1 = $r1.<com.lynda.infra.model.Video: int ID>;
+
+        varReplacer6631 = 0;
+
+        $r6 = staticinvoke <com.lynda.videoplayer.VideoAPIHandler: com.lynda.infra.api.BatchRequest a(int,int,boolean)>($i0, $i1, varReplacer6631);
+
+        $r7 = staticinvoke <com.lynda.infra.api.RequestParams: com.lynda.infra.api.RequestParams a(com.lynda.infra.api.BatchRequest)>($r6);
+
+        $r8 = $r7.<com.lynda.infra.api.RequestParams: java.util.Map b>;
+
+        $r9 = $r4.<com.lynda.infra.network.WebClient: com.lynda.Settings a>;
+
+        varReplacer6627 = "/batch2";
+
+        varReplacer6628 = null;
+
+        $r5 = staticinvoke <com.lynda.infra.api.LyndaAPI: java.lang.String a(java.lang.String,com.lynda.infra.api.RequestParams,com.lynda.Settings)>(varReplacer6627, varReplacer6628, $r9);
+
+        $r10 = virtualinvoke $r4.<com.lynda.infra.network.WebClient: com.squareup.okhttp.Request a(java.lang.String,java.util.Map)>($r5, $r8);
+
+        $r11 = new com.lynda.infra.network.WebClient$ResponseCallback;
+
+        $r12 = $r4.<com.lynda.infra.network.WebClient: android.content.Context b>;
+
+        specialinvoke $r11.<com.lynda.infra.network.WebClient$ResponseCallback: void <init>(android.content.Context,com.lynda.infra.network.ResponseHandler)>($r12, $r3);
+
+     label1:
+        $r13 = $r4.<com.lynda.infra.network.WebClient: com.squareup.okhttp.OkHttpClient c>;
+
+        $r14 = virtualinvoke $r13.<com.squareup.okhttp.OkHttpClient: com.squareup.okhttp.Call a(com.squareup.okhttp.Request)>($r10);
+
+        $r15 = virtualinvoke $r14.<com.squareup.okhttp.Call: com.squareup.okhttp.Response a()>();
+
+        $z0 = virtualinvoke $r15.<com.squareup.okhttp.Response: boolean b()>();
+
+     label2:
+        if $z0 == 0 goto label5;
+
+     label3:
+        virtualinvoke $r11.<com.lynda.infra.network.WebClient$ResponseCallback: void a(com.squareup.okhttp.Response)>($r15);
+
+     label4:
+        return;
+
+     label5:
+        $r10 = $r15.<com.squareup.okhttp.Response: com.squareup.okhttp.Request a>;
+
+     label6:
+        $r16 = new java.io.IOException;
+
+        $r17 = new java.lang.StringBuilder;
+
+     label7:
+        varReplacer6626 = "Unexpected code ";
+
+        specialinvoke $r17.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer6626);
+
+        $r17 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r15);
+
+        $r5 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r16.<java.io.IOException: void <init>(java.lang.String)>($r5);
+
+        virtualinvoke $r11.<com.lynda.infra.network.WebClient$ResponseCallback: void a(com.squareup.okhttp.Request,java.io.IOException)>($r10, $r16);
+
+     label8:
+        return;
+
+     label9:
+        $r18 := @caughtexception;
+
+        virtualinvoke $r18.<java.lang.Exception: void printStackTrace()>();
+
+        $r16 = new java.io.IOException;
+
+        varReplacer6632 = "Unknown error";
+
+        specialinvoke $r16.<java.io.IOException: void <init>(java.lang.String)>(varReplacer6632);
+
+        varReplacer6629 = null;
+
+        virtualinvoke $r11.<com.lynda.infra.network.WebClient$ResponseCallback: void a(com.squareup.okhttp.Request,java.io.IOException)>(varReplacer6629, $r16);
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label9;
+        catch java.lang.Exception from label3 to label4 with label9;
+        catch java.lang.Exception from label5 to label6 with label9;
+        catch java.lang.Exception from label7 to label8 with label9;
+    }
+
+    static void a(com.lynda.course.download.DownloadService, java.lang.Object)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        java.lang.Object $r1;
+
+        nop;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter1: java.lang.Object;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    private static void a(com.lynda.infra.app.tasks.CustomTask)
+    {
+        com.lynda.infra.app.tasks.CustomTask $r0;
+        boolean $z0;
+        java.lang.Exception $r1;
+        int varReplacer3777;
+
+        nop;
+
+        $r0 := @parameter0: com.lynda.infra.app.tasks.CustomTask;
+
+        if $r0 == null goto label6;
+
+     label1:
+        $z0 = virtualinvoke $r0.<com.lynda.infra.app.tasks.CustomTask: boolean isCancelled()>();
+
+     label2:
+        if $z0 != 0 goto label6;
+
+     label3:
+        varReplacer3777 = 0;
+
+        virtualinvoke $r0.<com.lynda.infra.app.tasks.CustomTask: boolean cancel(boolean)>(varReplacer3777);
+
+     label4:
+        return;
+
+     label5:
+        $r1 := @caughtexception;
+
+        virtualinvoke $r1.<java.lang.Exception: void printStackTrace()>();
+
+     label6:
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    private void a(com.lynda.infra.model.Video)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.infra.model.Video $r1;
+        java.lang.Object[] $r2;
+        int $i0, varReplacer11976;
+        java.lang.Integer $r3;
+        java.lang.String $r4, varReplacer11975;
+        com.lynda.infra.storage.DownloadDB $r5;
+        com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent $r6;
+
+        nop;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter0: com.lynda.infra.model.Video;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void h()>();
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        $r2 = newarray (java.lang.Object)[2];
+
+        $i0 = virtualinvoke $r1.<com.lynda.infra.model.Video: int getId()>();
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r2[0] = $r3;
+
+        $r4 = virtualinvoke $r1.<com.lynda.infra.model.Video: java.lang.String getTitle()>();
+
+        $r2[1] = $r4;
+
+        varReplacer11975 = "onVideoDownloadPaused: %s | %s";
+
+        staticinvoke <timber.log.Timber: void a(java.lang.String,java.lang.Object[])>(varReplacer11975, $r2);
+
+        varReplacer11976 = 4;
+
+        virtualinvoke $r1.<com.lynda.infra.model.Video: void setDownloadStatus(int)>(varReplacer11976);
+
+        $r5 = $r0.<com.lynda.course.download.DownloadService: com.lynda.infra.storage.DownloadDB b>;
+
+        virtualinvoke $r5.<com.lynda.infra.storage.DownloadDB: void b(com.lynda.infra.model.Video)>($r1);
+
+        $r6 = new com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent;
+
+        specialinvoke $r6.<com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent: void <init>(com.lynda.infra.model.Video)>($r1);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r6);
+
+        return;
+    }
+
+    private void a(java.lang.Object)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        java.lang.Object $r1;
+        com.lynda.App $r2;
+        com.lynda.infra.component.AppComponent $r3;
+        com.lynda.infra.event.Bus $r4;
+        boolean $z0;
+        java.util.Vector $r5;
+        int $i0, varReplacer3753, varReplacer3754, varReplacer3755, varReplacer3756, varReplacer3757, varReplacer3758, varReplacer3759, varReplacer3760, varReplacer3761, varReplacer3762, varReplacer3763, varReplacer3764, varReplacer3765, varReplacer3767, varReplacer3768, varReplacer3769, varReplacer3771;
+        android.app.NotificationManager $r6;
+        com.lynda.course.download.DownloadService$VideoStatus $r7;
+        android.support.v4.app.NotificationCompat$Builder $r8;
+        java.lang.String $r9, varReplacer3766, varReplacer3770;
+        java.lang.Object[] $r10;
+        java.lang.Integer $r11;
+        android.content.Intent $r12;
+        com.lynda.infra.app.ActivityFactory$Type $r13;
+        java.lang.Class $r14;
+        android.app.PendingIntent $r15;
+        android.app.Notification $r16;
+        java.lang.Exception $r17;
+
+        nop;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter0: java.lang.Object;
+
+        $r2 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+        $r3 = $r2.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+        $r4 = interfaceinvoke $r3.<com.lynda.infra.component.AppComponent: com.lynda.infra.event.Bus g()>();
+
+        virtualinvoke $r4.<com.lynda.infra.event.Bus: void d(java.lang.Object)>($r1);
+
+        $z0 = $r1 instanceof com.lynda.course.download.DownloadEvents$UpdateVideoProgressEvent;
+
+        if $z0 != 0 goto label17;
+
+        $r5 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        $i0 = virtualinvoke $r5.<java.util.Vector: int size()>();
+
+        if $i0 != 0 goto label01;
+
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 & 4096;
+
+        if $i0 != 0 goto label01;
+
+        $r6 = $r0.<com.lynda.course.download.DownloadService: android.app.NotificationManager k>;
+
+        varReplacer3761 = 39493;
+
+        virtualinvoke $r6.<android.app.NotificationManager: void cancel(int)>(varReplacer3761);
+
+        return;
+
+     label01:
+        $r5 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        $i0 = virtualinvoke $r5.<java.util.Vector: int size()>();
+
+     label02:
+        if $i0 != 0 goto label05;
+
+     label03:
+        $r7 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.DownloadService$VideoStatus m>;
+
+     label04:
+        if $r7 == null goto label17;
+
+     label05:
+        $r6 = $r0.<com.lynda.course.download.DownloadService: android.app.NotificationManager k>;
+
+        varReplacer3758 = 12345;
+
+        virtualinvoke $r6.<android.app.NotificationManager: void cancel(int)>(varReplacer3758);
+
+        $r6 = $r0.<com.lynda.course.download.DownloadService: android.app.NotificationManager k>;
+
+        varReplacer3753 = 32756;
+
+        virtualinvoke $r6.<android.app.NotificationManager: void cancel(int)>(varReplacer3753);
+
+        $r8 = $r0.<com.lynda.course.download.DownloadService: android.support.v4.app.NotificationCompat$Builder l>;
+
+     label06:
+        if $r8 != null goto label14;
+
+        $r8 = new android.support.v4.app.NotificationCompat$Builder;
+
+     label07:
+        specialinvoke $r8.<android.support.v4.app.NotificationCompat$Builder: void <init>(android.content.Context)>($r0);
+
+        $r0.<com.lynda.course.download.DownloadService: android.support.v4.app.NotificationCompat$Builder l> = $r8;
+
+        $r8 = $r0.<com.lynda.course.download.DownloadService: android.support.v4.app.NotificationCompat$Builder l>;
+
+        varReplacer3762 = 2131755175;
+
+        $i0 = staticinvoke <android.support.v4.content.ContextCompat: int c(android.content.Context,int)>($r0, varReplacer3762);
+
+        $r8.<android.support.v4.app.NotificationCompat$Builder: int y> = $i0;
+
+        $r8 = $r0.<com.lynda.course.download.DownloadService: android.support.v4.app.NotificationCompat$Builder l>;
+
+        varReplacer3771 = 1;
+
+        $r8.<android.support.v4.app.NotificationCompat$Builder: int z> = varReplacer3771;
+
+        $r8 = $r0.<com.lynda.course.download.DownloadService: android.support.v4.app.NotificationCompat$Builder l>;
+
+        varReplacer3769 = 2131296561;
+
+        $r9 = virtualinvoke $r0.<com.lynda.course.download.DownloadService: java.lang.String getString(int)>(varReplacer3769);
+
+        $r8 = virtualinvoke $r8.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder a(java.lang.CharSequence)>($r9);
+
+        varReplacer3767 = 2;
+
+        varReplacer3768 = 1;
+
+        virtualinvoke $r8.<android.support.v4.app.NotificationCompat$Builder: void a(int,boolean)>(varReplacer3767, varReplacer3768);
+
+        $r8 = $r0.<com.lynda.course.download.DownloadService: android.support.v4.app.NotificationCompat$Builder l>;
+
+        varReplacer3770 = "progress";
+
+        $r8.<android.support.v4.app.NotificationCompat$Builder: java.lang.String w> = varReplacer3770;
+
+        $r8 = $r0.<com.lynda.course.download.DownloadService: android.support.v4.app.NotificationCompat$Builder l>;
+
+        $r10 = newarray (java.lang.Object)[1];
+
+        $r5 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        $i0 = virtualinvoke $r5.<java.util.Vector: int size()>();
+
+     label08:
+        $i0 = $i0 + 1;
+
+     label09:
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r10[0] = $r11;
+
+        varReplacer3756 = 2131296560;
+
+        $r9 = virtualinvoke $r0.<com.lynda.course.download.DownloadService: java.lang.String getString(int,java.lang.Object[])>(varReplacer3756, $r10);
+
+        $r8 = virtualinvoke $r8.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder b(java.lang.CharSequence)>($r9);
+
+        varReplacer3754 = 2130838257;
+
+        $r8 = virtualinvoke $r8.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder a(int)>(varReplacer3754);
+
+        virtualinvoke $r8.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder a()>();
+
+     label10:
+        $r12 = new android.content.Intent;
+
+        $r13 = <com.lynda.infra.app.ActivityFactory$Type: com.lynda.infra.app.ActivityFactory$Type c>;
+
+     label11:
+        $r14 = staticinvoke <com.lynda.infra.app.ActivityFactory: java.lang.Class a(com.lynda.infra.app.ActivityFactory$Type)>($r13);
+
+        specialinvoke $r12.<android.content.Intent: void <init>(android.content.Context,java.lang.Class)>($r0, $r14);
+
+        varReplacer3766 = "DOWNLOADED_COURSES";
+
+        virtualinvoke $r12.<android.content.Intent: android.content.Intent setAction(java.lang.String)>(varReplacer3766);
+
+        varReplacer3755 = 131072;
+
+        virtualinvoke $r12.<android.content.Intent: android.content.Intent setFlags(int)>(varReplacer3755);
+
+        varReplacer3759 = 0;
+
+        varReplacer3760 = 134217728;
+
+        $r15 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getActivity(android.content.Context,int,android.content.Intent,int)>($r0, varReplacer3759, $r12, varReplacer3760);
+
+        $r8 = $r0.<com.lynda.course.download.DownloadService: android.support.v4.app.NotificationCompat$Builder l>;
+
+        $r8.<android.support.v4.app.NotificationCompat$Builder: android.app.PendingIntent d> = $r15;
+
+        $r6 = $r0.<com.lynda.course.download.DownloadService: android.app.NotificationManager k>;
+
+        $r8 = $r0.<com.lynda.course.download.DownloadService: android.support.v4.app.NotificationCompat$Builder l>;
+
+        $r16 = virtualinvoke $r8.<android.support.v4.app.NotificationCompat$Builder: android.app.Notification b()>();
+
+        varReplacer3764 = 39493;
+
+        virtualinvoke $r6.<android.app.NotificationManager: void notify(int,android.app.Notification)>(varReplacer3764, $r16);
+
+     label12:
+        return;
+
+     label13:
+        $r17 := @caughtexception;
+
+        virtualinvoke $r17.<java.lang.Exception: void printStackTrace()>();
+
+        return;
+
+     label14:
+        $r8 = $r0.<com.lynda.course.download.DownloadService: android.support.v4.app.NotificationCompat$Builder l>;
+
+        virtualinvoke $r8.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder a()>();
+
+        $r8 = $r0.<com.lynda.course.download.DownloadService: android.support.v4.app.NotificationCompat$Builder l>;
+
+        $r10 = newarray (java.lang.Object)[1];
+
+        $r5 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        $i0 = virtualinvoke $r5.<java.util.Vector: int size()>();
+
+     label15:
+        $i0 = $i0 + 1;
+
+     label16:
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r10[0] = $r11;
+
+        varReplacer3763 = 2131296560;
+
+        $r9 = virtualinvoke $r0.<com.lynda.course.download.DownloadService: java.lang.String getString(int,java.lang.Object[])>(varReplacer3763, $r10);
+
+        $r8 = virtualinvoke $r8.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder b(java.lang.CharSequence)>($r9);
+
+        varReplacer3765 = 2130838257;
+
+        virtualinvoke $r8.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder a(int)>(varReplacer3765);
+
+        $r6 = $r0.<com.lynda.course.download.DownloadService: android.app.NotificationManager k>;
+
+        $r8 = $r0.<com.lynda.course.download.DownloadService: android.support.v4.app.NotificationCompat$Builder l>;
+
+        $r16 = virtualinvoke $r8.<android.support.v4.app.NotificationCompat$Builder: android.app.Notification b()>();
+
+        varReplacer3757 = 39493;
+
+        virtualinvoke $r6.<android.app.NotificationManager: void notify(int,android.app.Notification)>(varReplacer3757, $r16);
+
+     label17:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label13;
+        catch java.lang.Exception from label03 to label04 with label13;
+        catch java.lang.Exception from label05 to label06 with label13;
+        catch java.lang.Exception from label07 to label08 with label13;
+        catch java.lang.Exception from label09 to label10 with label13;
+        catch java.lang.Exception from label11 to label12 with label13;
+        catch java.lang.Exception from label14 to label15 with label13;
+        catch java.lang.Exception from label16 to label17 with label13;
+    }
+
+    private void a(boolean)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        boolean $z0;
+        int $i0, varReplacer6654;
+        java.util.Vector $r1;
+        com.lynda.course.download.DownloadService$VideoStatus $r2;
+        android.util.SparseBooleanArray $r3;
+        java.lang.Object[] $r4;
+        com.lynda.course.download.DownloadService$DisconnectNetworkTask $r5;
+        java.lang.Integer[] $r6;
+        com.lynda.infra.network.WebClient $r7;
+        com.lynda.infra.storage.DownloadDB $r8;
+        byte $b1;
+        int[] $r9;
+        com.lynda.course.download.DownloadEvents$AllDownloadsPausedEvent $r10;
+        java.lang.Exception $r11;
+        java.lang.String varReplacer6655;
+
+        nop;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $z0 := @parameter0: boolean;
+
+     label01:
+        $r1 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        $i0 = virtualinvoke $r1.<java.util.Vector: int size()>();
+
+     label02:
+        if $i0 != 0 goto label07;
+
+     label03:
+        $r2 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.DownloadService$VideoStatus m>;
+
+     label04:
+        if $r2 != null goto label07;
+
+     label05:
+        $r3 = $r0.<com.lynda.course.download.DownloadService: android.util.SparseBooleanArray h>;
+
+        virtualinvoke $r3.<android.util.SparseBooleanArray: void clear()>();
+
+     label06:
+        return;
+
+     label07:
+        $r4 = newarray (java.lang.Object)[0];
+
+        varReplacer6655 = "pause all downloads";
+
+        staticinvoke <timber.log.Timber: void a(java.lang.String,java.lang.Object[])>(varReplacer6655, $r4);
+
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+     label08:
+        $i0 = $i0 | 2;
+
+     label09:
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+     label10:
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+     label11:
+        $i0 = $i0 | 4;
+
+     label12:
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+        $r2 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.DownloadService$VideoStatus m>;
+
+     label13:
+        if $r2 == null goto label15;
+
+        $r5 = new com.lynda.course.download.DownloadService$DisconnectNetworkTask;
+
+     label14:
+        varReplacer6654 = 0;
+
+        specialinvoke $r5.<com.lynda.course.download.DownloadService$DisconnectNetworkTask: void <init>(com.lynda.course.download.DownloadService,byte)>($r0, varReplacer6654);
+
+        $r6 = newarray (java.lang.Integer)[0];
+
+        virtualinvoke $r5.<com.lynda.course.download.DownloadService$DisconnectNetworkTask: android.os.AsyncTask execute(java.lang.Object[])>($r6);
+
+     label15:
+        $r7 = $r0.<com.lynda.course.download.DownloadService: com.lynda.infra.network.WebClient e>;
+
+        virtualinvoke $r7.<com.lynda.infra.network.WebClient: void a()>();
+
+        $r8 = $r0.<com.lynda.course.download.DownloadService: com.lynda.infra.storage.DownloadDB b>;
+
+     label16:
+        $b1 = 5;
+
+     label17:
+        $r9 = newarray (int)[2];
+
+        $r9[0] = 3;
+
+        $r9[1] = 4;
+
+        virtualinvoke $r8.<com.lynda.infra.storage.DownloadDB: int a(int,int[])>($b1, $r9);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void f()>();
+
+     label18:
+        $r10 = new com.lynda.course.download.DownloadEvents$AllDownloadsPausedEvent;
+
+     label19:
+        specialinvoke $r10.<com.lynda.course.download.DownloadEvents$AllDownloadsPausedEvent: void <init>()>();
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r10);
+
+     label20:
+        return;
+
+     label21:
+        $r11 := @caughtexception;
+
+        virtualinvoke $r11.<java.lang.Exception: void printStackTrace()>();
+
+     label22:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label21;
+        catch java.lang.Exception from label03 to label04 with label21;
+        catch java.lang.Exception from label05 to label06 with label21;
+        catch java.lang.Exception from label07 to label08 with label21;
+        catch java.lang.Exception from label09 to label10 with label21;
+        catch java.lang.Exception from label10 to label11 with label21;
+        catch java.lang.Exception from label12 to label13 with label21;
+        catch java.lang.Exception from label14 to label16 with label21;
+        catch java.lang.Exception from label17 to label18 with label21;
+        catch java.lang.Exception from label19 to label20 with label21;
+        catch java.lang.Exception from label22 to label22 with label21;
+        catch java.lang.Exception from label22 to label22 with label21;
+    }
+
+    public static boolean a()
+    {
+        boolean z0;
+
+        nop;
+
+        z0 = <com.lynda.course.download.DownloadService: boolean f>;
+
+        return z0;
+    }
+
+    static int b(com.lynda.course.download.DownloadService)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        int i0;
+
+        nop;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        return i0;
+    }
+
+    private void b()
+    {
+        com.lynda.course.download.DownloadService $r0;
+        boolean $z0;
+        java.util.concurrent.atomic.AtomicBoolean $r1;
+        int $i0, varReplacer3790, varReplacer3791;
+        java.lang.Thread $r2;
+        com.lynda.course.download.DownloadService$1 $r3;
+
+        nop;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 = $r0.<com.lynda.course.download.DownloadService: java.util.concurrent.atomic.AtomicBoolean o>;
+
+        varReplacer3790 = 0;
+
+        varReplacer3791 = 1;
+
+        $z0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: boolean compareAndSet(boolean,boolean)>(varReplacer3790, varReplacer3791);
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 | 4096;
+
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void d()>();
+
+        $r2 = new java.lang.Thread;
+
+        $r3 = new com.lynda.course.download.DownloadService$1;
+
+        specialinvoke $r3.<com.lynda.course.download.DownloadService$1: void <init>(com.lynda.course.download.DownloadService)>($r0);
+
+        specialinvoke $r2.<java.lang.Thread: void <init>(java.lang.Runnable)>($r3);
+
+        virtualinvoke $r2.<java.lang.Thread: void start()>();
+
+        return;
+    }
+
+    static void b(com.lynda.course.download.DownloadService, com.lynda.infra.model.Video)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.infra.model.Video $r1;
+
+        nop;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter1: com.lynda.infra.model.Video;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void c(com.lynda.infra.model.Video)>($r1);
+
+        return;
+    }
+
+    private void b(com.lynda.infra.model.Video)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.infra.model.Video $r1;
+        java.lang.Object[] $r2;
+        int $i0, varReplacer11977, varReplacer11978, varReplacer11979;
+        java.lang.Integer $r3;
+        java.lang.String $r4, varReplacer11980;
+        com.lynda.infra.storage.DownloadDB $r5;
+        android.util.SparseBooleanArray $r6, $r7;
+        com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent $r8;
+        java.lang.Throwable $r9;
+
+        nop;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter0: com.lynda.infra.model.Video;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void h()>();
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        $r2 = newarray (java.lang.Object)[2];
+
+        $i0 = virtualinvoke $r1.<com.lynda.infra.model.Video: int getId()>();
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r2[0] = $r3;
+
+        $r4 = virtualinvoke $r1.<com.lynda.infra.model.Video: java.lang.String getTitle()>();
+
+        $r2[1] = $r4;
+
+        varReplacer11980 = "onVideoDownloadCanceled: %s | %s";
+
+        staticinvoke <timber.log.Timber: void a(java.lang.String,java.lang.Object[])>(varReplacer11980, $r2);
+
+        $r5 = $r0.<com.lynda.course.download.DownloadService: com.lynda.infra.storage.DownloadDB b>;
+
+        virtualinvoke $r5.<com.lynda.infra.storage.DownloadDB: void c(com.lynda.infra.model.Video)>($r1);
+
+        varReplacer11977 = 0;
+
+        virtualinvoke $r1.<com.lynda.infra.model.Video: void setDownloadProgress(int)>(varReplacer11977);
+
+        varReplacer11978 = 0;
+
+        virtualinvoke $r1.<com.lynda.infra.model.Video: void setDownloadStatus(int)>(varReplacer11978);
+
+        $r6 = $r0.<com.lynda.course.download.DownloadService: android.util.SparseBooleanArray h>;
+
+        entermonitor $r6;
+
+     label2:
+        $r7 = $r0.<com.lynda.course.download.DownloadService: android.util.SparseBooleanArray h>;
+
+        $i0 = $r1.<com.lynda.infra.model.Video: int ID>;
+
+        varReplacer11979 = 0;
+
+        virtualinvoke $r7.<android.util.SparseBooleanArray: void put(int,boolean)>($i0, varReplacer11979);
+
+        exitmonitor $r6;
+
+     label3:
+        $r8 = new com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent;
+
+        specialinvoke $r8.<com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent: void <init>(com.lynda.infra.model.Video)>($r1);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r8);
+
+        return;
+
+     label4:
+        $r9 := @caughtexception;
+
+     label5:
+        exitmonitor $r6;
+
+     label6:
+        throw $r9;
+
+        catch java.lang.Throwable from label2 to label3 with label4;
+        catch java.lang.Throwable from label5 to label6 with label4;
+    }
+
+    private void c()
+    {
+        com.lynda.course.download.DownloadService $r0;
+        android.app.NotificationManager $r1;
+        java.util.Vector $r2;
+        int $i0, varReplacer6661, varReplacer6662, varReplacer6663, varReplacer6664, varReplacer6665, varReplacer6666, varReplacer6667, varReplacer6668;
+        android.support.v4.app.NotificationCompat$Builder $r3, $r6;
+        android.content.Context $r4;
+        java.lang.String $r5;
+        android.app.Notification $r7;
+        java.lang.Exception $r8;
+
+        nop;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+     label01:
+        $r1 = $r0.<com.lynda.course.download.DownloadService: android.app.NotificationManager k>;
+
+     label02:
+        if $r1 != null goto label03;
+
+        return;
+
+     label03:
+        $r2 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        $i0 = virtualinvoke $r2.<java.util.Vector: int size()>();
+
+     label04:
+        if $i0 == 0 goto label07;
+
+     label05:
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+     label06:
+        $i0 = $i0 & 2048;
+
+        if $i0 <= 0 goto label12;
+
+     label07:
+        $r1 = $r0.<com.lynda.course.download.DownloadService: android.app.NotificationManager k>;
+
+        varReplacer6664 = 39493;
+
+        virtualinvoke $r1.<android.app.NotificationManager: void cancel(int)>(varReplacer6664);
+
+     label08:
+        $r3 = new android.support.v4.app.NotificationCompat$Builder;
+
+     label09:
+        $r4 = virtualinvoke $r0.<com.lynda.course.download.DownloadService: android.content.Context getApplicationContext()>();
+
+        specialinvoke $r3.<android.support.v4.app.NotificationCompat$Builder: void <init>(android.content.Context)>($r4);
+
+        varReplacer6666 = 2131755175;
+
+        $i0 = staticinvoke <android.support.v4.content.ContextCompat: int c(android.content.Context,int)>($r0, varReplacer6666);
+
+        $r3.<android.support.v4.app.NotificationCompat$Builder: int y> = $i0;
+
+        varReplacer6665 = 1;
+
+        $r3.<android.support.v4.app.NotificationCompat$Builder: int z> = varReplacer6665;
+
+        varReplacer6667 = 2131296558;
+
+        $r5 = virtualinvoke $r0.<com.lynda.course.download.DownloadService: java.lang.String getString(int)>(varReplacer6667);
+
+        virtualinvoke $r3.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder a(java.lang.CharSequence)>($r5);
+
+        varReplacer6661 = 2131296559;
+
+        $r5 = virtualinvoke $r0.<com.lynda.course.download.DownloadService: java.lang.String getString(int)>(varReplacer6661);
+
+        $r6 = virtualinvoke $r3.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder b(java.lang.CharSequence)>($r5);
+
+        varReplacer6662 = 2130837747;
+
+        $r6 = virtualinvoke $r6.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder a(int)>(varReplacer6662);
+
+        varReplacer6668 = 1;
+
+        virtualinvoke $r6.<android.support.v4.app.NotificationCompat$Builder: android.support.v4.app.NotificationCompat$Builder a(boolean)>(varReplacer6668);
+
+        $r1 = $r0.<com.lynda.course.download.DownloadService: android.app.NotificationManager k>;
+
+        $r7 = virtualinvoke $r3.<android.support.v4.app.NotificationCompat$Builder: android.app.Notification b()>();
+
+        varReplacer6663 = 12345;
+
+        virtualinvoke $r1.<android.app.NotificationManager: void notify(int,android.app.Notification)>(varReplacer6663, $r7);
+
+     label10:
+        return;
+
+     label11:
+        $r8 := @caughtexception;
+
+        virtualinvoke $r8.<java.lang.Exception: void printStackTrace()>();
+
+     label12:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label11;
+        catch java.lang.Exception from label03 to label04 with label11;
+        catch java.lang.Exception from label05 to label06 with label11;
+        catch java.lang.Exception from label07 to label08 with label11;
+        catch java.lang.Exception from label09 to label10 with label11;
+    }
+
+    static void c(com.lynda.course.download.DownloadService)
+    {
+        com.lynda.course.download.DownloadService $r0;
+
+        nop;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void h()>();
+
+        return;
+    }
+
+    static void c(com.lynda.course.download.DownloadService, com.lynda.infra.model.Video)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.infra.model.Video $r1;
+        int $i0, varReplacer12002, varReplacer12003, varReplacer12004, varReplacer12005;
+        java.lang.Object[] $r2;
+        com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent $r3;
+        java.lang.Integer $r4;
+        java.lang.String $r5, varReplacer12001, varReplacer12006, varReplacer12007, varReplacer12008, varReplacer12009;
+        com.lynda.infra.storage.DownloadDB $r6;
+        com.lynda.infra.network.APIStatusResponseHandler $r7;
+        com.lynda.infra.api.API $r8;
+        com.lynda.infra.network.WebClient $r9;
+        com.lynda.infra.api.RequestParams $r10;
+        com.lynda.App $r11;
+        com.lynda.infra.component.AppComponent $r12;
+        com.lynda.infra.analytics.AnalyticsTracker $r13;
+
+        nop;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter1: com.lynda.infra.model.Video;
+
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 & 4;
+
+        if $i0 <= 0 goto label1;
+
+        $r2 = newarray (java.lang.Object)[0];
+
+        varReplacer12001 = "onVideoPrepared -> fail video";
+
+        staticinvoke <timber.log.Timber: void a(java.lang.String,java.lang.Object[])>(varReplacer12001, $r2);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void c(com.lynda.infra.model.Video)>($r1);
+
+        return;
+
+     label1:
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 & 1;
+
+        if $i0 <= 0 goto label2;
+
+        $r2 = newarray (java.lang.Object)[0];
+
+        varReplacer12009 = "onVideoPrepared -> pause video";
+
+        staticinvoke <timber.log.Timber: void a(java.lang.String,java.lang.Object[])>(varReplacer12009, $r2);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(com.lynda.infra.model.Video)>($r1);
+
+        return;
+
+     label2:
+        if $r1 == null goto label7;
+
+        varReplacer12005 = 5;
+
+        virtualinvoke $r1.<com.lynda.infra.model.Video: void setDownloadProgress(int)>(varReplacer12005);
+
+        varReplacer12003 = 2;
+
+        virtualinvoke $r1.<com.lynda.infra.model.Video: void setDownloadStatus(int)>(varReplacer12003);
+
+        $r3 = new com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent;
+
+        specialinvoke $r3.<com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent: void <init>(com.lynda.infra.model.Video)>($r1);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r3);
+
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 | 4096;
+
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+        $i0 = specialinvoke $r0.<com.lynda.course.download.DownloadService: int d(com.lynda.infra.model.Video)>($r1);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void h()>();
+
+        if $i0 != 0 goto label4;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void h()>();
+
+        if $r1 == null goto label3;
+
+        $r2 = newarray (java.lang.Object)[2];
+
+        $i0 = virtualinvoke $r1.<com.lynda.infra.model.Video: int getId()>();
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r2[0] = $r4;
+
+        $r5 = virtualinvoke $r1.<com.lynda.infra.model.Video: java.lang.String getTitle()>();
+
+        $r2[1] = $r5;
+
+        varReplacer12006 = "onVideoDownloadFinished: %s | %s";
+
+        staticinvoke <timber.log.Timber: void a(java.lang.String,java.lang.Object[])>(varReplacer12006, $r2);
+
+        varReplacer12004 = 3;
+
+        virtualinvoke $r1.<com.lynda.infra.model.Video: void setDownloadStatus(int)>(varReplacer12004);
+
+        varReplacer12002 = 100;
+
+        virtualinvoke $r1.<com.lynda.infra.model.Video: void setDownloadProgress(int)>(varReplacer12002);
+
+        $r6 = $r0.<com.lynda.course.download.DownloadService: com.lynda.infra.storage.DownloadDB b>;
+
+        virtualinvoke $r6.<com.lynda.infra.storage.DownloadDB: void c(com.lynda.infra.model.Video)>($r1);
+
+        $r7 = new com.lynda.infra.network.APIStatusResponseHandler;
+
+        specialinvoke $r7.<com.lynda.infra.network.APIStatusResponseHandler: void <init>(android.content.Context)>($r0);
+
+        $r8 = $r0.<com.lynda.course.download.DownloadService: com.lynda.infra.api.API d>;
+
+        $i0 = $r1.<com.lynda.infra.model.Video: int ID>;
+
+        $r9 = $r8.<com.lynda.infra.api.API: com.lynda.infra.network.WebClient a>;
+
+        $r5 = staticinvoke <com.lynda.infra.api.APIEndpoint: java.lang.String l(int)>($i0);
+
+        $r10 = staticinvoke <com.lynda.infra.api.RequestParams: com.lynda.infra.api.RequestParams c(int)>($i0);
+
+        virtualinvoke $r9.<com.lynda.infra.network.WebClient: void a(java.lang.String,com.lynda.infra.api.RequestParams,com.lynda.infra.network.ResponseHandler)>($r5, $r10, $r7);
+
+        $r11 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+        $r12 = $r11.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+        $r13 = interfaceinvoke $r12.<com.lynda.infra.component.AppComponent: com.lynda.infra.analytics.AnalyticsTracker c()>();
+
+        $i0 = virtualinvoke $r1.<com.lynda.infra.model.Video: int getId()>();
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+        varReplacer12007 = "offline";
+
+        varReplacer12008 = "video download completed";
+
+        virtualinvoke $r13.<com.lynda.infra.analytics.AnalyticsTracker: void a(java.lang.String,java.lang.String,java.lang.String)>(varReplacer12007, varReplacer12008, $r5);
+
+        $r3 = new com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent;
+
+        specialinvoke $r3.<com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent: void <init>(com.lynda.infra.model.Video)>($r1);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r3);
+
+     label3:
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 & 4096;
+
+        if $i0 == 0 goto label7;
+
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 + -4096;
+
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+        return;
+
+     label4:
+        if $i0 != 512 goto label5;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(com.lynda.infra.model.Video)>($r1);
+
+        goto label3;
+
+     label5:
+        if $i0 != 1024 goto label6;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void b(com.lynda.infra.model.Video)>($r1);
+
+        goto label3;
+
+     label6:
+        if $i0 != 256 goto label3;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void c(com.lynda.infra.model.Video)>($r1);
+
+        goto label3;
+
+     label7:
+        return;
+    }
+
+    private void c(com.lynda.infra.model.Video)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.infra.model.Video $r1;
+        java.lang.Object[] $r2;
+        int $i0, varReplacer11985, varReplacer11990, varReplacer11992, varReplacer11993, varReplacer11994, varReplacer11995;
+        java.lang.Integer $r3;
+        java.lang.String $r4, varReplacer11986, varReplacer11987, varReplacer11988, varReplacer11989, varReplacer11991, varReplacer11996;
+        com.lynda.App $r5;
+        com.lynda.infra.component.AppComponent $r6;
+        com.lynda.infra.analytics.AnalyticsTracker $r7;
+        android.util.SparseBooleanArray $r8, $r9;
+        boolean $z0;
+        com.lynda.infra.storage.DownloadDB $r10;
+        com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent $r11;
+        java.util.Vector $r12;
+        java.lang.Throwable $r13;
+
+        nop;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter0: com.lynda.infra.model.Video;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void h()>();
+
+        $r2 = newarray (java.lang.Object)[0];
+
+        varReplacer11996 = "download failed";
+
+        staticinvoke <timber.log.Timber: void a(java.lang.String,java.lang.Object[])>(varReplacer11996, $r2);
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        $r2 = newarray (java.lang.Object)[2];
+
+        $i0 = virtualinvoke $r1.<com.lynda.infra.model.Video: int getId()>();
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r2[0] = $r3;
+
+        $r4 = virtualinvoke $r1.<com.lynda.infra.model.Video: java.lang.String getTitle()>();
+
+        $r2[1] = $r4;
+
+        varReplacer11986 = "onVideoDownloadFailed: %s | %s";
+
+        staticinvoke <timber.log.Timber: void a(java.lang.String,java.lang.Object[])>(varReplacer11986, $r2);
+
+        $r5 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+        $r6 = $r5.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+        $r7 = interfaceinvoke $r6.<com.lynda.infra.component.AppComponent: com.lynda.infra.analytics.AnalyticsTracker c()>();
+
+        $r4 = virtualinvoke $r1.<com.lynda.infra.model.Video: java.lang.String getTitle()>();
+
+        varReplacer11987 = "offline";
+
+        varReplacer11988 = "video download failed";
+
+        virtualinvoke $r7.<com.lynda.infra.analytics.AnalyticsTracker: void a(java.lang.String,java.lang.String,java.lang.String)>(varReplacer11987, varReplacer11988, $r4);
+
+        $r8 = $r0.<com.lynda.course.download.DownloadService: android.util.SparseBooleanArray h>;
+
+        entermonitor $r8;
+
+     label2:
+        $r9 = $r0.<com.lynda.course.download.DownloadService: android.util.SparseBooleanArray h>;
+
+        $i0 = $r1.<com.lynda.infra.model.Video: int ID>;
+
+        $z0 = virtualinvoke $r9.<android.util.SparseBooleanArray: boolean get(int)>($i0);
+
+        if $z0 == 0 goto label5;
+
+        $r9 = $r0.<com.lynda.course.download.DownloadService: android.util.SparseBooleanArray h>;
+
+        $i0 = $r1.<com.lynda.infra.model.Video: int ID>;
+
+        varReplacer11992 = 0;
+
+        virtualinvoke $r9.<android.util.SparseBooleanArray: void put(int,boolean)>($i0, varReplacer11992);
+
+        $r10 = $r0.<com.lynda.course.download.DownloadService: com.lynda.infra.storage.DownloadDB b>;
+
+        virtualinvoke $r10.<com.lynda.infra.storage.DownloadDB: void c(com.lynda.infra.model.Video)>($r1);
+
+        varReplacer11985 = 0;
+
+        virtualinvoke $r1.<com.lynda.infra.model.Video: void setDownloadProgress(int)>(varReplacer11985);
+
+        varReplacer11994 = 0;
+
+        virtualinvoke $r1.<com.lynda.infra.model.Video: void setDownloadStatus(int)>(varReplacer11994);
+
+        $r2 = newarray (java.lang.Object)[0];
+
+        varReplacer11989 = "download failed - more then once, remove from queue";
+
+        staticinvoke <timber.log.Timber: void a(java.lang.String,java.lang.Object[])>(varReplacer11989, $r2);
+
+     label3:
+        exitmonitor $r8;
+
+     label4:
+        $r11 = new com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent;
+
+        specialinvoke $r11.<com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent: void <init>(com.lynda.infra.model.Video)>($r1);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r11);
+
+        return;
+
+     label5:
+        $r9 = $r0.<com.lynda.course.download.DownloadService: android.util.SparseBooleanArray h>;
+
+        $i0 = $r1.<com.lynda.infra.model.Video: int ID>;
+
+        varReplacer11993 = 1;
+
+        virtualinvoke $r9.<android.util.SparseBooleanArray: void put(int,boolean)>($i0, varReplacer11993);
+
+        $r12 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        virtualinvoke $r12.<java.util.Vector: boolean add(java.lang.Object)>($r1);
+
+        varReplacer11990 = 0;
+
+        virtualinvoke $r1.<com.lynda.infra.model.Video: void setDownloadProgress(int)>(varReplacer11990);
+
+        varReplacer11995 = 1;
+
+        virtualinvoke $r1.<com.lynda.infra.model.Video: void setDownloadStatus(int)>(varReplacer11995);
+
+        $r2 = newarray (java.lang.Object)[0];
+
+        varReplacer11991 = "download failed - first time, add to retry queue";
+
+        staticinvoke <timber.log.Timber: void a(java.lang.String,java.lang.Object[])>(varReplacer11991, $r2);
+
+        goto label3;
+
+     label6:
+        $r13 := @caughtexception;
+
+        exitmonitor $r8;
+
+     label7:
+        throw $r13;
+
+        catch java.lang.Throwable from label2 to label4 with label6;
+        catch java.lang.Throwable from label5 to label7 with label6;
+    }
+
+    private int d(com.lynda.infra.model.Video)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.infra.model.Video $r1;
+        byte[] $r2;
+        java.io.FileOutputStream $r3, $r18, r59;
+        boolean $z0;
+        java.lang.String $r4, varReplacer12046, varReplacer12053, varReplacer12058, varReplacer12059, varReplacer12063, varReplacer12064, varReplacer12065, varReplacer12066, varReplacer12069;
+        int $i0, $i2, $i3, $i4, varReplacer12040, varReplacer12041, varReplacer12042, varReplacer12043, varReplacer12045, varReplacer12047, varReplacer12048, varReplacer12049, varReplacer12050, varReplacer12051, varReplacer12052, varReplacer12054, varReplacer12056, varReplacer12057, varReplacer12060, varReplacer12061, varReplacer12062, varReplacer12067, varReplacer12068;
+        java.lang.Object[] $r5;
+        java.net.URL $r6, r57;
+        java.net.URLConnection $r7;
+        java.net.HttpURLConnection $r8;
+        com.lynda.App $r9;
+        com.lynda.infra.component.AppComponent $r10;
+        com.lynda.infra.storage.CourseDB $r11;
+        com.lynda.course.download.tasks.DownloadCourseImagesTask $r12, r58;
+        android.content.Context $r13;
+        java.lang.Integer[] $r14;
+        java.lang.Integer $r15;
+        com.lynda.infra.storage.StorageHelper$StorageStatus $r16;
+        java.io.File $r17;
+        java.io.OutputStream $r19, $r20;
+        java.io.InputStream $r21;
+        long $l1, $l5, $l6, varReplacer12044, varReplacer12055;
+        java.lang.Throwable $r22, $r23, $r24, $r26, $r27, $r28, $r29, $r30, $r31, $r32, $r41, $r42, $r43, $r44, $r45, $r46, $r47, $r48, $r49, $r50, $r52, $r53, $r54, $r55;
+        java.lang.Exception $r25, $r35, $r56;
+        com.lynda.course.download.DownloadEvents$UpdateVideoProgressEvent $r33, r60;
+        com.lynda.course.download.DownloadService$VideoStatus $r34;
+        com.lynda.course.download.tasks.PauseAllDownloadTask $r36, r62;
+        com.lynda.course.download.DownloadService$DisconnectNetworkTask $r37, r61;
+        com.lynda.infra.storage.DownloadDB $r38;
+        com.lynda.course.download.DownloadService$11 $r39, r63;
+        com.lynda.course.download.DownloadEvents$VideoDownloadErrorEvent $r40, r64;
+        android.util.SparseBooleanArray $r51;
+        java.io.IOException r65;
+        java.lang.InterruptedException r66;
+
+        nop;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter0: com.lynda.infra.model.Video;
+
+        $r3 = null;
+
+        if $r1 != null goto label001;
+
+        varReplacer12056 = 256;
+
+        return varReplacer12056;
+
+     label001:
+        $z0 = staticinvoke <com.lynda.BuildSettings: boolean b()>();
+
+        varReplacer12068 = 0;
+
+        $r4 = virtualinvoke $r1.<com.lynda.infra.model.Video: java.lang.String getRemoteVideoUrl(android.content.Context,boolean,boolean)>($r0, $z0, varReplacer12068);
+
+     label002:
+        if $r4 == null goto label005;
+
+     label003:
+        $i0 = virtualinvoke $r4.<java.lang.String: int length()>();
+
+     label004:
+        if $i0 != 0 goto label006;
+
+     label005:
+        varReplacer12054 = 256;
+
+        return varReplacer12054;
+
+     label006:
+        $r5 = newarray (java.lang.Object)[1];
+
+        $r5[0] = $r4;
+
+     label007:
+        varReplacer12058 = "Download Video: %s";
+
+        staticinvoke <timber.log.Timber: void a(java.lang.String,java.lang.Object[])>(varReplacer12058, $r5);
+
+     label008:
+        r57 = new java.net.URL;
+
+     label009:
+        $r6 = r57;
+
+     label010:
+        specialinvoke r57.<java.net.URL: void <init>(java.lang.String)>($r4);
+
+        $r7 = virtualinvoke $r6.<java.net.URL: java.net.URLConnection openConnection()>();
+
+     label011:
+        $r8 = (java.net.HttpURLConnection) $r7;
+
+        $r0.<com.lynda.course.download.DownloadService: java.net.HttpURLConnection j> = $r8;
+
+     label012:
+        $r9 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+     label013:
+        $r10 = $r9.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+     label014:
+        $r11 = interfaceinvoke $r10.<com.lynda.infra.component.AppComponent: com.lynda.infra.storage.CourseDB q()>();
+
+     label015:
+        $i0 = $r1.<com.lynda.infra.model.Video: int CourseID>;
+
+     label016:
+        $r4 = virtualinvoke $r11.<com.lynda.infra.storage.CourseDB: java.lang.String c(int)>($i0);
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r4);
+
+     label017:
+        if $z0 == 0 goto label027;
+
+     label018:
+        r58 = new com.lynda.course.download.tasks.DownloadCourseImagesTask;
+
+     label019:
+        $r12 = r58;
+
+     label020:
+        $r9 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+     label021:
+        $r10 = $r9.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+     label022:
+        $r11 = interfaceinvoke $r10.<com.lynda.infra.component.AppComponent: com.lynda.infra.storage.CourseDB q()>();
+
+        specialinvoke r58.<com.lynda.course.download.tasks.DownloadCourseImagesTask: void <init>(android.content.Context,com.lynda.infra.storage.CourseDB)>($r0, $r11);
+
+        $r13 = virtualinvoke $r0.<com.lynda.course.download.DownloadService: android.content.Context getApplicationContext()>();
+
+        $r13 = virtualinvoke $r13.<android.content.Context: android.content.Context getApplicationContext()>();
+
+     label023:
+        $r12.<com.lynda.course.download.tasks.DownloadCourseImagesTask: android.content.Context a> = $r13;
+
+        $r14 = newarray (java.lang.Integer)[1];
+
+        $i0 = $r1.<com.lynda.infra.model.Video: int CourseID>;
+
+     label024:
+        $r15 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+     label025:
+        $r14[0] = $r15;
+
+     label026:
+        virtualinvoke $r12.<com.lynda.course.download.tasks.DownloadCourseImagesTask: android.os.AsyncTask execute(java.lang.Object[])>($r14);
+
+     label027:
+        $r16 = staticinvoke <com.lynda.infra.storage.StorageHelper: com.lynda.infra.storage.StorageHelper$StorageStatus a()>();
+
+     label028:
+        $z0 = $r16.<com.lynda.infra.storage.StorageHelper$StorageStatus: boolean a>;
+
+     label029:
+        if $z0 != 0 goto label033;
+
+     label030:
+        $r5 = newarray (java.lang.Object)[0];
+
+     label031:
+        varReplacer12059 = "Storage not writeable";
+
+        staticinvoke <timber.log.Timber: void c(java.lang.String,java.lang.Object[])>(varReplacer12059, $r5);
+
+     label032:
+        varReplacer12048 = 256;
+
+        return varReplacer12048;
+
+     label033:
+        $r8 = $r0.<com.lynda.course.download.DownloadService: java.net.HttpURLConnection j>;
+
+     label034:
+        varReplacer12040 = 1;
+
+        virtualinvoke $r8.<java.net.HttpURLConnection: void setDoInput(boolean)>(varReplacer12040);
+
+     label035:
+        $r8 = $r0.<com.lynda.course.download.DownloadService: java.net.HttpURLConnection j>;
+
+     label036:
+        virtualinvoke $r8.<java.net.HttpURLConnection: void connect()>();
+
+     label037:
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+     label038:
+        $i0 = $i0 & 255;
+
+     label039:
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+     label040:
+        $i0 = $i0 | 4096;
+
+     label041:
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+        $r8 = $r0.<com.lynda.course.download.DownloadService: java.net.HttpURLConnection j>;
+
+     label042:
+        $i0 = virtualinvoke $r8.<java.net.HttpURLConnection: int getContentLength()>();
+
+        $r9 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+     label043:
+        $r10 = $r9.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+     label044:
+        interfaceinvoke $r10.<com.lynda.infra.component.AppComponent: com.lynda.videoplayer.VideoplayerSettings A()>();
+
+        $r17 = staticinvoke <com.lynda.course.download.DownloadHelper: java.io.File a(android.content.Context,com.lynda.infra.model.Video)>($r0, $r1);
+
+     label045:
+        r59 = new java.io.FileOutputStream;
+
+     label046:
+        $r18 = r59;
+
+     label047:
+        specialinvoke r59.<java.io.FileOutputStream: void <init>(java.io.File)>($r17);
+
+     label048:
+        $r19 = staticinvoke <com.lynda.infra.encryption.EncryptionHandler: java.io.OutputStream a(android.content.Context,java.io.FileOutputStream)>($r0, $r18);
+
+     label049:
+        $r20 = $r19;
+
+     label050:
+        $r5 = newarray (java.lang.Object)[1];
+
+     label051:
+        $r4 = virtualinvoke $r17.<java.io.File: java.lang.String getAbsolutePath()>();
+
+     label052:
+        $r5[0] = $r4;
+
+     label053:
+        varReplacer12064 = "saving file to %s";
+
+        staticinvoke <timber.log.Timber: void a(java.lang.String,java.lang.Object[])>(varReplacer12064, $r5);
+
+     label054:
+        $r8 = $r0.<com.lynda.course.download.DownloadService: java.net.HttpURLConnection j>;
+
+     label055:
+        $r21 = virtualinvoke $r8.<java.net.HttpURLConnection: java.io.InputStream getInputStream()>();
+
+     label056:
+        $r2 = newarray (byte)[8192];
+
+     label057:
+        $l1 = virtualinvoke $r1.<com.lynda.infra.model.Video: long getDownloadOffset()>();
+
+     label058:
+        $i2 = 7;
+
+     label059:
+        $i3 = virtualinvoke $r21.<java.io.InputStream: int read(byte[])>($r2);
+
+     label060:
+        if $i3 <= 0 goto label178;
+
+     label061:
+        $i4 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+     label062:
+        $i4 = $i4 & 2;
+
+        if $i4 > 0 goto label065;
+
+     label063:
+        $z0 = specialinvoke $r0.<com.lynda.course.download.DownloadService: boolean g()>();
+
+     label064:
+        if $z0 == 0 goto label124;
+
+     label065:
+        virtualinvoke $r19.<java.io.OutputStream: void close()>();
+
+     label066:
+        virtualinvoke $r17.<java.io.File: boolean delete()>();
+
+     label067:
+        varReplacer12067 = 0;
+
+        virtualinvoke $r1.<com.lynda.infra.model.Video: void setDownloadProgress(int)>(varReplacer12067);
+
+     label068:
+        $r5 = newarray (java.lang.Object)[0];
+
+     label069:
+        varReplacer12053 = "active video download should get canceled";
+
+        staticinvoke <timber.log.Timber: void a(java.lang.String,java.lang.Object[])>(varReplacer12053, $r5);
+
+        $z0 = specialinvoke $r0.<com.lynda.course.download.DownloadService: boolean g()>();
+
+     label070:
+        if $z0 != 0 goto label073;
+
+     label071:
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+     label072:
+        $i0 = $i0 & 4;
+
+        if $i0 <= 0 goto label110;
+
+     label073:
+        virtualinvoke $r18.<java.io.FileOutputStream: void close()>();
+
+     label074:
+        if $r19 == null goto label076;
+
+     label075:
+        virtualinvoke $r19.<java.io.OutputStream: void close()>();
+
+     label076:
+        varReplacer12049 = 256;
+
+        return varReplacer12049;
+
+     label077:
+        $r22 := @caughtexception;
+
+     label078:
+        r65 = (java.io.IOException) $r22;
+
+     label079:
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+     label080:
+        varReplacer12055 = 500L;
+
+        staticinvoke <java.lang.Thread: void sleep(long)>(varReplacer12055);
+
+     label081:
+        $r8 = $r0.<com.lynda.course.download.DownloadService: java.net.HttpURLConnection j>;
+
+     label082:
+        $r21 = virtualinvoke $r8.<java.net.HttpURLConnection: java.io.InputStream getInputStream()>();
+
+     label083:
+        goto label056;
+
+     label084:
+        $r23 := @caughtexception;
+
+     label085:
+        r66 = (java.lang.InterruptedException) $r23;
+
+     label086:
+        virtualinvoke r66.<java.lang.InterruptedException: void printStackTrace()>();
+
+     label087:
+        goto label081;
+
+     label088:
+        $r24 := @caughtexception;
+
+        $r3 = $r18;
+
+     label089:
+        $z0 = specialinvoke $r0.<com.lynda.course.download.DownloadService: boolean g()>();
+
+     label090:
+        if $z0 != 0 goto label093;
+
+     label091:
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+     label092:
+        $i0 = $i0 & 4;
+
+        if $i0 <= 0 goto label191;
+
+     label093:
+        $r5 = newarray (java.lang.Object)[0];
+
+        varReplacer12065 = "downloadVideoFile/Exception: we are offline, returning failed";
+
+        staticinvoke <timber.log.Timber: void c(java.lang.String,java.lang.Object[])>(varReplacer12065, $r5);
+
+     label094:
+        if $r3 == null goto label096;
+
+     label095:
+        virtualinvoke $r3.<java.io.FileOutputStream: void close()>();
+
+     label096:
+        if $r19 == null goto label098;
+
+     label097:
+        virtualinvoke $r19.<java.io.OutputStream: void close()>();
+
+     label098:
+        varReplacer12041 = 256;
+
+        return varReplacer12041;
+
+     label099:
+        $r25 := @caughtexception;
+
+     label100:
+        virtualinvoke $r25.<java.lang.Exception: void printStackTrace()>();
+
+     label101:
+        goto label067;
+
+     label102:
+        $r26 := @caughtexception;
+
+     label103:
+        if $r18 == null goto label105;
+
+     label104:
+        virtualinvoke $r18.<java.io.FileOutputStream: void close()>();
+
+     label105:
+        if $r20 == null goto label107;
+
+     label106:
+        virtualinvoke $r20.<java.io.OutputStream: void close()>();
+
+     label107:
+        throw $r26;
+
+     label108:
+        $r27 := @caughtexception;
+
+        r65 = (java.io.IOException) $r27;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label074;
+
+     label109:
+        $r28 := @caughtexception;
+
+        r65 = (java.io.IOException) $r28;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label076;
+
+     label110:
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+     label111:
+        $i0 = $i0 & 1;
+
+        if $i0 <= 0 goto label118;
+
+     label112:
+        virtualinvoke $r18.<java.io.FileOutputStream: void close()>();
+
+     label113:
+        if $r19 == null goto label115;
+
+     label114:
+        virtualinvoke $r19.<java.io.OutputStream: void close()>();
+
+     label115:
+        varReplacer12043 = 512;
+
+        return varReplacer12043;
+
+     label116:
+        $r29 := @caughtexception;
+
+        r65 = (java.io.IOException) $r29;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label113;
+
+     label117:
+        $r30 := @caughtexception;
+
+        r65 = (java.io.IOException) $r30;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label115;
+
+     label118:
+        virtualinvoke $r18.<java.io.FileOutputStream: void close()>();
+
+     label119:
+        if $r19 == null goto label121;
+
+     label120:
+        virtualinvoke $r19.<java.io.OutputStream: void close()>();
+
+     label121:
+        varReplacer12051 = 1024;
+
+        return varReplacer12051;
+
+     label122:
+        $r31 := @caughtexception;
+
+        r65 = (java.io.IOException) $r31;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label119;
+
+     label123:
+        $r32 := @caughtexception;
+
+        r65 = (java.io.IOException) $r32;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label121;
+
+     label124:
+        $l5 = (long) $i3;
+
+        $l1 = $l1 + $l5;
+
+        $l5 = 100L * $l1;
+
+        $l6 = (long) $i0;
+
+     label125:
+        $l5 = $l5 / $l6;
+
+     label126:
+        varReplacer12044 = 5L;
+
+        $l5 = staticinvoke <java.lang.Math: long max(long,long)>(varReplacer12044, $l5);
+
+     label127:
+        $i4 = (int) $l5;
+
+     label128:
+        virtualinvoke $r1.<com.lynda.infra.model.Video: void setDownloadProgress(int)>($i4);
+
+        $i4 = virtualinvoke $r1.<com.lynda.infra.model.Video: int getDownloadProgress()>();
+
+     label129:
+        if $i4 <= $i2 goto label134;
+
+     label130:
+        r60 = new com.lynda.course.download.DownloadEvents$UpdateVideoProgressEvent;
+
+     label131:
+        $r33 = r60;
+
+     label132:
+        specialinvoke r60.<com.lynda.course.download.DownloadEvents$UpdateVideoProgressEvent: void <init>(com.lynda.infra.model.Video)>($r1);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r33);
+
+     label133:
+        $i2 = $i2 + 7;
+
+     label134:
+        $r34 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.DownloadService$VideoStatus m>;
+
+     label135:
+        if $r34 == null goto label139;
+
+     label136:
+        $r34 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.DownloadService$VideoStatus m>;
+
+     label137:
+        $i4 = virtualinvoke $r1.<com.lynda.infra.model.Video: int getDownloadProgress()>();
+
+     label138:
+        $r34.<com.lynda.course.download.DownloadService$VideoStatus: int c> = $i4;
+
+     label139:
+        varReplacer12062 = 0;
+
+        virtualinvoke $r19.<java.io.OutputStream: void write(byte[],int,int)>($r2, varReplacer12062, $i3);
+
+     label140:
+        goto label059;
+
+     label141:
+        $r35 := @caughtexception;
+
+     label142:
+        virtualinvoke $r19.<java.io.OutputStream: void close()>();
+
+     label143:
+        virtualinvoke $r17.<java.io.File: boolean delete()>();
+
+     label144:
+        $r36 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.tasks.PauseAllDownloadTask q>;
+
+     label145:
+        staticinvoke <com.lynda.course.download.DownloadService: void a(com.lynda.infra.app.tasks.CustomTask)>($r36);
+
+     label146:
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+     label147:
+        $i0 = $i0 | 2;
+
+     label148:
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+     label149:
+        $i0 = $i0 | 1;
+
+     label150:
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+        $r34 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.DownloadService$VideoStatus m>;
+
+     label151:
+        if $r34 == null goto label157;
+
+     label152:
+        r61 = new com.lynda.course.download.DownloadService$DisconnectNetworkTask;
+
+     label153:
+        $r37 = r61;
+
+     label154:
+        varReplacer12045 = 0;
+
+        specialinvoke r61.<com.lynda.course.download.DownloadService$DisconnectNetworkTask: void <init>(com.lynda.course.download.DownloadService,byte)>($r0, varReplacer12045);
+
+     label155:
+        $r14 = newarray (java.lang.Integer)[0];
+
+     label156:
+        virtualinvoke $r37.<com.lynda.course.download.DownloadService$DisconnectNetworkTask: android.os.AsyncTask execute(java.lang.Object[])>($r14);
+
+     label157:
+        r62 = new com.lynda.course.download.tasks.PauseAllDownloadTask;
+
+     label158:
+        $r36 = r62;
+
+     label159:
+        $r9 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+     label160:
+        $r10 = $r9.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+     label161:
+        $r38 = interfaceinvoke $r10.<com.lynda.infra.component.AppComponent: com.lynda.infra.storage.DownloadDB r()>();
+
+        specialinvoke r62.<com.lynda.course.download.tasks.PauseAllDownloadTask: void <init>(com.lynda.infra.storage.DownloadDB)>($r38);
+
+     label162:
+        $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.tasks.PauseAllDownloadTask q> = $r36;
+
+        $r36 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.tasks.PauseAllDownloadTask q>;
+
+        r63 = new com.lynda.course.download.DownloadService$11;
+
+     label163:
+        $r39 = r63;
+
+     label164:
+        specialinvoke r63.<com.lynda.course.download.DownloadService$11: void <init>(com.lynda.course.download.DownloadService)>($r0);
+
+        virtualinvoke $r36.<com.lynda.course.download.tasks.PauseAllDownloadTask: void a(com.lynda.infra.app.tasks.OnTaskChangeListener)>($r39);
+
+     label165:
+        $r36 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.tasks.PauseAllDownloadTask q>;
+
+        $r14 = newarray (java.lang.Integer)[0];
+
+     label166:
+        virtualinvoke $r36.<com.lynda.course.download.tasks.PauseAllDownloadTask: android.os.AsyncTask execute(java.lang.Object[])>($r14);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void c()>();
+
+     label167:
+        $r5 = newarray (java.lang.Object)[0];
+
+     label168:
+        varReplacer12066 = "Disk full";
+
+        staticinvoke <timber.log.Timber: void c(java.lang.String,java.lang.Object[])>(varReplacer12066, $r5);
+
+     label169:
+        r64 = new com.lynda.course.download.DownloadEvents$VideoDownloadErrorEvent;
+
+     label170:
+        $r40 = r64;
+
+     label171:
+        varReplacer12061 = 100;
+
+        specialinvoke r64.<com.lynda.course.download.DownloadEvents$VideoDownloadErrorEvent: void <init>(com.lynda.infra.model.Video,int)>($r1, varReplacer12061);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r40);
+
+     label172:
+        virtualinvoke $r18.<java.io.FileOutputStream: void close()>();
+
+     label173:
+        if $r19 == null goto label175;
+
+     label174:
+        virtualinvoke $r19.<java.io.OutputStream: void close()>();
+
+     label175:
+        varReplacer12050 = 256;
+
+        return varReplacer12050;
+
+     label176:
+        $r41 := @caughtexception;
+
+        r65 = (java.io.IOException) $r41;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label173;
+
+     label177:
+        $r42 := @caughtexception;
+
+        r65 = (java.io.IOException) $r42;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label175;
+
+     label178:
+        virtualinvoke $r19.<java.io.OutputStream: void close()>();
+
+     label179:
+        $r8 = $r0.<com.lynda.course.download.DownloadService: java.net.HttpURLConnection j>;
+
+     label180:
+        virtualinvoke $r8.<java.net.HttpURLConnection: void disconnect()>();
+
+        $r4 = virtualinvoke $r17.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        virtualinvoke $r1.<com.lynda.infra.model.Video: void setOfflinePath(java.lang.String)>($r4);
+
+        $r9 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+     label181:
+        $r10 = $r9.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+     label182:
+        $r11 = interfaceinvoke $r10.<com.lynda.infra.component.AppComponent: com.lynda.infra.storage.CourseDB q()>();
+
+        virtualinvoke $r11.<com.lynda.infra.storage.CourseDB: void a(com.lynda.infra.model.Video)>($r1);
+
+     label183:
+        virtualinvoke $r18.<java.io.FileOutputStream: void close()>();
+
+     label184:
+        if $r19 == null goto label186;
+
+     label185:
+        virtualinvoke $r19.<java.io.OutputStream: void close()>();
+
+     label186:
+        varReplacer12047 = 0;
+
+        return varReplacer12047;
+
+     label187:
+        $r43 := @caughtexception;
+
+        r65 = (java.io.IOException) $r43;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label184;
+
+     label188:
+        $r44 := @caughtexception;
+
+        r65 = (java.io.IOException) $r44;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label186;
+
+     label189:
+        $r45 := @caughtexception;
+
+        r65 = (java.io.IOException) $r45;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label096;
+
+     label190:
+        $r46 := @caughtexception;
+
+        r65 = (java.io.IOException) $r46;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label098;
+
+     label191:
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+     label192:
+        $i0 = $i0 & 1;
+
+        if $i0 <= 0 goto label201;
+
+     label193:
+        $r5 = newarray (java.lang.Object)[0];
+
+        varReplacer12046 = "downloadVideoFile/Exception: we are paused";
+
+        staticinvoke <timber.log.Timber: void c(java.lang.String,java.lang.Object[])>(varReplacer12046, $r5);
+
+     label194:
+        if $r3 == null goto label196;
+
+     label195:
+        virtualinvoke $r3.<java.io.FileOutputStream: void close()>();
+
+     label196:
+        if $r19 == null goto label198;
+
+     label197:
+        virtualinvoke $r19.<java.io.OutputStream: void close()>();
+
+     label198:
+        varReplacer12057 = 512;
+
+        return varReplacer12057;
+
+     label199:
+        $r47 := @caughtexception;
+
+        r65 = (java.io.IOException) $r47;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label196;
+
+     label200:
+        $r48 := @caughtexception;
+
+        r65 = (java.io.IOException) $r48;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label198;
+
+     label201:
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+     label202:
+        $i0 = $i0 & 2;
+
+        if $i0 <= 0 goto label211;
+
+     label203:
+        $r5 = newarray (java.lang.Object)[0];
+
+        varReplacer12063 = "downloadVideoFile/Exception: we canceled";
+
+        staticinvoke <timber.log.Timber: void c(java.lang.String,java.lang.Object[])>(varReplacer12063, $r5);
+
+     label204:
+        if $r3 == null goto label206;
+
+     label205:
+        virtualinvoke $r3.<java.io.FileOutputStream: void close()>();
+
+     label206:
+        if $r19 == null goto label208;
+
+     label207:
+        virtualinvoke $r19.<java.io.OutputStream: void close()>();
+
+     label208:
+        varReplacer12052 = 1024;
+
+        return varReplacer12052;
+
+     label209:
+        $r49 := @caughtexception;
+
+        r65 = (java.io.IOException) $r49;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label206;
+
+     label210:
+        $r50 := @caughtexception;
+
+        r65 = (java.io.IOException) $r50;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label208;
+
+     label211:
+        r65 = (java.io.IOException) $r24;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        $r5 = newarray (java.lang.Object)[0];
+
+        varReplacer12069 = "IOException";
+
+        staticinvoke <timber.log.Timber: void c(java.lang.Throwable,java.lang.String,java.lang.Object[])>($r24, varReplacer12069, $r5);
+
+        $r51 = $r0.<com.lynda.course.download.DownloadService: android.util.SparseBooleanArray h>;
+
+        $i0 = $r1.<com.lynda.infra.model.Video: int ID>;
+
+        $i0 = virtualinvoke $r51.<android.util.SparseBooleanArray: int indexOfKey(int)>($i0);
+
+     label212:
+        if $i0 < 0 goto label216;
+
+     label213:
+        r64 = new com.lynda.course.download.DownloadEvents$VideoDownloadErrorEvent;
+
+     label214:
+        $r40 = r64;
+
+     label215:
+        varReplacer12060 = 110;
+
+        specialinvoke r64.<com.lynda.course.download.DownloadEvents$VideoDownloadErrorEvent: void <init>(com.lynda.infra.model.Video,int)>($r1, varReplacer12060);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r40);
+
+     label216:
+        if $r3 == null goto label218;
+
+     label217:
+        virtualinvoke $r3.<java.io.FileOutputStream: void close()>();
+
+     label218:
+        if $r19 == null goto label220;
+
+     label219:
+        virtualinvoke $r19.<java.io.OutputStream: void close()>();
+
+     label220:
+        varReplacer12042 = 256;
+
+        return varReplacer12042;
+
+     label221:
+        $r52 := @caughtexception;
+
+        r65 = (java.io.IOException) $r52;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label218;
+
+     label222:
+        $r53 := @caughtexception;
+
+        r65 = (java.io.IOException) $r53;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label220;
+
+     label223:
+        $r54 := @caughtexception;
+
+        r65 = (java.io.IOException) $r54;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label105;
+
+     label224:
+        $r55 := @caughtexception;
+
+        r65 = (java.io.IOException) $r55;
+
+        virtualinvoke r65.<java.io.IOException: void printStackTrace()>();
+
+        goto label107;
+
+     label225:
+        $r56 := @caughtexception;
+
+        goto label144;
+
+     label226:
+        $r26 := @caughtexception;
+
+        $r18 = null;
+
+        $r20 = null;
+
+        goto label103;
+
+     label227:
+        $r26 := @caughtexception;
+
+        $r20 = null;
+
+        goto label103;
+
+     label228:
+        $r26 := @caughtexception;
+
+        $r20 = $r19;
+
+        $r18 = $r3;
+
+        goto label103;
+
+     label229:
+        $r24 := @caughtexception;
+
+        $r19 = null;
+
+        goto label089;
+
+     label230:
+        $r24 := @caughtexception;
+
+        $r3 = $r18;
+
+        $r19 = null;
+
+        goto label089;
+
+        catch java.io.IOException from label001 to label002 with label229;
+        catch java.io.IOException from label003 to label004 with label229;
+        catch java.io.IOException from label007 to label008 with label229;
+        catch java.io.IOException from label010 to label011 with label229;
+        catch java.io.IOException from label012 to label013 with label229;
+        catch java.io.IOException from label014 to label015 with label229;
+        catch java.io.IOException from label016 to label017 with label229;
+        catch java.io.IOException from label020 to label021 with label229;
+        catch java.io.IOException from label022 to label023 with label229;
+        catch java.io.IOException from label024 to label025 with label229;
+        catch java.io.IOException from label026 to label028 with label229;
+        catch java.io.IOException from label031 to label032 with label229;
+        catch java.io.IOException from label034 to label035 with label229;
+        catch java.io.IOException from label036 to label037 with label229;
+        catch java.io.IOException from label042 to label043 with label229;
+        catch java.io.IOException from label044 to label045 with label229;
+        catch java.io.IOException from label047 to label048 with label229;
+        catch java.lang.Throwable from label001 to label002 with label226;
+        catch java.lang.Throwable from label003 to label004 with label226;
+        catch java.lang.Throwable from label006 to label009 with label226;
+        catch java.lang.Throwable from label010 to label017 with label226;
+        catch java.lang.Throwable from label018 to label019 with label226;
+        catch java.lang.Throwable from label020 to label029 with label226;
+        catch java.lang.Throwable from label030 to label032 with label226;
+        catch java.lang.Throwable from label033 to label038 with label226;
+        catch java.lang.Throwable from label039 to label040 with label226;
+        catch java.lang.Throwable from label041 to label046 with label226;
+        catch java.lang.Throwable from label047 to label048 with label226;
+        catch java.io.IOException from label048 to label049 with label230;
+        catch java.lang.Throwable from label048 to label049 with label227;
+        catch java.io.IOException from label051 to label052 with label088;
+        catch java.io.IOException from label053 to label054 with label088;
+        catch java.lang.Throwable from label050 to label054 with label102;
+        catch java.io.IOException from label055 to label056 with label077;
+        catch java.lang.Throwable from label054 to label056 with label102;
+        catch java.io.IOException from label057 to label058 with label088;
+        catch java.io.IOException from label059 to label060 with label088;
+        catch java.io.IOException from label063 to label064 with label088;
+        catch java.io.IOException from label065 to label066 with label088;
+        catch java.lang.Throwable from label056 to label058 with label102;
+        catch java.lang.Throwable from label059 to label060 with label102;
+        catch java.lang.Throwable from label061 to label062 with label102;
+        catch java.lang.Throwable from label063 to label064 with label102;
+        catch java.lang.Throwable from label065 to label066 with label102;
+        catch java.lang.Exception from label066 to label067 with label099;
+        catch java.lang.Throwable from label066 to label067 with label102;
+        catch java.io.IOException from label067 to label068 with label088;
+        catch java.io.IOException from label069 to label070 with label088;
+        catch java.lang.Throwable from label067 to label070 with label102;
+        catch java.lang.Throwable from label071 to label072 with label102;
+        catch java.io.IOException from label073 to label074 with label108;
+        catch java.io.IOException from label075 to label076 with label109;
+        catch java.io.IOException from label079 to label080 with label088;
+        catch java.lang.Throwable from label078 to label080 with label102;
+        catch java.lang.InterruptedException from label080 to label081 with label084;
+        catch java.io.IOException from label080 to label081 with label088;
+        catch java.lang.Throwable from label080 to label081 with label102;
+        catch java.io.IOException from label082 to label083 with label088;
+        catch java.io.IOException from label086 to label087 with label088;
+        catch java.lang.Throwable from label081 to label083 with label102;
+        catch java.lang.Throwable from label085 to label087 with label102;
+        catch java.lang.Throwable from label089 to label090 with label228;
+        catch java.lang.Throwable from label091 to label092 with label228;
+        catch java.lang.Throwable from label093 to label094 with label228;
+        catch java.io.IOException from label095 to label096 with label189;
+        catch java.io.IOException from label097 to label098 with label190;
+        catch java.io.IOException from label100 to label101 with label088;
+        catch java.lang.Throwable from label100 to label101 with label102;
+        catch java.io.IOException from label104 to label105 with label223;
+        catch java.io.IOException from label106 to label107 with label224;
+        catch java.lang.Throwable from label110 to label111 with label102;
+        catch java.io.IOException from label112 to label113 with label116;
+        catch java.io.IOException from label114 to label115 with label117;
+        catch java.io.IOException from label118 to label119 with label122;
+        catch java.io.IOException from label120 to label121 with label123;
+        catch java.io.IOException from label126 to label127 with label088;
+        catch java.io.IOException from label128 to label129 with label088;
+        catch java.io.IOException from label132 to label133 with label088;
+        catch java.io.IOException from label137 to label138 with label088;
+        catch java.lang.Throwable from label125 to label127 with label102;
+        catch java.lang.Throwable from label128 to label129 with label102;
+        catch java.lang.Throwable from label130 to label131 with label102;
+        catch java.lang.Throwable from label132 to label133 with label102;
+        catch java.lang.Throwable from label134 to label135 with label102;
+        catch java.lang.Throwable from label136 to label139 with label102;
+        catch java.lang.Exception from label139 to label140 with label141;
+        catch java.lang.Throwable from label139 to label140 with label102;
+        catch java.io.IOException from label142 to label143 with label088;
+        catch java.lang.Throwable from label142 to label143 with label102;
+        catch java.lang.Exception from label143 to label144 with label225;
+        catch java.lang.Throwable from label143 to label144 with label102;
+        catch java.io.IOException from label145 to label146 with label088;
+        catch java.io.IOException from label154 to label155 with label088;
+        catch java.io.IOException from label156 to label157 with label088;
+        catch java.io.IOException from label159 to label160 with label088;
+        catch java.io.IOException from label161 to label162 with label088;
+        catch java.io.IOException from label164 to label165 with label088;
+        catch java.io.IOException from label166 to label167 with label088;
+        catch java.io.IOException from label168 to label169 with label088;
+        catch java.io.IOException from label171 to label172 with label088;
+        catch java.lang.Throwable from label144 to label147 with label102;
+        catch java.lang.Throwable from label148 to label149 with label102;
+        catch java.lang.Throwable from label150 to label151 with label102;
+        catch java.lang.Throwable from label152 to label153 with label102;
+        catch java.lang.Throwable from label154 to label158 with label102;
+        catch java.lang.Throwable from label159 to label163 with label102;
+        catch java.lang.Throwable from label164 to label170 with label102;
+        catch java.lang.Throwable from label171 to label172 with label102;
+        catch java.io.IOException from label172 to label173 with label176;
+        catch java.io.IOException from label174 to label175 with label177;
+        catch java.io.IOException from label178 to label179 with label088;
+        catch java.io.IOException from label180 to label181 with label088;
+        catch java.io.IOException from label182 to label183 with label088;
+        catch java.lang.Throwable from label178 to label183 with label102;
+        catch java.io.IOException from label183 to label184 with label187;
+        catch java.io.IOException from label185 to label186 with label188;
+        catch java.lang.Throwable from label191 to label192 with label228;
+        catch java.lang.Throwable from label193 to label194 with label228;
+        catch java.io.IOException from label195 to label196 with label199;
+        catch java.io.IOException from label197 to label198 with label200;
+        catch java.lang.Throwable from label201 to label202 with label228;
+        catch java.lang.Throwable from label203 to label204 with label228;
+        catch java.io.IOException from label205 to label206 with label209;
+        catch java.io.IOException from label207 to label208 with label210;
+        catch java.lang.Throwable from label211 to label212 with label228;
+        catch java.lang.Throwable from label213 to label214 with label228;
+        catch java.lang.Throwable from label215 to label216 with label228;
+        catch java.io.IOException from label217 to label218 with label221;
+        catch java.io.IOException from label219 to label220 with label222;
+    }
+
+    private void d()
+    {
+        com.lynda.course.download.DownloadService $r0;
+        android.app.NotificationManager $r1;
+        java.lang.Exception $r2;
+        int varReplacer3792, varReplacer3793, varReplacer3794;
+
+        nop;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+     label1:
+        $r1 = $r0.<com.lynda.course.download.DownloadService: android.app.NotificationManager k>;
+
+     label2:
+        if $r1 != null goto label3;
+
+        return;
+
+     label3:
+        $r1 = $r0.<com.lynda.course.download.DownloadService: android.app.NotificationManager k>;
+
+        varReplacer3793 = 39493;
+
+        virtualinvoke $r1.<android.app.NotificationManager: void cancel(int)>(varReplacer3793);
+
+        $r1 = $r0.<com.lynda.course.download.DownloadService: android.app.NotificationManager k>;
+
+        varReplacer3792 = 32756;
+
+        virtualinvoke $r1.<android.app.NotificationManager: void cancel(int)>(varReplacer3792);
+
+        $r1 = $r0.<com.lynda.course.download.DownloadService: android.app.NotificationManager k>;
+
+        varReplacer3794 = 12345;
+
+        virtualinvoke $r1.<android.app.NotificationManager: void cancel(int)>(varReplacer3794);
+
+     label4:
+        return;
+
+     label5:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r2.<java.lang.Exception: void printStackTrace()>();
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    static void d(com.lynda.course.download.DownloadService)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        int varReplacer6633;
+
+        nop;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        varReplacer6633 = 1;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(boolean)>(varReplacer6633);
+
+        return;
+    }
+
+    static void d(com.lynda.course.download.DownloadService, com.lynda.infra.model.Video)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.infra.model.Video $r1;
+
+        nop;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter1: com.lynda.infra.model.Video;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(com.lynda.infra.model.Video)>($r1);
+
+        return;
+    }
+
+    private void e()
+    {
+        com.lynda.course.download.DownloadService $r0;
+        java.util.concurrent.atomic.AtomicBoolean $r1;
+        boolean $z0;
+        java.util.Vector $r2;
+        int $i0, varReplacer3772, varReplacer3773, varReplacer3774, varReplacer3775;
+        java.lang.Exception $r3;
+        java.lang.Object[] $r4;
+        com.lynda.course.download.tasks.ResumeAllInterruptedDownloadsTask $r5;
+        com.lynda.App $r6;
+        com.lynda.infra.component.AppComponent $r7;
+        com.lynda.infra.storage.DownloadDB $r8;
+        com.lynda.course.download.DownloadService$3 $r9;
+        java.lang.Integer[] $r10;
+        java.lang.String varReplacer3776;
+
+        nop;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 = $r0.<com.lynda.course.download.DownloadService: java.util.concurrent.atomic.AtomicBoolean n>;
+
+        varReplacer3774 = 0;
+
+        varReplacer3775 = 1;
+
+        $z0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: boolean compareAndSet(boolean,boolean)>(varReplacer3774, varReplacer3775);
+
+        if $z0 != 0 goto label01;
+
+        return;
+
+     label01:
+        $r2 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        $i0 = virtualinvoke $r2.<java.util.Vector: int size()>();
+
+     label02:
+        if $i0 <= 0 goto label06;
+
+     label03:
+        $r1 = $r0.<com.lynda.course.download.DownloadService: java.util.concurrent.atomic.AtomicBoolean n>;
+
+        varReplacer3773 = 0;
+
+        virtualinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(varReplacer3773);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void b()>();
+
+     label04:
+        return;
+
+     label05:
+        $r3 := @caughtexception;
+
+        virtualinvoke $r3.<java.lang.Exception: void printStackTrace()>();
+
+        $r1 = $r0.<com.lynda.course.download.DownloadService: java.util.concurrent.atomic.AtomicBoolean n>;
+
+        varReplacer3772 = 0;
+
+        virtualinvoke $r1.<java.util.concurrent.atomic.AtomicBoolean: void set(boolean)>(varReplacer3772);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void b()>();
+
+        return;
+
+     label06:
+        $r4 = newarray (java.lang.Object)[0];
+
+        varReplacer3776 = "resume all downloads";
+
+        staticinvoke <timber.log.Timber: void a(java.lang.String,java.lang.Object[])>(varReplacer3776, $r4);
+
+        $r5 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.tasks.ResumeAllInterruptedDownloadsTask p>;
+
+        staticinvoke <com.lynda.course.download.DownloadService: void a(com.lynda.infra.app.tasks.CustomTask)>($r5);
+
+     label07:
+        $r5 = new com.lynda.course.download.tasks.ResumeAllInterruptedDownloadsTask;
+
+     label08:
+        $r6 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+        $r7 = $r6.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+        $r8 = interfaceinvoke $r7.<com.lynda.infra.component.AppComponent: com.lynda.infra.storage.DownloadDB r()>();
+
+        specialinvoke $r5.<com.lynda.course.download.tasks.ResumeAllInterruptedDownloadsTask: void <init>(com.lynda.infra.storage.DownloadDB)>($r8);
+
+        $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.tasks.ResumeAllInterruptedDownloadsTask p> = $r5;
+
+        $r5 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.tasks.ResumeAllInterruptedDownloadsTask p>;
+
+     label09:
+        $r9 = new com.lynda.course.download.DownloadService$3;
+
+     label10:
+        specialinvoke $r9.<com.lynda.course.download.DownloadService$3: void <init>(com.lynda.course.download.DownloadService)>($r0);
+
+        virtualinvoke $r5.<com.lynda.course.download.tasks.ResumeAllInterruptedDownloadsTask: void a(com.lynda.infra.app.tasks.OnTaskChangeListener)>($r9);
+
+        $r5 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.tasks.ResumeAllInterruptedDownloadsTask p>;
+
+        $r10 = newarray (java.lang.Integer)[0];
+
+        virtualinvoke $r5.<com.lynda.course.download.tasks.ResumeAllInterruptedDownloadsTask: android.os.AsyncTask execute(java.lang.Object[])>($r10);
+
+     label11:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label05;
+        catch java.lang.Exception from label03 to label04 with label05;
+        catch java.lang.Exception from label06 to label07 with label05;
+        catch java.lang.Exception from label08 to label09 with label05;
+        catch java.lang.Exception from label10 to label11 with label05;
+    }
+
+    static void e(com.lynda.course.download.DownloadService)
+    {
+        com.lynda.course.download.DownloadService $r0;
+
+        nop;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void c()>();
+
+        return;
+    }
+
+    static void e(com.lynda.course.download.DownloadService, com.lynda.infra.model.Video)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.infra.model.Video $r1;
+
+        nop;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter1: com.lynda.infra.model.Video;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void b(com.lynda.infra.model.Video)>($r1);
+
+        return;
+    }
+
+    static java.util.concurrent.atomic.AtomicBoolean f(com.lynda.course.download.DownloadService)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        java.util.concurrent.atomic.AtomicBoolean r1;
+
+        nop;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        r1 = $r0.<com.lynda.course.download.DownloadService: java.util.concurrent.atomic.AtomicBoolean o>;
+
+        return r1;
+    }
+
+    private void f()
+    {
+        com.lynda.course.download.DownloadService $r0;
+        java.util.ArrayList $r1;
+        java.lang.Object[] $r2;
+        java.util.Vector $r3, $r4;
+        java.util.Iterator $r5;
+        boolean $z0;
+        java.lang.Object $r6;
+        com.lynda.infra.model.Video $r7;
+        java.lang.Throwable $r8;
+        int $i0, varReplacer6658, varReplacer6659;
+        com.lynda.course.download.DownloadEvents$UpdateMultiVideoStatusEvent $r9;
+        com.lynda.course.download.DownloadEvents$AllDownloadsPausedEvent $r10;
+        android.util.SparseBooleanArray $r11;
+        java.lang.String varReplacer6657;
+
+        nop;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r2 = newarray (java.lang.Object)[0];
+
+        varReplacer6657 = "handlePausedAllVideos";
+
+        staticinvoke <timber.log.Timber: void a(java.lang.String,java.lang.Object[])>(varReplacer6657, $r2);
+
+        $r3 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        entermonitor $r3;
+
+     label1:
+        $r1 = new java.util.ArrayList;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>()>();
+
+        $r4 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        $r5 = virtualinvoke $r4.<java.util.Vector: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (com.lynda.infra.model.Video) $r6;
+
+        varReplacer6659 = 4;
+
+        virtualinvoke $r7.<com.lynda.infra.model.Video: void setDownloadStatus(int)>(varReplacer6659);
+
+        virtualinvoke $r1.<java.util.ArrayList: boolean add(java.lang.Object)>($r7);
+
+        interfaceinvoke $r5.<java.util.Iterator: void remove()>();
+
+        goto label2;
+
+     label3:
+        $r8 := @caughtexception;
+
+        exitmonitor $r3;
+
+     label4:
+        throw $r8;
+
+     label5:
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 & 255;
+
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 | 512;
+
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+        $r9 = new com.lynda.course.download.DownloadEvents$UpdateMultiVideoStatusEvent;
+
+        varReplacer6658 = 0;
+
+        specialinvoke $r9.<com.lynda.course.download.DownloadEvents$UpdateMultiVideoStatusEvent: void <init>(int,java.util.ArrayList)>(varReplacer6658, $r1);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r9);
+
+        $r10 = new com.lynda.course.download.DownloadEvents$AllDownloadsPausedEvent;
+
+        specialinvoke $r10.<com.lynda.course.download.DownloadEvents$AllDownloadsPausedEvent: void <init>()>();
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r10);
+
+        $r4 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        virtualinvoke $r4.<java.util.Vector: void clear()>();
+
+        $r11 = $r0.<com.lynda.course.download.DownloadService: android.util.SparseBooleanArray h>;
+
+        virtualinvoke $r11.<android.util.SparseBooleanArray: void clear()>();
+
+        exitmonitor $r3;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label4 with label3;
+        catch java.lang.Throwable from label5 to label6 with label3;
+    }
+
+    static void g(com.lynda.course.download.DownloadService)
+    {
+        com.lynda.course.download.DownloadService $r0;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void b()>();
+
+        return;
+    }
+
+    private boolean g()
+    {
+        com.lynda.course.download.DownloadService $r0;
+        java.lang.Object $r1;
+        android.net.ConnectivityManager $r2;
+        android.net.NetworkInfo $r3;
+        boolean $z0;
+        int varReplacer12135, varReplacer12136;
+        java.lang.String varReplacer12137;
+
+        nop;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        varReplacer12137 = "connectivity";
+
+        $r1 = virtualinvoke $r0.<com.lynda.course.download.DownloadService: java.lang.Object getSystemService(java.lang.String)>(varReplacer12137);
+
+        $r2 = (android.net.ConnectivityManager) $r1;
+
+        $r3 = virtualinvoke $r2.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+        if $r3 == null goto label1;
+
+        $z0 = virtualinvoke $r3.<android.net.NetworkInfo: boolean isConnected()>();
+
+        if $z0 != 0 goto label2;
+
+     label1:
+        varReplacer12135 = 1;
+
+        return varReplacer12135;
+
+     label2:
+        varReplacer12136 = 0;
+
+        return varReplacer12136;
+    }
+
+    static java.util.concurrent.atomic.AtomicBoolean h(com.lynda.course.download.DownloadService)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        java.util.concurrent.atomic.AtomicBoolean r1;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        r1 = $r0.<com.lynda.course.download.DownloadService: java.util.concurrent.atomic.AtomicBoolean n>;
+
+        return r1;
+    }
+
+    private void h()
+    {
+        com.lynda.course.download.DownloadService $r0;
+        int $i0;
+
+        nop;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 & 1;
+
+        if $i0 <= 0 goto label1;
+
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 + -1;
+
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+     label1:
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 & 2;
+
+        if $i0 <= 0 goto label2;
+
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 + -2;
+
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+     label2:
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 & 4;
+
+        if $i0 <= 0 goto label3;
+
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 + -4;
+
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+     label3:
+        return;
+    }
+
+    static com.lynda.infra.component.AppComponent i(com.lynda.course.download.DownloadService)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.App $r1;
+        com.lynda.infra.component.AppComponent r2;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        $r1 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+        r2 = $r1.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+        return r2;
+    }
+
+    static com.lynda.course.download.DownloadService$VideoStatus j(com.lynda.course.download.DownloadService)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.course.download.DownloadService$VideoStatus r1;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        r1 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.DownloadService$VideoStatus m>;
+
+        return r1;
+    }
+
+    static android.util.SparseBooleanArray k(com.lynda.course.download.DownloadService)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        android.util.SparseBooleanArray r1;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        r1 = $r0.<com.lynda.course.download.DownloadService: android.util.SparseBooleanArray h>;
+
+        return r1;
+    }
+
+    static void l(com.lynda.course.download.DownloadService)
+    {
+        com.lynda.course.download.DownloadService $r0;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void f()>();
+
+        return;
+    }
+
+    static java.net.HttpURLConnection m(com.lynda.course.download.DownloadService)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        java.net.HttpURLConnection r1;
+
+        nop;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        r1 = $r0.<com.lynda.course.download.DownloadService: java.net.HttpURLConnection j>;
+
+        return r1;
+    }
+
+    static boolean n(com.lynda.course.download.DownloadService)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        boolean $z0;
+
+        nop;
+
+        $r0 := @parameter0: com.lynda.course.download.DownloadService;
+
+        $z0 = specialinvoke $r0.<com.lynda.course.download.DownloadService: boolean g()>();
+
+        return $z0;
+    }
+
+    public android.os.IBinder onBind(android.content.Intent)
+    {
+        com.lynda.course.download.DownloadService this;
+        android.content.Intent parameter0;
+
+        nop;
+
+        this := @this: com.lynda.course.download.DownloadService;
+
+        parameter0 := @parameter0: android.content.Intent;
+
+        this.<com.lynda.course.download.DownloadService: android.os.IBinder ipcBinder_0> = parameter0;
+
+        this.<com.lynda.course.download.DownloadService: android.os.IBinder ipcBinder_0> = parameter0;
+
+        this.<com.lynda.course.download.DownloadService: android.os.IBinder ipcBinder_0> = parameter0;
+
+        return parameter0;
+    }
+
+    public void onCreate()
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.App $r1;
+        com.lynda.infra.component.AppComponent $r2;
+        java.util.concurrent.atomic.AtomicBoolean $r3;
+        com.lynda.infra.event.Bus $r4;
+        java.lang.Object $r5;
+        android.app.NotificationManager $r6;
+        int varReplacer3744, varReplacer3745, varReplacer3747;
+        java.lang.String varReplacer3746;
+
+        nop;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        specialinvoke $r0.<android.app.Service: void onCreate()>();
+
+        $r1 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+        $r2 = $r1.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+        interfaceinvoke $r2.<com.lynda.infra.component.AppComponent: void a(com.lynda.course.download.DownloadService)>($r0);
+
+        varReplacer3744 = 1;
+
+        <com.lynda.course.download.DownloadService: boolean f> = varReplacer3744;
+
+        $r3 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        varReplacer3745 = 0;
+
+        specialinvoke $r3.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(varReplacer3745);
+
+        $r0.<com.lynda.course.download.DownloadService: java.util.concurrent.atomic.AtomicBoolean n> = $r3;
+
+        $r3 = new java.util.concurrent.atomic.AtomicBoolean;
+
+        varReplacer3747 = 0;
+
+        specialinvoke $r3.<java.util.concurrent.atomic.AtomicBoolean: void <init>(boolean)>(varReplacer3747);
+
+        $r0.<com.lynda.course.download.DownloadService: java.util.concurrent.atomic.AtomicBoolean o> = $r3;
+
+        $r4 = $r0.<com.lynda.course.download.DownloadService: com.lynda.infra.event.Bus a>;
+
+        virtualinvoke $r4.<com.lynda.infra.event.Bus: void a(java.lang.Object)>($r0);
+
+        varReplacer3746 = "notification";
+
+        $r5 = virtualinvoke $r0.<com.lynda.course.download.DownloadService: java.lang.Object getSystemService(java.lang.String)>(varReplacer3746);
+
+        $r6 = (android.app.NotificationManager) $r5;
+
+        $r0.<com.lynda.course.download.DownloadService: android.app.NotificationManager k> = $r6;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void d()>();
+
+        return;
+    }
+
+    public void onDestroy()
+    {
+        com.lynda.course.download.DownloadService $r0;
+        android.app.NotificationManager $r1;
+        com.lynda.course.download.DownloadEvents$DownloadServiceDownEvent $r2;
+        com.lynda.App $r3;
+        com.lynda.infra.component.AppComponent $r4;
+        com.lynda.infra.event.Bus $r5;
+        java.lang.Exception $r6;
+        int varReplacer3751, varReplacer3752;
+
+        nop;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        varReplacer3752 = 0;
+
+        <com.lynda.course.download.DownloadService: boolean f> = varReplacer3752;
+
+     label1:
+        $r1 = $r0.<com.lynda.course.download.DownloadService: android.app.NotificationManager k>;
+
+     label2:
+        if $r1 != null goto label4;
+
+     label3:
+        $r2 = new com.lynda.course.download.DownloadEvents$DownloadServiceDownEvent;
+
+        specialinvoke $r2.<com.lynda.course.download.DownloadEvents$DownloadServiceDownEvent: void <init>()>();
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r2);
+
+        $r3 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+        $r4 = $r3.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+        $r5 = interfaceinvoke $r4.<com.lynda.infra.component.AppComponent: com.lynda.infra.event.Bus g()>();
+
+        virtualinvoke $r5.<com.lynda.infra.event.Bus: void c(java.lang.Object)>($r0);
+
+        specialinvoke $r0.<android.app.Service: void onDestroy()>();
+
+        return;
+
+     label4:
+        $r1 = $r0.<com.lynda.course.download.DownloadService: android.app.NotificationManager k>;
+
+        varReplacer3751 = 39493;
+
+        virtualinvoke $r1.<android.app.NotificationManager: void cancel(int)>(varReplacer3751);
+
+     label5:
+        goto label3;
+
+     label6:
+        $r6 := @caughtexception;
+
+        virtualinvoke $r6.<java.lang.Exception: void printStackTrace()>();
+
+        goto label3;
+
+        catch java.lang.Exception from label1 to label2 with label6;
+        catch java.lang.Exception from label4 to label5 with label6;
+    }
+
+    public void onEventAsync(com.lynda.course.download.DownloadEvents$AddMultipleVideoToQueueEvent)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.course.download.DownloadEvents$AddMultipleVideoToQueueEvent $r1;
+        java.util.ArrayList $r2;
+        int $i0;
+        com.lynda.course.download.DownloadEvents$GeneralErrorEvent $r3;
+        java.lang.String $r4;
+        com.lynda.course.download.tasks.AddCourseDownloadTask $r5;
+        com.lynda.App $r6;
+        com.lynda.infra.component.AppComponent $r7;
+        com.lynda.infra.storage.DownloadDB $r8;
+        com.lynda.course.download.DownloadService$4 $r9;
+        java.util.ArrayList[] $r10;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter0: com.lynda.course.download.DownloadEvents$AddMultipleVideoToQueueEvent;
+
+        $r2 = $r1.<com.lynda.course.download.DownloadEvents$AddMultipleVideoToQueueEvent: java.util.ArrayList a>;
+
+        if $r2 == null goto label1;
+
+        $i0 = virtualinvoke $r2.<java.util.ArrayList: int size()>();
+
+        if $i0 != 0 goto label3;
+
+     label1:
+        $r3 = new com.lynda.course.download.DownloadEvents$GeneralErrorEvent;
+
+        $r4 = virtualinvoke $r0.<com.lynda.course.download.DownloadService: java.lang.String getString(int)>(2131296588);
+
+        specialinvoke $r3.<com.lynda.course.download.DownloadEvents$GeneralErrorEvent: void <init>(java.lang.String)>($r4);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r3);
+
+     label2:
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void b()>();
+
+        return;
+
+     label3:
+        $r5 = new com.lynda.course.download.tasks.AddCourseDownloadTask;
+
+        $r6 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+        $r7 = $r6.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+        $r8 = interfaceinvoke $r7.<com.lynda.infra.component.AppComponent: com.lynda.infra.storage.DownloadDB r()>();
+
+        specialinvoke $r5.<com.lynda.course.download.tasks.AddCourseDownloadTask: void <init>(com.lynda.infra.storage.DownloadDB)>($r8);
+
+        $r9 = new com.lynda.course.download.DownloadService$4;
+
+        specialinvoke $r9.<com.lynda.course.download.DownloadService$4: void <init>(com.lynda.course.download.DownloadService,java.util.ArrayList)>($r0, $r2);
+
+        virtualinvoke $r5.<com.lynda.course.download.tasks.AddCourseDownloadTask: void a(com.lynda.infra.app.tasks.OnTaskChangeListener)>($r9);
+
+        $r10 = newarray (java.util.ArrayList)[1];
+
+        $r10[0] = $r2;
+
+        virtualinvoke $r5.<com.lynda.course.download.tasks.AddCourseDownloadTask: android.os.AsyncTask execute(java.lang.Object[])>($r10);
+
+        goto label2;
+    }
+
+    public void onEventAsync(com.lynda.course.download.DownloadEvents$AddVideoToQueueEvent)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.course.download.DownloadEvents$AddVideoToQueueEvent $r1;
+        com.lynda.infra.model.Video $r2;
+        int $i0;
+        com.lynda.infra.storage.DownloadDB $r3;
+        java.util.Vector $r4;
+        com.lynda.Session $r5;
+        com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent $r6;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter0: com.lynda.course.download.DownloadEvents$AddVideoToQueueEvent;
+
+        $r2 = $r1.<com.lynda.course.download.DownloadEvents$AddVideoToQueueEvent: com.lynda.infra.model.Video a>;
+
+        $r3 = $r0.<com.lynda.course.download.DownloadService: com.lynda.infra.storage.DownloadDB b>;
+
+        $i0 = virtualinvoke $r3.<com.lynda.infra.storage.DownloadDB: int a(com.lynda.infra.model.Video)>($r2);
+
+        if $i0 == 4 goto label1;
+
+        virtualinvoke $r2.<com.lynda.infra.model.Video: void setDownloadStatus(int)>(1);
+
+        $r4 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        virtualinvoke $r4.<java.util.Vector: boolean add(java.lang.Object)>($r2);
+
+     label1:
+        $r5 = $r0.<com.lynda.course.download.DownloadService: com.lynda.Session c>;
+
+        $r5.<com.lynda.Session: boolean g> = 1;
+
+        $r6 = new com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent;
+
+        specialinvoke $r6.<com.lynda.course.download.DownloadEvents$UpdateVideoStatusEvent: void <init>(com.lynda.infra.model.Video)>($r2);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r6);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void b()>();
+
+        return;
+    }
+
+    public void onEventAsync(com.lynda.course.download.DownloadEvents$CancelCourseDownloadsEvent)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.course.download.DownloadEvents$CancelCourseDownloadsEvent $r1;
+        com.lynda.course.download.tasks.CancelCourseDownloadTask $r2;
+        int $i0;
+        com.lynda.App $r3;
+        com.lynda.infra.component.AppComponent $r4;
+        com.lynda.infra.storage.DownloadDB $r5;
+        com.lynda.course.download.DownloadService$9 $r6;
+        java.lang.Integer[] $r7;
+        java.lang.Integer $r8;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter0: com.lynda.course.download.DownloadEvents$CancelCourseDownloadsEvent;
+
+        $i0 = $r1.<com.lynda.course.download.DownloadEvents$CancelCourseDownloadsEvent: int a>;
+
+        $r2 = new com.lynda.course.download.tasks.CancelCourseDownloadTask;
+
+        $r3 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+        $r4 = $r3.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+        $r5 = interfaceinvoke $r4.<com.lynda.infra.component.AppComponent: com.lynda.infra.storage.DownloadDB r()>();
+
+        specialinvoke $r2.<com.lynda.course.download.tasks.CancelCourseDownloadTask: void <init>(com.lynda.infra.storage.DownloadDB)>($r5);
+
+        $r6 = new com.lynda.course.download.DownloadService$9;
+
+        specialinvoke $r6.<com.lynda.course.download.DownloadService$9: void <init>(com.lynda.course.download.DownloadService,int)>($r0, $i0);
+
+        virtualinvoke $r2.<com.lynda.course.download.tasks.CancelCourseDownloadTask: void a(com.lynda.infra.app.tasks.OnTaskChangeListener)>($r6);
+
+        $r7 = newarray (java.lang.Integer)[1];
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r7[0] = $r8;
+
+        virtualinvoke $r2.<com.lynda.course.download.tasks.CancelCourseDownloadTask: android.os.AsyncTask execute(java.lang.Object[])>($r7);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void b()>();
+
+        return;
+    }
+
+    public void onEventAsync(com.lynda.course.download.DownloadEvents$CancelVideoEvent)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.course.download.DownloadEvents$CancelVideoEvent $r1;
+        com.lynda.infra.model.Video $r2, $r10;
+        int $i0, $i1;
+        com.lynda.course.download.DownloadService$VideoStatus $r3;
+        com.lynda.course.download.DownloadService$DisconnectNetworkTask $r4;
+        java.lang.Integer[] $r5;
+        java.util.Vector $r6, $r7;
+        java.util.Iterator $r8;
+        boolean $z0;
+        java.lang.Object $r9;
+        java.lang.Throwable $r11, $r20;
+        android.util.SparseBooleanArray $r12, $r13;
+        com.lynda.course.download.tasks.CancelVideoDownloadTask $r14;
+        com.lynda.App $r15;
+        com.lynda.infra.component.AppComponent $r16;
+        com.lynda.infra.storage.DownloadDB $r17;
+        com.lynda.course.download.DownloadService$8 $r18;
+        com.lynda.infra.model.Video[] $r19;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter0: com.lynda.course.download.DownloadEvents$CancelVideoEvent;
+
+        $r2 = $r1.<com.lynda.course.download.DownloadEvents$CancelVideoEvent: com.lynda.infra.model.Video a>;
+
+        $r3 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.DownloadService$VideoStatus m>;
+
+        if $r3 == null goto label01;
+
+        $r3 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.DownloadService$VideoStatus m>;
+
+        $i0 = $r3.<com.lynda.course.download.DownloadService$VideoStatus: int b>;
+
+        $i1 = $r2.<com.lynda.infra.model.Video: int CourseID>;
+
+        if $i0 != $i1 goto label01;
+
+        $r3 = $r0.<com.lynda.course.download.DownloadService: com.lynda.course.download.DownloadService$VideoStatus m>;
+
+        $i0 = $r3.<com.lynda.course.download.DownloadService$VideoStatus: int a>;
+
+        $i1 = $r2.<com.lynda.infra.model.Video: int ID>;
+
+        if $i0 != $i1 goto label01;
+
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 | 2;
+
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+        $r4 = new com.lynda.course.download.DownloadService$DisconnectNetworkTask;
+
+        specialinvoke $r4.<com.lynda.course.download.DownloadService$DisconnectNetworkTask: void <init>(com.lynda.course.download.DownloadService,byte)>($r0, 0);
+
+        $r5 = newarray (java.lang.Integer)[0];
+
+        virtualinvoke $r4.<com.lynda.course.download.DownloadService$DisconnectNetworkTask: android.os.AsyncTask execute(java.lang.Object[])>($r5);
+
+     label01:
+        $r6 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        entermonitor $r6;
+
+     label02:
+        $r7 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        $r8 = virtualinvoke $r7.<java.util.Vector: java.util.Iterator iterator()>();
+
+     label03:
+        $z0 = interfaceinvoke $r8.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label06;
+
+        $r9 = interfaceinvoke $r8.<java.util.Iterator: java.lang.Object next()>();
+
+        $r10 = (com.lynda.infra.model.Video) $r9;
+
+        $i1 = $r10.<com.lynda.infra.model.Video: int ID>;
+
+        $i0 = $r2.<com.lynda.infra.model.Video: int ID>;
+
+        if $i1 != $i0 goto label03;
+
+        interfaceinvoke $r8.<java.util.Iterator: void remove()>();
+
+        goto label03;
+
+     label04:
+        $r11 := @caughtexception;
+
+        exitmonitor $r6;
+
+     label05:
+        throw $r11;
+
+     label06:
+        exitmonitor $r6;
+
+     label07:
+        $r12 = $r0.<com.lynda.course.download.DownloadService: android.util.SparseBooleanArray h>;
+
+        entermonitor $r12;
+
+     label08:
+        $r13 = $r0.<com.lynda.course.download.DownloadService: android.util.SparseBooleanArray h>;
+
+        $i0 = $r2.<com.lynda.infra.model.Video: int ID>;
+
+        virtualinvoke $r13.<android.util.SparseBooleanArray: void delete(int)>($i0);
+
+        exitmonitor $r12;
+
+     label09:
+        $r14 = new com.lynda.course.download.tasks.CancelVideoDownloadTask;
+
+        $r15 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+        $r16 = $r15.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+        $r17 = interfaceinvoke $r16.<com.lynda.infra.component.AppComponent: com.lynda.infra.storage.DownloadDB r()>();
+
+        specialinvoke $r14.<com.lynda.course.download.tasks.CancelVideoDownloadTask: void <init>(com.lynda.infra.storage.DownloadDB)>($r17);
+
+        $r18 = new com.lynda.course.download.DownloadService$8;
+
+        specialinvoke $r18.<com.lynda.course.download.DownloadService$8: void <init>(com.lynda.course.download.DownloadService,com.lynda.infra.model.Video)>($r0, $r2);
+
+        virtualinvoke $r14.<com.lynda.course.download.tasks.CancelVideoDownloadTask: void a(com.lynda.infra.app.tasks.OnTaskChangeListener)>($r18);
+
+        $r19 = newarray (com.lynda.infra.model.Video)[1];
+
+        $r19[0] = $r2;
+
+        virtualinvoke $r14.<com.lynda.course.download.tasks.CancelVideoDownloadTask: android.os.AsyncTask execute(java.lang.Object[])>($r19);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void b()>();
+
+        return;
+
+     label10:
+        $r20 := @caughtexception;
+
+     label11:
+        exitmonitor $r12;
+
+     label12:
+        throw $r20;
+
+        catch java.lang.Throwable from label02 to label05 with label04;
+        catch java.lang.Throwable from label06 to label07 with label04;
+        catch java.lang.Throwable from label08 to label09 with label10;
+        catch java.lang.Throwable from label11 to label12 with label10;
+    }
+
+    public void onEventAsync(com.lynda.course.download.DownloadEvents$DeleteAllCourseVideosEvent)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.course.download.DownloadEvents$DeleteAllCourseVideosEvent $r1;
+        com.lynda.course.download.tasks.DeleteVideosTask $r2;
+        int $i0;
+        com.lynda.App $r3;
+        com.lynda.infra.component.AppComponent $r4;
+        com.lynda.infra.storage.DownloadDB $r5;
+        com.lynda.infra.storage.CourseDB $r6;
+        com.lynda.course.download.DownloadService$6 $r7;
+        java.lang.Integer[] $r8;
+        java.lang.Integer $r9;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter0: com.lynda.course.download.DownloadEvents$DeleteAllCourseVideosEvent;
+
+        $i0 = $r1.<com.lynda.course.download.DownloadEvents$DeleteAllCourseVideosEvent: int a>;
+
+        $r2 = new com.lynda.course.download.tasks.DeleteVideosTask;
+
+        $r3 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+        $r4 = $r3.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+        $r5 = interfaceinvoke $r4.<com.lynda.infra.component.AppComponent: com.lynda.infra.storage.DownloadDB r()>();
+
+        $r3 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+        $r4 = $r3.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+        $r6 = interfaceinvoke $r4.<com.lynda.infra.component.AppComponent: com.lynda.infra.storage.CourseDB q()>();
+
+        specialinvoke $r2.<com.lynda.course.download.tasks.DeleteVideosTask: void <init>(com.lynda.infra.storage.DownloadDB,com.lynda.infra.storage.CourseDB)>($r5, $r6);
+
+        $r7 = new com.lynda.course.download.DownloadService$6;
+
+        specialinvoke $r7.<com.lynda.course.download.DownloadService$6: void <init>(com.lynda.course.download.DownloadService,int)>($r0, $i0);
+
+        virtualinvoke $r2.<com.lynda.course.download.tasks.DeleteVideosTask: void a(com.lynda.infra.app.tasks.OnTaskChangeListener)>($r7);
+
+        $r8 = newarray (java.lang.Integer)[1];
+
+        $r9 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r8[0] = $r9;
+
+        virtualinvoke $r2.<com.lynda.course.download.tasks.DeleteVideosTask: android.os.AsyncTask execute(java.lang.Object[])>($r8);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void b()>();
+
+        return;
+    }
+
+    public void onEventAsync(com.lynda.course.download.DownloadEvents$DeleteVideoEvent)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.course.download.DownloadEvents$DeleteVideoEvent $r1;
+        com.lynda.infra.model.Video $r2;
+        com.lynda.course.download.tasks.DeleteVideoTask $r3;
+        com.lynda.App $r4;
+        com.lynda.infra.component.AppComponent $r5;
+        com.lynda.infra.storage.CourseDB $r6;
+        com.lynda.course.download.DownloadService$5 $r7;
+        com.lynda.infra.model.Video[] $r8;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter0: com.lynda.course.download.DownloadEvents$DeleteVideoEvent;
+
+        $r2 = $r1.<com.lynda.course.download.DownloadEvents$DeleteVideoEvent: com.lynda.infra.model.Video a>;
+
+        $r3 = new com.lynda.course.download.tasks.DeleteVideoTask;
+
+        $r4 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+        $r5 = $r4.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+        $r6 = interfaceinvoke $r5.<com.lynda.infra.component.AppComponent: com.lynda.infra.storage.CourseDB q()>();
+
+        specialinvoke $r3.<com.lynda.course.download.tasks.DeleteVideoTask: void <init>(com.lynda.infra.storage.CourseDB)>($r6);
+
+        $r7 = new com.lynda.course.download.DownloadService$5;
+
+        specialinvoke $r7.<com.lynda.course.download.DownloadService$5: void <init>(com.lynda.course.download.DownloadService,com.lynda.infra.model.Video)>($r0, $r2);
+
+        virtualinvoke $r3.<com.lynda.course.download.tasks.DeleteVideoTask: void a(com.lynda.infra.app.tasks.OnTaskChangeListener)>($r7);
+
+        $r8 = newarray (com.lynda.infra.model.Video)[1];
+
+        $r8[0] = $r2;
+
+        virtualinvoke $r3.<com.lynda.course.download.tasks.DeleteVideoTask: android.os.AsyncTask execute(java.lang.Object[])>($r8);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void b()>();
+
+        return;
+    }
+
+    public void onEventAsync(com.lynda.course.download.DownloadEvents$PauseCourseDownloadEvent)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.course.download.DownloadEvents$PauseCourseDownloadEvent $r1;
+        com.lynda.course.download.tasks.PauseCourseDownloadTask $r2;
+        int $i0;
+        com.lynda.App $r3;
+        com.lynda.infra.component.AppComponent $r4;
+        com.lynda.infra.storage.DownloadDB $r5;
+        com.lynda.course.download.DownloadService$10 $r6;
+        java.lang.Integer[] $r7;
+        java.lang.Integer $r8;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter0: com.lynda.course.download.DownloadEvents$PauseCourseDownloadEvent;
+
+        $i0 = $r1.<com.lynda.course.download.DownloadEvents$PauseCourseDownloadEvent: int a>;
+
+        $r2 = new com.lynda.course.download.tasks.PauseCourseDownloadTask;
+
+        $r3 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+        $r4 = $r3.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+        $r5 = interfaceinvoke $r4.<com.lynda.infra.component.AppComponent: com.lynda.infra.storage.DownloadDB r()>();
+
+        specialinvoke $r2.<com.lynda.course.download.tasks.PauseCourseDownloadTask: void <init>(com.lynda.infra.storage.DownloadDB)>($r5);
+
+        $r6 = new com.lynda.course.download.DownloadService$10;
+
+        specialinvoke $r6.<com.lynda.course.download.DownloadService$10: void <init>(com.lynda.course.download.DownloadService,int)>($r0, $i0);
+
+        virtualinvoke $r2.<com.lynda.course.download.tasks.PauseCourseDownloadTask: void a(com.lynda.infra.app.tasks.OnTaskChangeListener)>($r6);
+
+        $r7 = newarray (java.lang.Integer)[1];
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r7[0] = $r8;
+
+        virtualinvoke $r2.<com.lynda.course.download.tasks.PauseCourseDownloadTask: android.os.AsyncTask execute(java.lang.Object[])>($r7);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void b()>();
+
+        return;
+    }
+
+    public void onEventAsync(com.lynda.course.download.DownloadEvents$RequestVideosForCourseEvent)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.course.download.DownloadEvents$RequestVideosForCourseEvent $r1;
+        com.lynda.course.download.tasks.GetActiveCourseVideosTask $r2;
+        int $i0;
+        com.lynda.App $r3;
+        com.lynda.infra.component.AppComponent $r4;
+        com.lynda.infra.storage.DownloadDB $r5;
+        com.lynda.course.download.DownloadService$7 $r6;
+        java.lang.Integer[] $r7;
+        java.lang.Integer $r8;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter0: com.lynda.course.download.DownloadEvents$RequestVideosForCourseEvent;
+
+        $i0 = $r1.<com.lynda.course.download.DownloadEvents$RequestVideosForCourseEvent: int a>;
+
+        $r2 = new com.lynda.course.download.tasks.GetActiveCourseVideosTask;
+
+        $r3 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+        $r4 = $r3.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+        $r5 = interfaceinvoke $r4.<com.lynda.infra.component.AppComponent: com.lynda.infra.storage.DownloadDB r()>();
+
+        specialinvoke $r2.<com.lynda.course.download.tasks.GetActiveCourseVideosTask: void <init>(com.lynda.infra.storage.DownloadDB)>($r5);
+
+        $r6 = new com.lynda.course.download.DownloadService$7;
+
+        specialinvoke $r6.<com.lynda.course.download.DownloadService$7: void <init>(com.lynda.course.download.DownloadService,int)>($r0, $i0);
+
+        virtualinvoke $r2.<com.lynda.course.download.tasks.GetActiveCourseVideosTask: void a(com.lynda.infra.app.tasks.OnTaskChangeListener)>($r6);
+
+        $r7 = newarray (java.lang.Integer)[1];
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r7[0] = $r8;
+
+        virtualinvoke $r2.<com.lynda.course.download.tasks.GetActiveCourseVideosTask: android.os.AsyncTask execute(java.lang.Object[])>($r7);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void b()>();
+
+        return;
+    }
+
+    public void onEventAsync(com.lynda.course.download.DownloadEvents$ResumeCourseDownloadEvent)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.course.download.DownloadEvents$ResumeCourseDownloadEvent $r1;
+        com.lynda.course.download.tasks.ResumeCourseDownloadTask $r2;
+        int $i0;
+        com.lynda.App $r3;
+        com.lynda.infra.component.AppComponent $r4;
+        com.lynda.infra.storage.DownloadDB $r5;
+        com.lynda.course.download.DownloadService$2 $r6;
+        java.lang.Integer[] $r7;
+        java.lang.Integer $r8;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter0: com.lynda.course.download.DownloadEvents$ResumeCourseDownloadEvent;
+
+        $i0 = $r1.<com.lynda.course.download.DownloadEvents$ResumeCourseDownloadEvent: int a>;
+
+        $r2 = new com.lynda.course.download.tasks.ResumeCourseDownloadTask;
+
+        $r3 = staticinvoke <com.lynda.App: com.lynda.App a(android.content.Context)>($r0);
+
+        $r4 = $r3.<com.lynda.App: com.lynda.infra.component.AppComponent a>;
+
+        $r5 = interfaceinvoke $r4.<com.lynda.infra.component.AppComponent: com.lynda.infra.storage.DownloadDB r()>();
+
+        specialinvoke $r2.<com.lynda.course.download.tasks.ResumeCourseDownloadTask: void <init>(com.lynda.infra.storage.DownloadDB)>($r5);
+
+        $r6 = new com.lynda.course.download.DownloadService$2;
+
+        specialinvoke $r6.<com.lynda.course.download.DownloadService$2: void <init>(com.lynda.course.download.DownloadService,int)>($r0, $i0);
+
+        virtualinvoke $r2.<com.lynda.course.download.tasks.ResumeCourseDownloadTask: void a(com.lynda.infra.app.tasks.OnTaskChangeListener)>($r6);
+
+        $r7 = newarray (java.lang.Integer)[1];
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r7[0] = $r8;
+
+        virtualinvoke $r2.<com.lynda.course.download.tasks.ResumeCourseDownloadTask: android.os.AsyncTask execute(java.lang.Object[])>($r7);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void b()>();
+
+        return;
+    }
+
+    public void onEventAsync(com.lynda.course.download.DownloadEvents$StopAllEvent)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.course.download.DownloadEvents$StopAllEvent $r1;
+        java.util.Vector $r2, $r3;
+        int $i0;
+        android.util.SparseBooleanArray $r4;
+        java.lang.Throwable $r5;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter0: com.lynda.course.download.DownloadEvents$StopAllEvent;
+
+        $i0 = $r0.<com.lynda.course.download.DownloadService: int i>;
+
+        $i0 = $i0 | 2;
+
+        $r0.<com.lynda.course.download.DownloadService: int i> = $i0;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(boolean)>(0);
+
+        $r2 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        entermonitor $r2;
+
+     label1:
+        $r3 = $r0.<com.lynda.course.download.DownloadService: java.util.Vector g>;
+
+        virtualinvoke $r3.<java.util.Vector: void clear()>();
+
+        exitmonitor $r2;
+
+     label2:
+        $r4 = $r0.<com.lynda.course.download.DownloadService: android.util.SparseBooleanArray h>;
+
+        virtualinvoke $r4.<android.util.SparseBooleanArray: void clear()>();
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void d()>();
+
+        return;
+
+     label3:
+        $r5 := @caughtexception;
+
+     label4:
+        exitmonitor $r2;
+
+     label5:
+        throw $r5;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label4 to label5 with label3;
+    }
+
+    public void onEventAsync(com.lynda.infra.app.events.ConnectionChangedEvent)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        com.lynda.infra.app.events.ConnectionChangedEvent $r1;
+        boolean $z0;
+        java.lang.Object[] $r2;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter0: com.lynda.infra.app.events.ConnectionChangedEvent;
+
+        $z0 = $r1.<com.lynda.infra.app.events.ConnectionChangedEvent: boolean a>;
+
+        if $z0 == 0 goto label1;
+
+        $r2 = newarray (java.lang.Object)[0];
+
+        staticinvoke <timber.log.Timber: void a(java.lang.String,java.lang.Object[])>("resume all videos if allowed", $r2);
+
+        $z0 = staticinvoke <com.lynda.infra.utilities.ConnectionHelper: boolean d(android.content.Context)>($r0);
+
+        if $z0 == 0 goto label2;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void e()>();
+
+        return;
+
+     label1:
+        $r2 = newarray (java.lang.Object)[0];
+
+        staticinvoke <timber.log.Timber: void a(java.lang.String,java.lang.Object[])>("pause and interrupt all videos", $r2);
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(boolean)>(1);
+
+     label2:
+        return;
+    }
+
+    public int onStartCommand(android.content.Intent, int, int)
+    {
+        com.lynda.course.download.DownloadService $r0;
+        android.content.Intent $r1;
+        int $i0, $i1, varReplacer3749, varReplacer3750;
+        boolean $z0;
+        com.lynda.course.download.DownloadEvents$DownloadServiceUpAndRunningEvent $r2;
+        java.lang.String varReplacer3748;
+
+        nop;
+
+        $r0 := @this: com.lynda.course.download.DownloadService;
+
+        $r1 := @parameter0: android.content.Intent;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r2 = new com.lynda.course.download.DownloadEvents$DownloadServiceUpAndRunningEvent;
+
+        specialinvoke $r2.<com.lynda.course.download.DownloadEvents$DownloadServiceUpAndRunningEvent: void <init>()>();
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void a(java.lang.Object)>($r2);
+
+        if $r1 == null goto label1;
+
+        varReplacer3748 = "resumeAllDownloads";
+
+        varReplacer3749 = 0;
+
+        $z0 = virtualinvoke $r1.<android.content.Intent: boolean getBooleanExtra(java.lang.String,boolean)>(varReplacer3748, varReplacer3749);
+
+        if $z0 == 0 goto label1;
+
+        specialinvoke $r0.<com.lynda.course.download.DownloadService: void e()>();
+
+     label1:
+        varReplacer3750 = 1;
+
+        return varReplacer3750;
+    }
+}

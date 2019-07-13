@@ -1,0 +1,1182 @@
+class com.localytics.android.Utils extends java.lang.Object
+{
+    private static final long FILE_COPY_BUFFER_SIZE;
+
+    void <init>()
+    {
+        com.localytics.android.Utils $r0;
+
+        $r0 := @this: com.localytics.android.Utils;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static void copyDirectory(java.io.File, java.io.File) throws java.io.IOException
+    {
+        java.io.File $r0, $r1, $r2;
+        int $i0, $i1;
+        java.io.File[] $r3;
+        java.io.IOException $r4;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r6, varReplacer4368, varReplacer4369, varReplacer4370;
+        boolean $z0;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $r1 := @parameter1: java.io.File;
+
+        staticinvoke <com.localytics.android.Utils: void validateDirectoryRequirements(java.io.File,java.io.File)>($r0, $r1);
+
+        $r3 = virtualinvoke $r0.<java.io.File: java.io.File[] listFiles()>();
+
+        if $r3 != null goto label1;
+
+        $r4 = new java.io.IOException;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer4368 = "Failed to list files from ";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4368);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r4.<java.io.IOException: void <init>(java.lang.String)>($r6);
+
+        throw $r4;
+
+     label1:
+        $z0 = virtualinvoke $r1.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label2;
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean mkdirs()>();
+
+        if $z0 != 0 goto label3;
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean isDirectory()>();
+
+        if $z0 != 0 goto label3;
+
+        $r4 = new java.io.IOException;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer4369 = "Failed to create directory ";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4369);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r4.<java.io.IOException: void <init>(java.lang.String)>($r6);
+
+        throw $r4;
+
+     label2:
+        $z0 = virtualinvoke $r1.<java.io.File: boolean isDirectory()>();
+
+        if $z0 != 0 goto label3;
+
+        $r4 = new java.io.IOException;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        varReplacer4370 = " exists but it\'s not a directory";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4370);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r4.<java.io.IOException: void <init>(java.lang.String)>($r6);
+
+        throw $r4;
+
+     label3:
+        $i0 = lengthof $r3;
+
+        $i1 = 0;
+
+     label4:
+        if $i1 >= $i0 goto label7;
+
+        $r2 = $r3[$i1];
+
+        $r0 = new java.io.File;
+
+        $r6 = virtualinvoke $r2.<java.io.File: java.lang.String getName()>();
+
+        specialinvoke $r0.<java.io.File: void <init>(java.io.File,java.lang.String)>($r1, $r6);
+
+        $z0 = virtualinvoke $r2.<java.io.File: boolean isFile()>();
+
+        if $z0 == 0 goto label6;
+
+        staticinvoke <com.localytics.android.Utils: void copyFile(java.io.File,java.io.File)>($r2, $r0);
+
+     label5:
+        $i1 = $i1 + 1;
+
+        goto label4;
+
+     label6:
+        staticinvoke <com.localytics.android.Utils: void copyDirectory(java.io.File,java.io.File)>($r2, $r0);
+
+        goto label5;
+
+     label7:
+        return;
+    }
+
+    static void copyFile(java.io.File, java.io.File) throws java.io.IOException
+    {
+        java.io.File $r0, $r1, $r4;
+        java.io.FileInputStream $r2, $r10;
+        java.io.FileOutputStream $r3, $r11;
+        boolean $z0;
+        java.io.IOException $r5;
+        java.lang.StringBuilder $r6;
+        java.lang.String $r7, $r14, varReplacer3809, varReplacer3810, varReplacer3811, varReplacer3812, varReplacer3813, varReplacer3814;
+        java.nio.channels.FileChannel $r8, $r9, $r12, $r13;
+        long $l0, $l1, varReplacer3808;
+        byte $b2;
+        java.lang.Throwable $r15;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $r1 := @parameter1: java.io.File;
+
+        staticinvoke <com.localytics.android.Utils: void validateFileRequirements(java.io.File,java.io.File)>($r0, $r1);
+
+        $r4 = virtualinvoke $r1.<java.io.File: java.io.File getParentFile()>();
+
+        if $r4 == null goto label01;
+
+        $z0 = virtualinvoke $r4.<java.io.File: boolean mkdirs()>();
+
+        if $z0 != 0 goto label01;
+
+        $z0 = virtualinvoke $r4.<java.io.File: boolean isDirectory()>();
+
+        if $z0 != 0 goto label01;
+
+        $r5 = new java.io.IOException;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer3811 = "Parent directory ";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3811);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        varReplacer3813 = "cannot be created";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3813);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.io.IOException: void <init>(java.lang.String)>($r7);
+
+        throw $r5;
+
+     label01:
+        $r8 = null;
+
+        $r9 = null;
+
+        $r10 = null;
+
+        $r11 = null;
+
+     label02:
+        $r2 = new java.io.FileInputStream;
+
+        specialinvoke $r2.<java.io.FileInputStream: void <init>(java.io.File)>($r0);
+
+     label03:
+        $r3 = new java.io.FileOutputStream;
+
+        specialinvoke $r3.<java.io.FileOutputStream: void <init>(java.io.File)>($r1);
+
+     label04:
+        $r12 = virtualinvoke $r2.<java.io.FileInputStream: java.nio.channels.FileChannel getChannel()>();
+
+     label05:
+        $r8 = $r12;
+
+     label06:
+        $r13 = virtualinvoke $r3.<java.io.FileOutputStream: java.nio.channels.FileChannel getChannel()>();
+
+     label07:
+        $r9 = $r13;
+
+        $l0 = 0L;
+
+     label08:
+        varReplacer3808 = 1048576L;
+
+        $l1 = virtualinvoke $r13.<java.nio.channels.FileChannel: long transferFrom(java.nio.channels.ReadableByteChannel,long,long)>($r12, $l0, varReplacer3808);
+
+     label09:
+        $b2 = $l1 cmp 0L;
+
+        if $b2 <= 0 goto label10;
+
+        $l0 = $l0 + $l1;
+
+        goto label08;
+
+     label10:
+        if $r12 == null goto label11;
+
+        virtualinvoke $r12.<java.nio.channels.FileChannel: void close()>();
+
+     label11:
+        if $r13 == null goto label12;
+
+        virtualinvoke $r13.<java.nio.channels.FileChannel: void close()>();
+
+     label12:
+        if $r2 == null goto label13;
+
+        virtualinvoke $r2.<java.io.FileInputStream: void close()>();
+
+     label13:
+        if $r3 == null goto label14;
+
+        virtualinvoke $r3.<java.io.FileOutputStream: void close()>();
+
+     label14:
+        $r7 = staticinvoke <com.localytics.android.Utils: java.lang.String getMD5CheckSum(java.io.File)>($r0);
+
+        $r14 = staticinvoke <com.localytics.android.Utils: java.lang.String getMD5CheckSum(java.io.File)>($r1);
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r7);
+
+        if $z0 == 0 goto label21;
+
+        $r5 = new java.io.IOException;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer3812 = "Failed to get checksum for source file ";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3812);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.io.IOException: void <init>(java.lang.String)>($r7);
+
+        throw $r5;
+
+     label15:
+        $r15 := @caughtexception;
+
+     label16:
+        if $r8 == null goto label17;
+
+        virtualinvoke $r8.<java.nio.channels.FileChannel: void close()>();
+
+     label17:
+        if $r9 == null goto label18;
+
+        virtualinvoke $r9.<java.nio.channels.FileChannel: void close()>();
+
+     label18:
+        if $r10 == null goto label19;
+
+        virtualinvoke $r10.<java.io.FileInputStream: void close()>();
+
+     label19:
+        if $r11 == null goto label20;
+
+        virtualinvoke $r11.<java.io.FileOutputStream: void close()>();
+
+     label20:
+        throw $r15;
+
+     label21:
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r14);
+
+        if $z0 == 0 goto label22;
+
+        $r5 = new java.io.IOException;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer3814 = "Failed to get checksum for destination file ";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3814);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.io.IOException: void <init>(java.lang.String)>($r7);
+
+        throw $r5;
+
+     label22:
+        $z0 = virtualinvoke $r7.<java.lang.String: boolean equals(java.lang.Object)>($r14);
+
+        if $z0 != 0 goto label25;
+
+        $r5 = new java.io.IOException;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        varReplacer3810 = " and ";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3810);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        varReplacer3809 = " have different checksum";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3809);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.io.IOException: void <init>(java.lang.String)>($r7);
+
+        throw $r5;
+
+     label23:
+        $r15 := @caughtexception;
+
+        $r10 = $r2;
+
+        goto label16;
+
+     label24:
+        $r15 := @caughtexception;
+
+        $r11 = $r3;
+
+        $r10 = $r2;
+
+        goto label16;
+
+     label25:
+        return;
+
+        catch java.lang.Throwable from label02 to label03 with label15;
+        catch java.lang.Throwable from label03 to label04 with label23;
+        catch java.lang.Throwable from label04 to label05 with label24;
+        catch java.lang.Throwable from label06 to label07 with label24;
+        catch java.lang.Throwable from label08 to label09 with label24;
+    }
+
+    static boolean decompressZipFile(java.lang.String, java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, $r2, varReplacer13702, varReplacer13705, varReplacer13708, varReplacer13709, varReplacer13710;
+        byte[] $r3;
+        java.io.FileOutputStream $r4;
+        java.io.File $r5;
+        java.util.zip.ZipInputStream $r6, $r7;
+        java.io.FileInputStream $r8;
+        java.lang.StringBuilder $r9;
+        java.util.zip.ZipEntry $r10;
+        boolean $z0;
+        java.lang.Object[] $r11;
+        java.lang.Throwable $r12, $r13, $r14, $r15, $r16;
+        int $i0, varReplacer13698, varReplacer13699, varReplacer13700, varReplacer13701, varReplacer13703, varReplacer13704, varReplacer13706, varReplacer13707;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r7 = null;
+
+     label01:
+        $r6 = new java.util.zip.ZipInputStream;
+
+        $r8 = new java.io.FileInputStream;
+
+        $r9 = new java.lang.StringBuilder;
+
+     label02:
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+     label03:
+        $r0 = <java.io.File: java.lang.String separator>;
+
+     label04:
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r0 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r8.<java.io.FileInputStream: void <init>(java.lang.String)>($r0);
+
+        specialinvoke $r6.<java.util.zip.ZipInputStream: void <init>(java.io.InputStream)>($r8);
+
+     label05:
+        $r3 = newarray (byte)[8192];
+
+     label06:
+        $r10 = virtualinvoke $r6.<java.util.zip.ZipInputStream: java.util.zip.ZipEntry getNextEntry()>();
+
+     label07:
+        if $r10 == null goto label37;
+
+     label08:
+        $r9 = new java.lang.StringBuilder;
+
+     label09:
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+     label10:
+        $r0 = <java.io.File: java.lang.String separator>;
+
+     label11:
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r10.<java.util.zip.ZipEntry: java.lang.String getName()>();
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $z0 = virtualinvoke $r10.<java.util.zip.ZipEntry: boolean isDirectory()>();
+
+     label12:
+        if $z0 == 0 goto label24;
+
+     label13:
+        $r5 = new java.io.File;
+
+     label14:
+        specialinvoke $r5.<java.io.File: void <init>(java.lang.String)>($r0);
+
+        $z0 = virtualinvoke $r5.<java.io.File: boolean mkdir()>();
+
+     label15:
+        if $z0 != 0 goto label06;
+
+     label16:
+        $r11 = newarray (java.lang.Object)[1];
+
+        $r11[0] = $r0;
+
+     label17:
+        varReplacer13709 = "Could not create directory %s";
+
+        $r0 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer13709, $r11);
+
+        staticinvoke <com.localytics.android.Localytics$Log: int w(java.lang.String)>($r0);
+
+     label18:
+        goto label06;
+
+     label19:
+        $r12 := @caughtexception;
+
+        $r7 = $r6;
+
+     label20:
+        varReplacer13702 = "Caught IOException";
+
+        staticinvoke <com.localytics.android.Localytics$Log: int w(java.lang.String,java.lang.Throwable)>(varReplacer13702, $r12);
+
+     label21:
+        if $r7 == null goto label45;
+
+     label22:
+        virtualinvoke $r7.<java.util.zip.ZipInputStream: void close()>();
+
+     label23:
+        varReplacer13703 = 0;
+
+        return varReplacer13703;
+
+     label24:
+        $r4 = new java.io.FileOutputStream;
+
+     label25:
+        specialinvoke $r4.<java.io.FileOutputStream: void <init>(java.lang.String)>($r0);
+
+     label26:
+        $i0 = lengthof $r3;
+
+     label27:
+        varReplacer13704 = 0;
+
+        $i0 = virtualinvoke $r6.<java.util.zip.ZipInputStream: int read(byte[],int,int)>($r3, varReplacer13704, $i0);
+
+     label28:
+        if $i0 <= 0 goto label35;
+
+     label29:
+        varReplacer13700 = 0;
+
+        virtualinvoke $r4.<java.io.FileOutputStream: void write(byte[],int,int)>($r3, varReplacer13700, $i0);
+
+     label30:
+        goto label26;
+
+     label31:
+        $r13 := @caughtexception;
+
+        $r7 = $r6;
+
+     label32:
+        if $r7 == null goto label34;
+
+     label33:
+        virtualinvoke $r7.<java.util.zip.ZipInputStream: void close()>();
+
+     label34:
+        throw $r13;
+
+     label35:
+        virtualinvoke $r4.<java.io.FileOutputStream: void close()>();
+
+        virtualinvoke $r6.<java.util.zip.ZipInputStream: void closeEntry()>();
+
+     label36:
+        goto label06;
+
+     label37:
+        if $r6 == null goto label39;
+
+     label38:
+        virtualinvoke $r6.<java.util.zip.ZipInputStream: void close()>();
+
+     label39:
+        varReplacer13707 = 1;
+
+        return varReplacer13707;
+
+     label40:
+        $r14 := @caughtexception;
+
+        varReplacer13708 = "Caught IOException";
+
+        staticinvoke <com.localytics.android.Localytics$Log: int w(java.lang.String,java.lang.Throwable)>(varReplacer13708, $r14);
+
+        varReplacer13698 = 0;
+
+        return varReplacer13698;
+
+     label41:
+        $r15 := @caughtexception;
+
+        varReplacer13705 = "Caught IOException";
+
+        staticinvoke <com.localytics.android.Localytics$Log: int w(java.lang.String,java.lang.Throwable)>(varReplacer13705, $r15);
+
+        varReplacer13701 = 0;
+
+        return varReplacer13701;
+
+     label42:
+        $r16 := @caughtexception;
+
+        varReplacer13710 = "Caught IOException";
+
+        staticinvoke <com.localytics.android.Localytics$Log: int w(java.lang.String,java.lang.Throwable)>(varReplacer13710, $r16);
+
+        varReplacer13699 = 0;
+
+        return varReplacer13699;
+
+     label43:
+        $r13 := @caughtexception;
+
+        goto label32;
+
+     label44:
+        $r12 := @caughtexception;
+
+        goto label20;
+
+     label45:
+        varReplacer13706 = 0;
+
+        return varReplacer13706;
+
+        catch java.io.IOException from label02 to label03 with label44;
+        catch java.io.IOException from label04 to label05 with label44;
+        catch java.lang.Throwable from label01 to label05 with label43;
+        catch java.io.IOException from label06 to label07 with label19;
+        catch java.io.IOException from label09 to label10 with label19;
+        catch java.io.IOException from label11 to label12 with label19;
+        catch java.io.IOException from label14 to label15 with label19;
+        catch java.io.IOException from label17 to label18 with label19;
+        catch java.lang.Throwable from label05 to label07 with label31;
+        catch java.lang.Throwable from label08 to label12 with label31;
+        catch java.lang.Throwable from label13 to label15 with label31;
+        catch java.lang.Throwable from label16 to label18 with label31;
+        catch java.lang.Throwable from label20 to label21 with label43;
+        catch java.io.IOException from label22 to label23 with label41;
+        catch java.io.IOException from label25 to label26 with label19;
+        catch java.io.IOException from label27 to label28 with label19;
+        catch java.io.IOException from label29 to label30 with label19;
+        catch java.lang.Throwable from label24 to label28 with label31;
+        catch java.lang.Throwable from label29 to label30 with label31;
+        catch java.io.IOException from label33 to label34 with label42;
+        catch java.io.IOException from label35 to label36 with label19;
+        catch java.lang.Throwable from label35 to label36 with label31;
+        catch java.io.IOException from label38 to label39 with label40;
+    }
+
+    static void deleteFile(java.io.File)
+    {
+        java.io.File $r0, $r1;
+        int $i0, $i1;
+        boolean $z0;
+        java.io.File[] $r2;
+        java.lang.Object[] $r3;
+        java.lang.String $r4, varReplacer3807;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $z0 = virtualinvoke $r0.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $z0 = virtualinvoke $r0.<java.io.File: boolean isDirectory()>();
+
+        if $z0 == 0 goto label3;
+
+        $r2 = virtualinvoke $r0.<java.io.File: java.io.File[] listFiles()>();
+
+        if $r2 == null goto label3;
+
+        $i0 = lengthof $r2;
+
+        $i1 = 0;
+
+     label2:
+        if $i1 >= $i0 goto label3;
+
+        $r1 = $r2[$i1];
+
+        staticinvoke <com.localytics.android.Utils: void deleteFile(java.io.File)>($r1);
+
+        $i1 = $i1 + 1;
+
+        goto label2;
+
+     label3:
+        $z0 = virtualinvoke $r0.<java.io.File: boolean delete()>();
+
+        if $z0 != 0 goto label4;
+
+        $r3 = newarray (java.lang.Object)[1];
+
+        $r3[0] = $r0;
+
+        varReplacer3807 = "Delete %s failed.";
+
+        $r4 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer3807, $r3);
+
+        staticinvoke <com.localytics.android.Localytics$Log: int w(java.lang.String)>($r4);
+
+     label4:
+        return;
+    }
+
+    static int dpToPx(int, android.content.Context)
+    {
+        int $i0;
+        android.content.Context $r0;
+        float $f0, $f1;
+        android.content.res.Resources $r1;
+        android.util.DisplayMetrics $r2;
+
+        $i0 := @parameter0: int;
+
+        $r0 := @parameter1: android.content.Context;
+
+        $f0 = (float) $i0;
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r2 = virtualinvoke $r1.<android.content.res.Resources: android.util.DisplayMetrics getDisplayMetrics()>();
+
+        $f1 = $r2.<android.util.DisplayMetrics: float density>;
+
+        $f0 = $f0 * $f1;
+
+        $i0 = staticinvoke <java.lang.Math: int round(float)>($f0);
+
+        return $i0;
+    }
+
+    private static java.lang.String getFileCheckSum(java.security.MessageDigest, java.io.File)
+    {
+        java.security.MessageDigest $r0;
+        java.io.File $r1;
+        byte[] $r2;
+        java.io.FileInputStream $r3, $r5;
+        java.lang.StringBuilder $r4;
+        int $i0, $i1, varReplacer3827, varReplacer3829, varReplacer3833;
+        java.lang.Throwable $r6, $r8, $r9, $r10, $r11;
+        byte $b2;
+        short $s3;
+        java.lang.String $r7, varReplacer3825, varReplacer3826, varReplacer3828, varReplacer3830, varReplacer3831, varReplacer3832, varReplacer3834;
+
+        nop;
+
+        $r0 := @parameter0: java.security.MessageDigest;
+
+        $r1 := @parameter1: java.io.File;
+
+        $r5 = null;
+
+     label01:
+        $r3 = new java.io.FileInputStream;
+
+     label02:
+        specialinvoke $r3.<java.io.FileInputStream: void <init>(java.io.File)>($r1);
+
+     label03:
+        $r2 = newarray (byte)[16384];
+
+     label04:
+        $i0 = virtualinvoke $r3.<java.io.FileInputStream: int read(byte[])>($r2);
+
+     label05:
+        if $i0 == -1 goto label13;
+
+     label06:
+        varReplacer3829 = 0;
+
+        virtualinvoke $r0.<java.security.MessageDigest: void update(byte[],int,int)>($r2, varReplacer3829, $i0);
+
+     label07:
+        goto label04;
+
+     label08:
+        $r6 := @caughtexception;
+
+        $r5 = $r3;
+
+     label09:
+        varReplacer3830 = "Caught IOException";
+
+        staticinvoke <com.localytics.android.Localytics$Log: int w(java.lang.String,java.lang.Throwable)>(varReplacer3830, $r6);
+
+     label10:
+        if $r5 == null goto label27;
+
+     label11:
+        virtualinvoke $r5.<java.io.FileInputStream: void close()>();
+
+     label12:
+        varReplacer3831 = "";
+
+        return varReplacer3831;
+
+     label13:
+        if $r3 == null goto label15;
+
+     label14:
+        virtualinvoke $r3.<java.io.FileInputStream: void close()>();
+
+     label15:
+        $r2 = virtualinvoke $r0.<java.security.MessageDigest: byte[] digest()>();
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $i0 = 0;
+
+     label16:
+        $i1 = lengthof $r2;
+
+        if $i0 >= $i1 goto label24;
+
+        $b2 = $r2[$i0];
+
+        $s3 = $b2 & 255;
+
+        $i1 = $s3 + 256;
+
+        varReplacer3833 = 16;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.String toString(int,int)>($i1, varReplacer3833);
+
+        varReplacer3827 = 1;
+
+        $r7 = virtualinvoke $r7.<java.lang.String: java.lang.String substring(int)>(varReplacer3827);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $i0 = $i0 + 1;
+
+        goto label16;
+
+     label17:
+        $r8 := @caughtexception;
+
+        varReplacer3828 = "Caught IOException";
+
+        staticinvoke <com.localytics.android.Localytics$Log: int w(java.lang.String,java.lang.Throwable)>(varReplacer3828, $r8);
+
+        goto label15;
+
+     label18:
+        $r9 := @caughtexception;
+
+        varReplacer3832 = "Caught IOException";
+
+        staticinvoke <com.localytics.android.Localytics$Log: int w(java.lang.String,java.lang.Throwable)>(varReplacer3832, $r9);
+
+        varReplacer3834 = "";
+
+        return varReplacer3834;
+
+     label19:
+        $r10 := @caughtexception;
+
+     label20:
+        if $r5 == null goto label22;
+
+     label21:
+        virtualinvoke $r5.<java.io.FileInputStream: void close()>();
+
+     label22:
+        throw $r10;
+
+     label23:
+        $r11 := @caughtexception;
+
+        varReplacer3826 = "Caught IOException";
+
+        staticinvoke <com.localytics.android.Localytics$Log: int w(java.lang.String,java.lang.Throwable)>(varReplacer3826, $r11);
+
+        goto label22;
+
+     label24:
+        $r7 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r7;
+
+     label25:
+        $r10 := @caughtexception;
+
+        $r5 = $r3;
+
+        goto label20;
+
+     label26:
+        $r6 := @caughtexception;
+
+        goto label09;
+
+     label27:
+        varReplacer3825 = "";
+
+        return varReplacer3825;
+
+        catch java.io.IOException from label02 to label03 with label26;
+        catch java.lang.Throwable from label01 to label03 with label19;
+        catch java.io.IOException from label04 to label05 with label08;
+        catch java.io.IOException from label06 to label07 with label08;
+        catch java.lang.Throwable from label03 to label05 with label25;
+        catch java.lang.Throwable from label06 to label07 with label25;
+        catch java.lang.Throwable from label09 to label10 with label19;
+        catch java.io.IOException from label11 to label12 with label18;
+        catch java.io.IOException from label14 to label15 with label17;
+        catch java.io.IOException from label21 to label22 with label23;
+    }
+
+    static java.lang.String getMD5CheckSum(java.io.File)
+    {
+        java.io.File $r0;
+        java.lang.Throwable $r1;
+        java.security.MessageDigest $r2;
+        java.lang.String $r3, varReplacer3818, varReplacer3819, varReplacer3820;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+     label1:
+        varReplacer3818 = "MD5";
+
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3818);
+
+     label2:
+        $r3 = staticinvoke <com.localytics.android.Utils: java.lang.String getFileCheckSum(java.security.MessageDigest,java.io.File)>($r2, $r0);
+
+        return $r3;
+
+     label3:
+        $r1 := @caughtexception;
+
+        varReplacer3819 = "Caught NoSuchAlgorithmException";
+
+        staticinvoke <com.localytics.android.Localytics$Log: int w(java.lang.String,java.lang.Throwable)>(varReplacer3819, $r1);
+
+        varReplacer3820 = "";
+
+        return varReplacer3820;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+    }
+
+    static void map(java.util.Collection, java.util.Collection, com.localytics.android.Utils$Mapper)
+    {
+        java.util.Collection $r0, $r1;
+        com.localytics.android.Utils$Mapper $r2;
+        java.util.Iterator $r3;
+        boolean $z0;
+        java.lang.Object $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.util.Collection;
+
+        $r1 := @parameter1: java.util.Collection;
+
+        $r2 := @parameter2: com.localytics.android.Utils$Mapper;
+
+        $r3 = interfaceinvoke $r0.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = interfaceinvoke $r2.<com.localytics.android.Utils$Mapper: java.lang.Object transform(java.lang.Object)>($r4);
+
+        interfaceinvoke $r1.<java.util.Collection: boolean add(java.lang.Object)>($r4);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private static void validateDirectoryRequirements(java.io.File, java.io.File) throws java.io.IOException
+    {
+        java.io.File $r0, $r1;
+        boolean $z0;
+        java.io.IOException $r2;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r4, $r5, varReplacer4373, varReplacer4374, varReplacer4375, varReplacer4376, varReplacer4377, varReplacer4378, varReplacer4379;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $r1 := @parameter1: java.io.File;
+
+        staticinvoke <com.localytics.android.Utils: void validateFileRequirements(java.io.File,java.io.File)>($r0, $r1);
+
+        $z0 = virtualinvoke $r0.<java.io.File: boolean isDirectory()>();
+
+        if $z0 != 0 goto label1;
+
+        $r2 = new java.io.IOException;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer4379 = "Source file ";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4379);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        varReplacer4373 = " exists but it\'s not a directory";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4373);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<java.io.IOException: void <init>(java.lang.String)>($r4);
+
+        throw $r2;
+
+     label1:
+        $r4 = virtualinvoke $r0.<java.io.File: java.lang.String getCanonicalPath()>();
+
+        $r5 = virtualinvoke $r1.<java.io.File: java.lang.String getCanonicalPath()>();
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>($r5);
+
+        if $z0 == 0 goto label2;
+
+        $r2 = new java.io.IOException;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer4377 = "Can\'t copy because source ";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4377);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        varReplacer4374 = " and dest ";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4374);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        varReplacer4376 = " directory are same";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4376);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<java.io.IOException: void <init>(java.lang.String)>($r4);
+
+        throw $r2;
+
+     label2:
+        $r4 = virtualinvoke $r1.<java.io.File: java.lang.String getCanonicalPath()>();
+
+        $r5 = virtualinvoke $r0.<java.io.File: java.lang.String getCanonicalPath()>();
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean startsWith(java.lang.String)>($r5);
+
+        if $z0 == 0 goto label3;
+
+        $r2 = new java.io.IOException;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer4375 = "Can\'t copy the source ";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4375);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        varReplacer4378 = " into itself";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4378);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<java.io.IOException: void <init>(java.lang.String)>($r4);
+
+        throw $r2;
+
+     label3:
+        return;
+    }
+
+    private static void validateFileRequirements(java.io.File, java.io.File) throws java.io.IOException
+    {
+        java.io.File $r0, $r1;
+        java.lang.NullPointerException $r2;
+        boolean $z0;
+        java.io.FileNotFoundException $r3;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5, varReplacer3821, varReplacer3822, varReplacer3823, varReplacer3824;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $r1 := @parameter1: java.io.File;
+
+        if $r0 != null goto label1;
+
+        $r2 = new java.lang.NullPointerException;
+
+        varReplacer3822 = "Source file cannot be null";
+
+        specialinvoke $r2.<java.lang.NullPointerException: void <init>(java.lang.String)>(varReplacer3822);
+
+        throw $r2;
+
+     label1:
+        if $r1 != null goto label2;
+
+        $r2 = new java.lang.NullPointerException;
+
+        varReplacer3821 = "Dest file cannot be null";
+
+        specialinvoke $r2.<java.lang.NullPointerException: void <init>(java.lang.String)>(varReplacer3821);
+
+        throw $r2;
+
+     label2:
+        $z0 = virtualinvoke $r0.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label3;
+
+        $r3 = new java.io.FileNotFoundException;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer3824 = "Source file ";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3824);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        varReplacer3823 = " doesn\'t exist";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3823);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.io.FileNotFoundException: void <init>(java.lang.String)>($r5);
+
+        throw $r3;
+
+     label3:
+        return;
+    }
+}

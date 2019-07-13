@@ -1,0 +1,915 @@
+public class com.vigilant.solutions.socket.DfcSocket extends java.lang.Object
+{
+    public static final int GENERAL_ERROR;
+    public static final int NO_ERROR;
+    public static final int SOCKET_TIMEOUT_ERROR;
+    public static final int TIME_OUT;
+    private boolean m_bUseSSL;
+    private java.io.DataInputStream m_dataIn;
+    private java.io.DataOutputStream m_dataOut;
+    public int m_iErrorCode;
+    private java.net.Socket m_socket;
+
+    public void <init>()
+    {
+        com.vigilant.solutions.socket.DfcSocket $r0;
+        int varReplacer5565, varReplacer5569;
+        null_type varReplacer5566, varReplacer5567, varReplacer5568;
+
+        nop;
+
+        $r0 := @this: com.vigilant.solutions.socket.DfcSocket;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer5568 = null;
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: java.net.Socket m_socket> = varReplacer5568;
+
+        varReplacer5566 = null;
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: java.io.DataInputStream m_dataIn> = varReplacer5566;
+
+        varReplacer5567 = null;
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: java.io.DataOutputStream m_dataOut> = varReplacer5567;
+
+        varReplacer5569 = 0;
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: boolean m_bUseSSL> = varReplacer5569;
+
+        varReplacer5565 = 0;
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: int m_iErrorCode> = varReplacer5565;
+
+        return;
+    }
+
+    private byte recvByte() throws java.io.IOException
+    {
+        com.vigilant.solutions.socket.DfcSocket $r0;
+        byte $b0;
+        java.io.DataInputStream $r1;
+
+        $r0 := @this: com.vigilant.solutions.socket.DfcSocket;
+
+        $r1 = $r0.<com.vigilant.solutions.socket.DfcSocket: java.io.DataInputStream m_dataIn>;
+
+        $b0 = virtualinvoke $r1.<java.io.DataInputStream: byte readByte()>();
+
+        return $b0;
+    }
+
+    public byte[] RecvBodyWithoutContentLenght()
+    {
+        com.vigilant.solutions.socket.DfcSocket $r0;
+        byte[] $r1, $r2, $r3;
+        int $i0, $i1;
+        java.lang.String $r4;
+
+        $r0 := @this: com.vigilant.solutions.socket.DfcSocket;
+
+        $r2 = newarray (byte)[0];
+
+        $i0 = 0;
+
+     label1:
+        $r3 = virtualinvoke $r0.<com.vigilant.solutions.socket.DfcSocket: byte[] recv(int)>(1024);
+
+        if $r3 != null goto label3;
+
+     label2:
+        $r4 = new java.lang.String;
+
+        specialinvoke $r4.<java.lang.String: void <init>(byte[])>($r2);
+
+        $r4 = virtualinvoke $r0.<com.vigilant.solutions.socket.DfcSocket: java.lang.String findXmlHtml(java.lang.String)>($r4);
+
+        $i0 = virtualinvoke $r4.<java.lang.String: int length()>();
+
+        if $i0 != 0 goto label4;
+
+        return null;
+
+     label3:
+        $i1 = lengthof $r3;
+
+        $i1 = $i0 + $i1;
+
+        $r1 = newarray (byte)[$i1];
+
+        staticinvoke <com.vigilant.solutions.utilities.CGlobalFunction: void memcpy(java.lang.Object,int,java.lang.Object,int,int)>($r1, 0, $r2, 0, $i0);
+
+        $i1 = lengthof $r3;
+
+        staticinvoke <com.vigilant.solutions.utilities.CGlobalFunction: void memcpy(java.lang.Object,int,java.lang.Object,int,int)>($r1, $i0, $r3, 0, $i1);
+
+        $r2 = $r1;
+
+        $i0 = lengthof $r1;
+
+        $i1 = lengthof $r3;
+
+        if $i1 >= 1024 goto label1;
+
+        goto label2;
+
+     label4:
+        $r1 = virtualinvoke $r4.<java.lang.String: byte[] getBytes()>();
+
+        return $r1;
+    }
+
+    public boolean RecvLineBinary(com.vigilant.solutions.utilities.CArray)
+    {
+        com.vigilant.solutions.socket.DfcSocket $r0;
+        com.vigilant.solutions.utilities.CArray $r1;
+        java.lang.Throwable $r2, $r3;
+        byte $b0, $b1;
+        int $i2;
+        java.lang.Byte $r4;
+        java.net.SocketTimeoutException r5;
+        java.io.IOException r6;
+
+        $r0 := @this: com.vigilant.solutions.socket.DfcSocket;
+
+        $r1 := @parameter0: com.vigilant.solutions.utilities.CArray;
+
+     label01:
+        virtualinvoke $r1.<com.vigilant.solutions.utilities.CArray: void RemoveAll()>();
+
+     label02:
+        $b0 = 0;
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: int m_iErrorCode> = 0;
+
+     label03:
+        $b1 = specialinvoke $r0.<com.vigilant.solutions.socket.DfcSocket: byte recvByte()>();
+
+     label04:
+        if $b1 != 10 goto label11;
+
+        if $b0 != 13 goto label11;
+
+     label05:
+        $i2 = virtualinvoke $r1.<com.vigilant.solutions.utilities.CArray: int GetSize()>();
+
+     label06:
+        if $i2 <= 0 goto label10;
+
+     label07:
+        $i2 = virtualinvoke $r1.<com.vigilant.solutions.utilities.CArray: int GetSize()>();
+
+     label08:
+        $i2 = $i2 + -1;
+
+     label09:
+        virtualinvoke $r1.<com.vigilant.solutions.utilities.CArray: void RemoveAt(int)>($i2);
+
+     label10:
+        return 1;
+
+     label11:
+        $b0 = $b1;
+
+     label12:
+        $r4 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b1);
+
+        virtualinvoke $r1.<com.vigilant.solutions.utilities.CArray: void Add(java.lang.Object)>($r4);
+
+     label13:
+        goto label03;
+
+     label14:
+        $r3 := @caughtexception;
+
+        r5 = (java.net.SocketTimeoutException) $r3;
+
+        virtualinvoke r5.<java.net.SocketTimeoutException: void printStackTrace()>();
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: int m_iErrorCode> = -1;
+
+        return 0;
+
+     label15:
+        $r2 := @caughtexception;
+
+        r6 = (java.io.IOException) $r2;
+
+        virtualinvoke r6.<java.io.IOException: void printStackTrace()>();
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: int m_iErrorCode> = -2;
+
+        return 0;
+
+        catch java.net.SocketTimeoutException from label01 to label02 with label14;
+        catch java.net.SocketTimeoutException from label03 to label04 with label14;
+        catch java.net.SocketTimeoutException from label05 to label06 with label14;
+        catch java.net.SocketTimeoutException from label07 to label08 with label14;
+        catch java.net.SocketTimeoutException from label09 to label10 with label14;
+        catch java.net.SocketTimeoutException from label12 to label13 with label14;
+        catch java.io.IOException from label01 to label02 with label15;
+        catch java.io.IOException from label03 to label04 with label15;
+        catch java.io.IOException from label05 to label06 with label15;
+        catch java.io.IOException from label07 to label08 with label15;
+        catch java.io.IOException from label09 to label10 with label15;
+        catch java.io.IOException from label12 to label13 with label15;
+    }
+
+    public void SetUseSSL(boolean)
+    {
+        com.vigilant.solutions.socket.DfcSocket $r0;
+        boolean $z0;
+
+        $r0 := @this: com.vigilant.solutions.socket.DfcSocket;
+
+        $z0 := @parameter0: boolean;
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: boolean m_bUseSSL> = $z0;
+
+        return;
+    }
+
+    public void closeSocket()
+    {
+        com.vigilant.solutions.socket.DfcSocket $r0;
+        java.lang.Throwable $r1;
+        java.net.Socket $r2;
+        java.io.DataInputStream $r3;
+        java.io.DataOutputStream $r4;
+        java.io.IOException r5;
+
+        nop;
+
+        $r0 := @this: com.vigilant.solutions.socket.DfcSocket;
+
+        $r2 = $r0.<com.vigilant.solutions.socket.DfcSocket: java.net.Socket m_socket>;
+
+        if $r2 == null goto label2;
+
+        $r2 = $r0.<com.vigilant.solutions.socket.DfcSocket: java.net.Socket m_socket>;
+
+     label1:
+        virtualinvoke $r2.<java.net.Socket: void close()>();
+
+     label2:
+        $r3 = $r0.<com.vigilant.solutions.socket.DfcSocket: java.io.DataInputStream m_dataIn>;
+
+        if $r3 == null goto label4;
+
+        $r3 = $r0.<com.vigilant.solutions.socket.DfcSocket: java.io.DataInputStream m_dataIn>;
+
+     label3:
+        virtualinvoke $r3.<java.io.DataInputStream: void close()>();
+
+     label4:
+        $r4 = $r0.<com.vigilant.solutions.socket.DfcSocket: java.io.DataOutputStream m_dataOut>;
+
+        if $r4 == null goto label8;
+
+        $r4 = $r0.<com.vigilant.solutions.socket.DfcSocket: java.io.DataOutputStream m_dataOut>;
+
+     label5:
+        virtualinvoke $r4.<java.io.DataOutputStream: void close()>();
+
+     label6:
+        return;
+
+     label7:
+        $r1 := @caughtexception;
+
+        r5 = (java.io.IOException) $r1;
+
+        virtualinvoke r5.<java.io.IOException: void printStackTrace()>();
+
+     label8:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label7;
+        catch java.io.IOException from label3 to label4 with label7;
+        catch java.io.IOException from label5 to label6 with label7;
+    }
+
+    public boolean connect(java.lang.String, int, int)
+    {
+        com.vigilant.solutions.socket.DfcSocket $r0;
+        java.lang.String $r1, varReplacer5539;
+        int $i0, $i1, varReplacer5537, varReplacer5538;
+        java.lang.Exception $r2;
+        java.net.InetSocketAddress $r3, r19;
+        java.lang.Object[] $r4;
+        boolean $z0;
+        com.vigilant.solutions.socket.DfcSocket$1 $r5, r14;
+        javax.net.ssl.SSLContext $r6;
+        java.security.SecureRandom $r7, r15;
+        javax.net.ssl.SSLSocketFactory $r8;
+        java.net.Socket $r9, r18;
+        java.io.DataInputStream $r10, r16;
+        java.io.InputStream $r11;
+        java.io.DataOutputStream $r12, r17;
+        java.io.OutputStream $r13;
+        javax.net.ssl.TrustManager[] r20;
+        null_type varReplacer5540;
+
+        nop;
+
+        $r0 := @this: com.vigilant.solutions.socket.DfcSocket;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+     label01:
+        $z0 = $r0.<com.vigilant.solutions.socket.DfcSocket: boolean m_bUseSSL>;
+
+     label02:
+        if $z0 == 0 goto label14;
+
+     label03:
+        $r4 = newarray (javax.net.ssl.TrustManager)[1];
+
+     label04:
+        r14 = new com.vigilant.solutions.socket.DfcSocket$1;
+
+        $r5 = r14;
+
+     label05:
+        specialinvoke r14.<com.vigilant.solutions.socket.DfcSocket$1: void <init>(com.vigilant.solutions.socket.DfcSocket)>($r0);
+
+        $r4[0] = $r5;
+
+        varReplacer5539 = "TLS";
+
+        $r6 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer5539);
+
+     label06:
+        r15 = new java.security.SecureRandom;
+
+        $r7 = r15;
+
+     label07:
+        specialinvoke r15.<java.security.SecureRandom: void <init>()>();
+
+        r20 = (javax.net.ssl.TrustManager[]) $r4;
+
+        varReplacer5540 = null;
+
+        virtualinvoke $r6.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer5540, r20, $r7);
+
+        $r8 = virtualinvoke $r6.<javax.net.ssl.SSLContext: javax.net.ssl.SSLSocketFactory getSocketFactory()>();
+
+        $r9 = virtualinvoke $r8.<javax.net.ssl.SSLSocketFactory: java.net.Socket createSocket(java.lang.String,int)>($r1, $i0);
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: java.net.Socket m_socket> = $r9;
+
+     label08:
+        $r9 = $r0.<com.vigilant.solutions.socket.DfcSocket: java.net.Socket m_socket>;
+
+        virtualinvoke $r9.<java.net.Socket: void setSoTimeout(int)>($i1);
+
+     label09:
+        r16 = new java.io.DataInputStream;
+
+        $r10 = r16;
+
+     label10:
+        $r9 = $r0.<com.vigilant.solutions.socket.DfcSocket: java.net.Socket m_socket>;
+
+        $r11 = virtualinvoke $r9.<java.net.Socket: java.io.InputStream getInputStream()>();
+
+        specialinvoke r16.<java.io.DataInputStream: void <init>(java.io.InputStream)>($r11);
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: java.io.DataInputStream m_dataIn> = $r10;
+
+     label11:
+        r17 = new java.io.DataOutputStream;
+
+        $r12 = r17;
+
+     label12:
+        $r9 = $r0.<com.vigilant.solutions.socket.DfcSocket: java.net.Socket m_socket>;
+
+        $r13 = virtualinvoke $r9.<java.net.Socket: java.io.OutputStream getOutputStream()>();
+
+        specialinvoke r17.<java.io.DataOutputStream: void <init>(java.io.OutputStream)>($r13);
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: java.io.DataOutputStream m_dataOut> = $r12;
+
+     label13:
+        varReplacer5537 = 1;
+
+        return varReplacer5537;
+
+     label14:
+        r18 = new java.net.Socket;
+
+        $r9 = r18;
+
+     label15:
+        specialinvoke r18.<java.net.Socket: void <init>()>();
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: java.net.Socket m_socket> = $r9;
+
+     label16:
+        r19 = new java.net.InetSocketAddress;
+
+        $r3 = r19;
+
+     label17:
+        specialinvoke r19.<java.net.InetSocketAddress: void <init>(java.lang.String,int)>($r1, $i0);
+
+        $r9 = $r0.<com.vigilant.solutions.socket.DfcSocket: java.net.Socket m_socket>;
+
+        virtualinvoke $r9.<java.net.Socket: void connect(java.net.SocketAddress,int)>($r3, $i1);
+
+     label18:
+        goto label08;
+
+     label19:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r2.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer5538 = 0;
+
+        return varReplacer5538;
+
+        catch java.lang.Exception from label01 to label02 with label19;
+        catch java.lang.Exception from label03 to label04 with label19;
+        catch java.lang.Exception from label05 to label06 with label19;
+        catch java.lang.Exception from label07 to label09 with label19;
+        catch java.lang.Exception from label10 to label11 with label19;
+        catch java.lang.Exception from label12 to label13 with label19;
+        catch java.lang.Exception from label15 to label16 with label19;
+        catch java.lang.Exception from label17 to label18 with label19;
+    }
+
+    public java.lang.String findXmlHtml(java.lang.String)
+    {
+        com.vigilant.solutions.socket.DfcSocket $r0;
+        java.lang.String $r1, $r2, $r3;
+        int $i0, $i1, $i2;
+        java.lang.StringBuilder $r4;
+
+        $r0 := @this: com.vigilant.solutions.socket.DfcSocket;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r1 = "<?xml";
+
+        $r3 = "</html>";
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int indexOf(java.lang.String)>("<html>");
+
+        if $i0 == -1 goto label2;
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int indexOf(java.lang.String)>("<html>");
+
+        $i1 = virtualinvoke $r2.<java.lang.String: int lastIndexOf(java.lang.String)>("</html>");
+
+     label1:
+        if $i0 == -1 goto label4;
+
+        if $i1 != -1 goto label3;
+
+        return $r2;
+
+     label2:
+        $i0 = virtualinvoke $r2.<java.lang.String: int indexOf(java.lang.String)>("<?xml");
+
+        if $i0 == -1 goto label4;
+
+        $i1 = virtualinvoke $r1.<java.lang.String: int length()>();
+
+        $i1 = $i1 + $i0;
+
+        $i1 = virtualinvoke $r2.<java.lang.String: int indexOf(java.lang.String,int)>("<", $i1);
+
+        $i2 = $i1 + 1;
+
+        $i2 = virtualinvoke $r2.<java.lang.String: int indexOf(java.lang.String,int)>(">", $i2);
+
+        if $i1 == -1 goto label4;
+
+        if $i2 == -1 goto label4;
+
+        $i2 = $i2 + 1;
+
+        $r3 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>($i1, $i2);
+
+        $r4 = new java.lang.StringBuilder;
+
+        $r1 = virtualinvoke $r3.<java.lang.String: java.lang.String substring(int,int)>(0, 1);
+
+        $r1 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r1);
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>($r1);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("/");
+
+        $i1 = virtualinvoke $r3.<java.lang.String: int length()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.String: java.lang.String substring(int,int)>(1, $i1);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r1 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r3 = $r1;
+
+        $i1 = virtualinvoke $r2.<java.lang.String: int lastIndexOf(java.lang.String)>($r1);
+
+        goto label1;
+
+     label3:
+        $i2 = virtualinvoke $r3.<java.lang.String: int length()>();
+
+        $i1 = $i2 + $i1;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>($i0, $i1);
+
+     label4:
+        return $r2;
+    }
+
+    public byte[] recv(int)
+    {
+        com.vigilant.solutions.socket.DfcSocket $r0;
+        int $i0, $i1, $i2, varReplacer5554, varReplacer5555, varReplacer5557;
+        byte[] $r1, $r5;
+        java.lang.Throwable $r2, $r3;
+        java.io.DataInputStream $r4;
+        java.net.SocketTimeoutException r6;
+        java.io.IOException r7;
+        null_type varReplacer5553, varReplacer5556;
+
+        nop;
+
+        $r0 := @this: com.vigilant.solutions.socket.DfcSocket;
+
+        $i0 := @parameter0: int;
+
+        $r1 = newarray (byte)[$i0];
+
+        $i2 = 0;
+
+        varReplacer5554 = 0;
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: int m_iErrorCode> = varReplacer5554;
+
+     label01:
+        if $i2 < $i0 goto label02;
+
+        return $r1;
+
+     label02:
+        $r4 = $r0.<com.vigilant.solutions.socket.DfcSocket: java.io.DataInputStream m_dataIn>;
+
+        $i1 = $i0 - $i2;
+
+     label03:
+        $i1 = virtualinvoke $r4.<java.io.DataInputStream: int read(byte[],int,int)>($r1, $i2, $i1);
+
+     label04:
+        if $i1 > 0 goto label09;
+
+        if $i2 <= 0 goto label08;
+
+        $r5 = newarray (byte)[$i2];
+
+     label05:
+        staticinvoke <com.vigilant.solutions.utilities.CGlobalFunction: void memcpy(java.lang.Object,java.lang.Object,int)>($r5, $r1, $i2);
+
+     label06:
+        return $r5;
+
+     label07:
+        $r3 := @caughtexception;
+
+        r6 = (java.net.SocketTimeoutException) $r3;
+
+        virtualinvoke r6.<java.net.SocketTimeoutException: void printStackTrace()>();
+
+        varReplacer5557 = -1;
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: int m_iErrorCode> = varReplacer5557;
+
+     label08:
+        varReplacer5553 = null;
+
+        return varReplacer5553;
+
+     label09:
+        $i2 = $i2 + $i1;
+
+        goto label01;
+
+     label10:
+        $r2 := @caughtexception;
+
+        r7 = (java.io.IOException) $r2;
+
+        virtualinvoke r7.<java.io.IOException: void printStackTrace()>();
+
+        if $i2 != 0 goto label11;
+
+        varReplacer5555 = -2;
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: int m_iErrorCode> = varReplacer5555;
+
+        varReplacer5556 = null;
+
+        return varReplacer5556;
+
+     label11:
+        $r5 = newarray (byte)[$i2];
+
+        staticinvoke <com.vigilant.solutions.utilities.CGlobalFunction: void memcpy(java.lang.Object,java.lang.Object,int)>($r5, $r1, $i2);
+
+        return $r5;
+
+        catch java.net.SocketTimeoutException from label03 to label04 with label07;
+        catch java.net.SocketTimeoutException from label05 to label06 with label07;
+        catch java.io.IOException from label03 to label04 with label10;
+        catch java.io.IOException from label05 to label06 with label10;
+    }
+
+    public java.lang.String recvLine()
+    {
+        com.vigilant.solutions.socket.DfcSocket $r0;
+        byte[] $r1, $r2;
+        java.lang.Throwable $r3, $r4;
+        byte $b0, $b1;
+        int $i2, $i3;
+        java.lang.String r5;
+        java.net.SocketTimeoutException r6;
+        java.io.IOException r7;
+
+        $r0 := @this: com.vigilant.solutions.socket.DfcSocket;
+
+        $r1 = newarray (byte)[4096];
+
+        $b1 = 0;
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: int m_iErrorCode> = 0;
+
+        $i2 = 0;
+
+     label01:
+        $b0 = specialinvoke $r0.<com.vigilant.solutions.socket.DfcSocket: byte recvByte()>();
+
+     label02:
+        if $b0 == 10 goto label04;
+
+        if $b0 == 13 goto label04;
+
+        $i3 = $i2 + 1;
+
+        $r1[$i2] = $b0;
+
+     label03:
+        $b1 = $b0;
+
+        $i2 = $i3;
+
+        goto label01;
+
+     label04:
+        if $b0 != 10 goto label12;
+
+        if $b1 != 13 goto label12;
+
+        if $i2 != 0 goto label05;
+
+        return "";
+
+     label05:
+        $r2 = newarray (byte)[$i2];
+
+     label06:
+        staticinvoke <com.vigilant.solutions.utilities.CGlobalFunction: void memcpy(java.lang.Object,java.lang.Object,int)>($r2, $r1, $i2);
+
+     label07:
+        r5 = new java.lang.String;
+
+     label08:
+        specialinvoke r5.<java.lang.String: void <init>(byte[])>($r2);
+
+     label09:
+        return r5;
+
+     label10:
+        $r4 := @caughtexception;
+
+        r6 = (java.net.SocketTimeoutException) $r4;
+
+        virtualinvoke r6.<java.net.SocketTimeoutException: void printStackTrace()>();
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: int m_iErrorCode> = -1;
+
+        return null;
+
+     label11:
+        $r3 := @caughtexception;
+
+        r7 = (java.io.IOException) $r3;
+
+        virtualinvoke r7.<java.io.IOException: void printStackTrace()>();
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: int m_iErrorCode> = -2;
+
+        return null;
+
+     label12:
+        $i3 = $i2;
+
+        goto label03;
+
+        catch java.net.SocketTimeoutException from label01 to label02 with label10;
+        catch java.io.IOException from label01 to label02 with label11;
+        catch java.net.SocketTimeoutException from label06 to label07 with label10;
+        catch java.net.SocketTimeoutException from label08 to label09 with label10;
+        catch java.io.IOException from label06 to label07 with label11;
+        catch java.io.IOException from label08 to label09 with label11;
+    }
+
+    public byte[] recvex(int, int)
+    {
+        com.vigilant.solutions.socket.DfcSocket $r0;
+        int $i0, $i1, $i2;
+        byte[] $r1, $r4;
+        java.lang.Throwable $r2, $r3;
+        java.io.DataInputStream $r5;
+        java.net.SocketTimeoutException r6;
+        java.io.IOException r7;
+
+        $r0 := @this: com.vigilant.solutions.socket.DfcSocket;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        $r4 = newarray (byte)[$i0];
+
+        $i1 = 0;
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: int m_iErrorCode> = 0;
+
+     label01:
+        if $i1 < $i0 goto label02;
+
+        return $r4;
+
+     label02:
+        $r5 = $r0.<com.vigilant.solutions.socket.DfcSocket: java.io.DataInputStream m_dataIn>;
+
+        $i2 = $i0 - $i1;
+
+     label03:
+        $i2 = virtualinvoke $r5.<java.io.DataInputStream: int read(byte[],int,int)>($r4, $i1, $i2);
+
+     label04:
+        if $i2 > 0 goto label08;
+
+        if $i1 <= 0 goto label07;
+
+        $r1 = newarray (byte)[$i1];
+
+     label05:
+        staticinvoke <com.vigilant.solutions.utilities.CGlobalFunction: void memcpy(java.lang.Object,java.lang.Object,int)>($r1, $r4, $i1);
+
+     label06:
+        return $r1;
+
+     label07:
+        return null;
+
+     label08:
+        $i1 = $i1 + $i2;
+
+        goto label01;
+
+     label09:
+        $r3 := @caughtexception;
+
+        r6 = (java.net.SocketTimeoutException) $r3;
+
+        virtualinvoke r6.<java.net.SocketTimeoutException: void printStackTrace()>();
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: int m_iErrorCode> = -1;
+
+        return null;
+
+     label10:
+        $r2 := @caughtexception;
+
+        r7 = (java.io.IOException) $r2;
+
+        virtualinvoke r7.<java.io.IOException: void printStackTrace()>();
+
+        if $i1 == $i0 goto label11;
+
+        $r0.<com.vigilant.solutions.socket.DfcSocket: int m_iErrorCode> = -2;
+
+        return null;
+
+     label11:
+        return $r4;
+
+        catch java.net.SocketTimeoutException from label03 to label04 with label09;
+        catch java.net.SocketTimeoutException from label05 to label06 with label09;
+        catch java.io.IOException from label03 to label04 with label10;
+        catch java.io.IOException from label05 to label06 with label10;
+    }
+
+    public boolean send(byte[], int)
+    {
+        com.vigilant.solutions.socket.DfcSocket $r0;
+        byte[] $r1;
+        int $i0, varReplacer5562, varReplacer5563, varReplacer5564;
+        java.lang.Exception $r2;
+        java.io.DataOutputStream $r3;
+
+        nop;
+
+        $r0 := @this: com.vigilant.solutions.socket.DfcSocket;
+
+        $r1 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+     label1:
+        $r3 = $r0.<com.vigilant.solutions.socket.DfcSocket: java.io.DataOutputStream m_dataOut>;
+
+        varReplacer5562 = 0;
+
+        virtualinvoke $r3.<java.io.DataOutputStream: void write(byte[],int,int)>($r1, varReplacer5562, $i0);
+
+     label2:
+        varReplacer5563 = 1;
+
+        return varReplacer5563;
+
+     label3:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r2.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer5564 = 0;
+
+        return varReplacer5564;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public boolean sendLine(java.lang.String)
+    {
+        com.vigilant.solutions.socket.DfcSocket $r0;
+        java.lang.String $r1;
+        java.lang.Exception $r2;
+        java.io.DataOutputStream $r3;
+
+        $r0 := @this: com.vigilant.solutions.socket.DfcSocket;
+
+        $r1 := @parameter0: java.lang.String;
+
+     label1:
+        $r3 = $r0.<com.vigilant.solutions.socket.DfcSocket: java.io.DataOutputStream m_dataOut>;
+
+        virtualinvoke $r3.<java.io.DataOutputStream: void writeBytes(java.lang.String)>($r1);
+
+     label2:
+        return 1;
+
+     label3:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r2.<java.lang.Exception: void printStackTrace()>();
+
+        return 0;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public boolean sendex(byte[], int, int)
+    {
+        com.vigilant.solutions.socket.DfcSocket $r0;
+        byte[] $r1;
+        int $i0, $i1;
+        boolean $z0;
+
+        $r0 := @this: com.vigilant.solutions.socket.DfcSocket;
+
+        $r1 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $z0 = virtualinvoke $r0.<com.vigilant.solutions.socket.DfcSocket: boolean send(byte[],int)>($r1, $i0);
+
+        return $z0;
+    }
+}

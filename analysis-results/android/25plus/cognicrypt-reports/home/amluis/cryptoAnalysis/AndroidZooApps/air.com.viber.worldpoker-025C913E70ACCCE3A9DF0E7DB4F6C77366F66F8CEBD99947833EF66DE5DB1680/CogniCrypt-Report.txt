@@ -1,0 +1,107 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.immersion.hapticmediasdk.utils.FileManager: java.lang.String getUniqueFileName(java.lang.String)>
+		SHA-256: 60094877678a6cfe02028ceaff580697009c76d513bd885f3bb0e4545bbe8212
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3670)
+		Method: <com.vk.sdk.util.VKUtil: java.lang.String md5(java.lang.String)>
+		SHA-256: 9ef9d58892c49bb26f1d52fba99d9b792e3742861e91a67c760d525de7a8a449
+		Secure: true
+	Object:
+		Variable: $r7
+		Type: javax.crypto.Mac
+		Statement: $r7 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer4478)
+		Method: <com.helpshift.support.HSApiClient: java.lang.String getSignature(java.lang.String,java.lang.String)>
+		SHA-256: d1aa2a97082140ea86963fc965a0dc72accc5f278c6b3cf46a74809832cf645a
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer4477)
+		Method: <com.helpshift.support.HSApiClient: java.lang.String getSignature(java.lang.String,java.lang.String)>
+		SHA-256: 61eadd6bf4ca865399c948eb6066f3e780c83be49529b0d85281e446b2fed58a
+		Secure: false
+	Object:
+		Variable: varReplacer4477
+		Type: java.lang.String
+		Statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer4477)
+		Method: <com.helpshift.support.HSApiClient: java.lang.String getSignature(java.lang.String,java.lang.String)>
+		SHA-256: 789520fe96cff995f719304b5137f01686eead67ef0f0821b9c208ce6e38aa12
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4545)
+		Method: <com.immersion.hapticmediasdk.utils.FileManager: java.lang.String getUniqueFileName(java.lang.String)>
+		SHA-256: 2ff74e99b399e4e4600add0723d840da6af484755353c4892be4ba593f56c160
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.vk.sdk.util.VKUtil: java.lang.String md5(java.lang.String)>
+		SHA-256: 106d1660ecb7ad325f9df499c94fcedc5cfb2d42ea397a24616785afe0c1744d
+		Secure: true
+	Object:
+		Variable: $r6
+		Type: byte[]
+		Statement: $r6 = virtualinvoke $r7.<javax.crypto.Mac: byte[] doFinal(byte[])>($r6)
+		Method: <com.helpshift.support.HSApiClient: java.lang.String getSignature(java.lang.String,java.lang.String)>
+		SHA-256: 7ce6f01b3e8950a491644e247611cfb2f61ddbe5ef8f6fca0432db2aa1fb8dd0
+		Secure: true
+
+Findings in Java Class: com.helpshift.support.HSApiClient
+
+	 in Method: java.lang.String getSignature(java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer4477)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 8
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 1
+=====================================================================

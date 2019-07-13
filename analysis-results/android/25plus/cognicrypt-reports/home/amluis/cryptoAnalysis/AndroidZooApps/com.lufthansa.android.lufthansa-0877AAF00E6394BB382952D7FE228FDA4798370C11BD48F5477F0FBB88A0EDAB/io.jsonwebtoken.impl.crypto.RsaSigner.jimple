@@ -1,0 +1,158 @@
+public class io.jsonwebtoken.impl.crypto.RsaSigner extends io.jsonwebtoken.impl.crypto.RsaProvider implements io.jsonwebtoken.impl.crypto.Signer
+{
+
+    public void <init>(io.jsonwebtoken.SignatureAlgorithm, java.security.Key)
+    {
+        io.jsonwebtoken.impl.crypto.RsaSigner $r0;
+        io.jsonwebtoken.SignatureAlgorithm $r1;
+        java.security.Key $r2;
+        boolean $z0;
+        java.lang.StringBuilder $r3;
+        java.lang.Class $r4;
+        java.lang.String $r5, varReplacer6508, varReplacer6509;
+        java.lang.IllegalArgumentException $r6;
+
+        nop;
+
+        $r0 := @this: io.jsonwebtoken.impl.crypto.RsaSigner;
+
+        $r1 := @parameter0: io.jsonwebtoken.SignatureAlgorithm;
+
+        $r2 := @parameter1: java.security.Key;
+
+        specialinvoke $r0.<io.jsonwebtoken.impl.crypto.RsaProvider: void <init>(io.jsonwebtoken.SignatureAlgorithm,java.security.Key)>($r1, $r2);
+
+        $z0 = $r2 instanceof java.security.interfaces.RSAPrivateKey;
+
+        if $z0 != 0 goto label1;
+
+        $r3 = new java.lang.StringBuilder;
+
+        varReplacer6509 = "RSA signatures must be computed using an RSAPrivateKey.  The specified key of type ";
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer6509);
+
+        $r4 = virtualinvoke $r2.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.Class: java.lang.String getName()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        varReplacer6508 = " is not an RSAPrivateKey.";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer6508);
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r6.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r5);
+
+        throw $r6;
+
+     label1:
+        return;
+    }
+
+    protected byte[] doSign(byte[]) throws java.security.InvalidKeyException, java.security.SignatureException
+    {
+        io.jsonwebtoken.impl.crypto.RsaSigner $r0;
+        byte[] $r1;
+        java.security.Key $r2;
+        java.security.PrivateKey $r3;
+        java.security.Signature $r4;
+
+        nop;
+
+        $r0 := @this: io.jsonwebtoken.impl.crypto.RsaSigner;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 = $r0.<io.jsonwebtoken.impl.crypto.RsaSigner: java.security.Key key>;
+
+        $r3 = (java.security.PrivateKey) $r2;
+
+        $r4 = virtualinvoke $r0.<io.jsonwebtoken.impl.crypto.RsaSigner: java.security.Signature createSignatureInstance()>();
+
+        virtualinvoke $r4.<java.security.Signature: void initSign(java.security.PrivateKey)>($r3);
+
+        virtualinvoke $r4.<java.security.Signature: void update(byte[])>($r1);
+
+        $r1 = virtualinvoke $r4.<java.security.Signature: byte[] sign()>();
+
+        return $r1;
+    }
+
+    public byte[] sign(byte[])
+    {
+        io.jsonwebtoken.impl.crypto.RsaSigner $r0;
+        byte[] $r1;
+        java.lang.Throwable $r2, $r5;
+        java.lang.StringBuilder $r3, r6;
+        java.lang.String $r4, varReplacer9060, varReplacer9061;
+        io.jsonwebtoken.SignatureException r7;
+        java.security.InvalidKeyException r8;
+        java.security.SignatureException r9;
+
+        nop;
+
+        $r0 := @this: io.jsonwebtoken.impl.crypto.RsaSigner;
+
+        $r1 := @parameter0: byte[];
+
+     label1:
+        $r1 = virtualinvoke $r0.<io.jsonwebtoken.impl.crypto.RsaSigner: byte[] doSign(byte[])>($r1);
+
+     label2:
+        return $r1;
+
+     label3:
+        $r2 := @caughtexception;
+
+        r7 = new io.jsonwebtoken.SignatureException;
+
+        r6 = new java.lang.StringBuilder;
+
+        varReplacer9060 = "Invalid RSA PrivateKey. ";
+
+        specialinvoke r6.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer9060);
+
+        r8 = (java.security.InvalidKeyException) $r2;
+
+        $r4 = virtualinvoke r8.<java.security.InvalidKeyException: java.lang.String getMessage()>();
+
+        $r3 = virtualinvoke r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r7.<io.jsonwebtoken.SignatureException: void <init>(java.lang.String,java.lang.Throwable)>($r4, $r2);
+
+        throw r7;
+
+     label4:
+        $r5 := @caughtexception;
+
+        r7 = new io.jsonwebtoken.SignatureException;
+
+        r6 = new java.lang.StringBuilder;
+
+        varReplacer9061 = "Unable to calculate signature using RSA PrivateKey. ";
+
+        specialinvoke r6.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer9061);
+
+        r9 = (java.security.SignatureException) $r5;
+
+        $r4 = virtualinvoke r9.<java.security.SignatureException: java.lang.String getMessage()>();
+
+        $r3 = virtualinvoke r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r7.<io.jsonwebtoken.SignatureException: void <init>(java.lang.String,java.lang.Throwable)>($r4, $r5);
+
+        throw r7;
+
+        catch java.security.InvalidKeyException from label1 to label2 with label3;
+        catch java.security.SignatureException from label1 to label2 with label4;
+    }
+}
