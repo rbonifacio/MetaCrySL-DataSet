@@ -1,0 +1,632 @@
+public class io.dcloud.common.util.NetTool extends java.lang.Object
+{
+    private static java.lang.String TAG;
+    static io.dcloud.common.adapter.util.DCloudTrustManager sCustomTrustManager;
+    static javax.net.ssl.HostnameVerifier sCustomeHostnameVerifier;
+
+    static void <clinit>()
+    {
+        java.lang.String varReplacer947;
+        null_type varReplacer948, varReplacer949;
+
+        nop;
+
+        varReplacer947 = "NetTool";
+
+        <io.dcloud.common.util.NetTool: java.lang.String TAG> = varReplacer947;
+
+        varReplacer949 = null;
+
+        <io.dcloud.common.util.NetTool: io.dcloud.common.adapter.util.DCloudTrustManager sCustomTrustManager> = varReplacer949;
+
+        varReplacer948 = null;
+
+        <io.dcloud.common.util.NetTool: javax.net.ssl.HostnameVerifier sCustomeHostnameVerifier> = varReplacer948;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        io.dcloud.common.util.NetTool $r0;
+
+        $r0 := @this: io.dcloud.common.util.NetTool;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.net.HttpURLConnection createConnection(java.net.URL, java.lang.String)
+    {
+        java.net.URL $r0;
+        java.lang.String $r1, varReplacer1083;
+        java.net.URLConnection $r2;
+        java.net.HttpURLConnection $r3;
+        boolean $z0;
+        javax.net.ssl.SSLContext $r4;
+        java.lang.Object[] $r5;
+        io.dcloud.common.adapter.util.DCloudTrustManager $r6;
+        java.security.SecureRandom $r7;
+        javax.net.ssl.HttpsURLConnection $r8;
+        javax.net.ssl.SSLSocketFactory $r9;
+        javax.net.ssl.HostnameVerifier $r10;
+        java.lang.Exception $r11;
+        java.lang.Throwable $r12;
+        java.lang.RuntimeException r13;
+        javax.net.ssl.TrustManager[] r14;
+        java.io.IOException r15;
+        null_type varReplacer1082, varReplacer1085;
+        int varReplacer1084, varReplacer1086, varReplacer1087;
+
+        nop;
+
+        $r0 := @parameter0: java.net.URL;
+
+        $r1 := @parameter1: java.lang.String;
+
+     label1:
+        $r2 = virtualinvoke $r0.<java.net.URL: java.net.URLConnection openConnection()>();
+
+     label2:
+        $r3 = (java.net.HttpURLConnection) $r2;
+
+        $z0 = $r3 instanceof javax.net.ssl.HttpsURLConnection;
+
+        if $z0 == 0 goto label4;
+
+     label3:
+        varReplacer1083 = "TLSv1";
+
+        $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1083);
+
+        $r5 = newarray (javax.net.ssl.TrustManager)[1];
+
+        $r6 = staticinvoke <io.dcloud.common.util.NetTool: io.dcloud.common.adapter.util.DCloudTrustManager getDefaultTrustManager()>();
+
+        $r5[0] = $r6;
+
+        $r7 = staticinvoke <io.dcloud.common.adapter.util.DCloudTrustManager: java.security.SecureRandom createSecureRandom()>();
+
+        r14 = (javax.net.ssl.TrustManager[]) $r5;
+
+        varReplacer1085 = null;
+
+        virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1085, r14, $r7);
+
+        $r8 = (javax.net.ssl.HttpsURLConnection) $r3;
+
+        $r9 = virtualinvoke $r4.<javax.net.ssl.SSLContext: javax.net.ssl.SSLSocketFactory getSocketFactory()>();
+
+        virtualinvoke $r8.<javax.net.ssl.HttpsURLConnection: void setSSLSocketFactory(javax.net.ssl.SSLSocketFactory)>($r9);
+
+        $r8 = (javax.net.ssl.HttpsURLConnection) $r3;
+
+        $r10 = staticinvoke <io.dcloud.common.util.NetTool: javax.net.ssl.HostnameVerifier getDefaultHostnameVerifier()>();
+
+        virtualinvoke $r8.<javax.net.ssl.HttpsURLConnection: void setHostnameVerifier(javax.net.ssl.HostnameVerifier)>($r10);
+
+     label4:
+        varReplacer1087 = 5000;
+
+        virtualinvoke $r3.<java.net.HttpURLConnection: void setConnectTimeout(int)>(varReplacer1087);
+
+        varReplacer1084 = 5000;
+
+        virtualinvoke $r3.<java.net.HttpURLConnection: void setReadTimeout(int)>(varReplacer1084);
+
+        virtualinvoke $r3.<java.net.HttpURLConnection: void setRequestMethod(java.lang.String)>($r1);
+
+        varReplacer1086 = 1;
+
+        virtualinvoke $r3.<java.net.HttpURLConnection: void setDoInput(boolean)>(varReplacer1086);
+
+     label5:
+        return $r3;
+
+     label6:
+        $r11 := @caughtexception;
+
+        r13 = new java.lang.RuntimeException;
+
+     label7:
+        specialinvoke r13.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r11);
+
+     label8:
+        throw r13;
+
+     label9:
+        $r12 := @caughtexception;
+
+        r15 = (java.io.IOException) $r12;
+
+        virtualinvoke r15.<java.io.IOException: void printStackTrace()>();
+
+        varReplacer1082 = null;
+
+        return varReplacer1082;
+
+        catch java.io.IOException from label1 to label2 with label9;
+        catch java.lang.Exception from label3 to label4 with label6;
+        catch java.io.IOException from label4 to label5 with label9;
+        catch java.io.IOException from label7 to label8 with label9;
+    }
+
+    private static javax.net.ssl.HostnameVerifier getDefaultHostnameVerifier()
+    {
+        javax.net.ssl.HostnameVerifier $r0;
+        io.dcloud.common.util.NetTool$1 $r1;
+
+        nop;
+
+        $r0 = <io.dcloud.common.util.NetTool: javax.net.ssl.HostnameVerifier sCustomeHostnameVerifier>;
+
+        if $r0 == null goto label1;
+
+        $r0 = <io.dcloud.common.util.NetTool: javax.net.ssl.HostnameVerifier sCustomeHostnameVerifier>;
+
+        return $r0;
+
+     label1:
+        $r1 = new io.dcloud.common.util.NetTool$1;
+
+        specialinvoke $r1.<io.dcloud.common.util.NetTool$1: void <init>()>();
+
+        return $r1;
+    }
+
+    private static io.dcloud.common.adapter.util.DCloudTrustManager getDefaultTrustManager()
+    {
+        io.dcloud.common.adapter.util.DCloudTrustManager $r0;
+
+        nop;
+
+        $r0 = <io.dcloud.common.util.NetTool: io.dcloud.common.adapter.util.DCloudTrustManager sCustomTrustManager>;
+
+        if $r0 == null goto label1;
+
+        $r0 = <io.dcloud.common.util.NetTool: io.dcloud.common.adapter.util.DCloudTrustManager sCustomTrustManager>;
+
+        return $r0;
+
+     label1:
+        $r0 = new io.dcloud.common.adapter.util.DCloudTrustManager;
+
+        specialinvoke $r0.<io.dcloud.common.adapter.util.DCloudTrustManager: void <init>()>();
+
+        return $r0;
+    }
+
+    public static byte[] httpGet(java.lang.String)
+    {
+        java.lang.String $r0;
+        boolean $z0;
+        byte[] $r1;
+        java.lang.Exception $r2;
+        null_type varReplacer906, varReplacer907;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer906 = null;
+
+        $r1 = staticinvoke <io.dcloud.common.util.NetTool: byte[] httpGet(java.lang.String,java.util.HashMap)>($r0, varReplacer906);
+
+     label2:
+        return $r1;
+
+     label3:
+        $r2 := @caughtexception;
+
+        $z0 = $r2 instanceof java.net.SocketTimeoutException;
+
+        if $z0 != 0 goto label4;
+
+        $z0 = $r2 instanceof java.net.UnknownHostException;
+
+        if $z0 == 0 goto label5;
+
+     label4:
+        $z0 = staticinvoke <io.dcloud.common.constant.StringConst: boolean canChangeHost(java.lang.String)>($r0);
+
+        if $z0 == 0 goto label5;
+
+        $r0 = staticinvoke <io.dcloud.common.constant.StringConst: java.lang.String changeHost(java.lang.String)>($r0);
+
+        $r1 = staticinvoke <io.dcloud.common.util.NetTool: byte[] httpGet(java.lang.String)>($r0);
+
+        return $r1;
+
+     label5:
+        varReplacer907 = null;
+
+        return varReplacer907;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public static byte[] httpGet(java.lang.String, java.util.HashMap) throws java.lang.Exception
+    {
+        java.lang.String $r0, varReplacer980;
+        java.util.HashMap $r1;
+        byte[] $r2;
+        null_type varReplacer978, varReplacer979;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.util.HashMap;
+
+        varReplacer978 = null;
+
+        varReplacer979 = null;
+
+        varReplacer980 = "GET";
+
+        $r2 = staticinvoke <io.dcloud.common.util.NetTool: byte[] request(java.lang.String,java.lang.String,java.util.HashMap,java.lang.String)>($r0, varReplacer978, varReplacer978, varReplacer980);
+
+        return $r2;
+    }
+
+    public static byte[] httpGetThrows(java.lang.String) throws java.lang.Exception
+    {
+        java.lang.String $r0;
+        byte[] $r1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <io.dcloud.common.util.NetTool: byte[] httpGet(java.lang.String,java.util.HashMap)>($r0, null);
+
+        return $r1;
+    }
+
+    public static byte[] httpPost(java.lang.String, java.lang.String, java.util.HashMap)
+    {
+        java.lang.String $r0, $r1, varReplacer1081;
+        java.util.HashMap $r2;
+        byte[] $r3;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.util.HashMap;
+
+        varReplacer1081 = "POST";
+
+        $r3 = staticinvoke <io.dcloud.common.util.NetTool: byte[] request(java.lang.String,java.lang.String,java.util.HashMap,java.lang.String)>($r0, $r1, $r2, varReplacer1081);
+
+        return $r3;
+    }
+
+    private static byte[] read(java.io.InputStream)
+    {
+        java.io.InputStream $r0;
+        java.io.ByteArrayOutputStream $r1, r4;
+        int $i0, $i1, varReplacer1078, varReplacer1079;
+        byte[] $r2;
+        java.lang.Throwable $r3;
+        java.io.IOException r5;
+
+        nop;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+        r4 = new java.io.ByteArrayOutputStream;
+
+        $r1 = r4;
+
+        specialinvoke r4.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        $i0 = 10240;
+
+     label01:
+        $i1 = virtualinvoke $r0.<java.io.InputStream: int available()>();
+
+        varReplacer1078 = 10240;
+
+        $i1 = staticinvoke <java.lang.Math: int min(int,int)>(varReplacer1078, $i1);
+
+     label02:
+        if $i1 > 0 goto label12;
+
+     label03:
+        $r2 = newarray (byte)[$i0];
+
+     label04:
+        $i0 = virtualinvoke $r0.<java.io.InputStream: int read(byte[])>($r2);
+
+     label05:
+        if $i0 <= 0 goto label10;
+
+     label06:
+        varReplacer1079 = 0;
+
+        virtualinvoke $r1.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r2, varReplacer1079, $i0);
+
+     label07:
+        goto label04;
+
+     label08:
+        $r3 := @caughtexception;
+
+        r5 = (java.io.IOException) $r3;
+
+        virtualinvoke r5.<java.io.IOException: void printStackTrace()>();
+
+     label09:
+        $r2 = virtualinvoke $r1.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        return $r2;
+
+     label10:
+        virtualinvoke $r0.<java.io.InputStream: void close()>();
+
+     label11:
+        goto label09;
+
+     label12:
+        $i0 = $i1;
+
+        goto label03;
+
+        catch java.io.IOException from label01 to label02 with label08;
+        catch java.io.IOException from label04 to label05 with label08;
+        catch java.io.IOException from label06 to label07 with label08;
+        catch java.io.IOException from label10 to label11 with label08;
+    }
+
+    private static byte[] request(java.lang.String, java.lang.String, java.util.HashMap, java.lang.String)
+    {
+        java.lang.String $r0, $r1, $r3, $r9, $r10, varReplacer1041, varReplacer1042, varReplacer1045, varReplacer1046;
+        java.util.HashMap $r2;
+        int $i0;
+        java.net.URL $r4;
+        java.net.HttpURLConnection $r5;
+        boolean $z0;
+        java.util.Set $r6;
+        java.util.Iterator $r7;
+        java.lang.Object $r8;
+        java.lang.Exception $r11;
+        byte[] $r12;
+        java.io.OutputStream $r13;
+        java.lang.StringBuilder $r14;
+        java.io.InputStream $r15;
+        null_type varReplacer1043, varReplacer1044, varReplacer1047;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.util.HashMap;
+
+        $r3 := @parameter3: java.lang.String;
+
+        if $r0 == null goto label01;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i0 != 0 goto label02;
+
+     label01:
+        $r0 = <io.dcloud.common.util.NetTool: java.lang.String TAG>;
+
+        varReplacer1046 = "httpPost, url is null";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r0, varReplacer1046);
+
+        varReplacer1043 = null;
+
+        return varReplacer1043;
+
+     label02:
+        $r4 = new java.net.URL;
+
+     label03:
+        specialinvoke $r4.<java.net.URL: void <init>(java.lang.String)>($r0);
+
+        $r5 = staticinvoke <io.dcloud.common.util.NetTool: java.net.HttpURLConnection createConnection(java.net.URL,java.lang.String)>($r4, $r3);
+
+     label04:
+        if $r2 == null goto label14;
+
+     label05:
+        $z0 = virtualinvoke $r2.<java.util.HashMap: boolean isEmpty()>();
+
+     label06:
+        if $z0 != 0 goto label14;
+
+     label07:
+        $r6 = virtualinvoke $r2.<java.util.HashMap: java.util.Set keySet()>();
+
+        $r7 = interfaceinvoke $r6.<java.util.Set: java.util.Iterator iterator()>();
+
+     label08:
+        $z0 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+     label09:
+        if $z0 == 0 goto label14;
+
+     label10:
+        $r8 = interfaceinvoke $r7.<java.util.Iterator: java.lang.Object next()>();
+
+        $r9 = (java.lang.String) $r8;
+
+        $r8 = virtualinvoke $r2.<java.util.HashMap: java.lang.Object get(java.lang.Object)>($r9);
+
+        $r10 = (java.lang.String) $r8;
+
+        virtualinvoke $r5.<java.net.HttpURLConnection: void setRequestProperty(java.lang.String,java.lang.String)>($r9, $r10);
+
+     label11:
+        goto label08;
+
+     label12:
+        $r11 := @caughtexception;
+
+        $z0 = $r11 instanceof java.net.SocketTimeoutException;
+
+        if $z0 != 0 goto label13;
+
+        $z0 = $r11 instanceof java.net.UnknownHostException;
+
+        if $z0 == 0 goto label25;
+
+     label13:
+        $z0 = staticinvoke <io.dcloud.common.constant.StringConst: boolean canChangeHost(java.lang.String)>($r0);
+
+        if $z0 == 0 goto label25;
+
+        $r0 = staticinvoke <io.dcloud.common.constant.StringConst: java.lang.String changeHost(java.lang.String)>($r0);
+
+        $r12 = staticinvoke <io.dcloud.common.util.NetTool: byte[] httpPost(java.lang.String,java.lang.String,java.util.HashMap)>($r0, $r1, $r2);
+
+        return $r12;
+
+     label14:
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r3);
+
+     label15:
+        if $z0 != 0 goto label19;
+
+     label16:
+        $r3 = virtualinvoke $r3.<java.lang.String: java.lang.String toLowerCase()>();
+
+        varReplacer1045 = "post";
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean equals(java.lang.CharSequence,java.lang.CharSequence)>($r3, varReplacer1045);
+
+     label17:
+        if $z0 == 0 goto label19;
+
+     label18:
+        $r13 = virtualinvoke $r5.<java.net.HttpURLConnection: java.io.OutputStream getOutputStream()>();
+
+        staticinvoke <io.dcloud.common.util.NetTool: void write(java.io.OutputStream,java.lang.String)>($r13, $r1);
+
+     label19:
+        $i0 = virtualinvoke $r5.<java.net.HttpURLConnection: int getResponseCode()>();
+
+     label20:
+        if $i0 == 200 goto label23;
+
+        $r3 = <io.dcloud.common.util.NetTool: java.lang.String TAG>;
+
+        $r14 = new java.lang.StringBuilder;
+
+     label21:
+        specialinvoke $r14.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1041 = "httpGet fail, status code = ";
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1041);
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r9 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r3, $r9);
+
+     label22:
+        varReplacer1047 = null;
+
+        return varReplacer1047;
+
+     label23:
+        $r15 = virtualinvoke $r5.<java.net.HttpURLConnection: java.io.InputStream getInputStream()>();
+
+        $r12 = staticinvoke <io.dcloud.common.util.NetTool: byte[] read(java.io.InputStream)>($r15);
+
+     label24:
+        return $r12;
+
+     label25:
+        $r0 = <io.dcloud.common.util.NetTool: java.lang.String TAG>;
+
+        $r14 = new java.lang.StringBuilder;
+
+        specialinvoke $r14.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1042 = "httpPost exception, e = ";
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1042);
+
+        $r1 = virtualinvoke $r11.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r0, $r1);
+
+        virtualinvoke $r11.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer1044 = null;
+
+        return varReplacer1044;
+
+        catch java.lang.Exception from label03 to label04 with label12;
+        catch java.lang.Exception from label05 to label06 with label12;
+        catch java.lang.Exception from label07 to label09 with label12;
+        catch java.lang.Exception from label10 to label11 with label12;
+        catch java.lang.Exception from label14 to label15 with label12;
+        catch java.lang.Exception from label16 to label17 with label12;
+        catch java.lang.Exception from label18 to label20 with label12;
+        catch java.lang.Exception from label21 to label22 with label12;
+        catch java.lang.Exception from label23 to label24 with label12;
+    }
+
+    private static void write(java.io.OutputStream, java.lang.String)
+    {
+        java.io.OutputStream $r0;
+        java.lang.String $r1, varReplacer1080;
+        int $i0;
+        byte[] $r2;
+        java.lang.Throwable $r3;
+        java.io.IOException r4;
+
+        nop;
+
+        $r0 := @parameter0: java.io.OutputStream;
+
+        $r1 := @parameter1: java.lang.String;
+
+        if $r1 == null goto label6;
+
+     label1:
+        $i0 = virtualinvoke $r1.<java.lang.String: int length()>();
+
+     label2:
+        if $i0 <= 0 goto label6;
+
+     label3:
+        varReplacer1080 = "UTF-8";
+
+        $r2 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer1080);
+
+        virtualinvoke $r0.<java.io.OutputStream: void write(byte[])>($r2);
+
+     label4:
+        return;
+
+     label5:
+        $r3 := @caughtexception;
+
+        r4 = (java.io.IOException) $r3;
+
+        virtualinvoke r4.<java.io.IOException: void printStackTrace()>();
+
+     label6:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label5;
+        catch java.io.IOException from label3 to label4 with label5;
+    }
+}

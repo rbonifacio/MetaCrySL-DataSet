@@ -1,0 +1,535 @@
+public class com.platoevolved.inappbilling.Security extends java.lang.Object
+{
+    private static final java.lang.String KEY_FACTORY_ALGORITHM;
+    private static final java.security.SecureRandom RANDOM;
+    private static final java.lang.String SIGNATURE_ALGORITHM;
+    private static final java.lang.String TAG;
+    private static java.util.HashSet sKnownNonces;
+
+    static void <clinit>()
+    {
+        java.security.SecureRandom $r0;
+        java.util.HashSet $r1;
+
+        nop;
+
+        $r0 = new java.security.SecureRandom;
+
+        specialinvoke $r0.<java.security.SecureRandom: void <init>()>();
+
+        <com.platoevolved.inappbilling.Security: java.security.SecureRandom RANDOM> = $r0;
+
+        $r1 = new java.util.HashSet;
+
+        specialinvoke $r1.<java.util.HashSet: void <init>()>();
+
+        <com.platoevolved.inappbilling.Security: java.util.HashSet sKnownNonces> = $r1;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.platoevolved.inappbilling.Security $r0;
+
+        $r0 := @this: com.platoevolved.inappbilling.Security;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static long generateNonce()
+    {
+        java.security.SecureRandom $r0;
+        long $l0;
+        java.util.HashSet $r1;
+        java.lang.Long $r2;
+
+        nop;
+
+        $r0 = <com.platoevolved.inappbilling.Security: java.security.SecureRandom RANDOM>;
+
+        $l0 = virtualinvoke $r0.<java.security.SecureRandom: long nextLong()>();
+
+        $r1 = <com.platoevolved.inappbilling.Security: java.util.HashSet sKnownNonces>;
+
+        $r2 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        virtualinvoke $r1.<java.util.HashSet: boolean add(java.lang.Object)>($r2);
+
+        return $l0;
+    }
+
+    public static java.security.PublicKey generatePublicKey(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer238, varReplacer239, varReplacer240, varReplacer241, varReplacer242;
+        byte[] $r1;
+        java.security.KeyFactory $r2;
+        java.security.spec.X509EncodedKeySpec $r3;
+        java.security.PublicKey $r4;
+        java.lang.Throwable $r5, $r7;
+        java.lang.RuntimeException $r6;
+        com.platoevolved.inappbilling.Base64DecoderException $r8;
+        java.lang.IllegalArgumentException $r9;
+        null_type varReplacer243;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        $r1 = staticinvoke <com.platoevolved.inappbilling.Base64: byte[] decode(java.lang.String)>($r0);
+
+        varReplacer242 = "RSA";
+
+        $r2 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer242);
+
+     label2:
+        $r3 = new java.security.spec.X509EncodedKeySpec;
+
+     label3:
+        specialinvoke $r3.<java.security.spec.X509EncodedKeySpec: void <init>(byte[])>($r1);
+
+        $r4 = virtualinvoke $r2.<java.security.KeyFactory: java.security.PublicKey generatePublic(java.security.spec.KeySpec)>($r3);
+
+     label4:
+        return $r4;
+
+     label5:
+        $r5 := @caughtexception;
+
+        $r6 = new java.lang.RuntimeException;
+
+        specialinvoke $r6.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r5);
+
+        throw $r6;
+
+     label6:
+        $r7 := @caughtexception;
+
+        varReplacer238 = "Security";
+
+        varReplacer239 = "Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer238, varReplacer239);
+
+        varReplacer243 = null;
+
+        return varReplacer243;
+
+     label7:
+        $r8 := @caughtexception;
+
+        varReplacer240 = "Security";
+
+        varReplacer241 = "Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer240, varReplacer241);
+
+        $r9 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r8);
+
+        throw $r9;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label5;
+        catch java.security.spec.InvalidKeySpecException from label1 to label2 with label6;
+        catch java.security.spec.InvalidKeySpecException from label3 to label4 with label6;
+        catch com.platoevolved.inappbilling.Base64DecoderException from label1 to label2 with label7;
+        catch com.platoevolved.inappbilling.Base64DecoderException from label3 to label4 with label7;
+    }
+
+    public static boolean isNonceKnown(long)
+    {
+        long $l0;
+        java.util.HashSet $r0;
+        java.lang.Long $r1;
+        boolean $z0;
+
+        nop;
+
+        $l0 := @parameter0: long;
+
+        $r0 = <com.platoevolved.inappbilling.Security: java.util.HashSet sKnownNonces>;
+
+        $r1 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        $z0 = virtualinvoke $r0.<java.util.HashSet: boolean contains(java.lang.Object)>($r1);
+
+        return $z0;
+    }
+
+    public static void removeNonce(long)
+    {
+        long $l0;
+        java.util.HashSet $r0;
+        java.lang.Long $r1;
+
+        nop;
+
+        $l0 := @parameter0: long;
+
+        $r0 = <com.platoevolved.inappbilling.Security: java.util.HashSet sKnownNonces>;
+
+        $r1 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        virtualinvoke $r0.<java.util.HashSet: boolean remove(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    public static boolean verify(java.security.PublicKey, java.lang.String, java.lang.String)
+    {
+        java.security.PublicKey $r0;
+        java.lang.String $r1, $r2, varReplacer216, varReplacer217, varReplacer218, varReplacer219, varReplacer221, varReplacer222, varReplacer226, varReplacer227, varReplacer228, varReplacer230, varReplacer231;
+        java.security.Signature $r3;
+        byte[] $r4;
+        boolean $z0;
+        java.lang.Throwable $r5, $r6, $r7;
+        com.platoevolved.inappbilling.Base64DecoderException $r8;
+        int varReplacer220, varReplacer223, varReplacer224, varReplacer225, varReplacer229, varReplacer232;
+
+        nop;
+
+        $r0 := @parameter0: java.security.PublicKey;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+     label1:
+        varReplacer226 = "SHA1withRSA";
+
+        $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer226);
+
+        virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0);
+
+        $r4 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r3.<java.security.Signature: void update(byte[])>($r4);
+
+        $r4 = staticinvoke <com.platoevolved.inappbilling.Base64: byte[] decode(java.lang.String)>($r2);
+
+        $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4);
+
+     label2:
+        if $z0 != 0 goto label5;
+
+     label3:
+        varReplacer216 = "Security";
+
+        varReplacer217 = "Signature verification failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer216, varReplacer217);
+
+     label4:
+        varReplacer224 = 0;
+
+        return varReplacer224;
+
+     label5:
+        varReplacer223 = 1;
+
+        return varReplacer223;
+
+     label6:
+        $r5 := @caughtexception;
+
+        varReplacer221 = "Security";
+
+        varReplacer222 = "NoSuchAlgorithmException.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer221, varReplacer222);
+
+        varReplacer232 = 0;
+
+        return varReplacer232;
+
+     label7:
+        $r6 := @caughtexception;
+
+        varReplacer227 = "Security";
+
+        varReplacer228 = "Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer227, varReplacer228);
+
+        varReplacer229 = 0;
+
+        return varReplacer229;
+
+     label8:
+        $r7 := @caughtexception;
+
+        varReplacer218 = "Security";
+
+        varReplacer219 = "Signature exception.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer218, varReplacer219);
+
+        varReplacer220 = 0;
+
+        return varReplacer220;
+
+     label9:
+        $r8 := @caughtexception;
+
+        varReplacer230 = "Security";
+
+        varReplacer231 = "Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer230, varReplacer231);
+
+        varReplacer225 = 0;
+
+        return varReplacer225;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label6;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label6;
+        catch java.security.InvalidKeyException from label1 to label2 with label7;
+        catch java.security.InvalidKeyException from label3 to label4 with label7;
+        catch java.security.SignatureException from label1 to label2 with label8;
+        catch java.security.SignatureException from label3 to label4 with label8;
+        catch com.platoevolved.inappbilling.Base64DecoderException from label1 to label2 with label9;
+        catch com.platoevolved.inappbilling.Base64DecoderException from label3 to label4 with label9;
+    }
+
+    public static java.util.ArrayList verifyPurchase(java.lang.String, java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, $r2, $r10, varReplacer186, varReplacer187, varReplacer189, varReplacer190, varReplacer191, varReplacer192, varReplacer193, varReplacer194, varReplacer195, varReplacer197, varReplacer198, varReplacer201, varReplacer202, varReplacer204, varReplacer206, varReplacer207, varReplacer208, varReplacer209, varReplacer210, varReplacer211, varReplacer212, varReplacer213;
+        org.json.JSONObject $r3;
+        boolean $z0, $z1;
+        java.security.PublicKey $r4;
+        int $i0, $i2, $i3;
+        long $l1, $l4;
+        org.json.JSONArray $r5;
+        java.lang.StringBuilder $r6;
+        org.json.JSONException $r7, $r13;
+        java.util.ArrayList $r8;
+        com.platoevolved.inappbilling.Consts$PurchaseState $r9, $r11;
+        com.platoevolved.inappbilling.Security$VerifiedPurchase $r12;
+        null_type varReplacer185, varReplacer188, varReplacer196, varReplacer199, varReplacer200, varReplacer203, varReplacer205;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        if $r0 != null goto label01;
+
+        varReplacer207 = "Security";
+
+        varReplacer208 = "data is null";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer207, varReplacer208);
+
+        varReplacer185 = null;
+
+        return varReplacer185;
+
+     label01:
+        $z0 = 0;
+
+        $z1 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+        if $z1 != 0 goto label03;
+
+        $r4 = staticinvoke <com.platoevolved.inappbilling.Security: java.security.PublicKey generatePublicKey(java.lang.String)>($r2);
+
+        if $r4 != null goto label02;
+
+        varReplacer209 = "UnityGameObjectReceiver";
+
+        varReplacer210 = "OnError";
+
+        varReplacer211 = "Incorrect Public Key";
+
+        staticinvoke <com.unity3d.player.UnityPlayer: void UnitySendMessage(java.lang.String,java.lang.String,java.lang.String)>(varReplacer209, varReplacer210, varReplacer211);
+
+        varReplacer196 = null;
+
+        return varReplacer196;
+
+     label02:
+        $z1 = staticinvoke <com.platoevolved.inappbilling.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>($r4, $r0, $r1);
+
+        $z0 = $z1;
+
+        if $z1 != 0 goto label03;
+
+        varReplacer212 = "Security";
+
+        varReplacer213 = "signature does not match data.";
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>(varReplacer212, varReplacer213);
+
+        varReplacer199 = null;
+
+        return varReplacer199;
+
+     label03:
+        $i0 = 0;
+
+        $r3 = new org.json.JSONObject;
+
+     label04:
+        specialinvoke $r3.<org.json.JSONObject: void <init>(java.lang.String)>($r0);
+
+        varReplacer192 = "nonce";
+
+        $l1 = virtualinvoke $r3.<org.json.JSONObject: long optLong(java.lang.String)>(varReplacer192);
+
+        varReplacer187 = "orders";
+
+        $r5 = virtualinvoke $r3.<org.json.JSONObject: org.json.JSONArray optJSONArray(java.lang.String)>(varReplacer187);
+
+     label05:
+        if $r5 == null goto label07;
+
+     label06:
+        $i0 = virtualinvoke $r5.<org.json.JSONArray: int length()>();
+
+     label07:
+        $z1 = staticinvoke <com.platoevolved.inappbilling.Security: boolean isNonceKnown(long)>($l1);
+
+        if $z1 != 0 goto label09;
+
+        $r6 = new java.lang.StringBuilder;
+
+        varReplacer186 = "Nonce not found: ";
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer186);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        $r0 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer204 = "Security";
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>(varReplacer204, $r0);
+
+        varReplacer188 = null;
+
+        return varReplacer188;
+
+     label08:
+        $r7 := @caughtexception;
+
+        varReplacer205 = null;
+
+        return varReplacer205;
+
+     label09:
+        $r8 = new java.util.ArrayList;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>()>();
+
+        $i2 = 0;
+
+     label10:
+        if $i2 < $i0 goto label11;
+
+        staticinvoke <com.platoevolved.inappbilling.Security: void removeNonce(long)>($l1);
+
+        return $r8;
+
+     label11:
+        $r3 = virtualinvoke $r5.<org.json.JSONArray: org.json.JSONObject getJSONObject(int)>($i2);
+
+        varReplacer206 = "purchaseState";
+
+        $i3 = virtualinvoke $r3.<org.json.JSONObject: int getInt(java.lang.String)>(varReplacer206);
+
+        $r9 = staticinvoke <com.platoevolved.inappbilling.Consts$PurchaseState: com.platoevolved.inappbilling.Consts$PurchaseState valueOf(int)>($i3);
+
+        varReplacer190 = "productId";
+
+        $r0 = virtualinvoke $r3.<org.json.JSONObject: java.lang.String getString(java.lang.String)>(varReplacer190);
+
+        varReplacer191 = "packageName";
+
+        virtualinvoke $r3.<org.json.JSONObject: java.lang.String getString(java.lang.String)>(varReplacer191);
+
+        varReplacer195 = "purchaseTime";
+
+        $l4 = virtualinvoke $r3.<org.json.JSONObject: long getLong(java.lang.String)>(varReplacer195);
+
+        varReplacer193 = "orderId";
+
+        varReplacer194 = "";
+
+        $r1 = virtualinvoke $r3.<org.json.JSONObject: java.lang.String optString(java.lang.String,java.lang.String)>(varReplacer193, varReplacer194);
+
+     label12:
+        $r2 = null;
+
+     label13:
+        varReplacer201 = "notificationId";
+
+        $z1 = virtualinvoke $r3.<org.json.JSONObject: boolean has(java.lang.String)>(varReplacer201);
+
+     label14:
+        if $z1 == 0 goto label16;
+
+     label15:
+        varReplacer189 = "notificationId";
+
+        $r2 = virtualinvoke $r3.<org.json.JSONObject: java.lang.String getString(java.lang.String)>(varReplacer189);
+
+     label16:
+        varReplacer202 = "developerPayload";
+
+        varReplacer203 = null;
+
+        $r10 = virtualinvoke $r3.<org.json.JSONObject: java.lang.String optString(java.lang.String,java.lang.String)>(varReplacer202, varReplacer203);
+
+     label17:
+        $r11 = <com.platoevolved.inappbilling.Consts$PurchaseState: com.platoevolved.inappbilling.Consts$PurchaseState PURCHASED>;
+
+        if $r9 != $r11 goto label19;
+
+        if $z0 != 0 goto label19;
+
+     label18:
+        $i2 = $i2 + 1;
+
+        goto label10;
+
+     label19:
+        $r12 = new com.platoevolved.inappbilling.Security$VerifiedPurchase;
+
+     label20:
+        specialinvoke $r12.<com.platoevolved.inappbilling.Security$VerifiedPurchase: void <init>(com.platoevolved.inappbilling.Consts$PurchaseState,java.lang.String,java.lang.String,java.lang.String,long,java.lang.String)>($r9, $r2, $r0, $r1, $l4, $r10);
+
+        virtualinvoke $r8.<java.util.ArrayList: boolean add(java.lang.Object)>($r12);
+
+     label21:
+        goto label18;
+
+     label22:
+        $r13 := @caughtexception;
+
+        varReplacer197 = "Security";
+
+        varReplacer198 = "JSON exception: ";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer197, varReplacer198, $r13);
+
+        varReplacer200 = null;
+
+        return varReplacer200;
+
+        catch org.json.JSONException from label04 to label05 with label08;
+        catch org.json.JSONException from label06 to label07 with label08;
+        catch org.json.JSONException from label11 to label12 with label22;
+        catch org.json.JSONException from label13 to label14 with label22;
+        catch org.json.JSONException from label15 to label16 with label22;
+        catch org.json.JSONException from label16 to label17 with label22;
+        catch org.json.JSONException from label20 to label21 with label22;
+    }
+}

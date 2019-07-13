@@ -1,0 +1,157 @@
+public class com.parse.signpost.signature.HmacSha1MessageSigner extends com.parse.signpost.signature.OAuthMessageSigner
+{
+    private static final java.lang.String MAC_NAME;
+
+    public void <init>()
+    {
+        com.parse.signpost.signature.HmacSha1MessageSigner $r0;
+
+        nop;
+
+        $r0 := @this: com.parse.signpost.signature.HmacSha1MessageSigner;
+
+        specialinvoke $r0.<com.parse.signpost.signature.OAuthMessageSigner: void <init>()>();
+
+        return;
+    }
+
+    public java.lang.String getSignatureMethod()
+    {
+        com.parse.signpost.signature.HmacSha1MessageSigner $r0;
+        java.lang.String varReplacer3242;
+
+        nop;
+
+        $r0 := @this: com.parse.signpost.signature.HmacSha1MessageSigner;
+
+        varReplacer3242 = "HMAC-SHA1";
+
+        return varReplacer3242;
+    }
+
+    public java.lang.String sign(com.parse.signpost.http.HttpRequest, com.parse.signpost.http.HttpParameters) throws com.parse.signpost.exception.OAuthMessageSignerException
+    {
+        com.parse.signpost.signature.HmacSha1MessageSigner $r0;
+        com.parse.signpost.http.HttpRequest $r1;
+        com.parse.signpost.http.HttpParameters $r2;
+        javax.crypto.spec.SecretKeySpec $r3, r12;
+        java.lang.StringBuilder $r4, r11;
+        java.lang.String $r5, varReplacer3278, varReplacer3279, varReplacer3280, varReplacer3281, varReplacer3282;
+        byte[] $r6;
+        javax.crypto.Mac $r7;
+        com.parse.signpost.signature.SignatureBaseString $r8, r13;
+        java.lang.Throwable $r9, $r10;
+        com.parse.signpost.exception.OAuthMessageSignerException r14;
+        java.lang.Exception r15;
+        int varReplacer3277;
+
+        nop;
+
+        $r0 := @this: com.parse.signpost.signature.HmacSha1MessageSigner;
+
+        $r1 := @parameter0: com.parse.signpost.http.HttpRequest;
+
+        $r2 := @parameter1: com.parse.signpost.http.HttpParameters;
+
+        r11 = new java.lang.StringBuilder;
+
+        $r4 = r11;
+
+     label1:
+        $r5 = virtualinvoke $r0.<com.parse.signpost.signature.HmacSha1MessageSigner: java.lang.String getConsumerSecret()>();
+
+        $r5 = staticinvoke <com.parse.signpost.OAuth: java.lang.String percentEncode(java.lang.String)>($r5);
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r5);
+
+        specialinvoke r11.<java.lang.StringBuilder: void <init>(java.lang.String)>($r5);
+
+        varReplacer3277 = 38;
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(varReplacer3277);
+
+        $r5 = virtualinvoke $r0.<com.parse.signpost.signature.HmacSha1MessageSigner: java.lang.String getTokenSecret()>();
+
+        $r5 = staticinvoke <com.parse.signpost.OAuth: java.lang.String percentEncode(java.lang.String)>($r5);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer3278 = "UTF-8";
+
+        $r6 = virtualinvoke $r5.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer3278);
+
+     label2:
+        r12 = new javax.crypto.spec.SecretKeySpec;
+
+        $r3 = r12;
+
+     label3:
+        varReplacer3280 = "HmacSHA1";
+
+        specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer3280);
+
+        varReplacer3279 = "HmacSHA1";
+
+        $r7 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer3279);
+
+        virtualinvoke $r7.<javax.crypto.Mac: void init(java.security.Key)>($r3);
+
+     label4:
+        r13 = new com.parse.signpost.signature.SignatureBaseString;
+
+        $r8 = r13;
+
+     label5:
+        specialinvoke r13.<com.parse.signpost.signature.SignatureBaseString: void <init>(com.parse.signpost.http.HttpRequest,com.parse.signpost.http.HttpParameters)>($r1, $r2);
+
+        $r5 = virtualinvoke $r8.<com.parse.signpost.signature.SignatureBaseString: java.lang.String generate()>();
+
+        varReplacer3281 = "SBS";
+
+        staticinvoke <com.parse.signpost.OAuth: void debugOut(java.lang.String,java.lang.String)>(varReplacer3281, $r5);
+
+        varReplacer3282 = "UTF-8";
+
+        $r6 = virtualinvoke $r5.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer3282);
+
+        $r6 = virtualinvoke $r7.<javax.crypto.Mac: byte[] doFinal(byte[])>($r6);
+
+        $r5 = virtualinvoke $r0.<com.parse.signpost.signature.HmacSha1MessageSigner: java.lang.String base64Encode(byte[])>($r6);
+
+        $r5 = virtualinvoke $r5.<java.lang.String: java.lang.String trim()>();
+
+     label6:
+        return $r5;
+
+     label7:
+        $r9 := @caughtexception;
+
+        r14 = new com.parse.signpost.exception.OAuthMessageSignerException;
+
+        r15 = (java.lang.Exception) $r9;
+
+        specialinvoke r14.<com.parse.signpost.exception.OAuthMessageSignerException: void <init>(java.lang.Exception)>(r15);
+
+        throw r14;
+
+     label8:
+        $r10 := @caughtexception;
+
+        r14 = new com.parse.signpost.exception.OAuthMessageSignerException;
+
+        r15 = (java.lang.Exception) $r10;
+
+        specialinvoke r14.<com.parse.signpost.exception.OAuthMessageSignerException: void <init>(java.lang.Exception)>(r15);
+
+        throw r14;
+
+        catch java.security.GeneralSecurityException from label1 to label2 with label7;
+        catch java.security.GeneralSecurityException from label3 to label4 with label7;
+        catch java.security.GeneralSecurityException from label5 to label6 with label7;
+        catch java.io.UnsupportedEncodingException from label1 to label2 with label8;
+        catch java.io.UnsupportedEncodingException from label3 to label4 with label8;
+        catch java.io.UnsupportedEncodingException from label5 to label6 with label8;
+    }
+}

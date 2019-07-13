@@ -1,0 +1,710 @@
+public class com.mixpanel.android.util.ImageStore extends java.lang.Object
+{
+    private static final java.lang.String DEFAULT_DIRECTORY_PREFIX;
+    private static final java.lang.String FILE_PREFIX;
+    private static final java.lang.String LOGTAG;
+    private static final int MAX_BITMAP_SIZE;
+    private static android.support.v4.util.LruCache sMemoryCache;
+    private final com.mixpanel.android.mpmetrics.MPConfig mConfig;
+    private final java.security.MessageDigest mDigest;
+    private final java.io.File mDirectory;
+    private final com.mixpanel.android.util.RemoteService mPoster;
+
+    public void <init>(android.content.Context, java.lang.String)
+    {
+        com.mixpanel.android.util.ImageStore $r0;
+        android.content.Context $r1;
+        java.lang.String $r2, varReplacer380;
+        java.lang.StringBuilder $r3;
+        com.mixpanel.android.util.HttpService $r4;
+
+        nop;
+
+        $r0 := @this: com.mixpanel.android.util.ImageStore;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer380 = "MixpanelAPI.Images.";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer380);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r4 = new com.mixpanel.android.util.HttpService;
+
+        specialinvoke $r4.<com.mixpanel.android.util.HttpService: void <init>()>();
+
+        specialinvoke $r0.<com.mixpanel.android.util.ImageStore: void <init>(android.content.Context,java.lang.String,com.mixpanel.android.util.RemoteService)>($r1, $r2, $r4);
+
+        return;
+    }
+
+    public void <init>(android.content.Context, java.lang.String, com.mixpanel.android.util.RemoteService)
+    {
+        com.mixpanel.android.util.ImageStore $r0;
+        android.content.Context $r1;
+        java.lang.String $r2, varReplacer382, varReplacer383, varReplacer384;
+        com.mixpanel.android.util.RemoteService $r3;
+        int $i0, $i2, varReplacer381;
+        java.lang.Throwable $r4, $r11;
+        java.io.File $r5;
+        com.mixpanel.android.mpmetrics.MPConfig $r6;
+        java.security.MessageDigest $r7;
+        android.support.v4.util.LruCache $r8;
+        java.lang.Runtime $r9;
+        long $l1;
+        com.mixpanel.android.util.ImageStore$1 $r10;
+
+        nop;
+
+        $r0 := @this: com.mixpanel.android.util.ImageStore;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: com.mixpanel.android.util.RemoteService;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer381 = 0;
+
+        $r5 = virtualinvoke $r1.<android.content.Context: java.io.File getDir(java.lang.String,int)>($r2, varReplacer381);
+
+        $r0.<com.mixpanel.android.util.ImageStore: java.io.File mDirectory> = $r5;
+
+        $r0.<com.mixpanel.android.util.ImageStore: com.mixpanel.android.util.RemoteService mPoster> = $r3;
+
+        $r6 = staticinvoke <com.mixpanel.android.mpmetrics.MPConfig: com.mixpanel.android.mpmetrics.MPConfig getInstance(android.content.Context)>($r1);
+
+        $r0.<com.mixpanel.android.util.ImageStore: com.mixpanel.android.mpmetrics.MPConfig mConfig> = $r6;
+
+     label01:
+        varReplacer384 = "SHA1";
+
+        $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer384);
+
+     label02:
+        $r0.<com.mixpanel.android.util.ImageStore: java.security.MessageDigest mDigest> = $r7;
+
+        $r8 = <com.mixpanel.android.util.ImageStore: android.support.v4.util.LruCache sMemoryCache>;
+
+        if $r8 != null goto label10;
+
+        entermonitor class "Lcom/mixpanel/android/util/ImageStore;";
+
+     label03:
+        $r8 = <com.mixpanel.android.util.ImageStore: android.support.v4.util.LruCache sMemoryCache>;
+
+        if $r8 != null goto label04;
+
+        $r9 = staticinvoke <java.lang.Runtime: java.lang.Runtime getRuntime()>();
+
+        $l1 = virtualinvoke $r9.<java.lang.Runtime: long maxMemory()>();
+
+        $l1 = $l1 / 1024L;
+
+        $i0 = (int) $l1;
+
+        $r6 = $r0.<com.mixpanel.android.util.ImageStore: com.mixpanel.android.mpmetrics.MPConfig mConfig>;
+
+        $i2 = virtualinvoke $r6.<com.mixpanel.android.mpmetrics.MPConfig: int getImageCacheMaxMemoryFactor()>();
+
+        $i0 = $i0 / $i2;
+
+        $r10 = new com.mixpanel.android.util.ImageStore$1;
+
+        specialinvoke $r10.<com.mixpanel.android.util.ImageStore$1: void <init>(com.mixpanel.android.util.ImageStore,int)>($r0, $i0);
+
+        <com.mixpanel.android.util.ImageStore: android.support.v4.util.LruCache sMemoryCache> = $r10;
+
+     label04:
+        exitmonitor class "Lcom/mixpanel/android/util/ImageStore;";
+
+     label05:
+        return;
+
+     label06:
+        $r4 := @caughtexception;
+
+        varReplacer382 = "MixpanelAPI.ImageStore";
+
+        varReplacer383 = "Images won\'t be stored because this platform doesn\'t supply a SHA1 hash function";
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>(varReplacer382, varReplacer383);
+
+        $r7 = null;
+
+        goto label02;
+
+     label07:
+        $r11 := @caughtexception;
+
+     label08:
+        exitmonitor class "Lcom/mixpanel/android/util/ImageStore;";
+
+     label09:
+        throw $r11;
+
+     label10:
+        return;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label06;
+        catch java.lang.Throwable from label03 to label05 with label07;
+        catch java.lang.Throwable from label08 to label09 with label07;
+    }
+
+    public static void addBitmapToMemoryCache(java.lang.String, android.graphics.Bitmap)
+    {
+        java.lang.String $r0;
+        android.graphics.Bitmap $r1, $r3;
+        android.support.v4.util.LruCache $r2, $r4;
+        java.lang.Throwable $r5;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: android.graphics.Bitmap;
+
+        $r3 = staticinvoke <com.mixpanel.android.util.ImageStore: android.graphics.Bitmap getBitmapFromMemCache(java.lang.String)>($r0);
+
+        if $r3 != null goto label5;
+
+        $r2 = <com.mixpanel.android.util.ImageStore: android.support.v4.util.LruCache sMemoryCache>;
+
+        entermonitor $r2;
+
+     label1:
+        $r4 = <com.mixpanel.android.util.ImageStore: android.support.v4.util.LruCache sMemoryCache>;
+
+        virtualinvoke $r4.<android.support.v4.util.LruCache: java.lang.Object put(java.lang.Object,java.lang.Object)>($r0, $r1);
+
+        exitmonitor $r2;
+
+     label2:
+        return;
+
+     label3:
+        $r5 := @caughtexception;
+
+        exitmonitor $r2;
+
+     label4:
+        throw $r5;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public static void clearMemCache()
+    {
+        android.support.v4.util.LruCache $r0, $r1;
+        java.lang.Throwable $r2;
+
+        $r0 = <com.mixpanel.android.util.ImageStore: android.support.v4.util.LruCache sMemoryCache>;
+
+        entermonitor $r0;
+
+     label1:
+        $r1 = <com.mixpanel.android.util.ImageStore: android.support.v4.util.LruCache sMemoryCache>;
+
+        virtualinvoke $r1.<android.support.v4.util.LruCache: void evictAll()>();
+
+        exitmonitor $r0;
+
+     label2:
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        exitmonitor $r0;
+
+     label4:
+        throw $r2;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    private static android.graphics.Bitmap decodeImage(java.io.File) throws com.mixpanel.android.util.ImageStore$CantGetImageException
+    {
+        java.io.File $r0;
+        float $f0, $f1;
+        android.graphics.BitmapFactory$Options $r1;
+        java.lang.String $r2;
+        int $i0;
+        byte $b1;
+        com.mixpanel.android.util.ImageStore$CantGetImageException $r3;
+        android.graphics.Bitmap $r4;
+
+        $r0 := @parameter0: java.io.File;
+
+        $r1 = new android.graphics.BitmapFactory$Options;
+
+        specialinvoke $r1.<android.graphics.BitmapFactory$Options: void <init>()>();
+
+        $r1.<android.graphics.BitmapFactory$Options: boolean inJustDecodeBounds> = 1;
+
+        $r2 = virtualinvoke $r0.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        staticinvoke <android.graphics.BitmapFactory: android.graphics.Bitmap decodeFile(java.lang.String,android.graphics.BitmapFactory$Options)>($r2, $r1);
+
+        $i0 = $r1.<android.graphics.BitmapFactory$Options: int outHeight>;
+
+        $f0 = (float) $i0;
+
+        $i0 = $r1.<android.graphics.BitmapFactory$Options: int outWidth>;
+
+        $f1 = (float) $i0;
+
+        $f0 = $f0 * $f1;
+
+        $f1 = staticinvoke <com.mixpanel.android.util.ImageStore: float getAvailableMemory()>();
+
+        $b1 = $f0 cmpl $f1;
+
+        if $b1 <= 0 goto label1;
+
+        $r3 = new com.mixpanel.android.util.ImageStore$CantGetImageException;
+
+        specialinvoke $r3.<com.mixpanel.android.util.ImageStore$CantGetImageException: void <init>(java.lang.String)>("Do not have enough memory for the image");
+
+        throw $r3;
+
+     label1:
+        $r2 = virtualinvoke $r0.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $r4 = staticinvoke <android.graphics.BitmapFactory: android.graphics.Bitmap decodeFile(java.lang.String)>($r2);
+
+        if $r4 != null goto label2;
+
+        virtualinvoke $r0.<java.io.File: boolean delete()>();
+
+        $r3 = new com.mixpanel.android.util.ImageStore$CantGetImageException;
+
+        specialinvoke $r3.<com.mixpanel.android.util.ImageStore$CantGetImageException: void <init>(java.lang.String)>("Bitmap on disk can\'t be opened or was corrupt");
+
+        throw $r3;
+
+     label2:
+        return $r4;
+    }
+
+    private static float getAvailableMemory()
+    {
+        float $f0, $f1;
+        java.lang.Runtime $r0;
+        long $l0, $l1;
+
+        $r0 = staticinvoke <java.lang.Runtime: java.lang.Runtime getRuntime()>();
+
+        $l0 = virtualinvoke $r0.<java.lang.Runtime: long totalMemory()>();
+
+        $l1 = virtualinvoke $r0.<java.lang.Runtime: long freeMemory()>();
+
+        $l0 = $l0 - $l1;
+
+        $f0 = (float) $l0;
+
+        $l0 = virtualinvoke $r0.<java.lang.Runtime: long maxMemory()>();
+
+        $f1 = (float) $l0;
+
+        $f0 = $f1 - $f0;
+
+        return $f0;
+    }
+
+    public static android.graphics.Bitmap getBitmapFromMemCache(java.lang.String)
+    {
+        java.lang.String $r0;
+        android.support.v4.util.LruCache $r1, $r3;
+        java.lang.Object $r2;
+        android.graphics.Bitmap $r4;
+        java.lang.Throwable $r5;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = <com.mixpanel.android.util.ImageStore: android.support.v4.util.LruCache sMemoryCache>;
+
+        entermonitor $r1;
+
+     label1:
+        $r3 = <com.mixpanel.android.util.ImageStore: android.support.v4.util.LruCache sMemoryCache>;
+
+        $r2 = virtualinvoke $r3.<android.support.v4.util.LruCache: java.lang.Object get(java.lang.Object)>($r0);
+
+        $r4 = (android.graphics.Bitmap) $r2;
+
+        exitmonitor $r1;
+
+     label2:
+        return $r4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label4:
+        throw $r5;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public static void removeBitmapFromMemCache(java.lang.String)
+    {
+        java.lang.String $r0;
+        android.support.v4.util.LruCache $r1, $r2;
+        java.lang.Throwable $r3;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = <com.mixpanel.android.util.ImageStore: android.support.v4.util.LruCache sMemoryCache>;
+
+        entermonitor $r1;
+
+     label1:
+        $r2 = <com.mixpanel.android.util.ImageStore: android.support.v4.util.LruCache sMemoryCache>;
+
+        virtualinvoke $r2.<android.support.v4.util.LruCache: java.lang.Object remove(java.lang.Object)>($r0);
+
+        exitmonitor $r1;
+
+     label2:
+        return;
+
+     label3:
+        $r3 := @caughtexception;
+
+        exitmonitor $r1;
+
+     label4:
+        throw $r3;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    private java.io.File storedFile(java.lang.String)
+    {
+        com.mixpanel.android.util.ImageStore $r0;
+        java.lang.String $r1;
+        java.security.MessageDigest $r2;
+        byte[] $r3;
+        java.lang.StringBuilder $r4;
+        java.io.File $r5, $r6;
+
+        $r0 := @this: com.mixpanel.android.util.ImageStore;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = $r0.<com.mixpanel.android.util.ImageStore: java.security.MessageDigest mDigest>;
+
+        if $r2 != null goto label1;
+
+        return null;
+
+     label1:
+        $r2 = $r0.<com.mixpanel.android.util.ImageStore: java.security.MessageDigest mDigest>;
+
+        $r3 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r3);
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("MP_IMG_");
+
+        $r1 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r3, 10);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r5 = new java.io.File;
+
+        $r6 = $r0.<com.mixpanel.android.util.ImageStore: java.io.File mDirectory>;
+
+        specialinvoke $r5.<java.io.File: void <init>(java.io.File,java.lang.String)>($r6, $r1);
+
+        return $r5;
+    }
+
+    public void clearStorage()
+    {
+        com.mixpanel.android.util.ImageStore $r0;
+        java.io.File $r1;
+        int $i0, $i1;
+        java.io.File[] $r2;
+        java.lang.String $r3;
+        boolean $z0;
+
+        $r0 := @this: com.mixpanel.android.util.ImageStore;
+
+        $r1 = $r0.<com.mixpanel.android.util.ImageStore: java.io.File mDirectory>;
+
+        $r2 = virtualinvoke $r1.<java.io.File: java.io.File[] listFiles()>();
+
+        $i0 = lengthof $r2;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label3;
+
+        $r1 = $r2[$i1];
+
+        $r3 = virtualinvoke $r1.<java.io.File: java.lang.String getName()>();
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean startsWith(java.lang.String)>("MP_IMG_");
+
+        if $z0 == 0 goto label2;
+
+        virtualinvoke $r1.<java.io.File: boolean delete()>();
+
+     label2:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        staticinvoke <com.mixpanel.android.util.ImageStore: void clearMemCache()>();
+
+        return;
+    }
+
+    public void deleteStorage(java.lang.String)
+    {
+        com.mixpanel.android.util.ImageStore $r0;
+        java.lang.String $r1;
+        java.io.File $r2;
+
+        $r0 := @this: com.mixpanel.android.util.ImageStore;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = specialinvoke $r0.<com.mixpanel.android.util.ImageStore: java.io.File storedFile(java.lang.String)>($r1);
+
+        if $r2 == null goto label1;
+
+        virtualinvoke $r2.<java.io.File: boolean delete()>();
+
+        staticinvoke <com.mixpanel.android.util.ImageStore: void removeBitmapFromMemCache(java.lang.String)>($r1);
+
+     label1:
+        return;
+    }
+
+    public android.graphics.Bitmap getImage(java.lang.String) throws com.mixpanel.android.util.ImageStore$CantGetImageException
+    {
+        com.mixpanel.android.util.ImageStore $r0;
+        java.lang.String $r1;
+        android.graphics.Bitmap $r2;
+        java.io.File $r3;
+
+        $r0 := @this: com.mixpanel.android.util.ImageStore;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = staticinvoke <com.mixpanel.android.util.ImageStore: android.graphics.Bitmap getBitmapFromMemCache(java.lang.String)>($r1);
+
+        if $r2 != null goto label1;
+
+        $r3 = virtualinvoke $r0.<com.mixpanel.android.util.ImageStore: java.io.File getImageFile(java.lang.String)>($r1);
+
+        $r2 = staticinvoke <com.mixpanel.android.util.ImageStore: android.graphics.Bitmap decodeImage(java.io.File)>($r3);
+
+        staticinvoke <com.mixpanel.android.util.ImageStore: void addBitmapToMemoryCache(java.lang.String,android.graphics.Bitmap)>($r1, $r2);
+
+     label1:
+        return $r2;
+    }
+
+    public java.io.File getImageFile(java.lang.String) throws com.mixpanel.android.util.ImageStore$CantGetImageException
+    {
+        com.mixpanel.android.util.ImageStore $r0;
+        java.lang.String $r1;
+        java.io.FileOutputStream $r2, $r8;
+        java.io.File $r3;
+        boolean $z0;
+        com.mixpanel.android.mpmetrics.MPConfig $r4;
+        javax.net.ssl.SSLSocketFactory $r5;
+        com.mixpanel.android.util.RemoteService $r6;
+        byte[] $r7;
+        int $i0;
+        java.lang.Throwable $r9, $r12, $r13, $r14, $r15, $r16;
+        com.mixpanel.android.util.ImageStore$CantGetImageException $r10;
+        com.mixpanel.android.util.RemoteService$ServiceUnavailableException $r11;
+
+        $r0 := @this: com.mixpanel.android.util.ImageStore;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r3 = specialinvoke $r0.<com.mixpanel.android.util.ImageStore: java.io.File storedFile(java.lang.String)>($r1);
+
+        if $r3 == null goto label01;
+
+        $z0 = virtualinvoke $r3.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label27;
+
+     label01:
+        $r4 = $r0.<com.mixpanel.android.util.ImageStore: com.mixpanel.android.mpmetrics.MPConfig mConfig>;
+
+     label02:
+        $r5 = virtualinvoke $r4.<com.mixpanel.android.mpmetrics.MPConfig: javax.net.ssl.SSLSocketFactory getSSLSocketFactory()>();
+
+     label03:
+        $r6 = $r0.<com.mixpanel.android.util.ImageStore: com.mixpanel.android.util.RemoteService mPoster>;
+
+     label04:
+        $r7 = interfaceinvoke $r6.<com.mixpanel.android.util.RemoteService: byte[] performRequest(java.lang.String,java.util.Map,javax.net.ssl.SSLSocketFactory)>($r1, null, $r5);
+
+     label05:
+        if $r7 == null goto label27;
+
+        if $r3 == null goto label27;
+
+        $i0 = lengthof $r7;
+
+        if $i0 >= 10000000 goto label27;
+
+        $r8 = null;
+
+     label06:
+        $r2 = new java.io.FileOutputStream;
+
+     label07:
+        specialinvoke $r2.<java.io.FileOutputStream: void <init>(java.io.File)>($r3);
+
+     label08:
+        virtualinvoke $r2.<java.io.OutputStream: void write(byte[])>($r7);
+
+     label09:
+        if $r2 == null goto label27;
+
+     label10:
+        virtualinvoke $r2.<java.io.OutputStream: void close()>();
+
+     label11:
+        return $r3;
+
+     label12:
+        $r9 := @caughtexception;
+
+        $r10 = new com.mixpanel.android.util.ImageStore$CantGetImageException;
+
+        specialinvoke $r10.<com.mixpanel.android.util.ImageStore$CantGetImageException: void <init>(java.lang.String,java.lang.Throwable)>("Can\'t download bitmap", $r9);
+
+        throw $r10;
+
+     label13:
+        $r11 := @caughtexception;
+
+        $r10 = new com.mixpanel.android.util.ImageStore$CantGetImageException;
+
+        specialinvoke $r10.<com.mixpanel.android.util.ImageStore$CantGetImageException: void <init>(java.lang.String,java.lang.Throwable)>("Couldn\'t download image due to service availability", $r11);
+
+        throw $r10;
+
+     label14:
+        $r12 := @caughtexception;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>("MixpanelAPI.ImageStore", "Problem closing output file", $r12);
+
+        return $r3;
+
+     label15:
+        $r13 := @caughtexception;
+
+     label16:
+        $r10 = new com.mixpanel.android.util.ImageStore$CantGetImageException;
+
+        specialinvoke $r10.<com.mixpanel.android.util.ImageStore$CantGetImageException: void <init>(java.lang.String,java.lang.Throwable)>("It appears that ImageStore is misconfigured, or disk storage is unavailable- can\'t write to bitmap directory", $r13);
+
+        throw $r10;
+
+     label17:
+        $r14 := @caughtexception;
+
+     label18:
+        if $r8 == null goto label20;
+
+     label19:
+        virtualinvoke $r8.<java.io.OutputStream: void close()>();
+
+     label20:
+        throw $r14;
+
+     label21:
+        $r15 := @caughtexception;
+
+     label22:
+        $r10 = new com.mixpanel.android.util.ImageStore$CantGetImageException;
+
+        specialinvoke $r10.<com.mixpanel.android.util.ImageStore$CantGetImageException: void <init>(java.lang.String,java.lang.Throwable)>("Can\'t store bitmap", $r15);
+
+        throw $r10;
+
+     label23:
+        $r16 := @caughtexception;
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String,java.lang.Throwable)>("MixpanelAPI.ImageStore", "Problem closing output file", $r16);
+
+        goto label20;
+
+     label24:
+        $r14 := @caughtexception;
+
+        $r8 = $r2;
+
+        goto label18;
+
+     label25:
+        $r15 := @caughtexception;
+
+        $r8 = $r2;
+
+        goto label22;
+
+     label26:
+        $r13 := @caughtexception;
+
+        $r8 = $r2;
+
+        goto label16;
+
+     label27:
+        return $r3;
+
+        catch java.io.IOException from label02 to label03 with label12;
+        catch java.io.IOException from label04 to label05 with label12;
+        catch com.mixpanel.android.util.RemoteService$ServiceUnavailableException from label02 to label03 with label13;
+        catch com.mixpanel.android.util.RemoteService$ServiceUnavailableException from label04 to label05 with label13;
+        catch java.io.FileNotFoundException from label07 to label08 with label15;
+        catch java.io.IOException from label07 to label08 with label21;
+        catch java.lang.Throwable from label06 to label08 with label17;
+        catch java.io.FileNotFoundException from label08 to label09 with label26;
+        catch java.io.IOException from label08 to label09 with label25;
+        catch java.lang.Throwable from label08 to label09 with label24;
+        catch java.io.IOException from label10 to label11 with label14;
+        catch java.lang.Throwable from label16 to label17 with label17;
+        catch java.io.IOException from label19 to label20 with label23;
+        catch java.lang.Throwable from label22 to label23 with label17;
+    }
+}

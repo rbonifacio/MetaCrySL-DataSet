@@ -1,0 +1,440 @@
+public class com.expressvpn.vpn.config.crypter.PiiCrypter extends com.expressvpn.vpn.config.crypter.Crypter
+{
+    private static final com.expressvpn.utils.android.log.L l;
+    private javax.crypto.SecretKey key;
+    private java.security.KeyStore keystore;
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+        com.expressvpn.utils.android.log.L $r1;
+
+        nop;
+
+        $r0 = staticinvoke <com.expressvpn.utils.android.log.Logger: java.lang.String getLogTag(java.lang.Class)>(class "Lcom/expressvpn/vpn/config/crypter/PiiCrypter;");
+
+        $r1 = staticinvoke <com.expressvpn.utils.android.log.Logger: com.expressvpn.utils.android.log.L newLog(java.lang.String)>($r0);
+
+        <com.expressvpn.vpn.config.crypter.PiiCrypter: com.expressvpn.utils.android.log.L l> = $r1;
+
+        return;
+    }
+
+    void <init>(android.content.Context)
+    {
+        com.expressvpn.vpn.config.crypter.PiiCrypter $r0;
+        android.content.Context $r1;
+        null_type varReplacer2267, varReplacer2268;
+
+        nop;
+
+        $r0 := @this: com.expressvpn.vpn.config.crypter.PiiCrypter;
+
+        $r1 := @parameter0: android.content.Context;
+
+        specialinvoke $r0.<com.expressvpn.vpn.config.crypter.Crypter: void <init>()>();
+
+        varReplacer2268 = null;
+
+        $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: java.security.KeyStore keystore> = varReplacer2268;
+
+        varReplacer2267 = null;
+
+        $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: javax.crypto.SecretKey key> = varReplacer2267;
+
+        $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: android.content.Context context> = $r1;
+
+        return;
+    }
+
+    private void generateKey() throws java.security.NoSuchProviderException, java.security.NoSuchAlgorithmException, java.security.InvalidAlgorithmParameterException, java.security.KeyStoreException, java.io.IOException, java.security.cert.CertificateException
+    {
+        com.expressvpn.vpn.config.crypter.PiiCrypter $r0;
+        java.security.SecureRandom $r1;
+        java.security.KeyStore$SecretKeyEntry $r2;
+        javax.crypto.KeyGenerator $r3;
+        javax.crypto.SecretKey $r4;
+        java.security.KeyStore $r5;
+        java.security.KeyStore$PasswordProtection $r6;
+        null_type varReplacer2294;
+        java.lang.String varReplacer2295, varReplacer2296;
+
+        nop;
+
+        $r0 := @this: com.expressvpn.vpn.config.crypter.PiiCrypter;
+
+        varReplacer2295 = "AES";
+
+        $r3 = staticinvoke <javax.crypto.KeyGenerator: javax.crypto.KeyGenerator getInstance(java.lang.String)>(varReplacer2295);
+
+        $r1 = new java.security.SecureRandom;
+
+        specialinvoke $r1.<java.security.SecureRandom: void <init>()>();
+
+        virtualinvoke $r3.<javax.crypto.KeyGenerator: void init(java.security.SecureRandom)>($r1);
+
+        $r4 = virtualinvoke $r3.<javax.crypto.KeyGenerator: javax.crypto.SecretKey generateKey()>();
+
+        $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: javax.crypto.SecretKey key> = $r4;
+
+        $r5 = $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: java.security.KeyStore keystore>;
+
+        $r2 = new java.security.KeyStore$SecretKeyEntry;
+
+        $r4 = $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: javax.crypto.SecretKey key>;
+
+        specialinvoke $r2.<java.security.KeyStore$SecretKeyEntry: void <init>(javax.crypto.SecretKey)>($r4);
+
+        $r6 = new java.security.KeyStore$PasswordProtection;
+
+        varReplacer2294 = null;
+
+        specialinvoke $r6.<java.security.KeyStore$PasswordProtection: void <init>(char[])>(varReplacer2294);
+
+        varReplacer2296 = "protection";
+
+        virtualinvoke $r5.<java.security.KeyStore: void setEntry(java.lang.String,java.security.KeyStore$Entry,java.security.KeyStore$ProtectionParameter)>(varReplacer2296, $r2, $r6);
+
+        specialinvoke $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: void saveKeyStore()>();
+
+        return;
+    }
+
+    private void loadKey() throws java.security.NoSuchProviderException, java.security.InvalidAlgorithmParameterException, java.security.cert.CertificateException, java.security.NoSuchAlgorithmException, java.security.KeyStoreException, java.io.IOException, java.security.UnrecoverableKeyException
+    {
+        com.expressvpn.vpn.config.crypter.PiiCrypter $r0;
+        java.security.Key $r1;
+        javax.crypto.SecretKey $r2;
+        java.security.KeyStore $r3;
+        com.expressvpn.utils.android.log.L $r4;
+        java.lang.String varReplacer2291, varReplacer2293;
+        null_type varReplacer2292;
+
+        nop;
+
+        $r0 := @this: com.expressvpn.vpn.config.crypter.PiiCrypter;
+
+        $r2 = $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: javax.crypto.SecretKey key>;
+
+        if $r2 == null goto label1;
+
+        return;
+
+     label1:
+        specialinvoke $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: void loadKeyStore()>();
+
+        $r3 = $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: java.security.KeyStore keystore>;
+
+        varReplacer2291 = "protection";
+
+        varReplacer2292 = null;
+
+        $r1 = virtualinvoke $r3.<java.security.KeyStore: java.security.Key getKey(java.lang.String,char[])>(varReplacer2291, varReplacer2292);
+
+        $r2 = (javax.crypto.SecretKey) $r1;
+
+        $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: javax.crypto.SecretKey key> = $r2;
+
+        $r2 = $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: javax.crypto.SecretKey key>;
+
+        if $r2 != null goto label2;
+
+        specialinvoke $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: void generateKey()>();
+
+        return;
+
+     label2:
+        $r4 = <com.expressvpn.vpn.config.crypter.PiiCrypter: com.expressvpn.utils.android.log.L l>;
+
+        varReplacer2293 = "Key is found";
+
+        interfaceinvoke $r4.<com.expressvpn.utils.android.log.L: void d(java.lang.String)>(varReplacer2293);
+
+        return;
+    }
+
+    private void loadKeyStore() throws java.security.KeyStoreException, java.security.cert.CertificateException, java.security.NoSuchAlgorithmException, java.io.IOException
+    {
+        com.expressvpn.vpn.config.crypter.PiiCrypter $r0;
+        java.io.File $r1, $r5;
+        java.security.KeyStore $r2;
+        com.expressvpn.utils.android.log.L $r3;
+        android.content.Context $r4;
+        boolean $z0;
+        java.io.FileInputStream $r6;
+        null_type varReplacer2276, varReplacer2279;
+        java.lang.String varReplacer2277, varReplacer2278, varReplacer2280;
+
+        nop;
+
+        $r0 := @this: com.expressvpn.vpn.config.crypter.PiiCrypter;
+
+        $r2 = $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: java.security.KeyStore keystore>;
+
+        if $r2 == null goto label1;
+
+        return;
+
+     label1:
+        $r3 = <com.expressvpn.vpn.config.crypter.PiiCrypter: com.expressvpn.utils.android.log.L l>;
+
+        varReplacer2278 = "load keystore ";
+
+        interfaceinvoke $r3.<com.expressvpn.utils.android.log.L: void d(java.lang.String)>(varReplacer2278);
+
+        varReplacer2277 = "BKS";
+
+        $r2 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer2277);
+
+        $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: java.security.KeyStore keystore> = $r2;
+
+        $r1 = new java.io.File;
+
+        $r4 = $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: android.content.Context context>;
+
+        $r5 = virtualinvoke $r4.<android.content.Context: java.io.File getFilesDir()>();
+
+        varReplacer2280 = "protect.bks";
+
+        specialinvoke $r1.<java.io.File: void <init>(java.io.File,java.lang.String)>($r5, varReplacer2280);
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label2;
+
+        $r2 = $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: java.security.KeyStore keystore>;
+
+        $r6 = new java.io.FileInputStream;
+
+        specialinvoke $r6.<java.io.FileInputStream: void <init>(java.io.File)>($r1);
+
+        varReplacer2276 = null;
+
+        virtualinvoke $r2.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r6, varReplacer2276);
+
+        return;
+
+     label2:
+        $r2 = $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: java.security.KeyStore keystore>;
+
+        varReplacer2279 = null;
+
+        virtualinvoke $r2.<java.security.KeyStore: void load(java.security.KeyStore$LoadStoreParameter)>(varReplacer2279);
+
+        specialinvoke $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: void saveKeyStore()>();
+
+        return;
+    }
+
+    private void saveKeyStore() throws java.io.IOException, java.security.cert.CertificateException, java.security.NoSuchAlgorithmException, java.security.KeyStoreException
+    {
+        com.expressvpn.vpn.config.crypter.PiiCrypter $r0;
+        java.io.File $r1, $r2;
+        android.content.Context $r3;
+        java.security.KeyStore $r4;
+        java.io.FileOutputStream $r5;
+        null_type varReplacer2281;
+        java.lang.String varReplacer2282;
+
+        nop;
+
+        $r0 := @this: com.expressvpn.vpn.config.crypter.PiiCrypter;
+
+        $r1 = new java.io.File;
+
+        $r3 = $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: android.content.Context context>;
+
+        $r2 = virtualinvoke $r3.<android.content.Context: java.io.File getFilesDir()>();
+
+        varReplacer2282 = "protect.bks";
+
+        specialinvoke $r1.<java.io.File: void <init>(java.io.File,java.lang.String)>($r2, varReplacer2282);
+
+        $r4 = $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: java.security.KeyStore keystore>;
+
+        $r5 = new java.io.FileOutputStream;
+
+        specialinvoke $r5.<java.io.FileOutputStream: void <init>(java.io.File)>($r1);
+
+        varReplacer2281 = null;
+
+        virtualinvoke $r4.<java.security.KeyStore: void store(java.io.OutputStream,char[])>($r5, varReplacer2281);
+
+        return;
+    }
+
+    public byte[] decrypt(byte[]) throws java.lang.Exception
+    {
+        com.expressvpn.vpn.config.crypter.PiiCrypter $r0;
+        byte[] $r1, $r2;
+        javax.crypto.Cipher $r3;
+        javax.crypto.SecretKey $r4;
+        javax.crypto.spec.IvParameterSpec $r5;
+        int $i0, varReplacer2284, varReplacer2285, varReplacer2288, varReplacer2289, varReplacer2290;
+        java.lang.String varReplacer2286, varReplacer2287;
+
+        nop;
+
+        $r0 := @this: com.expressvpn.vpn.config.crypter.PiiCrypter;
+
+        $r1 := @parameter0: byte[];
+
+        specialinvoke $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: void loadKey()>();
+
+        varReplacer2286 = "AES/GCM/NoPadding";
+
+        varReplacer2287 = "BC";
+
+        $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>(varReplacer2286, varReplacer2287);
+
+        $r2 = newarray (byte)[16];
+
+        varReplacer2288 = 0;
+
+        varReplacer2289 = 0;
+
+        varReplacer2290 = 16;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r1, varReplacer2288, $r2, varReplacer2288, varReplacer2290);
+
+        $r4 = $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: javax.crypto.SecretKey key>;
+
+        $r5 = new javax.crypto.spec.IvParameterSpec;
+
+        specialinvoke $r5.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r2);
+
+        varReplacer2284 = 2;
+
+        virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer2284, $r4, $r5);
+
+        $i0 = lengthof $r1;
+
+        $i0 = $i0 + -16;
+
+        varReplacer2285 = 16;
+
+        $r1 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[],int,int)>($r1, varReplacer2285, $i0);
+
+        return $r1;
+    }
+
+    public byte[] encrypt(byte[]) throws java.lang.Exception
+    {
+        com.expressvpn.vpn.config.crypter.PiiCrypter $r0;
+        byte[] $r1, $r4, $r8;
+        javax.crypto.Cipher $r2;
+        javax.crypto.SecretKey $r3;
+        com.expressvpn.utils.android.log.L $r5;
+        java.lang.StringBuilder $r6;
+        int $i0, $i1;
+        java.lang.String $r7;
+
+        $r0 := @this: com.expressvpn.vpn.config.crypter.PiiCrypter;
+
+        $r1 := @parameter0: byte[];
+
+        specialinvoke $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: void loadKey()>();
+
+        $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>("AES/GCM/NoPadding", "BC");
+
+        $r3 = $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: javax.crypto.SecretKey key>;
+
+        virtualinvoke $r2.<javax.crypto.Cipher: void init(int,java.security.Key)>(1, $r3);
+
+        $r4 = virtualinvoke $r2.<javax.crypto.Cipher: byte[] getIV()>();
+
+        $r5 = <com.expressvpn.vpn.config.crypter.PiiCrypter: com.expressvpn.utils.android.log.L l>;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("iv len = ");
+
+        $i0 = lengthof $r4;
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        interfaceinvoke $r5.<com.expressvpn.utils.android.log.L: void d(java.lang.String)>($r7);
+
+        $r8 = virtualinvoke $r2.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1);
+
+        $i0 = lengthof $r4;
+
+        $i1 = lengthof $r8;
+
+        $i0 = $i0 + $i1;
+
+        $r1 = newarray (byte)[$i0];
+
+        $i0 = lengthof $r4;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r4, 0, $r1, 0, $i0);
+
+        $i0 = lengthof $r4;
+
+        $i1 = lengthof $r8;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r8, 0, $r1, $i0, $i1);
+
+        return $r1;
+    }
+
+    public java.lang.String getMarker()
+    {
+        com.expressvpn.vpn.config.crypter.PiiCrypter $r0;
+        java.lang.String varReplacer2269;
+
+        nop;
+
+        $r0 := @this: com.expressvpn.vpn.config.crypter.PiiCrypter;
+
+        varReplacer2269 = "{EVPNPII}";
+
+        return varReplacer2269;
+    }
+
+    public boolean keyAvailable() throws java.security.cert.CertificateException, java.security.NoSuchAlgorithmException, java.security.KeyStoreException, java.io.IOException, java.security.UnrecoverableKeyException
+    {
+        com.expressvpn.vpn.config.crypter.PiiCrypter $r0;
+        java.security.Key $r1;
+        java.security.KeyStore $r2;
+        javax.crypto.SecretKey $r3;
+        int varReplacer2272, varReplacer2275;
+        java.lang.String varReplacer2273;
+        null_type varReplacer2274;
+
+        nop;
+
+        $r0 := @this: com.expressvpn.vpn.config.crypter.PiiCrypter;
+
+        specialinvoke $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: void loadKeyStore()>();
+
+        $r2 = $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: java.security.KeyStore keystore>;
+
+        varReplacer2273 = "protection";
+
+        varReplacer2274 = null;
+
+        $r1 = virtualinvoke $r2.<java.security.KeyStore: java.security.Key getKey(java.lang.String,char[])>(varReplacer2273, varReplacer2274);
+
+        $r3 = (javax.crypto.SecretKey) $r1;
+
+        $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: javax.crypto.SecretKey key> = $r3;
+
+        $r3 = $r0.<com.expressvpn.vpn.config.crypter.PiiCrypter: javax.crypto.SecretKey key>;
+
+        if $r3 == null goto label1;
+
+        varReplacer2272 = 1;
+
+        return varReplacer2272;
+
+     label1:
+        varReplacer2275 = 0;
+
+        return varReplacer2275;
+    }
+}

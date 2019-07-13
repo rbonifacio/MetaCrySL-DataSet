@@ -1,0 +1,91 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r8
+		Type: java.security.DigestOutputStream
+		Statement: specialinvoke $r8.<java.security.DigestOutputStream: void <init>(java.io.OutputStream,java.security.MessageDigest)>($r11, $r10)
+		Method: <com.flurry.sdk.cc: void <init>(java.lang.String,java.lang.String,java.lang.String,boolean,long,long,java.util.List,java.util.Map,java.util.Map,java.util.Map,long)>
+		SHA-256: edccaad4fca6b1fc5ebc921b996a09a8b4f1fde8e59be24a82b707fbe56c4825
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer570)
+		Method: <com.flurry.sdk.fh: byte[] d(java.lang.String)>
+		SHA-256: 980e48034e53d80fc01467638fff5dade65f117c8d5a2dcfc68409b28ee03cc1
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1790)
+		Method: <it.mtbforum.trainingcamp.utils.HttpClientUtils: java.lang.String md5(java.lang.String)>
+		SHA-256: 49a7080e21f3b7efb74ec59981249f5bdde7e596a9763da466051e6ea1b82605
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.flurry.sdk.fh: byte[] d(java.lang.String)>
+		SHA-256: bdf1bd7d2798466c205c3d96aa7542716f106fff18aaf9304bba8907c09bf51d
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <it.mtbforum.trainingcamp.utils.HttpClientUtils: java.lang.String md5(java.lang.String)>
+		SHA-256: ac341b55ba3c56312cb04638a4ffcd8756dcf99e2cab5e688bff6dc91ea4ab3e
+		Secure: true
+
+Findings in Java Class: com.flurry.sdk.cc
+
+	 in Method: void <init>(java.lang.String,java.lang.String,java.lang.String,boolean,long,long,java.util.List,java.util.Map,java.util.Map,java.util.Map,long)
+		ForbiddenMethodError violating CrySL rule for java.security.DigestOutputStream
+			Detected call to forbidden method void on(boolean) of class java.security.DigestOutputStream
+			at statement: virtualinvoke $r8.<java.security.DigestOutputStream: void on(boolean)>(varReplacer605)
+
+		IncompleteOperationError violating CrySL rule for java.security.DigestOutputStream (on Object #edccaad4fca6b1fc5ebc921b996a09a8b4f1fde8e59be24a82b707fbe56c4825)
+			Operation on object of type java.security.DigestOutputStream object not completed. Expected call to write
+			at statement: virtualinvoke $r8.<java.security.DigestOutputStream: void on(boolean)>(varReplacer605)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 5
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 1
+	ForbiddenMethodError: 1
+=====================================================================

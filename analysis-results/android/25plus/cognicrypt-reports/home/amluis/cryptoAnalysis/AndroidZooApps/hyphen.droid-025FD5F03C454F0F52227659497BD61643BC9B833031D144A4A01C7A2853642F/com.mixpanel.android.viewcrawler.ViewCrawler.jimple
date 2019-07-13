@@ -1,0 +1,430 @@
+public class com.mixpanel.android.viewcrawler.ViewCrawler extends java.lang.Object implements com.mixpanel.android.viewcrawler.UpdatesFromMixpanel, com.mixpanel.android.viewcrawler.TrackingDebug
+{
+    private static final int EMULATOR_CONNECT_ATTEMPT_INTERVAL_MILLIS;
+    private static final java.lang.String LOGTAG;
+    private static final int MESSAGE_CONNECT_TO_EDITOR;
+    private static final int MESSAGE_EVENT_BINDINGS_RECEIVED;
+    private static final int MESSAGE_HANDLE_EDITOR_BINDINGS_RECEIVED;
+    private static final int MESSAGE_HANDLE_EDITOR_CHANGES_RECEIVED;
+    private static final int MESSAGE_HANDLE_EDITOR_CLOSED;
+    private static final int MESSAGE_INITIALIZE_CHANGES;
+    private static final int MESSAGE_SEND_DEVICE_INFO;
+    private static final int MESSAGE_SEND_EVENT_TRACKED;
+    private static final int MESSAGE_SEND_STATE_FOR_EDITING;
+    private static final java.lang.String SHARED_PREF_BINDINGS_KEY;
+    private static final java.lang.String SHARED_PREF_CHANGES_KEY;
+    private static final java.lang.String SHARED_PREF_EDITS_FILE;
+    private final com.mixpanel.android.mpmetrics.MPConfig mConfig;
+    private final java.util.Map mDeviceInfo;
+    private final com.mixpanel.android.viewcrawler.EditState mEditState;
+    private final java.util.List mEditorChanges;
+    private final java.util.List mEditorEventBindings;
+    private final com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler mMessageThreadHandler;
+    private final java.util.List mPersistentChanges;
+    private final java.util.List mPersistentEventBindings;
+    private final com.mixpanel.android.viewcrawler.EditProtocol mProtocol;
+    private final javax.net.ssl.SSLSocketFactory mSSLSocketFactory;
+    private final com.mixpanel.android.viewcrawler.DynamicEventTracker mTracker;
+    private final com.mixpanel.android.mpmetrics.Tweaks mTweaks;
+
+    public void <init>(android.content.Context, java.lang.String, com.mixpanel.android.mpmetrics.MixpanelAPI)
+    {
+        com.mixpanel.android.viewcrawler.ViewCrawler $r0;
+        android.content.Context $r1, $r15;
+        java.lang.String $r2, $r9, $r10, varReplacer664, varReplacer665, varReplacer670;
+        com.mixpanel.android.mpmetrics.MixpanelAPI $r3;
+        java.lang.Throwable $r4;
+        com.mixpanel.android.mpmetrics.ResourceReader$Ids $r5;
+        android.os.HandlerThread $r6;
+        com.mixpanel.android.mpmetrics.MPConfig $r7;
+        java.util.ArrayList $r8;
+        com.mixpanel.android.viewcrawler.EditProtocol $r11;
+        com.mixpanel.android.viewcrawler.EditState $r12;
+        com.mixpanel.android.mpmetrics.Tweaks $r13;
+        java.util.Map $r14;
+        android.app.Application $r16;
+        com.mixpanel.android.viewcrawler.ViewCrawler$LifecycleCallbacks $r17;
+        java.lang.Class $r18;
+        com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler $r19, $r21;
+        android.os.Looper $r20;
+        android.os.Message $r22;
+        com.mixpanel.android.viewcrawler.DynamicEventTracker $r23;
+        javax.net.ssl.SSLContext $r24;
+        javax.net.ssl.SSLSocketFactory $r25;
+        int varReplacer666, varReplacer671;
+        null_type varReplacer667, varReplacer668, varReplacer669;
+
+        nop;
+
+        $r0 := @this: com.mixpanel.android.viewcrawler.ViewCrawler;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: com.mixpanel.android.mpmetrics.MixpanelAPI;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r7 = staticinvoke <com.mixpanel.android.mpmetrics.MPConfig: com.mixpanel.android.mpmetrics.MPConfig getInstance(android.content.Context)>($r1);
+
+        $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.mpmetrics.MPConfig mConfig> = $r7;
+
+        $r8 = new java.util.ArrayList;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>()>();
+
+        $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: java.util.List mPersistentChanges> = $r8;
+
+        $r8 = new java.util.ArrayList;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>()>();
+
+        $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: java.util.List mEditorChanges> = $r8;
+
+        $r8 = new java.util.ArrayList;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>()>();
+
+        $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: java.util.List mPersistentEventBindings> = $r8;
+
+        $r8 = new java.util.ArrayList;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>()>();
+
+        $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: java.util.List mEditorEventBindings> = $r8;
+
+        $r7 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.mpmetrics.MPConfig mConfig>;
+
+        $r9 = virtualinvoke $r7.<com.mixpanel.android.mpmetrics.MPConfig: java.lang.String getResourcePackageName()>();
+
+        $r10 = $r9;
+
+        if $r9 != null goto label1;
+
+        $r10 = virtualinvoke $r1.<android.content.Context: java.lang.String getPackageName()>();
+
+     label1:
+        $r5 = new com.mixpanel.android.mpmetrics.ResourceReader$Ids;
+
+        specialinvoke $r5.<com.mixpanel.android.mpmetrics.ResourceReader$Ids: void <init>(java.lang.String,android.content.Context)>($r10, $r1);
+
+        $r11 = new com.mixpanel.android.viewcrawler.EditProtocol;
+
+        specialinvoke $r11.<com.mixpanel.android.viewcrawler.EditProtocol: void <init>(com.mixpanel.android.mpmetrics.ResourceIds)>($r5);
+
+        $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.viewcrawler.EditProtocol mProtocol> = $r11;
+
+        $r12 = new com.mixpanel.android.viewcrawler.EditState;
+
+        specialinvoke $r12.<com.mixpanel.android.viewcrawler.EditState: void <init>()>();
+
+        $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.viewcrawler.EditState mEditState> = $r12;
+
+        $r13 = new com.mixpanel.android.mpmetrics.Tweaks;
+
+        specialinvoke $r13.<com.mixpanel.android.mpmetrics.Tweaks: void <init>()>();
+
+        $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.mpmetrics.Tweaks mTweaks> = $r13;
+
+        $r14 = virtualinvoke $r3.<com.mixpanel.android.mpmetrics.MixpanelAPI: java.util.Map getDeviceInfo()>();
+
+        $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: java.util.Map mDeviceInfo> = $r14;
+
+        $r15 = virtualinvoke $r1.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        $r16 = (android.app.Application) $r15;
+
+        $r17 = new com.mixpanel.android.viewcrawler.ViewCrawler$LifecycleCallbacks;
+
+        specialinvoke $r17.<com.mixpanel.android.viewcrawler.ViewCrawler$LifecycleCallbacks: void <init>(com.mixpanel.android.viewcrawler.ViewCrawler)>($r0);
+
+        virtualinvoke $r16.<android.app.Application: void registerActivityLifecycleCallbacks(android.app.Application$ActivityLifecycleCallbacks)>($r17);
+
+        $r6 = new android.os.HandlerThread;
+
+        $r18 = class "Lcom/mixpanel/android/viewcrawler/ViewCrawler;";
+
+        $r9 = virtualinvoke $r18.<java.lang.Class: java.lang.String getCanonicalName()>();
+
+        specialinvoke $r6.<android.os.HandlerThread: void <init>(java.lang.String)>($r9);
+
+        varReplacer666 = 10;
+
+        virtualinvoke $r6.<android.os.HandlerThread: void setPriority(int)>(varReplacer666);
+
+        virtualinvoke $r6.<android.os.HandlerThread: void start()>();
+
+        $r19 = new com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler;
+
+        $r20 = virtualinvoke $r6.<android.os.HandlerThread: android.os.Looper getLooper()>();
+
+        specialinvoke $r19.<com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler: void <init>(com.mixpanel.android.viewcrawler.ViewCrawler,android.content.Context,java.lang.String,android.os.Looper)>($r0, $r1, $r2, $r20);
+
+        $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler mMessageThreadHandler> = $r19;
+
+        $r19 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler mMessageThreadHandler>;
+
+        $r21 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler mMessageThreadHandler>;
+
+        varReplacer671 = 0;
+
+        $r22 = virtualinvoke $r21.<com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler: android.os.Message obtainMessage(int)>(varReplacer671);
+
+        virtualinvoke $r19.<com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler: boolean sendMessage(android.os.Message)>($r22);
+
+        $r23 = new com.mixpanel.android.viewcrawler.DynamicEventTracker;
+
+        $r19 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler mMessageThreadHandler>;
+
+        specialinvoke $r23.<com.mixpanel.android.viewcrawler.DynamicEventTracker: void <init>(com.mixpanel.android.mpmetrics.MixpanelAPI,android.os.Handler)>($r3, $r19);
+
+        $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.viewcrawler.DynamicEventTracker mTracker> = $r23;
+
+     label2:
+        varReplacer670 = "TLS";
+
+        $r24 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer670);
+
+        varReplacer667 = null;
+
+        varReplacer668 = null;
+
+        varReplacer669 = null;
+
+        virtualinvoke $r24.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer667, varReplacer667, varReplacer667);
+
+        $r25 = virtualinvoke $r24.<javax.net.ssl.SSLContext: javax.net.ssl.SSLSocketFactory getSocketFactory()>();
+
+     label3:
+        $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: javax.net.ssl.SSLSocketFactory mSSLSocketFactory> = $r25;
+
+        return;
+
+     label4:
+        $r4 := @caughtexception;
+
+        varReplacer664 = "MixpanelAPI.ViewCrawler";
+
+        varReplacer665 = "System has no SSL support. Built-in events editor will not be available";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer664, varReplacer665, $r4);
+
+        $r25 = null;
+
+        goto label3;
+
+        catch java.security.GeneralSecurityException from label2 to label3 with label4;
+    }
+
+    static com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler access$000(com.mixpanel.android.viewcrawler.ViewCrawler)
+    {
+        com.mixpanel.android.viewcrawler.ViewCrawler $r0;
+        com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler r1;
+
+        $r0 := @parameter0: com.mixpanel.android.viewcrawler.ViewCrawler;
+
+        r1 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler mMessageThreadHandler>;
+
+        return r1;
+    }
+
+    static com.mixpanel.android.viewcrawler.EditState access$100(com.mixpanel.android.viewcrawler.ViewCrawler)
+    {
+        com.mixpanel.android.viewcrawler.ViewCrawler $r0;
+        com.mixpanel.android.viewcrawler.EditState r1;
+
+        $r0 := @parameter0: com.mixpanel.android.viewcrawler.ViewCrawler;
+
+        r1 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.viewcrawler.EditState mEditState>;
+
+        return r1;
+    }
+
+    static java.util.List access$1000(com.mixpanel.android.viewcrawler.ViewCrawler)
+    {
+        com.mixpanel.android.viewcrawler.ViewCrawler $r0;
+        java.util.List r1;
+
+        $r0 := @parameter0: com.mixpanel.android.viewcrawler.ViewCrawler;
+
+        r1 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: java.util.List mEditorChanges>;
+
+        return r1;
+    }
+
+    static java.util.List access$1100(com.mixpanel.android.viewcrawler.ViewCrawler)
+    {
+        com.mixpanel.android.viewcrawler.ViewCrawler $r0;
+        java.util.List r1;
+
+        $r0 := @parameter0: com.mixpanel.android.viewcrawler.ViewCrawler;
+
+        r1 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: java.util.List mEditorEventBindings>;
+
+        return r1;
+    }
+
+    static com.mixpanel.android.viewcrawler.DynamicEventTracker access$1200(com.mixpanel.android.viewcrawler.ViewCrawler)
+    {
+        com.mixpanel.android.viewcrawler.ViewCrawler $r0;
+        com.mixpanel.android.viewcrawler.DynamicEventTracker r1;
+
+        $r0 := @parameter0: com.mixpanel.android.viewcrawler.ViewCrawler;
+
+        r1 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.viewcrawler.DynamicEventTracker mTracker>;
+
+        return r1;
+    }
+
+    static com.mixpanel.android.mpmetrics.MPConfig access$200(com.mixpanel.android.viewcrawler.ViewCrawler)
+    {
+        com.mixpanel.android.viewcrawler.ViewCrawler $r0;
+        com.mixpanel.android.mpmetrics.MPConfig r1;
+
+        $r0 := @parameter0: com.mixpanel.android.viewcrawler.ViewCrawler;
+
+        r1 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.mpmetrics.MPConfig mConfig>;
+
+        return r1;
+    }
+
+    static java.util.List access$300(com.mixpanel.android.viewcrawler.ViewCrawler)
+    {
+        com.mixpanel.android.viewcrawler.ViewCrawler $r0;
+        java.util.List r1;
+
+        $r0 := @parameter0: com.mixpanel.android.viewcrawler.ViewCrawler;
+
+        r1 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: java.util.List mPersistentChanges>;
+
+        return r1;
+    }
+
+    static java.util.List access$400(com.mixpanel.android.viewcrawler.ViewCrawler)
+    {
+        com.mixpanel.android.viewcrawler.ViewCrawler $r0;
+        java.util.List r1;
+
+        $r0 := @parameter0: com.mixpanel.android.viewcrawler.ViewCrawler;
+
+        r1 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: java.util.List mPersistentEventBindings>;
+
+        return r1;
+    }
+
+    static javax.net.ssl.SSLSocketFactory access$500(com.mixpanel.android.viewcrawler.ViewCrawler)
+    {
+        com.mixpanel.android.viewcrawler.ViewCrawler $r0;
+        javax.net.ssl.SSLSocketFactory r1;
+
+        $r0 := @parameter0: com.mixpanel.android.viewcrawler.ViewCrawler;
+
+        r1 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: javax.net.ssl.SSLSocketFactory mSSLSocketFactory>;
+
+        return r1;
+    }
+
+    static com.mixpanel.android.mpmetrics.Tweaks access$700(com.mixpanel.android.viewcrawler.ViewCrawler)
+    {
+        com.mixpanel.android.viewcrawler.ViewCrawler $r0;
+        com.mixpanel.android.mpmetrics.Tweaks r1;
+
+        $r0 := @parameter0: com.mixpanel.android.viewcrawler.ViewCrawler;
+
+        r1 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.mpmetrics.Tweaks mTweaks>;
+
+        return r1;
+    }
+
+    static java.util.Map access$800(com.mixpanel.android.viewcrawler.ViewCrawler)
+    {
+        com.mixpanel.android.viewcrawler.ViewCrawler $r0;
+        java.util.Map r1;
+
+        $r0 := @parameter0: com.mixpanel.android.viewcrawler.ViewCrawler;
+
+        r1 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: java.util.Map mDeviceInfo>;
+
+        return r1;
+    }
+
+    static com.mixpanel.android.viewcrawler.EditProtocol access$900(com.mixpanel.android.viewcrawler.ViewCrawler)
+    {
+        com.mixpanel.android.viewcrawler.ViewCrawler $r0;
+        com.mixpanel.android.viewcrawler.EditProtocol r1;
+
+        $r0 := @parameter0: com.mixpanel.android.viewcrawler.ViewCrawler;
+
+        r1 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.viewcrawler.EditProtocol mProtocol>;
+
+        return r1;
+    }
+
+    public com.mixpanel.android.mpmetrics.Tweaks getTweaks()
+    {
+        com.mixpanel.android.viewcrawler.ViewCrawler $r0;
+        com.mixpanel.android.mpmetrics.Tweaks r1;
+
+        $r0 := @this: com.mixpanel.android.viewcrawler.ViewCrawler;
+
+        r1 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.mpmetrics.Tweaks mTweaks>;
+
+        return r1;
+    }
+
+    public void reportTrack(java.lang.String)
+    {
+        com.mixpanel.android.viewcrawler.ViewCrawler $r0;
+        java.lang.String $r1;
+        android.os.Message $r2;
+        com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler $r3;
+        int varReplacer1204;
+
+        nop;
+
+        $r0 := @this: com.mixpanel.android.viewcrawler.ViewCrawler;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r3 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler mMessageThreadHandler>;
+
+        $r2 = virtualinvoke $r3.<com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler: android.os.Message obtainMessage()>();
+
+        varReplacer1204 = 9;
+
+        $r2.<android.os.Message: int what> = varReplacer1204;
+
+        $r2.<android.os.Message: java.lang.Object obj> = $r1;
+
+        $r3 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler mMessageThreadHandler>;
+
+        virtualinvoke $r3.<com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler: boolean sendMessage(android.os.Message)>($r2);
+
+        return;
+    }
+
+    public void setEventBindings(org.json.JSONArray)
+    {
+        com.mixpanel.android.viewcrawler.ViewCrawler $r0;
+        org.json.JSONArray $r1;
+        android.os.Message $r2;
+        com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler $r3;
+
+        $r0 := @this: com.mixpanel.android.viewcrawler.ViewCrawler;
+
+        $r1 := @parameter0: org.json.JSONArray;
+
+        $r3 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler mMessageThreadHandler>;
+
+        $r2 = virtualinvoke $r3.<com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler: android.os.Message obtainMessage(int)>(6);
+
+        $r2.<android.os.Message: java.lang.Object obj> = $r1;
+
+        $r3 = $r0.<com.mixpanel.android.viewcrawler.ViewCrawler: com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler mMessageThreadHandler>;
+
+        virtualinvoke $r3.<com.mixpanel.android.viewcrawler.ViewCrawler$ViewCrawlerHandler: boolean sendMessage(android.os.Message)>($r2);
+
+        return;
+    }
+}

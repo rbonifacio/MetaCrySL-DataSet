@@ -1,0 +1,86 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.edujoy.Kids.Math.Games-080DEEA631BD35ECA14E450DBFD872E818B2E06FB19011875F551430FBD0C4B7.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1097)
+		Method: <com.adcolony.sdk.au: boolean a(java.lang.String,java.io.File)>
+		SHA-256: ab221b01ed720ca4371e84afbeb484114cd9b3c37c99d516db27e607fed129ec
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.adcolony.sdk.au: boolean a(java.lang.String,java.io.File)>
+		SHA-256: d6036aca31367e5de9645cd202b969f7a1228535bcb94f0708f483bbb991fa83
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.adcolony.sdk.ba: java.lang.String a(java.lang.String)>
+		SHA-256: 375abe268650a8d55eb22df8c75fdf2f65b54a2c7e43a7671b56bef36f8a89ff
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1182)
+		Method: <com.adcolony.sdk.ba: java.lang.String a(java.lang.String)>
+		SHA-256: 427d0de89f488cb5097759521d32e170bb7c97c4dfdfa61e9929bc983fe6fb75
+		Secure: true
+
+Findings in Java Class: com.adcolony.sdk.au
+
+	 in Method: boolean a(java.lang.String,java.io.File)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #ab221b01ed720ca4371e84afbeb484114cd9b3c37c99d516db27e607fed129ec)
+			First parameter (with value "SHA1") should be any of {SHA-224, SHA-256, SHA-1, SHA-384, SHA-512, MD5}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1097)
+
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #ab221b01ed720ca4371e84afbeb484114cd9b3c37c99d516db27e607fed129ec)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte),java.security.MessageDigest: void update(byte[])
+			at statement: $r4 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	TypestateError: 1
+	ConstraintError: 1
+=====================================================================

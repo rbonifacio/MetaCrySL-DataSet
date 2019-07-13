@@ -1,0 +1,95 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer292)
+		Method: <de.defim.apk.c.a.c: java.lang.String a(byte[])>
+		SHA-256: 340a86c0e91ae97a4744c9ac48c9a1a018c3696c1476955e0595b1451a7a6b2e
+		Secure: true
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <de.defim.apk.c.a.c: java.lang.String a(byte[])>
+		SHA-256: 85075d05eb7693deb90f4991b9c7d9d0798b6b3872d213e4dd07d55a4a51f8b6
+		Secure: true
+	Object:
+		Variable: $r8
+		Type: byte[]
+		Statement: $r8 = virtualinvoke $r5.<java.security.MessageDigest: byte[] digest(byte[])>($r8)
+		Method: <de.defim.apk.c.a.c: java.lang.String b(android.content.Context,java.lang.String)>
+		SHA-256: 65ec4630a1b2e40893e63a4d8377047777de2e4198ddbc9481e9a67234112ef5
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: java.security.MessageDigest
+		Statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer639)
+		Method: <de.defim.apk.c.a.c: java.lang.String b(android.content.Context,java.lang.String)>
+		SHA-256: 6e039332a4605e3cf94ff7fef18ce09b389dc3cf2d3c46075631f1e30a458e13
+		Secure: false
+	Object:
+		Variable: $r10
+		Type: java.security.Signature
+		Statement: $r10 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer235)
+		Method: <de.defim.apk.b.a.e: boolean a(java.lang.String,java.lang.String,java.lang.String)>
+		SHA-256: b1442bd57a76e68eef0e67c06a552996cab59b44c3fa924e7284065eb6676c19
+		Secure: false
+
+Findings in Java Class: de.defim.apk.b.a.e
+
+	 in Method: boolean a(java.lang.String,java.lang.String,java.lang.String)
+		IncompleteOperationError violating CrySL rule for java.security.Signature (on Object #b1442bd57a76e68eef0e67c06a552996cab59b44c3fa924e7284065eb6676c19)
+			Operation on object of type java.security.Signature object not completed. Expected call to update, verify
+			at statement: $r16 = virtualinvoke $r14.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>($r10, $r15)
+
+
+Findings in Java Class: de.defim.apk.c.a.c
+
+	 in Method: java.lang.String b(android.content.Context,java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #6e039332a4605e3cf94ff7fef18ce09b389dc3cf2d3c46075631f1e30a458e13)
+			First parameter (with value "SHA1") should be any of {SHA-224, SHA-256, SHA-1, SHA-384, SHA-512, MD5}
+			at statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer639)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 5
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 1
+	IncompleteOperationError: 1
+=====================================================================

@@ -1,0 +1,102 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.mopub.common.util.Utils: java.lang.String sha1(java.lang.String)>
+		SHA-256: b1475ecb277cf44c18e504f1be84657ccb3a6b602605d56eb56e04862a5c2552
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer9503)
+		Method: <com.placed.client.android.bh: java.lang.String a(java.lang.String)>
+		SHA-256: b5b06a721b540257cde401ce9a9d8c1465e72d792cd80dee201a837734acd27b
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
+		Method: <com.placed.client.android.bh: java.lang.String a(java.lang.String)>
+		SHA-256: a4db0d97fee199861f2ac076b26ae6af6b5094638cded4f23f62d50dd8449c
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2720)
+		Method: <com.mopub.common.util.Utils: java.lang.String sha1(java.lang.String)>
+		SHA-256: 52be940d7a623d3947f9e26f106de21b3b43efbc46271bdc30f47ee83ca5b781
+		Secure: true
+	Object:
+		Variable: $r8
+		Type: javax.crypto.Cipher
+		Statement: $r8 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7765)
+		Method: <com.amazon.device.ads.DebugProperties: byte[] decrypt(byte[])>
+		SHA-256: 2d97a0d560cf12754defe1eab231f54e3b559d48d055bdaa7f3b348b3cde523f
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r8.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1)
+		Method: <com.amazon.device.ads.DebugProperties: byte[] decrypt(byte[])>
+		SHA-256: 78aa0526a800bf71c5e314ba5fcd40400c911438f10b199aac7ad9c52d88a29b
+		Secure: false
+
+Findings in Java Class: com.amazon.device.ads.DebugProperties
+
+	 in Method: byte[] decrypt(byte[])
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #2d97a0d560cf12754defe1eab231f54e3b559d48d055bdaa7f3b348b3cde523f)
+			First parameter (with value "RSA") should be any of {OAEPPadding, NoPadding, PKCS1Padding}
+			at statement: $r8 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7765)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer7763, $r7)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #2d97a0d560cf12754defe1eab231f54e3b559d48d055bdaa7f3b348b3cde523f)
+			First parameter (with value "RSA") should be any of {OAEPPadding, NoPadding, PKCS1Padding}
+			at statement: $r8 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7765)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
+	RequiredPredicateError: 1
+=====================================================================

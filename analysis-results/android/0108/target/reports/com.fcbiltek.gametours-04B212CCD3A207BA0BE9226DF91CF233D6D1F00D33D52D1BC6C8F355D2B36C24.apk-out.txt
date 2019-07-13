@@ -1,0 +1,105 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.fcbiltek.gametours-04B212CCD3A207BA0BE9226DF91CF233D6D1F00D33D52D1BC6C8F355D2B36C24.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r8
+		Type: byte[]
+		Statement: $r8 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest(byte[])>($r8)
+		Method: <com.google.example.games.basegameutils.GameHelperUtils: java.lang.String getSHA1CertFingerprint(android.content.Context)>
+		SHA-256: b95cd9a42f4be3abf3fd2df0455645f6074fd03b611ae8a509eee3fa3cf10597
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1215)
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzaT(java.lang.String)>
+		SHA-256: 256ca57077acaaa81d0fe59d68d23e57dbc616315603bb469a24f7d28d7527f7
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4)
+		Method: <com.fcbiltek.gametours.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 50d20e0d863bf9aaaccbe6d5f71c736bbbd4ab16c1ca9b261b70d21b96f5b665
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.Signature
+		Statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer1934)
+		Method: <com.fcbiltek.gametours.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 8354ee6e1459f8c53a893fd4aeaca8aa332a00386c77b5e0c804a2c7107e99ec
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzaT(java.lang.String)>
+		SHA-256: 36ba1c4d4a21b43e8434065008241024dfe4622b0bb42c4c93bbc9c8a26a18ab
+		Secure: true
+	Object:
+		Variable: $r6
+		Type: java.security.MessageDigest
+		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1768)
+		Method: <com.google.example.games.basegameutils.GameHelperUtils: java.lang.String getSHA1CertFingerprint(android.content.Context)>
+		SHA-256: 9c1e08cc71554f2c5da709b394125cf00ceb52157598c371040c977a7da52ab7
+		Secure: false
+
+Findings in Java Class: com.google.example.games.basegameutils.GameHelperUtils
+
+	 in Method: java.lang.String getSHA1CertFingerprint(android.content.Context)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #9c1e08cc71554f2c5da709b394125cf00ceb52157598c371040c977a7da52ab7)
+			First parameter (with value "SHA1") should be any of {SHA-224, SHA-256, SHA-1, SHA-384, SHA-512, MD5}
+			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1768)
+
+
+Findings in Java Class: com.fcbiltek.gametours.util.Security
+
+	 in Method: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 1
+	ConstraintError: 1
+=====================================================================

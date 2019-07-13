@@ -1,0 +1,582 @@
+public class org.mozilla.gecko.browserid.DSACryptoImplementation extends java.lang.Object
+{
+    private static final java.lang.String LOG_TAG;
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+        java.lang.Class $r1;
+
+        nop;
+
+        $r1 = class "Lorg/mozilla/gecko/browserid/DSACryptoImplementation;";
+
+        $r0 = virtualinvoke $r1.<java.lang.Class: java.lang.String getSimpleName()>();
+
+        <org.mozilla.gecko.browserid.DSACryptoImplementation: java.lang.String LOG_TAG> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        org.mozilla.gecko.browserid.DSACryptoImplementation $r0;
+
+        $r0 := @this: org.mozilla.gecko.browserid.DSACryptoImplementation;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static java.lang.String access$000()
+    {
+        java.lang.String r0;
+
+        r0 = <org.mozilla.gecko.browserid.DSACryptoImplementation: java.lang.String LOG_TAG>;
+
+        return r0;
+    }
+
+    private static org.mozilla.gecko.browserid.SigningPrivateKey createPrivateKey(org.mozilla.gecko.sync.ExtendedJSONObject) throws java.security.spec.InvalidKeySpecException, java.security.NoSuchAlgorithmException
+    {
+        org.mozilla.gecko.sync.ExtendedJSONObject $r0;
+        java.lang.String $r1, $r2, varReplacer13051, varReplacer13052, varReplacer13053, varReplacer13054, varReplacer13057, varReplacer13058, varReplacer13059, varReplacer13060, varReplacer13061, varReplacer13062, varReplacer13064, varReplacer13065;
+        boolean $z0;
+        java.security.spec.InvalidKeySpecException $r3;
+        java.lang.StringBuilder $r4;
+        java.math.BigInteger $r5, $r6, $r7, $r8;
+        java.lang.IllegalArgumentException $r9;
+        java.lang.NullPointerException $r10;
+        java.lang.Throwable $r11;
+        java.security.spec.DSAPrivateKeySpec $r12;
+        java.security.KeyFactory $r13;
+        java.security.PrivateKey $r14;
+        java.security.interfaces.DSAPrivateKey $r15;
+        org.mozilla.gecko.browserid.DSACryptoImplementation$DSASigningPrivateKey $r16;
+        int varReplacer13055, varReplacer13056, varReplacer13063, varReplacer13066;
+
+        nop;
+
+        $r0 := @parameter0: org.mozilla.gecko.sync.ExtendedJSONObject;
+
+        varReplacer13052 = "algorithm";
+
+        $r1 = virtualinvoke $r0.<org.mozilla.gecko.sync.ExtendedJSONObject: java.lang.String getString(java.lang.String)>(varReplacer13052);
+
+        $r2 = "DS";
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 != 0 goto label01;
+
+        $r3 = new java.security.spec.InvalidKeySpecException;
+
+        $r4 = new java.lang.StringBuilder;
+
+        varReplacer13065 = "algorithm must equal DS, was ";
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer13065);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.security.spec.InvalidKeySpecException: void <init>(java.lang.String)>($r1);
+
+        throw $r3;
+
+     label01:
+        $r5 = new java.math.BigInteger;
+
+     label02:
+        varReplacer13054 = "x";
+
+        $r1 = virtualinvoke $r0.<org.mozilla.gecko.sync.ExtendedJSONObject: java.lang.String getString(java.lang.String)>(varReplacer13054);
+
+        varReplacer13056 = 16;
+
+        specialinvoke $r5.<java.math.BigInteger: void <init>(java.lang.String,int)>($r1, varReplacer13056);
+
+     label03:
+        $r6 = new java.math.BigInteger;
+
+     label04:
+        varReplacer13053 = "p";
+
+        $r1 = virtualinvoke $r0.<org.mozilla.gecko.sync.ExtendedJSONObject: java.lang.String getString(java.lang.String)>(varReplacer13053);
+
+        varReplacer13066 = 16;
+
+        specialinvoke $r6.<java.math.BigInteger: void <init>(java.lang.String,int)>($r1, varReplacer13066);
+
+     label05:
+        $r7 = new java.math.BigInteger;
+
+     label06:
+        varReplacer13051 = "q";
+
+        $r1 = virtualinvoke $r0.<org.mozilla.gecko.sync.ExtendedJSONObject: java.lang.String getString(java.lang.String)>(varReplacer13051);
+
+        varReplacer13055 = 16;
+
+        specialinvoke $r7.<java.math.BigInteger: void <init>(java.lang.String,int)>($r1, varReplacer13055);
+
+     label07:
+        $r8 = new java.math.BigInteger;
+
+     label08:
+        varReplacer13058 = "g";
+
+        $r1 = virtualinvoke $r0.<org.mozilla.gecko.sync.ExtendedJSONObject: java.lang.String getString(java.lang.String)>(varReplacer13058);
+
+        varReplacer13063 = 16;
+
+        specialinvoke $r8.<java.math.BigInteger: void <init>(java.lang.String,int)>($r1, varReplacer13063);
+
+     label09:
+        if $r5 != null goto label13;
+
+        $r9 = new java.lang.IllegalArgumentException;
+
+     label10:
+        varReplacer13062 = "x must not be null";
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer13062);
+
+        throw $r9;
+
+     label11:
+        $r10 := @caughtexception;
+
+     label12:
+        $r3 = new java.security.spec.InvalidKeySpecException;
+
+        varReplacer13057 = "x, p, q, and g must be integers encoded as strings, base 16";
+
+        specialinvoke $r3.<java.security.spec.InvalidKeySpecException: void <init>(java.lang.String)>(varReplacer13057);
+
+        throw $r3;
+
+     label13:
+        if $r6 != null goto label16;
+
+        $r9 = new java.lang.IllegalArgumentException;
+
+     label14:
+        varReplacer13059 = "p must not be null";
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer13059);
+
+        throw $r9;
+
+     label15:
+        $r11 := @caughtexception;
+
+        goto label12;
+
+     label16:
+        if $r7 != null goto label18;
+
+        $r9 = new java.lang.IllegalArgumentException;
+
+     label17:
+        varReplacer13064 = "q must not be null";
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer13064);
+
+        throw $r9;
+
+     label18:
+        if $r8 != null goto label20;
+
+        $r9 = new java.lang.IllegalArgumentException;
+
+     label19:
+        varReplacer13060 = "g must not be null";
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer13060);
+
+        throw $r9;
+
+     label20:
+        $r12 = new java.security.spec.DSAPrivateKeySpec;
+
+     label21:
+        specialinvoke $r12.<java.security.spec.DSAPrivateKeySpec: void <init>(java.math.BigInteger,java.math.BigInteger,java.math.BigInteger,java.math.BigInteger)>($r5, $r6, $r7, $r8);
+
+        varReplacer13061 = "DSA";
+
+        $r13 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer13061);
+
+        $r14 = virtualinvoke $r13.<java.security.KeyFactory: java.security.PrivateKey generatePrivate(java.security.spec.KeySpec)>($r12);
+
+     label22:
+        $r15 = (java.security.interfaces.DSAPrivateKey) $r14;
+
+        $r16 = new org.mozilla.gecko.browserid.DSACryptoImplementation$DSASigningPrivateKey;
+
+     label23:
+        specialinvoke $r16.<org.mozilla.gecko.browserid.DSACryptoImplementation$DSASigningPrivateKey: void <init>(java.security.interfaces.DSAPrivateKey)>($r15);
+
+     label24:
+        return $r16;
+
+        catch java.lang.NullPointerException from label02 to label03 with label11;
+        catch java.lang.NullPointerException from label04 to label05 with label11;
+        catch java.lang.NullPointerException from label06 to label07 with label11;
+        catch java.lang.NullPointerException from label08 to label09 with label11;
+        catch java.lang.NullPointerException from label10 to label11 with label11;
+        catch java.lang.NumberFormatException from label02 to label03 with label15;
+        catch java.lang.NumberFormatException from label04 to label05 with label15;
+        catch java.lang.NumberFormatException from label06 to label07 with label15;
+        catch java.lang.NumberFormatException from label08 to label09 with label15;
+        catch java.lang.NumberFormatException from label10 to label11 with label15;
+        catch java.lang.NullPointerException from label14 to label15 with label11;
+        catch java.lang.NullPointerException from label17 to label18 with label11;
+        catch java.lang.NullPointerException from label19 to label20 with label11;
+        catch java.lang.NullPointerException from label21 to label22 with label11;
+        catch java.lang.NullPointerException from label23 to label24 with label11;
+        catch java.lang.NumberFormatException from label14 to label15 with label15;
+        catch java.lang.NumberFormatException from label17 to label18 with label15;
+        catch java.lang.NumberFormatException from label19 to label20 with label15;
+        catch java.lang.NumberFormatException from label21 to label22 with label15;
+        catch java.lang.NumberFormatException from label23 to label24 with label15;
+    }
+
+    private static org.mozilla.gecko.browserid.VerifyingPublicKey createPublicKey(org.mozilla.gecko.sync.ExtendedJSONObject) throws java.security.spec.InvalidKeySpecException, java.security.NoSuchAlgorithmException
+    {
+        org.mozilla.gecko.sync.ExtendedJSONObject $r0;
+        java.lang.String $r1, $r2, varReplacer13035, varReplacer13037, varReplacer13039, varReplacer13040, varReplacer13041, varReplacer13042, varReplacer13043, varReplacer13044, varReplacer13045, varReplacer13047, varReplacer13048, varReplacer13050;
+        boolean $z0;
+        java.security.spec.InvalidKeySpecException $r3;
+        java.lang.StringBuilder $r4;
+        java.math.BigInteger $r5, $r6, $r7, $r8;
+        java.lang.IllegalArgumentException $r9;
+        java.lang.NullPointerException $r10;
+        java.lang.Throwable $r11;
+        java.security.spec.DSAPublicKeySpec $r12;
+        java.security.KeyFactory $r13;
+        java.security.PublicKey $r14;
+        java.security.interfaces.DSAPublicKey $r15;
+        org.mozilla.gecko.browserid.DSACryptoImplementation$DSAVerifyingPublicKey $r16;
+        int varReplacer13036, varReplacer13038, varReplacer13046, varReplacer13049;
+
+        nop;
+
+        $r0 := @parameter0: org.mozilla.gecko.sync.ExtendedJSONObject;
+
+        varReplacer13043 = "algorithm";
+
+        $r1 = virtualinvoke $r0.<org.mozilla.gecko.sync.ExtendedJSONObject: java.lang.String getString(java.lang.String)>(varReplacer13043);
+
+        $r2 = "DS";
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 != 0 goto label01;
+
+        $r3 = new java.security.spec.InvalidKeySpecException;
+
+        $r4 = new java.lang.StringBuilder;
+
+        varReplacer13050 = "algorithm must equal DS, was ";
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer13050);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.security.spec.InvalidKeySpecException: void <init>(java.lang.String)>($r1);
+
+        throw $r3;
+
+     label01:
+        $r5 = new java.math.BigInteger;
+
+     label02:
+        varReplacer13044 = "y";
+
+        $r1 = virtualinvoke $r0.<org.mozilla.gecko.sync.ExtendedJSONObject: java.lang.String getString(java.lang.String)>(varReplacer13044);
+
+        varReplacer13046 = 16;
+
+        specialinvoke $r5.<java.math.BigInteger: void <init>(java.lang.String,int)>($r1, varReplacer13046);
+
+     label03:
+        $r6 = new java.math.BigInteger;
+
+     label04:
+        varReplacer13035 = "p";
+
+        $r1 = virtualinvoke $r0.<org.mozilla.gecko.sync.ExtendedJSONObject: java.lang.String getString(java.lang.String)>(varReplacer13035);
+
+        varReplacer13049 = 16;
+
+        specialinvoke $r6.<java.math.BigInteger: void <init>(java.lang.String,int)>($r1, varReplacer13049);
+
+     label05:
+        $r7 = new java.math.BigInteger;
+
+     label06:
+        varReplacer13048 = "q";
+
+        $r1 = virtualinvoke $r0.<org.mozilla.gecko.sync.ExtendedJSONObject: java.lang.String getString(java.lang.String)>(varReplacer13048);
+
+        varReplacer13038 = 16;
+
+        specialinvoke $r7.<java.math.BigInteger: void <init>(java.lang.String,int)>($r1, varReplacer13038);
+
+     label07:
+        $r8 = new java.math.BigInteger;
+
+     label08:
+        varReplacer13039 = "g";
+
+        $r1 = virtualinvoke $r0.<org.mozilla.gecko.sync.ExtendedJSONObject: java.lang.String getString(java.lang.String)>(varReplacer13039);
+
+        varReplacer13036 = 16;
+
+        specialinvoke $r8.<java.math.BigInteger: void <init>(java.lang.String,int)>($r1, varReplacer13036);
+
+     label09:
+        if $r5 != null goto label13;
+
+        $r9 = new java.lang.IllegalArgumentException;
+
+     label10:
+        varReplacer13047 = "n must not be null";
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer13047);
+
+        throw $r9;
+
+     label11:
+        $r10 := @caughtexception;
+
+     label12:
+        $r3 = new java.security.spec.InvalidKeySpecException;
+
+        varReplacer13045 = "y, p, q, and g must be integers encoded as strings, base 16";
+
+        specialinvoke $r3.<java.security.spec.InvalidKeySpecException: void <init>(java.lang.String)>(varReplacer13045);
+
+        throw $r3;
+
+     label13:
+        if $r6 != null goto label16;
+
+        $r9 = new java.lang.IllegalArgumentException;
+
+     label14:
+        varReplacer13037 = "p must not be null";
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer13037);
+
+        throw $r9;
+
+     label15:
+        $r11 := @caughtexception;
+
+        goto label12;
+
+     label16:
+        if $r7 != null goto label18;
+
+        $r9 = new java.lang.IllegalArgumentException;
+
+     label17:
+        varReplacer13042 = "q must not be null";
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer13042);
+
+        throw $r9;
+
+     label18:
+        if $r8 != null goto label20;
+
+        $r9 = new java.lang.IllegalArgumentException;
+
+     label19:
+        varReplacer13040 = "g must not be null";
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer13040);
+
+        throw $r9;
+
+     label20:
+        $r12 = new java.security.spec.DSAPublicKeySpec;
+
+     label21:
+        specialinvoke $r12.<java.security.spec.DSAPublicKeySpec: void <init>(java.math.BigInteger,java.math.BigInteger,java.math.BigInteger,java.math.BigInteger)>($r5, $r6, $r7, $r8);
+
+        varReplacer13041 = "DSA";
+
+        $r13 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer13041);
+
+        $r14 = virtualinvoke $r13.<java.security.KeyFactory: java.security.PublicKey generatePublic(java.security.spec.KeySpec)>($r12);
+
+     label22:
+        $r15 = (java.security.interfaces.DSAPublicKey) $r14;
+
+        $r16 = new org.mozilla.gecko.browserid.DSACryptoImplementation$DSAVerifyingPublicKey;
+
+     label23:
+        specialinvoke $r16.<org.mozilla.gecko.browserid.DSACryptoImplementation$DSAVerifyingPublicKey: void <init>(java.security.interfaces.DSAPublicKey)>($r15);
+
+     label24:
+        return $r16;
+
+        catch java.lang.NullPointerException from label02 to label03 with label11;
+        catch java.lang.NullPointerException from label04 to label05 with label11;
+        catch java.lang.NullPointerException from label06 to label07 with label11;
+        catch java.lang.NullPointerException from label08 to label09 with label11;
+        catch java.lang.NullPointerException from label10 to label11 with label11;
+        catch java.lang.NumberFormatException from label02 to label03 with label15;
+        catch java.lang.NumberFormatException from label04 to label05 with label15;
+        catch java.lang.NumberFormatException from label06 to label07 with label15;
+        catch java.lang.NumberFormatException from label08 to label09 with label15;
+        catch java.lang.NumberFormatException from label10 to label11 with label15;
+        catch java.lang.NullPointerException from label14 to label15 with label11;
+        catch java.lang.NullPointerException from label17 to label18 with label11;
+        catch java.lang.NullPointerException from label19 to label20 with label11;
+        catch java.lang.NullPointerException from label21 to label22 with label11;
+        catch java.lang.NullPointerException from label23 to label24 with label11;
+        catch java.lang.NumberFormatException from label14 to label15 with label15;
+        catch java.lang.NumberFormatException from label17 to label18 with label15;
+        catch java.lang.NumberFormatException from label19 to label20 with label15;
+        catch java.lang.NumberFormatException from label21 to label22 with label15;
+        catch java.lang.NumberFormatException from label23 to label24 with label15;
+    }
+
+    public static org.mozilla.gecko.browserid.BrowserIDKeyPair fromJSONObject(org.mozilla.gecko.sync.ExtendedJSONObject) throws java.security.spec.InvalidKeySpecException, java.security.NoSuchAlgorithmException
+    {
+        org.mozilla.gecko.sync.ExtendedJSONObject $r0, $r2;
+        org.mozilla.gecko.browserid.BrowserIDKeyPair $r1;
+        java.security.spec.InvalidKeySpecException $r3;
+        org.mozilla.gecko.sync.NonObjectJSONException $r4;
+        org.mozilla.gecko.browserid.SigningPrivateKey $r5;
+        org.mozilla.gecko.browserid.VerifyingPublicKey $r6;
+        java.lang.String varReplacer13010, varReplacer13011, varReplacer13012, varReplacer13013, varReplacer13014;
+
+        nop;
+
+        $r0 := @parameter0: org.mozilla.gecko.sync.ExtendedJSONObject;
+
+     label01:
+        varReplacer13014 = "privateKey";
+
+        $r2 = virtualinvoke $r0.<org.mozilla.gecko.sync.ExtendedJSONObject: org.mozilla.gecko.sync.ExtendedJSONObject getObject(java.lang.String)>(varReplacer13014);
+
+        varReplacer13013 = "publicKey";
+
+        $r0 = virtualinvoke $r0.<org.mozilla.gecko.sync.ExtendedJSONObject: org.mozilla.gecko.sync.ExtendedJSONObject getObject(java.lang.String)>(varReplacer13013);
+
+     label02:
+        if $r2 != null goto label06;
+
+        $r3 = new java.security.spec.InvalidKeySpecException;
+
+     label03:
+        varReplacer13012 = "privateKey must not be null";
+
+        specialinvoke $r3.<java.security.spec.InvalidKeySpecException: void <init>(java.lang.String)>(varReplacer13012);
+
+     label04:
+        throw $r3;
+
+     label05:
+        $r4 := @caughtexception;
+
+        $r3 = new java.security.spec.InvalidKeySpecException;
+
+        varReplacer13010 = "privateKey and publicKey must be JSON objects";
+
+        specialinvoke $r3.<java.security.spec.InvalidKeySpecException: void <init>(java.lang.String)>(varReplacer13010);
+
+        throw $r3;
+
+     label06:
+        if $r0 != null goto label09;
+
+        $r3 = new java.security.spec.InvalidKeySpecException;
+
+     label07:
+        varReplacer13011 = "publicKey must not be null";
+
+        specialinvoke $r3.<java.security.spec.InvalidKeySpecException: void <init>(java.lang.String)>(varReplacer13011);
+
+     label08:
+        throw $r3;
+
+     label09:
+        $r1 = new org.mozilla.gecko.browserid.BrowserIDKeyPair;
+
+     label10:
+        $r5 = staticinvoke <org.mozilla.gecko.browserid.DSACryptoImplementation: org.mozilla.gecko.browserid.SigningPrivateKey createPrivateKey(org.mozilla.gecko.sync.ExtendedJSONObject)>($r2);
+
+        $r6 = staticinvoke <org.mozilla.gecko.browserid.DSACryptoImplementation: org.mozilla.gecko.browserid.VerifyingPublicKey createPublicKey(org.mozilla.gecko.sync.ExtendedJSONObject)>($r0);
+
+        specialinvoke $r1.<org.mozilla.gecko.browserid.BrowserIDKeyPair: void <init>(org.mozilla.gecko.browserid.SigningPrivateKey,org.mozilla.gecko.browserid.VerifyingPublicKey)>($r5, $r6);
+
+     label11:
+        return $r1;
+
+        catch org.mozilla.gecko.sync.NonObjectJSONException from label01 to label02 with label05;
+        catch org.mozilla.gecko.sync.NonObjectJSONException from label03 to label04 with label05;
+        catch org.mozilla.gecko.sync.NonObjectJSONException from label07 to label08 with label05;
+        catch org.mozilla.gecko.sync.NonObjectJSONException from label10 to label11 with label05;
+    }
+
+    public static org.mozilla.gecko.browserid.BrowserIDKeyPair generateKeyPair(int) throws java.security.NoSuchAlgorithmException
+    {
+        int $i0, varReplacer12963;
+        org.mozilla.gecko.browserid.BrowserIDKeyPair $r0;
+        org.mozilla.gecko.browserid.DSACryptoImplementation$DSASigningPrivateKey $r1;
+        java.security.KeyPairGenerator $r2;
+        java.security.KeyPair $r3;
+        java.security.PrivateKey $r4;
+        java.security.interfaces.DSAPrivateKey $r5;
+        java.security.PublicKey $r6;
+        java.security.interfaces.DSAPublicKey $r7;
+        org.mozilla.gecko.browserid.DSACryptoImplementation$DSAVerifyingPublicKey $r8;
+        java.lang.String varReplacer12962;
+
+        nop;
+
+        $i0 := @parameter0: int;
+
+        varReplacer12962 = "DSA";
+
+        $r2 = staticinvoke <java.security.KeyPairGenerator: java.security.KeyPairGenerator getInstance(java.lang.String)>(varReplacer12962);
+
+        varReplacer12963 = 1024;
+
+        virtualinvoke $r2.<java.security.KeyPairGenerator: void initialize(int)>(varReplacer12963);
+
+        $r3 = virtualinvoke $r2.<java.security.KeyPairGenerator: java.security.KeyPair generateKeyPair()>();
+
+        $r4 = virtualinvoke $r3.<java.security.KeyPair: java.security.PrivateKey getPrivate()>();
+
+        $r5 = (java.security.interfaces.DSAPrivateKey) $r4;
+
+        $r6 = virtualinvoke $r3.<java.security.KeyPair: java.security.PublicKey getPublic()>();
+
+        $r7 = (java.security.interfaces.DSAPublicKey) $r6;
+
+        $r0 = new org.mozilla.gecko.browserid.BrowserIDKeyPair;
+
+        $r1 = new org.mozilla.gecko.browserid.DSACryptoImplementation$DSASigningPrivateKey;
+
+        specialinvoke $r1.<org.mozilla.gecko.browserid.DSACryptoImplementation$DSASigningPrivateKey: void <init>(java.security.interfaces.DSAPrivateKey)>($r5);
+
+        $r8 = new org.mozilla.gecko.browserid.DSACryptoImplementation$DSAVerifyingPublicKey;
+
+        specialinvoke $r8.<org.mozilla.gecko.browserid.DSACryptoImplementation$DSAVerifyingPublicKey: void <init>(java.security.interfaces.DSAPublicKey)>($r7);
+
+        specialinvoke $r0.<org.mozilla.gecko.browserid.BrowserIDKeyPair: void <init>(org.mozilla.gecko.browserid.SigningPrivateKey,org.mozilla.gecko.browserid.VerifyingPublicKey)>($r1, $r8);
+
+        return $r0;
+    }
+}

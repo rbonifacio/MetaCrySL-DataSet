@@ -1,0 +1,1044 @@
+public class de.appkind.a0000087.chat.SocketIoTalkifyController extends de.appkind.a0000087.chat.BaseTalkifyController
+{
+    private static final java.lang.String TALKIFY_PREFS;
+    private boolean _connecting;
+    private boolean _hasPreviousMessages;
+    private long _oldestMessageTimestamp;
+    private java.lang.String _room;
+    private com.github.nkzawa.socketio.client.Socket _socket;
+    private javax.net.ssl.TrustManager[] trustAllCerts;
+
+    public void <init>(android.app.Activity)
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        android.app.Activity $r1;
+        java.lang.Object[] $r2;
+        de.appkind.a0000087.chat.SocketIoTalkifyController$1 r3;
+        javax.net.ssl.TrustManager[] r4;
+        long varReplacer217;
+        int varReplacer218;
+
+        nop;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $r1 := @parameter0: android.app.Activity;
+
+        specialinvoke $r0.<de.appkind.a0000087.chat.BaseTalkifyController: void <init>(android.app.Activity)>($r1);
+
+        $r2 = newarray (javax.net.ssl.TrustManager)[1];
+
+        r3 = new de.appkind.a0000087.chat.SocketIoTalkifyController$1;
+
+        specialinvoke r3.<de.appkind.a0000087.chat.SocketIoTalkifyController$1: void <init>(de.appkind.a0000087.chat.SocketIoTalkifyController)>($r0);
+
+        $r2[0] = r3;
+
+        r4 = (javax.net.ssl.TrustManager[]) $r2;
+
+        $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: javax.net.ssl.TrustManager[] trustAllCerts> = r4;
+
+        varReplacer217 = 0L;
+
+        $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: long _oldestMessageTimestamp> = varReplacer217;
+
+        varReplacer218 = 0;
+
+        $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: boolean _hasPreviousMessages> = varReplacer218;
+
+        return;
+    }
+
+    private java.lang.Integer _applicationID()
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        int $i0;
+        java.lang.Integer $r1;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>("87");
+
+        $r1 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        return $r1;
+    }
+
+    private void _connectToSocketIO(java.lang.String) throws java.net.URISyntaxException
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        java.lang.String $r1, varReplacer993, varReplacer994, varReplacer995, varReplacer997, varReplacer999, varReplacer1000, varReplacer1001, varReplacer1002;
+        java.lang.Exception $r2;
+        com.github.nkzawa.socketio.client.IO$Options $r3;
+        javax.net.ssl.SSLContext $r4;
+        javax.net.ssl.TrustManager[] $r5;
+        java.security.SecureRandom $r6;
+        de.appkind.a0000087.chat.SocketIoTalkifyController$RelaxedHostNameVerifier $r7;
+        java.lang.StringBuilder $r8;
+        com.github.nkzawa.socketio.client.Socket $r9;
+        de.appkind.a0000087.chat.SocketIoTalkifyController$3 $r10;
+        de.appkind.a0000087.chat.SocketIoTalkifyController$4 $r11;
+        de.appkind.a0000087.chat.SocketIoTalkifyController$5 $r12;
+        de.appkind.a0000087.chat.SocketIoTalkifyController$6 $r13;
+        de.appkind.a0000087.chat.SocketIoTalkifyController$7 $r14;
+        null_type varReplacer996;
+        int varReplacer998;
+
+        nop;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $r1 := @parameter0: java.lang.String;
+
+     label01:
+        varReplacer1001 = "TLS";
+
+        $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1001);
+
+        $r5 = $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: javax.net.ssl.TrustManager[] trustAllCerts>;
+
+     label02:
+        $r6 = new java.security.SecureRandom;
+
+     label03:
+        specialinvoke $r6.<java.security.SecureRandom: void <init>()>();
+
+        varReplacer996 = null;
+
+        virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer996, $r5, $r6);
+
+        staticinvoke <com.github.nkzawa.socketio.client.IO: void setDefaultSSLContext(javax.net.ssl.SSLContext)>($r4);
+
+     label04:
+        $r7 = new de.appkind.a0000087.chat.SocketIoTalkifyController$RelaxedHostNameVerifier;
+
+     label05:
+        specialinvoke $r7.<de.appkind.a0000087.chat.SocketIoTalkifyController$RelaxedHostNameVerifier: void <init>()>();
+
+        staticinvoke <javax.net.ssl.HttpsURLConnection: void setDefaultHostnameVerifier(javax.net.ssl.HostnameVerifier)>($r7);
+
+     label06:
+        $r3 = new com.github.nkzawa.socketio.client.IO$Options;
+
+     label07:
+        specialinvoke $r3.<com.github.nkzawa.socketio.client.IO$Options: void <init>()>();
+
+     label08:
+        $r8 = new java.lang.StringBuilder;
+
+     label09:
+        varReplacer994 = "token=";
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer994);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r3.<com.github.nkzawa.socketio.client.IO$Options: java.lang.String query> = $r1;
+
+        varReplacer998 = 1;
+
+        $r3.<com.github.nkzawa.socketio.client.IO$Options: boolean secure> = varReplacer998;
+
+        $r3.<com.github.nkzawa.socketio.client.IO$Options: javax.net.ssl.SSLContext sslContext> = $r4;
+
+        varReplacer995 = "https://talkify.appkind.de:3000";
+
+        $r9 = staticinvoke <com.github.nkzawa.socketio.client.IO: com.github.nkzawa.socketio.client.Socket socket(java.lang.String,com.github.nkzawa.socketio.client.IO$Options)>(varReplacer995, $r3);
+
+        specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: void setSocket(com.github.nkzawa.socketio.client.Socket)>($r9);
+
+        $r9 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: com.github.nkzawa.socketio.client.Socket socket()>();
+
+     label10:
+        $r10 = new de.appkind.a0000087.chat.SocketIoTalkifyController$3;
+
+     label11:
+        specialinvoke $r10.<de.appkind.a0000087.chat.SocketIoTalkifyController$3: void <init>(de.appkind.a0000087.chat.SocketIoTalkifyController)>($r0);
+
+        varReplacer1002 = "error";
+
+        virtualinvoke $r9.<com.github.nkzawa.socketio.client.Socket: com.github.nkzawa.emitter.Emitter on(java.lang.String,com.github.nkzawa.emitter.Emitter$Listener)>(varReplacer1002, $r10);
+
+        $r9 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: com.github.nkzawa.socketio.client.Socket socket()>();
+
+     label12:
+        $r11 = new de.appkind.a0000087.chat.SocketIoTalkifyController$4;
+
+     label13:
+        specialinvoke $r11.<de.appkind.a0000087.chat.SocketIoTalkifyController$4: void <init>(de.appkind.a0000087.chat.SocketIoTalkifyController)>($r0);
+
+        varReplacer993 = "connect";
+
+        virtualinvoke $r9.<com.github.nkzawa.socketio.client.Socket: com.github.nkzawa.emitter.Emitter on(java.lang.String,com.github.nkzawa.emitter.Emitter$Listener)>(varReplacer993, $r11);
+
+        $r9 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: com.github.nkzawa.socketio.client.Socket socket()>();
+
+     label14:
+        $r12 = new de.appkind.a0000087.chat.SocketIoTalkifyController$5;
+
+     label15:
+        specialinvoke $r12.<de.appkind.a0000087.chat.SocketIoTalkifyController$5: void <init>(de.appkind.a0000087.chat.SocketIoTalkifyController)>($r0);
+
+        varReplacer999 = "chatMessage";
+
+        virtualinvoke $r9.<com.github.nkzawa.socketio.client.Socket: com.github.nkzawa.emitter.Emitter on(java.lang.String,com.github.nkzawa.emitter.Emitter$Listener)>(varReplacer999, $r12);
+
+        $r9 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: com.github.nkzawa.socketio.client.Socket socket()>();
+
+     label16:
+        $r13 = new de.appkind.a0000087.chat.SocketIoTalkifyController$6;
+
+     label17:
+        specialinvoke $r13.<de.appkind.a0000087.chat.SocketIoTalkifyController$6: void <init>(de.appkind.a0000087.chat.SocketIoTalkifyController)>($r0);
+
+        varReplacer997 = "sendHistory";
+
+        virtualinvoke $r9.<com.github.nkzawa.socketio.client.Socket: com.github.nkzawa.emitter.Emitter on(java.lang.String,com.github.nkzawa.emitter.Emitter$Listener)>(varReplacer997, $r13);
+
+        $r9 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: com.github.nkzawa.socketio.client.Socket socket()>();
+
+     label18:
+        $r14 = new de.appkind.a0000087.chat.SocketIoTalkifyController$7;
+
+     label19:
+        specialinvoke $r14.<de.appkind.a0000087.chat.SocketIoTalkifyController$7: void <init>(de.appkind.a0000087.chat.SocketIoTalkifyController)>($r0);
+
+        varReplacer1000 = "previousMessages";
+
+        virtualinvoke $r9.<com.github.nkzawa.socketio.client.Socket: com.github.nkzawa.emitter.Emitter on(java.lang.String,com.github.nkzawa.emitter.Emitter$Listener)>(varReplacer1000, $r14);
+
+        $r9 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: com.github.nkzawa.socketio.client.Socket socket()>();
+
+        virtualinvoke $r9.<com.github.nkzawa.socketio.client.Socket: com.github.nkzawa.socketio.client.Socket connect()>();
+
+     label20:
+        return;
+
+     label21:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r2.<java.lang.Exception: void printStackTrace()>();
+
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label21;
+        catch java.lang.Exception from label03 to label04 with label21;
+        catch java.lang.Exception from label05 to label06 with label21;
+        catch java.lang.Exception from label07 to label08 with label21;
+        catch java.lang.Exception from label09 to label10 with label21;
+        catch java.lang.Exception from label11 to label12 with label21;
+        catch java.lang.Exception from label13 to label14 with label21;
+        catch java.lang.Exception from label15 to label16 with label21;
+        catch java.lang.Exception from label17 to label18 with label21;
+        catch java.lang.Exception from label19 to label20 with label21;
+    }
+
+    private java.lang.Integer _customerID()
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        java.lang.Integer r1;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        r1 = <de.appkind.a0000087.settings.AppSettings: java.lang.Integer COSTUMER_ID>;
+
+        return r1;
+    }
+
+    private java.lang.String _deviceID()
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        android.app.Activity $r1;
+        java.lang.String $r2;
+
+        nop;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $r1 = virtualinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: android.app.Activity context()>();
+
+        $r2 = staticinvoke <de.appkind.a0000087.settings.AppSettings: java.lang.String deviceId(android.content.Context)>($r1);
+
+        return $r2;
+    }
+
+    private void _setBoarded(boolean)
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        boolean $z0;
+        android.app.Activity $r1;
+        android.content.SharedPreferences $r2;
+        android.content.SharedPreferences$Editor $r3;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = virtualinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: android.app.Activity context()>();
+
+        $r2 = virtualinvoke $r1.<android.app.Activity: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>("TalkifyPrefs", 0);
+
+        $r3 = interfaceinvoke $r2.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        interfaceinvoke $r3.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putBoolean(java.lang.String,boolean)>("isBoarded", $z0);
+
+        interfaceinvoke $r3.<android.content.SharedPreferences$Editor: boolean commit()>();
+
+        return;
+    }
+
+    private void _setRegistered(boolean)
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        boolean $z0;
+        android.app.Activity $r1;
+        android.content.SharedPreferences $r2;
+        android.content.SharedPreferences$Editor $r3;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = virtualinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: android.app.Activity context()>();
+
+        $r2 = virtualinvoke $r1.<android.app.Activity: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>("TalkifyPrefs", 0);
+
+        $r3 = interfaceinvoke $r2.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        interfaceinvoke $r3.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putBoolean(java.lang.String,boolean)>("isRegistered", $z0);
+
+        interfaceinvoke $r3.<android.content.SharedPreferences$Editor: boolean commit()>();
+
+        return;
+    }
+
+    static void access$0(de.appkind.a0000087.chat.SocketIoTalkifyController, boolean)
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        boolean $z0;
+        int varReplacer332;
+
+        nop;
+
+        $r0 := @parameter0: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $z0 := @parameter1: boolean;
+
+        varReplacer332 = 0;
+
+        $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: boolean _connecting> = varReplacer332;
+
+        return;
+    }
+
+    static void access$1(de.appkind.a0000087.chat.SocketIoTalkifyController, java.lang.String)
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        java.lang.String $r1;
+
+        nop;
+
+        $r0 := @parameter0: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: java.lang.String _room> = $r1;
+
+        return;
+    }
+
+    static void access$2(de.appkind.a0000087.chat.SocketIoTalkifyController, java.lang.String) throws java.net.URISyntaxException
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        java.lang.String $r1;
+
+        nop;
+
+        $r0 := @parameter0: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $r1 := @parameter1: java.lang.String;
+
+        specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: void _connectToSocketIO(java.lang.String)>($r1);
+
+        return;
+    }
+
+    static void access$3(de.appkind.a0000087.chat.SocketIoTalkifyController, boolean)
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        boolean $z0;
+
+        $r0 := @parameter0: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $z0 := @parameter1: boolean;
+
+        $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: boolean _hasPreviousMessages> = $z0;
+
+        return;
+    }
+
+    static void access$4(de.appkind.a0000087.chat.SocketIoTalkifyController, long)
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        long $l0;
+
+        $r0 := @parameter0: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $l0 := @parameter1: long;
+
+        $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: long _oldestMessageTimestamp> = $l0;
+
+        return;
+    }
+
+    static void access$5(de.appkind.a0000087.chat.SocketIoTalkifyController)
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+
+        $r0 := @parameter0: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: void setRegistered()>();
+
+        return;
+    }
+
+    static void access$6(de.appkind.a0000087.chat.SocketIoTalkifyController)
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+
+        $r0 := @parameter0: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: void setBoarded()>();
+
+        return;
+    }
+
+    private void setBoarded()
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: void _setBoarded(boolean)>(1);
+
+        return;
+    }
+
+    private void setRegistered()
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: void _setRegistered(boolean)>(1);
+
+        return;
+    }
+
+    private void setSocket(com.github.nkzawa.socketio.client.Socket)
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        com.github.nkzawa.socketio.client.Socket $r1;
+
+        nop;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $r1 := @parameter0: com.github.nkzawa.socketio.client.Socket;
+
+        $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: com.github.nkzawa.socketio.client.Socket _socket> = $r1;
+
+        return;
+    }
+
+    private com.github.nkzawa.socketio.client.Socket socket()
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        com.github.nkzawa.socketio.client.Socket r1;
+
+        nop;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        r1 = $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: com.github.nkzawa.socketio.client.Socket _socket>;
+
+        return r1;
+    }
+
+    public void asyncGetChatTerms(de.appkind.a0000087.chat.TalkifyController$ChatTermsReceiver)
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        de.appkind.a0000087.chat.TalkifyController$ChatTermsReceiver $r1;
+        com.loopj.android.http.AsyncHttpClient $r2;
+        de.appkind.a0000087.chat.SocketIoTalkifyController$10 $r3;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $r1 := @parameter0: de.appkind.a0000087.chat.TalkifyController$ChatTermsReceiver;
+
+        $r2 = new com.loopj.android.http.AsyncHttpClient;
+
+        specialinvoke $r2.<com.loopj.android.http.AsyncHttpClient: void <init>()>();
+
+        $r3 = new de.appkind.a0000087.chat.SocketIoTalkifyController$10;
+
+        specialinvoke $r3.<de.appkind.a0000087.chat.SocketIoTalkifyController$10: void <init>(de.appkind.a0000087.chat.SocketIoTalkifyController,de.appkind.a0000087.chat.TalkifyController$ChatTermsReceiver)>($r0, $r1);
+
+        virtualinvoke $r2.<com.loopj.android.http.AsyncHttpClient: com.loopj.android.http.RequestHandle get(java.lang.String,com.loopj.android.http.ResponseHandlerInterface)>("http://api.appkind.de/GetChatTerms", $r3);
+
+        return;
+    }
+
+    public void asyncSignUp(java.lang.String, java.lang.String, java.lang.String, de.appkind.a0000087.chat.TalkifyController$SignupHandler)
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        java.lang.String $r1, $r2, $r3, $r8;
+        de.appkind.a0000087.chat.TalkifyController$SignupHandler $r4;
+        com.loopj.android.http.AsyncHttpClient $r5;
+        java.lang.Exception $r6;
+        com.loopj.android.http.RequestParams $r7;
+        java.lang.Integer $r9;
+        de.appkind.a0000087.chat.SocketIoTalkifyController$8 $r10;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 := @parameter3: de.appkind.a0000087.chat.TalkifyController$SignupHandler;
+
+        $r5 = new com.loopj.android.http.AsyncHttpClient;
+
+     label1:
+        specialinvoke $r5.<com.loopj.android.http.AsyncHttpClient: void <init>()>();
+
+     label2:
+        $r7 = new com.loopj.android.http.RequestParams;
+
+     label3:
+        specialinvoke $r7.<com.loopj.android.http.RequestParams: void <init>()>();
+
+        $r8 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: java.lang.String _deviceID()>();
+
+        virtualinvoke $r7.<com.loopj.android.http.RequestParams: void put(java.lang.String,java.lang.String)>("deviceAppID", $r8);
+
+        $r9 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: java.lang.Integer _applicationID()>();
+
+        virtualinvoke $r7.<com.loopj.android.http.RequestParams: void put(java.lang.String,java.lang.Object)>("applicationID", $r9);
+
+        virtualinvoke $r7.<com.loopj.android.http.RequestParams: void put(java.lang.String,java.lang.String)>("appKey", "29ff7700d1");
+
+        virtualinvoke $r7.<com.loopj.android.http.RequestParams: void put(java.lang.String,java.lang.String)>("apiKey", "981ad126b302de09a5fea3d450d3df60");
+
+        virtualinvoke $r7.<com.loopj.android.http.RequestParams: void put(java.lang.String,java.lang.String)>("os", "android");
+
+        $r9 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: java.lang.Integer _customerID()>();
+
+        virtualinvoke $r7.<com.loopj.android.http.RequestParams: void put(java.lang.String,java.lang.Object)>("customerID", $r9);
+
+        virtualinvoke $r7.<com.loopj.android.http.RequestParams: void put(java.lang.String,java.lang.String)>("phoneNumber", $r3);
+
+        virtualinvoke $r7.<com.loopj.android.http.RequestParams: void put(java.lang.String,java.lang.String)>("firstName", $r1);
+
+        virtualinvoke $r7.<com.loopj.android.http.RequestParams: void put(java.lang.String,java.lang.String)>("lastName", $r2);
+
+        $r1 = virtualinvoke $r7.<com.loopj.android.http.RequestParams: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>("signup", $r1);
+
+        virtualinvoke $r5.<com.loopj.android.http.AsyncHttpClient: void setTimeout(int)>(60000);
+
+     label4:
+        $r10 = new de.appkind.a0000087.chat.SocketIoTalkifyController$8;
+
+     label5:
+        specialinvoke $r10.<de.appkind.a0000087.chat.SocketIoTalkifyController$8: void <init>(de.appkind.a0000087.chat.SocketIoTalkifyController,de.appkind.a0000087.chat.TalkifyController$SignupHandler)>($r0, $r4);
+
+        virtualinvoke $r5.<com.loopj.android.http.AsyncHttpClient: com.loopj.android.http.RequestHandle post(java.lang.String,com.loopj.android.http.RequestParams,com.loopj.android.http.ResponseHandlerInterface)>("http://api.appkind.de/ChatDeviceRegistration", $r7, $r10);
+
+     label6:
+        return;
+
+     label7:
+        $r6 := @caughtexception;
+
+        interfaceinvoke $r4.<de.appkind.a0000087.chat.TalkifyController$SignupHandler: void onSignupError(java.lang.String)>("Exception");
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label7;
+        catch java.lang.Exception from label3 to label4 with label7;
+        catch java.lang.Exception from label5 to label6 with label7;
+    }
+
+    public void asyncVerifySMSCode(java.lang.String, de.appkind.a0000087.chat.TalkifyController$VerifyHandler)
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        java.lang.String $r1, $r6;
+        de.appkind.a0000087.chat.TalkifyController$VerifyHandler $r2;
+        com.loopj.android.http.AsyncHttpClient $r3;
+        java.lang.Exception $r4;
+        com.loopj.android.http.RequestParams $r5;
+        de.appkind.a0000087.chat.SocketIoTalkifyController$9 $r7;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: de.appkind.a0000087.chat.TalkifyController$VerifyHandler;
+
+        $r3 = new com.loopj.android.http.AsyncHttpClient;
+
+     label1:
+        specialinvoke $r3.<com.loopj.android.http.AsyncHttpClient: void <init>()>();
+
+     label2:
+        $r5 = new com.loopj.android.http.RequestParams;
+
+     label3:
+        specialinvoke $r5.<com.loopj.android.http.RequestParams: void <init>()>();
+
+        $r6 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: java.lang.String _deviceID()>();
+
+        virtualinvoke $r5.<com.loopj.android.http.RequestParams: void put(java.lang.String,java.lang.String)>("deviceAppID", $r6);
+
+        virtualinvoke $r5.<com.loopj.android.http.RequestParams: void put(java.lang.String,java.lang.String)>("appKey", "29ff7700d1");
+
+        virtualinvoke $r5.<com.loopj.android.http.RequestParams: void put(java.lang.String,java.lang.String)>("apiKey", "981ad126b302de09a5fea3d450d3df60");
+
+        virtualinvoke $r5.<com.loopj.android.http.RequestParams: void put(java.lang.String,java.lang.String)>("smsCode", $r1);
+
+     label4:
+        $r7 = new de.appkind.a0000087.chat.SocketIoTalkifyController$9;
+
+     label5:
+        specialinvoke $r7.<de.appkind.a0000087.chat.SocketIoTalkifyController$9: void <init>(de.appkind.a0000087.chat.SocketIoTalkifyController,de.appkind.a0000087.chat.TalkifyController$VerifyHandler)>($r0, $r2);
+
+        virtualinvoke $r3.<com.loopj.android.http.AsyncHttpClient: com.loopj.android.http.RequestHandle post(java.lang.String,com.loopj.android.http.RequestParams,com.loopj.android.http.ResponseHandlerInterface)>("http://api.appkind.de/VerifySMSCode", $r5, $r7);
+
+     label6:
+        return;
+
+     label7:
+        $r4 := @caughtexception;
+
+        interfaceinvoke $r2.<de.appkind.a0000087.chat.TalkifyController$VerifyHandler: void onVerificationError(java.lang.String)>("Exception");
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label7;
+        catch java.lang.Exception from label3 to label4 with label7;
+        catch java.lang.Exception from label5 to label6 with label7;
+    }
+
+    public void connect()
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        com.loopj.android.http.AsyncHttpClient $r1;
+        java.lang.Exception $r2;
+        com.loopj.android.http.RequestParams $r3;
+        boolean $z0;
+        com.github.nkzawa.socketio.client.Socket $r4;
+        java.lang.String $r5, varReplacer236, varReplacer237, varReplacer238, varReplacer239, varReplacer240, varReplacer242, varReplacer243, varReplacer244, varReplacer245;
+        de.appkind.a0000087.chat.SocketIoTalkifyController$2 $r6;
+        int varReplacer241, varReplacer246;
+
+        nop;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $z0 = $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: boolean _connecting>;
+
+        if $z0 != 0 goto label1;
+
+        $r4 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: com.github.nkzawa.socketio.client.Socket socket()>();
+
+        if $r4 == null goto label2;
+
+     label1:
+        varReplacer243 = "chat";
+
+        varReplacer244 = "already connecting or connected";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer243, varReplacer244);
+
+        return;
+
+     label2:
+        varReplacer246 = 1;
+
+        $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: boolean _connecting> = varReplacer246;
+
+        $r1 = new com.loopj.android.http.AsyncHttpClient;
+
+     label3:
+        specialinvoke $r1.<com.loopj.android.http.AsyncHttpClient: void <init>()>();
+
+     label4:
+        $r3 = new com.loopj.android.http.RequestParams;
+
+     label5:
+        specialinvoke $r3.<com.loopj.android.http.RequestParams: void <init>()>();
+
+        $r5 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: java.lang.String _deviceID()>();
+
+        varReplacer242 = "deviceAppID";
+
+        virtualinvoke $r3.<com.loopj.android.http.RequestParams: void put(java.lang.String,java.lang.String)>(varReplacer242, $r5);
+
+        varReplacer238 = "appKey";
+
+        varReplacer239 = "29ff7700d1";
+
+        virtualinvoke $r3.<com.loopj.android.http.RequestParams: void put(java.lang.String,java.lang.String)>(varReplacer238, varReplacer239);
+
+        varReplacer236 = "apiKey";
+
+        varReplacer237 = "981ad126b302de09a5fea3d450d3df60";
+
+        virtualinvoke $r3.<com.loopj.android.http.RequestParams: void put(java.lang.String,java.lang.String)>(varReplacer236, varReplacer237);
+
+        $r5 = virtualinvoke $r3.<com.loopj.android.http.RequestParams: java.lang.String toString()>();
+
+        varReplacer245 = "signup";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer245, $r5);
+
+     label6:
+        $r6 = new de.appkind.a0000087.chat.SocketIoTalkifyController$2;
+
+     label7:
+        specialinvoke $r6.<de.appkind.a0000087.chat.SocketIoTalkifyController$2: void <init>(de.appkind.a0000087.chat.SocketIoTalkifyController)>($r0);
+
+        varReplacer240 = "http://api.appkind.de/GetChatRequest";
+
+        virtualinvoke $r1.<com.loopj.android.http.AsyncHttpClient: com.loopj.android.http.RequestHandle post(java.lang.String,com.loopj.android.http.RequestParams,com.loopj.android.http.ResponseHandlerInterface)>(varReplacer240, $r3, $r6);
+
+     label8:
+        return;
+
+     label9:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r2.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer241 = 0;
+
+        $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: boolean _connecting> = varReplacer241;
+
+        return;
+
+        catch java.lang.Exception from label3 to label4 with label9;
+        catch java.lang.Exception from label5 to label6 with label9;
+        catch java.lang.Exception from label7 to label8 with label9;
+    }
+
+    public boolean hasPreviousMessages()
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        boolean z0;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        z0 = $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: boolean _hasPreviousMessages>;
+
+        return z0;
+    }
+
+    public boolean isBoarded()
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        android.app.Activity $r1;
+        android.content.SharedPreferences $r2;
+        boolean $z0;
+        java.lang.String varReplacer549, varReplacer551;
+        int varReplacer550, varReplacer552;
+
+        nop;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $r1 = virtualinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: android.app.Activity context()>();
+
+        varReplacer549 = "TalkifyPrefs";
+
+        varReplacer550 = 0;
+
+        $r2 = virtualinvoke $r1.<android.app.Activity: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>(varReplacer549, varReplacer550);
+
+        varReplacer551 = "isBoarded";
+
+        varReplacer552 = 0;
+
+        $z0 = interfaceinvoke $r2.<android.content.SharedPreferences: boolean getBoolean(java.lang.String,boolean)>(varReplacer551, varReplacer552);
+
+        return $z0;
+    }
+
+    public boolean isRegistered()
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        android.app.Activity $r1;
+        android.content.SharedPreferences $r2;
+        boolean $z0;
+        java.lang.String varReplacer913, varReplacer915;
+        int varReplacer914, varReplacer916;
+
+        nop;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $r1 = virtualinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: android.app.Activity context()>();
+
+        varReplacer915 = "TalkifyPrefs";
+
+        varReplacer916 = 0;
+
+        $r2 = virtualinvoke $r1.<android.app.Activity: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>(varReplacer915, varReplacer916);
+
+        varReplacer913 = "isRegistered";
+
+        varReplacer914 = 0;
+
+        $z0 = interfaceinvoke $r2.<android.content.SharedPreferences: boolean getBoolean(java.lang.String,boolean)>(varReplacer913, varReplacer914);
+
+        return $z0;
+    }
+
+    public void onPause()
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        com.github.nkzawa.socketio.client.Socket $r1;
+        java.lang.String varReplacer544, varReplacer545;
+        int varReplacer546;
+
+        nop;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        varReplacer544 = "socketio";
+
+        varReplacer545 = "closing";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer544, varReplacer545);
+
+        $r1 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: com.github.nkzawa.socketio.client.Socket socket()>();
+
+        if $r1 == null goto label1;
+
+        $r1 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: com.github.nkzawa.socketio.client.Socket socket()>();
+
+        virtualinvoke $r1.<com.github.nkzawa.socketio.client.Socket: com.github.nkzawa.socketio.client.Socket close()>();
+
+     label1:
+        varReplacer546 = 0;
+
+        $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: boolean _connecting> = varReplacer546;
+
+        return;
+    }
+
+    public void onResume()
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        com.github.nkzawa.socketio.client.Socket $r1;
+        java.lang.String varReplacer547, varReplacer548;
+
+        nop;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        varReplacer547 = "socketio";
+
+        varReplacer548 = "resuming";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer547, varReplacer548);
+
+        $r1 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: com.github.nkzawa.socketio.client.Socket socket()>();
+
+        if $r1 == null goto label1;
+
+        $r1 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: com.github.nkzawa.socketio.client.Socket socket()>();
+
+        virtualinvoke $r1.<com.github.nkzawa.socketio.client.Socket: com.github.nkzawa.socketio.client.Socket open()>();
+
+     label1:
+        return;
+    }
+
+    public void receivePreviousMessages()
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        org.json.JSONException $r1;
+        org.json.JSONObject $r2;
+        long $l0;
+        java.lang.String $r3, varReplacer219, varReplacer220, varReplacer221;
+        com.github.nkzawa.socketio.client.Socket $r4;
+        java.lang.Object[] $r5;
+
+        nop;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $r2 = new org.json.JSONObject;
+
+     label1:
+        specialinvoke $r2.<org.json.JSONObject: void <init>()>();
+
+     label2:
+        $l0 = $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: long _oldestMessageTimestamp>;
+
+     label3:
+        varReplacer221 = "timestamp";
+
+        $r2 = virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,long)>(varReplacer221, $l0);
+
+     label4:
+        $r3 = $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: java.lang.String _room>;
+
+     label5:
+        varReplacer220 = "room";
+
+        $r2 = virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,java.lang.Object)>(varReplacer220, $r3);
+
+        $r4 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: com.github.nkzawa.socketio.client.Socket socket()>();
+
+     label6:
+        $r5 = newarray (java.lang.Object)[1];
+
+        $r5[0] = $r2;
+
+     label7:
+        varReplacer219 = "loadPrevious";
+
+        virtualinvoke $r4.<com.github.nkzawa.socketio.client.Socket: com.github.nkzawa.emitter.Emitter emit(java.lang.String,java.lang.Object[])>(varReplacer219, $r5);
+
+     label8:
+        return;
+
+     label9:
+        $r1 := @caughtexception;
+
+        virtualinvoke $r1.<org.json.JSONException: void printStackTrace()>();
+
+        return;
+
+        catch org.json.JSONException from label1 to label2 with label9;
+        catch org.json.JSONException from label3 to label4 with label9;
+        catch org.json.JSONException from label5 to label6 with label9;
+        catch org.json.JSONException from label7 to label8 with label9;
+    }
+
+    public void resetReadCount()
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        com.github.nkzawa.socketio.client.Socket $r1;
+        java.lang.Object[] $r2;
+        java.lang.String varReplacer557;
+
+        nop;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $r1 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: com.github.nkzawa.socketio.client.Socket socket()>();
+
+        if $r1 == null goto label1;
+
+        $r1 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: com.github.nkzawa.socketio.client.Socket socket()>();
+
+        $r2 = newarray (java.lang.Object)[0];
+
+        varReplacer557 = "resetReadCount";
+
+        virtualinvoke $r1.<com.github.nkzawa.socketio.client.Socket: com.github.nkzawa.emitter.Emitter emit(java.lang.String,java.lang.Object[])>(varReplacer557, $r2);
+
+     label1:
+        return;
+    }
+
+    public void sendMessage(java.lang.String)
+    {
+        de.appkind.a0000087.chat.SocketIoTalkifyController $r0;
+        java.lang.String $r1, varReplacer988, varReplacer989;
+        org.json.JSONException $r2;
+        org.json.JSONObject $r3;
+        com.github.nkzawa.socketio.client.Socket $r4;
+        java.lang.Object[] $r5;
+        java.util.HashSet $r6;
+        java.util.Iterator $r7;
+        boolean $z0;
+        java.lang.Object $r8;
+        de.appkind.a0000087.chat.TalkifyController$ChatListener $r9;
+        de.appkind.a0000087.chat.SocketIoTalkifyController$DefaultMessageItem $r10;
+
+        nop;
+
+        $r0 := @this: de.appkind.a0000087.chat.SocketIoTalkifyController;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r3 = new org.json.JSONObject;
+
+     label01:
+        specialinvoke $r3.<org.json.JSONObject: void <init>()>();
+
+        varReplacer989 = "msg";
+
+        $r3 = virtualinvoke $r3.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,java.lang.Object)>(varReplacer989, $r1);
+
+        $r4 = specialinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: com.github.nkzawa.socketio.client.Socket socket()>();
+
+     label02:
+        $r5 = newarray (java.lang.Object)[1];
+
+        $r5[0] = $r3;
+
+     label03:
+        varReplacer988 = "sendMessage";
+
+        virtualinvoke $r4.<com.github.nkzawa.socketio.client.Socket: com.github.nkzawa.emitter.Emitter emit(java.lang.String,java.lang.Object[])>(varReplacer988, $r5);
+
+        $r6 = virtualinvoke $r0.<de.appkind.a0000087.chat.SocketIoTalkifyController: java.util.HashSet chatListeners()>();
+
+        $r7 = virtualinvoke $r6.<java.util.HashSet: java.util.Iterator iterator()>();
+
+     label04:
+        $z0 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+     label05:
+        if $z0 != 0 goto label06;
+
+        return;
+
+     label06:
+        $r8 = interfaceinvoke $r7.<java.util.Iterator: java.lang.Object next()>();
+
+     label07:
+        $r9 = (de.appkind.a0000087.chat.TalkifyController$ChatListener) $r8;
+
+     label08:
+        $r10 = staticinvoke <de.appkind.a0000087.chat.SocketIoTalkifyController$DefaultMessageItem: de.appkind.a0000087.chat.SocketIoTalkifyController$DefaultMessageItem userItem(java.lang.String)>($r1);
+
+        interfaceinvoke $r9.<de.appkind.a0000087.chat.TalkifyController$ChatListener: void onMessageReceived(de.appkind.a0000087.chat.TalkifyController$MessageItem)>($r10);
+
+     label09:
+        goto label04;
+
+     label10:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r2.<org.json.JSONException: void printStackTrace()>();
+
+        return;
+
+        catch org.json.JSONException from label01 to label02 with label10;
+        catch org.json.JSONException from label03 to label05 with label10;
+        catch org.json.JSONException from label06 to label07 with label10;
+        catch org.json.JSONException from label08 to label09 with label10;
+    }
+}

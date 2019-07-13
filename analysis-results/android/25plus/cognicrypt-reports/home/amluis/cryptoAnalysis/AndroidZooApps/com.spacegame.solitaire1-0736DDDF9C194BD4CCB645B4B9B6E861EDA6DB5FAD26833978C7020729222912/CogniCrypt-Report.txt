@@ -1,0 +1,105 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2561)
+		Method: <com.facebook.ads.internal.util.s: java.lang.String a(java.lang.String)>
+		SHA-256: 5a22f3b65364f84723a2ea7af48c3305a847d1b1627effd64a33af28749d9656
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3452)
+		Method: <com.facebook.ads.internal.h.a.o: java.lang.String a(byte[],java.lang.String)>
+		SHA-256: 36392fca2f26225bddc7bc09bf233b5e8c57634959d78e606e2f3b0ece4f1b4e
+		Secure: true
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r0)
+		Method: <com.facebook.ads.internal.h.a.o: java.lang.String a(byte[],java.lang.String)>
+		SHA-256: 8b3145b340a6eb159a4d880bda44d3cff594af2332e72af75d6e28d17186dbf7
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
+		Method: <com.facebook.ads.internal.util.s: java.lang.String a(java.lang.String)>
+		SHA-256: 2125805d03a1e43489bdecc5db182c9da3fb7141e4e8c4afb45e18805c8edeaa
+		Secure: true
+	Object:
+		Variable: $r6
+		Type: byte[]
+		Statement: $r6 = virtualinvoke $r5.<java.security.MessageDigest: byte[] digest()>()
+		Method: <net.hockeyapp.android.Constants: void loadCrashIdentifier(android.content.Context)>
+		SHA-256: 6a3069053649d899383b61fcfad25384555728d4af17de5336fb5f338ffe42e5
+		Secure: true
+	Object:
+		Variable: $r12
+		Type: java.security.MessageDigest
+		Statement: $r12 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer136)
+		Method: <com.zegame.erasegame.ForestMania: void onCreate(android.os.Bundle)>
+		SHA-256: 69e00570ddf466220a35cf4d281b26172b178f06efeec5d86814b08a11d94777
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: java.security.MessageDigest
+		Statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer204)
+		Method: <net.hockeyapp.android.Constants: void loadCrashIdentifier(android.content.Context)>
+		SHA-256: 5db85a645028b96ddf5129fd68205bdd195a8e24b3411bee19dc10a8a1af5f96
+		Secure: true
+
+Findings in Java Class: com.zegame.erasegame.ForestMania
+
+	 in Method: void onCreate(android.os.Bundle)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #69e00570ddf466220a35cf4d281b26172b178f06efeec5d86814b08a11d94777)
+			First parameter (with value "SHA") should be any of {SHA-224, SHA-256, SHA-1, SHA-384, SHA-512, MD5}
+			at statement: $r12 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer136)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #69e00570ddf466220a35cf4d281b26172b178f06efeec5d86814b08a11d94777)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, java.security.MessageDigest: void update(byte[],int,int), java.security.MessageDigest: void update(java.nio.ByteBuffer), java.security.MessageDigest: void update(byte), java.security.MessageDigest: void update(byte[])
+			at statement: virtualinvoke $r12.<java.security.MessageDigest: void update(byte[])>($r13)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 7
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 1
+	IncompleteOperationError: 1
+=====================================================================

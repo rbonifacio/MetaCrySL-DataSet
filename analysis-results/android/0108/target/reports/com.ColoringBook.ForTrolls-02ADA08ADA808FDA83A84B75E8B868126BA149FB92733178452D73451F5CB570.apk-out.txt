@@ -1,0 +1,109 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.ColoringBook.ForTrolls-02ADA08ADA808FDA83A84B75E8B868126BA149FB92733178452D73451F5CB570.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r5
+		Type: javax.crypto.SecretKey
+		Statement: $r5 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r1)
+		Method: <com.gkcrop.coloringbook.SplashActivity: java.lang.String decryptIt(java.lang.String)>
+		SHA-256: ed1dd2da117c016fd1c17f58f270f60e84d4a143911540fc7a70c6b8911f501c
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r3)
+		Method: <com.gkcrop.coloringbook.SplashActivity: java.lang.String decryptIt(java.lang.String)>
+		SHA-256: 261127369920e1691fb4f39c67f853a62e5ed6b0dda0a0a66edb538a67bdc7df
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer286)
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzaH(java.lang.String)>
+		SHA-256: 2d9b86548434691d4747835296906979314e8ba9a0630219657517f2a22c2ae3
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzaH(java.lang.String)>
+		SHA-256: b99893f35dd36825378e8706865a4357958a98bd12dbd264e8cce2e0999aa454
+		Secure: true
+	Object:
+		Variable: $r6
+		Type: javax.crypto.Cipher
+		Statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer54)
+		Method: <com.gkcrop.coloringbook.SplashActivity: java.lang.String decryptIt(java.lang.String)>
+		SHA-256: 50f8b2132cb6001bf9343ccf4bacff58cc5c913e359655e00c899f14b881cf42
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: javax.crypto.SecretKeyFactory
+		Statement: $r4 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer50)
+		Method: <com.gkcrop.coloringbook.SplashActivity: java.lang.String decryptIt(java.lang.String)>
+		SHA-256: c14c36aabb423871cfcacf66b7b5ff7f92f8e249e354f96f88d4828cacd187e3
+		Secure: false
+
+Findings in Java Class: com.gkcrop.coloringbook.SplashActivity
+
+	 in Method: java.lang.String decryptIt(java.lang.String)
+		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #c14c36aabb423871cfcacf66b7b5ff7f92f8e249e354f96f88d4828cacd187e3)
+			First parameter (with value "DES") should be any of {PBEwithSHA1ANDRC2, PBEwithHmacSHA1, PBEwithSHAAND192BITAES-CBC-BC, DESede, PBEwithMD5AND128BITAES-CBC-OPENSSL, PBEwithMD5ANDDES, PBEwithSHAAND128BITAES-CBC-BC, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithMD5AND192BITAES-CBC-OPENSSL, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC, PBEwithMD5AND256BITAES-CBC-OPENSSL, PBEwithMD5ANDRC2, PBEwithSHA1ANDDES, PBEwithSHA256AND128BITAES-CBC-BC}
+			at statement: $r4 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer50)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer52, $r5)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
+			First parameter was not properly generated as specced Key
+			at statement: $r5 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r1)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #50f8b2132cb6001bf9343ccf4bacff58cc5c913e359655e00c899f14b881cf42)
+			First parameter (with value "DES") should be any of {AES, DESede, RSA}
+			at statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer54)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 2
+	ConstraintError: 2
+=====================================================================

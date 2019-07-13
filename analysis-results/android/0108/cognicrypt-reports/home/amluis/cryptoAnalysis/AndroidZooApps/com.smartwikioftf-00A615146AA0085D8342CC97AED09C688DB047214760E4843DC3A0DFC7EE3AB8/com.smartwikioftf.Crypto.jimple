@@ -1,0 +1,157 @@
+public class com.smartwikioftf.Crypto extends java.lang.Object
+{
+    private final javax.crypto.Cipher cipher;
+    private final javax.crypto.spec.SecretKeySpec key;
+    private java.security.spec.AlgorithmParameterSpec spec;
+
+    public void <init>(java.lang.String) throws java.lang.Exception
+    {
+        com.smartwikioftf.Crypto $r0;
+        java.lang.String $r1, varReplacer176, varReplacer177, varReplacer178, varReplacer181;
+        byte[] $r2, $r4;
+        java.security.MessageDigest $r3;
+        int $i0, varReplacer179, varReplacer180;
+        javax.crypto.Cipher $r5;
+        javax.crypto.spec.SecretKeySpec $r6;
+        java.security.spec.AlgorithmParameterSpec $r7;
+
+        nop;
+
+        $r0 := @this: com.smartwikioftf.Crypto;
+
+        $r1 := @parameter0: java.lang.String;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer177 = "SHA-256";
+
+        $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer177);
+
+        varReplacer178 = "UTF-8";
+
+        $r2 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer178);
+
+        virtualinvoke $r3.<java.security.MessageDigest: void update(byte[])>($r2);
+
+        $r2 = newarray (byte)[32];
+
+        $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>();
+
+        $i0 = lengthof $r2;
+
+        varReplacer179 = 0;
+
+        varReplacer180 = 0;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r4, varReplacer179, $r2, varReplacer179, $i0);
+
+        varReplacer181 = "AES/CBC/PKCS7Padding";
+
+        $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer181);
+
+        $r0.<com.smartwikioftf.Crypto: javax.crypto.Cipher cipher> = $r5;
+
+        $r6 = new javax.crypto.spec.SecretKeySpec;
+
+        varReplacer176 = "AES";
+
+        specialinvoke $r6.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, varReplacer176);
+
+        $r0.<com.smartwikioftf.Crypto: javax.crypto.spec.SecretKeySpec key> = $r6;
+
+        $r7 = virtualinvoke $r0.<com.smartwikioftf.Crypto: java.security.spec.AlgorithmParameterSpec getIV()>();
+
+        $r0.<com.smartwikioftf.Crypto: java.security.spec.AlgorithmParameterSpec spec> = $r7;
+
+        return;
+    }
+
+    public java.lang.String decrypt(java.lang.String) throws java.lang.Exception
+    {
+        com.smartwikioftf.Crypto $r0;
+        java.lang.String $r1;
+        javax.crypto.spec.SecretKeySpec $r2;
+        java.security.spec.AlgorithmParameterSpec $r3;
+        javax.crypto.Cipher $r4;
+        byte[] $r5;
+
+        $r0 := @this: com.smartwikioftf.Crypto;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r4 = $r0.<com.smartwikioftf.Crypto: javax.crypto.Cipher cipher>;
+
+        $r2 = $r0.<com.smartwikioftf.Crypto: javax.crypto.spec.SecretKeySpec key>;
+
+        $r3 = $r0.<com.smartwikioftf.Crypto: java.security.spec.AlgorithmParameterSpec spec>;
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(2, $r2, $r3);
+
+        $r5 = staticinvoke <android.util.Base64: byte[] decode(java.lang.String,int)>($r1, 0);
+
+        $r4 = $r0.<com.smartwikioftf.Crypto: javax.crypto.Cipher cipher>;
+
+        $r5 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r5);
+
+        $r1 = new java.lang.String;
+
+        specialinvoke $r1.<java.lang.String: void <init>(byte[],java.lang.String)>($r5, "UTF-8");
+
+        return $r1;
+    }
+
+    public java.lang.String encrypt(java.lang.String) throws java.lang.Exception
+    {
+        com.smartwikioftf.Crypto $r0;
+        java.lang.String $r1;
+        javax.crypto.spec.SecretKeySpec $r2;
+        java.security.spec.AlgorithmParameterSpec $r3;
+        javax.crypto.Cipher $r4;
+        byte[] $r5;
+
+        $r0 := @this: com.smartwikioftf.Crypto;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r4 = $r0.<com.smartwikioftf.Crypto: javax.crypto.Cipher cipher>;
+
+        $r2 = $r0.<com.smartwikioftf.Crypto: javax.crypto.spec.SecretKeySpec key>;
+
+        $r3 = $r0.<com.smartwikioftf.Crypto: java.security.spec.AlgorithmParameterSpec spec>;
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(1, $r2, $r3);
+
+        $r4 = $r0.<com.smartwikioftf.Crypto: javax.crypto.Cipher cipher>;
+
+        $r5 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>("UTF-8");
+
+        $r5 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r5);
+
+        $r1 = new java.lang.String;
+
+        $r5 = staticinvoke <android.util.Base64: byte[] encode(byte[],int)>($r5, 0);
+
+        specialinvoke $r1.<java.lang.String: void <init>(byte[],java.lang.String)>($r5, "UTF-8");
+
+        return $r1;
+    }
+
+    public java.security.spec.AlgorithmParameterSpec getIV()
+    {
+        com.smartwikioftf.Crypto $r0;
+        byte[] $r1;
+        javax.crypto.spec.IvParameterSpec $r2;
+
+        nop;
+
+        $r0 := @this: com.smartwikioftf.Crypto;
+
+        $r1 = newarray (byte)[16];
+
+        $r2 = new javax.crypto.spec.IvParameterSpec;
+
+        specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r1);
+
+        return $r2;
+    }
+}

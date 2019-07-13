@@ -1,0 +1,1444 @@
+class com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod extends com.amazon.identity.auth.device.api.AuthenticationMethod implements com.amazon.identity.auth.device.api.ADPCorpusSigningAuthenticationMethod
+{
+    private static final long GET_CENTRAL_CREDENTIAL_TIME_OUT_MS;
+    private static final byte[] NEW_LINE;
+    static final java.lang.String TAG;
+    private final java.lang.String mPackageName;
+    private final com.amazon.identity.auth.device.api.TokenManagement mTokenManagement;
+
+    static void <clinit>()
+    {
+        java.util.concurrent.TimeUnit $r0;
+        java.lang.Class $r1;
+        java.lang.String $r2;
+        long $l0, varReplacer16376;
+        byte[] $r3;
+
+        nop;
+
+        $r1 = class "Lcom/amazon/identity/auth/device/api/InProcessAdpAuthenticationMethod;";
+
+        $r2 = virtualinvoke $r1.<java.lang.Class: java.lang.String getName()>();
+
+        <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG> = $r2;
+
+        $r0 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        varReplacer16376 = 2L;
+
+        $l0 = staticinvoke <com.amazon.identity.auth.device.utils.TimeUtil: long fromMinutesTo(long,java.util.concurrent.TimeUnit)>(varReplacer16376, $r0);
+
+        <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: long GET_CENTRAL_CREDENTIAL_TIME_OUT_MS> = $l0;
+
+        $r2 = "\n";
+
+        $r3 = virtualinvoke $r2.<java.lang.String: byte[] getBytes()>();
+
+        <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: byte[] NEW_LINE> = $r3;
+
+        return;
+    }
+
+    void <init>(android.content.Context, java.lang.String, java.lang.String, com.amazon.identity.auth.device.api.AuthenticationType)
+    {
+        com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod $r0;
+        android.content.Context $r1;
+        java.lang.String $r2, $r3, varReplacer16387;
+        com.amazon.identity.auth.device.api.AuthenticationType $r4;
+        java.lang.Object $r5;
+        com.amazon.identity.auth.device.framework.ServiceWrappingContext $r6;
+        com.amazon.identity.auth.device.api.TokenManagement $r7;
+
+        nop;
+
+        $r0 := @this: com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 := @parameter3: com.amazon.identity.auth.device.api.AuthenticationType;
+
+        specialinvoke $r0.<com.amazon.identity.auth.device.api.AuthenticationMethod: void <init>(android.content.Context,java.lang.String,com.amazon.identity.auth.device.api.AuthenticationType)>($r1, $r2, $r4);
+
+        $r6 = $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: com.amazon.identity.auth.device.framework.ServiceWrappingContext mContext>;
+
+        varReplacer16387 = "dcp_token_mangement";
+
+        $r5 = virtualinvoke $r6.<com.amazon.identity.auth.device.framework.ServiceWrappingContext: java.lang.Object getSystemService(java.lang.String)>(varReplacer16387);
+
+        $r7 = (com.amazon.identity.auth.device.api.TokenManagement) $r5;
+
+        $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: com.amazon.identity.auth.device.api.TokenManagement mTokenManagement> = $r7;
+
+        $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String mPackageName> = $r3;
+
+        return;
+    }
+
+    void <init>(android.content.Context, java.lang.String, java.lang.String, java.lang.String)
+    {
+        com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod $r0;
+        android.content.Context $r1;
+        java.lang.String $r2, $r3, $r4, varReplacer16377, varReplacer16378;
+        java.lang.Object $r5;
+        com.amazon.identity.auth.device.framework.ServiceWrappingContext $r6;
+        com.amazon.identity.auth.device.api.TokenManagement $r7;
+
+        nop;
+
+        $r0 := @this: com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 := @parameter3: java.lang.String;
+
+        varReplacer16378 = "BustedIdentityADPAuthenticator";
+
+        specialinvoke $r0.<com.amazon.identity.auth.device.api.AuthenticationMethod: void <init>(android.content.Context,java.lang.String,java.lang.String)>($r1, $r2, varReplacer16378);
+
+        $r6 = $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: com.amazon.identity.auth.device.framework.ServiceWrappingContext mContext>;
+
+        varReplacer16377 = "dcp_token_mangement";
+
+        $r5 = virtualinvoke $r6.<com.amazon.identity.auth.device.framework.ServiceWrappingContext: java.lang.Object getSystemService(java.lang.String)>(varReplacer16377);
+
+        $r7 = (com.amazon.identity.auth.device.api.TokenManagement) $r5;
+
+        $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: com.amazon.identity.auth.device.api.TokenManagement mTokenManagement> = $r7;
+
+        $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String mPackageName> = $r3;
+
+        return;
+    }
+
+    private byte[] getCorpus$56a66179(android.net.Uri, java.lang.String, byte[], java.lang.String, java.lang.String)
+    {
+        com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod $r0;
+        android.net.Uri $r1;
+        java.lang.String $r2, $r4, $r5, $r8, $r9, $r11, varReplacer16568, varReplacer16569, varReplacer16570, varReplacer16574, varReplacer16575, varReplacer16576, varReplacer16577;
+        byte[] $r3, $r12;
+        java.io.ByteArrayOutputStream $r6;
+        java.lang.Throwable $r7;
+        boolean $z0;
+        java.lang.StringBuilder $r10;
+        null_type varReplacer16571, varReplacer16572, varReplacer16573, varReplacer16578;
+
+        nop;
+
+        $r0 := @this: com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod;
+
+        $r1 := @parameter0: android.net.Uri;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: byte[];
+
+        $r4 := @parameter3: java.lang.String;
+
+        $r5 := @parameter4: java.lang.String;
+
+        $r6 = new java.io.ByteArrayOutputStream;
+
+     label01:
+        specialinvoke $r6.<java.io.ByteArrayOutputStream: void <init>()>();
+
+     label02:
+        if $r2 != null goto label05;
+
+        $r2 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+     label03:
+        varReplacer16570 = "No verb specified. Cannot create corpus";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r2, varReplacer16570);
+
+     label04:
+        varReplacer16578 = null;
+
+        return varReplacer16578;
+
+     label05:
+        if $r1 != null goto label09;
+
+        $r8 = null;
+
+     label06:
+        if $r8 != null goto label23;
+
+        $r2 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+     label07:
+        varReplacer16575 = "No path specified. Cannot create corpus";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r2, varReplacer16575);
+
+     label08:
+        varReplacer16573 = null;
+
+        return varReplacer16573;
+
+     label09:
+        $r8 = "BustedIdentityADPAuthenticator";
+
+        $r9 = $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String mAuthTypeString>;
+
+     label10:
+        $z0 = virtualinvoke $r8.<java.lang.String: boolean equals(java.lang.Object)>($r9);
+
+     label11:
+        if $z0 == 0 goto label14;
+
+     label12:
+        $r8 = virtualinvoke $r1.<android.net.Uri: java.lang.String toString()>();
+
+     label13:
+        goto label06;
+
+     label14:
+        $r9 = virtualinvoke $r1.<android.net.Uri: java.lang.String getEncodedPath()>();
+
+     label15:
+        $r8 = $r9;
+
+        if $r9 != null goto label16;
+
+        $r8 = "";
+
+     label16:
+        varReplacer16569 = "/";
+
+        $z0 = virtualinvoke $r8.<java.lang.String: boolean startsWith(java.lang.String)>(varReplacer16569);
+
+     label17:
+        if $z0 != 0 goto label19;
+
+        $r10 = new java.lang.StringBuilder;
+
+     label18:
+        varReplacer16577 = "/";
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16577);
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label19:
+        $r9 = virtualinvoke $r1.<android.net.Uri: java.lang.String getEncodedQuery()>();
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r9);
+
+     label20:
+        if $z0 != 0 goto label22;
+
+        $r10 = new java.lang.StringBuilder;
+
+     label21:
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        varReplacer16568 = "?";
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer16568);
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $r8 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label22:
+        goto label06;
+
+     label23:
+        $r9 = "BustedIdentityADPAuthenticator";
+
+        $r11 = $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String mAuthTypeString>;
+
+     label24:
+        $z0 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>($r11);
+
+     label25:
+        if $z0 == 0 goto label29;
+
+        $r3 = newarray (byte)[0];
+
+     label26:
+        if $r5 != null goto label31;
+
+        $r2 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+     label27:
+        varReplacer16576 = "Unable to retrieve ADP token for given account. Cannot generate corpus.";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r2, varReplacer16576);
+
+     label28:
+        varReplacer16571 = null;
+
+        return varReplacer16571;
+
+     label29:
+        if $r3 != null goto label30;
+
+        $r3 = newarray (byte)[0];
+
+        goto label26;
+
+     label30:
+        goto label26;
+
+     label31:
+        $r12 = virtualinvoke $r2.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r6.<java.io.ByteArrayOutputStream: void write(byte[])>($r12);
+
+     label32:
+        $r12 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: byte[] NEW_LINE>;
+
+     label33:
+        virtualinvoke $r6.<java.io.ByteArrayOutputStream: void write(byte[])>($r12);
+
+        $r12 = virtualinvoke $r8.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r6.<java.io.ByteArrayOutputStream: void write(byte[])>($r12);
+
+     label34:
+        $r12 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: byte[] NEW_LINE>;
+
+     label35:
+        virtualinvoke $r6.<java.io.ByteArrayOutputStream: void write(byte[])>($r12);
+
+        $r12 = virtualinvoke $r4.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r6.<java.io.ByteArrayOutputStream: void write(byte[])>($r12);
+
+     label36:
+        $r12 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: byte[] NEW_LINE>;
+
+     label37:
+        virtualinvoke $r6.<java.io.ByteArrayOutputStream: void write(byte[])>($r12);
+
+        virtualinvoke $r6.<java.io.ByteArrayOutputStream: void write(byte[])>($r3);
+
+     label38:
+        $r3 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: byte[] NEW_LINE>;
+
+     label39:
+        virtualinvoke $r6.<java.io.ByteArrayOutputStream: void write(byte[])>($r3);
+
+        $r3 = virtualinvoke $r5.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r6.<java.io.ByteArrayOutputStream: void write(byte[])>($r3);
+
+        $r3 = virtualinvoke $r6.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+     label40:
+        return $r3;
+
+     label41:
+        $r7 := @caughtexception;
+
+        $r2 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        varReplacer16574 = "Could not construct a corpus because an IOException occured";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String,java.lang.Throwable)>($r2, varReplacer16574, $r7);
+
+        varReplacer16572 = null;
+
+        return varReplacer16572;
+
+        catch java.io.IOException from label01 to label02 with label41;
+        catch java.io.IOException from label03 to label04 with label41;
+        catch java.io.IOException from label07 to label08 with label41;
+        catch java.io.IOException from label10 to label11 with label41;
+        catch java.io.IOException from label12 to label13 with label41;
+        catch java.io.IOException from label14 to label15 with label41;
+        catch java.io.IOException from label16 to label17 with label41;
+        catch java.io.IOException from label18 to label19 with label41;
+        catch java.io.IOException from label19 to label20 with label41;
+        catch java.io.IOException from label21 to label22 with label41;
+        catch java.io.IOException from label24 to label25 with label41;
+        catch java.io.IOException from label27 to label28 with label41;
+        catch java.io.IOException from label31 to label32 with label41;
+        catch java.io.IOException from label33 to label34 with label41;
+        catch java.io.IOException from label35 to label36 with label41;
+        catch java.io.IOException from label37 to label38 with label41;
+        catch java.io.IOException from label39 to label40 with label41;
+    }
+
+    private static android.os.Bundle getOptions()
+    {
+        android.os.Bundle $r0;
+        java.lang.String varReplacer16521;
+        int varReplacer16522;
+
+        nop;
+
+        $r0 = new android.os.Bundle;
+
+        specialinvoke $r0.<android.os.Bundle: void <init>()>();
+
+        varReplacer16521 = "ignore.platform.restrictions";
+
+        varReplacer16522 = 1;
+
+        virtualinvoke $r0.<android.os.Bundle: void putBoolean(java.lang.String,boolean)>(varReplacer16521, varReplacer16522);
+
+        return $r0;
+    }
+
+    private java.security.PrivateKey getPrivateKey()
+    {
+        com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod $r0;
+        long $l0;
+        com.amazon.identity.auth.device.api.TokenManagement $r1;
+        java.lang.String $r2, $r3, varReplacer16601, varReplacer16602, varReplacer16604, varReplacer16605, varReplacer16606, varReplacer16607;
+        android.os.Bundle $r4;
+        java.security.PrivateKey $r5;
+        java.lang.Throwable $r6, $r9, $r10, $r11;
+        com.amazon.identity.auth.device.api.MAPCallbackErrorException $r7;
+        java.lang.StringBuilder $r8, r12;
+        java.lang.InterruptedException r13;
+        java.util.concurrent.ExecutionException r14;
+        java.util.concurrent.TimeoutException r15;
+        null_type varReplacer16603;
+
+        nop;
+
+        $r0 := @this: com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod;
+
+        $r1 = $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: com.amazon.identity.auth.device.api.TokenManagement mTokenManagement>;
+
+        $r2 = $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String mDirectedId>;
+
+        $r3 = $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String mPackageName>;
+
+     label01:
+        varReplacer16601 = "com.amazon.dcp.sso.token.device.privatekey";
+
+        $r3 = staticinvoke <com.amazon.identity.auth.device.storage.StorageKeyUtils: java.lang.String getKeyWithPackageNamespace(java.lang.String,java.lang.String)>($r3, varReplacer16601);
+
+        $r4 = staticinvoke <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: android.os.Bundle getOptions()>();
+
+     label02:
+        $l0 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: long GET_CENTRAL_CREDENTIAL_TIME_OUT_MS>;
+
+     label03:
+        $r2 = virtualinvoke $r1.<com.amazon.identity.auth.device.api.TokenManagement: java.lang.String getValue(java.lang.String,java.lang.String,android.os.Bundle,long)>($r2, $r3, $r4, $l0);
+
+        $r5 = staticinvoke <com.amazon.identity.auth.device.utils.KeyFactoryUtils: java.security.PrivateKey getPrivateKey(java.lang.String)>($r2);
+
+     label04:
+        return $r5;
+
+     label05:
+        $r6 := @caughtexception;
+
+        $r2 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        varReplacer16602 = "Could not sign request because there was an invalid key";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String,java.lang.Throwable)>($r2, varReplacer16602, $r6);
+
+     label06:
+        varReplacer16603 = null;
+
+        return varReplacer16603;
+
+     label07:
+        $r7 := @caughtexception;
+
+        $r4 = virtualinvoke $r7.<com.amazon.identity.auth.device.api.MAPCallbackErrorException: android.os.Bundle getErrorBundle()>();
+
+        $r2 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        r12 = new java.lang.StringBuilder;
+
+        varReplacer16607 = "Getting private key failed because of callback error. Error Bundle: ";
+
+        specialinvoke r12.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16607);
+
+        $r3 = staticinvoke <com.amazon.identity.auth.device.utils.BundleUtils: java.lang.String toString(android.os.Bundle)>($r4);
+
+        $r8 = virtualinvoke r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r2, $r3);
+
+        goto label06;
+
+     label08:
+        $r9 := @caughtexception;
+
+        $r2 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        r12 = new java.lang.StringBuilder;
+
+        varReplacer16606 = "Getting private key failed because of InterruptedException: ";
+
+        specialinvoke r12.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16606);
+
+        r13 = (java.lang.InterruptedException) $r9;
+
+        $r3 = virtualinvoke r13.<java.lang.InterruptedException: java.lang.String getMessage()>();
+
+        $r8 = virtualinvoke r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r2, $r3);
+
+        goto label06;
+
+     label09:
+        $r10 := @caughtexception;
+
+        $r2 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        r12 = new java.lang.StringBuilder;
+
+        varReplacer16604 = "Getting private key failed because of ExecutionException: ";
+
+        specialinvoke r12.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16604);
+
+        r14 = (java.util.concurrent.ExecutionException) $r10;
+
+        $r3 = virtualinvoke r14.<java.util.concurrent.ExecutionException: java.lang.String getMessage()>();
+
+        $r8 = virtualinvoke r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r2, $r3);
+
+        goto label06;
+
+     label10:
+        $r11 := @caughtexception;
+
+        $r2 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        r12 = new java.lang.StringBuilder;
+
+        varReplacer16605 = "Getting private key failed because of TimeoutException: ";
+
+        specialinvoke r12.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16605);
+
+        r15 = (java.util.concurrent.TimeoutException) $r11;
+
+        $r3 = virtualinvoke r15.<java.util.concurrent.TimeoutException: java.lang.String getMessage()>();
+
+        $r8 = virtualinvoke r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r2, $r3);
+
+        goto label06;
+
+        catch java.security.spec.InvalidKeySpecException from label01 to label02 with label05;
+        catch java.security.spec.InvalidKeySpecException from label03 to label04 with label05;
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label01 to label02 with label07;
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label03 to label04 with label07;
+        catch java.lang.InterruptedException from label01 to label02 with label08;
+        catch java.lang.InterruptedException from label03 to label04 with label08;
+        catch java.util.concurrent.ExecutionException from label01 to label02 with label09;
+        catch java.util.concurrent.ExecutionException from label03 to label04 with label09;
+        catch java.util.concurrent.TimeoutException from label01 to label02 with label10;
+        catch java.util.concurrent.TimeoutException from label03 to label04 with label10;
+    }
+
+    private static byte[] signWithNewAuth(byte[], java.security.PrivateKey)
+    {
+        byte[] $r0;
+        java.security.PrivateKey $r1;
+        java.security.Signature $r2;
+        java.lang.Throwable $r3, $r5, $r6;
+        java.lang.String $r4, varReplacer16581, varReplacer16582, varReplacer16584, varReplacer16586;
+        null_type varReplacer16583, varReplacer16585, varReplacer16587;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: java.security.PrivateKey;
+
+     label1:
+        varReplacer16582 = "SHA256WithRSA";
+
+        $r2 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer16582);
+
+        virtualinvoke $r2.<java.security.Signature: void initSign(java.security.PrivateKey)>($r1);
+
+        virtualinvoke $r2.<java.security.Signature: void update(byte[])>($r0);
+
+        $r0 = virtualinvoke $r2.<java.security.Signature: byte[] sign()>();
+
+     label2:
+        return $r0;
+
+     label3:
+        $r3 := @caughtexception;
+
+        $r4 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        varReplacer16581 = "Request signing failed because of No such algorithm found.";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String,java.lang.Throwable)>($r4, varReplacer16581, $r3);
+
+        varReplacer16583 = null;
+
+        return varReplacer16583;
+
+     label4:
+        $r5 := @caughtexception;
+
+        $r4 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        varReplacer16584 = "Request signing failed because it was given an invalid key";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String,java.lang.Throwable)>($r4, varReplacer16584, $r5);
+
+        varReplacer16587 = null;
+
+        return varReplacer16587;
+
+     label5:
+        $r6 := @caughtexception;
+
+        $r4 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        varReplacer16586 = "Request signing failed because there was a problem with the signature";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String,java.lang.Throwable)>($r4, varReplacer16586, $r6);
+
+        varReplacer16585 = null;
+
+        return varReplacer16585;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+        catch java.security.InvalidKeyException from label1 to label2 with label4;
+        catch java.security.SignatureException from label1 to label2 with label5;
+    }
+
+    private static byte[] signWithOldAuth(byte[], java.security.PrivateKey)
+    {
+        byte[] $r0;
+        java.security.PrivateKey $r1;
+        java.security.MessageDigest $r2;
+        javax.crypto.Cipher $r3;
+        java.lang.Throwable $r4, $r8, $r9, $r10, $r11;
+        java.lang.String $r5, $r7, varReplacer16590, varReplacer16592, varReplacer16593, varReplacer16594, varReplacer16596, varReplacer16598, varReplacer16599;
+        java.lang.StringBuilder $r6, r12;
+        java.security.NoSuchAlgorithmException r13;
+        javax.crypto.NoSuchPaddingException r14;
+        javax.crypto.IllegalBlockSizeException r15;
+        javax.crypto.BadPaddingException r16;
+        java.security.InvalidKeyException r17;
+        null_type varReplacer16588, varReplacer16591, varReplacer16595, varReplacer16597, varReplacer16600;
+        int varReplacer16589;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: java.security.PrivateKey;
+
+     label1:
+        varReplacer16593 = "SHA-256";
+
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer16593);
+
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte[])>($r0);
+
+        $r0 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>();
+
+        varReplacer16590 = "RSA/ECB/PKCS1Padding";
+
+        $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer16590);
+
+        varReplacer16589 = 1;
+
+        virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer16589, $r1);
+
+        virtualinvoke $r3.<javax.crypto.Cipher: byte[] update(byte[])>($r0);
+
+        $r0 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal()>();
+
+     label2:
+        return $r0;
+
+     label3:
+        $r4 := @caughtexception;
+
+        $r5 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        r12 = new java.lang.StringBuilder;
+
+        varReplacer16599 = "Signing request with old auth failed because of NoSuchAlgorithmException: ";
+
+        specialinvoke r12.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16599);
+
+        r13 = (java.security.NoSuchAlgorithmException) $r4;
+
+        $r7 = virtualinvoke r13.<java.security.NoSuchAlgorithmException: java.lang.String getMessage()>();
+
+        $r6 = virtualinvoke r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r5, $r7);
+
+        varReplacer16591 = null;
+
+        return varReplacer16591;
+
+     label4:
+        $r8 := @caughtexception;
+
+        $r5 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        r12 = new java.lang.StringBuilder;
+
+        varReplacer16592 = "Signing request with old auth failed because of NoSuchPaddingException: ";
+
+        specialinvoke r12.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16592);
+
+        r14 = (javax.crypto.NoSuchPaddingException) $r8;
+
+        $r7 = virtualinvoke r14.<javax.crypto.NoSuchPaddingException: java.lang.String getMessage()>();
+
+        $r6 = virtualinvoke r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r5, $r7);
+
+        varReplacer16595 = null;
+
+        return varReplacer16595;
+
+     label5:
+        $r9 := @caughtexception;
+
+        $r5 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        r12 = new java.lang.StringBuilder;
+
+        varReplacer16594 = "Signing request with old auth failed because of IllegalBlockSizeException: ";
+
+        specialinvoke r12.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16594);
+
+        r15 = (javax.crypto.IllegalBlockSizeException) $r9;
+
+        $r7 = virtualinvoke r15.<javax.crypto.IllegalBlockSizeException: java.lang.String getMessage()>();
+
+        $r6 = virtualinvoke r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r5, $r7);
+
+        varReplacer16588 = null;
+
+        return varReplacer16588;
+
+     label6:
+        $r10 := @caughtexception;
+
+        $r5 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        r12 = new java.lang.StringBuilder;
+
+        varReplacer16596 = "Signing request with old auth failed because of BadPaddingException: ";
+
+        specialinvoke r12.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16596);
+
+        r16 = (javax.crypto.BadPaddingException) $r10;
+
+        $r7 = virtualinvoke r16.<javax.crypto.BadPaddingException: java.lang.String getMessage()>();
+
+        $r6 = virtualinvoke r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r5, $r7);
+
+        varReplacer16597 = null;
+
+        return varReplacer16597;
+
+     label7:
+        $r11 := @caughtexception;
+
+        $r5 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        r12 = new java.lang.StringBuilder;
+
+        varReplacer16598 = "Signing request with old auth failed because of InvalidKeyException: ";
+
+        specialinvoke r12.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16598);
+
+        r17 = (java.security.InvalidKeyException) $r11;
+
+        $r7 = virtualinvoke r17.<java.security.InvalidKeyException: java.lang.String getMessage()>();
+
+        $r6 = virtualinvoke r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r5, $r7);
+
+        varReplacer16600 = null;
+
+        return varReplacer16600;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+        catch javax.crypto.NoSuchPaddingException from label1 to label2 with label4;
+        catch javax.crypto.IllegalBlockSizeException from label1 to label2 with label5;
+        catch javax.crypto.BadPaddingException from label1 to label2 with label6;
+        catch java.security.InvalidKeyException from label1 to label2 with label7;
+    }
+
+    private boolean useLegacyAuth()
+    {
+        com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod $r0;
+        java.lang.String $r1, $r3;
+        boolean $z0;
+        com.amazon.identity.auth.device.api.AuthenticationType $r2;
+
+        nop;
+
+        $r0 := @this: com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod;
+
+        $r2 = <com.amazon.identity.auth.device.api.AuthenticationType: com.amazon.identity.auth.device.api.AuthenticationType DeviceAuthenticator>;
+
+        $r3 = $r2.<com.amazon.identity.auth.device.api.AuthenticationType: java.lang.String mValue>;
+
+        $r1 = $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String mAuthTypeString>;
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        return $z0;
+    }
+
+    protected final com.amazon.identity.auth.device.api.MAPFuture getAuthenticationBundle(android.net.Uri, java.lang.String, java.util.Map, byte[], com.amazon.identity.auth.device.callback.CallbackFuture) throws java.io.IOException
+    {
+        com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod $r0;
+        android.net.Uri $r1;
+        java.lang.String $r2, $r8, $r9, varReplacer16434, varReplacer16435, varReplacer16436, varReplacer16441, varReplacer16442, varReplacer16443, varReplacer16444, varReplacer16445, varReplacer16446, varReplacer16448, varReplacer16452, varReplacer16455, varReplacer16456, varReplacer16457, varReplacer16459, varReplacer16461;
+        java.util.Map $r3;
+        byte[] $r4;
+        com.amazon.identity.auth.device.callback.CallbackFuture $r5;
+        android.os.Bundle $r6, r23;
+        com.amazon.identity.auth.device.api.TokenManagement $r7;
+        long $l0;
+        java.text.SimpleDateFormat $r10, r20;
+        java.util.Locale $r11;
+        java.util.Date $r12, r21;
+        com.amazon.identity.auth.device.api.MAPCallbackErrorException $r13;
+        java.lang.StringBuilder $r14, r22;
+        java.lang.Object[] $r15;
+        boolean $z0;
+        java.lang.Throwable $r16, $r18, $r19;
+        java.lang.Thread $r17;
+        java.lang.InterruptedException r24;
+        java.util.concurrent.ExecutionException r25;
+        java.util.concurrent.TimeoutException r26;
+        int varReplacer16437, varReplacer16439, varReplacer16447, varReplacer16450, varReplacer16453, varReplacer16458;
+        null_type varReplacer16438, varReplacer16440, varReplacer16449, varReplacer16451, varReplacer16454, varReplacer16460;
+
+        nop;
+
+        $r0 := @this: com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod;
+
+        $r1 := @parameter0: android.net.Uri;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.util.Map;
+
+        $r4 := @parameter3: byte[];
+
+        $r5 := @parameter4: com.amazon.identity.auth.device.callback.CallbackFuture;
+
+        $r7 = $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: com.amazon.identity.auth.device.api.TokenManagement mTokenManagement>;
+
+        $r8 = $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String mDirectedId>;
+
+        $r9 = $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String mPackageName>;
+
+     label01:
+        varReplacer16457 = "com.amazon.dcp.sso.token.device.adptoken";
+
+        $r9 = staticinvoke <com.amazon.identity.auth.device.storage.StorageKeyUtils: java.lang.String getKeyWithPackageNamespace(java.lang.String,java.lang.String)>($r9, varReplacer16457);
+
+        $r6 = staticinvoke <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: android.os.Bundle getOptions()>();
+
+     label02:
+        $l0 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: long GET_CENTRAL_CREDENTIAL_TIME_OUT_MS>;
+
+     label03:
+        $r8 = virtualinvoke $r7.<com.amazon.identity.auth.device.api.TokenManagement: java.lang.String getValue(java.lang.String,java.lang.String,android.os.Bundle,long)>($r8, $r9, $r6, $l0);
+
+     label04:
+        if $r8 != null goto label09;
+
+     label05:
+        varReplacer16458 = 2;
+
+        varReplacer16459 = "Unable to sign request. Could not retrieve ADP token for account";
+
+        varReplacer16460 = null;
+
+        staticinvoke <com.amazon.identity.auth.device.api.AuthenticationMethod: void callbackError(com.amazon.identity.auth.device.callback.CallbackFuture,int,java.lang.String,android.os.Bundle)>($r5, varReplacer16458, varReplacer16459, varReplacer16460);
+
+     label06:
+        $r2 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+     label07:
+        varReplacer16445 = "Unable to sign request. Could not retrieve ADP token for account";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r2, varReplacer16445);
+
+     label08:
+        return $r5;
+
+     label09:
+        r20 = new java.text.SimpleDateFormat;
+
+        $r10 = r20;
+
+        $r11 = <java.util.Locale: java.util.Locale US>;
+
+     label10:
+        varReplacer16434 = "yyyy-MM-dd\'T\'HH:mm:ss\'Z\'";
+
+        specialinvoke r20.<java.text.SimpleDateFormat: void <init>(java.lang.String,java.util.Locale)>(varReplacer16434, $r11);
+
+     label11:
+        r21 = new java.util.Date;
+
+        $r12 = r21;
+
+     label12:
+        specialinvoke r21.<java.util.Date: void <init>()>();
+
+        $r9 = virtualinvoke $r10.<java.text.SimpleDateFormat: java.lang.String format(java.util.Date)>($r12);
+
+        $r4 = specialinvoke $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: byte[] getCorpus$56a66179(android.net.Uri,java.lang.String,byte[],java.lang.String,java.lang.String)>($r1, $r2, $r4, $r9, $r8);
+
+     label13:
+        if $r4 == null goto label14;
+
+        if $r9 != null goto label23;
+
+     label14:
+        $r2 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+     label15:
+        varReplacer16441 = "Could not sign request because we were unable to create a corpus";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r2, varReplacer16441);
+
+     label16:
+        $r2 = null;
+
+     label17:
+        if $r2 != null goto label28;
+
+     label18:
+        varReplacer16447 = 3;
+
+        varReplacer16448 = "Unable to sign request. Could not generate ADP signature. Please check provided parameters.";
+
+        varReplacer16449 = null;
+
+        staticinvoke <com.amazon.identity.auth.device.api.AuthenticationMethod: void callbackError(com.amazon.identity.auth.device.callback.CallbackFuture,int,java.lang.String,android.os.Bundle)>($r5, varReplacer16447, varReplacer16448, varReplacer16449);
+
+     label19:
+        $r2 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+     label20:
+        varReplacer16443 = "Unable to sign request. Could not generate ADP signature.";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r2, varReplacer16443);
+
+     label21:
+        return $r5;
+
+     label22:
+        $r13 := @caughtexception;
+
+        $r6 = virtualinvoke $r13.<com.amazon.identity.auth.device.api.MAPCallbackErrorException: android.os.Bundle getErrorBundle()>();
+
+        r22 = new java.lang.StringBuilder;
+
+        varReplacer16444 = "Getting ADP Token failed because of callback error. Error Bundle: ";
+
+        specialinvoke r22.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16444);
+
+        $r2 = staticinvoke <com.amazon.identity.auth.device.utils.BundleUtils: java.lang.String toString(android.os.Bundle)>($r6);
+
+        $r14 = virtualinvoke r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer16437 = 6;
+
+        varReplacer16438 = null;
+
+        staticinvoke <com.amazon.identity.auth.device.api.AuthenticationMethod: void callbackError(com.amazon.identity.auth.device.callback.CallbackFuture,int,java.lang.String,android.os.Bundle)>($r5, varReplacer16437, $r2, varReplacer16438);
+
+        $r2 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        r22 = new java.lang.StringBuilder;
+
+        varReplacer16446 = "Getting ADP Token failed because of callback error. Error Bundle: ";
+
+        specialinvoke r22.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16446);
+
+        $r8 = staticinvoke <com.amazon.identity.auth.device.utils.BundleUtils: java.lang.String toString(android.os.Bundle)>($r6);
+
+        $r14 = virtualinvoke r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r2, $r8);
+
+        return $r5;
+
+     label23:
+        $r2 = virtualinvoke $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String signBufferAsBase64(byte[])>($r4);
+
+     label24:
+        if $r2 != null goto label25;
+
+        $r2 = null;
+
+        goto label17;
+
+     label25:
+        $r15 = newarray (java.lang.Object)[2];
+
+        $r15[0] = $r2;
+
+        $r15[1] = $r9;
+
+     label26:
+        varReplacer16435 = "%s:%s";
+
+        $r2 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer16435, $r15);
+
+     label27:
+        goto label17;
+
+     label28:
+        r23 = new android.os.Bundle;
+
+        $r6 = r23;
+
+     label29:
+        specialinvoke r23.<android.os.Bundle: void <init>()>();
+
+        $z0 = specialinvoke $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: boolean useLegacyAuth()>();
+
+     label30:
+        if $z0 == 0 goto label42;
+
+        $r9 = "X-ADP-Request-Digest";
+
+     label31:
+        staticinvoke <com.amazon.identity.auth.request.AuthenticatedRequestHelpers: void setHeaderInBundle(android.os.Bundle,java.lang.String,java.lang.String)>($r6, $r9, $r2);
+
+        $z0 = specialinvoke $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: boolean useLegacyAuth()>();
+
+     label32:
+        if $z0 == 0 goto label43;
+
+        $r2 = "X-ADP-Authentication-Token";
+
+     label33:
+        staticinvoke <com.amazon.identity.auth.request.AuthenticatedRequestHelpers: void setHeaderInBundle(android.os.Bundle,java.lang.String,java.lang.String)>($r6, $r2, $r8);
+
+        $z0 = specialinvoke $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: boolean useLegacyAuth()>();
+
+     label34:
+        if $z0 == 0 goto label44;
+
+        $r2 = null;
+
+     label35:
+        if $r2 == null goto label39;
+
+     label36:
+        $z0 = specialinvoke $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: boolean useLegacyAuth()>();
+
+     label37:
+        if $z0 == 0 goto label45;
+
+        $r8 = null;
+
+     label38:
+        staticinvoke <com.amazon.identity.auth.request.AuthenticatedRequestHelpers: void setHeaderInBundle(android.os.Bundle,java.lang.String,java.lang.String)>($r6, $r2, $r8);
+
+     label39:
+        virtualinvoke $r5.<com.amazon.identity.auth.device.callback.CallbackFuture: void onSuccess(android.os.Bundle)>($r6);
+
+     label40:
+        return $r5;
+
+     label41:
+        $r16 := @caughtexception;
+
+        $r17 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        virtualinvoke $r17.<java.lang.Thread: void interrupt()>();
+
+        r22 = new java.lang.StringBuilder;
+
+        varReplacer16436 = "Getting ADP Token failed because of InterruptedException. This can happen if the caller kills the thread or asnc task that is calling MAP\'s api. Exception message: ";
+
+        specialinvoke r22.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16436);
+
+        r24 = (java.lang.InterruptedException) $r16;
+
+        $r2 = virtualinvoke r24.<java.lang.InterruptedException: java.lang.String getMessage()>();
+
+        $r14 = virtualinvoke r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer16453 = 6;
+
+        varReplacer16454 = null;
+
+        staticinvoke <com.amazon.identity.auth.device.api.AuthenticationMethod: void callbackError(com.amazon.identity.auth.device.callback.CallbackFuture,int,java.lang.String,android.os.Bundle)>($r5, varReplacer16453, $r2, varReplacer16454);
+
+        $r2 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        r22 = new java.lang.StringBuilder;
+
+        varReplacer16455 = "Getting ADP Token failed because of InterruptedException. This can happen if the caller kills the thread or asnc task that is calling MAP\'s api. Exception message: ";
+
+        specialinvoke r22.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16455);
+
+        r24 = (java.lang.InterruptedException) $r16;
+
+        $r8 = virtualinvoke r24.<java.lang.InterruptedException: java.lang.String getMessage()>();
+
+        $r14 = virtualinvoke r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String,java.lang.Throwable)>($r2, $r8, $r16);
+
+        return $r5;
+
+     label42:
+        $r9 = "x-adp-signature";
+
+        goto label31;
+
+     label43:
+        $r2 = "x-adp-token";
+
+        goto label33;
+
+     label44:
+        $r2 = "x-adp-alg";
+
+        goto label35;
+
+     label45:
+        $r8 = "SHA256WithRSA:1.0";
+
+        goto label38;
+
+     label46:
+        $r18 := @caughtexception;
+
+        r22 = new java.lang.StringBuilder;
+
+        varReplacer16452 = "Getting ADP Token failed because of ExecutionException. This can happen when the thread or task was aborted. Exception message: ";
+
+        specialinvoke r22.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16452);
+
+        r25 = (java.util.concurrent.ExecutionException) $r18;
+
+        $r2 = virtualinvoke r25.<java.util.concurrent.ExecutionException: java.lang.String getMessage()>();
+
+        $r14 = virtualinvoke r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer16439 = 6;
+
+        varReplacer16440 = null;
+
+        staticinvoke <com.amazon.identity.auth.device.api.AuthenticationMethod: void callbackError(com.amazon.identity.auth.device.callback.CallbackFuture,int,java.lang.String,android.os.Bundle)>($r5, varReplacer16439, $r2, varReplacer16440);
+
+        $r2 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        r22 = new java.lang.StringBuilder;
+
+        varReplacer16456 = "Getting ADP Token failed because of ExecutionException. This can happen when the thread or task was aborted. Exception message: ";
+
+        specialinvoke r22.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16456);
+
+        r25 = (java.util.concurrent.ExecutionException) $r18;
+
+        $r8 = virtualinvoke r25.<java.util.concurrent.ExecutionException: java.lang.String getMessage()>();
+
+        $r14 = virtualinvoke r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String,java.lang.Throwable)>($r2, $r8, $r18);
+
+        return $r5;
+
+     label47:
+        $r19 := @caughtexception;
+
+        r22 = new java.lang.StringBuilder;
+
+        varReplacer16461 = "Getting ADP Token failed because of TimeoutException. This happens when the timeout passed into the future object occurs. Exception message: ";
+
+        specialinvoke r22.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16461);
+
+        r26 = (java.util.concurrent.TimeoutException) $r19;
+
+        $r2 = virtualinvoke r26.<java.util.concurrent.TimeoutException: java.lang.String getMessage()>();
+
+        $r14 = virtualinvoke r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer16450 = 6;
+
+        varReplacer16451 = null;
+
+        staticinvoke <com.amazon.identity.auth.device.api.AuthenticationMethod: void callbackError(com.amazon.identity.auth.device.callback.CallbackFuture,int,java.lang.String,android.os.Bundle)>($r5, varReplacer16450, $r2, varReplacer16451);
+
+        $r2 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        r22 = new java.lang.StringBuilder;
+
+        varReplacer16442 = "Getting ADP Token failed because of TimeoutException. This happens when the timeout passed into the future object occurs. Exception message: ";
+
+        specialinvoke r22.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16442);
+
+        r26 = (java.util.concurrent.TimeoutException) $r19;
+
+        $r8 = virtualinvoke r26.<java.util.concurrent.TimeoutException: java.lang.String getMessage()>();
+
+        $r14 = virtualinvoke r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String,java.lang.Throwable)>($r2, $r8, $r19);
+
+        return $r5;
+
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label01 to label02 with label22;
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label03 to label04 with label22;
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label05 to label06 with label22;
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label07 to label08 with label22;
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label10 to label11 with label22;
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label12 to label13 with label22;
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label15 to label16 with label22;
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label18 to label19 with label22;
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label20 to label21 with label22;
+        catch java.lang.InterruptedException from label01 to label02 with label41;
+        catch java.lang.InterruptedException from label03 to label04 with label41;
+        catch java.lang.InterruptedException from label05 to label06 with label41;
+        catch java.lang.InterruptedException from label07 to label08 with label41;
+        catch java.lang.InterruptedException from label10 to label11 with label41;
+        catch java.lang.InterruptedException from label12 to label13 with label41;
+        catch java.lang.InterruptedException from label15 to label16 with label41;
+        catch java.lang.InterruptedException from label18 to label19 with label41;
+        catch java.lang.InterruptedException from label20 to label21 with label41;
+        catch java.util.concurrent.ExecutionException from label01 to label02 with label46;
+        catch java.util.concurrent.ExecutionException from label03 to label04 with label46;
+        catch java.util.concurrent.ExecutionException from label05 to label06 with label46;
+        catch java.util.concurrent.ExecutionException from label07 to label08 with label46;
+        catch java.util.concurrent.ExecutionException from label10 to label11 with label46;
+        catch java.util.concurrent.ExecutionException from label12 to label13 with label46;
+        catch java.util.concurrent.ExecutionException from label15 to label16 with label46;
+        catch java.util.concurrent.ExecutionException from label18 to label19 with label46;
+        catch java.util.concurrent.ExecutionException from label20 to label21 with label46;
+        catch java.util.concurrent.TimeoutException from label01 to label02 with label47;
+        catch java.util.concurrent.TimeoutException from label03 to label04 with label47;
+        catch java.util.concurrent.TimeoutException from label05 to label06 with label47;
+        catch java.util.concurrent.TimeoutException from label07 to label08 with label47;
+        catch java.util.concurrent.TimeoutException from label10 to label11 with label47;
+        catch java.util.concurrent.TimeoutException from label12 to label13 with label47;
+        catch java.util.concurrent.TimeoutException from label15 to label16 with label47;
+        catch java.util.concurrent.TimeoutException from label18 to label19 with label47;
+        catch java.util.concurrent.TimeoutException from label20 to label21 with label47;
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label23 to label24 with label22;
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label26 to label27 with label22;
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label29 to label30 with label22;
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label31 to label32 with label22;
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label33 to label34 with label22;
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label36 to label37 with label22;
+        catch com.amazon.identity.auth.device.api.MAPCallbackErrorException from label38 to label40 with label22;
+        catch java.lang.InterruptedException from label23 to label24 with label41;
+        catch java.lang.InterruptedException from label26 to label27 with label41;
+        catch java.lang.InterruptedException from label29 to label30 with label41;
+        catch java.lang.InterruptedException from label31 to label32 with label41;
+        catch java.lang.InterruptedException from label33 to label34 with label41;
+        catch java.lang.InterruptedException from label36 to label37 with label41;
+        catch java.lang.InterruptedException from label38 to label40 with label41;
+        catch java.util.concurrent.ExecutionException from label23 to label24 with label46;
+        catch java.util.concurrent.ExecutionException from label26 to label27 with label46;
+        catch java.util.concurrent.ExecutionException from label29 to label30 with label46;
+        catch java.util.concurrent.ExecutionException from label31 to label32 with label46;
+        catch java.util.concurrent.ExecutionException from label33 to label34 with label46;
+        catch java.util.concurrent.ExecutionException from label36 to label37 with label46;
+        catch java.util.concurrent.ExecutionException from label38 to label40 with label46;
+        catch java.util.concurrent.TimeoutException from label23 to label24 with label47;
+        catch java.util.concurrent.TimeoutException from label26 to label27 with label47;
+        catch java.util.concurrent.TimeoutException from label29 to label30 with label47;
+        catch java.util.concurrent.TimeoutException from label31 to label32 with label47;
+        catch java.util.concurrent.TimeoutException from label33 to label34 with label47;
+        catch java.util.concurrent.TimeoutException from label36 to label37 with label47;
+        catch java.util.concurrent.TimeoutException from label38 to label40 with label47;
+    }
+
+    final java.lang.String signBufferAsBase64(byte[])
+    {
+        com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod $r0;
+        byte[] $r1;
+        java.lang.String $r2;
+        java.security.PrivateKey $r3;
+        boolean $z0;
+        int varReplacer16579;
+        null_type varReplacer16580;
+
+        nop;
+
+        $r0 := @this: com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 = null;
+
+        $r3 = specialinvoke $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.security.PrivateKey getPrivateKey()>();
+
+        if $r3 != null goto label1;
+
+        varReplacer16580 = null;
+
+        return varReplacer16580;
+
+     label1:
+        $z0 = specialinvoke $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: boolean useLegacyAuth()>();
+
+        if $z0 == 0 goto label4;
+
+        $r1 = staticinvoke <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: byte[] signWithOldAuth(byte[],java.security.PrivateKey)>($r1, $r3);
+
+     label2:
+        if $r1 == null goto label3;
+
+        $r2 = new java.lang.String;
+
+        varReplacer16579 = 2;
+
+        $r1 = staticinvoke <android.util.Base64: byte[] encode(byte[],int)>($r1, varReplacer16579);
+
+        specialinvoke $r2.<java.lang.String: void <init>(byte[])>($r1);
+
+     label3:
+        return $r2;
+
+     label4:
+        $r1 = staticinvoke <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: byte[] signWithNewAuth(byte[],java.security.PrivateKey)>($r1, $r3);
+
+        goto label2;
+    }
+
+    public final com.amazon.identity.auth.device.api.MAPFuture signCorpus(byte[], android.os.Bundle, com.amazon.identity.auth.device.api.Callback)
+    {
+        com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod $r0;
+        byte[] $r1;
+        android.os.Bundle $r2;
+        com.amazon.identity.auth.device.api.Callback $r3;
+        com.amazon.identity.auth.device.callback.CallbackFuture $r4;
+        com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod$1 $r5;
+        java.lang.String $r6, $r9;
+        boolean $z0;
+        com.amazon.identity.auth.device.api.MAPAccountManager $r7;
+        com.amazon.identity.auth.device.api.TokenManagement $r8;
+
+        $r0 := @this: com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 := @parameter1: android.os.Bundle;
+
+        $r3 := @parameter2: com.amazon.identity.auth.device.api.Callback;
+
+        $r4 = new com.amazon.identity.auth.device.callback.CallbackFuture;
+
+        specialinvoke $r4.<com.amazon.identity.auth.device.callback.CallbackFuture: void <init>(com.amazon.identity.auth.device.api.Callback)>(null);
+
+        if $r1 != null goto label1;
+
+        $r6 = <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String TAG>;
+
+        staticinvoke <com.amazon.identity.auth.device.utils.ADPCorpusSigningCallbackHelpers: void nullCorpusCallbackError(com.amazon.identity.auth.device.callback.CallbackFuture,java.lang.String)>($r4, $r6);
+
+        return $r4;
+
+     label1:
+        $r6 = $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String mDirectedId>;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r6);
+
+        if $z0 != 0 goto label2;
+
+        $r7 = $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: com.amazon.identity.auth.device.api.MAPAccountManager mMapAccountManager>;
+
+        $r6 = $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String mDirectedId>;
+
+        $z0 = virtualinvoke $r7.<com.amazon.identity.auth.device.api.MAPAccountManager: boolean isAccountRegistered(java.lang.String)>($r6);
+
+        if $z0 != 0 goto label3;
+
+     label2:
+        staticinvoke <com.amazon.identity.auth.device.utils.ADPCorpusSigningCallbackHelpers: void callbackError(com.amazon.identity.auth.device.callback.CallbackFuture,int,java.lang.String)>($r4, 2, "The account is not valid or no longer registered.");
+
+        return $r4;
+
+     label3:
+        $r8 = $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: com.amazon.identity.auth.device.api.TokenManagement mTokenManagement>;
+
+        $r6 = $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String mDirectedId>;
+
+        $r9 = $r0.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: java.lang.String mPackageName>;
+
+        $r9 = staticinvoke <com.amazon.identity.auth.device.storage.StorageKeyUtils: java.lang.String getKeyWithPackageNamespace(java.lang.String,java.lang.String)>($r9, "com.amazon.dcp.sso.token.device.adptoken");
+
+        $r2 = staticinvoke <com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod: android.os.Bundle getOptions()>();
+
+        $r5 = new com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod$1;
+
+        specialinvoke $r5.<com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod$1: void <init>(com.amazon.identity.auth.device.api.InProcessAdpAuthenticationMethod,byte[],com.amazon.identity.auth.device.callback.CallbackFuture)>($r0, $r1, $r4);
+
+        virtualinvoke $r8.<com.amazon.identity.auth.device.api.TokenManagement: com.amazon.identity.auth.device.api.MAPFuture getToken(java.lang.String,java.lang.String,android.os.Bundle,com.amazon.identity.auth.device.api.Callback)>($r6, $r9, $r2, $r5);
+
+        return $r4;
+    }
+}

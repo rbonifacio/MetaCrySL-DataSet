@@ -1,0 +1,116 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.skobbler.ngx.SKMaps: java.lang.String a(java.lang.String)>
+		SHA-256: d160ffc82304384fcee9e71ed6973615397cf943ea12b14acf6215115716e448
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.internal.gr: java.lang.String R(java.lang.String)>
+		SHA-256: 63a4e53ca392777d4bf78e3bbf211aad4ac40bf31a3770727d02663989cc2cd8
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4)
+		Method: <com.gpsmycity.android.u168.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 50d20e0d863bf9aaaccbe6d5f71c736bbbd4ab16c1ca9b261b70d21b96f5b665
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3121)
+		Method: <com.gpsmycity.android.u168.upgrade.UpgradeActivity$Sha1Hex: java.lang.String makeSHA1Hash(java.lang.String)>
+		SHA-256: 53980ac4259bfc563645a5109f2a59bdc0ee409c6ee3a07411dc744c62a6d40e
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1089)
+		Method: <com.google.android.gms.internal.gr: java.lang.String R(java.lang.String)>
+		SHA-256: daf4d2078633045d338867e7e2bb6e1ce38accee776f5cd165cc4c446a5d1083
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.gpsmycity.android.u168.upgrade.UpgradeActivity$Sha1Hex: java.lang.String makeSHA1Hash(java.lang.String)>
+		SHA-256: 6e06f188bec5d5ddf4ac76c14bddcf0772c8247ce6672edf4bb0d6b493058eb
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.Signature
+		Statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer6774)
+		Method: <com.gpsmycity.android.u168.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: f641f1efc5e139f22a197d3ba84d29c4da4a654d383f4f9a0585fa9745538c0b
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2028)
+		Method: <com.skobbler.ngx.SKMaps: java.lang.String a(java.lang.String)>
+		SHA-256: 8190a6d6498b4d9661dca392f2e96b3091a813b597df444099674978a6618517
+		Secure: true
+
+Findings in Java Class: com.gpsmycity.android.u168.upgrade.UpgradeActivity$Sha1Hex
+
+	 in Method: java.lang.String makeSHA1Hash(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #53980ac4259bfc563645a5109f2a59bdc0ee409c6ee3a07411dc744c62a6d40e)
+			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3121)
+
+
+Findings in Java Class: com.gpsmycity.android.u168.util.Security
+
+	 in Method: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 8
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 1
+	ConstraintError: 1
+=====================================================================

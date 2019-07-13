@@ -1,0 +1,100 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer2109)
+		Method: <com.baretreemedia.trollsapp.a.d.a.a.b.a: void <init>(javax.net.ssl.SSLContext)>
+		SHA-256: 698bcfdc6b480f921cb8a8ae6477a228bf09cc93a02dc4fe62a16b3d66025b8e
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: javax.net.ssl.SSLContext
+		Statement: $r1 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer2105)
+		Method: <com.baretreemedia.trollsapp.a.d.a.a.a: org.apache.http.client.HttpClient b()>
+		SHA-256: aa7249abd8d24dc7cdfa1e0d3fde85547a4a55cf65934a8b6ffb4e93b584637f
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4)
+		Method: <com.baretreemedia.trollsapp.a.a.h: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: ed8e3ff95538e1402ac4b4098dfe9dd33c0637fbced08822cd190c68376d5f16
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.Signature
+		Statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer2227)
+		Method: <com.baretreemedia.trollsapp.a.a.h: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 762111801df7534e94a5f1471455223771ad89e201fc3a923f7f8d8930f1e305
+		Secure: false
+
+Findings in Java Class: com.baretreemedia.trollsapp.a.d.a.a.b.a
+
+	 in Method: void <init>(javax.net.ssl.SSLContext)
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #698bcfdc6b480f921cb8a8ae6477a228bf09cc93a02dc4fe62a16b3d66025b8e)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to init
+			at statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer2109)
+
+
+Findings in Java Class: com.baretreemedia.trollsapp.a.d.a.a.a
+
+	 in Method: org.apache.http.client.HttpClient b()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2103, r15, varReplacer2103)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2103, r15, varReplacer2103)
+
+
+Findings in Java Class: com.baretreemedia.trollsapp.a.a.h
+
+	 in Method: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 1
+	RequiredPredicateError: 3
+=====================================================================

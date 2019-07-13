@@ -1,0 +1,193 @@
+public class com.genie_connect.android.utils.crypt.Crypt2 extends java.lang.Object
+{
+    private static final java.lang.String CYPHER_TRANSFORMATION;
+    private static final java.lang.String FIELD_SEPARATOR;
+    private static final int ITERATION_COUNT;
+    private static final int KEY_LENGTH;
+    private static final java.lang.String PKCS12_DERIVATION_ALGORITHM;
+    private static final int SALT_LENGTH;
+    private static final java.lang.String UTF_8;
+
+    public void <init>()
+    {
+        com.genie_connect.android.utils.crypt.Crypt2 $r0;
+
+        $r0 := @this: com.genie_connect.android.utils.crypt.Crypt2;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String decrypt(java.lang.String, java.lang.String) throws java.lang.Exception
+    {
+        java.lang.String $r0, $r1, varReplacer5938, varReplacer5939, varReplacer5940;
+        javax.crypto.spec.IvParameterSpec $r2;
+        java.lang.String[] $r3;
+        byte[] $r4, $r5, $r6;
+        javax.crypto.SecretKey $r7;
+        javax.crypto.Cipher $r8;
+        int varReplacer5941;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        varReplacer5939 = "#";
+
+        $r3 = virtualinvoke $r1.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer5939);
+
+        $r1 = $r3[0];
+
+        $r4 = staticinvoke <com.genie_connect.common.utils.crypt.HashHelper: byte[] base64Decode(java.lang.String)>($r1);
+
+        $r1 = $r3[1];
+
+        $r5 = staticinvoke <com.genie_connect.common.utils.crypt.HashHelper: byte[] base64Decode(java.lang.String)>($r1);
+
+        $r1 = $r3[2];
+
+        $r6 = staticinvoke <com.genie_connect.common.utils.crypt.HashHelper: byte[] base64Decode(java.lang.String)>($r1);
+
+        $r7 = staticinvoke <com.genie_connect.android.utils.crypt.Crypt2: javax.crypto.SecretKey deriveKeyPkcs12(byte[],java.lang.String)>($r4, $r0);
+
+        varReplacer5938 = "AES/CBC/PKCS5Padding";
+
+        $r8 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer5938);
+
+        $r2 = new javax.crypto.spec.IvParameterSpec;
+
+        specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r5);
+
+        varReplacer5941 = 2;
+
+        virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer5941, $r7, $r2);
+
+        $r4 = virtualinvoke $r8.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6);
+
+        $r0 = new java.lang.String;
+
+        varReplacer5940 = "UTF-8";
+
+        specialinvoke $r0.<java.lang.String: void <init>(byte[],java.lang.String)>($r4, varReplacer5940);
+
+        return $r0;
+    }
+
+    private static javax.crypto.SecretKey deriveKeyPkcs12(byte[], java.lang.String) throws java.lang.Exception
+    {
+        byte[] $r0;
+        java.lang.String $r1, varReplacer5943;
+        javax.crypto.spec.PBEKeySpec $r2;
+        char[] $r3;
+        javax.crypto.SecretKeyFactory $r4;
+        javax.crypto.SecretKey $r5;
+        int varReplacer5944, varReplacer5945;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 = new javax.crypto.spec.PBEKeySpec;
+
+        $r3 = virtualinvoke $r1.<java.lang.String: char[] toCharArray()>();
+
+        varReplacer5944 = 1000;
+
+        varReplacer5945 = 256;
+
+        specialinvoke $r2.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r3, $r0, varReplacer5944, varReplacer5945);
+
+        varReplacer5943 = "PBEWITHSHA256AND256BITAES-CBC-BC";
+
+        $r4 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer5943);
+
+        $r5 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2);
+
+        return $r5;
+    }
+
+    public static java.lang.String encrypt(java.lang.String, java.lang.String) throws java.lang.Exception
+    {
+        java.lang.String $r0, $r1, varReplacer14393, varReplacer14395, varReplacer14396, varReplacer14397;
+        byte[] $r2, $r5;
+        javax.crypto.spec.IvParameterSpec $r3;
+        java.security.SecureRandom $r4;
+        java.lang.StringBuilder $r6;
+        javax.crypto.SecretKey $r7;
+        javax.crypto.Cipher $r8;
+        int $i0, varReplacer14394;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r4 = new java.security.SecureRandom;
+
+        specialinvoke $r4.<java.security.SecureRandom: void <init>()>();
+
+        $r5 = newarray (byte)[32];
+
+        virtualinvoke $r4.<java.security.SecureRandom: void nextBytes(byte[])>($r5);
+
+        $r7 = staticinvoke <com.genie_connect.android.utils.crypt.Crypt2: javax.crypto.SecretKey deriveKeyPkcs12(byte[],java.lang.String)>($r5, $r0);
+
+        varReplacer14397 = "AES/CBC/PKCS5Padding";
+
+        $r8 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer14397);
+
+        $i0 = virtualinvoke $r8.<javax.crypto.Cipher: int getBlockSize()>();
+
+        $r2 = newarray (byte)[$i0];
+
+        virtualinvoke $r4.<java.security.SecureRandom: void nextBytes(byte[])>($r2);
+
+        $r3 = new javax.crypto.spec.IvParameterSpec;
+
+        specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r2);
+
+        varReplacer14394 = 1;
+
+        virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer14394, $r7, $r3);
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r0 = staticinvoke <com.genie_connect.common.utils.crypt.HashHelper: java.lang.String base64Encode(byte[])>($r5);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        varReplacer14396 = "#";
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer14396);
+
+        $r0 = staticinvoke <com.genie_connect.common.utils.crypt.HashHelper: java.lang.String base64Encode(byte[])>($r2);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        varReplacer14393 = "#";
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer14393);
+
+        varReplacer14395 = "UTF-8";
+
+        $r2 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer14395);
+
+        $r2 = virtualinvoke $r8.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r2);
+
+        $r0 = staticinvoke <com.genie_connect.common.utils.crypt.HashHelper: java.lang.String base64Encode(byte[])>($r2);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r0;
+    }
+}

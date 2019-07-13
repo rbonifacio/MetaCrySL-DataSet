@@ -1,0 +1,151 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: varReplacer2128
+		Type: java.lang.String
+		Statement: specialinvoke r8.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer2128)
+		Method: <com.mobileapptracker.MATEncryption: void <init>(java.lang.String,java.lang.String)>
+		SHA-256: 8a8ce7ac5d38b6f730b520cf03cfc5b01b038590a354d7c8a26d95922b50032b
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: javax.crypto.Cipher
+		Statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2129)
+		Method: <com.mobileapptracker.MATEncryption: void <init>(java.lang.String,java.lang.String)>
+		SHA-256: 7890dd734ac97ad78af6e1b0ef6c7bd65f6310decfba5f3eae5a84f599fc7a65
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: java.security.MessageDigest
+		Statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer210)
+		Method: <com.deltadna.android.sdk.EventStore: void <init>(android.content.Context,com.deltadna.android.sdk.helpers.Settings,com.deltadna.android.sdk.Preferences)>
+		SHA-256: de327772e6e7cdb9d2459bd4554699ecfd79fd8047fed6208158613358ef037
+		Secure: false
+	Object:
+		Variable: $r9
+		Type: java.security.MessageDigest
+		Statement: $r9 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1797)
+		Method: <com.deltadna.android.sdk.net.NetworkManager: void <init>(java.lang.String,java.lang.String,java.lang.String,com.deltadna.android.sdk.helpers.Settings,java.lang.String)>
+		SHA-256: 9dfe887af1de197f69f0d64cad04bb596f3beacd73cad565e0d69f8736680bc7
+		Secure: false
+	Object:
+		Variable: r8
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke r8.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer2128)
+		Method: <com.mobileapptracker.MATEncryption: void <init>(java.lang.String,java.lang.String)>
+		SHA-256: 59a1cee5db87538c05b51e1ccbf9ab8f9a42e6e0088e2a300691059710470cbc
+		Secure: false
+	Object:
+		Variable: r7
+		Type: javax.crypto.spec.IvParameterSpec
+		Statement: specialinvoke r7.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r3)
+		Method: <com.mobileapptracker.MATEncryption: void <init>(java.lang.String,java.lang.String)>
+		SHA-256: caa67fc73d8e755b6ad922924c4525a07219f2e85b0b9f78a3a2e84f401dd2f6
+		Secure: false
+
+Findings in Java Class: com.deltadna.android.sdk.EventStore
+
+	 in Method: void <init>(android.content.Context,com.deltadna.android.sdk.helpers.Settings,com.deltadna.android.sdk.Preferences)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #de327772e6e7cdb9d2459bd4554699ecfd79fd8047fed6208158613358ef037)
+			First parameter (with value "SHA1") should be any of {SHA-224, SHA-256, SHA-1, SHA-384, SHA-512, MD5}
+			at statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer210)
+
+
+Findings in Java Class: com.deltadna.android.sdk.DDNA
+
+	 in Method: void <init>(android.app.Application,java.lang.String,java.lang.String,java.lang.String,com.deltadna.android.sdk.helpers.Settings,java.lang.String,java.lang.String,java.lang.String)
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #9dfe887af1de197f69f0d64cad04bb596f3beacd73cad565e0d69f8736680bc7)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: specialinvoke $r10.<com.deltadna.android.sdk.EventHandler: void <init>(com.deltadna.android.sdk.EventStore,com.deltadna.android.sdk.helpers.EngageArchive,com.deltadna.android.sdk.net.NetworkManager)>($r17, $r18, $r23)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #de327772e6e7cdb9d2459bd4554699ecfd79fd8047fed6208158613358ef037)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: specialinvoke $r10.<com.deltadna.android.sdk.EventHandler: void <init>(com.deltadna.android.sdk.EventStore,com.deltadna.android.sdk.helpers.EngageArchive,com.deltadna.android.sdk.net.NetworkManager)>($r17, $r18, $r23)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #9dfe887af1de197f69f0d64cad04bb596f3beacd73cad565e0d69f8736680bc7)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: specialinvoke $r10.<com.deltadna.android.sdk.EventHandler: void <init>(com.deltadna.android.sdk.EventStore,com.deltadna.android.sdk.helpers.EngageArchive,com.deltadna.android.sdk.net.NetworkManager)>($r17, $r18, $r23)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #de327772e6e7cdb9d2459bd4554699ecfd79fd8047fed6208158613358ef037)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: specialinvoke $r10.<com.deltadna.android.sdk.EventHandler: void <init>(com.deltadna.android.sdk.EventStore,com.deltadna.android.sdk.helpers.EngageArchive,com.deltadna.android.sdk.net.NetworkManager)>($r17, $r18, $r23)
+
+
+Findings in Java Class: dummyMainClass
+
+	 in Method: com.deltadna.android.sdk.EventStore dummyMainMethod_EventStore(android.content.Intent)
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #de327772e6e7cdb9d2459bd4554699ecfd79fd8047fed6208158613358ef037)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: return $r2
+
+
+Findings in Java Class: com.mobileapptracker.MATEncryption
+
+	 in Method: void <init>(java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke r7.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r3)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #7890dd734ac97ad78af6e1b0ef6c7bd65f6310decfba5f3eae5a84f599fc7a65)
+			First parameter (with value "AES/CBC/NoPadding") should be any of AES/CBC/{PKCS5Padding, PKCS7Padding, ISO10126Padding}
+			at statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2129)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #7890dd734ac97ad78af6e1b0ef6c7bd65f6310decfba5f3eae5a84f599fc7a65)
+			First parameter (with value "AES/CBC/NoPadding") should be any of AES/CBC/{PKCS5Padding, PKCS7Padding, ISO10126Padding}
+			at statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2129)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke r8.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer2128)
+
+
+Findings in Java Class: com.mobileapptracker.MobileAppTracker
+
+	 in Method: void initAll(java.lang.String,java.lang.String)
+		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #7890dd734ac97ad78af6e1b0ef6c7bd65f6310decfba5f3eae5a84f599fc7a65)
+			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
+			at statement: specialinvoke $r8.<com.mobileapptracker.MATEventQueue: void <init>(android.content.Context,com.mobileapptracker.MobileAppTracker)>($r4, $r0)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 6
+	RequiredPredicateError: 2
+	ConstraintError: 3
+=====================================================================

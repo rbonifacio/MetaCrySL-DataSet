@@ -1,0 +1,89 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.ionicframework.payzaap483385-03CCFB1221DD1AA233ACC2792CF1AB9B5A80DD8D4604485DBEFBF62CD0DD9404.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r10
+		Type: java.security.KeyStore
+		Statement: $r10 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r8)
+		Method: <d: void <init>()>
+		SHA-256: 1f7c2a2b875a56108a75f020511b75cb04140af54e0b39af9c4e7d70aa646514
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: javax.net.ssl.SSLContext
+		Statement: $r1 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer37)
+		Method: <d: void <init>()>
+		SHA-256: 23d9a8abf2919841170e04b728e7b870b69f9ca0f307217316cb2eafc0662325
+		Secure: false
+
+Findings in Java Class: d
+
+	 in Method: void <init>()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer32, $r12, varReplacer32)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer32, $r12, varReplacer32)
+
+		TypestateError violating CrySL rule for javax.net.ssl.SSLContext (on Object #23d9a8abf2919841170e04b728e7b870b69f9ca0f307217316cb2eafc0662325)
+			Unexpected call to method init on object of type javax.net.ssl.SSLContext. Expect a call to one of the following methods createSSLEngine
+			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer32, $r12, varReplacer32)
+
+		TypestateError violating CrySL rule for javax.net.ssl.SSLContext (on Object #23d9a8abf2919841170e04b728e7b870b69f9ca0f307217316cb2eafc0662325)
+			Unexpected call to method getInstance on object of type javax.net.ssl.SSLContext. Expect a call to one of the following methods createSSLEngine
+			at statement: $r1 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer37)
+
+
+Findings in Java Class: dummyMainClass
+
+	 in Method: void dummyMainMethod(java.lang.String[])
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #23d9a8abf2919841170e04b728e7b870b69f9ca0f307217316cb2eafc0662325)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to init, getInstance
+			at statement: return
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 2
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 2
+	TypestateError: 2
+	IncompleteOperationError: 1
+=====================================================================

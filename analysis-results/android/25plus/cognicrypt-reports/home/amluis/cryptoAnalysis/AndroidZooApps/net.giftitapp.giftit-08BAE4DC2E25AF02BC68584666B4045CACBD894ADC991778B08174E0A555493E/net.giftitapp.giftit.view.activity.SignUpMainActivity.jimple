@@ -1,0 +1,478 @@
+public class net.giftitapp.giftit.view.activity.SignUpMainActivity extends net.giftitapp.giftit.view.activity.BaseActivity implements net.giftitapp.giftit.dataview.SignUpDataView
+{
+    private final java.lang.String TAG;
+    private net.giftitapp.giftit.util.DataManager mDataManager;
+    private net.giftitapp.giftit.view.component.ProgressBarHandler mProgressHandler;
+    private net.giftitapp.giftit.presenter.SignUpPresenter mSignUpPresenter;
+    public android.content.Intent ipcIntent;
+    public android.content.Intent ipcResultIntent;
+
+    public void <init>()
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity $r0;
+        java.lang.String $r1;
+        java.lang.Class $r2;
+
+        nop;
+
+        $r0 := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        specialinvoke $r0.<net.giftitapp.giftit.view.activity.BaseActivity: void <init>()>();
+
+        $r2 = class "Lnet/giftitapp/giftit/view/activity/SignUpMainActivity;";
+
+        $r1 = virtualinvoke $r2.<java.lang.Class: java.lang.String getName()>();
+
+        $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: java.lang.String TAG> = $r1;
+
+        return;
+    }
+
+    public static android.content.Intent getCallingIntent(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.content.Intent $r1;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = new android.content.Intent;
+
+        specialinvoke $r1.<android.content.Intent: void <init>(android.content.Context,java.lang.Class)>($r0, class "Lnet/giftitapp/giftit/view/activity/SignUpMainActivity;");
+
+        return $r1;
+    }
+
+    private void showHashKey()
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity $r0;
+        java.lang.Throwable $r1, $r9;
+        android.content.pm.Signature $r2;
+        java.lang.String $r3, r11, varReplacer3109, varReplacer3110, varReplacer3111, varReplacer3112, varReplacer3113, varReplacer3115;
+        int $i0, $i1, varReplacer3114, varReplacer3116;
+        android.content.pm.PackageManager $r4;
+        android.content.pm.PackageInfo $r5;
+        android.content.pm.Signature[] $r6;
+        java.security.MessageDigest $r7;
+        byte[] $r8;
+        java.lang.Exception $r10;
+        android.content.pm.PackageManager$NameNotFoundException r12;
+        java.security.NoSuchAlgorithmException r13;
+
+        nop;
+
+        $r0 := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        $i0 = 0;
+
+     label01:
+        $r4 = virtualinvoke $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: android.content.pm.PackageManager getPackageManager()>();
+
+        varReplacer3113 = "net.giftitapp.giftit";
+
+        varReplacer3114 = 64;
+
+        $r5 = virtualinvoke $r4.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>(varReplacer3113, varReplacer3114);
+
+     label02:
+        $r6 = $r5.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        $i1 = lengthof $r6;
+
+     label03:
+        if $i0 >= $i1 goto label12;
+
+     label04:
+        $r2 = $r6[$i0];
+
+     label05:
+        varReplacer3115 = "SHA";
+
+        $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3115);
+
+        $r8 = virtualinvoke $r2.<android.content.pm.Signature: byte[] toByteArray()>();
+
+        virtualinvoke $r7.<java.security.MessageDigest: void update(byte[])>($r8);
+
+     label06:
+        r11 = new java.lang.String;
+
+        $r3 = r11;
+
+     label07:
+        $r8 = virtualinvoke $r7.<java.security.MessageDigest: byte[] digest()>();
+
+        varReplacer3116 = 0;
+
+        $r8 = staticinvoke <android.util.Base64: byte[] encode(byte[],int)>($r8, varReplacer3116);
+
+        specialinvoke r11.<java.lang.String: void <init>(byte[])>($r8);
+
+        varReplacer3109 = "hash key";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer3109, $r3);
+
+     label08:
+        $i0 = $i0 + 1;
+
+        goto label03;
+
+     label09:
+        $r1 := @caughtexception;
+
+        r12 = (android.content.pm.PackageManager$NameNotFoundException) $r1;
+
+        $r3 = virtualinvoke r12.<android.content.pm.PackageManager$NameNotFoundException: java.lang.String toString()>();
+
+        varReplacer3111 = "name not found";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer3111, $r3);
+
+        return;
+
+     label10:
+        $r9 := @caughtexception;
+
+        r13 = (java.security.NoSuchAlgorithmException) $r9;
+
+        $r3 = virtualinvoke r13.<java.security.NoSuchAlgorithmException: java.lang.String toString()>();
+
+        varReplacer3110 = "no such an algorithm";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer3110, $r3);
+
+        return;
+
+     label11:
+        $r10 := @caughtexception;
+
+        $r3 = virtualinvoke $r10.<java.lang.Exception: java.lang.String toString()>();
+
+        varReplacer3112 = "exception";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer3112, $r3);
+
+     label12:
+        return;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label01 to label02 with label09;
+        catch android.content.pm.PackageManager$NameNotFoundException from label05 to label06 with label09;
+        catch android.content.pm.PackageManager$NameNotFoundException from label07 to label08 with label09;
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label10;
+        catch java.security.NoSuchAlgorithmException from label05 to label06 with label10;
+        catch java.security.NoSuchAlgorithmException from label07 to label08 with label10;
+        catch java.lang.Exception from label01 to label03 with label11;
+        catch java.lang.Exception from label04 to label06 with label11;
+        catch java.lang.Exception from label07 to label08 with label11;
+    }
+
+    void goToSignInPage()
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity $r0;
+        net.giftitapp.giftit.view.navigator.Navigator $r1;
+
+        $r0 := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        $r1 = virtualinvoke $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: net.giftitapp.giftit.view.navigator.Navigator getNavigator()>();
+
+        virtualinvoke $r1.<net.giftitapp.giftit.view.navigator.Navigator: void navigateToLoginPage(android.content.Context)>($r0);
+
+        return;
+    }
+
+    void goToSignUpViaEmail()
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity $r0;
+        net.giftitapp.giftit.view.navigator.Navigator $r1;
+
+        $r0 := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        $r1 = virtualinvoke $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: net.giftitapp.giftit.view.navigator.Navigator getNavigator()>();
+
+        virtualinvoke $r1.<net.giftitapp.giftit.view.navigator.Navigator: void navigateToSignUpEmail(android.content.Context)>($r0);
+
+        return;
+    }
+
+    void goToSignUpViaFacebook()
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity $r0;
+        net.giftitapp.giftit.presenter.SignUpPresenter $r1;
+
+        $r0 := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        $r1 = $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: net.giftitapp.giftit.presenter.SignUpPresenter mSignUpPresenter>;
+
+        virtualinvoke $r1.<net.giftitapp.giftit.presenter.SignUpPresenter: void logOnFacebook(android.app.Activity)>($r0);
+
+        return;
+    }
+
+    void goToTermsAndConditions()
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity $r0;
+        net.giftitapp.giftit.view.navigator.Navigator $r1;
+
+        $r0 := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        $r1 = virtualinvoke $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: net.giftitapp.giftit.view.navigator.Navigator getNavigator()>();
+
+        virtualinvoke $r1.<net.giftitapp.giftit.view.navigator.Navigator: void navigateToTermsAndConditions(android.content.Context)>($r0);
+
+        return;
+    }
+
+    public void hideLoading()
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity $r0;
+        net.giftitapp.giftit.view.component.ProgressBarHandler $r1;
+
+        nop;
+
+        $r0 := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        $r1 = $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: net.giftitapp.giftit.view.component.ProgressBarHandler mProgressHandler>;
+
+        virtualinvoke $r1.<net.giftitapp.giftit.view.component.ProgressBarHandler: void hideProgressDialog()>();
+
+        return;
+    }
+
+    public void hideRetry()
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity $r0;
+
+        $r0 := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        return;
+    }
+
+    protected void onActivityResult(int, int, android.content.Intent)
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity $r0;
+        int $i0, $i1;
+        android.content.Intent $r1;
+        net.giftitapp.giftit.presenter.SignUpPresenter $r2;
+
+        nop;
+
+        $r0 := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        $r1 := @parameter2: android.content.Intent;
+
+        specialinvoke $r0.<net.giftitapp.giftit.view.activity.BaseActivity: void onActivityResult(int,int,android.content.Intent)>($i0, $i1, $r1);
+
+        $r2 = $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: net.giftitapp.giftit.presenter.SignUpPresenter mSignUpPresenter>;
+
+        virtualinvoke $r2.<net.giftitapp.giftit.presenter.SignUpPresenter: void onActivityResult(int,int,android.content.Intent)>($i0, $i1, $r1);
+
+        return;
+    }
+
+    protected void onCreate(android.os.Bundle)
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity $r0;
+        android.os.Bundle $r1;
+        net.giftitapp.giftit.view.component.ProgressBarHandler $r2;
+        net.giftitapp.giftit.presenter.SignUpPresenter $r3;
+        net.giftitapp.giftit.util.DataManager $r4;
+        boolean $z0;
+        net.giftitapp.giftit.view.navigator.Navigator $r5;
+        int varReplacer3105, varReplacer3106;
+
+        nop;
+
+        $r0 := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        $r1 := @parameter0: android.os.Bundle;
+
+        specialinvoke $r0.<net.giftitapp.giftit.view.activity.BaseActivity: void onCreate(android.os.Bundle)>($r1);
+
+        varReplacer3105 = 2130968759;
+
+        virtualinvoke $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: void setContentView(int)>(varReplacer3105);
+
+        staticinvoke <butterknife.ButterKnife: void bind(android.app.Activity)>($r0);
+
+        $r2 = new net.giftitapp.giftit.view.component.ProgressBarHandler;
+
+        specialinvoke $r2.<net.giftitapp.giftit.view.component.ProgressBarHandler: void <init>(android.content.Context)>($r0);
+
+        $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: net.giftitapp.giftit.view.component.ProgressBarHandler mProgressHandler> = $r2;
+
+        $r3 = new net.giftitapp.giftit.presenter.SignUpPresenter;
+
+        specialinvoke $r3.<net.giftitapp.giftit.presenter.SignUpPresenter: void <init>()>();
+
+        $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: net.giftitapp.giftit.presenter.SignUpPresenter mSignUpPresenter> = $r3;
+
+        $r3 = $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: net.giftitapp.giftit.presenter.SignUpPresenter mSignUpPresenter>;
+
+        virtualinvoke $r3.<net.giftitapp.giftit.presenter.SignUpPresenter: void setDataView(net.giftitapp.giftit.dataview.SignUpDataView)>($r0);
+
+        $r4 = new net.giftitapp.giftit.util.DataManager;
+
+        specialinvoke $r4.<net.giftitapp.giftit.util.DataManager: void <init>(android.content.Context)>($r0);
+
+        $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: net.giftitapp.giftit.util.DataManager mDataManager> = $r4;
+
+        specialinvoke $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: void showHashKey()>();
+
+        $r4 = $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: net.giftitapp.giftit.util.DataManager mDataManager>;
+
+        $z0 = virtualinvoke $r4.<net.giftitapp.giftit.util.DataManager: boolean isLogin()>();
+
+        if $z0 == 0 goto label1;
+
+        $r5 = virtualinvoke $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: net.giftitapp.giftit.view.navigator.Navigator getNavigator()>();
+
+        varReplacer3106 = 0;
+
+        virtualinvoke $r5.<net.giftitapp.giftit.view.navigator.Navigator: void navigateToHomePage(android.content.Context,boolean)>($r0, varReplacer3106);
+
+     label1:
+        return;
+    }
+
+    public void showError(java.lang.String)
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity $r0;
+        java.lang.String $r1;
+
+        nop;
+
+        $r0 := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        $r1 := @parameter0: java.lang.String;
+
+        staticinvoke <net.giftitapp.giftit.util.DialogUtil: void showAlertDialog(android.content.Context,java.lang.String)>($r0, $r1);
+
+        return;
+    }
+
+    public void showLoading()
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity $r0;
+        net.giftitapp.giftit.view.component.ProgressBarHandler $r1;
+
+        nop;
+
+        $r0 := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        $r1 = $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: net.giftitapp.giftit.view.component.ProgressBarHandler mProgressHandler>;
+
+        virtualinvoke $r1.<net.giftitapp.giftit.view.component.ProgressBarHandler: void showProgressDialog()>();
+
+        return;
+    }
+
+    public void showResult(java.lang.String)
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity $r0;
+        java.lang.String $r1;
+        boolean $z0;
+        net.giftitapp.giftit.view.navigator.Navigator $r2;
+        android.content.Context $r3;
+
+        $r0 := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>("login");
+
+        if $z0 == 0 goto label1;
+
+        $r2 = virtualinvoke $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: net.giftitapp.giftit.view.navigator.Navigator getNavigator()>();
+
+        virtualinvoke $r2.<net.giftitapp.giftit.view.navigator.Navigator: void navigateToHomePage(android.content.Context,boolean)>($r0, 0);
+
+        return;
+
+     label1:
+        staticinvoke <net.giftitapp.giftit.util.DialogUtil: void showMessage(android.content.Context,java.lang.String)>($r0, $r1);
+
+        $r2 = virtualinvoke $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: net.giftitapp.giftit.view.navigator.Navigator getNavigator()>();
+
+        $r3 = virtualinvoke $r0.<net.giftitapp.giftit.view.activity.SignUpMainActivity: android.content.Context getContext()>();
+
+        virtualinvoke $r2.<net.giftitapp.giftit.view.navigator.Navigator: void navigateToFriendPage(android.content.Context,boolean)>($r3, 1);
+
+        return;
+    }
+
+    public void showRetry()
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity $r0;
+
+        $r0 := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        return;
+    }
+
+    public void showSuccess()
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity $r0;
+
+        $r0 := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        return;
+    }
+
+    public void showSuggestedName(java.lang.String)
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity $r0;
+        java.lang.String $r1;
+
+        $r0 := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        $r1 := @parameter0: java.lang.String;
+
+        return;
+    }
+
+    public android.content.Intent getIntent()
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity this;
+        android.content.Intent $r0;
+
+        this := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        $r0 = this.<net.giftitapp.giftit.view.activity.SignUpMainActivity: android.content.Intent ipcIntent>;
+
+        return $r0;
+    }
+
+    public void setIntent(android.content.Intent)
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity this;
+        android.content.Intent parameter0;
+
+        this := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        parameter0 := @parameter0: android.content.Intent;
+
+        this.<net.giftitapp.giftit.view.activity.SignUpMainActivity: android.content.Intent ipcIntent> = parameter0;
+
+        return;
+    }
+
+    public void setResult(int, android.content.Intent)
+    {
+        net.giftitapp.giftit.view.activity.SignUpMainActivity this;
+        int parameter0;
+        android.content.Intent parameter1;
+
+        this := @this: net.giftitapp.giftit.view.activity.SignUpMainActivity;
+
+        parameter0 := @parameter0: int;
+
+        parameter1 := @parameter1: android.content.Intent;
+
+        this.<net.giftitapp.giftit.view.activity.SignUpMainActivity: android.content.Intent ipcResultIntent> = parameter1;
+
+        return;
+    }
+}

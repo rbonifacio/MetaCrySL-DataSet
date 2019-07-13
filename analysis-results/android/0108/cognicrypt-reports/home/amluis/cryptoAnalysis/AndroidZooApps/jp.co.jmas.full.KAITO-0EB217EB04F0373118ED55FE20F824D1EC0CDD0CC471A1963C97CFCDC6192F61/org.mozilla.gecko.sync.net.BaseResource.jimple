@@ -1,0 +1,1349 @@
+public final class org.mozilla.gecko.sync.net.BaseResource extends java.lang.Object implements org.mozilla.gecko.sync.net.Resource
+{
+    private static ch.boye.httpclientandroidlib.conn.ClientConnectionManager connManager;
+    private static final java.lang.Object connManagerMonitor;
+    private static java.util.concurrent.CopyOnWriteArrayList httpResponseObservers;
+    private static boolean rewriteLocalhost;
+    private ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient client;
+    private ch.boye.httpclientandroidlib.protocol.BasicHttpContext context;
+    public org.mozilla.gecko.sync.net.ResourceDelegate delegate;
+    protected ch.boye.httpclientandroidlib.client.methods.HttpRequestBase request;
+    private boolean retryOnFailedRequest;
+    private java.net.URI uri;
+
+    static void <clinit>()
+    {
+        java.util.concurrent.CopyOnWriteArrayList $r0;
+        java.lang.Object $r1;
+        int varReplacer5316;
+
+        nop;
+
+        varReplacer5316 = 1;
+
+        <org.mozilla.gecko.sync.net.BaseResource: boolean rewriteLocalhost> = varReplacer5316;
+
+        $r0 = new java.util.concurrent.CopyOnWriteArrayList;
+
+        specialinvoke $r0.<java.util.concurrent.CopyOnWriteArrayList: void <init>()>();
+
+        <org.mozilla.gecko.sync.net.BaseResource: java.util.concurrent.CopyOnWriteArrayList httpResponseObservers> = $r0;
+
+        $r1 = new java.lang.Object;
+
+        specialinvoke $r1.<java.lang.Object: void <init>()>();
+
+        <org.mozilla.gecko.sync.net.BaseResource: java.lang.Object connManagerMonitor> = $r1;
+
+        return;
+    }
+
+    public void <init>(java.lang.String) throws java.net.URISyntaxException
+    {
+        org.mozilla.gecko.sync.net.BaseResource $r0;
+        java.lang.String $r1;
+        boolean $z0;
+
+        $r0 := @this: org.mozilla.gecko.sync.net.BaseResource;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 = <org.mozilla.gecko.sync.net.BaseResource: boolean rewriteLocalhost>;
+
+        specialinvoke $r0.<org.mozilla.gecko.sync.net.BaseResource: void <init>(java.lang.String,boolean)>($r1, $z0);
+
+        return;
+    }
+
+    private void <init>(java.lang.String, boolean) throws java.net.URISyntaxException
+    {
+        org.mozilla.gecko.sync.net.BaseResource $r0;
+        java.lang.String $r1;
+        boolean $z0;
+        java.net.URI $r2;
+
+        $r0 := @this: org.mozilla.gecko.sync.net.BaseResource;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 := @parameter1: boolean;
+
+        $r2 = new java.net.URI;
+
+        specialinvoke $r2.<java.net.URI: void <init>(java.lang.String)>($r1);
+
+        specialinvoke $r0.<org.mozilla.gecko.sync.net.BaseResource: void <init>(java.net.URI,boolean)>($r2, $z0);
+
+        return;
+    }
+
+    public void <init>(java.net.URI)
+    {
+        org.mozilla.gecko.sync.net.BaseResource $r0;
+        java.net.URI $r1;
+        boolean $z0;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.sync.net.BaseResource;
+
+        $r1 := @parameter0: java.net.URI;
+
+        $z0 = <org.mozilla.gecko.sync.net.BaseResource: boolean rewriteLocalhost>;
+
+        specialinvoke $r0.<org.mozilla.gecko.sync.net.BaseResource: void <init>(java.net.URI,boolean)>($r1, $z0);
+
+        return;
+    }
+
+    private void <init>(java.net.URI, boolean)
+    {
+        org.mozilla.gecko.sync.net.BaseResource $r0;
+        java.net.URI $r1, $r6;
+        boolean $z0;
+        java.lang.IllegalArgumentException $r2;
+        java.lang.String $r3, $r4, $r7, $r8, $r9, varReplacer6004, varReplacer6005, varReplacer6007, varReplacer6008, varReplacer6009, varReplacer6010, varReplacer6011, varReplacer6012, varReplacer6013;
+        java.lang.StringBuilder $r5;
+        int $i0, varReplacer6006;
+        java.lang.Throwable $r10;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.sync.net.BaseResource;
+
+        $r1 := @parameter0: java.net.URI;
+
+        $z0 := @parameter1: boolean;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer6006 = 1;
+
+        $r0.<org.mozilla.gecko.sync.net.BaseResource: boolean retryOnFailedRequest> = varReplacer6006;
+
+        if $r1 != null goto label1;
+
+        $r2 = new java.lang.IllegalArgumentException;
+
+        varReplacer6004 = "uri must not be null";
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer6004);
+
+        throw $r2;
+
+     label1:
+        if $z0 == 0 goto label5;
+
+        $r3 = "localhost";
+
+        $r4 = virtualinvoke $r1.<java.net.URI: java.lang.String getHost()>();
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r4);
+
+        if $z0 == 0 goto label5;
+
+        $r5 = new java.lang.StringBuilder;
+
+        varReplacer6007 = "Rewriting ";
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer6007);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        varReplacer6009 = " to point to 10.0.2.2";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer6009);
+
+        varReplacer6008 = ".";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer6008);
+
+        $r3 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer6005 = "BaseResource";
+
+        staticinvoke <org.mozilla.gecko.background.common.log.Logger: void debug(java.lang.String,java.lang.String)>(varReplacer6005, $r3);
+
+        $r6 = new java.net.URI;
+
+     label2:
+        $r3 = virtualinvoke $r1.<java.net.URI: java.lang.String getScheme()>();
+
+        $r4 = virtualinvoke $r1.<java.net.URI: java.lang.String getUserInfo()>();
+
+        $i0 = virtualinvoke $r1.<java.net.URI: int getPort()>();
+
+        $r7 = virtualinvoke $r1.<java.net.URI: java.lang.String getPath()>();
+
+        $r8 = virtualinvoke $r1.<java.net.URI: java.lang.String getQuery()>();
+
+        $r9 = virtualinvoke $r1.<java.net.URI: java.lang.String getFragment()>();
+
+        varReplacer6010 = "10.0.2.2";
+
+        specialinvoke $r6.<java.net.URI: void <init>(java.lang.String,java.lang.String,java.lang.String,int,java.lang.String,java.lang.String,java.lang.String)>($r3, $r4, varReplacer6010, $i0, $r7, $r8, $r9);
+
+     label3:
+        $r0.<org.mozilla.gecko.sync.net.BaseResource: java.net.URI uri> = $r6;
+
+        return;
+
+     label4:
+        $r10 := @caughtexception;
+
+        varReplacer6012 = "BaseResource";
+
+        varReplacer6013 = "Got error rewriting URI for Android emulator.";
+
+        staticinvoke <org.mozilla.gecko.background.common.log.Logger: void error(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer6012, varReplacer6013, $r10);
+
+        $r2 = new java.lang.IllegalArgumentException;
+
+        varReplacer6011 = "Invalid URI";
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String,java.lang.Throwable)>(varReplacer6011, $r10);
+
+        throw $r2;
+
+     label5:
+        $r0.<org.mozilla.gecko.sync.net.BaseResource: java.net.URI uri> = $r1;
+
+        return;
+
+        catch java.net.URISyntaxException from label2 to label3 with label4;
+    }
+
+    public static void addHttpResponseObserver(org.mozilla.gecko.sync.net.HttpResponseObserver)
+    {
+        org.mozilla.gecko.sync.net.HttpResponseObserver $r0;
+        java.util.concurrent.CopyOnWriteArrayList $r1;
+        java.lang.ref.WeakReference $r2;
+
+        $r0 := @parameter0: org.mozilla.gecko.sync.net.HttpResponseObserver;
+
+        if $r0 != null goto label1;
+
+        return;
+
+     label1:
+        $r1 = <org.mozilla.gecko.sync.net.BaseResource: java.util.concurrent.CopyOnWriteArrayList httpResponseObservers>;
+
+        $r2 = new java.lang.ref.WeakReference;
+
+        specialinvoke $r2.<java.lang.ref.WeakReference: void <init>(java.lang.Object)>($r0);
+
+        virtualinvoke $r1.<java.util.concurrent.CopyOnWriteArrayList: boolean add(java.lang.Object)>($r2);
+
+        return;
+    }
+
+    public static void closeExpiredConnections()
+    {
+        java.lang.Object $r0;
+        ch.boye.httpclientandroidlib.conn.ClientConnectionManager $r1;
+        java.lang.Throwable $r2;
+
+        $r0 = <org.mozilla.gecko.sync.net.BaseResource: java.lang.Object connManagerMonitor>;
+
+        entermonitor $r0;
+
+     label1:
+        $r1 = <org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.conn.ClientConnectionManager connManager>;
+
+        exitmonitor $r0;
+
+     label2:
+        if $r1 != null goto label4;
+
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        exitmonitor $r0;
+
+        throw $r2;
+
+     label4:
+        staticinvoke <org.mozilla.gecko.background.common.log.Logger: void trace(java.lang.String,java.lang.String)>("BaseResource", "Closing expired connections.");
+
+        interfaceinvoke $r1.<ch.boye.httpclientandroidlib.conn.ClientConnectionManager: void closeExpiredConnections()>();
+
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public static void consumeEntity(ch.boye.httpclientandroidlib.HttpEntity)
+    {
+        ch.boye.httpclientandroidlib.HttpEntity $r0;
+        java.lang.Throwable $r1;
+
+        $r0 := @parameter0: ch.boye.httpclientandroidlib.HttpEntity;
+
+     label1:
+        staticinvoke <ch.boye.httpclientandroidlib.util.EntityUtils: void consume(ch.boye.httpclientandroidlib.HttpEntity)>($r0);
+
+     label2:
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public static void consumeEntity(ch.boye.httpclientandroidlib.HttpResponse)
+    {
+        ch.boye.httpclientandroidlib.HttpResponse $r0;
+        ch.boye.httpclientandroidlib.HttpEntity $r1;
+        java.lang.Throwable $r2;
+
+        nop;
+
+        $r0 := @parameter0: ch.boye.httpclientandroidlib.HttpResponse;
+
+        if $r0 != null goto label1;
+
+        return;
+
+     label1:
+        $r1 = interfaceinvoke $r0.<ch.boye.httpclientandroidlib.HttpResponse: ch.boye.httpclientandroidlib.HttpEntity getEntity()>();
+
+        staticinvoke <ch.boye.httpclientandroidlib.util.EntityUtils: void consume(ch.boye.httpclientandroidlib.HttpEntity)>($r1);
+
+     label2:
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public static void consumeEntity(org.mozilla.gecko.sync.net.SyncStorageResponse)
+    {
+        org.mozilla.gecko.sync.net.SyncStorageResponse $r0;
+        ch.boye.httpclientandroidlib.HttpResponse $r1;
+
+        nop;
+
+        $r0 := @parameter0: org.mozilla.gecko.sync.net.SyncStorageResponse;
+
+        $r1 = virtualinvoke $r0.<org.mozilla.gecko.sync.net.SyncStorageResponse: ch.boye.httpclientandroidlib.HttpResponse httpResponse()>();
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        $r1 = virtualinvoke $r0.<org.mozilla.gecko.sync.net.SyncStorageResponse: ch.boye.httpclientandroidlib.HttpResponse httpResponse()>();
+
+        staticinvoke <org.mozilla.gecko.sync.net.BaseResource: void consumeEntity(ch.boye.httpclientandroidlib.HttpResponse)>($r1);
+
+        return;
+    }
+
+    public static void consumeReader(java.io.BufferedReader)
+    {
+        java.io.BufferedReader $r0;
+        java.lang.Throwable $r1;
+
+        $r0 := @parameter0: java.io.BufferedReader;
+
+     label1:
+        virtualinvoke $r0.<java.io.BufferedReader: void close()>();
+
+     label2:
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    private void execute()
+    {
+        org.mozilla.gecko.sync.net.BaseResource $r0;
+        ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient $r1;
+        ch.boye.httpclientandroidlib.client.methods.HttpRequestBase $r2;
+        ch.boye.httpclientandroidlib.protocol.BasicHttpContext $r3;
+        ch.boye.httpclientandroidlib.client.methods.CloseableHttpResponse $r4;
+        java.lang.StringBuilder $r5, r18;
+        ch.boye.httpclientandroidlib.StatusLine $r6;
+        java.lang.String $r7, varReplacer5380, varReplacer5381, varReplacer5382, varReplacer5383;
+        java.util.concurrent.CopyOnWriteArrayList $r8;
+        java.util.Iterator $r9;
+        boolean $z0;
+        java.lang.Object $r10;
+        java.lang.ref.WeakReference $r11;
+        org.mozilla.gecko.sync.net.HttpResponseObserver $r12;
+        ch.boye.httpclientandroidlib.client.ClientProtocolException $r13;
+        org.mozilla.gecko.sync.net.ResourceDelegate $r14;
+        java.lang.Throwable $r15;
+        java.lang.Exception $r16;
+        java.io.IOException $r17, r19;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.sync.net.BaseResource;
+
+     label01:
+        $r1 = $r0.<org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient client>;
+
+        $r2 = $r0.<org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.client.methods.HttpRequestBase request>;
+
+        $r3 = $r0.<org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.protocol.BasicHttpContext context>;
+
+     label02:
+        $r4 = virtualinvoke $r1.<ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient: ch.boye.httpclientandroidlib.client.methods.CloseableHttpResponse execute(ch.boye.httpclientandroidlib.client.methods.HttpUriRequest,ch.boye.httpclientandroidlib.protocol.HttpContext)>($r2, $r3);
+
+     label03:
+        r18 = new java.lang.StringBuilder;
+
+        $r5 = r18;
+
+     label04:
+        varReplacer5380 = "Response: ";
+
+        specialinvoke r18.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer5380);
+
+        $r6 = interfaceinvoke $r4.<ch.boye.httpclientandroidlib.HttpResponse: ch.boye.httpclientandroidlib.StatusLine getStatusLine()>();
+
+        $r7 = virtualinvoke $r6.<java.lang.Object: java.lang.String toString()>();
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer5383 = "BaseResource";
+
+        staticinvoke <org.mozilla.gecko.background.common.log.Logger: void debug(java.lang.String,java.lang.String)>(varReplacer5383, $r7);
+
+     label05:
+        $r8 = <org.mozilla.gecko.sync.net.BaseResource: java.util.concurrent.CopyOnWriteArrayList httpResponseObservers>;
+
+        $r9 = virtualinvoke $r8.<java.util.concurrent.CopyOnWriteArrayList: java.util.Iterator iterator()>();
+
+     label06:
+        $z0 = interfaceinvoke $r9.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label12;
+
+        $r10 = interfaceinvoke $r9.<java.util.Iterator: java.lang.Object next()>();
+
+        $r11 = (java.lang.ref.WeakReference) $r10;
+
+        $r10 = virtualinvoke $r11.<java.lang.ref.WeakReference: java.lang.Object get()>();
+
+        $r12 = (org.mozilla.gecko.sync.net.HttpResponseObserver) $r10;
+
+        if $r12 == null goto label06;
+
+        $r2 = $r0.<org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.client.methods.HttpRequestBase request>;
+
+        interfaceinvoke $r12.<org.mozilla.gecko.sync.net.HttpResponseObserver: void observeHttpResponse(ch.boye.httpclientandroidlib.client.methods.HttpUriRequest,ch.boye.httpclientandroidlib.HttpResponse)>($r2, $r4);
+
+        goto label06;
+
+     label07:
+        $r13 := @caughtexception;
+
+        $r14 = $r0.<org.mozilla.gecko.sync.net.BaseResource: org.mozilla.gecko.sync.net.ResourceDelegate delegate>;
+
+        interfaceinvoke $r14.<org.mozilla.gecko.sync.net.ResourceDelegate: void handleHttpProtocolException(ch.boye.httpclientandroidlib.client.ClientProtocolException)>($r13);
+
+        return;
+
+     label08:
+        $r15 := @caughtexception;
+
+        varReplacer5381 = "BaseResource";
+
+        varReplacer5382 = "I/O exception returned from execute.";
+
+        staticinvoke <org.mozilla.gecko.background.common.log.Logger: void debug(java.lang.String,java.lang.String)>(varReplacer5381, varReplacer5382);
+
+        $z0 = $r0.<org.mozilla.gecko.sync.net.BaseResource: boolean retryOnFailedRequest>;
+
+        if $z0 != 0 goto label09;
+
+        $r14 = $r0.<org.mozilla.gecko.sync.net.BaseResource: org.mozilla.gecko.sync.net.ResourceDelegate delegate>;
+
+        $r17 = (java.io.IOException) $r15;
+
+        interfaceinvoke $r14.<org.mozilla.gecko.sync.net.ResourceDelegate: void handleHttpIOException(java.io.IOException)>($r17);
+
+        return;
+
+     label09:
+        specialinvoke $r0.<org.mozilla.gecko.sync.net.BaseResource: void retryRequest()>();
+
+        return;
+
+     label10:
+        $r16 := @caughtexception;
+
+        $z0 = $r0.<org.mozilla.gecko.sync.net.BaseResource: boolean retryOnFailedRequest>;
+
+        if $z0 != 0 goto label11;
+
+        r19 = new java.io.IOException;
+
+        $r17 = r19;
+
+        specialinvoke r19.<java.io.IOException: void <init>()>();
+
+        virtualinvoke $r17.<java.io.IOException: java.lang.Throwable initCause(java.lang.Throwable)>($r16);
+
+        $r14 = $r0.<org.mozilla.gecko.sync.net.BaseResource: org.mozilla.gecko.sync.net.ResourceDelegate delegate>;
+
+        interfaceinvoke $r14.<org.mozilla.gecko.sync.net.ResourceDelegate: void handleHttpIOException(java.io.IOException)>($r17);
+
+        return;
+
+     label11:
+        specialinvoke $r0.<org.mozilla.gecko.sync.net.BaseResource: void retryRequest()>();
+
+        return;
+
+     label12:
+        $r14 = $r0.<org.mozilla.gecko.sync.net.BaseResource: org.mozilla.gecko.sync.net.ResourceDelegate delegate>;
+
+        interfaceinvoke $r14.<org.mozilla.gecko.sync.net.ResourceDelegate: void handleHttpResponse(ch.boye.httpclientandroidlib.HttpResponse)>($r4);
+
+        return;
+
+        catch ch.boye.httpclientandroidlib.client.ClientProtocolException from label02 to label03 with label07;
+        catch ch.boye.httpclientandroidlib.client.ClientProtocolException from label04 to label05 with label07;
+        catch java.io.IOException from label02 to label03 with label08;
+        catch java.io.IOException from label04 to label05 with label08;
+        catch java.lang.Exception from label01 to label03 with label10;
+        catch java.lang.Exception from label04 to label05 with label10;
+    }
+
+    private static ch.boye.httpclientandroidlib.conn.ClientConnectionManager getConnectionManager() throws java.security.KeyManagementException, java.security.NoSuchAlgorithmException
+    {
+        java.lang.Object $r0;
+        ch.boye.httpclientandroidlib.conn.ClientConnectionManager $r1;
+        javax.net.ssl.SSLContext $r2;
+        java.security.SecureRandom $r3;
+        java.lang.StringBuilder $r4;
+        int $i0, varReplacer5350, varReplacer5351, varReplacer5354, varReplacer5356;
+        java.lang.String $r5, varReplacer5345, varReplacer5349, varReplacer5352, varReplacer5353, varReplacer5355;
+        ch.boye.httpclientandroidlib.conn.ssl.SSLSocketFactory $r6;
+        java.lang.String[] $r7, $r8;
+        ch.boye.httpclientandroidlib.conn.scheme.SchemeRegistry $r9;
+        ch.boye.httpclientandroidlib.conn.scheme.Scheme $r10;
+        ch.boye.httpclientandroidlib.conn.scheme.PlainSocketFactory $r11;
+        ch.boye.httpclientandroidlib.impl.conn.tsccm.ThreadSafeClientConnManager $r12;
+        java.lang.Throwable $r13;
+        null_type varReplacer5346, varReplacer5347, varReplacer5348;
+
+        nop;
+
+        $r0 = <org.mozilla.gecko.sync.net.BaseResource: java.lang.Object connManagerMonitor>;
+
+        entermonitor $r0;
+
+     label1:
+        $r1 = <org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.conn.ClientConnectionManager connManager>;
+
+        if $r1 == null goto label3;
+
+        $r1 = <org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.conn.ClientConnectionManager connManager>;
+
+        exitmonitor $r0;
+
+     label2:
+        return $r1;
+
+     label3:
+        varReplacer5353 = "TLS";
+
+        $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer5353);
+
+        $r3 = new java.security.SecureRandom;
+
+        specialinvoke $r3.<java.security.SecureRandom: void <init>()>();
+
+        varReplacer5346 = null;
+
+        varReplacer5347 = null;
+
+        virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer5346, varReplacer5346, $r3);
+
+        $r4 = new java.lang.StringBuilder;
+
+        varReplacer5352 = "Using protocols and cipher suites for Android API ";
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer5352);
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer5345 = "BaseResource";
+
+        staticinvoke <org.mozilla.gecko.background.common.log.Logger: void debug(java.lang.String,java.lang.String)>(varReplacer5345, $r5);
+
+        $r6 = new ch.boye.httpclientandroidlib.conn.ssl.SSLSocketFactory;
+
+        $r7 = <org.mozilla.gecko.background.common.GlobalConstants: java.lang.String[] DEFAULT_PROTOCOLS>;
+
+        $r8 = <org.mozilla.gecko.background.common.GlobalConstants: java.lang.String[] DEFAULT_CIPHER_SUITES>;
+
+        varReplacer5348 = null;
+
+        specialinvoke $r6.<ch.boye.httpclientandroidlib.conn.ssl.SSLSocketFactory: void <init>(javax.net.ssl.SSLContext,java.lang.String[],java.lang.String[],ch.boye.httpclientandroidlib.conn.ssl.X509HostnameVerifier)>($r2, $r7, $r8, varReplacer5348);
+
+        $r9 = new ch.boye.httpclientandroidlib.conn.scheme.SchemeRegistry;
+
+        specialinvoke $r9.<ch.boye.httpclientandroidlib.conn.scheme.SchemeRegistry: void <init>()>();
+
+        $r10 = new ch.boye.httpclientandroidlib.conn.scheme.Scheme;
+
+        varReplacer5349 = "https";
+
+        varReplacer5350 = 443;
+
+        specialinvoke $r10.<ch.boye.httpclientandroidlib.conn.scheme.Scheme: void <init>(java.lang.String,int,ch.boye.httpclientandroidlib.conn.scheme.SchemeSocketFactory)>(varReplacer5349, varReplacer5350, $r6);
+
+        virtualinvoke $r9.<ch.boye.httpclientandroidlib.conn.scheme.SchemeRegistry: ch.boye.httpclientandroidlib.conn.scheme.Scheme register(ch.boye.httpclientandroidlib.conn.scheme.Scheme)>($r10);
+
+        $r10 = new ch.boye.httpclientandroidlib.conn.scheme.Scheme;
+
+        $r11 = new ch.boye.httpclientandroidlib.conn.scheme.PlainSocketFactory;
+
+        specialinvoke $r11.<ch.boye.httpclientandroidlib.conn.scheme.PlainSocketFactory: void <init>()>();
+
+        varReplacer5355 = "http";
+
+        varReplacer5356 = 80;
+
+        specialinvoke $r10.<ch.boye.httpclientandroidlib.conn.scheme.Scheme: void <init>(java.lang.String,int,ch.boye.httpclientandroidlib.conn.scheme.SchemeSocketFactory)>(varReplacer5355, varReplacer5356, $r11);
+
+        virtualinvoke $r9.<ch.boye.httpclientandroidlib.conn.scheme.SchemeRegistry: ch.boye.httpclientandroidlib.conn.scheme.Scheme register(ch.boye.httpclientandroidlib.conn.scheme.Scheme)>($r10);
+
+        $r12 = new ch.boye.httpclientandroidlib.impl.conn.tsccm.ThreadSafeClientConnManager;
+
+        specialinvoke $r12.<ch.boye.httpclientandroidlib.impl.conn.tsccm.ThreadSafeClientConnManager: void <init>(ch.boye.httpclientandroidlib.conn.scheme.SchemeRegistry)>($r9);
+
+        varReplacer5354 = 20;
+
+        virtualinvoke $r12.<ch.boye.httpclientandroidlib.impl.conn.tsccm.ThreadSafeClientConnManager: void setMaxTotal(int)>(varReplacer5354);
+
+        varReplacer5351 = 10;
+
+        virtualinvoke $r12.<ch.boye.httpclientandroidlib.impl.conn.tsccm.ThreadSafeClientConnManager: void setDefaultMaxPerRoute(int)>(varReplacer5351);
+
+        <org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.conn.ClientConnectionManager connManager> = $r12;
+
+        exitmonitor $r0;
+
+     label4:
+        return $r12;
+
+     label5:
+        $r13 := @caughtexception;
+
+        exitmonitor $r0;
+
+        throw $r13;
+
+        catch java.lang.Throwable from label1 to label2 with label5;
+        catch java.lang.Throwable from label3 to label4 with label5;
+    }
+
+    private void go(ch.boye.httpclientandroidlib.client.methods.HttpRequestBase)
+    {
+        org.mozilla.gecko.sync.net.BaseResource $r0;
+        ch.boye.httpclientandroidlib.client.methods.HttpRequestBase $r1;
+        ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient $r2, r18;
+        org.mozilla.gecko.sync.net.ResourceDelegate $r3;
+        ch.boye.httpclientandroidlib.protocol.BasicHttpContext $r4, r17;
+        ch.boye.httpclientandroidlib.conn.ClientConnectionManager $r5;
+        org.mozilla.gecko.sync.net.AuthHeaderProvider $r6;
+        ch.boye.httpclientandroidlib.Header $r7;
+        ch.boye.httpclientandroidlib.impl.client.BasicAuthCache $r8, r19;
+        ch.boye.httpclientandroidlib.params.HttpParams $r9;
+        int $i0, varReplacer5344;
+        ch.boye.httpclientandroidlib.HttpVersion $r10;
+        java.lang.String $r11, varReplacer5329, varReplacer5330, varReplacer5331, varReplacer5332, varReplacer5333, varReplacer5334, varReplacer5335, varReplacer5336, varReplacer5337, varReplacer5338, varReplacer5339, varReplacer5340, varReplacer5341, varReplacer5342, varReplacer5343;
+        java.lang.Throwable $r12, $r13;
+        java.lang.Exception $r14;
+        java.security.GeneralSecurityException $r15, r20;
+        java.lang.IllegalArgumentException r16;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.sync.net.BaseResource;
+
+        $r1 := @parameter0: ch.boye.httpclientandroidlib.client.methods.HttpRequestBase;
+
+        $r3 = $r0.<org.mozilla.gecko.sync.net.BaseResource: org.mozilla.gecko.sync.net.ResourceDelegate delegate>;
+
+        if $r3 != null goto label01;
+
+        r16 = new java.lang.IllegalArgumentException;
+
+        varReplacer5334 = "No delegate provided.";
+
+        specialinvoke r16.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer5334);
+
+        throw r16;
+
+     label01:
+        $r0.<org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.client.methods.HttpRequestBase request> = $r1;
+
+        r17 = new ch.boye.httpclientandroidlib.protocol.BasicHttpContext;
+
+        $r4 = r17;
+
+     label02:
+        specialinvoke r17.<ch.boye.httpclientandroidlib.protocol.BasicHttpContext: void <init>()>();
+
+     label03:
+        $r0.<org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.protocol.BasicHttpContext context> = $r4;
+
+     label04:
+        r18 = new ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
+
+        $r2 = r18;
+
+     label05:
+        $r5 = staticinvoke <org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.conn.ClientConnectionManager getConnectionManager()>();
+
+        specialinvoke r18.<ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient: void <init>(ch.boye.httpclientandroidlib.conn.ClientConnectionManager)>($r5);
+
+     label06:
+        $r0.<org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient client> = $r2;
+
+        $r3 = $r0.<org.mozilla.gecko.sync.net.BaseResource: org.mozilla.gecko.sync.net.ResourceDelegate delegate>;
+
+     label07:
+        $r6 = interfaceinvoke $r3.<org.mozilla.gecko.sync.net.ResourceDelegate: org.mozilla.gecko.sync.net.AuthHeaderProvider getAuthHeaderProvider()>();
+
+     label08:
+        if $r6 == null goto label14;
+
+     label09:
+        $r1 = $r0.<org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.client.methods.HttpRequestBase request>;
+
+        $r4 = $r0.<org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.protocol.BasicHttpContext context>;
+
+        $r2 = $r0.<org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient client>;
+
+     label10:
+        $r7 = interfaceinvoke $r6.<org.mozilla.gecko.sync.net.AuthHeaderProvider: ch.boye.httpclientandroidlib.Header getAuthHeader(ch.boye.httpclientandroidlib.client.methods.HttpRequestBase,ch.boye.httpclientandroidlib.protocol.BasicHttpContext,ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient)>($r1, $r4, $r2);
+
+     label11:
+        if $r7 == null goto label14;
+
+     label12:
+        $r1 = $r0.<org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.client.methods.HttpRequestBase request>;
+
+     label13:
+        virtualinvoke $r1.<ch.boye.httpclientandroidlib.client.methods.HttpRequestBase: void addHeader(ch.boye.httpclientandroidlib.Header)>($r7);
+
+        varReplacer5330 = "BaseResource";
+
+        varReplacer5331 = "Added auth header.";
+
+        staticinvoke <org.mozilla.gecko.background.common.log.Logger: void debug(java.lang.String,java.lang.String)>(varReplacer5330, varReplacer5331);
+
+     label14:
+        $r4 = $r0.<org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.protocol.BasicHttpContext context>;
+
+     label15:
+        r19 = new ch.boye.httpclientandroidlib.impl.client.BasicAuthCache;
+
+        $r8 = r19;
+
+     label16:
+        specialinvoke r19.<ch.boye.httpclientandroidlib.impl.client.BasicAuthCache: void <init>()>();
+
+        varReplacer5335 = "http.auth.auth-cache";
+
+        interfaceinvoke $r4.<ch.boye.httpclientandroidlib.protocol.HttpContext: void setAttribute(java.lang.String,java.lang.Object)>(varReplacer5335, $r8);
+
+     label17:
+        $r2 = $r0.<org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient client>;
+
+     label18:
+        $r9 = virtualinvoke $r2.<ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient: ch.boye.httpclientandroidlib.params.HttpParams getParams()>();
+
+     label19:
+        $r3 = $r0.<org.mozilla.gecko.sync.net.BaseResource: org.mozilla.gecko.sync.net.ResourceDelegate delegate>;
+
+     label20:
+        $i0 = interfaceinvoke $r3.<org.mozilla.gecko.sync.net.ResourceDelegate: int connectionTimeout()>();
+
+        varReplacer5333 = "HTTP parameters";
+
+        staticinvoke <ch.boye.httpclientandroidlib.util.Args: java.lang.Object notNull(java.lang.Object,java.lang.String)>($r9, varReplacer5333);
+
+        varReplacer5337 = "http.connection.timeout";
+
+        interfaceinvoke $r9.<ch.boye.httpclientandroidlib.params.HttpParams: ch.boye.httpclientandroidlib.params.HttpParams setIntParameter(java.lang.String,int)>(varReplacer5337, $i0);
+
+     label21:
+        $r3 = $r0.<org.mozilla.gecko.sync.net.BaseResource: org.mozilla.gecko.sync.net.ResourceDelegate delegate>;
+
+     label22:
+        $i0 = interfaceinvoke $r3.<org.mozilla.gecko.sync.net.ResourceDelegate: int socketTimeout()>();
+
+        varReplacer5338 = "HTTP parameters";
+
+        staticinvoke <ch.boye.httpclientandroidlib.util.Args: java.lang.Object notNull(java.lang.Object,java.lang.String)>($r9, varReplacer5338);
+
+        varReplacer5332 = "http.socket.timeout";
+
+        interfaceinvoke $r9.<ch.boye.httpclientandroidlib.params.HttpParams: ch.boye.httpclientandroidlib.params.HttpParams setIntParameter(java.lang.String,int)>(varReplacer5332, $i0);
+
+        varReplacer5329 = "HTTP parameters";
+
+        staticinvoke <ch.boye.httpclientandroidlib.util.Args: java.lang.Object notNull(java.lang.Object,java.lang.String)>($r9, varReplacer5329);
+
+        varReplacer5343 = "http.connection.stalecheck";
+
+        varReplacer5344 = 0;
+
+        interfaceinvoke $r9.<ch.boye.httpclientandroidlib.params.HttpParams: ch.boye.httpclientandroidlib.params.HttpParams setBooleanParameter(java.lang.String,boolean)>(varReplacer5343, varReplacer5344);
+
+        varReplacer5336 = "utf-8";
+
+        staticinvoke <ch.boye.httpclientandroidlib.params.HttpProtocolParams: void setContentCharset(ch.boye.httpclientandroidlib.params.HttpParams,java.lang.String)>($r9, varReplacer5336);
+
+     label23:
+        $r10 = <ch.boye.httpclientandroidlib.HttpVersion: ch.boye.httpclientandroidlib.HttpVersion HTTP_1_1>;
+
+     label24:
+        staticinvoke <ch.boye.httpclientandroidlib.params.HttpProtocolParams: void setVersion(ch.boye.httpclientandroidlib.params.HttpParams,ch.boye.httpclientandroidlib.ProtocolVersion)>($r9, $r10);
+
+     label25:
+        $r3 = $r0.<org.mozilla.gecko.sync.net.BaseResource: org.mozilla.gecko.sync.net.ResourceDelegate delegate>;
+
+     label26:
+        $r11 = interfaceinvoke $r3.<org.mozilla.gecko.sync.net.ResourceDelegate: java.lang.String getUserAgent()>();
+
+     label27:
+        if $r11 == null goto label29;
+
+     label28:
+        staticinvoke <ch.boye.httpclientandroidlib.params.HttpProtocolParams: void setUserAgent(ch.boye.httpclientandroidlib.params.HttpParams,java.lang.String)>($r9, $r11);
+
+     label29:
+        $r3 = $r0.<org.mozilla.gecko.sync.net.BaseResource: org.mozilla.gecko.sync.net.ResourceDelegate delegate>;
+
+        $r1 = $r0.<org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.client.methods.HttpRequestBase request>;
+
+        $r2 = $r0.<org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient client>;
+
+     label30:
+        interfaceinvoke $r3.<org.mozilla.gecko.sync.net.ResourceDelegate: void addHeaders(ch.boye.httpclientandroidlib.client.methods.HttpRequestBase,ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient)>($r1, $r2);
+
+     label31:
+        specialinvoke $r0.<org.mozilla.gecko.sync.net.BaseResource: void execute()>();
+
+        return;
+
+     label32:
+        $r12 := @caughtexception;
+
+        varReplacer5339 = "BaseResource";
+
+        varReplacer5340 = "Couldn\'t prepare client.";
+
+        staticinvoke <org.mozilla.gecko.background.common.log.Logger: void error(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer5339, varReplacer5340, $r12);
+
+        $r3 = $r0.<org.mozilla.gecko.sync.net.BaseResource: org.mozilla.gecko.sync.net.ResourceDelegate delegate>;
+
+        $r15 = (java.security.GeneralSecurityException) $r12;
+
+        interfaceinvoke $r3.<org.mozilla.gecko.sync.net.ResourceDelegate: void handleTransportException(java.security.GeneralSecurityException)>($r15);
+
+        return;
+
+     label33:
+        $r13 := @caughtexception;
+
+        varReplacer5341 = "BaseResource";
+
+        varReplacer5342 = "Couldn\'t prepare client.";
+
+        staticinvoke <org.mozilla.gecko.background.common.log.Logger: void error(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer5341, varReplacer5342, $r13);
+
+        $r3 = $r0.<org.mozilla.gecko.sync.net.BaseResource: org.mozilla.gecko.sync.net.ResourceDelegate delegate>;
+
+        $r15 = (java.security.GeneralSecurityException) $r13;
+
+        interfaceinvoke $r3.<org.mozilla.gecko.sync.net.ResourceDelegate: void handleTransportException(java.security.GeneralSecurityException)>($r15);
+
+        return;
+
+     label34:
+        $r14 := @caughtexception;
+
+        $r3 = $r0.<org.mozilla.gecko.sync.net.BaseResource: org.mozilla.gecko.sync.net.ResourceDelegate delegate>;
+
+        r20 = new java.security.GeneralSecurityException;
+
+        specialinvoke r20.<java.security.GeneralSecurityException: void <init>(java.lang.Throwable)>($r14);
+
+        interfaceinvoke $r3.<org.mozilla.gecko.sync.net.ResourceDelegate: void handleTransportException(java.security.GeneralSecurityException)>(r20);
+
+        return;
+
+        catch java.security.KeyManagementException from label02 to label03 with label32;
+        catch java.security.KeyManagementException from label05 to label06 with label32;
+        catch java.security.KeyManagementException from label07 to label08 with label32;
+        catch java.security.KeyManagementException from label10 to label11 with label32;
+        catch java.security.KeyManagementException from label13 to label14 with label32;
+        catch java.security.KeyManagementException from label16 to label17 with label32;
+        catch java.security.KeyManagementException from label18 to label19 with label32;
+        catch java.security.KeyManagementException from label20 to label21 with label32;
+        catch java.security.KeyManagementException from label22 to label23 with label32;
+        catch java.security.KeyManagementException from label24 to label25 with label32;
+        catch java.security.KeyManagementException from label26 to label27 with label32;
+        catch java.security.KeyManagementException from label28 to label29 with label32;
+        catch java.security.KeyManagementException from label30 to label31 with label32;
+        catch java.security.GeneralSecurityException from label02 to label03 with label33;
+        catch java.security.GeneralSecurityException from label05 to label06 with label33;
+        catch java.security.GeneralSecurityException from label07 to label08 with label33;
+        catch java.security.GeneralSecurityException from label10 to label11 with label33;
+        catch java.security.GeneralSecurityException from label13 to label14 with label33;
+        catch java.security.GeneralSecurityException from label16 to label17 with label33;
+        catch java.security.GeneralSecurityException from label18 to label19 with label33;
+        catch java.security.GeneralSecurityException from label20 to label21 with label33;
+        catch java.security.GeneralSecurityException from label22 to label23 with label33;
+        catch java.security.GeneralSecurityException from label24 to label25 with label33;
+        catch java.security.GeneralSecurityException from label26 to label27 with label33;
+        catch java.security.GeneralSecurityException from label28 to label29 with label33;
+        catch java.security.GeneralSecurityException from label30 to label31 with label33;
+        catch java.lang.Exception from label02 to label04 with label34;
+        catch java.lang.Exception from label05 to label08 with label34;
+        catch java.lang.Exception from label09 to label11 with label34;
+        catch java.lang.Exception from label12 to label15 with label34;
+        catch java.lang.Exception from label16 to label23 with label34;
+        catch java.lang.Exception from label24 to label27 with label34;
+        catch java.lang.Exception from label28 to label31 with label34;
+    }
+
+    private static ch.boye.httpclientandroidlib.entity.StringEntity jsonEntity(org.mozilla.gecko.sync.ExtendedJSONObject)
+    {
+        org.mozilla.gecko.sync.ExtendedJSONObject $r0;
+        org.json.simple.JSONObject $r1;
+        java.lang.String $r2;
+        ch.boye.httpclientandroidlib.entity.StringEntity $r3;
+
+        nop;
+
+        $r0 := @parameter0: org.mozilla.gecko.sync.ExtendedJSONObject;
+
+        $r1 = $r0.<org.mozilla.gecko.sync.ExtendedJSONObject: org.json.simple.JSONObject object>;
+
+        $r2 = virtualinvoke $r1.<org.json.simple.JSONObject: java.lang.String toJSONString()>();
+
+        $r3 = staticinvoke <org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.entity.StringEntity stringEntityWithContentTypeApplicationJSON(java.lang.String)>($r2);
+
+        return $r3;
+    }
+
+    public static boolean removeHttpResponseObserver(org.mozilla.gecko.sync.net.HttpResponseObserver)
+    {
+        org.mozilla.gecko.sync.net.HttpResponseObserver $r0, $r5;
+        java.util.concurrent.CopyOnWriteArrayList $r1;
+        java.util.Iterator $r2;
+        boolean $z0;
+        java.lang.Object $r3;
+        java.lang.ref.WeakReference $r4;
+
+        $r0 := @parameter0: org.mozilla.gecko.sync.net.HttpResponseObserver;
+
+        $r1 = <org.mozilla.gecko.sync.net.BaseResource: java.util.concurrent.CopyOnWriteArrayList httpResponseObservers>;
+
+        $r2 = virtualinvoke $r1.<java.util.concurrent.CopyOnWriteArrayList: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r3 = interfaceinvoke $r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = (java.lang.ref.WeakReference) $r3;
+
+        $r3 = virtualinvoke $r4.<java.lang.ref.WeakReference: java.lang.Object get()>();
+
+        $r5 = (org.mozilla.gecko.sync.net.HttpResponseObserver) $r3;
+
+        if $r5 != $r0 goto label1;
+
+        $r1 = <org.mozilla.gecko.sync.net.BaseResource: java.util.concurrent.CopyOnWriteArrayList httpResponseObservers>;
+
+        virtualinvoke $r1.<java.util.concurrent.CopyOnWriteArrayList: boolean remove(java.lang.Object)>($r4);
+
+        return 1;
+
+     label2:
+        return 0;
+    }
+
+    private void retryRequest()
+    {
+        org.mozilla.gecko.sync.net.BaseResource $r0;
+        java.lang.String varReplacer5384, varReplacer5385;
+        int varReplacer5386;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.sync.net.BaseResource;
+
+        varReplacer5386 = 0;
+
+        $r0.<org.mozilla.gecko.sync.net.BaseResource: boolean retryOnFailedRequest> = varReplacer5386;
+
+        varReplacer5384 = "BaseResource";
+
+        varReplacer5385 = "Retrying request...";
+
+        staticinvoke <org.mozilla.gecko.background.common.log.Logger: void debug(java.lang.String,java.lang.String)>(varReplacer5384, varReplacer5385);
+
+        specialinvoke $r0.<org.mozilla.gecko.sync.net.BaseResource: void execute()>();
+
+        return;
+    }
+
+    public static void shutdownConnectionManager()
+    {
+        java.lang.Object $r0;
+        ch.boye.httpclientandroidlib.conn.ClientConnectionManager $r1;
+        java.lang.Throwable $r2;
+
+        $r0 = <org.mozilla.gecko.sync.net.BaseResource: java.lang.Object connManagerMonitor>;
+
+        entermonitor $r0;
+
+     label1:
+        $r1 = <org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.conn.ClientConnectionManager connManager>;
+
+        <org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.conn.ClientConnectionManager connManager> = null;
+
+        exitmonitor $r0;
+
+     label2:
+        if $r1 != null goto label4;
+
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        exitmonitor $r0;
+
+        throw $r2;
+
+     label4:
+        staticinvoke <org.mozilla.gecko.background.common.log.Logger: void debug(java.lang.String,java.lang.String)>("BaseResource", "Shutting down connection manager.");
+
+        interfaceinvoke $r1.<ch.boye.httpclientandroidlib.conn.ClientConnectionManager: void shutdown()>();
+
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    private static ch.boye.httpclientandroidlib.entity.StringEntity stringEntityWithContentTypeApplicationJSON(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer11614, varReplacer11615;
+        ch.boye.httpclientandroidlib.entity.StringEntity $r1;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = new ch.boye.httpclientandroidlib.entity.StringEntity;
+
+        varReplacer11615 = "UTF-8";
+
+        specialinvoke $r1.<ch.boye.httpclientandroidlib.entity.StringEntity: void <init>(java.lang.String,java.lang.String)>($r0, varReplacer11615);
+
+        varReplacer11614 = "application/json";
+
+        virtualinvoke $r1.<ch.boye.httpclientandroidlib.entity.StringEntity: void setContentType(java.lang.String)>(varReplacer11614);
+
+        return $r1;
+    }
+
+    public final void delete()
+    {
+        org.mozilla.gecko.sync.net.BaseResource $r0;
+        java.lang.StringBuilder $r1;
+        java.net.URI $r2;
+        java.lang.String $r3, varReplacer16459, varReplacer16460;
+        ch.boye.httpclientandroidlib.client.methods.HttpDelete $r4;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.sync.net.BaseResource;
+
+        $r1 = new java.lang.StringBuilder;
+
+        varReplacer16460 = "HTTP DELETE ";
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer16460);
+
+        $r2 = $r0.<org.mozilla.gecko.sync.net.BaseResource: java.net.URI uri>;
+
+        $r3 = virtualinvoke $r2.<java.net.URI: java.lang.String toASCIIString()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer16459 = "BaseResource";
+
+        staticinvoke <org.mozilla.gecko.background.common.log.Logger: void debug(java.lang.String,java.lang.String)>(varReplacer16459, $r3);
+
+        $r4 = new ch.boye.httpclientandroidlib.client.methods.HttpDelete;
+
+        $r2 = $r0.<org.mozilla.gecko.sync.net.BaseResource: java.net.URI uri>;
+
+        specialinvoke $r4.<ch.boye.httpclientandroidlib.client.methods.HttpDelete: void <init>(java.net.URI)>($r2);
+
+        specialinvoke $r0.<org.mozilla.gecko.sync.net.BaseResource: void go(ch.boye.httpclientandroidlib.client.methods.HttpRequestBase)>($r4);
+
+        return;
+    }
+
+    public final void get()
+    {
+        org.mozilla.gecko.sync.net.BaseResource $r0;
+        java.lang.StringBuilder $r1;
+        java.net.URI $r2;
+        java.lang.String $r3, varReplacer5317, varReplacer5318;
+        ch.boye.httpclientandroidlib.client.methods.HttpGet $r4;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.sync.net.BaseResource;
+
+        $r1 = new java.lang.StringBuilder;
+
+        varReplacer5317 = "HTTP GET ";
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer5317);
+
+        $r2 = $r0.<org.mozilla.gecko.sync.net.BaseResource: java.net.URI uri>;
+
+        $r3 = virtualinvoke $r2.<java.net.URI: java.lang.String toASCIIString()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer5318 = "BaseResource";
+
+        staticinvoke <org.mozilla.gecko.background.common.log.Logger: void debug(java.lang.String,java.lang.String)>(varReplacer5318, $r3);
+
+        $r4 = new ch.boye.httpclientandroidlib.client.methods.HttpGet;
+
+        $r2 = $r0.<org.mozilla.gecko.sync.net.BaseResource: java.net.URI uri>;
+
+        specialinvoke $r4.<ch.boye.httpclientandroidlib.client.methods.HttpGet: void <init>(java.net.URI)>($r2);
+
+        specialinvoke $r0.<org.mozilla.gecko.sync.net.BaseResource: void go(ch.boye.httpclientandroidlib.client.methods.HttpRequestBase)>($r4);
+
+        return;
+    }
+
+    public final java.lang.String getHostname()
+    {
+        org.mozilla.gecko.sync.net.BaseResource $r0;
+        java.lang.String $r1;
+        java.net.URI $r2;
+
+        $r0 := @this: org.mozilla.gecko.sync.net.BaseResource;
+
+        $r2 = $r0.<org.mozilla.gecko.sync.net.BaseResource: java.net.URI uri>;
+
+        $r1 = virtualinvoke $r2.<java.net.URI: java.lang.String getHost()>();
+
+        return $r1;
+    }
+
+    public final void post(ch.boye.httpclientandroidlib.HttpEntity)
+    {
+        org.mozilla.gecko.sync.net.BaseResource $r0;
+        ch.boye.httpclientandroidlib.HttpEntity $r1;
+        java.lang.StringBuilder $r2;
+        java.net.URI $r3;
+        java.lang.String $r4, varReplacer11612, varReplacer11613;
+        ch.boye.httpclientandroidlib.client.methods.HttpPost $r5;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.sync.net.BaseResource;
+
+        $r1 := @parameter0: ch.boye.httpclientandroidlib.HttpEntity;
+
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer11613 = "HTTP POST ";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer11613);
+
+        $r3 = $r0.<org.mozilla.gecko.sync.net.BaseResource: java.net.URI uri>;
+
+        $r4 = virtualinvoke $r3.<java.net.URI: java.lang.String toASCIIString()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer11612 = "BaseResource";
+
+        staticinvoke <org.mozilla.gecko.background.common.log.Logger: void debug(java.lang.String,java.lang.String)>(varReplacer11612, $r4);
+
+        $r5 = new ch.boye.httpclientandroidlib.client.methods.HttpPost;
+
+        $r3 = $r0.<org.mozilla.gecko.sync.net.BaseResource: java.net.URI uri>;
+
+        specialinvoke $r5.<ch.boye.httpclientandroidlib.client.methods.HttpPost: void <init>(java.net.URI)>($r3);
+
+        virtualinvoke $r5.<ch.boye.httpclientandroidlib.client.methods.HttpPost: void setEntity(ch.boye.httpclientandroidlib.HttpEntity)>($r1);
+
+        specialinvoke $r0.<org.mozilla.gecko.sync.net.BaseResource: void go(ch.boye.httpclientandroidlib.client.methods.HttpRequestBase)>($r5);
+
+        return;
+    }
+
+    public final void post(org.json.simple.JSONArray) throws java.io.UnsupportedEncodingException
+    {
+        org.mozilla.gecko.sync.net.BaseResource $r0;
+        org.json.simple.JSONArray $r1;
+        java.lang.String $r2;
+        ch.boye.httpclientandroidlib.entity.StringEntity $r3;
+
+        $r0 := @this: org.mozilla.gecko.sync.net.BaseResource;
+
+        $r1 := @parameter0: org.json.simple.JSONArray;
+
+        $r2 = virtualinvoke $r1.<org.json.simple.JSONArray: java.lang.String toJSONString()>();
+
+        $r3 = staticinvoke <org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.entity.StringEntity stringEntityWithContentTypeApplicationJSON(java.lang.String)>($r2);
+
+        virtualinvoke $r0.<org.mozilla.gecko.sync.net.BaseResource: void post(ch.boye.httpclientandroidlib.HttpEntity)>($r3);
+
+        return;
+    }
+
+    public final void post(org.json.simple.JSONObject) throws java.io.UnsupportedEncodingException
+    {
+        org.mozilla.gecko.sync.net.BaseResource $r0;
+        org.json.simple.JSONObject $r1;
+        java.lang.String $r2;
+        ch.boye.httpclientandroidlib.entity.StringEntity $r3;
+
+        $r0 := @this: org.mozilla.gecko.sync.net.BaseResource;
+
+        $r1 := @parameter0: org.json.simple.JSONObject;
+
+        $r2 = virtualinvoke $r1.<org.json.simple.JSONObject: java.lang.String toJSONString()>();
+
+        $r3 = staticinvoke <org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.entity.StringEntity stringEntityWithContentTypeApplicationJSON(java.lang.String)>($r2);
+
+        virtualinvoke $r0.<org.mozilla.gecko.sync.net.BaseResource: void post(ch.boye.httpclientandroidlib.HttpEntity)>($r3);
+
+        return;
+    }
+
+    public final void post(org.mozilla.gecko.sync.ExtendedJSONObject)
+    {
+        org.mozilla.gecko.sync.net.BaseResource $r0;
+        org.mozilla.gecko.sync.ExtendedJSONObject $r1;
+        ch.boye.httpclientandroidlib.entity.StringEntity $r2;
+
+        nop;
+
+        $r0 := @this: org.mozilla.gecko.sync.net.BaseResource;
+
+        $r1 := @parameter0: org.mozilla.gecko.sync.ExtendedJSONObject;
+
+        $r2 = staticinvoke <org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.entity.StringEntity jsonEntity(org.mozilla.gecko.sync.ExtendedJSONObject)>($r1);
+
+        virtualinvoke $r0.<org.mozilla.gecko.sync.net.BaseResource: void post(ch.boye.httpclientandroidlib.HttpEntity)>($r2);
+
+        return;
+    }
+
+    public final void put(ch.boye.httpclientandroidlib.HttpEntity)
+    {
+        org.mozilla.gecko.sync.net.BaseResource $r0;
+        ch.boye.httpclientandroidlib.HttpEntity $r1;
+        java.lang.StringBuilder $r2;
+        java.net.URI $r3;
+        java.lang.String $r4;
+        ch.boye.httpclientandroidlib.client.methods.HttpPut $r5;
+
+        $r0 := @this: org.mozilla.gecko.sync.net.BaseResource;
+
+        $r1 := @parameter0: ch.boye.httpclientandroidlib.HttpEntity;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("HTTP PUT ");
+
+        $r3 = $r0.<org.mozilla.gecko.sync.net.BaseResource: java.net.URI uri>;
+
+        $r4 = virtualinvoke $r3.<java.net.URI: java.lang.String toASCIIString()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <org.mozilla.gecko.background.common.log.Logger: void debug(java.lang.String,java.lang.String)>("BaseResource", $r4);
+
+        $r5 = new ch.boye.httpclientandroidlib.client.methods.HttpPut;
+
+        $r3 = $r0.<org.mozilla.gecko.sync.net.BaseResource: java.net.URI uri>;
+
+        specialinvoke $r5.<ch.boye.httpclientandroidlib.client.methods.HttpPut: void <init>(java.net.URI)>($r3);
+
+        virtualinvoke $r5.<ch.boye.httpclientandroidlib.client.methods.HttpPut: void setEntity(ch.boye.httpclientandroidlib.HttpEntity)>($r1);
+
+        specialinvoke $r0.<org.mozilla.gecko.sync.net.BaseResource: void go(ch.boye.httpclientandroidlib.client.methods.HttpRequestBase)>($r5);
+
+        return;
+    }
+
+    public final void put(org.json.simple.JSONObject) throws java.io.UnsupportedEncodingException
+    {
+        org.mozilla.gecko.sync.net.BaseResource $r0;
+        org.json.simple.JSONObject $r1;
+        java.lang.String $r2;
+        ch.boye.httpclientandroidlib.entity.StringEntity $r3;
+
+        $r0 := @this: org.mozilla.gecko.sync.net.BaseResource;
+
+        $r1 := @parameter0: org.json.simple.JSONObject;
+
+        $r2 = virtualinvoke $r1.<org.json.simple.JSONObject: java.lang.String toJSONString()>();
+
+        $r3 = staticinvoke <org.mozilla.gecko.sync.net.BaseResource: ch.boye.httpclientandroidlib.entity.StringEntity stringEntityWithContentTypeApplicationJSON(java.lang.String)>($r2);
+
+        virtualinvoke $r0.<org.mozilla.gecko.sync.net.BaseResource: void put(ch.boye.httpclientandroidlib.HttpEntity)>($r3);
+
+        return;
+    }
+}

@@ -1,0 +1,114 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.allradio.radiofm-03DE6E1DD15596FA0340EF1026C7F3E8409CB6FE4CCDF98AB0D1D1548848A772.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzdc(java.lang.String)>
+		SHA-256: aa584cffcf05f6aaf026fd5646f49c0743c0b79fb60dad66eaf581f81c0f8229
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: javax.net.ssl.SSLContext
+		Statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer663)
+		Method: <okhttp3.OkHttpClient: javax.net.ssl.SSLSocketFactory systemDefaultSslSocketFactory(javax.net.ssl.X509TrustManager)>
+		SHA-256: c89061b519fc925f5919e39e04423da3d16e34bc6c8cd62e572cd8ea389992ad
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2777)
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzdc(java.lang.String)>
+		SHA-256: 9ffe2e71effc095c930f2dcaaf3781a543f8e3614a88bcf141c63096a0567c17
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r0)
+		Method: <com.google.android.gms.measurement.internal.zzal: java.security.MessageDigest zzfi(java.lang.String)>
+		SHA-256: 6fc04fe28e0812a19f2186c1f0d7c12d1f410b4204c49dda2c476f793477c46c
+		Secure: false
+	Object:
+		Variable: $r21
+		Type: byte[]
+		Statement: $r21 = virtualinvoke $r9.<java.security.MessageDigest: byte[] digest(byte[])>($r21)
+		Method: <com.google.android.gms.measurement.internal.zzn: void zzym()>
+		SHA-256: b6615363532e467125ba914ef2e1c97392f6f59fdd0f890ef0093cad3ad5ec0c
+		Secure: true
+
+Findings in Java Class: com.google.android.gms.measurement.internal.zzn
+
+	 in Method: void zzym()
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #6fc04fe28e0812a19f2186c1f0d7c12d1f410b4204c49dda2c476f793477c46c)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r9 = staticinvoke <com.google.android.gms.measurement.internal.zzal: java.security.MessageDigest zzfi(java.lang.String)>(varReplacer2427)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #6fc04fe28e0812a19f2186c1f0d7c12d1f410b4204c49dda2c476f793477c46c)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to update, java.security.MessageDigest: byte[] digest(byte[])
+			at statement: $r21 = virtualinvoke $r9.<java.security.MessageDigest: byte[] digest(byte[])>($r21)
+
+
+Findings in Java Class: com.google.android.gms.measurement.internal.zzal
+
+	 in Method: java.security.MessageDigest zzfi(java.lang.String)
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #6fc04fe28e0812a19f2186c1f0d7c12d1f410b4204c49dda2c476f793477c46c)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r0)
+
+
+Findings in Java Class: okhttp3.OkHttpClient
+
+	 in Method: javax.net.ssl.SSLSocketFactory systemDefaultSslSocketFactory(javax.net.ssl.X509TrustManager)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer661, r7, varReplacer661)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer661, r7, varReplacer661)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 5
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 3
+	RequiredPredicateError: 2
+=====================================================================
