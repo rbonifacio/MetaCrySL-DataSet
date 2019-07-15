@@ -1,0 +1,135 @@
+public class com.encryption.RSASignatureManager extends java.lang.Object
+{
+    public static final java.lang.String TAG;
+
+    public void <init>()
+    {
+        com.encryption.RSASignatureManager $r0;
+
+        $r0 := @this: com.encryption.RSASignatureManager;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String _getSignature(android.content.Context, java.lang.String)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, $r5, varReplacer7729, varReplacer7730, varReplacer7731, varReplacer7732;
+        java.security.spec.PKCS8EncodedKeySpec $r2;
+        java.lang.Exception $r3;
+        com.tracing._MainTracingManager $r4;
+        byte[] $r6;
+        java.security.KeyFactory $r7;
+        java.security.PrivateKey $r8;
+        int varReplacer7727, varReplacer7728;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r4 = staticinvoke <com.tracing._MainTracingManager: com.tracing._MainTracingManager getInstance(android.content.Context)>($r0);
+
+        $r5 = virtualinvoke $r4.<com.tracing._MainTracingManager: java.lang.String getPrivateKey()>();
+
+     label1:
+        varReplacer7727 = 0;
+
+        $r6 = staticinvoke <android.util.Base64: byte[] decode(java.lang.String,int)>($r5, varReplacer7727);
+
+     label2:
+        $r2 = new java.security.spec.PKCS8EncodedKeySpec;
+
+     label3:
+        specialinvoke $r2.<java.security.spec.PKCS8EncodedKeySpec: void <init>(byte[])>($r6);
+
+        varReplacer7730 = "RSA";
+
+        $r7 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer7730);
+
+        $r8 = virtualinvoke $r7.<java.security.KeyFactory: java.security.PrivateKey generatePrivate(java.security.spec.KeySpec)>($r2);
+
+        $r6 = staticinvoke <com.encryption.RSASignatureManager: byte[] createSignature(java.lang.String,java.security.PrivateKey)>($r1, $r8);
+
+        varReplacer7728 = 0;
+
+        $r1 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r6, varReplacer7728);
+
+     label4:
+        return $r1;
+
+     label5:
+        $r3 := @caughtexception;
+
+        varReplacer7731 = "RSASignatureManager";
+
+        varReplacer7732 = "Exception";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer7731, varReplacer7732, $r3);
+
+        varReplacer7729 = "";
+
+        return varReplacer7729;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    private static byte[] createSignature(java.lang.String, java.security.PrivateKey)
+    {
+        java.security.PrivateKey $r0;
+        java.lang.Exception $r1;
+        java.lang.String $r2, varReplacer7738, varReplacer7739, varReplacer7740, varReplacer7741, varReplacer7742, varReplacer7743;
+        byte[] $r3;
+        java.security.Signature $r4;
+        null_type varReplacer7737;
+
+        nop;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r0 := @parameter1: java.security.PrivateKey;
+
+        varReplacer7742 = " ";
+
+        varReplacer7743 = "";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer7742, varReplacer7743);
+
+     label1:
+        varReplacer7738 = "UTF8";
+
+        $r3 = virtualinvoke $r2.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer7738);
+
+        varReplacer7739 = "MD5WithRSA";
+
+        $r4 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer7739);
+
+        virtualinvoke $r4.<java.security.Signature: void initSign(java.security.PrivateKey)>($r0);
+
+        virtualinvoke $r4.<java.security.Signature: void update(byte[])>($r3);
+
+        $r3 = virtualinvoke $r4.<java.security.Signature: byte[] sign()>();
+
+     label2:
+        return $r3;
+
+     label3:
+        $r1 := @caughtexception;
+
+        varReplacer7740 = "RSASignatureManager";
+
+        varReplacer7741 = "Exception";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer7740, varReplacer7741, $r1);
+
+        varReplacer7737 = null;
+
+        return varReplacer7737;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+}

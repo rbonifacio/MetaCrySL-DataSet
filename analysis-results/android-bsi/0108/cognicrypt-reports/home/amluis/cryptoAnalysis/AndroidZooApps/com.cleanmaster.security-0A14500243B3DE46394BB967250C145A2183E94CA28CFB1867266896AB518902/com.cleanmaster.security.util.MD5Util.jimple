@@ -1,0 +1,612 @@
+public class com.cleanmaster.security.util.MD5Util extends java.lang.Object
+{
+
+    public static long a(byte[], int, int, java.lang.String)
+    {
+        byte[] $r0;
+        int $i0, $i1, varReplacer6817;
+        java.lang.String $r1;
+        java.util.zip.CRC32 $r2;
+        long $l2;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r1 := @parameter3: java.lang.String;
+
+        $r2 = new java.util.zip.CRC32;
+
+        specialinvoke $r2.<java.util.zip.CRC32: void <init>()>();
+
+        varReplacer6817 = 6;
+
+        virtualinvoke $r2.<java.util.zip.CRC32: void update(byte[],int,int)>($r0, varReplacer6817, $i1);
+
+        $r0 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r2.<java.util.zip.CRC32: void update(byte[])>($r0);
+
+        $l2 = virtualinvoke $r2.<java.util.zip.CRC32: long getValue()>();
+
+        return $l2;
+    }
+
+    public static java.lang.String a(java.io.File)
+    {
+        java.io.File $r0;
+        boolean $z0;
+        byte[] $r1;
+        java.security.MessageDigest $r2;
+        java.io.FileInputStream $r3, r12;
+        int $i0;
+        java.lang.Exception $r4, $r11;
+        java.lang.Throwable $r5, $r7, $r8, $r9, $r10;
+        java.lang.String $r6;
+        java.io.IOException r13;
+
+        $r0 := @parameter0: java.io.File;
+
+        $z0 = virtualinvoke $r0.<java.io.File: boolean isFile()>();
+
+        if $z0 != 0 goto label01;
+
+        return null;
+
+     label01:
+        $r1 = newarray (byte)[1024];
+
+     label02:
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("MD5");
+
+     label03:
+        r12 = new java.io.FileInputStream;
+
+     label04:
+        $r3 = r12;
+
+     label05:
+        specialinvoke r12.<java.io.FileInputStream: void <init>(java.io.File)>($r0);
+
+     label06:
+        $i0 = virtualinvoke $r3.<java.io.FileInputStream: int read(byte[],int,int)>($r1, 0, 1024);
+
+     label07:
+        if $i0 == -1 goto label15;
+
+     label08:
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r1, 0, $i0);
+
+     label09:
+        goto label06;
+
+     label10:
+        $r4 := @caughtexception;
+
+     label11:
+        if $r3 == null goto label27;
+
+     label12:
+        virtualinvoke $r3.<java.io.FileInputStream: void close()>();
+
+     label13:
+        return null;
+
+     label14:
+        $r5 := @caughtexception;
+
+        r13 = (java.io.IOException) $r5;
+
+        virtualinvoke r13.<java.io.IOException: void printStackTrace()>();
+
+        return null;
+
+     label15:
+        virtualinvoke $r3.<java.io.FileInputStream: void close()>();
+
+     label16:
+        if $r3 == null goto label18;
+
+     label17:
+        virtualinvoke $r3.<java.io.FileInputStream: void close()>();
+
+     label18:
+        $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>();
+
+        $r6 = staticinvoke <com.cleanmaster.security.util.MD5Util: java.lang.String a(byte[])>($r1);
+
+        return $r6;
+
+     label19:
+        $r7 := @caughtexception;
+
+        r13 = (java.io.IOException) $r7;
+
+        virtualinvoke r13.<java.io.IOException: void printStackTrace()>();
+
+        goto label18;
+
+     label20:
+        $r8 := @caughtexception;
+
+        $r3 = null;
+
+        $r9 = $r8;
+
+     label21:
+        if $r3 == null goto label23;
+
+     label22:
+        virtualinvoke $r3.<java.io.FileInputStream: void close()>();
+
+     label23:
+        throw $r9;
+
+     label24:
+        $r10 := @caughtexception;
+
+        r13 = (java.io.IOException) $r10;
+
+        virtualinvoke r13.<java.io.IOException: void printStackTrace()>();
+
+        goto label23;
+
+     label25:
+        $r9 := @caughtexception;
+
+        goto label21;
+
+     label26:
+        $r11 := @caughtexception;
+
+        $r3 = null;
+
+        goto label11;
+
+     label27:
+        return null;
+
+        catch java.lang.Exception from label02 to label03 with label26;
+        catch java.lang.Exception from label05 to label06 with label26;
+        catch java.lang.Throwable from label02 to label04 with label20;
+        catch java.lang.Throwable from label05 to label06 with label20;
+        catch java.lang.Exception from label06 to label07 with label10;
+        catch java.lang.Exception from label08 to label09 with label10;
+        catch java.lang.Throwable from label06 to label07 with label25;
+        catch java.lang.Throwable from label08 to label09 with label25;
+        catch java.io.IOException from label12 to label13 with label14;
+        catch java.lang.Exception from label15 to label16 with label10;
+        catch java.lang.Throwable from label15 to label16 with label25;
+        catch java.io.IOException from label17 to label18 with label19;
+        catch java.io.IOException from label22 to label23 with label24;
+    }
+
+    public static java.lang.String a(java.io.InputStream)
+    {
+        java.io.InputStream $r0;
+        byte[] $r1;
+        java.security.MessageDigest $r2;
+        int $i0;
+        java.lang.Exception $r3;
+        java.lang.String $r4;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+        if $r0 != null goto label1;
+
+        return null;
+
+     label1:
+        $r1 = newarray (byte)[1024];
+
+     label2:
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("MD5");
+
+     label3:
+        $i0 = virtualinvoke $r0.<java.io.InputStream: int read(byte[],int,int)>($r1, 0, 1024);
+
+     label4:
+        if $i0 == -1 goto label8;
+
+     label5:
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r1, 0, $i0);
+
+     label6:
+        goto label3;
+
+     label7:
+        $r3 := @caughtexception;
+
+        return null;
+
+     label8:
+        virtualinvoke $r0.<java.io.InputStream: void close()>();
+
+     label9:
+        $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>();
+
+        $r4 = staticinvoke <com.cleanmaster.security.util.MD5Util: java.lang.String a(byte[])>($r1);
+
+        return $r4;
+
+        catch java.lang.Exception from label2 to label4 with label7;
+        catch java.lang.Exception from label5 to label6 with label7;
+        catch java.lang.Exception from label8 to label9 with label7;
+    }
+
+    public static java.lang.String a(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer4681, varReplacer4684;
+        java.security.MessageDigest $r1;
+        byte[] $r2;
+        java.lang.StackOverflowError $r3;
+        java.lang.Exception $r4;
+        java.lang.Throwable $r5, $r6;
+        null_type varReplacer4682, varReplacer4683, varReplacer4685, varReplacer4686;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer4684 = "MD5";
+
+        $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4684);
+
+        varReplacer4681 = "UTF-8";
+
+        $r2 = virtualinvoke $r0.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer4681);
+
+        $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r2);
+
+     label2:
+        $r0 = staticinvoke <com.cleanmaster.security.util.MD5Util: java.lang.String a(byte[])>($r2);
+
+        return $r0;
+
+     label3:
+        $r3 := @caughtexception;
+
+        varReplacer4682 = null;
+
+        return varReplacer4682;
+
+     label4:
+        $r4 := @caughtexception;
+
+        varReplacer4685 = null;
+
+        return varReplacer4685;
+
+     label5:
+        $r5 := @caughtexception;
+
+        varReplacer4686 = null;
+
+        return varReplacer4686;
+
+     label6:
+        $r6 := @caughtexception;
+
+        varReplacer4683 = null;
+
+        return varReplacer4683;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label6;
+        catch java.io.UnsupportedEncodingException from label1 to label2 with label5;
+        catch java.lang.Exception from label1 to label2 with label4;
+        catch java.lang.StackOverflowError from label1 to label2 with label3;
+    }
+
+    public static java.lang.String a(byte[])
+    {
+        byte[] $r0;
+        java.lang.StringBuilder $r1;
+        int $i0, $i1;
+        byte $b2;
+        short $s3;
+        java.lang.String $r2, varReplacer4687;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 = new java.lang.StringBuilder;
+
+        $i0 = lengthof $r0;
+
+        $i0 = $i0 * 2;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(int)>($i0);
+
+        $i0 = lengthof $r0;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label3;
+
+        $b2 = $r0[$i1];
+
+        $s3 = $b2 & 255;
+
+        if $s3 >= 16 goto label2;
+
+        varReplacer4687 = "0";
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4687);
+
+     label2:
+        $s3 = $b2 & 255;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s3);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r2;
+    }
+
+    public static byte[] a(int)
+    {
+        int $i0, $i1, $i2;
+        byte[] $r0;
+        byte $b3;
+
+        nop;
+
+        $i0 := @parameter0: int;
+
+        $r0 = newarray (byte)[4];
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= 4 goto label2;
+
+        $i2 = $i1 * 8;
+
+        $i2 = $i0 >>> $i2;
+
+        $b3 = (byte) $i2;
+
+        $r0[$i1] = $b3;
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        return $r0;
+    }
+
+    public static byte[] a(short)
+    {
+        short $s0, $s3;
+        byte[] $r0;
+        int $i1, $i2;
+        byte $b4;
+
+        nop;
+
+        $s0 := @parameter0: short;
+
+        $r0 = newarray (byte)[2];
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= 2 goto label2;
+
+        $i2 = $i1 * 8;
+
+        $s3 = $s0 >>> $i2;
+
+        $b4 = (byte) $s3;
+
+        $r0[$i1] = $b4;
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        return $r0;
+    }
+
+    public static byte[] b(java.lang.String)
+    {
+        java.lang.String $r0, $r2;
+        byte[] $r1, $r3;
+        int $i0, $i1, $i2, varReplacer13868;
+        short $s3;
+        byte $b4;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        $i0 = $i0 / 2;
+
+        $r1 = newarray (byte)[$i0];
+
+        $i0 = 0;
+
+     label1:
+        $i1 = lengthof $r1;
+
+        if $i0 >= $i1 goto label2;
+
+        $i1 = $i0 * 2;
+
+        $i2 = $i0 * 2;
+
+        $i2 = $i2 + 2;
+
+        $r2 = virtualinvoke $r0.<java.lang.String: java.lang.String substring(int,int)>($i1, $i2);
+
+        varReplacer13868 = 16;
+
+        $s3 = staticinvoke <java.lang.Short: short parseShort(java.lang.String,int)>($r2, varReplacer13868);
+
+        $r3 = staticinvoke <com.cleanmaster.security.util.MD5Util: byte[] a(short)>($s3);
+
+        $b4 = $r3[0];
+
+        $r1[$i0] = $b4;
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label2:
+        return $r1;
+    }
+
+    public static byte[] b(byte[], int, int, java.lang.String)
+    {
+        byte[] $r0, $r2;
+        int $i0, $i2, $i3, $i4;
+        java.lang.String $r1;
+        byte $b1, $b5;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $i2 := @parameter1: int;
+
+        $i0 := @parameter2: int;
+
+        $r1 := @parameter3: java.lang.String;
+
+        if $r0 == null goto label4;
+
+        if $i0 >= 8 goto label1;
+
+        return $r0;
+
+     label1:
+        $r2 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        $i3 = 0;
+
+     label2:
+        if $i2 >= $i0 goto label4;
+
+        $i4 = virtualinvoke $r1.<java.lang.String: int length()>();
+
+        if $i3 != $i4 goto label3;
+
+        $i3 = 0;
+
+     label3:
+        $b5 = $r0[$i2];
+
+        $b1 = $r2[$i3];
+
+        $b1 = $b5 ^ $b1;
+
+        $r0[$i2] = $b1;
+
+        $i2 = $i2 + 1;
+
+        $i3 = $i3 + 1;
+
+        goto label2;
+
+     label4:
+        return $r0;
+    }
+
+    public static java.lang.String c(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r0 = staticinvoke <com.cleanmaster.security.util.MD5Util: java.lang.String a(java.lang.String)>($r0);
+
+        return $r0;
+    }
+
+    public static long d(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer12509;
+        java.security.MessageDigest $r1;
+        byte[] $r2;
+        java.nio.ByteBuffer $r3;
+        long $l0, varReplacer12508;
+        java.lang.Exception $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer12509 = "MD5";
+
+        $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer12509);
+
+        $r2 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r1.<java.security.MessageDigest: void update(byte[])>($r2);
+
+        $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>();
+
+        $r3 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer wrap(byte[])>($r2);
+
+        $l0 = virtualinvoke $r3.<java.nio.ByteBuffer: long getLong()>();
+
+     label2:
+        return $l0;
+
+     label3:
+        $r4 := @caughtexception;
+
+        varReplacer12508 = 0L;
+
+        return varReplacer12508;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public static java.lang.String e(java.lang.String)
+    {
+        java.lang.String $r0;
+        java.lang.StringBuilder $r1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        if $r0 != null goto label1;
+
+        return null;
+
+     label1:
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("ijinshan");
+
+        $r0 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r0 = staticinvoke <com.cleanmaster.security.util.MD5Util: java.lang.String c(java.lang.String)>($r0);
+
+        return $r0;
+    }
+}

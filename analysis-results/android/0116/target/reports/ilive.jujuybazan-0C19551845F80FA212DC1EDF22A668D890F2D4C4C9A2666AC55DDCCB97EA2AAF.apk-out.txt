@@ -44,30 +44,38 @@ Analyzed Objects:
 		SHA-256: 259643b79399ed9208d191696bb2067740846c3b8bfb6a7b9aa8b3aa6f569379
 		Secure: true
 	Object:
-		Variable: $r1
-		Type: java.security.MessageDigest
-		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer665)
-		Method: <net.roarsoftware.util.StringUtilities: void <clinit>()>
-		SHA-256: 625cf40a4885b1faa8d651b393d4bca5d675864f39fcd1c8e84bc0031c795243
-		Secure: true
-	Object:
 		Variable: $r2
 		Type: javax.net.ssl.SSLContext
-		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer391)
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer309)
 		Method: <com.tt.radio.MySSLSocketFactory: void <init>(java.security.KeyStore)>
-		SHA-256: b16593da92321196e65f69f70c63e014ec4d7d6cee0751617834370a96ba4ca2
+		SHA-256: f0f38c09d28466886e73251110779a91def8cdad233ac2ae7300ed7f3ac0d79c
 		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer666)
+		Method: <net.roarsoftware.util.StringUtilities: void <clinit>()>
+		SHA-256: ae17ecd795dfbe108d46fb17c5cb2c4edba6c6c5778824aba82df6813edb4f22
+		Secure: false
+
+Findings in Java Class: dummyMainClass
+
+	 in Method: void dummyMainMethod(java.lang.String[])
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #ae17ecd795dfbe108d46fb17c5cb2c4edba6c6c5778824aba82df6813edb4f22)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: return
+
 
 Findings in Java Class: com.tt.radio.MySSLSocketFactory
 
 	 in Method: void <init>(java.security.KeyStore)
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer389, r5, varReplacer389)
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer310, r5, varReplacer310)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
-			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer389, r5, varReplacer389)
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer310, r5, varReplacer310)
 
 
 ======================= CogniCrypt Summary ==========================
@@ -75,5 +83,6 @@ Findings in Java Class: com.tt.radio.MySSLSocketFactory
 	Number of Objects Analyzed: 3
 
 	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 1
 	RequiredPredicateError: 2
 =====================================================================

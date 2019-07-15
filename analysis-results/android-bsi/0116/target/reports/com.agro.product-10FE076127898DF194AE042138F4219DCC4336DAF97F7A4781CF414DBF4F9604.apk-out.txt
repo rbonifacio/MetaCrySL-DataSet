@@ -1,0 +1,109 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.agro.product-10FE076127898DF194AE042138F4219DCC4336DAF97F7A4781CF414DBF4F9604.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r6
+		Type: byte[]
+		Statement: $r6 = virtualinvoke $r7.<javax.crypto.Mac: byte[] doFinal(byte[])>($r6)
+		Method: <com.parse.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(com.parse.signpost.http.HttpRequest,com.parse.signpost.http.HttpParameters)>
+		SHA-256: af588f5518a135c2a7148f74ec340c3a6a36fde9198577f878ff5b071f829122
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r0)
+		Method: <com.parse.codec.digest.DigestUtils: byte[] md5(byte[])>
+		SHA-256: d2ba38deb0d2f449dfb6fcbb092e9f603e49b4b43cd2b43b5848853db2e618d6
+		Secure: false
+	Object:
+		Variable: varReplacer1305
+		Type: java.lang.String
+		Statement: specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer1305)
+		Method: <com.parse.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(com.parse.signpost.http.HttpRequest,com.parse.signpost.http.HttpParameters)>
+		SHA-256: c7ddecb0f23ddcceb73eda397388768436d5daf19d73a830dc17fe0c8177cb4e
+		Secure: false
+	Object:
+		Variable: $r7
+		Type: javax.crypto.Mac
+		Statement: $r7 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer1303)
+		Method: <com.parse.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(com.parse.signpost.http.HttpRequest,com.parse.signpost.http.HttpParameters)>
+		SHA-256: e6a956da99cd81259cb20661133eaf3736dc17293508ca687d2a6fa2db00a52f
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer686)
+		Method: <com.parse.codec.digest.DigestUtils: java.security.MessageDigest getDigest(java.lang.String)>
+		SHA-256: b1a52701f0c6907757aa9758f0e941c204ffd9b7e118f7fea0e4af140123f7d5
+		Secure: false
+	Object:
+		Variable: r12
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer1305)
+		Method: <com.parse.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(com.parse.signpost.http.HttpRequest,com.parse.signpost.http.HttpParameters)>
+		SHA-256: 4d930c8e3bade7020ed7195164c43bc17fba48b858d2ee1a20934b243802db46
+		Secure: false
+
+Findings in Java Class: com.parse.codec.digest.DigestUtils
+
+	 in Method: java.security.MessageDigest getDigest(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #b1a52701f0c6907757aa9758f0e941c204ffd9b7e118f7fea0e4af140123f7d5)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer686)
+
+
+Findings in Java Class: com.parse.signpost.signature.HmacSha1MessageSigner
+
+	 in Method: java.lang.String sign(com.parse.signpost.http.HttpRequest,com.parse.signpost.http.HttpParameters)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer1305)
+
+		ConstraintError violating CrySL rule for javax.crypto.Mac (on Object #e6a956da99cd81259cb20661133eaf3736dc17293508ca687d2a6fa2db00a52f)
+			First parameter (with value "HmacSHA1") should be any of {HmacSHA256, HmacSHA384, HmacSHA512}
+			at statement: $r7 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer1303)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
+	RequiredPredicateError: 1
+=====================================================================

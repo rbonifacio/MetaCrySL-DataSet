@@ -1,0 +1,132 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.heroesturkey.ht183411115020-0174B5509EEE0FE1FF7775A16865CB0CC5C207077BC4F85F68624A90BFAF33AD.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.facebook.internal.bu: java.lang.String a(java.lang.String,byte[])>
+		SHA-256: d3bec56e84a2eefa88f2df18e438f9cb0ce1a9ec4b00c82ce2a268dd70663475
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r0)
+		Method: <com.facebook.internal.bu: java.lang.String a(java.lang.String,byte[])>
+		SHA-256: 5bff83f201d8c27e601d5ac62ed21b0a5c7f7f0ff717f13e881009a6ba3d2605
+		Secure: false
+	Object:
+		Variable: r23
+		Type: java.security.SecureRandom
+		Statement: specialinvoke r23.<java.security.SecureRandom: void <init>()>()
+		Method: <org.brickred.socialauth.util.a: void <clinit>()>
+		SHA-256: a0e07a3cca7ae8f95188f899c75496a54e8b4fa1fc16c5cdeb284b17cc357045
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: javax.net.ssl.SSLContext
+		Statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer6104)
+		Method: <org.brickred.socialauth.util.a: void <clinit>()>
+		SHA-256: e08092da5a9507dcc026d825e348d789b3c39ae136b4fa6e1674d6a60c19df95
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4159)
+		Method: <com.google.android.gms.internal.gc: java.lang.String u(java.lang.String)>
+		SHA-256: a84f43ad3a4cc4ebb97b38568760cc7d69e82cd96b9741fc0177f23f148143ae
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.internal.gc: java.lang.String u(java.lang.String)>
+		SHA-256: 6b802b3841ffcda9462f86c5e24420034cf3f8209be824ebf9282985b1839e68
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.net.ssl.SSLContext
+		Statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer6100)
+		Method: <org.brickred.socialauth.util.a: void <clinit>()>
+		SHA-256: 480200986c97ba5635c78febf8fb091e5e72573fe5db986f6ee77a28650f5da6
+		Secure: false
+
+Findings in Java Class: com.google.android.gms.internal.gc
+
+	 in Method: java.lang.String u(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #a84f43ad3a4cc4ebb97b38568760cc7d69e82cd96b9741fc0177f23f148143ae)
+			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4159)
+
+
+Findings in Java Class: com.facebook.internal.bu
+
+	 in Method: java.lang.String a(java.lang.String,byte[])
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #5bff83f201d8c27e601d5ac62ed21b0a5c7f7f0ff717f13e881009a6ba3d2605)
+			First parameter (with value "SHA-1") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r0)
+
+
+Findings in Java Class: org.brickred.socialauth.util.a
+
+	 in Method: void <clinit>()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6097, r24, varReplacer6097)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>($r12, r24, $r14)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6097, r24, varReplacer6097)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>($r12, r24, $r14)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 7
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 4
+	ConstraintError: 2
+=====================================================================

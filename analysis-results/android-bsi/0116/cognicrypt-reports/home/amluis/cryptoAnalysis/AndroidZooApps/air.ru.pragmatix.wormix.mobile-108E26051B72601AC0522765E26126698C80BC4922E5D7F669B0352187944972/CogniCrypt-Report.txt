@@ -1,0 +1,85 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer751)
+		Method: <com.vk.sdk.util.VKUtil: java.lang.String md5(java.lang.String)>
+		SHA-256: 4d20dc2478b7692468f8a3239c33f2d7a854d8160b80d4a304f67bfd0c10b00d
+		Secure: false
+	Object:
+		Variable: $r9
+		Type: java.security.MessageDigest
+		Statement: $r9 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer571)
+		Method: <com.vk.sdk.util.VKUtil: java.lang.String[] getCertificateFingerprint(android.content.Context,java.lang.String)>
+		SHA-256: 54978dad6579c44d06f371ca81b4c68bdfbcdff50c1a7f94e235c2f953bc926f
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.vk.sdk.util.VKUtil: java.lang.String md5(java.lang.String)>
+		SHA-256: 2c29116256948103b2ea2c4cdfc5a05c42c3fb6b97f4cbcc1e5c3995389dfe38
+		Secure: false
+	Object:
+		Variable: $r10
+		Type: byte[]
+		Statement: $r10 = virtualinvoke $r9.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.vk.sdk.util.VKUtil: java.lang.String[] getCertificateFingerprint(android.content.Context,java.lang.String)>
+		SHA-256: be5b5fb254ce9976cd4b62d3a9b157564674a56192306d9fcc1d72d64d2540ef
+		Secure: false
+
+Findings in Java Class: com.vk.sdk.util.VKUtil
+
+	 in Method: java.lang.String[] getCertificateFingerprint(android.content.Context,java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #54978dad6579c44d06f371ca81b4c68bdfbcdff50c1a7f94e235c2f953bc926f)
+			First parameter (with value "SHA") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r9 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer571)
+
+
+	 in Method: java.lang.String md5(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #4d20dc2478b7692468f8a3239c33f2d7a854d8160b80d4a304f67bfd0c10b00d)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer751)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
+=====================================================================

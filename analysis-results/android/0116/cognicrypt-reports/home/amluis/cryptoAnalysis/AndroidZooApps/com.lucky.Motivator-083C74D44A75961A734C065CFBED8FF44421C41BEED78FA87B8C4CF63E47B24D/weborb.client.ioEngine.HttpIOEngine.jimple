@@ -1,0 +1,1212 @@
+public class weborb.client.ioEngine.HttpIOEngine extends weborb.client.ioEngine.IOEngine
+{
+    private static final java.lang.String COOKIE;
+    private static final java.lang.String SET_COOKIE;
+    private static java.lang.Boolean isAndroid;
+    private static boolean needsSingleThread;
+    private weborb.client.cookies.ConcurrentCookieStore cookieStore;
+    private weborb.client.cookies.CookieUtil cookieUtil;
+    private java.util.concurrent.ScheduledFuture currentTask;
+    private final java.util.concurrent.ScheduledExecutorService executor;
+    protected int pollingInterval;
+    private weborb.client.ioEngine.ISerializationSettings serializationSettings;
+
+    static void <clinit>()
+    {
+        int varReplacer1624;
+
+        nop;
+
+        varReplacer1624 = 0;
+
+        <weborb.client.ioEngine.HttpIOEngine: boolean needsSingleThread> = varReplacer1624;
+
+        return;
+    }
+
+    public void <init>(java.lang.String, weborb.client.IdInfo)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        java.lang.String $r1;
+        weborb.client.IdInfo $r2;
+        java.util.concurrent.ScheduledExecutorService $r3;
+        weborb.client.cookies.CookieUtil $r4;
+        weborb.client.cookies.ConcurrentCookieStore $r5;
+        weborb.client.ioEngine.ISerializationSettings $r6;
+        java.lang.Thread $r7;
+        java.lang.Exception $r8;
+        int varReplacer1668, varReplacer1669;
+
+        nop;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: weborb.client.IdInfo;
+
+        specialinvoke $r0.<weborb.client.ioEngine.IOEngine: void <init>(java.lang.String,weborb.client.IdInfo)>($r1, $r2);
+
+        $r3 = staticinvoke <java.util.concurrent.Executors: java.util.concurrent.ScheduledExecutorService newSingleThreadScheduledExecutor()>();
+
+        $r0.<weborb.client.ioEngine.HttpIOEngine: java.util.concurrent.ScheduledExecutorService executor> = $r3;
+
+        varReplacer1669 = 1000;
+
+        $r0.<weborb.client.ioEngine.HttpIOEngine: int pollingInterval> = varReplacer1669;
+
+        $r4 = new weborb.client.cookies.CookieUtil;
+
+        specialinvoke $r4.<weborb.client.cookies.CookieUtil: void <init>()>();
+
+        $r0.<weborb.client.ioEngine.HttpIOEngine: weborb.client.cookies.CookieUtil cookieUtil> = $r4;
+
+        $r5 = new weborb.client.cookies.ConcurrentCookieStore;
+
+        specialinvoke $r5.<weborb.client.cookies.ConcurrentCookieStore: void <init>()>();
+
+        $r0.<weborb.client.ioEngine.HttpIOEngine: weborb.client.cookies.ConcurrentCookieStore cookieStore> = $r5;
+
+        $r6 = specialinvoke $r0.<weborb.client.ioEngine.HttpIOEngine: weborb.client.ioEngine.ISerializationSettings getSerializationSettings()>();
+
+        $r0.<weborb.client.ioEngine.HttpIOEngine: weborb.client.ioEngine.ISerializationSettings serializationSettings> = $r6;
+
+        $r7 = new java.lang.Thread;
+
+     label1:
+        specialinvoke $r7.<java.lang.Thread: void <init>()>();
+
+        virtualinvoke $r7.<java.lang.Thread: void interrupt()>();
+
+     label2:
+        return;
+
+     label3:
+        $r8 := @caughtexception;
+
+        varReplacer1668 = 1;
+
+        <weborb.client.ioEngine.HttpIOEngine: boolean needsSingleThread> = varReplacer1668;
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    static void access$000(weborb.client.ioEngine.HttpIOEngine, byte[], java.util.Map, weborb.client.IResponder)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        byte[] $r1;
+        java.util.Map $r2;
+        weborb.client.IResponder $r3;
+
+        nop;
+
+        $r0 := @parameter0: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter1: byte[];
+
+        $r2 := @parameter2: java.util.Map;
+
+        $r3 := @parameter3: weborb.client.IResponder;
+
+        specialinvoke $r0.<weborb.client.ioEngine.HttpIOEngine: void send(byte[],java.util.Map,weborb.client.IResponder)>($r1, $r2, $r3);
+
+        return;
+    }
+
+    static java.util.concurrent.ScheduledFuture access$102(weborb.client.ioEngine.HttpIOEngine, java.util.concurrent.ScheduledFuture)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        java.util.concurrent.ScheduledFuture $r1;
+
+        $r0 := @parameter0: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter1: java.util.concurrent.ScheduledFuture;
+
+        $r0.<weborb.client.ioEngine.HttpIOEngine: java.util.concurrent.ScheduledFuture currentTask> = $r1;
+
+        return $r1;
+    }
+
+    static java.util.concurrent.ScheduledExecutorService access$200(weborb.client.ioEngine.HttpIOEngine)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        java.util.concurrent.ScheduledExecutorService r1;
+
+        $r0 := @parameter0: weborb.client.ioEngine.HttpIOEngine;
+
+        r1 = $r0.<weborb.client.ioEngine.HttpIOEngine: java.util.concurrent.ScheduledExecutorService executor>;
+
+        return r1;
+    }
+
+    static void access$301(weborb.client.ioEngine.HttpIOEngine, weborb.v3types.AsyncMessage)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        weborb.v3types.AsyncMessage $r1;
+
+        $r0 := @parameter0: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter1: weborb.v3types.AsyncMessage;
+
+        specialinvoke $r0.<weborb.client.ioEngine.IOEngine: void receivedMessage(weborb.v3types.AsyncMessage)>($r1);
+
+        return;
+    }
+
+    static void access$401(weborb.client.ioEngine.HttpIOEngine, weborb.v3types.AsyncMessage)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        weborb.v3types.AsyncMessage $r1;
+
+        $r0 := @parameter0: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter1: weborb.v3types.AsyncMessage;
+
+        specialinvoke $r0.<weborb.client.ioEngine.IOEngine: void receivedMessage(weborb.v3types.AsyncMessage)>($r1);
+
+        return;
+    }
+
+    static void access$501(weborb.client.ioEngine.HttpIOEngine, java.lang.String, weborb.client.Fault)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        java.lang.String $r1;
+        weborb.client.Fault $r2;
+
+        $r0 := @parameter0: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: weborb.client.Fault;
+
+        specialinvoke $r0.<weborb.client.ioEngine.IOEngine: void receivedError(java.lang.String,weborb.client.Fault)>($r1, $r2);
+
+        return;
+    }
+
+    private weborb.client.ioEngine.ISerializationSettings getSerializationSettings()
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        int $i0;
+        int[] $r1;
+        weborb.client.ioEngine.HTTPSerializationMode $r2;
+        java.lang.IllegalStateException $r3;
+        weborb.client.ioEngine.AMFSerializationSettings $r4;
+        weborb.client.ioEngine.XMLSerializationSettings $r5;
+        java.lang.String varReplacer1673;
+
+        nop;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 = <weborb.client.ioEngine.HttpIOEngine$4: int[] $SwitchMap$weborb$client$ioEngine$HTTPSerializationMode>;
+
+        $r2 = <weborb.client.WeborbClient: weborb.client.ioEngine.HTTPSerializationMode HTTP_SERIALIZATION_MODE>;
+
+        $i0 = virtualinvoke $r2.<weborb.client.ioEngine.HTTPSerializationMode: int ordinal()>();
+
+        $i0 = $r1[$i0];
+
+        lookupswitch($i0)
+        {
+            case 1: goto label2;
+            case 2: goto label3;
+            default: goto label1;
+        };
+
+     label1:
+        $r3 = new java.lang.IllegalStateException;
+
+        varReplacer1673 = "Unknown HTTP serialization mode";
+
+        specialinvoke $r3.<java.lang.IllegalStateException: void <init>(java.lang.String)>(varReplacer1673);
+
+        throw $r3;
+
+     label2:
+        $r4 = new weborb.client.ioEngine.AMFSerializationSettings;
+
+        specialinvoke $r4.<weborb.client.ioEngine.AMFSerializationSettings: void <init>()>();
+
+        return $r4;
+
+     label3:
+        $r5 = new weborb.client.ioEngine.XMLSerializationSettings;
+
+        specialinvoke $r5.<weborb.client.ioEngine.XMLSerializationSettings: void <init>()>();
+
+        return $r5;
+    }
+
+    private static boolean isAndroid()
+    {
+        java.lang.Boolean $r0;
+        boolean $z0;
+        java.lang.ClassNotFoundException $r1;
+        int varReplacer4198, varReplacer4200;
+        java.lang.String varReplacer4199;
+
+        nop;
+
+        $r0 = <weborb.client.ioEngine.HttpIOEngine: java.lang.Boolean isAndroid>;
+
+        if $r0 != null goto label3;
+
+     label1:
+        varReplacer4199 = "android.os.Handler";
+
+        staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>(varReplacer4199);
+
+        varReplacer4198 = 1;
+
+        $r0 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(varReplacer4198);
+
+     label2:
+        <weborb.client.ioEngine.HttpIOEngine: java.lang.Boolean isAndroid> = $r0;
+
+     label3:
+        $r0 = <weborb.client.ioEngine.HttpIOEngine: java.lang.Boolean isAndroid>;
+
+        $z0 = virtualinvoke $r0.<java.lang.Boolean: boolean booleanValue()>();
+
+        return $z0;
+
+     label4:
+        $r1 := @caughtexception;
+
+        varReplacer4200 = 0;
+
+        $r0 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(varReplacer4200);
+
+        <weborb.client.ioEngine.HttpIOEngine: java.lang.Boolean isAndroid> = $r0;
+
+        goto label3;
+
+        catch java.lang.ClassNotFoundException from label1 to label2 with label4;
+    }
+
+    private void send(byte[], java.util.Map, weborb.client.IResponder)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        byte[] $r1;
+        java.util.Map $r2;
+        weborb.client.IResponder $r3, $r23;
+        weborb.client.ioEngine.EasyX509TrustManager $r4, r25;
+        java.net.URL $r5, r24;
+        java.lang.String $r6, $r7, varReplacer4190, varReplacer4193, varReplacer4195, varReplacer4196;
+        boolean $z0;
+        javax.net.ssl.SSLContext $r8;
+        java.lang.Object[] $r9;
+        java.security.SecureRandom $r10, r26;
+        javax.net.ssl.SSLSocketFactory $r11;
+        java.net.URLConnection $r12;
+        int $i0, varReplacer4191;
+        java.net.HttpURLConnection $r13;
+        javax.net.ssl.HttpsURLConnection $r14;
+        javax.net.ssl.HostnameVerifier $r15;
+        weborb.client.ioEngine.ISerializationSettings $r16;
+        java.util.Set $r17;
+        java.util.Iterator $r18;
+        java.lang.Object $r19;
+        java.lang.Exception $r20;
+        long $l1;
+        java.io.OutputStream $r21;
+        java.io.InputStream $r22;
+        weborb.client.Fault r27;
+        weborb.client.DefaultResponder r28;
+        javax.net.ssl.TrustManager[] r29;
+        null_type varReplacer4192, varReplacer4194;
+
+        nop;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 := @parameter1: java.util.Map;
+
+        $r3 := @parameter2: weborb.client.IResponder;
+
+        r24 = new java.net.URL;
+
+        $r5 = r24;
+
+     label01:
+        $r6 = $r0.<weborb.client.ioEngine.HttpIOEngine: java.lang.String gateway>;
+
+        specialinvoke r24.<java.net.URL: void <init>(java.lang.String)>($r6);
+
+        $z0 = staticinvoke <weborb.client.ioEngine.HttpIOEngine: boolean isAndroid()>();
+
+     label02:
+        if $z0 == 0 goto label10;
+
+        $r6 = "https";
+
+     label03:
+        $r7 = virtualinvoke $r5.<java.net.URL: java.lang.String getProtocol()>();
+
+        $z0 = virtualinvoke $r6.<java.lang.String: boolean equals(java.lang.Object)>($r7);
+
+     label04:
+        if $z0 == 0 goto label10;
+
+     label05:
+        varReplacer4193 = "TLS";
+
+        $r8 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer4193);
+
+        $r9 = newarray (javax.net.ssl.TrustManager)[1];
+
+     label06:
+        r25 = new weborb.client.ioEngine.EasyX509TrustManager;
+
+        $r4 = r25;
+
+     label07:
+        varReplacer4192 = null;
+
+        specialinvoke r25.<weborb.client.ioEngine.EasyX509TrustManager: void <init>(java.security.KeyStore)>(varReplacer4192);
+
+        $r9[0] = $r4;
+
+     label08:
+        r26 = new java.security.SecureRandom;
+
+        $r10 = r26;
+
+     label09:
+        specialinvoke r26.<java.security.SecureRandom: void <init>()>();
+
+        r29 = (javax.net.ssl.TrustManager[]) $r9;
+
+        varReplacer4194 = null;
+
+        virtualinvoke $r8.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer4194, r29, $r10);
+
+        $r11 = virtualinvoke $r8.<javax.net.ssl.SSLContext: javax.net.ssl.SSLSocketFactory getSocketFactory()>();
+
+        staticinvoke <javax.net.ssl.HttpsURLConnection: void setDefaultSSLSocketFactory(javax.net.ssl.SSLSocketFactory)>($r11);
+
+     label10:
+        $r12 = virtualinvoke $r5.<java.net.URL: java.net.URLConnection openConnection()>();
+
+        specialinvoke $r0.<weborb.client.ioEngine.HttpIOEngine: void setCookies(java.net.URLConnection)>($r12);
+
+        $i0 = $r0.<weborb.client.ioEngine.HttpIOEngine: int soTimeout>;
+
+        virtualinvoke $r12.<java.net.URLConnection: void setReadTimeout(int)>($i0);
+
+        $i0 = $r0.<weborb.client.ioEngine.HttpIOEngine: int soTimeout>;
+
+        virtualinvoke $r12.<java.net.URLConnection: void setConnectTimeout(int)>($i0);
+
+        varReplacer4191 = 1;
+
+        virtualinvoke $r12.<java.net.URLConnection: void setDoOutput(boolean)>(varReplacer4191);
+
+     label11:
+        $z0 = $r12 instanceof java.net.HttpURLConnection;
+
+        if $z0 == 0 goto label13;
+
+     label12:
+        $r13 = (java.net.HttpURLConnection) $r12;
+
+        varReplacer4190 = "POST";
+
+        virtualinvoke $r13.<java.net.HttpURLConnection: void setRequestMethod(java.lang.String)>(varReplacer4190);
+
+     label13:
+        $z0 = $r12 instanceof javax.net.ssl.HttpsURLConnection;
+
+        if $z0 == 0 goto label15;
+
+     label14:
+        $r14 = (javax.net.ssl.HttpsURLConnection) $r12;
+
+        $r15 = virtualinvoke $r0.<weborb.client.ioEngine.HttpIOEngine: javax.net.ssl.HostnameVerifier getHostnameVerifier()>();
+
+        virtualinvoke $r14.<javax.net.ssl.HttpsURLConnection: void setHostnameVerifier(javax.net.ssl.HostnameVerifier)>($r15);
+
+     label15:
+        $r16 = $r0.<weborb.client.ioEngine.HttpIOEngine: weborb.client.ioEngine.ISerializationSettings serializationSettings>;
+
+        $r6 = interfaceinvoke $r16.<weborb.client.ioEngine.ISerializationSettings: java.lang.String getContentType()>();
+
+        varReplacer4195 = "Content-type";
+
+        virtualinvoke $r12.<java.net.URLConnection: void setRequestProperty(java.lang.String,java.lang.String)>(varReplacer4195, $r6);
+
+     label16:
+        if $r2 == null goto label24;
+
+     label17:
+        $r17 = interfaceinvoke $r2.<java.util.Map: java.util.Set keySet()>();
+
+        $r18 = interfaceinvoke $r17.<java.util.Set: java.util.Iterator iterator()>();
+
+     label18:
+        $z0 = interfaceinvoke $r18.<java.util.Iterator: boolean hasNext()>();
+
+     label19:
+        if $z0 == 0 goto label24;
+
+     label20:
+        $r19 = interfaceinvoke $r18.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (java.lang.String) $r19;
+
+        $r19 = interfaceinvoke $r2.<java.util.Map: java.lang.Object get(java.lang.Object)>($r6);
+
+        $r7 = (java.lang.String) $r19;
+
+        virtualinvoke $r12.<java.net.URLConnection: void addRequestProperty(java.lang.String,java.lang.String)>($r6, $r7);
+
+     label21:
+        goto label18;
+
+     label22:
+        $r20 := @caughtexception;
+
+        if $r3 == null goto label23;
+
+        r27 = new weborb.client.Fault;
+
+        $r6 = virtualinvoke $r20.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r7 = staticinvoke <weborb.util.ThrowableUtils: java.lang.String getStackTraceString(java.lang.Throwable)>($r20);
+
+        varReplacer4196 = "Internal client exception";
+
+        specialinvoke r27.<weborb.client.Fault: void <init>(java.lang.String,java.lang.String,java.lang.String)>($r6, $r7, varReplacer4196);
+
+        interfaceinvoke $r3.<weborb.client.IResponder: void errorHandler(weborb.client.Fault)>(r27);
+
+     label23:
+        $l1 = <weborb.util.log.ILoggingConstants: long EXCEPTION>;
+
+        $z0 = staticinvoke <weborb.util.log.Log: boolean isLogging(long)>($l1);
+
+        if $z0 == 0 goto label30;
+
+        $l1 = <weborb.util.log.ILoggingConstants: long EXCEPTION>;
+
+        staticinvoke <weborb.util.log.Log: void log(long,java.lang.Throwable)>($l1, $r20);
+
+        return;
+
+     label24:
+        $r21 = virtualinvoke $r12.<java.net.URLConnection: java.io.OutputStream getOutputStream()>();
+
+        virtualinvoke $r21.<java.io.OutputStream: void write(byte[])>($r1);
+
+        virtualinvoke $r21.<java.io.OutputStream: void close()>();
+
+        specialinvoke $r0.<weborb.client.ioEngine.HttpIOEngine: void storeCookies(java.net.URLConnection)>($r12);
+
+        $r22 = virtualinvoke $r12.<java.net.URLConnection: java.io.InputStream getInputStream()>();
+
+     label25:
+        if $r3 != null goto label29;
+
+        r28 = new weborb.client.DefaultResponder;
+
+        $r23 = r28;
+
+     label26:
+        specialinvoke r28.<weborb.client.DefaultResponder: void <init>()>();
+
+     label27:
+        virtualinvoke $r0.<weborb.client.ioEngine.HttpIOEngine: void processAMFResponse(java.io.InputStream,weborb.client.IResponder)>($r22, $r23);
+
+        virtualinvoke $r22.<java.io.InputStream: void close()>();
+
+     label28:
+        return;
+
+     label29:
+        $r23 = $r3;
+
+        goto label27;
+
+     label30:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label22;
+        catch java.lang.Exception from label03 to label04 with label22;
+        catch java.lang.Exception from label05 to label06 with label22;
+        catch java.lang.Exception from label07 to label08 with label22;
+        catch java.lang.Exception from label09 to label11 with label22;
+        catch java.lang.Exception from label12 to label13 with label22;
+        catch java.lang.Exception from label14 to label16 with label22;
+        catch java.lang.Exception from label17 to label19 with label22;
+        catch java.lang.Exception from label20 to label21 with label22;
+        catch java.lang.Exception from label24 to label25 with label22;
+        catch java.lang.Exception from label26 to label28 with label22;
+    }
+
+    private void setCookies(java.net.URLConnection)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        java.net.URLConnection $r1;
+        java.lang.StringBuilder $r2, $r11;
+        java.net.URL $r3;
+        java.net.URI $r4;
+        weborb.client.cookies.ConcurrentCookieStore $r5;
+        java.util.List $r6;
+        boolean $z0;
+        java.util.Iterator $r7;
+        java.lang.Object $r8;
+        java.net.HttpCookie $r9;
+        java.lang.String $r10, varReplacer4205, varReplacer4206, varReplacer4207, varReplacer4209;
+        int $i0, varReplacer4208;
+
+        nop;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter0: java.net.URLConnection;
+
+        $r3 = virtualinvoke $r1.<java.net.URLConnection: java.net.URL getURL()>();
+
+        $r4 = virtualinvoke $r3.<java.net.URL: java.net.URI toURI()>();
+
+        $r5 = $r0.<weborb.client.ioEngine.HttpIOEngine: weborb.client.cookies.ConcurrentCookieStore cookieStore>;
+
+        $r6 = virtualinvoke $r5.<weborb.client.cookies.ConcurrentCookieStore: java.util.List get(java.net.URI)>($r4);
+
+        $z0 = interfaceinvoke $r6.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label5;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = $r0.<weborb.client.ioEngine.HttpIOEngine: weborb.client.cookies.ConcurrentCookieStore cookieStore>;
+
+        $r6 = virtualinvoke $r5.<weborb.client.cookies.ConcurrentCookieStore: java.util.List get(java.net.URI)>($r4);
+
+        $r7 = interfaceinvoke $r6.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r8 = interfaceinvoke $r7.<java.util.Iterator: java.lang.Object next()>();
+
+        $r9 = (java.net.HttpCookie) $r8;
+
+        $r10 = virtualinvoke $r9.<java.net.HttpCookie: java.lang.String getValue()>();
+
+        varReplacer4205 = "";
+
+        $z0 = virtualinvoke $r10.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer4205);
+
+        if $z0 != 0 goto label3;
+
+        $z0 = virtualinvoke $r9.<java.net.HttpCookie: boolean hasExpired()>();
+
+        if $z0 != 0 goto label3;
+
+        $i0 = virtualinvoke $r2.<java.lang.StringBuilder: int length()>();
+
+        if $i0 <= 0 goto label2;
+
+        varReplacer4208 = 59;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(varReplacer4208);
+
+     label2:
+        $r10 = virtualinvoke $r9.<java.net.HttpCookie: java.lang.String getName()>();
+
+        $r11 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        varReplacer4206 = "=\"";
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4206);
+
+        $r10 = virtualinvoke $r9.<java.net.HttpCookie: java.lang.String getValue()>();
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        varReplacer4209 = "\"";
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4209);
+
+        goto label1;
+
+     label3:
+        $r5 = $r0.<weborb.client.ioEngine.HttpIOEngine: weborb.client.cookies.ConcurrentCookieStore cookieStore>;
+
+        virtualinvoke $r5.<weborb.client.cookies.ConcurrentCookieStore: boolean remove(java.net.URI,java.net.HttpCookie)>($r4, $r9);
+
+        goto label1;
+
+     label4:
+        $r10 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer4207 = "Cookie";
+
+        virtualinvoke $r1.<java.net.URLConnection: void setRequestProperty(java.lang.String,java.lang.String)>(varReplacer4207, $r10);
+
+     label5:
+        return;
+    }
+
+    private void storeCookies(java.net.URLConnection)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        java.net.URLConnection $r1;
+        weborb.client.cookies.ConcurrentCookieStore $r2;
+        weborb.client.cookies.CookieUtil $r3;
+        java.util.Map $r4;
+        java.lang.Object $r5;
+        java.util.List $r6;
+        java.util.Iterator $r7;
+        boolean $z0;
+        java.lang.String $r8, varReplacer4210;
+        java.net.URL $r9;
+        java.net.URI $r10;
+
+        nop;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter0: java.net.URLConnection;
+
+        $r4 = virtualinvoke $r1.<java.net.URLConnection: java.util.Map getHeaderFields()>();
+
+        if $r4 != null goto label1;
+
+        return;
+
+     label1:
+        varReplacer4210 = "Set-Cookie";
+
+        $r5 = interfaceinvoke $r4.<java.util.Map: java.lang.Object get(java.lang.Object)>(varReplacer4210);
+
+        $r6 = (java.util.List) $r5;
+
+        if $r6 == null goto label3;
+
+        $r7 = interfaceinvoke $r6.<java.util.List: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r5 = interfaceinvoke $r7.<java.util.Iterator: java.lang.Object next()>();
+
+        $r8 = (java.lang.String) $r5;
+
+        $r2 = $r0.<weborb.client.ioEngine.HttpIOEngine: weborb.client.cookies.ConcurrentCookieStore cookieStore>;
+
+        $r9 = virtualinvoke $r1.<java.net.URLConnection: java.net.URL getURL()>();
+
+        $r10 = virtualinvoke $r9.<java.net.URL: java.net.URI toURI()>();
+
+        $r3 = $r0.<weborb.client.ioEngine.HttpIOEngine: weborb.client.cookies.CookieUtil cookieUtil>;
+
+        $r6 = virtualinvoke $r3.<weborb.client.cookies.CookieUtil: java.util.List parse(java.lang.String)>($r8);
+
+        virtualinvoke $r2.<weborb.client.cookies.ConcurrentCookieStore: void add(java.net.URI,java.util.List)>($r10, $r6);
+
+        goto label2;
+
+     label3:
+        return;
+    }
+
+    public byte[] createRequest(java.lang.String, java.lang.String, java.lang.Object[], java.util.Map, java.util.Hashtable)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        java.lang.String $r1, $r2;
+        java.lang.Object[] $r3;
+        java.util.Map $r4;
+        java.util.Hashtable $r5;
+        weborb.v3types.ReqMessage $r6;
+        byte[] $r7;
+        null_type varReplacer4189;
+
+        nop;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.Object[];
+
+        $r4 := @parameter3: java.util.Map;
+
+        $r5 := @parameter4: java.util.Hashtable;
+
+        $r6 = virtualinvoke $r0.<weborb.client.ioEngine.HttpIOEngine: weborb.v3types.ReqMessage createRequestMessage(java.lang.String,java.lang.String,java.lang.Object[],java.util.Hashtable)>($r1, $r2, $r3, $r5);
+
+        varReplacer4189 = null;
+
+        $r7 = virtualinvoke $r0.<weborb.client.ioEngine.HttpIOEngine: byte[] createRequest(weborb.v3types.V3Message,java.util.Map)>($r6, varReplacer4189);
+
+        return $r7;
+    }
+
+    public byte[] createRequest(weborb.v3types.V3Message)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        weborb.v3types.V3Message $r1;
+        byte[] $r2;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter0: weborb.v3types.V3Message;
+
+        $r2 = virtualinvoke $r0.<weborb.client.ioEngine.HttpIOEngine: byte[] createRequest(weborb.v3types.V3Message,java.util.Map)>($r1, null);
+
+        return $r2;
+    }
+
+    public byte[] createRequest(weborb.v3types.V3Message, java.util.Map)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        weborb.v3types.V3Message $r1;
+        java.util.Map $r2;
+        weborb.message.Header $r3;
+        weborb.reader.ConcreteObject $r4;
+        int $i0, varReplacer4433;
+        weborb.message.Header[] $r5;
+        java.util.Set $r6;
+        java.util.Iterator $r7;
+        boolean $z0;
+        java.lang.Object $r8;
+        java.util.Map$Entry $r9;
+        java.lang.String $r10, varReplacer4431, varReplacer4432;
+        weborb.message.Body[] $r11;
+        weborb.message.Body $r12;
+        weborb.message.Message $r13;
+        java.lang.Object[] $r14;
+        weborb.client.ioEngine.ISerializationSettings $r15;
+        byte[] $r16;
+        null_type varReplacer4434;
+        float varReplacer4435;
+
+        nop;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter0: weborb.v3types.V3Message;
+
+        $r2 := @parameter1: java.util.Map;
+
+        goto label2;
+
+     label1:
+        $r11 = newarray (weborb.message.Body)[1];
+
+        $r12 = new weborb.message.Body;
+
+        varReplacer4431 = "null";
+
+        varReplacer4432 = "null";
+
+        varReplacer4433 = -1;
+
+        varReplacer4434 = null;
+
+        specialinvoke $r12.<weborb.message.Body: void <init>(java.lang.String,java.lang.String,int,java.lang.Object)>(varReplacer4431, varReplacer4431, varReplacer4433, varReplacer4434);
+
+        $r11[0] = $r12;
+
+        $r13 = new weborb.message.Message;
+
+        varReplacer4435 = 3.0F;
+
+        specialinvoke $r13.<weborb.message.Message: void <init>(float,weborb.message.Header[],weborb.message.Body[])>(varReplacer4435, $r5, $r11);
+
+        $r14 = newarray (java.lang.Object)[1];
+
+        $r14[0] = $r1;
+
+        virtualinvoke $r13.<weborb.message.Message: void setRequestBodyData(java.lang.Object)>($r14);
+
+        $r15 = $r0.<weborb.client.ioEngine.HttpIOEngine: weborb.client.ioEngine.ISerializationSettings serializationSettings>;
+
+        $i0 = interfaceinvoke $r15.<weborb.client.ioEngine.ISerializationSettings: int getSerializerType()>();
+
+        $r16 = staticinvoke <weborb.util.io.Serializer: byte[] toBytes(java.lang.Object,int)>($r13, $i0);
+
+        return $r16;
+
+     label2:
+        $r5 = null;
+
+        goto label1;
+    }
+
+    public java.lang.String getCookiesDateFormat()
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        java.lang.String $r1;
+        weborb.client.cookies.CookieUtil $r2;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        $r2 = $r0.<weborb.client.ioEngine.HttpIOEngine: weborb.client.cookies.CookieUtil cookieUtil>;
+
+        $r1 = virtualinvoke $r2.<weborb.client.cookies.CookieUtil: java.lang.String getCustomDateFormatPattern()>();
+
+        return $r1;
+    }
+
+    public int getPollingInterval()
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        int i0;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        i0 = $r0.<weborb.client.ioEngine.HttpIOEngine: int pollingInterval>;
+
+        return i0;
+    }
+
+    public void invoke(java.lang.String, java.lang.String, java.lang.Object[], java.util.Map, java.util.Map, java.util.Hashtable, weborb.client.IResponder)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        java.lang.String $r1, $r2;
+        java.lang.Object[] $r3;
+        java.util.Map $r4, $r5;
+        java.util.Hashtable $r6;
+        weborb.client.IResponder $r7;
+        byte[] $r8;
+        boolean $z0;
+        java.lang.Thread $r9;
+        weborb.client.ioEngine.HttpIOEngine$1 $r10;
+        null_type varReplacer4185, varReplacer4186, varReplacer4187;
+
+        nop;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.Object[];
+
+        $r4 := @parameter3: java.util.Map;
+
+        $r5 := @parameter4: java.util.Map;
+
+        $r6 := @parameter5: java.util.Hashtable;
+
+        $r7 := @parameter6: weborb.client.IResponder;
+
+        varReplacer4185 = null;
+
+        $r8 = virtualinvoke $r0.<weborb.client.ioEngine.HttpIOEngine: byte[] createRequest(java.lang.String,java.lang.String,java.lang.Object[],java.util.Map,java.util.Hashtable)>($r1, $r2, $r3, varReplacer4185, $r6);
+
+        $z0 = <weborb.client.ioEngine.HttpIOEngine: boolean needsSingleThread>;
+
+        if $z0 != 0 goto label1;
+
+        $z0 = $r7 instanceof weborb.client.IAsyncResponder;
+
+        if $z0 == 0 goto label1;
+
+        $r9 = new java.lang.Thread;
+
+        $r10 = new weborb.client.ioEngine.HttpIOEngine$1;
+
+        varReplacer4186 = null;
+
+        specialinvoke $r10.<weborb.client.ioEngine.HttpIOEngine$1: void <init>(weborb.client.ioEngine.HttpIOEngine,byte[],java.util.Map,weborb.client.IResponder)>($r0, $r8, varReplacer4186, $r7);
+
+        specialinvoke $r9.<java.lang.Thread: void <init>(java.lang.Runnable)>($r10);
+
+        virtualinvoke $r9.<java.lang.Thread: void start()>();
+
+        return;
+
+     label1:
+        varReplacer4187 = null;
+
+        specialinvoke $r0.<weborb.client.ioEngine.HttpIOEngine: void send(byte[],java.util.Map,weborb.client.IResponder)>($r8, varReplacer4187, $r7);
+
+        return;
+    }
+
+    public void onSubscribe(java.lang.String, java.lang.String, java.lang.String)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        java.lang.String $r1, $r2, $r3;
+        java.util.concurrent.ScheduledExecutorService $r4;
+        java.util.concurrent.TimeUnit $r5;
+        java.util.concurrent.ScheduledFuture $r6;
+        weborb.client.ioEngine.HttpIOEngine$2 $r7;
+        int $i0;
+        long $l1;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+        specialinvoke $r0.<weborb.client.ioEngine.IOEngine: void onSubscribe(java.lang.String,java.lang.String,java.lang.String)>($r1, $r2, $r3);
+
+        $r6 = $r0.<weborb.client.ioEngine.HttpIOEngine: java.util.concurrent.ScheduledFuture currentTask>;
+
+        if $r6 == null goto label1;
+
+        return;
+
+     label1:
+        $r7 = new weborb.client.ioEngine.HttpIOEngine$2;
+
+        specialinvoke $r7.<weborb.client.ioEngine.HttpIOEngine$2: void <init>(weborb.client.ioEngine.HttpIOEngine,java.lang.String,java.lang.String,java.lang.String)>($r0, $r1, $r2, $r3);
+
+        $r4 = $r0.<weborb.client.ioEngine.HttpIOEngine: java.util.concurrent.ScheduledExecutorService executor>;
+
+        $i0 = $r0.<weborb.client.ioEngine.HttpIOEngine: int pollingInterval>;
+
+        $l1 = (long) $i0;
+
+        $r5 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        $r6 = interfaceinvoke $r4.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture schedule(java.lang.Runnable,long,java.util.concurrent.TimeUnit)>($r7, $l1, $r5);
+
+        $r0.<weborb.client.ioEngine.HttpIOEngine: java.util.concurrent.ScheduledFuture currentTask> = $r6;
+
+        return;
+    }
+
+    public void onUnsubscribe(java.lang.String)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        java.lang.String $r1;
+        int $i0;
+        java.util.Map $r2;
+        java.util.concurrent.ScheduledFuture $r3;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter0: java.lang.String;
+
+        specialinvoke $r0.<weborb.client.ioEngine.IOEngine: void onUnsubscribe(java.lang.String)>($r1);
+
+        $r2 = $r0.<weborb.client.ioEngine.HttpIOEngine: java.util.Map subscriptions>;
+
+        $i0 = interfaceinvoke $r2.<java.util.Map: int size()>();
+
+        if $i0 != 0 goto label1;
+
+        $r3 = $r0.<weborb.client.ioEngine.HttpIOEngine: java.util.concurrent.ScheduledFuture currentTask>;
+
+        if $r3 == null goto label1;
+
+        $r3 = $r0.<weborb.client.ioEngine.HttpIOEngine: java.util.concurrent.ScheduledFuture currentTask>;
+
+        interfaceinvoke $r3.<java.util.concurrent.ScheduledFuture: boolean cancel(boolean)>(1);
+
+        $r0.<weborb.client.ioEngine.HttpIOEngine: java.util.concurrent.ScheduledFuture currentTask> = null;
+
+     label1:
+        return;
+    }
+
+    protected void processAMFResponse(java.io.InputStream, weborb.client.IResponder)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        java.io.InputStream $r1;
+        weborb.client.IResponder $r2;
+        boolean $z0;
+        weborb.client.ioEngine.ISerializationSettings $r3;
+        weborb.message.Message $r4;
+        java.lang.Object $r5;
+        java.lang.Object[] $r6;
+        weborb.types.IAdaptingType $r7;
+        weborb.v3types.V3Message $r8;
+
+        nop;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter0: java.io.InputStream;
+
+        $r2 := @parameter1: weborb.client.IResponder;
+
+        $r3 = $r0.<weborb.client.ioEngine.HttpIOEngine: weborb.client.ioEngine.ISerializationSettings serializationSettings>;
+
+        $r4 = interfaceinvoke $r3.<weborb.client.ioEngine.ISerializationSettings: weborb.message.Message parseResponse(java.io.InputStream)>($r1);
+
+        $r5 = virtualinvoke $r4.<weborb.message.Message: java.lang.Object getRequestBodyData()>();
+
+        $r6 = (java.lang.Object[]) $r5;
+
+        $z0 = $r2 instanceof weborb.client.IRawResponder;
+
+        if $z0 == 0 goto label1;
+
+        $r5 = $r6[0];
+
+        interfaceinvoke $r2.<weborb.client.IResponder: void responseHandler(java.lang.Object)>($r5);
+
+        return;
+
+     label1:
+        $r5 = $r6[0];
+
+        $r7 = (weborb.types.IAdaptingType) $r5;
+
+        $r5 = interfaceinvoke $r7.<weborb.types.IAdaptingType: java.lang.Object defaultAdapt()>();
+
+        $r8 = (weborb.v3types.V3Message) $r5;
+
+        virtualinvoke $r0.<weborb.client.ioEngine.HttpIOEngine: void processV3Message(weborb.v3types.V3Message,weborb.client.IResponder)>($r8, $r2);
+
+        return;
+    }
+
+    protected void receiveMessages(java.lang.String, java.lang.String, java.lang.String)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        java.lang.String $r1, $r2, $r3;
+        weborb.v3types.CommandMessage $r4;
+        weborb.client.IdInfo $r5;
+        weborb.client.ioEngine.HttpIOEngine$3 $r6;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 = new weborb.v3types.CommandMessage;
+
+        specialinvoke $r4.<weborb.v3types.CommandMessage: void <init>(int,java.lang.Object)>(2, null);
+
+        $r5 = $r0.<weborb.client.ioEngine.HttpIOEngine: weborb.client.IdInfo idInfo>;
+
+        staticinvoke <weborb.client.Subscription: void initCommandMessage(weborb.v3types.CommandMessage,java.lang.String,java.lang.String,weborb.client.IdInfo,java.lang.String)>($r4, $r1, $r2, $r5, $r3);
+
+        $r6 = new weborb.client.ioEngine.HttpIOEngine$3;
+
+        specialinvoke $r6.<weborb.client.ioEngine.HttpIOEngine$3: void <init>(weborb.client.ioEngine.HttpIOEngine,java.lang.String)>($r0, $r3);
+
+        virtualinvoke $r0.<weborb.client.ioEngine.HttpIOEngine: void sendRequest(weborb.v3types.V3Message,weborb.client.IResponder)>($r4, $r6);
+
+        return;
+    }
+
+    public void sendRequest(weborb.v3types.V3Message, weborb.client.IResponder)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        weborb.v3types.V3Message $r1;
+        weborb.client.IResponder $r2;
+        byte[] $r3;
+        java.lang.Throwable $r4;
+        java.lang.Exception $r5;
+        weborb.client.Fault $r6;
+        java.lang.String $r7;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter0: weborb.v3types.V3Message;
+
+        $r2 := @parameter1: weborb.client.IResponder;
+
+     label1:
+        $r3 = virtualinvoke $r0.<weborb.client.ioEngine.HttpIOEngine: byte[] createRequest(weborb.v3types.V3Message)>($r1);
+
+        specialinvoke $r0.<weborb.client.ioEngine.HttpIOEngine: void send(byte[],java.util.Map,weborb.client.IResponder)>($r3, null, $r2);
+
+     label2:
+        return;
+
+     label3:
+        $r4 := @caughtexception;
+
+        throw $r4;
+
+     label4:
+        $r5 := @caughtexception;
+
+        if $r2 == null goto label5;
+
+        $r6 = new weborb.client.Fault;
+
+        $r7 = staticinvoke <weborb.util.ThrowableUtils: java.lang.String getStackTraceString(java.lang.Throwable)>($r5);
+
+        specialinvoke $r6.<weborb.client.Fault: void <init>(java.lang.String,java.lang.String)>("Can\'t parse message", $r7);
+
+        interfaceinvoke $r2.<weborb.client.IResponder: void errorHandler(weborb.client.Fault)>($r6);
+
+     label5:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+        catch java.lang.Exception from label1 to label2 with label4;
+    }
+
+    public void setCookiesDateFormat(java.lang.String)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        java.lang.String $r1, varReplacer4184;
+        weborb.client.cookies.CookieUtil $r2;
+
+        nop;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = $r0.<weborb.client.ioEngine.HttpIOEngine: weborb.client.cookies.CookieUtil cookieUtil>;
+
+        varReplacer4184 = "EEE, dd-MMM-yy HH:mm:ss z";
+
+        virtualinvoke $r2.<weborb.client.cookies.CookieUtil: void setCustomDateFormatPattern(java.lang.String)>(varReplacer4184);
+
+        return;
+    }
+
+    public void setPollingInterval(int)
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        int $i0;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        $i0 := @parameter0: int;
+
+        $r0.<weborb.client.ioEngine.HttpIOEngine: int pollingInterval> = $i0;
+
+        return;
+    }
+
+    public void stop()
+    {
+        weborb.client.ioEngine.HttpIOEngine $r0;
+        java.util.concurrent.ScheduledExecutorService $r1;
+
+        $r0 := @this: weborb.client.ioEngine.HttpIOEngine;
+
+        specialinvoke $r0.<weborb.client.ioEngine.IOEngine: void stop()>();
+
+        $r1 = $r0.<weborb.client.ioEngine.HttpIOEngine: java.util.concurrent.ScheduledExecutorService executor>;
+
+        interfaceinvoke $r1.<java.util.concurrent.ScheduledExecutorService: java.util.List shutdownNow()>();
+
+        return;
+    }
+}

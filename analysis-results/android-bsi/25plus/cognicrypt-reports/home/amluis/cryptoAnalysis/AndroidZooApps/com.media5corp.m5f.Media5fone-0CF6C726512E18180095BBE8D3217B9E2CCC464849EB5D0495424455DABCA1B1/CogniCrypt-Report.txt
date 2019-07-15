@@ -1,0 +1,110 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r4
+		Type: java.security.MessageDigest
+		Statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1846)
+		Method: <com.media5corp.m5f.Common.Utils.CFileHelper: java.lang.String FileToMD5(java.lang.String)>
+		SHA-256: 2788ae391cd62828ccdbdce9e8d09b08c690c43e6d5493d815dc48b3abee3a00
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r4.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.media5corp.m5f.Common.Utils.CFileHelper: java.lang.String FileToMD5(java.lang.String)>
+		SHA-256: 4e98db58194d4968004e383c5b4b6f80cca28a85657b07b546feea6ba3868242
+		Secure: false
+	Object:
+		Variable: $r7
+		Type: byte[]
+		Statement: $r7 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest(byte[])>($r7)
+		Method: <com.millennialmedia.android.MMSDK: java.lang.String getMMdid(android.content.Context)>
+		SHA-256: 555533d791b2c2735b6c08bbe3254d105f99550e9fabedc097cca1d3818b020d
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: java.security.MessageDigest
+		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4061)
+		Method: <com.millennialmedia.android.MMSDK: java.lang.String getMMdid(android.content.Context)>
+		SHA-256: fc02a47348dc781b4eb5784c8e00cdbb8cad1d488c30e75a0809231b86439c81
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: java.security.MessageDigest
+		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4062)
+		Method: <com.millennialmedia.android.MMSDK: java.lang.String getMMdid(android.content.Context)>
+		SHA-256: 33db6b4b606c4400b99efba71da547276f66f627a4ec3c7ad52c2f19a73fd941
+		Secure: false
+	Object:
+		Variable: $r7
+		Type: byte[]
+		Statement: $r7 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest(byte[])>($r7)
+		Method: <com.millennialmedia.android.MMSDK: java.lang.String getMMdid(android.content.Context)>
+		SHA-256: 555533d791b2c2735b6c08bbe3254d105f99550e9fabedc097cca1d3818b020d
+		Secure: false
+
+Findings in Java Class: com.media5corp.m5f.Common.Utils.CFileHelper
+
+	 in Method: java.lang.String FileToMD5(java.lang.String)
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #2788ae391cd62828ccdbdce9e8d09b08c690c43e6d5493d815dc48b3abee3a00)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte),java.security.MessageDigest: void update(byte[])
+			at statement: $r1 = virtualinvoke $r4.<java.security.MessageDigest: byte[] digest()>()
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #2788ae391cd62828ccdbdce9e8d09b08c690c43e6d5493d815dc48b3abee3a00)
+			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1846)
+
+
+Findings in Java Class: com.millennialmedia.android.MMSDK
+
+	 in Method: java.lang.String getMMdid(android.content.Context)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #fc02a47348dc781b4eb5784c8e00cdbb8cad1d488c30e75a0809231b86439c81)
+			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4061)
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #33db6b4b606c4400b99efba71da547276f66f627a4ec3c7ad52c2f19a73fd941)
+			First parameter (with value "SHA1") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4062)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 3
+	TypestateError: 1
+=====================================================================

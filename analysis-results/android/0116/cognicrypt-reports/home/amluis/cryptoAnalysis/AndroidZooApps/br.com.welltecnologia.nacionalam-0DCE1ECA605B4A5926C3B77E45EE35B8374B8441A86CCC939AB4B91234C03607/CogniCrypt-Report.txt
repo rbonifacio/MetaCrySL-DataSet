@@ -1,0 +1,118 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r1
+		Type: javax.crypto.Cipher
+		Statement: $r1 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1361)
+		Method: <com.google.ads.util.AdUtil: java.lang.String c(java.lang.String)>
+		SHA-256: 916baa74150f536dc6727596e4ada78a9dc36496a5d179301fb131e981ced9c5
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: java.security.MessageDigest
+		Statement: $r0 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1084)
+		Method: <com.google.ads.b: java.math.BigInteger d()>
+		SHA-256: 1ad3e4a8c5058dd2b4c56b8b35deaab2462da4252b74403a6bb15b31e3f39641
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1580)
+		Method: <net.roarsoftware.util.StringUtilities: void <clinit>()>
+		SHA-256: 499e9d2e20717e744f02856043e166ba78058bf07d4e4cbaa6e02dc2fe3a2311
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer243)
+		Method: <com.google.ads.util.AdUtil: java.lang.String b(java.lang.String)>
+		SHA-256: 717ca8571b32bb52e7c6ecfe6ee7f12d29607856c3fabec2aa2cc682ad3b68a9
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r0.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.ads.b: java.math.BigInteger d()>
+		SHA-256: 78a979d5efddbf2afb96ae4c070ca3d2463759077cfed92e4b0a58617d6126a5
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.ads.util.AdUtil: java.lang.String b(java.lang.String)>
+		SHA-256: e0c72fc41e053c4940df80ac214885a81274dd181ac131e0da4a0b5bbb5e0b40
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer1360)
+		Method: <com.google.ads.util.AdUtil: java.lang.String c(java.lang.String)>
+		SHA-256: 53d6a75a2369174763f74bb6b23fad828e0dc680c5f0e7d7f0386e8732c6f0a2
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r1.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r4)
+		Method: <com.google.ads.util.AdUtil: java.lang.String c(java.lang.String)>
+		SHA-256: ef674bb9a4c2b9027318b1252f6e5a9432191f2b2541e9fcdd600035a3ebc3e1
+		Secure: false
+	Object:
+		Variable: varReplacer1360
+		Type: java.lang.String
+		Statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer1360)
+		Method: <com.google.ads.util.AdUtil: java.lang.String c(java.lang.String)>
+		SHA-256: 3e2050bbc67eda9bd34697d9b6cc27c6e3da1809cd6ff12a65b803c184ce4fbe
+		Secure: false
+
+Findings in Java Class: com.google.ads.util.AdUtil
+
+	 in Method: java.lang.String c(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer1360)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r1.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1357, $r2)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 9
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 2
+=====================================================================

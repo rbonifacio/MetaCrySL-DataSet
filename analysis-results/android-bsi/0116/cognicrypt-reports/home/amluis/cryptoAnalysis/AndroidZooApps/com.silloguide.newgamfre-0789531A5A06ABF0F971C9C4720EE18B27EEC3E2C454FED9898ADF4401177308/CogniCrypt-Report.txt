@@ -1,0 +1,92 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer215)
+		Method: <org.jsoup.helper.HttpConnection$Response: void initUnSecureTSL()>
+		SHA-256: 89cd6138dd693a9d31e6f64c236bb679bbe895d3aeccaeebce55a88954174dab
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzaH(java.lang.String)>
+		SHA-256: 550b2765d9e9428e8a020375877dcf930c7849e0f6bb937b691b5d60187d87e2
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1676)
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzaH(java.lang.String)>
+		SHA-256: 2324162e440c13fac7e3259ac3a42cae58ac509bdb2ca445d16afb330ea67f6a
+		Secure: false
+	Object:
+		Variable: r8
+		Type: java.security.SecureRandom
+		Statement: specialinvoke r8.<java.security.SecureRandom: void <init>()>()
+		Method: <org.jsoup.helper.HttpConnection$Response: void initUnSecureTSL()>
+		SHA-256: 13995045b6fe88ac1e570f57460505d4fec052026d8ba6f5f48c1982d4a554c7
+		Secure: true
+
+Findings in Java Class: com.google.android.gms.ads.internal.util.client.zza
+
+	 in Method: java.lang.String zzaH(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #2324162e440c13fac7e3259ac3a42cae58ac509bdb2ca445d16afb330ea67f6a)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1676)
+
+
+Findings in Java Class: org.jsoup.helper.HttpConnection$Response
+
+	 in Method: void initUnSecureTSL()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer216, r10, $r3)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer216, r10, $r3)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 1
+	RequiredPredicateError: 2
+=====================================================================

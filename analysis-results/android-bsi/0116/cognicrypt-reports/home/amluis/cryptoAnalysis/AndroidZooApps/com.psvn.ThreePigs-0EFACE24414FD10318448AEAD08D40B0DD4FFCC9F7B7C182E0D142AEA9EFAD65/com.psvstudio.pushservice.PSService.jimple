@@ -1,0 +1,2192 @@
+public class com.psvstudio.pushservice.PSService extends android.app.Service
+{
+    private static java.lang.String ACTION_WATCHDOG_OF_SERVICE;
+    static final java.lang.String LOG_TAG;
+    private static boolean PSError;
+    private static java.lang.String PSGetData;
+    private static java.lang.String PSGetGroup;
+    private static java.lang.String PSGetPMData;
+    private static java.lang.String PSSendStat;
+    private static android.content.Context SendContext;
+    private static java.lang.String SendData;
+    private static java.lang.String SendPsuid;
+    private static int Sendid;
+    private static int count;
+    private static int lastrun;
+    private static java.lang.String secretKey;
+    private static long updateTime;
+    java.lang.Thread PSServiceTask;
+    private java.lang.String PSURL;
+    private java.lang.String android_id;
+    private boolean isRunning;
+    public android.content.Intent ipcIntent;
+    public android.os.IBinder ipcBinder_0;
+
+    static void <clinit>()
+    {
+        java.lang.String varReplacer66, varReplacer67, varReplacer68, varReplacer69, varReplacer71, varReplacer73;
+        long varReplacer70;
+        int varReplacer72, varReplacer74, varReplacer75;
+
+        nop;
+
+        varReplacer74 = 0;
+
+        <com.psvstudio.pushservice.PSService: boolean PSError> = varReplacer74;
+
+        varReplacer70 = 600000L;
+
+        <com.psvstudio.pushservice.PSService: long updateTime> = varReplacer70;
+
+        varReplacer72 = 4;
+
+        <com.psvstudio.pushservice.PSService: int count> = varReplacer72;
+
+        varReplacer75 = -1;
+
+        <com.psvstudio.pushservice.PSService: int lastrun> = varReplacer75;
+
+        varReplacer68 = "PSPushServiceGet";
+
+        <com.psvstudio.pushservice.PSService: java.lang.String secretKey> = varReplacer68;
+
+        varReplacer73 = "psgetdata.php?";
+
+        <com.psvstudio.pushservice.PSService: java.lang.String PSGetData> = varReplacer73;
+
+        varReplacer66 = "psgetgroup.php?";
+
+        <com.psvstudio.pushservice.PSService: java.lang.String PSGetGroup> = varReplacer66;
+
+        varReplacer71 = "pssendstat.php?";
+
+        <com.psvstudio.pushservice.PSService: java.lang.String PSSendStat> = varReplacer71;
+
+        varReplacer69 = "psgetpmdata.php?q=https://play.google.com/store/apps/details?id=";
+
+        <com.psvstudio.pushservice.PSService: java.lang.String PSGetPMData> = varReplacer69;
+
+        varReplacer67 = "com.psvstudio.pushservice.PSBootReceiver";
+
+        <com.psvstudio.pushservice.PSService: java.lang.String ACTION_WATCHDOG_OF_SERVICE> = varReplacer67;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.psvstudio.pushservice.PSService $r0;
+        com.psvstudio.pushservice.PSService$1 $r1;
+        java.lang.Thread $r2;
+        int varReplacer750;
+        java.lang.String varReplacer751;
+
+        nop;
+
+        $r0 := @this: com.psvstudio.pushservice.PSService;
+
+        specialinvoke $r0.<android.app.Service: void <init>()>();
+
+        varReplacer750 = 0;
+
+        $r0.<com.psvstudio.pushservice.PSService: boolean isRunning> = varReplacer750;
+
+        varReplacer751 = "";
+
+        $r0.<com.psvstudio.pushservice.PSService: java.lang.String android_id> = varReplacer751;
+
+        $r2 = new java.lang.Thread;
+
+        $r1 = new com.psvstudio.pushservice.PSService$1;
+
+        specialinvoke $r1.<com.psvstudio.pushservice.PSService$1: void <init>(com.psvstudio.pushservice.PSService)>($r0);
+
+        specialinvoke $r2.<java.lang.Thread: void <init>(java.lang.Runnable)>($r1);
+
+        $r0.<com.psvstudio.pushservice.PSService: java.lang.Thread PSServiceTask> = $r2;
+
+        return;
+    }
+
+    private static java.lang.String MD5Sum(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer1508, varReplacer1509;
+        java.lang.Throwable $r1;
+        byte[] $r2, $r4;
+        java.security.MessageDigest $r3;
+        int $i0, varReplacer1506, varReplacer1507;
+        java.lang.StringBuilder $r5, r7;
+        java.math.BigInteger r6;
+        java.security.NoSuchAlgorithmException r8;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r2 = newarray (byte)[0];
+
+     label1:
+        varReplacer1508 = "MD5";
+
+        $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1508);
+
+        virtualinvoke $r3.<java.security.MessageDigest: void reset()>();
+
+        $r4 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r3.<java.security.MessageDigest: void update(byte[])>($r4);
+
+        $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>();
+
+     label2:
+        $r2 = $r4;
+
+     label3:
+        r6 = new java.math.BigInteger;
+
+        varReplacer1507 = 1;
+
+        specialinvoke r6.<java.math.BigInteger: void <init>(int,byte[])>(varReplacer1507, $r2);
+
+        varReplacer1506 = 16;
+
+        $r0 = virtualinvoke r6.<java.math.BigInteger: java.lang.String toString(int)>(varReplacer1506);
+
+     label4:
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i0 < 32 goto label6;
+
+        return $r0;
+
+     label5:
+        $r1 := @caughtexception;
+
+        r8 = (java.security.NoSuchAlgorithmException) $r1;
+
+        virtualinvoke r8.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        goto label3;
+
+     label6:
+        r7 = new java.lang.StringBuilder;
+
+        varReplacer1509 = "0";
+
+        specialinvoke r7.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1509);
+
+        $r5 = virtualinvoke r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        goto label4;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+    }
+
+    public static void PSRunApp(android.content.Context, boolean, int)
+    {
+        android.content.Context $r0;
+        boolean $z0;
+        int $i0, $i3, varReplacer775, varReplacer777, varReplacer778, varReplacer781, varReplacer782, varReplacer787, varReplacer788;
+        android.content.Intent $r1;
+        long $l1, $l2;
+        java.lang.String $r2, varReplacer773, varReplacer774, varReplacer776, varReplacer779, varReplacer780, varReplacer783, varReplacer784, varReplacer785, varReplacer786;
+        android.app.PendingIntent $r3;
+        java.lang.Object $r4;
+        android.app.AlarmManager $r5;
+        java.lang.StringBuilder $r6;
+        java.util.Calendar $r7;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $z0 := @parameter1: boolean;
+
+        $i0 := @parameter2: int;
+
+        $r1 = new android.content.Intent;
+
+        specialinvoke $r1.<android.content.Intent: void <init>()>();
+
+        $r2 = <com.psvstudio.pushservice.PSService: java.lang.String ACTION_WATCHDOG_OF_SERVICE>;
+
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent setAction(java.lang.String)>($r2);
+
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent setClass(android.content.Context,java.lang.Class)>($r0, class "Lcom/psvstudio/pushservice/PSBootReceiver;");
+
+        varReplacer781 = 0;
+
+        varReplacer782 = 134217728;
+
+        $r3 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getBroadcast(android.content.Context,int,android.content.Intent,int)>($r0, varReplacer781, $r1, varReplacer782);
+
+        varReplacer784 = "alarm";
+
+        $r4 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer784);
+
+        $r5 = (android.app.AlarmManager) $r4;
+
+        $l2 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $l1 = (long) 2700000;
+
+        $l1 = $l2 + $l1;
+
+        varReplacer778 = 0;
+
+        virtualinvoke $r5.<android.app.AlarmManager: void set(int,long,android.app.PendingIntent)>(varReplacer778, $l1, $r3);
+
+        $r6 = new java.lang.StringBuilder;
+
+        varReplacer783 = "PSService.";
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer783);
+
+        $r2 = virtualinvoke $r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r1 = new android.content.Intent;
+
+        specialinvoke $r1.<android.content.Intent: void <init>()>();
+
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent setAction(java.lang.String)>($r2);
+
+        varReplacer788 = 32;
+
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent addFlags(int)>(varReplacer788);
+
+        varReplacer776 = "pushid";
+
+        varReplacer777 = 0;
+
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent putExtra(java.lang.String,int)>(varReplacer776, varReplacer777);
+
+        varReplacer785 = "muid";
+
+        varReplacer786 = "";
+
+        virtualinvoke $r1.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>(varReplacer785, varReplacer786);
+
+        varReplacer773 = "psvpush_UnityPlugin";
+
+        varReplacer774 = "PSService.PSServiceTask.rerun";
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>(varReplacer773, varReplacer774);
+
+        virtualinvoke $r0.<android.content.Context: void sendBroadcast(android.content.Intent)>($r1);
+
+        $i0 = <com.psvstudio.pushservice.PSService: int lastrun>;
+
+        if $i0 < 0 goto label4;
+
+        $r7 = staticinvoke <java.util.Calendar: java.util.Calendar getInstance()>();
+
+        varReplacer775 = 12;
+
+        $i0 = virtualinvoke $r7.<java.util.Calendar: int get(int)>(varReplacer775);
+
+        if $i0 >= 10 goto label1;
+
+        $i3 = <com.psvstudio.pushservice.PSService: int lastrun>;
+
+        $i3 = $i3 - $i0;
+
+        if $i3 < 50 goto label3;
+
+     label1:
+        if $i0 < 10 goto label2;
+
+        $i3 = <com.psvstudio.pushservice.PSService: int lastrun>;
+
+        $i3 = $i0 - $i3;
+
+        if $i3 > 12 goto label3;
+
+     label2:
+        if $i0 < 10 goto label4;
+
+        $i3 = <com.psvstudio.pushservice.PSService: int lastrun>;
+
+        $i0 = $i0 - $i3;
+
+        if $i0 >= 8 goto label4;
+
+     label3:
+        varReplacer787 = 1;
+
+        <com.psvstudio.pushservice.PSService: boolean PSError> = varReplacer787;
+
+        varReplacer779 = "psvpush_UnityPlugin";
+
+        varReplacer780 = "PSService.PSServiceTask.longsleeprerun";
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>(varReplacer779, varReplacer780);
+
+        return;
+
+     label4:
+        return;
+    }
+
+    public static void PSSendStatistic(android.content.Context, java.lang.String, java.lang.String, int)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, $r2;
+        int $i0;
+        java.lang.Thread $r3;
+        com.psvstudio.pushservice.PSService$2 $r4;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $i0 := @parameter3: int;
+
+        <com.psvstudio.pushservice.PSService: android.content.Context SendContext> = $r0;
+
+        <com.psvstudio.pushservice.PSService: java.lang.String SendPsuid> = $r1;
+
+        <com.psvstudio.pushservice.PSService: java.lang.String SendData> = $r2;
+
+        <com.psvstudio.pushservice.PSService: int Sendid> = $i0;
+
+        $r3 = new java.lang.Thread;
+
+        $r4 = new com.psvstudio.pushservice.PSService$2;
+
+        specialinvoke $r4.<com.psvstudio.pushservice.PSService$2: void <init>()>();
+
+        specialinvoke $r3.<java.lang.Thread: void <init>(java.lang.Runnable)>($r4);
+
+        virtualinvoke $r3.<java.lang.Thread: void start()>();
+
+        return;
+    }
+
+    static boolean access$0(com.psvstudio.pushservice.PSService)
+    {
+        com.psvstudio.pushservice.PSService $r0;
+        boolean z0;
+
+        nop;
+
+        $r0 := @parameter0: com.psvstudio.pushservice.PSService;
+
+        z0 = $r0.<com.psvstudio.pushservice.PSService: boolean isRunning>;
+
+        return z0;
+    }
+
+    static boolean access$1()
+    {
+        boolean z0;
+
+        nop;
+
+        z0 = <com.psvstudio.pushservice.PSService: boolean PSError>;
+
+        return z0;
+    }
+
+    static java.lang.String access$10(com.psvstudio.pushservice.PSService)
+    {
+        com.psvstudio.pushservice.PSService $r0;
+        java.lang.String r1;
+
+        nop;
+
+        $r0 := @parameter0: com.psvstudio.pushservice.PSService;
+
+        r1 = $r0.<com.psvstudio.pushservice.PSService: java.lang.String PSURL>;
+
+        return r1;
+    }
+
+    static java.lang.String access$11()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.psvstudio.pushservice.PSService: java.lang.String PSGetData>;
+
+        return r0;
+    }
+
+    static android.content.Context access$12()
+    {
+        android.content.Context r0;
+
+        nop;
+
+        r0 = <com.psvstudio.pushservice.PSService: android.content.Context SendContext>;
+
+        return r0;
+    }
+
+    static int access$13()
+    {
+        int i0;
+
+        nop;
+
+        i0 = <com.psvstudio.pushservice.PSService: int Sendid>;
+
+        return i0;
+    }
+
+    static java.lang.String access$14()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.psvstudio.pushservice.PSService: java.lang.String SendPsuid>;
+
+        return r0;
+    }
+
+    static java.lang.String access$15()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.psvstudio.pushservice.PSService: java.lang.String PSSendStat>;
+
+        return r0;
+    }
+
+    static java.lang.String access$16()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.psvstudio.pushservice.PSService: java.lang.String SendData>;
+
+        return r0;
+    }
+
+    static long access$2()
+    {
+        long l0;
+
+        nop;
+
+        l0 = <com.psvstudio.pushservice.PSService: long updateTime>;
+
+        return l0;
+    }
+
+    static int access$3()
+    {
+        int i0;
+
+        nop;
+
+        i0 = <com.psvstudio.pushservice.PSService: int count>;
+
+        return i0;
+    }
+
+    static void access$4(int)
+    {
+        int $i0;
+
+        nop;
+
+        $i0 := @parameter0: int;
+
+        <com.psvstudio.pushservice.PSService: int count> = $i0;
+
+        return;
+    }
+
+    static void access$5(int)
+    {
+        int $i0;
+
+        nop;
+
+        $i0 := @parameter0: int;
+
+        <com.psvstudio.pushservice.PSService: int lastrun> = $i0;
+
+        return;
+    }
+
+    static void access$6(com.psvstudio.pushservice.PSService, java.lang.String)
+    {
+        com.psvstudio.pushservice.PSService $r0;
+        java.lang.String $r1;
+
+        nop;
+
+        $r0 := @parameter0: com.psvstudio.pushservice.PSService;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r0.<com.psvstudio.pushservice.PSService: java.lang.String PSURL> = $r1;
+
+        return;
+    }
+
+    static java.lang.String access$7(com.psvstudio.pushservice.PSService)
+    {
+        com.psvstudio.pushservice.PSService $r0;
+        java.lang.String r1;
+
+        nop;
+
+        $r0 := @parameter0: com.psvstudio.pushservice.PSService;
+
+        r1 = $r0.<com.psvstudio.pushservice.PSService: java.lang.String android_id>;
+
+        return r1;
+    }
+
+    static java.lang.String access$8()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.psvstudio.pushservice.PSService: java.lang.String secretKey>;
+
+        return r0;
+    }
+
+    static java.lang.String access$9(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r0 = staticinvoke <com.psvstudio.pushservice.PSService: java.lang.String MD5Sum(java.lang.String)>($r0);
+
+        return $r0;
+    }
+
+    public boolean getPSData(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+    {
+        com.psvstudio.pushservice.PSService $r0;
+        java.lang.String $r1, $r2, $r3, $r4, $r34, varReplacer1886, varReplacer1887, varReplacer1888, varReplacer1889, varReplacer1890, varReplacer1891, varReplacer1895, varReplacer1896, varReplacer1897, varReplacer1900, varReplacer1903, varReplacer1904, varReplacer1905, varReplacer1907, varReplacer1909, varReplacer1910, varReplacer1911, varReplacer1913, varReplacer1914, varReplacer1917, varReplacer1919, varReplacer1922, varReplacer1925, varReplacer1927, varReplacer1929, varReplacer1931, varReplacer1932, varReplacer1933, varReplacer1934, varReplacer1935, varReplacer1936, varReplacer1937, varReplacer1938, varReplacer1940, varReplacer1942, varReplacer1943, varReplacer1944, varReplacer1946, varReplacer1947, varReplacer1948, varReplacer1949, varReplacer1950, varReplacer1951, varReplacer1952, varReplacer1955, varReplacer1956, varReplacer1958, varReplacer1960, varReplacer1961, varReplacer1962, varReplacer1964;
+        android.content.Intent[] $r5;
+        java.io.BufferedReader $r6;
+        int[] $r7, $r14;
+        java.lang.String[] $r8, $r9, $r10, $r11, $r12, $r13, $r21, $r24, $r25, $r26, $r27, $r28, $r29, $r31, $r32, $r36;
+        java.lang.StringBuilder $r15, $r22;
+        java.net.URL $r16;
+        java.net.URLConnection $r17;
+        java.net.HttpURLConnection $r18, $r35;
+        int $i0, $i1, $i2, $i3, varReplacer1885, varReplacer1892, varReplacer1893, varReplacer1894, varReplacer1898, varReplacer1899, varReplacer1901, varReplacer1902, varReplacer1906, varReplacer1908, varReplacer1912, varReplacer1915, varReplacer1916, varReplacer1918, varReplacer1920, varReplacer1921, varReplacer1923, varReplacer1924, varReplacer1926, varReplacer1928, varReplacer1930, varReplacer1939, varReplacer1941, varReplacer1945, varReplacer1953, varReplacer1954, varReplacer1957, varReplacer1959, varReplacer1963;
+        java.io.InputStreamReader $r19;
+        java.io.InputStream $r20;
+        java.lang.Throwable $r23, $r39;
+        boolean[] $r30;
+        java.lang.Integer $r33;
+        boolean $z0;
+        android.content.Intent $r37;
+        java.lang.Exception $r38, $r40;
+        android.content.Context $r41;
+
+        nop;
+
+        $r0 := @this: com.psvstudio.pushservice.PSService;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 := @parameter3: java.lang.String;
+
+        $r16 = new java.net.URL;
+
+     label001:
+        specialinvoke $r16.<java.net.URL: void <init>(java.lang.String)>($r2);
+
+        $r17 = virtualinvoke $r16.<java.net.URL: java.net.URLConnection openConnection()>();
+
+     label002:
+        $r18 = (java.net.HttpURLConnection) $r17;
+
+     label003:
+        varReplacer1887 = "GET";
+
+        virtualinvoke $r18.<java.net.HttpURLConnection: void setRequestMethod(java.lang.String)>(varReplacer1887);
+
+        varReplacer1954 = 20000;
+
+        virtualinvoke $r18.<java.net.HttpURLConnection: void setConnectTimeout(int)>(varReplacer1954);
+
+        varReplacer1920 = 30000;
+
+        virtualinvoke $r18.<java.net.HttpURLConnection: void setReadTimeout(int)>(varReplacer1920);
+
+        virtualinvoke $r18.<java.net.HttpURLConnection: void connect()>();
+
+        $i0 = virtualinvoke $r18.<java.net.HttpURLConnection: int getResponseCode()>();
+
+     label004:
+        if $i0 == 200 goto label005;
+
+        if $i0 != 201 goto label226;
+
+     label005:
+        $r6 = new java.io.BufferedReader;
+
+        $r19 = new java.io.InputStreamReader;
+
+     label006:
+        $r20 = virtualinvoke $r18.<java.net.HttpURLConnection: java.io.InputStream getInputStream()>();
+
+        varReplacer1922 = "UTF-8";
+
+        specialinvoke $r19.<java.io.InputStreamReader: void <init>(java.io.InputStream,java.lang.String)>($r20, varReplacer1922);
+
+        specialinvoke $r6.<java.io.BufferedReader: void <init>(java.io.Reader)>($r19);
+
+     label007:
+        $r15 = new java.lang.StringBuilder;
+
+     label008:
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+     label009:
+        $r2 = virtualinvoke $r6.<java.io.BufferedReader: java.lang.String readLine()>();
+
+     label010:
+        if $r2 != null goto label015;
+
+     label011:
+        virtualinvoke $r6.<java.io.BufferedReader: void close()>();
+
+        $r2 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r18.<java.net.HttpURLConnection: void disconnect()>();
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+     label012:
+        if $i0 <= 0 goto label226;
+
+     label013:
+        $i0 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        varReplacer1906 = 1;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1906, $i0);
+
+        varReplacer1940 = "\n";
+
+        $r21 = virtualinvoke $r2.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer1940);
+
+     label014:
+        if $r21 != null goto label019;
+
+        varReplacer1885 = 0;
+
+        return varReplacer1885;
+
+     label015:
+        $r22 = new java.lang.StringBuilder;
+
+     label016:
+        $r2 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r2);
+
+        specialinvoke $r22.<java.lang.StringBuilder: void <init>(java.lang.String)>($r2);
+
+        varReplacer1936 = "\n";
+
+        $r22 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1936);
+
+        $r2 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+     label017:
+        goto label009;
+
+     label018:
+        $r23 := @caughtexception;
+
+        $r15 = new java.lang.StringBuilder;
+
+        varReplacer1942 = "PSService.ERROR MalformedURLException: ";
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1942);
+
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r23);
+
+        $r1 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer1955 = "psvpush_UnityPlugin";
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>(varReplacer1955, $r1);
+
+        varReplacer1908 = 0;
+
+        return varReplacer1908;
+
+     label019:
+        $i0 = lengthof $r21;
+
+        $r14 = newarray (int)[$i0];
+
+        $r8 = newarray (java.lang.String)[$i0];
+
+        $r10 = newarray (java.lang.String)[$i0];
+
+        $r24 = newarray (java.lang.String)[$i0];
+
+        $r25 = newarray (java.lang.String)[$i0];
+
+        $r26 = newarray (java.lang.String)[$i0];
+
+        $r27 = newarray (java.lang.String)[$i0];
+
+        $r7 = newarray (int)[$i0];
+
+        $r28 = newarray (java.lang.String)[$i0];
+
+        $r9 = newarray (java.lang.String)[$i0];
+
+        $r5 = newarray (android.content.Intent)[$i0];
+
+        $r29 = newarray (java.lang.String)[$i0];
+
+        $r13 = newarray (java.lang.String)[$i0];
+
+        $r12 = newarray (java.lang.String)[$i0];
+
+        $r11 = newarray (java.lang.String)[$i0];
+
+        $r30 = newarray (boolean)[$i0];
+
+        $r31 = newarray (java.lang.String)[$i0];
+
+        $i1 = 0;
+
+     label020:
+        if $i1 < $i0 goto label023;
+
+     label021:
+        virtualinvoke $r18.<java.net.HttpURLConnection: void disconnect()>();
+
+     label022:
+        varReplacer1928 = 0;
+
+        return varReplacer1928;
+
+     label023:
+        $r30[$i1] = 1;
+
+        $r2 = $r21[$i1];
+
+     label024:
+        varReplacer1888 = ";";
+
+        $r32 = virtualinvoke $r2.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer1888);
+
+     label025:
+        $r33 = new java.lang.Integer;
+
+     label026:
+        $r2 = $r32[0];
+
+        specialinvoke $r33.<java.lang.Integer: void <init>(java.lang.String)>($r2);
+
+        $i2 = virtualinvoke $r33.<java.lang.Integer: int intValue()>();
+
+        $r14[$i1] = $i2;
+
+     label027:
+        $r2 = $r32[1];
+
+        $r34 = $r32[1];
+
+     label028:
+        $i2 = virtualinvoke $r34.<java.lang.String: int length()>();
+
+     label029:
+        $i2 = $i2 + -1;
+
+     label030:
+        varReplacer1901 = 0;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1901, $i2);
+
+     label031:
+        $r8[$i1] = $r2;
+
+        $r2 = $r32[2];
+
+        $r34 = $r32[2];
+
+     label032:
+        $i2 = virtualinvoke $r34.<java.lang.String: int length()>();
+
+     label033:
+        $i2 = $i2 + -1;
+
+     label034:
+        varReplacer1924 = 0;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1924, $i2);
+
+     label035:
+        $r10[$i1] = $r2;
+
+        $r2 = $r32[3];
+
+        $r34 = $r32[3];
+
+     label036:
+        $i2 = virtualinvoke $r34.<java.lang.String: int length()>();
+
+     label037:
+        $i2 = $i2 + -1;
+
+     label038:
+        varReplacer1894 = 0;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1894, $i2);
+
+     label039:
+        $r24[$i1] = $r2;
+
+        $r2 = $r32[4];
+
+        $r34 = $r32[4];
+
+     label040:
+        $i2 = virtualinvoke $r34.<java.lang.String: int length()>();
+
+     label041:
+        $i2 = $i2 + -1;
+
+     label042:
+        varReplacer1921 = 0;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1921, $i2);
+
+     label043:
+        $r25[$i1] = $r2;
+
+        $r2 = $r32[5];
+
+        $r34 = $r32[5];
+
+     label044:
+        $i2 = virtualinvoke $r34.<java.lang.String: int length()>();
+
+     label045:
+        $i2 = $i2 + -1;
+
+     label046:
+        varReplacer1926 = 0;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1926, $i2);
+
+     label047:
+        $r26[$i1] = $r2;
+
+        $r2 = $r32[6];
+
+        $r34 = $r32[6];
+
+     label048:
+        $i2 = virtualinvoke $r34.<java.lang.String: int length()>();
+
+     label049:
+        $i2 = $i2 + -1;
+
+     label050:
+        varReplacer1923 = 0;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1923, $i2);
+
+     label051:
+        $r27[$i1] = $r2;
+
+        $r33 = new java.lang.Integer;
+
+     label052:
+        $r2 = $r32[7];
+
+        specialinvoke $r33.<java.lang.Integer: void <init>(java.lang.String)>($r2);
+
+        $i2 = virtualinvoke $r33.<java.lang.Integer: int intValue()>();
+
+        $r7[$i1] = $i2;
+
+     label053:
+        $r2 = $r32[8];
+
+        $r34 = $r32[8];
+
+     label054:
+        $i2 = virtualinvoke $r34.<java.lang.String: int length()>();
+
+     label055:
+        $i2 = $i2 + -1;
+
+     label056:
+        varReplacer1941 = 0;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1941, $i2);
+
+     label057:
+        $r28[$i1] = $r2;
+
+        $r2 = $r32[9];
+
+        $r34 = $r32[9];
+
+     label058:
+        $i2 = virtualinvoke $r34.<java.lang.String: int length()>();
+
+     label059:
+        $i2 = $i2 + -1;
+
+     label060:
+        varReplacer1915 = 0;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1915, $i2);
+
+     label061:
+        $r9[$i1] = $r2;
+
+        $r29[$i1] = "";
+
+        $r31[$i1] = "";
+
+        $i2 = $r7[$i1];
+
+        if $i2 != 1 goto label200;
+
+        $r2 = $r9[$i1];
+
+     label062:
+        $i2 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+     label063:
+        if $i2 <= 0 goto label200;
+
+        $r2 = $r26[$i1];
+
+        $r34 = $r26[$i1];
+
+     label064:
+        $i2 = virtualinvoke $r34.<java.lang.String: int length()>();
+
+        varReplacer1918 = 20;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1918, $i2);
+
+     label065:
+        $r31[$i1] = $r2;
+
+        $r30[$i1] = 0;
+
+        $r15 = new java.lang.StringBuilder;
+
+        $r2 = $r0.<com.psvstudio.pushservice.PSService: java.lang.String android_id>;
+
+     label066:
+        $r2 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r2);
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>(java.lang.String)>($r2);
+
+     label067:
+        $r2 = $r9[$i1];
+
+     label068:
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+     label069:
+        $r2 = <com.psvstudio.pushservice.PSService: java.lang.String secretKey>;
+
+     label070:
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r2 = staticinvoke <com.psvstudio.pushservice.PSService: java.lang.String MD5Sum(java.lang.String)>($r2);
+
+     label071:
+        $r15 = new java.lang.StringBuilder;
+
+     label072:
+        $r34 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r3);
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>(java.lang.String)>($r34);
+
+     label073:
+        $r34 = <com.psvstudio.pushservice.PSService: java.lang.String PSGetGroup>;
+
+     label074:
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r34);
+
+        varReplacer1931 = "psaid=";
+
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1931);
+
+     label075:
+        $r34 = $r0.<com.psvstudio.pushservice.PSService: java.lang.String android_id>;
+
+     label076:
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r34);
+
+        varReplacer1950 = "&psgroup=";
+
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1950);
+
+     label077:
+        $r34 = $r9[$i1];
+
+     label078:
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r34);
+
+        varReplacer1890 = "&hash=";
+
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1890);
+
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label079:
+        $r16 = new java.net.URL;
+
+     label080:
+        specialinvoke $r16.<java.net.URL: void <init>(java.lang.String)>($r2);
+
+        $r17 = virtualinvoke $r16.<java.net.URL: java.net.URLConnection openConnection()>();
+
+     label081:
+        $r35 = (java.net.HttpURLConnection) $r17;
+
+     label082:
+        varReplacer1946 = "GET";
+
+        virtualinvoke $r35.<java.net.HttpURLConnection: void setRequestMethod(java.lang.String)>(varReplacer1946);
+
+        varReplacer1939 = 20000;
+
+        virtualinvoke $r35.<java.net.HttpURLConnection: void setConnectTimeout(int)>(varReplacer1939);
+
+        varReplacer1916 = 30000;
+
+        virtualinvoke $r35.<java.net.HttpURLConnection: void setReadTimeout(int)>(varReplacer1916);
+
+        virtualinvoke $r35.<java.net.HttpURLConnection: void connect()>();
+
+        $i2 = virtualinvoke $r35.<java.net.HttpURLConnection: int getResponseCode()>();
+
+     label083:
+        if $i2 == 200 goto label084;
+
+        if $i2 != 201 goto label095;
+
+     label084:
+        $r6 = new java.io.BufferedReader;
+
+        $r19 = new java.io.InputStreamReader;
+
+     label085:
+        $r20 = virtualinvoke $r35.<java.net.HttpURLConnection: java.io.InputStream getInputStream()>();
+
+        varReplacer1907 = "UTF-8";
+
+        specialinvoke $r19.<java.io.InputStreamReader: void <init>(java.io.InputStream,java.lang.String)>($r20, varReplacer1907);
+
+        specialinvoke $r6.<java.io.BufferedReader: void <init>(java.io.Reader)>($r19);
+
+     label086:
+        $r15 = new java.lang.StringBuilder;
+
+     label087:
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+     label088:
+        $r2 = virtualinvoke $r6.<java.io.BufferedReader: java.lang.String readLine()>();
+
+     label089:
+        if $r2 != null goto label180;
+
+     label090:
+        virtualinvoke $r6.<java.io.BufferedReader: void close()>();
+
+        $r2 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r35.<java.net.HttpURLConnection: void disconnect()>();
+
+        $i2 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+     label091:
+        if $i2 <= 0 goto label095;
+
+     label092:
+        $i2 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        varReplacer1963 = 1;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1963, $i2);
+
+        varReplacer1909 = "\n";
+
+        $r32 = virtualinvoke $r2.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer1909);
+
+     label093:
+        $i2 = lengthof $r32;
+
+        if $i2 < 1 goto label195;
+
+        $i2 = 0;
+
+        $i3 = lengthof $r32;
+
+        $r36 = newarray (java.lang.String)[$i3];
+
+     label094:
+        $z0 = $r30[$i1];
+
+        if $z0 != 0 goto label095;
+
+        $i3 = lengthof $r32;
+
+        if $i2 < $i3 goto label183;
+
+     label095:
+        $r15 = new java.lang.StringBuilder;
+
+     label096:
+        $r2 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r3);
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>(java.lang.String)>($r2);
+
+     label097:
+        $r2 = <com.psvstudio.pushservice.PSService: java.lang.String PSGetPMData>;
+
+     label098:
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+     label099:
+        $r2 = $r31[$i1];
+
+     label100:
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        varReplacer1925 = "&hl=";
+
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1925);
+
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r2 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label101:
+        varReplacer1917 = "http://shop.nimpha.com.ua/PushService/";
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1917);
+
+     label102:
+        if $z0 != 0 goto label105;
+
+     label103:
+        varReplacer1960 = "http://shop.nimpha.com.ua/PushService/Test/";
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1960);
+
+     label104:
+        if $z0 == 0 goto label111;
+
+     label105:
+        $r15 = new java.lang.StringBuilder;
+
+     label106:
+        varReplacer1914 = "http://www.psvgamestudio.com/PSVScripts/PushService/";
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1914);
+
+     label107:
+        $r2 = <com.psvstudio.pushservice.PSService: java.lang.String PSGetPMData>;
+
+     label108:
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+     label109:
+        $r2 = $r31[$i1];
+
+     label110:
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        varReplacer1964 = "&hl=";
+
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1964);
+
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r2 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label111:
+        $r16 = new java.net.URL;
+
+     label112:
+        specialinvoke $r16.<java.net.URL: void <init>(java.lang.String)>($r2);
+
+        $r17 = virtualinvoke $r16.<java.net.URL: java.net.URLConnection openConnection()>();
+
+     label113:
+        $r35 = (java.net.HttpURLConnection) $r17;
+
+     label114:
+        varReplacer1962 = "GET";
+
+        virtualinvoke $r35.<java.net.HttpURLConnection: void setRequestMethod(java.lang.String)>(varReplacer1962);
+
+        varReplacer1902 = 20000;
+
+        virtualinvoke $r35.<java.net.HttpURLConnection: void setConnectTimeout(int)>(varReplacer1902);
+
+        varReplacer1959 = 30000;
+
+        virtualinvoke $r35.<java.net.HttpURLConnection: void setReadTimeout(int)>(varReplacer1959);
+
+        virtualinvoke $r35.<java.net.HttpURLConnection: void connect()>();
+
+        $i2 = virtualinvoke $r35.<java.net.HttpURLConnection: int getResponseCode()>();
+
+     label115:
+        if $i2 == 200 goto label116;
+
+        if $i2 != 201 goto label136;
+
+     label116:
+        $r6 = new java.io.BufferedReader;
+
+        $r19 = new java.io.InputStreamReader;
+
+     label117:
+        $r20 = virtualinvoke $r35.<java.net.HttpURLConnection: java.io.InputStream getInputStream()>();
+
+        varReplacer1889 = "UTF-8";
+
+        specialinvoke $r19.<java.io.InputStreamReader: void <init>(java.io.InputStream,java.lang.String)>($r20, varReplacer1889);
+
+        specialinvoke $r6.<java.io.BufferedReader: void <init>(java.io.Reader)>($r19);
+
+     label118:
+        $r15 = new java.lang.StringBuilder;
+
+     label119:
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+     label120:
+        $r2 = virtualinvoke $r6.<java.io.BufferedReader: java.lang.String readLine()>();
+
+     label121:
+        if $r2 != null goto label209;
+
+     label122:
+        virtualinvoke $r6.<java.io.BufferedReader: void close()>();
+
+        $r2 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r35.<java.net.HttpURLConnection: void disconnect()>();
+
+        $i2 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+     label123:
+        if $i2 <= 0 goto label136;
+
+     label124:
+        varReplacer1951 = "\n";
+
+        $r32 = virtualinvoke $r2.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer1951);
+
+     label125:
+        $i2 = lengthof $r32;
+
+        $r36 = newarray (java.lang.String)[$i2];
+
+        $i2 = 0;
+
+     label126:
+        $i3 = lengthof $r32;
+
+        if $i2 < $i3 goto label212;
+
+        $r2 = $r36[0];
+
+     label127:
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String trim()>();
+
+     label128:
+        $r13[$i1] = $r2;
+
+        $r2 = $r36[1];
+
+     label129:
+        $i2 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+     label130:
+        if $i2 <= 2 goto label223;
+
+        $r2 = $r36[1];
+
+        $r34 = $r36[1];
+
+     label131:
+        $i2 = virtualinvoke $r34.<java.lang.String: int length()>();
+
+        varReplacer1899 = 2;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1899, $i2);
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String trim()>();
+
+     label132:
+        $r12[$i1] = $r2;
+
+     label133:
+        $r2 = $r36[2];
+
+     label134:
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String trim()>();
+
+     label135:
+        $r11[$i1] = $r2;
+
+     label136:
+        $z0 = $r30[$i1];
+
+        if $z0 == 0 goto label176;
+
+        $r37 = new android.content.Intent;
+
+     label137:
+        specialinvoke $r37.<android.content.Intent: void <init>()>();
+
+     label138:
+        $r5[$i1] = $r37;
+
+        $r37 = $r5[$i1];
+
+        $r2 = $r29[$i1];
+
+     label139:
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent setAction(java.lang.String)>($r2);
+
+     label140:
+        $r37 = $r5[$i1];
+
+     label141:
+        varReplacer1893 = 32;
+
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent addFlags(int)>(varReplacer1893);
+
+     label142:
+        $r37 = $r5[$i1];
+
+        $i2 = $r14[$i1];
+
+     label143:
+        varReplacer1910 = "pushid";
+
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent putExtra(java.lang.String,int)>(varReplacer1910, $i2);
+
+     label144:
+        $r37 = $r5[$i1];
+
+        $r2 = $r8[$i1];
+
+     label145:
+        varReplacer1944 = "gamepackage";
+
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>(varReplacer1944, $r2);
+
+     label146:
+        $r37 = $r5[$i1];
+
+        $r2 = $r10[$i1];
+
+     label147:
+        varReplacer1905 = "muid";
+
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>(varReplacer1905, $r2);
+
+     label148:
+        $r37 = $r5[$i1];
+
+        $r2 = $r24[$i1];
+
+     label149:
+        varReplacer1961 = "title";
+
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>(varReplacer1961, $r2);
+
+     label150:
+        $r37 = $r5[$i1];
+
+        $r2 = $r25[$i1];
+
+     label151:
+        varReplacer1943 = "text";
+
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>(varReplacer1943, $r2);
+
+     label152:
+        $r37 = $r5[$i1];
+
+        $r2 = $r26[$i1];
+
+     label153:
+        varReplacer1919 = "url";
+
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>(varReplacer1919, $r2);
+
+     label154:
+        $r37 = $r5[$i1];
+
+        $r2 = $r27[$i1];
+
+     label155:
+        varReplacer1886 = "version";
+
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>(varReplacer1886, $r2);
+
+     label156:
+        $r37 = $r5[$i1];
+
+        $i2 = $r7[$i1];
+
+     label157:
+        varReplacer1956 = "flag";
+
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent putExtra(java.lang.String,int)>(varReplacer1956, $i2);
+
+     label158:
+        $r37 = $r5[$i1];
+
+        $r2 = $r28[$i1];
+
+     label159:
+        varReplacer1949 = "s_icon";
+
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>(varReplacer1949, $r2);
+
+     label160:
+        $r37 = $r5[$i1];
+
+     label161:
+        varReplacer1929 = "vibrate";
+
+        varReplacer1930 = 1;
+
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent putExtra(java.lang.String,boolean)>(varReplacer1929, varReplacer1930);
+
+     label162:
+        $r37 = $r5[$i1];
+
+     label163:
+        varReplacer1911 = "sound";
+
+        varReplacer1912 = 0;
+
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent putExtra(java.lang.String,boolean)>(varReplacer1911, varReplacer1912);
+
+     label164:
+        $r37 = $r5[$i1];
+
+     label165:
+        varReplacer1891 = "lights";
+
+        varReplacer1892 = 0;
+
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent putExtra(java.lang.String,boolean)>(varReplacer1891, varReplacer1892);
+
+     label166:
+        $r37 = $r5[$i1];
+
+        $r2 = $r13[$i1];
+
+     label167:
+        varReplacer1913 = "newstitle";
+
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>(varReplacer1913, $r2);
+
+     label168:
+        $r37 = $r5[$i1];
+
+        $r2 = $r12[$i1];
+
+     label169:
+        varReplacer1900 = "newsimg";
+
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>(varReplacer1900, $r2);
+
+     label170:
+        $r37 = $r5[$i1];
+
+        $r2 = $r11[$i1];
+
+     label171:
+        varReplacer1895 = "newsdescr";
+
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>(varReplacer1895, $r2);
+
+     label172:
+        $r37 = $r5[$i1];
+
+        $r2 = $r9[$i1];
+
+     label173:
+        varReplacer1932 = "group";
+
+        virtualinvoke $r37.<android.content.Intent: android.content.Intent putExtra(java.lang.String,java.lang.String)>(varReplacer1932, $r2);
+
+     label174:
+        $r37 = $r5[$i1];
+
+     label175:
+        virtualinvoke $r0.<com.psvstudio.pushservice.PSService: void sendBroadcast(android.content.Intent)>($r37);
+
+     label176:
+        $i1 = $i1 + 1;
+
+        goto label020;
+
+     label177:
+        $r38 := @caughtexception;
+
+        $r14[$i1] = 0;
+
+        goto label027;
+
+     label178:
+        $r39 := @caughtexception;
+
+        $r15 = new java.lang.StringBuilder;
+
+        varReplacer1896 = "PSService.ERROR IOException: ";
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1896);
+
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r39);
+
+        $r1 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer1933 = "psvpush_UnityPlugin";
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>(varReplacer1933, $r1);
+
+        varReplacer1957 = 0;
+
+        return varReplacer1957;
+
+     label179:
+        $r40 := @caughtexception;
+
+        $r7[$i1] = 2;
+
+        goto label053;
+
+     label180:
+        $r22 = new java.lang.StringBuilder;
+
+     label181:
+        $r2 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r2);
+
+        specialinvoke $r22.<java.lang.StringBuilder: void <init>(java.lang.String)>($r2);
+
+        varReplacer1948 = "\n";
+
+        $r22 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1948);
+
+        $r2 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+     label182:
+        goto label088;
+
+     label183:
+        $r2 = $r32[$i2];
+
+        $r34 = $r32[$i2];
+
+     label184:
+        $i3 = virtualinvoke $r34.<java.lang.String: int length()>();
+
+        varReplacer1898 = 0;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1898, $i3);
+
+     label185:
+        $r36[$i2] = $r2;
+
+     label186:
+        $r41 = virtualinvoke $r0.<com.psvstudio.pushservice.PSService: android.content.Context getApplicationContext()>();
+
+     label187:
+        $r2 = $r36[$i2];
+
+     label188:
+        $z0 = staticinvoke <com.psvstudio.pushservice.PSReceiver: boolean isPackageInstalled(android.content.Context,java.lang.String)>($r41, $r2);
+
+     label189:
+        if $z0 == 0 goto label194;
+
+        $r15 = new java.lang.StringBuilder;
+
+     label190:
+        varReplacer1958 = "PSService.";
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1958);
+
+     label191:
+        $r2 = $r36[$i2];
+
+     label192:
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label193:
+        $r29[$i1] = $r2;
+
+        $r2 = $r36[$i2];
+
+        $r8[$i1] = $r2;
+
+        $r30[$i1] = 1;
+
+     label194:
+        $i2 = $i2 + 1;
+
+        goto label094;
+
+     label195:
+        $r15 = new java.lang.StringBuilder;
+
+     label196:
+        varReplacer1927 = "PSService.";
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1927);
+
+        $r41 = virtualinvoke $r0.<com.psvstudio.pushservice.PSService: android.content.Context getApplicationContext()>();
+
+        $r2 = virtualinvoke $r41.<android.content.Context: java.lang.String getPackageName()>();
+
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label197:
+        $r29[$i1] = $r2;
+
+        $r28[$i1] = "small_icon_notify";
+
+        $r2 = $r9[$i1];
+
+     label198:
+        varReplacer1897 = "0";
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1897);
+
+     label199:
+        if $z0 == 0 goto label095;
+
+        $r30[$i1] = 1;
+
+        goto label095;
+
+     label200:
+        $r41 = virtualinvoke $r0.<com.psvstudio.pushservice.PSService: android.content.Context getApplicationContext()>();
+
+     label201:
+        $r2 = $r8[$i1];
+
+     label202:
+        $z0 = staticinvoke <com.psvstudio.pushservice.PSReceiver: boolean isPackageInstalled(android.content.Context,java.lang.String)>($r41, $r2);
+
+     label203:
+        if $z0 != 0 goto label204;
+
+        $r30[$i1] = 0;
+
+     label204:
+        $r15 = new java.lang.StringBuilder;
+
+     label205:
+        varReplacer1952 = "PSService.";
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1952);
+
+     label206:
+        $r2 = $r8[$i1];
+
+     label207:
+        $r15 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label208:
+        $r29[$i1] = $r2;
+
+        $r2 = $r8[$i1];
+
+        $r31[$i1] = $r2;
+
+        goto label095;
+
+     label209:
+        $r22 = new java.lang.StringBuilder;
+
+     label210:
+        $r2 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r2);
+
+        specialinvoke $r22.<java.lang.StringBuilder: void <init>(java.lang.String)>($r2);
+
+        varReplacer1947 = "\n";
+
+        $r22 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1947);
+
+        $r2 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+     label211:
+        goto label120;
+
+     label212:
+        $r2 = $r32[$i2];
+
+     label213:
+        $i3 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+     label214:
+        if $i3 <= 1 goto label222;
+
+        $r2 = $r32[$i2];
+
+        $r34 = $r32[$i2];
+
+     label215:
+        $i3 = virtualinvoke $r34.<java.lang.String: int length()>();
+
+     label216:
+        $i3 = $i3 + -1;
+
+     label217:
+        varReplacer1953 = 0;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1953, $i3);
+
+     label218:
+        varReplacer1903 = "<p>";
+
+        varReplacer1904 = "\n";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1903, varReplacer1904);
+
+     label219:
+        $r36[$i2] = $r2;
+
+        $r2 = $r36[$i2];
+
+     label220:
+        varReplacer1937 = "</p>";
+
+        varReplacer1938 = "";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1937, varReplacer1938);
+
+        varReplacer1934 = "<br>";
+
+        varReplacer1935 = "\n";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1934, varReplacer1935);
+
+     label221:
+        $r36[$i2] = $r2;
+
+        $i2 = $i2 + 1;
+
+        goto label126;
+
+     label222:
+        $r2 = "";
+
+        goto label218;
+
+     label223:
+        $r2 = $r36[1];
+
+     label224:
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String trim()>();
+
+     label225:
+        $r12[$i1] = $r2;
+
+        goto label133;
+
+     label226:
+        virtualinvoke $r18.<java.net.HttpURLConnection: void disconnect()>();
+
+     label227:
+        varReplacer1945 = 0;
+
+        return varReplacer1945;
+
+        catch java.net.MalformedURLException from label001 to label002 with label018;
+        catch java.net.MalformedURLException from label003 to label004 with label018;
+        catch java.net.MalformedURLException from label006 to label007 with label018;
+        catch java.net.MalformedURLException from label008 to label010 with label018;
+        catch java.net.MalformedURLException from label011 to label012 with label018;
+        catch java.net.MalformedURLException from label013 to label014 with label018;
+        catch java.net.MalformedURLException from label016 to label017 with label018;
+        catch java.io.IOException from label001 to label002 with label178;
+        catch java.io.IOException from label003 to label004 with label178;
+        catch java.io.IOException from label006 to label007 with label178;
+        catch java.io.IOException from label008 to label010 with label178;
+        catch java.io.IOException from label011 to label012 with label178;
+        catch java.io.IOException from label013 to label014 with label178;
+        catch java.io.IOException from label016 to label017 with label178;
+        catch java.net.MalformedURLException from label021 to label022 with label018;
+        catch java.net.MalformedURLException from label024 to label025 with label018;
+        catch java.io.IOException from label021 to label022 with label178;
+        catch java.io.IOException from label024 to label025 with label178;
+        catch java.lang.Exception from label026 to label027 with label177;
+        catch java.net.MalformedURLException from label028 to label029 with label018;
+        catch java.net.MalformedURLException from label030 to label031 with label018;
+        catch java.net.MalformedURLException from label032 to label033 with label018;
+        catch java.net.MalformedURLException from label034 to label035 with label018;
+        catch java.net.MalformedURLException from label036 to label037 with label018;
+        catch java.net.MalformedURLException from label038 to label039 with label018;
+        catch java.net.MalformedURLException from label040 to label041 with label018;
+        catch java.net.MalformedURLException from label042 to label043 with label018;
+        catch java.net.MalformedURLException from label044 to label045 with label018;
+        catch java.net.MalformedURLException from label046 to label047 with label018;
+        catch java.net.MalformedURLException from label048 to label049 with label018;
+        catch java.net.MalformedURLException from label050 to label051 with label018;
+        catch java.io.IOException from label028 to label029 with label178;
+        catch java.io.IOException from label030 to label031 with label178;
+        catch java.io.IOException from label032 to label033 with label178;
+        catch java.io.IOException from label034 to label035 with label178;
+        catch java.io.IOException from label036 to label037 with label178;
+        catch java.io.IOException from label038 to label039 with label178;
+        catch java.io.IOException from label040 to label041 with label178;
+        catch java.io.IOException from label042 to label043 with label178;
+        catch java.io.IOException from label044 to label045 with label178;
+        catch java.io.IOException from label046 to label047 with label178;
+        catch java.io.IOException from label048 to label049 with label178;
+        catch java.io.IOException from label050 to label051 with label178;
+        catch java.lang.Exception from label052 to label053 with label179;
+        catch java.net.MalformedURLException from label054 to label055 with label018;
+        catch java.net.MalformedURLException from label056 to label057 with label018;
+        catch java.net.MalformedURLException from label058 to label059 with label018;
+        catch java.net.MalformedURLException from label060 to label061 with label018;
+        catch java.net.MalformedURLException from label062 to label063 with label018;
+        catch java.net.MalformedURLException from label064 to label065 with label018;
+        catch java.net.MalformedURLException from label066 to label067 with label018;
+        catch java.net.MalformedURLException from label068 to label069 with label018;
+        catch java.net.MalformedURLException from label070 to label071 with label018;
+        catch java.net.MalformedURLException from label072 to label073 with label018;
+        catch java.net.MalformedURLException from label074 to label075 with label018;
+        catch java.net.MalformedURLException from label076 to label077 with label018;
+        catch java.net.MalformedURLException from label078 to label079 with label018;
+        catch java.net.MalformedURLException from label080 to label081 with label018;
+        catch java.net.MalformedURLException from label082 to label083 with label018;
+        catch java.net.MalformedURLException from label085 to label086 with label018;
+        catch java.net.MalformedURLException from label087 to label089 with label018;
+        catch java.net.MalformedURLException from label090 to label091 with label018;
+        catch java.net.MalformedURLException from label092 to label093 with label018;
+        catch java.net.MalformedURLException from label096 to label097 with label018;
+        catch java.net.MalformedURLException from label098 to label099 with label018;
+        catch java.net.MalformedURLException from label100 to label101 with label018;
+        catch java.net.MalformedURLException from label101 to label102 with label018;
+        catch java.net.MalformedURLException from label103 to label104 with label018;
+        catch java.net.MalformedURLException from label106 to label107 with label018;
+        catch java.net.MalformedURLException from label108 to label109 with label018;
+        catch java.net.MalformedURLException from label110 to label111 with label018;
+        catch java.net.MalformedURLException from label112 to label113 with label018;
+        catch java.net.MalformedURLException from label114 to label115 with label018;
+        catch java.net.MalformedURLException from label117 to label118 with label018;
+        catch java.net.MalformedURLException from label119 to label121 with label018;
+        catch java.net.MalformedURLException from label122 to label123 with label018;
+        catch java.net.MalformedURLException from label124 to label125 with label018;
+        catch java.net.MalformedURLException from label127 to label128 with label018;
+        catch java.net.MalformedURLException from label129 to label130 with label018;
+        catch java.net.MalformedURLException from label131 to label132 with label018;
+        catch java.net.MalformedURLException from label134 to label135 with label018;
+        catch java.net.MalformedURLException from label137 to label138 with label018;
+        catch java.net.MalformedURLException from label139 to label140 with label018;
+        catch java.net.MalformedURLException from label141 to label142 with label018;
+        catch java.net.MalformedURLException from label143 to label144 with label018;
+        catch java.net.MalformedURLException from label145 to label146 with label018;
+        catch java.net.MalformedURLException from label147 to label148 with label018;
+        catch java.net.MalformedURLException from label149 to label150 with label018;
+        catch java.net.MalformedURLException from label151 to label152 with label018;
+        catch java.net.MalformedURLException from label153 to label154 with label018;
+        catch java.net.MalformedURLException from label155 to label156 with label018;
+        catch java.net.MalformedURLException from label157 to label158 with label018;
+        catch java.net.MalformedURLException from label159 to label160 with label018;
+        catch java.net.MalformedURLException from label161 to label162 with label018;
+        catch java.net.MalformedURLException from label163 to label164 with label018;
+        catch java.net.MalformedURLException from label165 to label166 with label018;
+        catch java.net.MalformedURLException from label167 to label168 with label018;
+        catch java.net.MalformedURLException from label169 to label170 with label018;
+        catch java.net.MalformedURLException from label171 to label172 with label018;
+        catch java.net.MalformedURLException from label173 to label174 with label018;
+        catch java.net.MalformedURLException from label175 to label176 with label018;
+        catch java.io.IOException from label054 to label055 with label178;
+        catch java.io.IOException from label056 to label057 with label178;
+        catch java.io.IOException from label058 to label059 with label178;
+        catch java.io.IOException from label060 to label061 with label178;
+        catch java.io.IOException from label062 to label063 with label178;
+        catch java.io.IOException from label064 to label065 with label178;
+        catch java.io.IOException from label066 to label067 with label178;
+        catch java.io.IOException from label068 to label069 with label178;
+        catch java.io.IOException from label070 to label071 with label178;
+        catch java.io.IOException from label072 to label073 with label178;
+        catch java.io.IOException from label074 to label075 with label178;
+        catch java.io.IOException from label076 to label077 with label178;
+        catch java.io.IOException from label078 to label079 with label178;
+        catch java.io.IOException from label080 to label081 with label178;
+        catch java.io.IOException from label082 to label083 with label178;
+        catch java.io.IOException from label085 to label086 with label178;
+        catch java.io.IOException from label087 to label089 with label178;
+        catch java.io.IOException from label090 to label091 with label178;
+        catch java.io.IOException from label092 to label093 with label178;
+        catch java.io.IOException from label096 to label097 with label178;
+        catch java.io.IOException from label098 to label099 with label178;
+        catch java.io.IOException from label100 to label101 with label178;
+        catch java.io.IOException from label101 to label102 with label178;
+        catch java.io.IOException from label103 to label104 with label178;
+        catch java.io.IOException from label106 to label107 with label178;
+        catch java.io.IOException from label108 to label109 with label178;
+        catch java.io.IOException from label110 to label111 with label178;
+        catch java.io.IOException from label112 to label113 with label178;
+        catch java.io.IOException from label114 to label115 with label178;
+        catch java.io.IOException from label117 to label118 with label178;
+        catch java.io.IOException from label119 to label121 with label178;
+        catch java.io.IOException from label122 to label123 with label178;
+        catch java.io.IOException from label124 to label125 with label178;
+        catch java.io.IOException from label127 to label128 with label178;
+        catch java.io.IOException from label129 to label130 with label178;
+        catch java.io.IOException from label131 to label132 with label178;
+        catch java.io.IOException from label134 to label135 with label178;
+        catch java.io.IOException from label137 to label138 with label178;
+        catch java.io.IOException from label139 to label140 with label178;
+        catch java.io.IOException from label141 to label142 with label178;
+        catch java.io.IOException from label143 to label144 with label178;
+        catch java.io.IOException from label145 to label146 with label178;
+        catch java.io.IOException from label147 to label148 with label178;
+        catch java.io.IOException from label149 to label150 with label178;
+        catch java.io.IOException from label151 to label152 with label178;
+        catch java.io.IOException from label153 to label154 with label178;
+        catch java.io.IOException from label155 to label156 with label178;
+        catch java.io.IOException from label157 to label158 with label178;
+        catch java.io.IOException from label159 to label160 with label178;
+        catch java.io.IOException from label161 to label162 with label178;
+        catch java.io.IOException from label163 to label164 with label178;
+        catch java.io.IOException from label165 to label166 with label178;
+        catch java.io.IOException from label167 to label168 with label178;
+        catch java.io.IOException from label169 to label170 with label178;
+        catch java.io.IOException from label171 to label172 with label178;
+        catch java.io.IOException from label173 to label174 with label178;
+        catch java.io.IOException from label175 to label176 with label178;
+        catch java.net.MalformedURLException from label181 to label182 with label018;
+        catch java.net.MalformedURLException from label184 to label185 with label018;
+        catch java.net.MalformedURLException from label186 to label187 with label018;
+        catch java.net.MalformedURLException from label188 to label189 with label018;
+        catch java.net.MalformedURLException from label190 to label191 with label018;
+        catch java.net.MalformedURLException from label192 to label193 with label018;
+        catch java.net.MalformedURLException from label196 to label197 with label018;
+        catch java.net.MalformedURLException from label198 to label199 with label018;
+        catch java.net.MalformedURLException from label200 to label201 with label018;
+        catch java.net.MalformedURLException from label202 to label203 with label018;
+        catch java.net.MalformedURLException from label205 to label206 with label018;
+        catch java.net.MalformedURLException from label207 to label208 with label018;
+        catch java.net.MalformedURLException from label210 to label211 with label018;
+        catch java.net.MalformedURLException from label213 to label214 with label018;
+        catch java.net.MalformedURLException from label215 to label216 with label018;
+        catch java.net.MalformedURLException from label217 to label218 with label018;
+        catch java.net.MalformedURLException from label218 to label219 with label018;
+        catch java.net.MalformedURLException from label220 to label221 with label018;
+        catch java.net.MalformedURLException from label224 to label225 with label018;
+        catch java.net.MalformedURLException from label226 to label227 with label018;
+        catch java.io.IOException from label181 to label182 with label178;
+        catch java.io.IOException from label184 to label185 with label178;
+        catch java.io.IOException from label186 to label187 with label178;
+        catch java.io.IOException from label188 to label189 with label178;
+        catch java.io.IOException from label190 to label191 with label178;
+        catch java.io.IOException from label192 to label193 with label178;
+        catch java.io.IOException from label196 to label197 with label178;
+        catch java.io.IOException from label198 to label199 with label178;
+        catch java.io.IOException from label200 to label201 with label178;
+        catch java.io.IOException from label202 to label203 with label178;
+        catch java.io.IOException from label205 to label206 with label178;
+        catch java.io.IOException from label207 to label208 with label178;
+        catch java.io.IOException from label210 to label211 with label178;
+        catch java.io.IOException from label213 to label214 with label178;
+        catch java.io.IOException from label215 to label216 with label178;
+        catch java.io.IOException from label217 to label218 with label178;
+        catch java.io.IOException from label218 to label219 with label178;
+        catch java.io.IOException from label220 to label221 with label178;
+        catch java.io.IOException from label224 to label225 with label178;
+        catch java.io.IOException from label226 to label227 with label178;
+    }
+
+    public android.os.IBinder onBind(android.content.Intent)
+    {
+        com.psvstudio.pushservice.PSService this;
+        android.content.Intent parameter0;
+
+        nop;
+
+        this := @this: com.psvstudio.pushservice.PSService;
+
+        parameter0 := @parameter0: android.content.Intent;
+
+        this.<com.psvstudio.pushservice.PSService: android.os.IBinder ipcBinder_0> = parameter0;
+
+        this.<com.psvstudio.pushservice.PSService: android.os.IBinder ipcBinder_0> = parameter0;
+
+        return parameter0;
+    }
+
+    public void onCreate()
+    {
+        com.psvstudio.pushservice.PSService $r0;
+        android.content.ContentResolver $r1;
+        java.lang.String $r2, varReplacer752;
+
+        nop;
+
+        $r0 := @this: com.psvstudio.pushservice.PSService;
+
+        specialinvoke $r0.<android.app.Service: void onCreate()>();
+
+        $r1 = virtualinvoke $r0.<com.psvstudio.pushservice.PSService: android.content.ContentResolver getContentResolver()>();
+
+        varReplacer752 = "android_id";
+
+        $r2 = staticinvoke <android.provider.Settings$Secure: java.lang.String getString(android.content.ContentResolver,java.lang.String)>($r1, varReplacer752);
+
+        $r0.<com.psvstudio.pushservice.PSService: java.lang.String android_id> = $r2;
+
+        return;
+    }
+
+    public void onDestroy()
+    {
+        com.psvstudio.pushservice.PSService $r0;
+        int varReplacer757;
+
+        nop;
+
+        $r0 := @this: com.psvstudio.pushservice.PSService;
+
+        varReplacer757 = 0;
+
+        $r0.<com.psvstudio.pushservice.PSService: boolean isRunning> = varReplacer757;
+
+        specialinvoke $r0.<android.app.Service: void onDestroy()>();
+
+        return;
+    }
+
+    public int onStartCommand(android.content.Intent, int, int)
+    {
+        com.psvstudio.pushservice.PSService $r0;
+        android.content.Intent $r1;
+        int $i0, $i1, varReplacer753, varReplacer756;
+        java.lang.Thread $r2;
+        java.lang.String varReplacer754, varReplacer755;
+
+        nop;
+
+        $r0 := @this: com.psvstudio.pushservice.PSService;
+
+        $r1 := @parameter0: android.content.Intent;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        varReplacer754 = "psvpush_UnityPlugin";
+
+        varReplacer755 = "PSService.onStartCommand.Start ok";
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>(varReplacer754, varReplacer755);
+
+        virtualinvoke $r0.<com.psvstudio.pushservice.PSService: void readFlags(int)>($i0);
+
+        varReplacer756 = 1;
+
+        $r0.<com.psvstudio.pushservice.PSService: boolean isRunning> = varReplacer756;
+
+        $r2 = $r0.<com.psvstudio.pushservice.PSService: java.lang.Thread PSServiceTask>;
+
+        virtualinvoke $r2.<java.lang.Thread: void start()>();
+
+        varReplacer753 = 2;
+
+        return varReplacer753;
+    }
+
+    void readFlags(int)
+    {
+        com.psvstudio.pushservice.PSService $r0;
+        int $i0, $i1;
+        java.lang.String varReplacer758, varReplacer759, varReplacer760, varReplacer761;
+
+        nop;
+
+        $r0 := @this: com.psvstudio.pushservice.PSService;
+
+        $i0 := @parameter0: int;
+
+        $i1 = $i0 & 1;
+
+        if $i1 != 1 goto label1;
+
+        varReplacer760 = "psvpush_UnityPlugin";
+
+        varReplacer761 = "START_FLAG_REDELIVERY";
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>(varReplacer760, varReplacer761);
+
+     label1:
+        $i0 = $i0 & 2;
+
+        if $i0 != 2 goto label2;
+
+        varReplacer758 = "psvpush_UnityPlugin";
+
+        varReplacer759 = "START_FLAG_RETRY";
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>(varReplacer758, varReplacer759);
+
+     label2:
+        return;
+    }
+}

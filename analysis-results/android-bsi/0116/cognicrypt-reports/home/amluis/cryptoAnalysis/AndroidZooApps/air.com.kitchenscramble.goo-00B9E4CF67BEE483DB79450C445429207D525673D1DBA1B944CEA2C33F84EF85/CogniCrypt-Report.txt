@@ -1,0 +1,109 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r8
+		Type: byte[]
+		Statement: $r8 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest(byte[])>($r8)
+		Method: <com.rockyou.gpgsextension.basegameutils.GameHelperUtils: java.lang.String getSHA1CertFingerprint(android.content.Context)>
+		SHA-256: b95cd9a42f4be3abf3fd2df0455645f6074fd03b611ae8a509eee3fa3cf10597
+		Secure: false
+	Object:
+		Variable: $r8
+		Type: byte[]
+		Statement: $r8 = virtualinvoke $r7.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.playdom.msdk.internal.FacebookUIProxy: void onCreate(android.os.Bundle)>
+		SHA-256: 12590c7193d7fbd9b2cccd658f7ae17439eba114d23c35002083cd4130adbb0d
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r0.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.facebook.internal.Utility: java.lang.String hashBytes(java.security.MessageDigest,byte[])>
+		SHA-256: 1bd65c7e3ef7c5880ee054dd01ba963cb9b0d277e32cad1c7526c867dab34e4b
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer933)
+		Method: <com.facebook.internal.Utility: java.lang.String hashWithAlgorithm(java.lang.String,byte[])>
+		SHA-256: 208da5a0a8ecbfefa0f44b8fecf37af899be42fdd2e6710c44833840622db634
+		Secure: false
+	Object:
+		Variable: $r7
+		Type: java.security.MessageDigest
+		Statement: $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer386)
+		Method: <com.playdom.msdk.internal.FacebookUIProxy: void onCreate(android.os.Bundle)>
+		SHA-256: 41cb6815bd172536ec8d1f3ee1e9180d302fa4b478df4ee69ad1c48c615fb34d
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: java.security.MessageDigest
+		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2033)
+		Method: <com.rockyou.gpgsextension.basegameutils.GameHelperUtils: java.lang.String getSHA1CertFingerprint(android.content.Context)>
+		SHA-256: df32b1198352bfa1389d6151060e65e93dee57e8c83c1a01620557bfc5dc1ab4
+		Secure: false
+
+Findings in Java Class: com.playdom.msdk.internal.FacebookUIProxy
+
+	 in Method: void onCreate(android.os.Bundle)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #41cb6815bd172536ec8d1f3ee1e9180d302fa4b478df4ee69ad1c48c615fb34d)
+			First parameter (with value "SHA") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer386)
+
+
+Findings in Java Class: com.facebook.internal.Utility
+
+	 in Method: java.lang.String hashWithAlgorithm(java.lang.String,byte[])
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #208da5a0a8ecbfefa0f44b8fecf37af899be42fdd2e6710c44833840622db634)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer933)
+
+
+Findings in Java Class: com.rockyou.gpgsextension.basegameutils.GameHelperUtils
+
+	 in Method: java.lang.String getSHA1CertFingerprint(android.content.Context)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #df32b1198352bfa1389d6151060e65e93dee57e8c83c1a01620557bfc5dc1ab4)
+			First parameter (with value "SHA1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2033)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 3
+=====================================================================

@@ -1,0 +1,134 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer383)
+		Method: <com.paypal.android.sdk.X: void <init>()>
+		SHA-256: 96422c391c6858f84c44a0957e54bccc814c14a78c2e60fd35770c8e49a2a956
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: java.security.KeyStore
+		Statement: $r0 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer388)
+		Method: <com.paypal.android.sdk.V: java.security.KeyStore b()>
+		SHA-256: 9aeb80138d89ba1332e7c893ff653abc83acb5962d4123b04a661c312eb7b58b
+		Secure: false
+	Object:
+		Variable: $r10
+		Type: javax.crypto.Mac
+		Statement: $r10 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer470)
+		Method: <com.paypal.android.sdk.z: org.apache.http.Header a(java.lang.String,java.util.List,java.lang.String)>
+		SHA-256: acee0d6e44228fdfdfea77bd68300121b6d25952691ae91b05d703f83c2e4bdd
+		Secure: false
+	Object:
+		Variable: $r11
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r11.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r12, varReplacer469)
+		Method: <com.paypal.android.sdk.z: org.apache.http.Header a(java.lang.String,java.util.List,java.lang.String)>
+		SHA-256: 2dd612f016e9c7cb0024fdd3056967350c8a266ec674b7bf202db46b9aba2cbc
+		Secure: false
+	Object:
+		Variable: varReplacer469
+		Type: java.lang.String
+		Statement: specialinvoke $r11.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r12, varReplacer469)
+		Method: <com.paypal.android.sdk.z: org.apache.http.Header a(java.lang.String,java.util.List,java.lang.String)>
+		SHA-256: e3b1b6d3e02e2134eb7b8724aced2daad86b0d6a7e4e9a8909bda37d487ee138
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: java.security.KeyStore
+		Statement: $r0 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer386)
+		Method: <com.paypal.android.sdk.V: java.security.KeyStore b()>
+		SHA-256: d0099ef222d63b35d63d79f291e1cd622ad0626ea9b4e99266c988c0d23568aa
+		Secure: false
+	Object:
+		Variable: $r12
+		Type: byte[]
+		Statement: $r12 = virtualinvoke $r10.<javax.crypto.Mac: byte[] doFinal()>()
+		Method: <com.paypal.android.sdk.z: org.apache.http.Header a(java.lang.String,java.util.List,java.lang.String)>
+		SHA-256: 29aea692653404fca082f5e0e38bd6a630ac3aa984b92e1d71d1078d4dfb3cef
+		Secure: false
+
+Findings in Java Class: com.paypal.android.sdk.V
+
+	 in Method: java.security.KeyStore b()
+		NeverTypeOfError violating CrySL rule for java.security.KeyStore (on Object #d0099ef222d63b35d63d79f291e1cd622ad0626ea9b4e99266c988c0d23568aa)
+			Second parameter should never be of type java.lang.String.
+			at statement: virtualinvoke $r0.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r2, $r4)
+
+		NeverTypeOfError violating CrySL rule for java.security.KeyStore (on Object #9aeb80138d89ba1332e7c893ff653abc83acb5962d4123b04a661c312eb7b58b)
+			Second parameter should never be of type java.lang.String.
+			at statement: virtualinvoke $r0.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r2, $r4)
+
+		ConstraintError violating CrySL rule for java.security.KeyStore (on Object #9aeb80138d89ba1332e7c893ff653abc83acb5962d4123b04a661c312eb7b58b)
+			First parameter (with value "JKS") should be any of {BKS, PKCS12-DEF, BCPKCS12, PKCS12, BouncyCastle}
+			at statement: $r0 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer388)
+
+
+Findings in Java Class: com.paypal.android.sdk.z
+
+	 in Method: org.apache.http.Header a(java.lang.String,java.util.List,java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r11.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r12, varReplacer469)
+
+		ConstraintError violating CrySL rule for javax.crypto.Mac (on Object #acee0d6e44228fdfdfea77bd68300121b6d25952691ae91b05d703f83c2e4bdd)
+			First parameter (with value "HmacSHA1") should be any of {HmacSHA224, HmacSHA256, HmacSHA384, HmacSHA512}
+			at statement: $r10 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer470)
+
+
+Findings in Java Class: com.paypal.android.sdk.X
+
+	 in Method: void <init>()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer381, r6, varReplacer381)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer381, r6, varReplacer381)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 7
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
+	RequiredPredicateError: 3
+	NeverTypeOfError: 2
+=====================================================================

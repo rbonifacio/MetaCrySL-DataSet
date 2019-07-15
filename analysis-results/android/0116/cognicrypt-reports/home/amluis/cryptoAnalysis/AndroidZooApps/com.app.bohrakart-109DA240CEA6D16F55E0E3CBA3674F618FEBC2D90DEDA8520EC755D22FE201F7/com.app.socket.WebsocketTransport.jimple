@@ -1,0 +1,386 @@
+class com.app.socket.WebsocketTransport extends org.java_websocket.client.WebSocketClient implements com.app.socket.IOTransport
+{
+    private static final java.util.regex.Pattern PATTERN_HTTP;
+    public static final java.lang.String TRANSPORT_NAME;
+    private com.app.socket.IOConnection connection;
+
+    static void <clinit>()
+    {
+        java.util.regex.Pattern $r0;
+        java.lang.String varReplacer7640;
+
+        nop;
+
+        varReplacer7640 = "^http";
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>(varReplacer7640);
+
+        <com.app.socket.WebsocketTransport: java.util.regex.Pattern PATTERN_HTTP> = $r0;
+
+        return;
+    }
+
+    public void <init>(java.net.URI, com.app.socket.IOConnection)
+    {
+        com.app.socket.WebsocketTransport $r0;
+        java.net.URI $r1;
+        com.app.socket.IOConnection $r2;
+        javax.net.ssl.SSLContext $r3, $r4;
+        int $i0;
+        java.lang.String $r5, $r6, varReplacer7649, varReplacer7650, varReplacer7651, varReplacer7652, varReplacer7653, varReplacer7657, varReplacer7658;
+        boolean $z0;
+        java.lang.Throwable $r7, $r8, $r9;
+        org.java_websocket.client.DefaultSSLWebSocketClientFactory r10;
+        java.security.NoSuchAlgorithmException r11;
+        java.security.NoSuchProviderException r12;
+        java.security.KeyManagementException r13;
+        null_type varReplacer7654, varReplacer7655, varReplacer7656;
+
+        nop;
+
+        $r0 := @this: com.app.socket.WebsocketTransport;
+
+        $r1 := @parameter0: java.net.URI;
+
+        $r2 := @parameter1: com.app.socket.IOConnection;
+
+        specialinvoke $r0.<org.java_websocket.client.WebSocketClient: void <init>(java.net.URI)>($r1);
+
+        $r0.<com.app.socket.WebsocketTransport: com.app.socket.IOConnection connection> = $r2;
+
+        $r3 = null;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 > 19 goto label05;
+
+     label01:
+        varReplacer7649 = "Below Lollipop";
+
+        varReplacer7650 = "Below Lollipop";
+
+        staticinvoke <android.util.Log: int v(java.lang.String,java.lang.String)>(varReplacer7649, varReplacer7649);
+
+        varReplacer7657 = "TLS";
+
+        varReplacer7658 = "HarmonyJSSE";
+
+        $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String,java.lang.String)>(varReplacer7657, varReplacer7658);
+
+     label02:
+        $r3 = $r4;
+
+     label03:
+        varReplacer7654 = null;
+
+        varReplacer7655 = null;
+
+        varReplacer7656 = null;
+
+        virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer7654, varReplacer7654, varReplacer7654);
+
+     label04:
+        $r5 = "wss";
+
+        $r6 = virtualinvoke $r1.<java.net.URI: java.lang.String getScheme()>();
+
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean equals(java.lang.Object)>($r6);
+
+        if $z0 == 0 goto label10;
+
+        if $r3 == null goto label10;
+
+        r10 = new org.java_websocket.client.DefaultSSLWebSocketClientFactory;
+
+        specialinvoke r10.<org.java_websocket.client.DefaultSSLWebSocketClientFactory: void <init>(javax.net.ssl.SSLContext)>($r3);
+
+        virtualinvoke $r0.<com.app.socket.WebsocketTransport: void setWebSocketFactory(org.java_websocket.client.WebSocketClient$WebSocketClientFactory)>(r10);
+
+        return;
+
+     label05:
+        varReplacer7651 = "Lollipop & above";
+
+        varReplacer7652 = "Lollipop & above";
+
+        staticinvoke <android.util.Log: int v(java.lang.String,java.lang.String)>(varReplacer7651, varReplacer7651);
+
+        varReplacer7653 = "SSL";
+
+        $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer7653);
+
+     label06:
+        $r3 = $r4;
+
+        goto label03;
+
+     label07:
+        $r7 := @caughtexception;
+
+        r11 = (java.security.NoSuchAlgorithmException) $r7;
+
+        virtualinvoke r11.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        goto label03;
+
+     label08:
+        $r8 := @caughtexception;
+
+        r12 = (java.security.NoSuchProviderException) $r8;
+
+        virtualinvoke r12.<java.security.NoSuchProviderException: void printStackTrace()>();
+
+        goto label03;
+
+     label09:
+        $r9 := @caughtexception;
+
+        r13 = (java.security.KeyManagementException) $r9;
+
+        virtualinvoke r13.<java.security.KeyManagementException: void printStackTrace()>();
+
+        goto label04;
+
+     label10:
+        return;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label07;
+        catch java.security.NoSuchProviderException from label01 to label02 with label08;
+        catch java.security.KeyManagementException from label03 to label04 with label09;
+        catch java.security.NoSuchAlgorithmException from label05 to label06 with label07;
+        catch java.security.NoSuchProviderException from label05 to label06 with label08;
+    }
+
+    public static com.app.socket.IOTransport create(java.net.URL, com.app.socket.IOConnection)
+    {
+        java.net.URL $r0;
+        com.app.socket.IOConnection $r1;
+        java.lang.StringBuilder $r2;
+        java.util.regex.Pattern $r3;
+        java.lang.String $r4, varReplacer7645, varReplacer7646, varReplacer7647, varReplacer7648;
+        java.util.regex.Matcher $r5;
+        java.net.URI $r6;
+        com.app.socket.WebsocketTransport $r7;
+
+        nop;
+
+        $r0 := @parameter0: java.net.URL;
+
+        $r1 := @parameter1: com.app.socket.IOConnection;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = <com.app.socket.WebsocketTransport: java.util.regex.Pattern PATTERN_HTTP>;
+
+        $r4 = virtualinvoke $r0.<java.net.URL: java.lang.String toString()>();
+
+        $r5 = virtualinvoke $r3.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r4);
+
+        varReplacer7648 = "ws";
+
+        $r4 = virtualinvoke $r5.<java.util.regex.Matcher: java.lang.String replaceFirst(java.lang.String)>(varReplacer7648);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        varReplacer7646 = "/socket.io/1/";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7646);
+
+        varReplacer7645 = "websocket";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7645);
+
+        varReplacer7647 = "/";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7647);
+
+        $r4 = virtualinvoke $r1.<com.app.socket.IOConnection: java.lang.String getSessionId()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = staticinvoke <java.net.URI: java.net.URI create(java.lang.String)>($r4);
+
+        $r7 = new com.app.socket.WebsocketTransport;
+
+        specialinvoke $r7.<com.app.socket.WebsocketTransport: void <init>(java.net.URI,com.app.socket.IOConnection)>($r6, $r1);
+
+        return $r7;
+    }
+
+    public boolean canSendBulk()
+    {
+        com.app.socket.WebsocketTransport $r0;
+        int varReplacer8190;
+
+        nop;
+
+        $r0 := @this: com.app.socket.WebsocketTransport;
+
+        varReplacer8190 = 0;
+
+        return varReplacer8190;
+    }
+
+    public void disconnect()
+    {
+        com.app.socket.WebsocketTransport $r0;
+        java.lang.Exception $r1;
+        com.app.socket.IOConnection $r2;
+
+        nop;
+
+        $r0 := @this: com.app.socket.WebsocketTransport;
+
+     label1:
+        virtualinvoke $r0.<com.app.socket.WebsocketTransport: void close()>();
+
+     label2:
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        $r2 = $r0.<com.app.socket.WebsocketTransport: com.app.socket.IOConnection connection>;
+
+        virtualinvoke $r2.<com.app.socket.IOConnection: void transportError(java.lang.Exception)>($r1);
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public java.lang.String getName()
+    {
+        com.app.socket.WebsocketTransport $r0;
+
+        $r0 := @this: com.app.socket.WebsocketTransport;
+
+        return "websocket";
+    }
+
+    public void invalidate()
+    {
+        com.app.socket.WebsocketTransport $r0;
+        null_type varReplacer8135;
+
+        nop;
+
+        $r0 := @this: com.app.socket.WebsocketTransport;
+
+        varReplacer8135 = null;
+
+        $r0.<com.app.socket.WebsocketTransport: com.app.socket.IOConnection connection> = varReplacer8135;
+
+        return;
+    }
+
+    public void onClose(int, java.lang.String, boolean)
+    {
+        com.app.socket.WebsocketTransport $r0;
+        int $i0;
+        java.lang.String $r1;
+        boolean $z0;
+        com.app.socket.IOConnection $r2;
+
+        $r0 := @this: com.app.socket.WebsocketTransport;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $z0 := @parameter2: boolean;
+
+        $r2 = $r0.<com.app.socket.WebsocketTransport: com.app.socket.IOConnection connection>;
+
+        if $r2 == null goto label1;
+
+        $r2 = $r0.<com.app.socket.WebsocketTransport: com.app.socket.IOConnection connection>;
+
+        virtualinvoke $r2.<com.app.socket.IOConnection: void transportDisconnected()>();
+
+     label1:
+        return;
+    }
+
+    public void onError(java.lang.Exception)
+    {
+        com.app.socket.WebsocketTransport $r0;
+        java.lang.Exception $r1;
+
+        $r0 := @this: com.app.socket.WebsocketTransport;
+
+        $r1 := @parameter0: java.lang.Exception;
+
+        return;
+    }
+
+    public void onMessage(java.lang.String)
+    {
+        com.app.socket.WebsocketTransport $r0;
+        java.lang.String $r1;
+        com.app.socket.IOConnection $r2;
+
+        $r0 := @this: com.app.socket.WebsocketTransport;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = $r0.<com.app.socket.WebsocketTransport: com.app.socket.IOConnection connection>;
+
+        if $r2 == null goto label1;
+
+        $r2 = $r0.<com.app.socket.WebsocketTransport: com.app.socket.IOConnection connection>;
+
+        virtualinvoke $r2.<com.app.socket.IOConnection: void transportMessage(java.lang.String)>($r1);
+
+     label1:
+        return;
+    }
+
+    public void onOpen(org.java_websocket.handshake.ServerHandshake)
+    {
+        com.app.socket.WebsocketTransport $r0;
+        org.java_websocket.handshake.ServerHandshake $r1;
+        com.app.socket.IOConnection $r2;
+
+        $r0 := @this: com.app.socket.WebsocketTransport;
+
+        $r1 := @parameter0: org.java_websocket.handshake.ServerHandshake;
+
+        $r2 = $r0.<com.app.socket.WebsocketTransport: com.app.socket.IOConnection connection>;
+
+        if $r2 == null goto label1;
+
+        $r2 = $r0.<com.app.socket.WebsocketTransport: com.app.socket.IOConnection connection>;
+
+        virtualinvoke $r2.<com.app.socket.IOConnection: void transportConnected()>();
+
+     label1:
+        return;
+    }
+
+    public void sendBulk(java.lang.String[]) throws java.io.IOException
+    {
+        com.app.socket.WebsocketTransport $r0;
+        java.lang.String[] $r1;
+        java.lang.RuntimeException $r2;
+        java.lang.String varReplacer8191;
+
+        nop;
+
+        $r0 := @this: com.app.socket.WebsocketTransport;
+
+        $r1 := @parameter0: java.lang.String[];
+
+        $r2 = new java.lang.RuntimeException;
+
+        varReplacer8191 = "Cannot send Bulk!";
+
+        specialinvoke $r2.<java.lang.RuntimeException: void <init>(java.lang.String)>(varReplacer8191);
+
+        throw $r2;
+    }
+}

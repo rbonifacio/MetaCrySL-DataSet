@@ -1,0 +1,119 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r0)
+		Method: <com.google.android.gms.measurement.internal.zzal: java.security.MessageDigest zzbZ(java.lang.String)>
+		SHA-256: 522d713ccdd51fb09c7367c1023d8059fd763d58aa7b393dcc325c80c85cc957
+		Secure: false
+	Object:
+		Variable: $r21
+		Type: byte[]
+		Statement: $r21 = virtualinvoke $r11.<java.security.MessageDigest: byte[] digest(byte[])>($r21)
+		Method: <com.google.android.gms.measurement.internal.zzn: void zzkO()>
+		SHA-256: 5612f1459a8d01e40def18075671523d5cae6b8e4ea8fc218c7c80f87e1be9d3
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1862)
+		Method: <com.github.hiteshsondhi88.libffmpeg.FileUtils: java.lang.String SHA1(java.io.InputStream)>
+		SHA-256: c19816891539263daa142eec69b8ceb928f01a6c7078ca67ede7378eb13891c9
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.github.hiteshsondhi88.libffmpeg.FileUtils: java.lang.String SHA1(java.io.InputStream)>
+		SHA-256: 39e5d7d79d2f5e6b8b1cf9e37c99e0918cc2bc9b0b5ef9034f8ac7d5e59bb681
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1229)
+		Method: <com.android.volley.InternalUtils: java.lang.String sha1Hash(java.lang.String)>
+		SHA-256: 9fdcef22006d40ae965e62c7231f69ccc68f354ac3705aa206145ce1e9393f94
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.android.volley.InternalUtils: java.lang.String sha1Hash(java.lang.String)>
+		SHA-256: 51d771176588bd9b377838ae77608f0ca53802f65bd7d4d703667e5fef52b40b
+		Secure: true
+
+Findings in Java Class: com.google.android.gms.measurement.internal.zzn
+
+	 in Method: void zzkO()
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #522d713ccdd51fb09c7367c1023d8059fd763d58aa7b393dcc325c80c85cc957)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to update, java.security.MessageDigest: byte[] digest(byte[])
+			at statement: $r21 = virtualinvoke $r11.<java.security.MessageDigest: byte[] digest(byte[])>($r21)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #522d713ccdd51fb09c7367c1023d8059fd763d58aa7b393dcc325c80c85cc957)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r11 = staticinvoke <com.google.android.gms.measurement.internal.zzal: java.security.MessageDigest zzbZ(java.lang.String)>(varReplacer1640)
+
+
+Findings in Java Class: com.google.android.gms.measurement.internal.zzal
+
+	 in Method: java.security.MessageDigest zzbZ(java.lang.String)
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #522d713ccdd51fb09c7367c1023d8059fd763d58aa7b393dcc325c80c85cc957)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r0)
+
+
+Findings in Java Class: com.github.hiteshsondhi88.libffmpeg.FileUtils
+
+	 in Method: java.lang.String SHA1(java.io.InputStream)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #c19816891539263daa142eec69b8ceb928f01a6c7078ca67ede7378eb13891c9)
+			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1862)
+
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #c19816891539263daa142eec69b8ceb928f01a6c7078ca67ede7378eb13891c9)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte[]),java.security.MessageDigest: void update(byte)
+			at statement: $r1 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 1
+	IncompleteOperationError: 3
+	TypestateError: 1
+=====================================================================

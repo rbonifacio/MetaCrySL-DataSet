@@ -1,0 +1,1096 @@
+public class org.cocos2dx.lib.AISGeneral extends java.lang.Object
+{
+    static final java.lang.String lastVideoDate;
+
+    public void <init>()
+    {
+        org.cocos2dx.lib.AISGeneral $r0;
+
+        $r0 := @this: org.cocos2dx.lib.AISGeneral;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.util.List getAllDataFromJson(android.content.Context, java.lang.String)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1;
+        java.lang.Exception $r2;
+        java.lang.Object $r3;
+        com.localnotification.NotificationResponse $r4;
+        java.util.List $r5, $r7;
+        int $i0;
+        java.util.Random $r6;
+        com.localnotification.NotificationResponse$MessagesEntity $r8;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+     label01:
+        $r3 = staticinvoke <org.cocos2dx.lib.AISGeneral: java.lang.Object getGSONFromResponse(android.content.Context,java.lang.String,java.lang.Class)>($r0, $r1, class "Lcom/localnotification/NotificationResponse;");
+
+        $r4 = (com.localnotification.NotificationResponse) $r3;
+
+     label02:
+        if $r4 == null goto label12;
+
+     label03:
+        $r5 = virtualinvoke $r4.<com.localnotification.NotificationResponse: java.util.List getMessages()>();
+
+     label04:
+        if $r5 == null goto label12;
+
+     label05:
+        $r5 = virtualinvoke $r4.<com.localnotification.NotificationResponse: java.util.List getMessages()>();
+
+        $i0 = interfaceinvoke $r5.<java.util.List: int size()>();
+
+     label06:
+        if $i0 <= 0 goto label12;
+
+     label07:
+        $r5 = virtualinvoke $r4.<com.localnotification.NotificationResponse: java.util.List getMessages()>();
+
+     label08:
+        $r6 = new java.util.Random;
+
+     label09:
+        specialinvoke $r6.<java.util.Random: void <init>()>();
+
+        $r7 = virtualinvoke $r4.<com.localnotification.NotificationResponse: java.util.List getMessages()>();
+
+        $i0 = interfaceinvoke $r7.<java.util.List: int size()>();
+
+        $i0 = virtualinvoke $r6.<java.util.Random: int nextInt(int)>($i0);
+
+        $r3 = interfaceinvoke $r5.<java.util.List: java.lang.Object get(int)>($i0);
+
+        $r8 = (com.localnotification.NotificationResponse$MessagesEntity) $r3;
+
+        $r5 = virtualinvoke $r8.<com.localnotification.NotificationResponse$MessagesEntity: java.util.List getMessage()>();
+
+     label10:
+        return $r5;
+
+     label11:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r2.<java.lang.Exception: void printStackTrace()>();
+
+     label12:
+        return null;
+
+        catch java.lang.Exception from label01 to label02 with label11;
+        catch java.lang.Exception from label03 to label04 with label11;
+        catch java.lang.Exception from label05 to label06 with label11;
+        catch java.lang.Exception from label07 to label08 with label11;
+        catch java.lang.Exception from label09 to label10 with label11;
+    }
+
+    public static java.lang.String getAppName(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.Throwable $r1;
+        android.content.pm.PackageManager $r2;
+        java.lang.String $r3;
+        android.content.pm.ApplicationInfo $r4;
+        java.lang.CharSequence $r5;
+        android.content.pm.PackageManager$NameNotFoundException r6;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+     label1:
+        $r3 = virtualinvoke $r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        $r4 = virtualinvoke $r2.<android.content.pm.PackageManager: android.content.pm.ApplicationInfo getApplicationInfo(java.lang.String,int)>($r3, 128);
+
+        $r5 = virtualinvoke $r4.<android.content.pm.ApplicationInfo: java.lang.CharSequence loadLabel(android.content.pm.PackageManager)>($r2);
+
+        $r3 = interfaceinvoke $r5.<java.lang.CharSequence: java.lang.String toString()>();
+
+     label2:
+        return $r3;
+
+     label3:
+        $r1 := @caughtexception;
+
+        r6 = (android.content.pm.PackageManager$NameNotFoundException) $r1;
+
+        virtualinvoke r6.<android.content.pm.PackageManager$NameNotFoundException: void printStackTrace()>();
+
+        return "Temp";
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label3;
+    }
+
+    public static java.lang.String getErrorReason(int)
+    {
+        int $i0;
+
+        $i0 := @parameter0: int;
+
+        lookupswitch($i0)
+        {
+            case 0: goto label2;
+            case 1: goto label3;
+            case 2: goto label4;
+            case 3: goto label5;
+            default: goto label1;
+        };
+
+     label1:
+        return "";
+
+     label2:
+        return "Internal error";
+
+     label3:
+        return "Invalid request";
+
+     label4:
+        return "Network Error";
+
+     label5:
+        return "No fill";
+    }
+
+    public static java.lang.Object getGSONFromResponse(android.content.Context, java.lang.String, java.lang.Class)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1;
+        java.lang.Class $r2;
+        java.io.ByteArrayInputStream $r3;
+        java.lang.Exception $r4;
+        com.google.gson.GsonBuilder $r5;
+        java.io.InputStreamReader $r6;
+        byte[] $r7;
+        com.google.gson.Gson $r8;
+        java.lang.Object $r9;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.Class;
+
+        $r3 = new java.io.ByteArrayInputStream;
+
+     label1:
+        $r7 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        specialinvoke $r3.<java.io.ByteArrayInputStream: void <init>(byte[])>($r7);
+
+     label2:
+        $r6 = new java.io.InputStreamReader;
+
+     label3:
+        specialinvoke $r6.<java.io.InputStreamReader: void <init>(java.io.InputStream)>($r3);
+
+     label4:
+        $r5 = new com.google.gson.GsonBuilder;
+
+     label5:
+        specialinvoke $r5.<com.google.gson.GsonBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r5.<com.google.gson.GsonBuilder: com.google.gson.Gson create()>();
+
+        $r9 = virtualinvoke $r8.<com.google.gson.Gson: java.lang.Object fromJson(java.io.Reader,java.lang.Class)>($r6, $r2);
+
+     label6:
+        return $r9;
+
+     label7:
+        $r4 := @caughtexception;
+
+        virtualinvoke $r4.<java.lang.Exception: void printStackTrace()>();
+
+        return null;
+
+        catch java.lang.Exception from label1 to label2 with label7;
+        catch java.lang.Exception from label3 to label4 with label7;
+        catch java.lang.Exception from label5 to label6 with label7;
+    }
+
+    public static final java.lang.String getTestDeviceId(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.StringBuffer $r1;
+        android.content.ContentResolver $r2;
+        java.lang.String $r3, varReplacer962, varReplacer963, varReplacer964, varReplacer966, varReplacer967;
+        android.content.pm.PackageManager $r4;
+        java.security.MessageDigest $r5;
+        byte[] $r6;
+        int $i0, $i1, varReplacer965;
+        java.util.Locale $r7;
+        byte $b2;
+        short $s3;
+        java.lang.StringBuilder $r8;
+        java.lang.Exception $r9;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        varReplacer966 = "android_id";
+
+        $r3 = staticinvoke <android.provider.Settings$Secure: java.lang.String getString(android.content.ContentResolver,java.lang.String)>($r2, varReplacer966);
+
+     label01:
+        $r4 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        varReplacer964 = "com.gameimax.gameimaxStore";
+
+        varReplacer965 = 0;
+
+        virtualinvoke $r4.<android.content.pm.PackageManager: android.content.pm.ApplicationInfo getApplicationInfo(java.lang.String,int)>(varReplacer964, varReplacer965);
+
+        varReplacer963 = "MD5";
+
+        $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer963);
+
+        $r6 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r5.<java.security.MessageDigest: void update(byte[])>($r6);
+
+        $r6 = virtualinvoke $r5.<java.security.MessageDigest: byte[] digest()>();
+
+     label02:
+        $r1 = new java.lang.StringBuffer;
+
+     label03:
+        specialinvoke $r1.<java.lang.StringBuffer: void <init>()>();
+
+     label04:
+        $i0 = 0;
+
+     label05:
+        $i1 = lengthof $r6;
+
+     label06:
+        if $i0 < $i1 goto label09;
+
+     label07:
+        $r3 = virtualinvoke $r1.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        $r7 = staticinvoke <java.util.Locale: java.util.Locale getDefault()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.String: java.lang.String toUpperCase(java.util.Locale)>($r7);
+
+     label08:
+        return $r3;
+
+     label09:
+        $b2 = $r6[$i0];
+
+     label10:
+        $s3 = $b2 & 255;
+
+     label11:
+        $r3 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s3);
+
+     label12:
+        $i1 = virtualinvoke $r3.<java.lang.String: int length()>();
+
+     label13:
+        if $i1 < 2 goto label16;
+
+     label14:
+        virtualinvoke $r1.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>($r3);
+
+     label15:
+        $i0 = $i0 + 1;
+
+        goto label05;
+
+     label16:
+        $r8 = new java.lang.StringBuilder;
+
+     label17:
+        varReplacer967 = "0";
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer967);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label18:
+        goto label12;
+
+     label19:
+        $r9 := @caughtexception;
+
+        varReplacer962 = "";
+
+        return varReplacer962;
+
+        catch java.lang.Exception from label01 to label02 with label19;
+        catch java.lang.Exception from label03 to label04 with label19;
+        catch java.lang.Exception from label05 to label06 with label19;
+        catch java.lang.Exception from label07 to label08 with label19;
+        catch java.lang.Exception from label09 to label10 with label19;
+        catch java.lang.Exception from label11 to label12 with label19;
+        catch java.lang.Exception from label12 to label13 with label19;
+        catch java.lang.Exception from label14 to label15 with label19;
+        catch java.lang.Exception from label17 to label18 with label19;
+    }
+
+    public static final boolean isAisStoreInstalled(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.Exception $r1;
+        android.content.pm.PackageManager $r2;
+        int varReplacer260, varReplacer262, varReplacer263;
+        java.lang.String varReplacer261;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+     label1:
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        varReplacer261 = "com.gameimax.gameimaxStore";
+
+        varReplacer262 = 0;
+
+        virtualinvoke $r2.<android.content.pm.PackageManager: android.content.pm.ApplicationInfo getApplicationInfo(java.lang.String,int)>(varReplacer261, varReplacer262);
+
+     label2:
+        varReplacer263 = 1;
+
+        return varReplacer263;
+
+     label3:
+        $r1 := @caughtexception;
+
+        varReplacer260 = 0;
+
+        return varReplacer260;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public static final boolean isNeedToShowAdColonyAd(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.util.Calendar $r1;
+        java.lang.StringBuilder $r2;
+        int $i0;
+        java.lang.String $r3, $r4;
+        android.content.SharedPreferences $r5;
+        boolean $z0;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = staticinvoke <java.util.Calendar: java.util.Calendar getInstance()>();
+
+        $r2 = new java.lang.StringBuilder;
+
+        $i0 = virtualinvoke $r1.<java.util.Calendar: int get(int)>(5);
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>($r3);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("-");
+
+        $i0 = virtualinvoke $r1.<java.util.Calendar: int get(int)>(2);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("-");
+
+        $i0 = virtualinvoke $r1.<java.util.Calendar: int get(int)>(1);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r4 = virtualinvoke $r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        $r5 = virtualinvoke $r0.<android.content.Context: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>($r4, 0);
+
+        $r4 = interfaceinvoke $r5.<android.content.SharedPreferences: java.lang.String getString(java.lang.String,java.lang.String)>("lastVideoDate", "15-08-1947");
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>($r4);
+
+        if $z0 == 0 goto label1;
+
+        return 0;
+
+     label1:
+        return 1;
+    }
+
+    public static boolean isNotificationFileexistsInAssets(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.Throwable $r1;
+        android.content.res.AssetManager $r2;
+        java.io.IOException r3;
+        int varReplacer610, varReplacer612;
+        java.lang.String varReplacer611;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+     label1:
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.res.AssetManager getAssets()>();
+
+        varReplacer611 = "multiLangText.json";
+
+        virtualinvoke $r2.<android.content.res.AssetManager: java.io.InputStream open(java.lang.String)>(varReplacer611);
+
+     label2:
+        varReplacer612 = 1;
+
+        return varReplacer612;
+
+     label3:
+        $r1 := @caughtexception;
+
+        r3 = (java.io.IOException) $r1;
+
+        virtualinvoke r3.<java.io.IOException: void printStackTrace()>();
+
+        varReplacer610 = 0;
+
+        return varReplacer610;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public static boolean isWebPageisAvailable(java.lang.String)
+    {
+        java.lang.String $r0, $r4;
+        java.lang.Exception $r1;
+        java.net.URL $r2;
+        java.lang.StringBuilder $r3;
+        java.net.URLConnection $r5;
+        java.net.HttpURLConnection $r6;
+        int $i0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r3 = new java.lang.StringBuilder;
+
+     label1:
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("url to check:");
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("url", $r4);
+
+     label2:
+        $r2 = new java.net.URL;
+
+     label3:
+        specialinvoke $r2.<java.net.URL: void <init>(java.lang.String)>($r0);
+
+        $r5 = virtualinvoke $r2.<java.net.URL: java.net.URLConnection openConnection()>();
+
+        $r6 = (java.net.HttpURLConnection) $r5;
+
+        virtualinvoke $r6.<java.net.HttpURLConnection: void setRequestMethod(java.lang.String)>("GET");
+
+        virtualinvoke $r6.<java.net.HttpURLConnection: void connect()>();
+
+        $i0 = virtualinvoke $r6.<java.net.HttpURLConnection: int getResponseCode()>();
+
+     label4:
+        if $i0 != 200 goto label6;
+
+        return 1;
+
+     label5:
+        $r1 := @caughtexception;
+
+        $r0 = virtualinvoke $r1.<java.lang.Exception: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("isWebPageisAvailable", $r0);
+
+     label6:
+        return 0;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    public static java.lang.String makeWebServiceCall(android.content.Context, java.lang.String, java.lang.String, java.lang.String, java.util.ArrayList, java.util.ArrayList)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, $r2, $r3;
+        java.util.ArrayList $r4, $r5;
+        java.lang.Exception $r6;
+        java.net.URL $r7;
+        java.lang.StringBuilder $r8;
+        java.io.BufferedReader $r9;
+        java.net.URLConnection $r10;
+        java.net.HttpURLConnection $r11;
+        int $i0, $i1;
+        java.io.OutputStream $r12;
+        byte[] $r13;
+        java.io.InputStream $r14;
+        java.io.InputStreamReader $r15;
+        java.lang.Object $r16;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: java.lang.String;
+
+        $r4 := @parameter4: java.util.ArrayList;
+
+        $r5 := @parameter5: java.util.ArrayList;
+
+        $r7 = new java.net.URL;
+
+     label01:
+        specialinvoke $r7.<java.net.URL: void <init>(java.lang.String)>($r1);
+
+        $r10 = virtualinvoke $r7.<java.net.URL: java.net.URLConnection openConnection()>();
+
+        $r11 = (java.net.HttpURLConnection) $r10;
+
+        virtualinvoke $r11.<java.net.HttpURLConnection: void setDoOutput(boolean)>(1);
+
+        virtualinvoke $r11.<java.net.HttpURLConnection: void setRequestMethod(java.lang.String)>("POST");
+
+        virtualinvoke $r11.<java.net.HttpURLConnection: void setRequestProperty(java.lang.String,java.lang.String)>("Content-type", "text/xml; charset=utf-8");
+
+     label02:
+        $r8 = new java.lang.StringBuilder;
+
+     label03:
+        $r1 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r2);
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>($r1);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r1 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r11.<java.net.HttpURLConnection: void setRequestProperty(java.lang.String,java.lang.String)>("SOAPAction", $r1);
+
+        virtualinvoke $r11.<java.net.HttpURLConnection: void setDoInput(boolean)>(1);
+
+     label04:
+        $r8 = new java.lang.StringBuilder;
+
+     label05:
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>("<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><");
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" xmlns=\"");
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\">");
+
+        $r1 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label06:
+        $i0 = 0;
+
+     label07:
+        $i1 = virtualinvoke $r4.<java.util.ArrayList: int size()>();
+
+     label08:
+        if $i0 < $i1 goto label20;
+
+        $r8 = new java.lang.StringBuilder;
+
+     label09:
+        $r1 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r1);
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>($r1);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("</");
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("></soap:Body></soap:Envelope>");
+
+        $r1 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r12 = virtualinvoke $r11.<java.net.HttpURLConnection: java.io.OutputStream getOutputStream()>();
+
+        $r13 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r12.<java.io.OutputStream: void write(byte[])>($r13);
+
+        $i0 = virtualinvoke $r11.<java.net.HttpURLConnection: int getResponseCode()>();
+
+     label10:
+        $r8 = new java.lang.StringBuilder;
+
+     label11:
+        $r1 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>($r1);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" asd");
+
+        $r1 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("response code", $r1);
+
+        $r14 = virtualinvoke $r11.<java.net.HttpURLConnection: java.io.InputStream getInputStream()>();
+
+     label12:
+        $r9 = new java.io.BufferedReader;
+
+        $r15 = new java.io.InputStreamReader;
+
+     label13:
+        specialinvoke $r15.<java.io.InputStreamReader: void <init>(java.io.InputStream)>($r14);
+
+        specialinvoke $r9.<java.io.BufferedReader: void <init>(java.io.Reader)>($r15);
+
+     label14:
+        $r8 = new java.lang.StringBuilder;
+
+     label15:
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+     label16:
+        $r1 = virtualinvoke $r9.<java.io.BufferedReader: java.lang.String readLine()>();
+
+     label17:
+        if $r1 != null goto label23;
+
+     label18:
+        $r1 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label19:
+        return $r1;
+
+     label20:
+        $r8 = new java.lang.StringBuilder;
+
+     label21:
+        $r1 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r1);
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>($r1);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("<");
+
+        $r16 = virtualinvoke $r4.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r1 = (java.lang.String) $r16;
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(">");
+
+        $r16 = virtualinvoke $r5.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r1 = (java.lang.String) $r16;
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("</");
+
+        $r16 = virtualinvoke $r4.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r1 = (java.lang.String) $r16;
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(">");
+
+        $r1 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label22:
+        $i0 = $i0 + 1;
+
+        goto label07;
+
+     label23:
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+     label24:
+        goto label16;
+
+     label25:
+        $r6 := @caughtexception;
+
+        virtualinvoke $r6.<java.lang.Exception: void printStackTrace()>();
+
+        return null;
+
+        catch java.lang.Exception from label01 to label02 with label25;
+        catch java.lang.Exception from label03 to label04 with label25;
+        catch java.lang.Exception from label05 to label06 with label25;
+        catch java.lang.Exception from label07 to label08 with label25;
+        catch java.lang.Exception from label09 to label10 with label25;
+        catch java.lang.Exception from label11 to label12 with label25;
+        catch java.lang.Exception from label13 to label14 with label25;
+        catch java.lang.Exception from label15 to label17 with label25;
+        catch java.lang.Exception from label18 to label19 with label25;
+        catch java.lang.Exception from label21 to label22 with label25;
+        catch java.lang.Exception from label23 to label24 with label25;
+    }
+
+    public static java.lang.String readDataFromFile(java.io.File)
+    {
+        java.io.File $r0;
+        java.io.FileInputStream $r1;
+        java.io.BufferedReader $r2, $r3;
+        java.lang.String $r4, $r6, $r8, varReplacer311;
+        java.io.InputStreamReader $r5;
+        java.lang.StringBuilder $r7;
+        java.lang.Throwable $r9, $r10, $r11, $r12, $r13, $r14;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $r3 = null;
+
+        $r4 = "";
+
+     label01:
+        $r1 = new java.io.FileInputStream;
+
+     label02:
+        specialinvoke $r1.<java.io.FileInputStream: void <init>(java.io.File)>($r0);
+
+     label03:
+        $r2 = new java.io.BufferedReader;
+
+        $r5 = new java.io.InputStreamReader;
+
+     label04:
+        varReplacer311 = "UTF-8";
+
+        specialinvoke $r5.<java.io.InputStreamReader: void <init>(java.io.InputStream,java.lang.String)>($r1, varReplacer311);
+
+        specialinvoke $r2.<java.io.BufferedReader: void <init>(java.io.Reader)>($r5);
+
+     label05:
+        $r6 = virtualinvoke $r2.<java.io.BufferedReader: java.lang.String readLine()>();
+
+     label06:
+        if $r6 != null goto label09;
+
+        if $r2 == null goto label27;
+
+     label07:
+        virtualinvoke $r2.<java.io.BufferedReader: void close()>();
+
+     label08:
+        return $r4;
+
+     label09:
+        $r7 = new java.lang.StringBuilder;
+
+     label10:
+        $r8 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r4);
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>($r8);
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label11:
+        $r4 = $r6;
+
+     label12:
+        $r6 = virtualinvoke $r2.<java.io.BufferedReader: java.lang.String readLine()>();
+
+     label13:
+        goto label06;
+
+     label14:
+        $r9 := @caughtexception;
+
+     label15:
+        if $r3 == null goto label27;
+
+     label16:
+        virtualinvoke $r3.<java.io.BufferedReader: void close()>();
+
+     label17:
+        return $r4;
+
+     label18:
+        $r10 := @caughtexception;
+
+        return $r4;
+
+     label19:
+        $r11 := @caughtexception;
+
+     label20:
+        if $r3 == null goto label22;
+
+     label21:
+        virtualinvoke $r3.<java.io.BufferedReader: void close()>();
+
+     label22:
+        throw $r11;
+
+     label23:
+        $r12 := @caughtexception;
+
+        return $r4;
+
+     label24:
+        $r13 := @caughtexception;
+
+        goto label22;
+
+     label25:
+        $r11 := @caughtexception;
+
+        $r3 = $r2;
+
+        goto label20;
+
+     label26:
+        $r14 := @caughtexception;
+
+        $r3 = $r2;
+
+        goto label15;
+
+     label27:
+        return $r4;
+
+        catch java.io.IOException from label02 to label03 with label14;
+        catch java.io.IOException from label04 to label05 with label14;
+        catch java.lang.Throwable from label01 to label05 with label19;
+        catch java.io.IOException from label05 to label06 with label26;
+        catch java.lang.Throwable from label05 to label06 with label25;
+        catch java.io.IOException from label07 to label08 with label23;
+        catch java.io.IOException from label10 to label11 with label26;
+        catch java.io.IOException from label12 to label13 with label26;
+        catch java.lang.Throwable from label09 to label11 with label25;
+        catch java.lang.Throwable from label12 to label13 with label25;
+        catch java.io.IOException from label16 to label17 with label18;
+        catch java.io.IOException from label21 to label22 with label24;
+    }
+
+    public static java.lang.String readFileFromAssets(android.content.Context, java.lang.String)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1;
+        byte[] $r2;
+        android.content.res.AssetManager $r3;
+        java.io.InputStream $r4;
+        int $i0;
+        java.lang.Throwable $r5;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+     label1:
+        $r3 = virtualinvoke $r0.<android.content.Context: android.content.res.AssetManager getAssets()>();
+
+        $r4 = virtualinvoke $r3.<android.content.res.AssetManager: java.io.InputStream open(java.lang.String)>($r1);
+
+        $i0 = virtualinvoke $r4.<java.io.InputStream: int available()>();
+
+     label2:
+        $r2 = newarray (byte)[$i0];
+
+     label3:
+        virtualinvoke $r4.<java.io.InputStream: int read(byte[])>($r2);
+
+        virtualinvoke $r4.<java.io.InputStream: void close()>();
+
+     label4:
+        $r1 = new java.lang.String;
+
+     label5:
+        specialinvoke $r1.<java.lang.String: void <init>(byte[])>($r2);
+
+     label6:
+        return $r1;
+
+     label7:
+        $r5 := @caughtexception;
+
+        return "";
+
+        catch java.io.IOException from label1 to label2 with label7;
+        catch java.io.IOException from label3 to label4 with label7;
+        catch java.io.IOException from label5 to label6 with label7;
+    }
+
+    public static final void setTodaysDateForAdColony(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.util.Calendar $r1;
+        java.lang.StringBuilder $r2;
+        int $i0;
+        java.lang.String $r3, $r4;
+        android.content.SharedPreferences $r5;
+        android.content.SharedPreferences$Editor $r6;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = staticinvoke <java.util.Calendar: java.util.Calendar getInstance()>();
+
+        $r2 = new java.lang.StringBuilder;
+
+        $i0 = virtualinvoke $r1.<java.util.Calendar: int get(int)>(5);
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>($r3);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("-");
+
+        $i0 = virtualinvoke $r1.<java.util.Calendar: int get(int)>(2);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("-");
+
+        $i0 = virtualinvoke $r1.<java.util.Calendar: int get(int)>(1);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r4 = virtualinvoke $r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        $r5 = virtualinvoke $r0.<android.content.Context: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>($r4, 0);
+
+        $r6 = interfaceinvoke $r5.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        $r6 = interfaceinvoke $r6.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putString(java.lang.String,java.lang.String)>("lastVideoDate", $r3);
+
+        interfaceinvoke $r6.<android.content.SharedPreferences$Editor: boolean commit()>();
+
+        return;
+    }
+
+    public static void showExitDialogWithMessage(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1;
+        android.app.Activity $r2;
+        org.cocos2dx.lib.AISGeneral$2 $r3;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 = <org.cocos2dx.lib.Cocos2dxActivity: android.app.Activity me>;
+
+        $r3 = new org.cocos2dx.lib.AISGeneral$2;
+
+        specialinvoke $r3.<org.cocos2dx.lib.AISGeneral$2: void <init>(java.lang.String,java.lang.String)>($r0, $r1);
+
+        virtualinvoke $r2.<android.app.Activity: void runOnUiThread(java.lang.Runnable)>($r3);
+
+        return;
+    }
+
+    public static void showSimpleMessgeDialog(android.content.Context, java.lang.String, java.lang.String, java.lang.String)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, $r2, $r3, varReplacer606, varReplacer608, varReplacer609;
+        android.app.AlertDialog$Builder $r4;
+        org.cocos2dx.lib.AISGeneral$1 $r5;
+        android.app.AlertDialog $r6;
+        int varReplacer607;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: java.lang.String;
+
+        $r4 = new android.app.AlertDialog$Builder;
+
+        specialinvoke $r4.<android.app.AlertDialog$Builder: void <init>(android.content.Context)>($r0);
+
+        varReplacer608 = "";
+
+        $r4 = virtualinvoke $r4.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setTitle(java.lang.CharSequence)>(varReplacer608);
+
+        varReplacer609 = "Notification text file could not be found in assets.";
+
+        $r4 = virtualinvoke $r4.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setMessage(java.lang.CharSequence)>(varReplacer609);
+
+        $r5 = new org.cocos2dx.lib.AISGeneral$1;
+
+        specialinvoke $r5.<org.cocos2dx.lib.AISGeneral$1: void <init>()>();
+
+        varReplacer606 = "Ok";
+
+        $r4 = virtualinvoke $r4.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setPositiveButton(java.lang.CharSequence,android.content.DialogInterface$OnClickListener)>(varReplacer606, $r5);
+
+        varReplacer607 = 0;
+
+        $r4 = virtualinvoke $r4.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setCancelable(boolean)>(varReplacer607);
+
+        $r6 = virtualinvoke $r4.<android.app.AlertDialog$Builder: android.app.AlertDialog create()>();
+
+        virtualinvoke $r6.<android.app.AlertDialog: void show()>();
+
+        return;
+    }
+
+    public static void storeDataToFile(java.io.File, java.lang.String)
+    {
+        java.io.File $r0;
+        java.lang.String $r1;
+        java.io.FileOutputStream $r2;
+        byte[] $r3;
+        java.lang.Throwable $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 = new java.io.FileOutputStream;
+
+     label1:
+        specialinvoke $r2.<java.io.FileOutputStream: void <init>(java.io.File)>($r0);
+
+        $r3 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r2.<java.io.FileOutputStream: void write(byte[])>($r3);
+
+        virtualinvoke $r2.<java.io.FileOutputStream: void close()>();
+
+     label2:
+        return;
+
+     label3:
+        $r4 := @caughtexception;
+
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+}

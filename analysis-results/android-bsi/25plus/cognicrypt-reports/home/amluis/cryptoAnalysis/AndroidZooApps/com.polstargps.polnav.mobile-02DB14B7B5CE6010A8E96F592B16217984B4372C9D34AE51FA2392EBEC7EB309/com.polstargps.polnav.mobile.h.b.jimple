@@ -1,0 +1,499 @@
+public class com.polstargps.polnav.mobile.h.b extends java.lang.Object
+{
+    private static final java.lang.String a;
+
+    public void <init>()
+    {
+        com.polstargps.polnav.mobile.h.b $r0;
+
+        $r0 := @this: com.polstargps.polnav.mobile.h.b;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static int a(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer7116, varReplacer7119, varReplacer7120;
+        java.security.MessageDigest $r1;
+        byte[] $r2;
+        int $i0, varReplacer7115, varReplacer7117, varReplacer7118;
+        java.math.BigInteger $r3;
+        java.lang.Throwable $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer7116 = "MD5";
+
+        $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7116);
+
+     label2:
+        $r2 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        $i0 = lengthof $r2;
+
+        varReplacer7115 = 0;
+
+        virtualinvoke $r1.<java.security.MessageDigest: void update(byte[],int,int)>($r2, varReplacer7115, $i0);
+
+        $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>();
+
+        $r3 = new java.math.BigInteger;
+
+        varReplacer7118 = 1;
+
+        specialinvoke $r3.<java.math.BigInteger: void <init>(int,byte[])>(varReplacer7118, $r2);
+
+        $i0 = virtualinvoke $r3.<java.math.BigInteger: int intValue()>();
+
+        return $i0;
+
+     label3:
+        $r4 := @caughtexception;
+
+        varReplacer7119 = "MD5";
+
+        varReplacer7120 = "Exception while getting digest";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer7119, varReplacer7120, $r4);
+
+        varReplacer7117 = 0;
+
+        return varReplacer7117;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+    }
+
+    public static java.lang.String a(java.io.File)
+    {
+        java.io.File $r0;
+        java.security.MessageDigest $r1;
+        java.io.FileInputStream $r2;
+        byte[] $r3;
+        int $i0;
+        java.lang.Throwable $r4, $r6, $r7, $r8, $r12, $r13;
+        java.lang.RuntimeException $r5;
+        java.math.BigInteger $r9;
+        java.lang.String $r10;
+        java.lang.Object[] $r11;
+
+        $r0 := @parameter0: java.io.File;
+
+     label01:
+        $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("MD5");
+
+     label02:
+        $r2 = new java.io.FileInputStream;
+
+     label03:
+        specialinvoke $r2.<java.io.FileInputStream: void <init>(java.io.File)>($r0);
+
+     label04:
+        $r3 = newarray (byte)[8192];
+
+     label05:
+        $i0 = virtualinvoke $r2.<java.io.InputStream: int read(byte[])>($r3);
+
+     label06:
+        if $i0 <= 0 goto label16;
+
+     label07:
+        virtualinvoke $r1.<java.security.MessageDigest: void update(byte[],int,int)>($r3, 0, $i0);
+
+     label08:
+        goto label05;
+
+     label09:
+        $r4 := @caughtexception;
+
+     label10:
+        $r5 = new java.lang.RuntimeException;
+
+        specialinvoke $r5.<java.lang.RuntimeException: void <init>(java.lang.String,java.lang.Throwable)>("Unable to process file for MD5", $r4);
+
+        throw $r5;
+
+     label11:
+        $r6 := @caughtexception;
+
+     label12:
+        virtualinvoke $r2.<java.io.InputStream: void close()>();
+
+     label13:
+        throw $r6;
+
+     label14:
+        $r7 := @caughtexception;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("MD5", "Exception while getting digest", $r7);
+
+        return null;
+
+     label15:
+        $r8 := @caughtexception;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("MD5", "Exception while getting FileInputStream", $r8);
+
+        return null;
+
+     label16:
+        $r3 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>();
+
+     label17:
+        $r9 = new java.math.BigInteger;
+
+     label18:
+        specialinvoke $r9.<java.math.BigInteger: void <init>(int,byte[])>(1, $r3);
+
+        $r10 = virtualinvoke $r9.<java.math.BigInteger: java.lang.String toString(int)>(16);
+
+     label19:
+        $r11 = newarray (java.lang.Object)[1];
+
+        $r11[0] = $r10;
+
+     label20:
+        $r10 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("%32s", $r11);
+
+        $r10 = virtualinvoke $r10.<java.lang.String: java.lang.String replace(char,char)>(32, 48);
+
+     label21:
+        virtualinvoke $r2.<java.io.InputStream: void close()>();
+
+     label22:
+        return $r10;
+
+     label23:
+        $r12 := @caughtexception;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("MD5", "Exception on closing MD5 input stream", $r12);
+
+        return $r10;
+
+     label24:
+        $r13 := @caughtexception;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>("MD5", "Exception on closing MD5 input stream", $r13);
+
+        goto label13;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label14;
+        catch java.io.FileNotFoundException from label03 to label04 with label15;
+        catch java.io.IOException from label05 to label06 with label09;
+        catch java.io.IOException from label07 to label08 with label09;
+        catch java.lang.Throwable from label05 to label06 with label11;
+        catch java.lang.Throwable from label07 to label08 with label11;
+        catch java.lang.Throwable from label10 to label11 with label11;
+        catch java.io.IOException from label12 to label13 with label24;
+        catch java.io.IOException from label16 to label17 with label09;
+        catch java.io.IOException from label18 to label19 with label09;
+        catch java.io.IOException from label20 to label21 with label09;
+        catch java.lang.Throwable from label16 to label21 with label11;
+        catch java.io.IOException from label21 to label22 with label23;
+    }
+
+    public static java.lang.String a(java.io.InputStream)
+    {
+        java.io.InputStream $r0;
+        java.security.MessageDigest $r1;
+        byte[] $r2;
+        int $i0, varReplacer6959, varReplacer6963, varReplacer6964, varReplacer6965, varReplacer6966;
+        java.lang.Throwable $r3, $r5, $r6, $r10, $r11;
+        java.lang.RuntimeException $r4;
+        java.math.BigInteger $r7;
+        java.lang.String $r8, varReplacer6952, varReplacer6953, varReplacer6954, varReplacer6955, varReplacer6956, varReplacer6958, varReplacer6960, varReplacer6961, varReplacer6962;
+        java.lang.Object[] $r9;
+        null_type varReplacer6957;
+
+        nop;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+     label01:
+        varReplacer6962 = "MD5";
+
+        $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6962);
+
+     label02:
+        $r2 = newarray (byte)[8192];
+
+     label03:
+        $i0 = virtualinvoke $r0.<java.io.InputStream: int read(byte[])>($r2);
+
+     label04:
+        if $i0 <= 0 goto label13;
+
+     label05:
+        varReplacer6963 = 0;
+
+        virtualinvoke $r1.<java.security.MessageDigest: void update(byte[],int,int)>($r2, varReplacer6963, $i0);
+
+     label06:
+        goto label03;
+
+     label07:
+        $r3 := @caughtexception;
+
+     label08:
+        $r4 = new java.lang.RuntimeException;
+
+        varReplacer6954 = "Unable to process file for MD5";
+
+        specialinvoke $r4.<java.lang.RuntimeException: void <init>(java.lang.String,java.lang.Throwable)>(varReplacer6954, $r3);
+
+        throw $r4;
+
+     label09:
+        $r5 := @caughtexception;
+
+     label10:
+        virtualinvoke $r0.<java.io.InputStream: void close()>();
+
+     label11:
+        throw $r5;
+
+     label12:
+        $r6 := @caughtexception;
+
+        varReplacer6955 = "MD5";
+
+        varReplacer6956 = "Exception while getting digest";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer6955, varReplacer6956, $r6);
+
+        varReplacer6957 = null;
+
+        return varReplacer6957;
+
+     label13:
+        $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>();
+
+     label14:
+        $r7 = new java.math.BigInteger;
+
+     label15:
+        varReplacer6959 = 1;
+
+        specialinvoke $r7.<java.math.BigInteger: void <init>(int,byte[])>(varReplacer6959, $r2);
+
+        varReplacer6966 = 16;
+
+        $r8 = virtualinvoke $r7.<java.math.BigInteger: java.lang.String toString(int)>(varReplacer6966);
+
+     label16:
+        $r9 = newarray (java.lang.Object)[1];
+
+        $r9[0] = $r8;
+
+     label17:
+        varReplacer6958 = "%32s";
+
+        $r8 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer6958, $r9);
+
+        varReplacer6964 = 32;
+
+        varReplacer6965 = 48;
+
+        $r8 = virtualinvoke $r8.<java.lang.String: java.lang.String replace(char,char)>(varReplacer6964, varReplacer6965);
+
+     label18:
+        virtualinvoke $r0.<java.io.InputStream: void close()>();
+
+     label19:
+        return $r8;
+
+     label20:
+        $r10 := @caughtexception;
+
+        varReplacer6960 = "MD5";
+
+        varReplacer6961 = "Exception on closing MD5 input stream";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer6960, varReplacer6961, $r10);
+
+        return $r8;
+
+     label21:
+        $r11 := @caughtexception;
+
+        varReplacer6952 = "MD5";
+
+        varReplacer6953 = "Exception on closing MD5 input stream";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer6952, varReplacer6953, $r11);
+
+        goto label11;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label12;
+        catch java.io.IOException from label03 to label04 with label07;
+        catch java.io.IOException from label05 to label06 with label07;
+        catch java.lang.Throwable from label03 to label04 with label09;
+        catch java.lang.Throwable from label05 to label06 with label09;
+        catch java.lang.Throwable from label08 to label09 with label09;
+        catch java.io.IOException from label10 to label11 with label21;
+        catch java.io.IOException from label13 to label14 with label07;
+        catch java.io.IOException from label15 to label16 with label07;
+        catch java.io.IOException from label17 to label18 with label07;
+        catch java.lang.Throwable from label13 to label18 with label09;
+        catch java.io.IOException from label18 to label19 with label20;
+    }
+
+    public static boolean a(java.lang.String, java.io.File)
+    {
+        java.lang.String $r0, $r2, $r4;
+        java.io.File $r1;
+        boolean $z0;
+        java.lang.StringBuilder $r3;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.io.File;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r0);
+
+        if $z0 != 0 goto label1;
+
+        if $r1 != null goto label2;
+
+     label1:
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("MD5", "MD5 string empty or updateFile null");
+
+        return 0;
+
+     label2:
+        $r2 = staticinvoke <com.polstargps.polnav.mobile.h.b: java.lang.String a(java.io.File)>($r1);
+
+        if $r2 != null goto label3;
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("MD5", "calculatedDigest null");
+
+        return 0;
+
+     label3:
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Calculated digest: ");
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int v(java.lang.String,java.lang.String)>("MD5", $r4);
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Provided digest: ");
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int v(java.lang.String,java.lang.String)>("MD5", $r4);
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>($r0);
+
+        return $z0;
+    }
+
+    public static java.lang.String b(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer8442, varReplacer8443, varReplacer8444, varReplacer8445;
+        int $i0, $i1, varReplacer8441;
+        java.security.MessageDigest $r1;
+        byte[] $r2;
+        java.lang.StringBuilder $r3;
+        byte $b2;
+        java.lang.Object[] $r4;
+        java.lang.Byte $r5;
+        java.lang.Throwable $r6;
+        null_type varReplacer8440;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 = 0;
+
+     label01:
+        varReplacer8443 = "MD5";
+
+        $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer8443);
+
+        $r2 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        $i1 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        varReplacer8441 = 0;
+
+        virtualinvoke $r1.<java.security.MessageDigest: void update(byte[],int,int)>($r2, varReplacer8441, $i1);
+
+        $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>();
+
+     label02:
+        $r3 = new java.lang.StringBuilder;
+
+     label03:
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+     label04:
+        $i1 = lengthof $r2;
+
+     label05:
+        if $i0 >= $i1 goto label10;
+
+        $b2 = $r2[$i0];
+
+        $r4 = newarray (java.lang.Object)[1];
+
+     label06:
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b2);
+
+     label07:
+        $r4[0] = $r5;
+
+     label08:
+        varReplacer8442 = "%02x";
+
+        $r0 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer8442, $r4);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+     label09:
+        $i0 = $i0 + 1;
+
+        goto label05;
+
+     label10:
+        $r0 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label11:
+        return $r0;
+
+     label12:
+        $r6 := @caughtexception;
+
+        varReplacer8444 = "MD5";
+
+        varReplacer8445 = "Exception while getting digest";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer8444, varReplacer8445, $r6);
+
+        varReplacer8440 = null;
+
+        return varReplacer8440;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label12;
+        catch java.security.NoSuchAlgorithmException from label03 to label04 with label12;
+        catch java.security.NoSuchAlgorithmException from label06 to label07 with label12;
+        catch java.security.NoSuchAlgorithmException from label08 to label09 with label12;
+        catch java.security.NoSuchAlgorithmException from label10 to label11 with label12;
+    }
+}

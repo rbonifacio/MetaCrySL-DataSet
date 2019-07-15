@@ -1,0 +1,282 @@
+public class com.sina.weibo.sdk.utils.AesEncrypt extends java.lang.Object
+{
+
+    public void <init>()
+    {
+        com.sina.weibo.sdk.utils.AesEncrypt $r0;
+
+        $r0 := @this: com.sina.weibo.sdk.utils.AesEncrypt;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String Decrypt(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer10263, varReplacer10264, varReplacer10266, varReplacer10267, varReplacer10269;
+        java.lang.Exception $r1, $r2;
+        byte[] $r3;
+        javax.crypto.Cipher $r4;
+        java.security.Key $r5;
+        int varReplacer10265;
+        null_type varReplacer10268, varReplacer10270;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        $r3 = staticinvoke <com.sina.weibo.sdk.utils.AesEncrypt: byte[] deBase64(java.lang.String)>($r0);
+
+        varReplacer10264 = "AES/ECB/PKCS5Padding";
+
+        $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer10264);
+
+        varReplacer10266 = "Stark";
+
+        $r5 = staticinvoke <com.sina.weibo.sdk.utils.AesEncrypt: java.security.Key generateKey(java.lang.String)>(varReplacer10266);
+
+        varReplacer10265 = 2;
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer10265, $r5);
+
+     label2:
+        $r3 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r3);
+
+     label3:
+        $r0 = new java.lang.String;
+
+     label4:
+        varReplacer10267 = "utf-8";
+
+        specialinvoke $r0.<java.lang.String: void <init>(byte[],java.lang.String)>($r3, varReplacer10267);
+
+     label5:
+        return $r0;
+
+     label6:
+        $r1 := @caughtexception;
+
+     label7:
+        $r0 = virtualinvoke $r1.<java.lang.Exception: java.lang.String getMessage()>();
+
+        varReplacer10263 = "Decrypt";
+
+        staticinvoke <com.sina.weibo.sdk.utils.LogUtil: void e(java.lang.String,java.lang.String)>(varReplacer10263, $r0);
+
+     label8:
+        varReplacer10268 = null;
+
+        return varReplacer10268;
+
+     label9:
+        $r2 := @caughtexception;
+
+        $r0 = virtualinvoke $r2.<java.lang.Exception: java.lang.String getMessage()>();
+
+        varReplacer10269 = "Decrypt";
+
+        staticinvoke <com.sina.weibo.sdk.utils.LogUtil: void e(java.lang.String,java.lang.String)>(varReplacer10269, $r0);
+
+        varReplacer10270 = null;
+
+        return varReplacer10270;
+
+        catch java.lang.Exception from label1 to label2 with label9;
+        catch java.lang.Exception from label2 to label3 with label6;
+        catch java.lang.Exception from label4 to label5 with label6;
+        catch java.lang.Exception from label7 to label8 with label9;
+    }
+
+    public static java.lang.String Encrypt(java.lang.String)
+    {
+        java.lang.String $r0;
+        java.lang.Exception $r1;
+        javax.crypto.Cipher $r2;
+        java.security.Key $r3;
+        byte[] $r4;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>("AES/ECB/PKCS5Padding");
+
+        $r3 = staticinvoke <com.sina.weibo.sdk.utils.AesEncrypt: java.security.Key generateKey(java.lang.String)>("Stark");
+
+        virtualinvoke $r2.<javax.crypto.Cipher: void init(int,java.security.Key)>(1, $r3);
+
+        $r4 = virtualinvoke $r0.<java.lang.String: byte[] getBytes(java.lang.String)>("utf-8");
+
+        $r4 = virtualinvoke $r2.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r4);
+
+        $r0 = staticinvoke <com.sina.weibo.sdk.utils.AesEncrypt: java.lang.String enBase64(byte[])>($r4);
+
+     label2:
+        return $r0;
+
+     label3:
+        $r1 := @caughtexception;
+
+        $r0 = virtualinvoke $r1.<java.lang.Exception: java.lang.String getMessage()>();
+
+        staticinvoke <com.sina.weibo.sdk.utils.LogUtil: void e(java.lang.String,java.lang.String)>("Encrypt", $r0);
+
+        return null;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    private static byte[] deBase64(java.lang.String)
+    {
+        java.lang.String $r0;
+        byte[] $r1;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        $r1 = staticinvoke <com.sina.weibo.sdk.utils.Base64: byte[] decode(byte[])>($r1);
+
+        return $r1;
+    }
+
+    private static java.lang.String enBase64(byte[])
+    {
+        byte[] $r0;
+        java.lang.String $r1;
+        char[] $r2;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 = new java.lang.String;
+
+        $r2 = staticinvoke <com.sina.weibo.sdk.utils.Base64: char[] encode(byte[])>($r0);
+
+        specialinvoke $r1.<java.lang.String: void <init>(char[])>($r2);
+
+        return $r1;
+    }
+
+    protected static java.security.Key generateKey(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer10271, varReplacer10272, varReplacer10273, varReplacer10275, varReplacer10276, varReplacer10280, varReplacer10282, varReplacer10283;
+        java.lang.Exception $r1;
+        int $i0, varReplacer10277, varReplacer10278;
+        byte[] $r2;
+        javax.crypto.spec.SecretKeySpec $r3;
+        null_type varReplacer10274, varReplacer10279, varReplacer10281;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label01:
+        varReplacer10271 = "Stark";
+
+        $r0 = staticinvoke <com.sina.weibo.sdk.utils.MD5: java.lang.String hexdigest(java.lang.String)>(varReplacer10271);
+
+        varReplacer10277 = 2;
+
+        varReplacer10278 = 18;
+
+        $r0 = virtualinvoke $r0.<java.lang.String: java.lang.String substring(int,int)>(varReplacer10277, varReplacer10278);
+
+     label02:
+        if $r0 != null goto label05;
+
+     label03:
+        varReplacer10272 = "Decrypt";
+
+        varReplacer10273 = "Key\u4e3a\u7a7anull";
+
+        staticinvoke <com.sina.weibo.sdk.utils.LogUtil: void v(java.lang.String,java.lang.String)>(varReplacer10272, varReplacer10273);
+
+     label04:
+        varReplacer10281 = null;
+
+        return varReplacer10281;
+
+     label05:
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+     label06:
+        if $i0 == 16 goto label09;
+
+     label07:
+        varReplacer10282 = "Decrypt";
+
+        varReplacer10283 = "Key\u957f\u5ea6\u4e0d\u662f16\u4f4d";
+
+        staticinvoke <com.sina.weibo.sdk.utils.LogUtil: void v(java.lang.String,java.lang.String)>(varReplacer10282, varReplacer10283);
+
+     label08:
+        varReplacer10279 = null;
+
+        return varReplacer10279;
+
+     label09:
+        varReplacer10275 = "utf-8";
+
+        $r2 = virtualinvoke $r0.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer10275);
+
+     label10:
+        $r3 = new javax.crypto.spec.SecretKeySpec;
+
+     label11:
+        varReplacer10276 = "AES";
+
+        specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, varReplacer10276);
+
+     label12:
+        return $r3;
+
+     label13:
+        $r1 := @caughtexception;
+
+        $r0 = virtualinvoke $r1.<java.lang.Exception: java.lang.String getMessage()>();
+
+        varReplacer10280 = "generateKey";
+
+        staticinvoke <com.sina.weibo.sdk.utils.LogUtil: void e(java.lang.String,java.lang.String)>(varReplacer10280, $r0);
+
+        varReplacer10274 = null;
+
+        return varReplacer10274;
+
+        catch java.lang.Exception from label01 to label02 with label13;
+        catch java.lang.Exception from label03 to label04 with label13;
+        catch java.lang.Exception from label05 to label06 with label13;
+        catch java.lang.Exception from label07 to label08 with label13;
+        catch java.lang.Exception from label09 to label10 with label13;
+        catch java.lang.Exception from label11 to label12 with label13;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] $r0;
+        java.lang.String $r1;
+        java.io.PrintStream $r2;
+        java.lang.StringBuilder $r3;
+
+        $r0 := @parameter0: java.lang.String[];
+
+        $r1 = staticinvoke <com.sina.weibo.sdk.utils.AesEncrypt: java.lang.String Decrypt(java.lang.String)>("u7FFIamNkcuNHMwmAa+VaIrn96etbed19m6VA0iWPoJB8tcFkKkLIgLCScynfkClC9/IRHmXbKa4+ySqhnIjK7P3TgRj0n9KGsLQIVxiT/h2HWmUZj9Bum4EJuSjfSJBVjf/78GWl4zw2EQBOTZyF/9En8JLeLv1YO1tzDwKP3+5S8nnmvV26sjHFAhyRNifFZqUAxMoO1j02c48G/C7vYisBIahWr+vGRmlpxliexdbmR3CKKTSmTmT7jGWVhv5dP5DPcYKEpchtuRnR/rrjI0Nhj3Jcz8gPCegdi+sC+nLij0IjxFf1N5xvyl8CTkbLAF/QjyHq2Y0UU1pOq+oyy88TWp/rym9+vLP5NTT+VObXbduol8UQg0PeRVuTsx4iHHROb4i+Pc5DEVAWsX6Cnn2z7B9gKph0y6JLIddzmUqyeBTzZ3rJEAW/h4JrN9X8nI3HES88cHdQn9YXP7XQrlP6qhy7Z7TKpPda44tWJhR4kZLxflu9pMkCwr2upkDquCgqdgCmeD6vzBd80U0AZphXxFw6GGrFTbkYYbRcmBfrlg5ypEyXoaDujnS15s/6y8Wkmfge/6T6L5t+CHgarkSuNUl0yrZ32R8P9wMDMKs+nzy50pkRugEUFbG8C202SN7DyexqBguwEN4QFqZh2j9vs5kpdfzNYVIxfnuivbriWvNZvRmesdrxnvmaYJH0ssWD5XzJrOeUdzJvqqzjXh8kCw90NuaIMh+5eF2c8MrP81Jh+82kdlmrD0fybdOPap5RRIe/UAIqcOIChbyjO6iDQ6G/ChShzHGwbxxQsQ22tdmOC+tJq4kAqk5Y9uPtyEV7r38nyBsfiyDWMgweIxnCfvDxIe5frXIE+OKziNGeUXuJf6FYc1Kex/ASjdE");
+
+        $r2 = <java.lang.System: java.io.PrintStream out>;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(java.lang.String)>("\u89e3\u5bc6\u540e\u7684\u5b57\u4e32\u662f\uff1a");
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r2.<java.io.PrintStream: void println(java.lang.String)>($r1);
+
+        return;
+    }
+}

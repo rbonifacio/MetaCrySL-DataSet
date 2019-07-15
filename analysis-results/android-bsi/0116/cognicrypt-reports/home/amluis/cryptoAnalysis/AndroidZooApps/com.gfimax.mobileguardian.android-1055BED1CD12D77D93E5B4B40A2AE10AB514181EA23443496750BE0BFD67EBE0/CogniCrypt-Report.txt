@@ -1,0 +1,84 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1442)
+		Method: <com.vizualmobile.MiscellaneousUtils: java.lang.String getHmac(java.lang.String,java.lang.String)>
+		SHA-256: e9b6242f9918818276826866cbbdd81bfcd7a86d0ff77111ac0e202af7faf51c
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: javax.crypto.Mac
+		Statement: $r5 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer1447)
+		Method: <com.vizualmobile.MiscellaneousUtils: java.lang.String getHmac(java.lang.String,java.lang.String)>
+		SHA-256: e18244f8ec35205d667a1246691222d1816c76d70b8a9aef9447700bd09a6697
+		Secure: false
+	Object:
+		Variable: varReplacer1442
+		Type: java.lang.String
+		Statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1442)
+		Method: <com.vizualmobile.MiscellaneousUtils: java.lang.String getHmac(java.lang.String,java.lang.String)>
+		SHA-256: a8df03274b856160b138b58ed57b8898910c94e0bf2ce4908d4a13fa728c6732
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r5.<javax.crypto.Mac: byte[] doFinal(byte[])>($r4)
+		Method: <com.vizualmobile.MiscellaneousUtils: java.lang.String getHmac(java.lang.String,java.lang.String)>
+		SHA-256: 3fe28d05d60e5b92e24fe1568a41e9fa854868a9b983656e01f76277db0d5e28
+		Secure: false
+
+Findings in Java Class: com.vizualmobile.MiscellaneousUtils
+
+	 in Method: java.lang.String getHmac(java.lang.String,java.lang.String)
+		ConstraintError violating CrySL rule for javax.crypto.Mac (on Object #e18244f8ec35205d667a1246691222d1816c76d70b8a9aef9447700bd09a6697)
+			First parameter (with value "HmacSHA1") should be any of {HmacSHA256, HmacSHA384, HmacSHA512}
+			at statement: $r5 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer1447)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1442)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 1
+	RequiredPredicateError: 1
+=====================================================================

@@ -1,0 +1,146 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.sinyee.babybus.numberwriter-1151A8D9E3475362DBDE550448CA9707BD2E48FF73613267D36541AA2C5580A6.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: java.security.KeyPair
+		Statement: $r3 = virtualinvoke $r2.<java.security.KeyPairGenerator: java.security.KeyPair generateKeyPair()>()
+		Method: <com.babybus.helper.RSACodeHelper: void init()>
+		SHA-256: 6bc71973c3f5ea8a041e37be4a70512025cf5a185f39cdbfc493bf5a29f146e9
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r4)
+		Method: <com.babybus.utils.RSAUtils: java.lang.String sPubEncrypt(java.lang.String,java.lang.String)>
+		SHA-256: 8d37f153aed0a1cd0cb26abb78ad69a694aa98dd4ee51f96cbc671d573e6bccc
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.net.ssl.SSLContext
+		Statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1671)
+		Method: <okhttp3.OkHttpClient: javax.net.ssl.SSLSocketFactory systemDefaultSslSocketFactory(javax.net.ssl.X509TrustManager)>
+		SHA-256: 603a20de0f53d8775226e90c8cdc3b659b2b621bb674530aa8d94e3dcd2d001c
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.crypto.Cipher
+		Statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1911)
+		Method: <com.babybus.utils.RSAUtils: java.lang.String sPubEncrypt(java.lang.String,java.lang.String)>
+		SHA-256: 16377b024f654f5d792268b4d587354076cc1866b792220cf477cb7f62272196
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.KeyPairGenerator
+		Statement: $r2 = staticinvoke <java.security.KeyPairGenerator: java.security.KeyPairGenerator getInstance(java.lang.String)>(varReplacer507)
+		Method: <com.babybus.helper.RSACodeHelper: void init()>
+		SHA-256: c94a41f1323b1cca2396270b1af450f0dbe95bf9077061d7ffc2b0a3f4952a63
+		Secure: false
+
+Findings in Java Class: com.babybus.helper.RSACodeHelper
+
+	 in Method: void init()
+		ConstraintError violating CrySL rule for java.security.KeyPairGenerator (on Object #c94a41f1323b1cca2396270b1af450f0dbe95bf9077061d7ffc2b0a3f4952a63)
+			First parameter (with value 1024) should be any of {2048, 4096}
+			at statement: virtualinvoke $r2.<java.security.KeyPairGenerator: void initialize(int)>(varReplacer506)
+
+
+Findings in Java Class: com.babybus.utils.RSAUtils
+
+	 in Method: java.lang.String sPubEncrypt(java.lang.String,java.lang.String)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #16377b024f654f5d792268b4d587354076cc1866b792220cf477cb7f62272196)
+			First parameter (with value "RSA/ECB/PKCS1Padding") should be any of RSA/ECB/{OAEPPadding, NoPadding}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1911)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #16377b024f654f5d792268b4d587354076cc1866b792220cf477cb7f62272196)
+			First parameter (with value "RSA/ECB/PKCS1Padding") should be any of RSA/ECB/{OAEPPadding, NoPadding}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1911)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1907, $r2)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #16377b024f654f5d792268b4d587354076cc1866b792220cf477cb7f62272196)
+			First parameter (with value "RSA/ECB/PKCS1Padding") should be any of RSA/ECB/{OAEPPadding, NoPadding}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1911)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #16377b024f654f5d792268b4d587354076cc1866b792220cf477cb7f62272196)
+			First parameter (with value "RSA/ECB/PKCS1Padding") should be any of RSA/ECB/{OAEPPadding, NoPadding}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1911)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #16377b024f654f5d792268b4d587354076cc1866b792220cf477cb7f62272196)
+			First parameter (with value "RSA/ECB/PKCS1Padding") should be any of RSA/ECB/{OAEPPadding, NoPadding}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1911)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #16377b024f654f5d792268b4d587354076cc1866b792220cf477cb7f62272196)
+			First parameter (with value "RSA/ECB/PKCS1Padding") should be any of RSA/ECB/{OAEPPadding, NoPadding}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1911)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #16377b024f654f5d792268b4d587354076cc1866b792220cf477cb7f62272196)
+			First parameter (with value "RSA/ECB/PKCS1Padding") should be any of RSA/ECB/{OAEPPadding, NoPadding}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1911)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #16377b024f654f5d792268b4d587354076cc1866b792220cf477cb7f62272196)
+			First parameter (with value "RSA/ECB/PKCS1Padding") should be any of RSA/ECB/{OAEPPadding, NoPadding}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1911)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #16377b024f654f5d792268b4d587354076cc1866b792220cf477cb7f62272196)
+			First parameter (with value "RSA/ECB/PKCS1Padding") should be any of RSA/ECB/{OAEPPadding, NoPadding}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1911)
+
+
+Findings in Java Class: okhttp3.OkHttpClient
+
+	 in Method: javax.net.ssl.SSLSocketFactory systemDefaultSslSocketFactory(javax.net.ssl.X509TrustManager)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1669, r7, varReplacer1669)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1669, r7, varReplacer1669)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 5
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 10
+	RequiredPredicateError: 3
+=====================================================================

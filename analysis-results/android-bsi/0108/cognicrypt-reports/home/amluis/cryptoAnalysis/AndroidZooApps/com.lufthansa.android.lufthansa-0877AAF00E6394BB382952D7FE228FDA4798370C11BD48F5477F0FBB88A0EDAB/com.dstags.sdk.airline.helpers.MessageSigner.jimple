@@ -1,0 +1,85 @@
+public class com.dstags.sdk.airline.helpers.MessageSigner extends java.lang.Object
+{
+
+    public static java.lang.String a(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer6823;
+        io.jsonwebtoken.JwtBuilder $r1;
+        com.dstags.sdk.airline.SecureSettings $r2;
+        byte[] $r3;
+        io.jsonwebtoken.SignatureAlgorithm $r4;
+        java.security.Key $r5;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <io.jsonwebtoken.Jwts: io.jsonwebtoken.JwtBuilder builder()>();
+
+        $r2 = staticinvoke <com.dstags.sdk.airline.SecureDroidSettings: com.dstags.sdk.airline.SecureSettings a()>();
+
+        $r3 = interfaceinvoke $r2.<com.dstags.sdk.airline.SecureSettings: byte[] c()>();
+
+        varReplacer6823 = "x5t";
+
+        interfaceinvoke $r1.<io.jsonwebtoken.JwtBuilder: io.jsonwebtoken.JwtBuilder setHeaderParam(java.lang.String,java.lang.Object)>(varReplacer6823, $r3);
+
+        interfaceinvoke $r1.<io.jsonwebtoken.JwtBuilder: io.jsonwebtoken.JwtBuilder setPayload(java.lang.String)>($r0);
+
+        $r4 = <io.jsonwebtoken.SignatureAlgorithm: io.jsonwebtoken.SignatureAlgorithm RS512>;
+
+        $r2 = staticinvoke <com.dstags.sdk.airline.SecureDroidSettings: com.dstags.sdk.airline.SecureSettings a()>();
+
+        $r5 = interfaceinvoke $r2.<com.dstags.sdk.airline.SecureSettings: java.security.Key b()>();
+
+        $r1 = interfaceinvoke $r1.<io.jsonwebtoken.JwtBuilder: io.jsonwebtoken.JwtBuilder signWith(io.jsonwebtoken.SignatureAlgorithm,java.security.Key)>($r4, $r5);
+
+        $r0 = interfaceinvoke $r1.<io.jsonwebtoken.JwtBuilder: java.lang.String compact()>();
+
+        return $r0;
+    }
+
+    public static byte[] a(java.security.cert.Certificate)
+    {
+        java.security.cert.Certificate $r0;
+        java.security.MessageDigest $r1;
+        byte[] $r2;
+        java.lang.Throwable $r3, $r4;
+        java.lang.String varReplacer6130;
+        null_type varReplacer6131;
+
+        nop;
+
+        $r0 := @parameter0: java.security.cert.Certificate;
+
+     label1:
+        varReplacer6130 = "SHA-1";
+
+        $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6130);
+
+        $r2 = virtualinvoke $r0.<java.security.cert.Certificate: byte[] getEncoded()>();
+
+        virtualinvoke $r1.<java.security.MessageDigest: void update(byte[])>($r2);
+
+        $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>();
+
+     label2:
+        return $r2;
+
+     label3:
+        $r3 := @caughtexception;
+
+     label4:
+        varReplacer6131 = null;
+
+        return varReplacer6131;
+
+     label5:
+        $r4 := @caughtexception;
+
+        goto label4;
+
+        catch java.security.cert.CertificateException from label1 to label2 with label5;
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+    }
+}

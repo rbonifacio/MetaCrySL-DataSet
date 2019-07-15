@@ -1,0 +1,114 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <cmn.j: java.lang.String a(byte[])>
+		SHA-256: de1fac0995af9e909e2c591f5ccb6f1906550164b85c5f67b64dc58928688125
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1334)
+		Method: <com.appbrain.g.a: java.security.MessageDigest a()>
+		SHA-256: 230f65ff2c45d31b562682a49257e490c62850bcd208a7c2ba1e36a518103351
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1137)
+		Method: <cmn.j: java.lang.String a(byte[])>
+		SHA-256: f180230a015722ba13f721e5195225df5052e5ece6e17f923d09cd30c46e7e92
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
+		Method: <cmn.j: long b(java.lang.String)>
+		SHA-256: 6d7e9d4cbcbf62b03a493d0c856844e5dc79688f6d9ac776d2659d29c7e6bf7e
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.appbrain.g.a: long a(byte[][])>
+		SHA-256: 94dacef5038b9fd5dcf8e37f15750ede1c794ee5e2ec5487426703309c52fd62
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1075)
+		Method: <cmn.j: long b(java.lang.String)>
+		SHA-256: c1d0cd8475614d4332e81130459bc37b56f33967274d58228375ef5c05cfe885
+		Secure: false
+
+Findings in Java Class: cmn.j
+
+	 in Method: long b(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #c1d0cd8475614d4332e81130459bc37b56f33967274d58228375ef5c05cfe885)
+			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1075)
+
+
+	 in Method: java.lang.String a(byte[])
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #f180230a015722ba13f721e5195225df5052e5ece6e17f923d09cd30c46e7e92)
+			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1137)
+
+
+Findings in Java Class: com.appbrain.g.a
+
+	 in Method: java.security.MessageDigest a()
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #230f65ff2c45d31b562682a49257e490c62850bcd208a7c2ba1e36a518103351)
+			First parameter (with value "SHA-1") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1334)
+
+
+	 in Method: long a(byte[][])
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #230f65ff2c45d31b562682a49257e490c62850bcd208a7c2ba1e36a518103351)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte),java.security.MessageDigest: void update(byte[])
+			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 3
+	TypestateError: 1
+=====================================================================

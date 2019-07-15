@@ -1,0 +1,246 @@
+public class com.glykka.easysign.billing_v3.Security extends java.lang.Object
+{
+
+    public static java.security.PublicKey generatePublicKey(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer17322, varReplacer17323, varReplacer17324, varReplacer17325, varReplacer17326;
+        byte[] $r1;
+        java.security.KeyFactory $r2;
+        java.security.spec.X509EncodedKeySpec $r3;
+        java.security.PublicKey $r4;
+        java.lang.Throwable $r5, $r7;
+        java.lang.RuntimeException $r6;
+        java.lang.IllegalArgumentException $r8;
+        com.glykka.easysign.billing_v3.util.Base64DecoderException $r9;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        $r1 = staticinvoke <com.glykka.easysign.billing_v3.util.Base64: byte[] decode(java.lang.String)>($r0);
+
+        varReplacer17324 = "RSA";
+
+        $r2 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer17324);
+
+     label2:
+        $r3 = new java.security.spec.X509EncodedKeySpec;
+
+     label3:
+        specialinvoke $r3.<java.security.spec.X509EncodedKeySpec: void <init>(byte[])>($r1);
+
+        $r4 = virtualinvoke $r2.<java.security.KeyFactory: java.security.PublicKey generatePublic(java.security.spec.KeySpec)>($r3);
+
+     label4:
+        return $r4;
+
+     label5:
+        $r5 := @caughtexception;
+
+        $r6 = new java.lang.RuntimeException;
+
+        specialinvoke $r6.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r5);
+
+        throw $r6;
+
+     label6:
+        $r7 := @caughtexception;
+
+        varReplacer17322 = "IABUtil/Security";
+
+        varReplacer17323 = "Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer17322, varReplacer17323);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r7);
+
+        throw $r8;
+
+     label7:
+        $r9 := @caughtexception;
+
+        varReplacer17325 = "IABUtil/Security";
+
+        varReplacer17326 = "Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer17325, varReplacer17326);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r9);
+
+        throw $r8;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label5;
+        catch java.security.spec.InvalidKeySpecException from label1 to label2 with label6;
+        catch java.security.spec.InvalidKeySpecException from label3 to label4 with label6;
+        catch com.glykka.easysign.billing_v3.util.Base64DecoderException from label1 to label2 with label7;
+        catch com.glykka.easysign.billing_v3.util.Base64DecoderException from label3 to label4 with label7;
+    }
+
+    public static boolean verify(java.security.PublicKey, java.lang.String, java.lang.String)
+    {
+        java.security.PublicKey $r0;
+        java.lang.String $r1, $r2, varReplacer17305, varReplacer17306, varReplacer17307, varReplacer17308, varReplacer17309, varReplacer17310, varReplacer17311, varReplacer17312, varReplacer17314, varReplacer17315, varReplacer17316;
+        java.security.Signature $r3;
+        byte[] $r4;
+        boolean $z0;
+        java.lang.Throwable $r5, $r6, $r7;
+        com.glykka.easysign.billing_v3.util.Base64DecoderException $r8;
+        int varReplacer17313, varReplacer17317, varReplacer17318, varReplacer17319, varReplacer17320, varReplacer17321;
+
+        nop;
+
+        $r0 := @parameter0: java.security.PublicKey;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+     label1:
+        varReplacer17314 = "SHA1withRSA";
+
+        $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer17314);
+
+        virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0);
+
+        $r4 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r3.<java.security.Signature: void update(byte[])>($r4);
+
+        $r4 = staticinvoke <com.glykka.easysign.billing_v3.util.Base64: byte[] decode(java.lang.String)>($r2);
+
+        $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4);
+
+     label2:
+        if $z0 != 0 goto label5;
+
+     label3:
+        varReplacer17311 = "IABUtil/Security";
+
+        varReplacer17312 = "Signature verification failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer17311, varReplacer17312);
+
+     label4:
+        varReplacer17321 = 0;
+
+        return varReplacer17321;
+
+     label5:
+        varReplacer17319 = 1;
+
+        return varReplacer17319;
+
+     label6:
+        $r5 := @caughtexception;
+
+        varReplacer17305 = "IABUtil/Security";
+
+        varReplacer17306 = "NoSuchAlgorithmException.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer17305, varReplacer17306);
+
+        varReplacer17318 = 0;
+
+        return varReplacer17318;
+
+     label7:
+        $r6 := @caughtexception;
+
+        varReplacer17315 = "IABUtil/Security";
+
+        varReplacer17316 = "Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer17315, varReplacer17316);
+
+        varReplacer17317 = 0;
+
+        return varReplacer17317;
+
+     label8:
+        $r7 := @caughtexception;
+
+        varReplacer17307 = "IABUtil/Security";
+
+        varReplacer17308 = "Signature exception.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer17307, varReplacer17308);
+
+        varReplacer17320 = 0;
+
+        return varReplacer17320;
+
+     label9:
+        $r8 := @caughtexception;
+
+        varReplacer17309 = "IABUtil/Security";
+
+        varReplacer17310 = "Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer17309, varReplacer17310);
+
+        varReplacer17313 = 0;
+
+        return varReplacer17313;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label6;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label6;
+        catch java.security.InvalidKeyException from label1 to label2 with label7;
+        catch java.security.InvalidKeyException from label3 to label4 with label7;
+        catch java.security.SignatureException from label1 to label2 with label8;
+        catch java.security.SignatureException from label3 to label4 with label8;
+        catch com.glykka.easysign.billing_v3.util.Base64DecoderException from label1 to label2 with label9;
+        catch com.glykka.easysign.billing_v3.util.Base64DecoderException from label3 to label4 with label9;
+    }
+
+    public static boolean verifyPurchase(java.lang.String, java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, $r2, varReplacer17303, varReplacer17304;
+        boolean $z0;
+        java.security.PublicKey $r3;
+        int varReplacer17302;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r0);
+
+        if $z0 != 0 goto label1;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        varReplacer17303 = "IABUtil/Security";
+
+        varReplacer17304 = "Purchase verification failed: missing data.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer17303, varReplacer17304);
+
+        varReplacer17302 = 0;
+
+        return varReplacer17302;
+
+     label2:
+        $r3 = staticinvoke <com.glykka.easysign.billing_v3.Security: java.security.PublicKey generatePublicKey(java.lang.String)>($r0);
+
+        $z0 = staticinvoke <com.glykka.easysign.billing_v3.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>($r3, $r1, $r2);
+
+        return $z0;
+    }
+}

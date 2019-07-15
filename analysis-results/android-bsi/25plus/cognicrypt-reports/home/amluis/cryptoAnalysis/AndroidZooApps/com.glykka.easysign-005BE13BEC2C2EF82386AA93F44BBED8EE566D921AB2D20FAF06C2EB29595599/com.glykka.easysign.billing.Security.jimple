@@ -1,0 +1,545 @@
+public class com.glykka.easysign.billing.Security extends java.lang.Object
+{
+    private static final java.security.SecureRandom RANDOM;
+    private static java.util.HashSet sKnownNonces;
+
+    static void <clinit>()
+    {
+        java.security.SecureRandom $r0;
+        java.util.HashSet $r1;
+
+        nop;
+
+        $r0 = new java.security.SecureRandom;
+
+        specialinvoke $r0.<java.security.SecureRandom: void <init>()>();
+
+        <com.glykka.easysign.billing.Security: java.security.SecureRandom RANDOM> = $r0;
+
+        $r1 = new java.util.HashSet;
+
+        specialinvoke $r1.<java.util.HashSet: void <init>()>();
+
+        <com.glykka.easysign.billing.Security: java.util.HashSet sKnownNonces> = $r1;
+
+        return;
+    }
+
+    public static long generateNonce()
+    {
+        java.security.SecureRandom $r0;
+        long $l0;
+        java.util.HashSet $r1;
+        java.lang.Long $r2;
+
+        nop;
+
+        $r0 = <com.glykka.easysign.billing.Security: java.security.SecureRandom RANDOM>;
+
+        $l0 = virtualinvoke $r0.<java.security.SecureRandom: long nextLong()>();
+
+        $r1 = <com.glykka.easysign.billing.Security: java.util.HashSet sKnownNonces>;
+
+        $r2 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        virtualinvoke $r1.<java.util.HashSet: boolean add(java.lang.Object)>($r2);
+
+        return $l0;
+    }
+
+    public static java.security.PublicKey generatePublicKey(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer12827, varReplacer12828, varReplacer12829, varReplacer12830, varReplacer12831, varReplacer12832;
+        byte[] $r1;
+        java.security.KeyFactory $r2;
+        java.security.spec.X509EncodedKeySpec $r3;
+        java.security.PublicKey $r4;
+        java.lang.Throwable $r5, $r7;
+        java.lang.RuntimeException $r6;
+        java.lang.IllegalArgumentException $r8;
+        com.glykka.easysign.billing.util.Base64DecoderException $r9;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer12827 = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAip67llKOAAlQ0gPtgdgO0FP62hVNtq+cTfXOiJRyudDb2UMwZBhzlqA8OSFztgRuUEWSloqkG6hI+MRN/OTSXNI3tB5npMgYATSUJ1P9LMkhqYoNx3hzxa53jB29ULiGwpMaQKephJ13QTeCqshxMx8dyD6kjvrCZvgHxmlmecvpXkoerYBP+L/RPm7qv3DlA5cFWFK16JOSX7FgsM1Vzl7TKGjxYGxI39fPOWzeJonhAreZ2WGHrPAEZTSGqOnhGppvQGI8F3437+P+62VzOMOlyS40IoGEoF1KNIHCYuOw+FUtW4xc2HXWZSamIfARhEpZQj1Kg9PYjkztBXXSRQIDAQAB";
+
+        $r1 = staticinvoke <com.glykka.easysign.billing.util.Base64: byte[] decode(java.lang.String)>(varReplacer12827);
+
+        varReplacer12828 = "RSA";
+
+        $r2 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer12828);
+
+     label2:
+        $r3 = new java.security.spec.X509EncodedKeySpec;
+
+     label3:
+        specialinvoke $r3.<java.security.spec.X509EncodedKeySpec: void <init>(byte[])>($r1);
+
+        $r4 = virtualinvoke $r2.<java.security.KeyFactory: java.security.PublicKey generatePublic(java.security.spec.KeySpec)>($r3);
+
+     label4:
+        return $r4;
+
+     label5:
+        $r5 := @caughtexception;
+
+        $r6 = new java.lang.RuntimeException;
+
+        specialinvoke $r6.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r5);
+
+        throw $r6;
+
+     label6:
+        $r7 := @caughtexception;
+
+        varReplacer12831 = "Security";
+
+        varReplacer12832 = "Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer12831, varReplacer12832);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r7);
+
+        throw $r8;
+
+     label7:
+        $r9 := @caughtexception;
+
+        varReplacer12829 = "Security";
+
+        varReplacer12830 = "Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer12829, varReplacer12830);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r9);
+
+        throw $r8;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label5;
+        catch java.security.spec.InvalidKeySpecException from label1 to label2 with label6;
+        catch java.security.spec.InvalidKeySpecException from label3 to label4 with label6;
+        catch com.glykka.easysign.billing.util.Base64DecoderException from label1 to label2 with label7;
+        catch com.glykka.easysign.billing.util.Base64DecoderException from label3 to label4 with label7;
+    }
+
+    public static boolean isNonceKnown(long)
+    {
+        long $l0;
+        java.util.HashSet $r0;
+        java.lang.Long $r1;
+        boolean $z0;
+
+        nop;
+
+        $l0 := @parameter0: long;
+
+        $r0 = <com.glykka.easysign.billing.Security: java.util.HashSet sKnownNonces>;
+
+        $r1 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        $z0 = virtualinvoke $r0.<java.util.HashSet: boolean contains(java.lang.Object)>($r1);
+
+        return $z0;
+    }
+
+    public static void removeNonce(long)
+    {
+        long $l0;
+        java.util.HashSet $r0;
+        java.lang.Long $r1;
+
+        nop;
+
+        $l0 := @parameter0: long;
+
+        $r0 = <com.glykka.easysign.billing.Security: java.util.HashSet sKnownNonces>;
+
+        $r1 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        virtualinvoke $r0.<java.util.HashSet: boolean remove(java.lang.Object)>($r1);
+
+        return;
+    }
+
+    public static boolean verify(java.security.PublicKey, java.lang.String, java.lang.String)
+    {
+        java.security.PublicKey $r0;
+        java.lang.String $r1, $r2, $r4, varReplacer12808, varReplacer12809, varReplacer12811, varReplacer12813, varReplacer12814, varReplacer12815, varReplacer12816, varReplacer12817, varReplacer12818, varReplacer12819, varReplacer12820, varReplacer12823, varReplacer12824;
+        java.lang.StringBuilder $r3;
+        java.security.Signature $r5;
+        byte[] $r6;
+        boolean $z0;
+        java.lang.Throwable $r7, $r8, $r9;
+        com.glykka.easysign.billing.util.Base64DecoderException $r10;
+        int varReplacer12810, varReplacer12812, varReplacer12821, varReplacer12822, varReplacer12825, varReplacer12826;
+
+        nop;
+
+        $r0 := @parameter0: java.security.PublicKey;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer12811 = "signature: ";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer12811);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer12813 = "Security";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer12813, $r4);
+
+     label1:
+        varReplacer12818 = "SHA1withRSA";
+
+        $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer12818);
+
+        virtualinvoke $r5.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0);
+
+        $r6 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r5.<java.security.Signature: void update(byte[])>($r6);
+
+        $r6 = staticinvoke <com.glykka.easysign.billing.util.Base64: byte[] decode(java.lang.String)>($r2);
+
+        $z0 = virtualinvoke $r5.<java.security.Signature: boolean verify(byte[])>($r6);
+
+     label2:
+        if $z0 != 0 goto label5;
+
+     label3:
+        varReplacer12819 = "Security";
+
+        varReplacer12820 = "Signature verification failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer12819, varReplacer12820);
+
+     label4:
+        varReplacer12812 = 0;
+
+        return varReplacer12812;
+
+     label5:
+        varReplacer12822 = 1;
+
+        return varReplacer12822;
+
+     label6:
+        $r7 := @caughtexception;
+
+        varReplacer12816 = "Security";
+
+        varReplacer12817 = "NoSuchAlgorithmException.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer12816, varReplacer12817);
+
+        varReplacer12825 = 0;
+
+        return varReplacer12825;
+
+     label7:
+        $r8 := @caughtexception;
+
+        varReplacer12808 = "Security";
+
+        varReplacer12809 = "Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer12808, varReplacer12809);
+
+        varReplacer12826 = 0;
+
+        return varReplacer12826;
+
+     label8:
+        $r9 := @caughtexception;
+
+        varReplacer12814 = "Security";
+
+        varReplacer12815 = "Signature exception.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer12814, varReplacer12815);
+
+        varReplacer12810 = 0;
+
+        return varReplacer12810;
+
+     label9:
+        $r10 := @caughtexception;
+
+        varReplacer12823 = "Security";
+
+        varReplacer12824 = "Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer12823, varReplacer12824);
+
+        varReplacer12821 = 0;
+
+        return varReplacer12821;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label6;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label6;
+        catch java.security.InvalidKeyException from label1 to label2 with label7;
+        catch java.security.InvalidKeyException from label3 to label4 with label7;
+        catch java.security.SignatureException from label1 to label2 with label8;
+        catch java.security.SignatureException from label3 to label4 with label8;
+        catch com.glykka.easysign.billing.util.Base64DecoderException from label1 to label2 with label9;
+        catch com.glykka.easysign.billing.util.Base64DecoderException from label3 to label4 with label9;
+    }
+
+    public static java.util.ArrayList verifyPurchase(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, $r4, $r10, varReplacer12780, varReplacer12781, varReplacer12782, varReplacer12783, varReplacer12788, varReplacer12789, varReplacer12790, varReplacer12791, varReplacer12792, varReplacer12793, varReplacer12795, varReplacer12796, varReplacer12797, varReplacer12798, varReplacer12799, varReplacer12800, varReplacer12801, varReplacer12802, varReplacer12803, varReplacer12804, varReplacer12805, varReplacer12807;
+        org.json.JSONObject $r2;
+        java.lang.StringBuilder $r3;
+        boolean $z0, $z1;
+        java.security.PublicKey $r5;
+        int $i0, $i2, $i3;
+        long $l1, $l4;
+        org.json.JSONArray $r6;
+        org.json.JSONException $r7, $r13;
+        java.util.ArrayList $r8;
+        com.glykka.easysign.billing.Consts$PurchaseState $r9, $r11;
+        com.glykka.easysign.billing.Security$VerifiedPurchase $r12;
+        null_type varReplacer12784, varReplacer12785, varReplacer12786, varReplacer12787, varReplacer12794, varReplacer12806;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        if $r0 != null goto label01;
+
+        varReplacer12802 = "Security";
+
+        varReplacer12803 = "data is null";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer12802, varReplacer12803);
+
+        varReplacer12806 = null;
+
+        return varReplacer12806;
+
+     label01:
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer12791 = "signedData: ";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer12791);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer12807 = "Security";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>(varReplacer12807, $r4);
+
+        $z0 = 0;
+
+        $z1 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+        if $z1 != 0 goto label02;
+
+        varReplacer12788 = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAip67llKOAAlQ0gPtgdgO0FP62hVNtq+cTfXOiJRyudDb2UMwZBhzlqA8OSFztgRuUEWSloqkG6hI+MRN/OTSXNI3tB5npMgYATSUJ1P9LMkhqYoNx3hzxa53jB29ULiGwpMaQKephJ13QTeCqshxMx8dyD6kjvrCZvgHxmlmecvpXkoerYBP+L/RPm7qv3DlA5cFWFK16JOSX7FgsM1Vzl7TKGjxYGxI39fPOWzeJonhAreZ2WGHrPAEZTSGqOnhGppvQGI8F3437+P+62VzOMOlyS40IoGEoF1KNIHCYuOw+FUtW4xc2HXWZSamIfARhEpZQj1Kg9PYjkztBXXSRQIDAQAB";
+
+        $r5 = staticinvoke <com.glykka.easysign.billing.Security: java.security.PublicKey generatePublicKey(java.lang.String)>(varReplacer12788);
+
+        $z1 = staticinvoke <com.glykka.easysign.billing.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>($r5, $r0, $r1);
+
+        $z0 = $z1;
+
+        if $z1 != 0 goto label02;
+
+        varReplacer12789 = "Security";
+
+        varReplacer12790 = "signature does not match data.";
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>(varReplacer12789, varReplacer12790);
+
+        varReplacer12786 = null;
+
+        return varReplacer12786;
+
+     label02:
+        $i0 = 0;
+
+        $r2 = new org.json.JSONObject;
+
+     label03:
+        specialinvoke $r2.<org.json.JSONObject: void <init>(java.lang.String)>($r0);
+
+        varReplacer12780 = "nonce";
+
+        $l1 = virtualinvoke $r2.<org.json.JSONObject: long optLong(java.lang.String)>(varReplacer12780);
+
+        varReplacer12781 = "orders";
+
+        $r6 = virtualinvoke $r2.<org.json.JSONObject: org.json.JSONArray optJSONArray(java.lang.String)>(varReplacer12781);
+
+     label04:
+        if $r6 == null goto label06;
+
+     label05:
+        $i0 = virtualinvoke $r6.<org.json.JSONArray: int length()>();
+
+     label06:
+        $z1 = staticinvoke <com.glykka.easysign.billing.Security: boolean isNonceKnown(long)>($l1);
+
+        if $z1 != 0 goto label08;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer12798 = "Nonce not found: ";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer12798);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        $r0 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer12795 = "Security";
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>(varReplacer12795, $r0);
+
+        varReplacer12787 = null;
+
+        return varReplacer12787;
+
+     label07:
+        $r7 := @caughtexception;
+
+        varReplacer12784 = null;
+
+        return varReplacer12784;
+
+     label08:
+        $r8 = new java.util.ArrayList;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>()>();
+
+        $i2 = 0;
+
+     label09:
+        if $i2 >= $i0 goto label22;
+
+     label10:
+        $r2 = virtualinvoke $r6.<org.json.JSONArray: org.json.JSONObject getJSONObject(int)>($i2);
+
+        varReplacer12792 = "purchaseState";
+
+        $i3 = virtualinvoke $r2.<org.json.JSONObject: int getInt(java.lang.String)>(varReplacer12792);
+
+        $r9 = staticinvoke <com.glykka.easysign.billing.Consts$PurchaseState: com.glykka.easysign.billing.Consts$PurchaseState valueOf(int)>($i3);
+
+        varReplacer12804 = "productId";
+
+        $r0 = virtualinvoke $r2.<org.json.JSONObject: java.lang.String getString(java.lang.String)>(varReplacer12804);
+
+        varReplacer12801 = "packageName";
+
+        virtualinvoke $r2.<org.json.JSONObject: java.lang.String getString(java.lang.String)>(varReplacer12801);
+
+        varReplacer12805 = "purchaseTime";
+
+        $l4 = virtualinvoke $r2.<org.json.JSONObject: long getLong(java.lang.String)>(varReplacer12805);
+
+        varReplacer12796 = "orderId";
+
+        varReplacer12797 = "";
+
+        $r1 = virtualinvoke $r2.<org.json.JSONObject: java.lang.String optString(java.lang.String,java.lang.String)>(varReplacer12796, varReplacer12797);
+
+     label11:
+        $r4 = null;
+
+     label12:
+        varReplacer12782 = "notificationId";
+
+        $z1 = virtualinvoke $r2.<org.json.JSONObject: boolean has(java.lang.String)>(varReplacer12782);
+
+     label13:
+        if $z1 == 0 goto label15;
+
+     label14:
+        varReplacer12783 = "notificationId";
+
+        $r4 = virtualinvoke $r2.<org.json.JSONObject: java.lang.String getString(java.lang.String)>(varReplacer12783);
+
+     label15:
+        varReplacer12793 = "developerPayload";
+
+        varReplacer12794 = null;
+
+        $r10 = virtualinvoke $r2.<org.json.JSONObject: java.lang.String optString(java.lang.String,java.lang.String)>(varReplacer12793, varReplacer12794);
+
+     label16:
+        $r11 = <com.glykka.easysign.billing.Consts$PurchaseState: com.glykka.easysign.billing.Consts$PurchaseState PURCHASED>;
+
+        if $r9 != $r11 goto label18;
+
+        if $z0 != 0 goto label18;
+
+     label17:
+        $i2 = $i2 + 1;
+
+        goto label09;
+
+     label18:
+        $r12 = new com.glykka.easysign.billing.Security$VerifiedPurchase;
+
+     label19:
+        specialinvoke $r12.<com.glykka.easysign.billing.Security$VerifiedPurchase: void <init>(com.glykka.easysign.billing.Consts$PurchaseState,java.lang.String,java.lang.String,java.lang.String,long,java.lang.String)>($r9, $r4, $r0, $r1, $l4, $r10);
+
+        virtualinvoke $r8.<java.util.ArrayList: boolean add(java.lang.Object)>($r12);
+
+     label20:
+        goto label17;
+
+     label21:
+        $r13 := @caughtexception;
+
+        varReplacer12799 = "Security";
+
+        varReplacer12800 = "JSON exception: ";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer12799, varReplacer12800, $r13);
+
+        varReplacer12785 = null;
+
+        return varReplacer12785;
+
+     label22:
+        staticinvoke <com.glykka.easysign.billing.Security: void removeNonce(long)>($l1);
+
+        return $r8;
+
+        catch org.json.JSONException from label03 to label04 with label07;
+        catch org.json.JSONException from label05 to label06 with label07;
+        catch org.json.JSONException from label10 to label11 with label21;
+        catch org.json.JSONException from label12 to label13 with label21;
+        catch org.json.JSONException from label14 to label15 with label21;
+        catch org.json.JSONException from label15 to label16 with label21;
+        catch org.json.JSONException from label19 to label20 with label21;
+    }
+}

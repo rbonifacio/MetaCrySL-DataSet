@@ -1,0 +1,2661 @@
+class com.nifty.cloud.mb.CommonConnection extends java.lang.Object
+{
+    private static int[] $SWITCH_TABLE$com$nifty$cloud$mb$CommonConstant$ConnectType;
+    private static final int CONNECTION_TIMEOUT;
+    private static final int CONNECT_EVENT_FILE_GET;
+    private static final int CONNECT_EVENT_FILE_POST;
+    private static final int CONNECT_EVENT_NORMAL;
+    private static final java.lang.String DEBUG_URL;
+    static final java.lang.String HEADER_ACCESS_CONTROL_ALLOW_ORIGIN;
+    static final java.lang.String HEADER_ADMS_SESSION_TOKEN;
+    static final java.lang.String HEADER_APPLICATION_KEY;
+    static final java.lang.String HEADER_APPS_SESSION_TOKEN;
+    static final java.lang.String HEADER_CONTENT_TYPE;
+    static final java.lang.String HEADER_CONTENT_TYPE_VALUE;
+    static final java.lang.String HEADER_DEVS_SESSION_TOKEN;
+    static final java.lang.String HEADER_OS_VERSION;
+    static final java.lang.String HEADER_SDK_VERSION;
+    static final java.lang.String HEADER_SIGNATURE;
+    static final java.lang.String HEADER_TIMESTAMP;
+    static final java.lang.String RESPONSE_HEADER_SIGNATURE;
+    private static final java.lang.String RESPONSE_SIGNATURE_ERROR_MESSAGE;
+    private static final java.lang.String SIGNATURE_METHOD_KEY;
+    private static final java.lang.String SIGNATURE_METHOD_VALUE;
+    private static final java.lang.String SIGNATURE_VERSION_KEY;
+    private static final java.lang.String SIGNATURE_VERSION_VALUE;
+    private static final int SO_TIMEOUT;
+    private static final java.lang.String TAG;
+    private com.nifty.cloud.mb.ProgressCallback callback;
+    private int connectEvent;
+    private java.lang.String content;
+    private java.lang.String contentType;
+    private com.nifty.cloud.mb.NCMBException exception;
+    private org.apache.http.client.HttpClient httpClient;
+    private org.apache.http.client.methods.HttpUriRequest httpRequest;
+    private boolean isDebug;
+    private org.json.JSONObject jsonContent;
+    private byte[] postData;
+    private java.lang.String result;
+    private byte[] resultData;
+    private java.lang.String sessionToken;
+    private int statusCode;
+    private com.nifty.cloud.mb.CommonConstant$ConnectType type;
+    private java.lang.String url;
+
+    static int[] $SWITCH_TABLE$com$nifty$cloud$mb$CommonConstant$ConnectType()
+    {
+        int[] $r0;
+        com.nifty.cloud.mb.CommonConstant$ConnectType[] $r1;
+        int $i0;
+        com.nifty.cloud.mb.CommonConstant$ConnectType $r2;
+        java.lang.NoSuchFieldError $r3, $r4, $r5, $r6;
+
+        nop;
+
+        $r0 = <com.nifty.cloud.mb.CommonConnection: int[] $SWITCH_TABLE$com$nifty$cloud$mb$CommonConstant$ConnectType>;
+
+        if $r0 == null goto label01;
+
+        return $r0;
+
+     label01:
+        $r1 = staticinvoke <com.nifty.cloud.mb.CommonConstant$ConnectType: com.nifty.cloud.mb.CommonConstant$ConnectType[] values()>();
+
+        $i0 = lengthof $r1;
+
+        $r0 = newarray (int)[$i0];
+
+     label02:
+        $r2 = <com.nifty.cloud.mb.CommonConstant$ConnectType: com.nifty.cloud.mb.CommonConstant$ConnectType DELETE>;
+
+        $i0 = virtualinvoke $r2.<com.nifty.cloud.mb.CommonConstant$ConnectType: int ordinal()>();
+
+     label03:
+        $r0[$i0] = 4;
+
+     label04:
+        $r2 = <com.nifty.cloud.mb.CommonConstant$ConnectType: com.nifty.cloud.mb.CommonConstant$ConnectType GET>;
+
+        $i0 = virtualinvoke $r2.<com.nifty.cloud.mb.CommonConstant$ConnectType: int ordinal()>();
+
+     label05:
+        $r0[$i0] = 1;
+
+     label06:
+        $r2 = <com.nifty.cloud.mb.CommonConstant$ConnectType: com.nifty.cloud.mb.CommonConstant$ConnectType POST>;
+
+        $i0 = virtualinvoke $r2.<com.nifty.cloud.mb.CommonConstant$ConnectType: int ordinal()>();
+
+     label07:
+        $r0[$i0] = 2;
+
+     label08:
+        $r2 = <com.nifty.cloud.mb.CommonConstant$ConnectType: com.nifty.cloud.mb.CommonConstant$ConnectType PUT>;
+
+        $i0 = virtualinvoke $r2.<com.nifty.cloud.mb.CommonConstant$ConnectType: int ordinal()>();
+
+     label09:
+        $r0[$i0] = 3;
+
+     label10:
+        <com.nifty.cloud.mb.CommonConnection: int[] $SWITCH_TABLE$com$nifty$cloud$mb$CommonConstant$ConnectType> = $r0;
+
+        return $r0;
+
+     label11:
+        $r3 := @caughtexception;
+
+        goto label10;
+
+     label12:
+        $r4 := @caughtexception;
+
+        goto label08;
+
+     label13:
+        $r5 := @caughtexception;
+
+        goto label06;
+
+     label14:
+        $r6 := @caughtexception;
+
+        goto label04;
+
+        catch java.lang.NoSuchFieldError from label02 to label03 with label14;
+        catch java.lang.NoSuchFieldError from label04 to label05 with label13;
+        catch java.lang.NoSuchFieldError from label06 to label07 with label12;
+        catch java.lang.NoSuchFieldError from label08 to label09 with label11;
+    }
+
+    static void <clinit>()
+    {
+        int $i0;
+        android.os.StrictMode$ThreadPolicy$Builder $r0;
+        android.os.StrictMode$ThreadPolicy $r1;
+
+        nop;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 9 goto label1;
+
+        $r0 = new android.os.StrictMode$ThreadPolicy$Builder;
+
+        specialinvoke $r0.<android.os.StrictMode$ThreadPolicy$Builder: void <init>()>();
+
+        $r0 = virtualinvoke $r0.<android.os.StrictMode$ThreadPolicy$Builder: android.os.StrictMode$ThreadPolicy$Builder permitAll()>();
+
+        $r1 = virtualinvoke $r0.<android.os.StrictMode$ThreadPolicy$Builder: android.os.StrictMode$ThreadPolicy build()>();
+
+        staticinvoke <android.os.StrictMode: void setThreadPolicy(android.os.StrictMode$ThreadPolicy)>($r1);
+
+     label1:
+        return;
+    }
+
+    public void <init>(java.lang.String, com.nifty.cloud.mb.CommonConstant$ConnectType, java.lang.String, java.lang.String)
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        java.lang.String $r1, $r3, $r4, varReplacer1364;
+        com.nifty.cloud.mb.CommonConstant$ConnectType $r2;
+        boolean $z0;
+        null_type varReplacer1350, varReplacer1352, varReplacer1354, varReplacer1355, varReplacer1356, varReplacer1357, varReplacer1358, varReplacer1360, varReplacer1361, varReplacer1362, varReplacer1365, varReplacer1366, varReplacer1367;
+        int varReplacer1351, varReplacer1353, varReplacer1359, varReplacer1363;
+
+        nop;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: com.nifty.cloud.mb.CommonConstant$ConnectType;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 := @parameter3: java.lang.String;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer1351 = 0;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: int statusCode> = varReplacer1351;
+
+        varReplacer1350 = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String result> = varReplacer1350;
+
+        varReplacer1354 = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = varReplacer1354;
+
+        varReplacer1367 = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: byte[] resultData> = varReplacer1367;
+
+        varReplacer1363 = 1;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: int connectEvent> = varReplacer1363;
+
+        varReplacer1361 = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String url> = varReplacer1361;
+
+        varReplacer1358 = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.CommonConstant$ConnectType type> = varReplacer1358;
+
+        varReplacer1366 = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String sessionToken> = varReplacer1366;
+
+        varReplacer1352 = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String content> = varReplacer1352;
+
+        varReplacer1355 = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String contentType> = varReplacer1355;
+
+        varReplacer1360 = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.json.JSONObject jsonContent> = varReplacer1360;
+
+        varReplacer1362 = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: byte[] postData> = varReplacer1362;
+
+        varReplacer1356 = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.ProgressCallback callback> = varReplacer1356;
+
+        varReplacer1357 = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.HttpClient httpClient> = varReplacer1357;
+
+        varReplacer1365 = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest> = varReplacer1365;
+
+        varReplacer1353 = 0;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: boolean isDebug> = varReplacer1353;
+
+        $z0 = $r0.<com.nifty.cloud.mb.CommonConnection: boolean isDebug>;
+
+        if $z0 == 0 goto label2;
+
+        varReplacer1364 = "https://www.google.co.jp/";
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String url> = varReplacer1364;
+
+     label1:
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.CommonConstant$ConnectType type> = $r2;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String sessionToken> = $r3;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String content> = $r4;
+
+        varReplacer1359 = 1;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: int connectEvent> = varReplacer1359;
+
+        return;
+
+     label2:
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String url> = $r1;
+
+        goto label1;
+    }
+
+    public void <init>(java.lang.String, java.lang.String, com.nifty.cloud.mb.ProgressCallback)
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        java.lang.String $r1, $r2;
+        com.nifty.cloud.mb.ProgressCallback $r3;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: com.nifty.cloud.mb.ProgressCallback;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: int statusCode> = 0;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String result> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: byte[] resultData> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: int connectEvent> = 1;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String url> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.CommonConstant$ConnectType type> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String sessionToken> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String content> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String contentType> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.json.JSONObject jsonContent> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: byte[] postData> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.ProgressCallback callback> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.HttpClient httpClient> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: boolean isDebug> = 0;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String url> = $r1;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String sessionToken> = $r2;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.ProgressCallback callback> = $r3;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: int connectEvent> = 2;
+
+        return;
+    }
+
+    public void <init>(java.lang.String, byte[], java.lang.String, java.lang.String, org.json.JSONObject, com.nifty.cloud.mb.ProgressCallback)
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        java.lang.String $r1, $r3, $r4;
+        byte[] $r2;
+        org.json.JSONObject $r5;
+        com.nifty.cloud.mb.ProgressCallback $r6;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: byte[];
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 := @parameter3: java.lang.String;
+
+        $r5 := @parameter4: org.json.JSONObject;
+
+        $r6 := @parameter5: com.nifty.cloud.mb.ProgressCallback;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: int statusCode> = 0;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String result> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: byte[] resultData> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: int connectEvent> = 1;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String url> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.CommonConstant$ConnectType type> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String sessionToken> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String content> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String contentType> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.json.JSONObject jsonContent> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: byte[] postData> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.ProgressCallback callback> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.HttpClient httpClient> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest> = null;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: boolean isDebug> = 0;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String url> = $r1;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: byte[] postData> = $r2;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String sessionToken> = $r4;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String contentType> = $r3;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.json.JSONObject jsonContent> = $r5;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.ProgressCallback callback> = $r6;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: int connectEvent> = 3;
+
+        return;
+    }
+
+    private void addHeader()
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        null_type varReplacer1396;
+
+        nop;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        varReplacer1396 = null;
+
+        specialinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void addHeader(java.lang.String)>(varReplacer1396);
+
+        return;
+    }
+
+    private void addHeader(java.lang.String)
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        java.lang.String $r1, $r6, varReplacer1433, varReplacer1434, varReplacer1435, varReplacer1436, varReplacer1437, varReplacer1438, varReplacer1439, varReplacer1440, varReplacer1441, varReplacer1442, varReplacer1443, varReplacer1445, varReplacer1446, varReplacer1447, varReplacer1448, varReplacer1449;
+        java.text.SimpleDateFormat $r2;
+        java.sql.Timestamp $r3;
+        org.apache.http.client.methods.HttpUriRequest $r4;
+        long $l0;
+        java.util.SimpleTimeZone $r5;
+        int $i1, varReplacer1444;
+        java.lang.StringBuilder $r7;
+        java.lang.Throwable $r8;
+
+        nop;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        $r1 := @parameter0: java.lang.String;
+
+        goto label09;
+
+     label01:
+        $r4 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+        $r1 = <com.nifty.cloud.mb.NCMB: java.lang.String applicationKey>;
+
+        varReplacer1442 = "X-NCMB-Application-Key";
+
+        interfaceinvoke $r4.<org.apache.http.client.methods.HttpUriRequest: void addHeader(java.lang.String,java.lang.String)>(varReplacer1442, $r1);
+
+        $r3 = new java.sql.Timestamp;
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        specialinvoke $r3.<java.sql.Timestamp: void <init>(long)>($l0);
+
+        $r2 = new java.text.SimpleDateFormat;
+
+        varReplacer1440 = "yyyy-MM-dd\'T\'hh:mm:ss.SSS\'Z\'";
+
+        specialinvoke $r2.<java.text.SimpleDateFormat: void <init>(java.lang.String)>(varReplacer1440);
+
+        $r5 = new java.util.SimpleTimeZone;
+
+        varReplacer1444 = 0;
+
+        varReplacer1445 = "GMT";
+
+        specialinvoke $r5.<java.util.SimpleTimeZone: void <init>(int,java.lang.String)>(varReplacer1444, varReplacer1445);
+
+        virtualinvoke $r2.<java.text.DateFormat: void setTimeZone(java.util.TimeZone)>($r5);
+
+        $r4 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+     label02:
+        $r1 = virtualinvoke $r2.<java.text.DateFormat: java.lang.String format(java.util.Date)>($r3);
+
+        varReplacer1441 = "UTF-8";
+
+        $r1 = staticinvoke <java.net.URLEncoder: java.lang.String encode(java.lang.String,java.lang.String)>($r1, varReplacer1441);
+
+        varReplacer1433 = "X-NCMB-Timestamp";
+
+        interfaceinvoke $r4.<org.apache.http.client.methods.HttpUriRequest: void addHeader(java.lang.String,java.lang.String)>(varReplacer1433, $r1);
+
+     label03:
+        $r4 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+     label04:
+        $r1 = specialinvoke $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String makeSignatureHashData()>();
+
+     label05:
+        $r6 = <com.nifty.cloud.mb.NCMB: java.lang.String clientKey>;
+
+     label06:
+        $r1 = specialinvoke $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String makeSignature(java.lang.String,java.lang.String)>($r1, $r6);
+
+        varReplacer1443 = "UTF-8";
+
+        $r1 = staticinvoke <java.net.URLEncoder: java.lang.String encode(java.lang.String,java.lang.String)>($r1, varReplacer1443);
+
+        varReplacer1437 = "X-NCMB-Signature";
+
+        interfaceinvoke $r4.<org.apache.http.client.methods.HttpUriRequest: void addHeader(java.lang.String,java.lang.String)>(varReplacer1437, $r1);
+
+     label07:
+        $r4 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+        varReplacer1435 = "Access-Control-Allow-Origin";
+
+        varReplacer1436 = "*";
+
+        interfaceinvoke $r4.<org.apache.http.client.methods.HttpUriRequest: void addHeader(java.lang.String,java.lang.String)>(varReplacer1435, varReplacer1436);
+
+        $r1 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String sessionToken>;
+
+        if $r1 == null goto label08;
+
+        $r1 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String sessionToken>;
+
+        $i1 = virtualinvoke $r1.<java.lang.String: int length()>();
+
+        if $i1 <= 0 goto label08;
+
+        $r4 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+        $r1 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String sessionToken>;
+
+        varReplacer1448 = "X-NCMB-Apps-Session-Token";
+
+        interfaceinvoke $r4.<org.apache.http.client.methods.HttpUriRequest: void addHeader(java.lang.String,java.lang.String)>(varReplacer1448, $r1);
+
+     label08:
+        $r4 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+        varReplacer1446 = "X-NCMB-SDK-Version";
+
+        varReplacer1447 = "android-1.5.4";
+
+        interfaceinvoke $r4.<org.apache.http.client.methods.HttpUriRequest: void addHeader(java.lang.String,java.lang.String)>(varReplacer1446, varReplacer1447);
+
+        $r1 = <android.os.Build$VERSION: java.lang.String RELEASE>;
+
+        $r4 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+        $r7 = new java.lang.StringBuilder;
+
+        varReplacer1434 = "android-";
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1434);
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer1449 = "X-NCMB-OS-Version";
+
+        interfaceinvoke $r4.<org.apache.http.client.methods.HttpUriRequest: void addHeader(java.lang.String,java.lang.String)>(varReplacer1449, $r1);
+
+        return;
+
+     label09:
+        $r4 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+        varReplacer1438 = "Content-Type";
+
+        varReplacer1439 = "application/json";
+
+        interfaceinvoke $r4.<org.apache.http.client.methods.HttpUriRequest: void addHeader(java.lang.String,java.lang.String)>(varReplacer1438, varReplacer1439);
+
+        goto label01;
+
+     label10:
+        $r8 := @caughtexception;
+
+        goto label07;
+
+        catch java.io.UnsupportedEncodingException from label02 to label03 with label10;
+        catch java.io.UnsupportedEncodingException from label04 to label05 with label10;
+        catch java.io.UnsupportedEncodingException from label06 to label07 with label10;
+    }
+
+    private void checkInvalidSessionToken(java.lang.String)
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        java.lang.String $r1, $r2, varReplacer1406, varReplacer1407;
+        boolean $z0;
+
+        nop;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = "E401001";
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        $r1 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String sessionToken>;
+
+        if $r1 == null goto label1;
+
+        $r1 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String sessionToken>;
+
+        $r2 = staticinvoke <com.nifty.cloud.mb.NCMBUser: java.lang.String getCurrentSessionToken()>();
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>($r2);
+
+        if $z0 == 0 goto label1;
+
+        staticinvoke <com.nifty.cloud.mb.NCMBUser: void logOutEvent()>();
+
+        varReplacer1406 = "com.nifty.cloud.mb.CommonConnection";
+
+        varReplacer1407 = "currentUser is found. delete local data.";
+
+        staticinvoke <com.nifty.cloud.mb.NCMB: void logW(java.lang.String,java.lang.String)>(varReplacer1406, varReplacer1407);
+
+     label1:
+        return;
+    }
+
+    private java.lang.String makeSignature(java.lang.String, java.lang.String)
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        java.lang.String $r1, $r2, varReplacer1426, varReplacer1427, varReplacer1428, varReplacer1429, varReplacer1431;
+        java.lang.Exception $r3;
+        javax.crypto.spec.SecretKeySpec $r4;
+        byte[] $r5;
+        javax.crypto.Mac $r6;
+        java.lang.IllegalArgumentException $r7;
+        int varReplacer1430;
+
+        nop;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r4 = new javax.crypto.spec.SecretKeySpec;
+
+     label1:
+        varReplacer1427 = "UTF-8";
+
+        $r5 = virtualinvoke $r2.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer1427);
+
+        varReplacer1431 = "HmacSHA256";
+
+        specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer1431);
+
+        varReplacer1426 = "HmacSHA256";
+
+        $r6 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer1426);
+
+        virtualinvoke $r6.<javax.crypto.Mac: void init(java.security.Key)>($r4);
+
+        varReplacer1428 = "UTF-8";
+
+        $r5 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer1428);
+
+        $r5 = virtualinvoke $r6.<javax.crypto.Mac: byte[] doFinal(byte[])>($r5);
+
+        varReplacer1430 = 0;
+
+        $r1 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r5, varReplacer1430);
+
+     label2:
+        return $r1;
+
+     label3:
+        $r3 := @caughtexception;
+
+        $r7 = new java.lang.IllegalArgumentException;
+
+        varReplacer1429 = "signature";
+
+        specialinvoke $r7.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer1429);
+
+        throw $r7;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    private java.lang.String makeSignatureHashData()
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        java.lang.StringBuilder $r1, $r6;
+        java.util.ArrayList $r2;
+        java.lang.String $r3, $r4, varReplacer1414, varReplacer1415, varReplacer1416, varReplacer1417, varReplacer1418, varReplacer1419, varReplacer1420, varReplacer1421, varReplacer1422, varReplacer1423, varReplacer1424, varReplacer1425;
+        int $i0, $i1;
+        java.lang.String[] $r5;
+        org.apache.http.client.methods.HttpUriRequest $r7;
+        org.apache.http.Header[] $r8;
+        org.apache.http.Header $r9;
+        com.nifty.cloud.mb.CommonConstant$ConnectType $r10;
+        java.util.Iterator $r11;
+        boolean $z0;
+        java.lang.Object $r12;
+
+        nop;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String url>;
+
+        $r4 = "https://mb.api.cloud.nifty.com";
+
+        $i0 = virtualinvoke $r4.<java.lang.String: int length()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.String: java.lang.String substring(int)>($i0);
+
+        varReplacer1414 = "\\?";
+
+        $r5 = virtualinvoke $r3.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer1414);
+
+        $r3 = $r5[0];
+
+        $r4 = null;
+
+        $i0 = lengthof $r5;
+
+        if $i0 <= 1 goto label1;
+
+        $r4 = $r5[1];
+
+     label1:
+        $r2 = new java.util.ArrayList;
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>()>();
+
+        if $r4 == null goto label3;
+
+        varReplacer1425 = "\\&";
+
+        $r5 = virtualinvoke $r4.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer1425);
+
+        $i0 = lengthof $r5;
+
+        $i1 = 0;
+
+     label2:
+        if $i1 < $i0 goto label5;
+
+     label3:
+        varReplacer1420 = "SignatureMethod=HmacSHA256";
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>(varReplacer1420);
+
+        varReplacer1421 = "SignatureVersion=2";
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>(varReplacer1421);
+
+        $r6 = new java.lang.StringBuilder;
+
+        varReplacer1419 = "X-NCMB-Application-Key=";
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1419);
+
+        $r4 = <com.nifty.cloud.mb.NCMB: java.lang.String applicationKey>;
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>($r4);
+
+        $r6 = new java.lang.StringBuilder;
+
+        varReplacer1418 = "X-NCMB-Timestamp=";
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1418);
+
+        $r7 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+        varReplacer1424 = "X-NCMB-Timestamp";
+
+        $r8 = interfaceinvoke $r7.<org.apache.http.client.methods.HttpUriRequest: org.apache.http.Header[] getHeaders(java.lang.String)>(varReplacer1424);
+
+        $r9 = $r8[0];
+
+        $r4 = interfaceinvoke $r9.<org.apache.http.Header: java.lang.String getValue()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>($r4);
+
+        staticinvoke <java.util.Collections: void sort(java.util.List)>($r2);
+
+        $r10 = $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.CommonConstant$ConnectType type>;
+
+        $r4 = virtualinvoke $r10.<com.nifty.cloud.mb.CommonConstant$ConnectType: java.lang.String toString()>();
+
+        $r6 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        varReplacer1422 = "\n";
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1422);
+
+        varReplacer1415 = "mb.api.cloud.nifty.com";
+
+        $r6 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1415);
+
+        varReplacer1417 = "\n";
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1417);
+
+        $r6 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer1416 = "\n";
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1416);
+
+        $r11 = interfaceinvoke $r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label4:
+        $z0 = interfaceinvoke $r11.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 != 0 goto label6;
+
+        $i0 = virtualinvoke $r1.<java.lang.StringBuilder: int length()>();
+
+        $i0 = $i0 + -1;
+
+        $i1 = virtualinvoke $r1.<java.lang.StringBuilder: int length()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder delete(int,int)>($i0, $i1);
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r3;
+
+     label5:
+        $r4 = $r5[$i1];
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>($r4);
+
+        $i1 = $i1 + 1;
+
+        goto label2;
+
+     label6:
+        $r12 = interfaceinvoke $r11.<java.util.Iterator: java.lang.Object next()>();
+
+        $r3 = (java.lang.String) $r12;
+
+        $r6 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer1423 = "&";
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1423);
+
+        goto label4;
+    }
+
+    java.lang.String bin2hex(byte[])
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        byte[] $r1;
+        byte $b0;
+        java.lang.StringBuffer $r2;
+        int $i1, $i2, $i4;
+        java.lang.String $r3;
+        short $s3;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 = new java.lang.StringBuffer;
+
+        specialinvoke $r2.<java.lang.StringBuffer: void <init>()>();
+
+        $i1 = lengthof $r1;
+
+        $i2 = 0;
+
+     label1:
+        if $i2 < $i1 goto label2;
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        return $r3;
+
+     label2:
+        $b0 = $r1[$i2];
+
+        $s3 = $b0 & 255;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s3);
+
+        $i4 = virtualinvoke $r3.<java.lang.String: int length()>();
+
+        if $i4 != 1 goto label3;
+
+        virtualinvoke $r2.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>("0");
+
+     label3:
+        virtualinvoke $r2.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>($r3);
+
+        $i2 = $i2 + 1;
+
+        goto label1;
+    }
+
+    void cancel()
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        org.apache.http.client.methods.HttpUriRequest $r1;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        $r1 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+        if $r1 == null goto label1;
+
+        $r1 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+        interfaceinvoke $r1.<org.apache.http.client.methods.HttpUriRequest: void abort()>();
+
+     label1:
+        return;
+    }
+
+    boolean checkResponseSignature(java.lang.String, org.apache.http.Header)
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        java.lang.String $r1, $r5, $r6, varReplacer1401, varReplacer1402, varReplacer1403, varReplacer1404, varReplacer1405;
+        org.apache.http.Header $r2;
+        java.lang.StringBuffer $r3;
+        com.nifty.cloud.mb.NCMBException $r4;
+        int $i0, varReplacer1397, varReplacer1398, varReplacer1399, varReplacer1400;
+        boolean $z0;
+
+        nop;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: org.apache.http.Header;
+
+        if $r2 != null goto label1;
+
+        $r4 = new com.nifty.cloud.mb.NCMBException;
+
+        varReplacer1401 = "E100001";
+
+        varReplacer1402 = "{\"code\":\"E100001\",\"error\":\"Authentication error by response signature incorrect.\"}";
+
+        specialinvoke $r4.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.String,java.lang.String)>(varReplacer1401, varReplacer1402);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r4;
+
+        varReplacer1399 = 0;
+
+        return varReplacer1399;
+
+     label1:
+        $r5 = interfaceinvoke $r2.<org.apache.http.Header: java.lang.String getValue()>();
+
+        $r3 = new java.lang.StringBuffer;
+
+        $r6 = specialinvoke $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String makeSignatureHashData()>();
+
+        specialinvoke $r3.<java.lang.StringBuffer: void <init>(java.lang.String)>($r6);
+
+        if $r1 == null goto label2;
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int length()>();
+
+        if $i0 <= 0 goto label2;
+
+        varReplacer1403 = "\n";
+
+        virtualinvoke $r3.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>(varReplacer1403);
+
+        virtualinvoke $r3.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>($r1);
+
+     label2:
+        $r1 = virtualinvoke $r3.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        $r6 = <com.nifty.cloud.mb.NCMB: java.lang.String clientKey>;
+
+        $r1 = specialinvoke $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String makeSignature(java.lang.String,java.lang.String)>($r1, $r6);
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int length()>();
+
+        $i0 = $i0 + -1;
+
+        varReplacer1397 = 0;
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1397, $i0);
+
+        if $r1 == null goto label3;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>($r5);
+
+        if $z0 != 0 goto label4;
+
+     label3:
+        $r4 = new com.nifty.cloud.mb.NCMBException;
+
+        varReplacer1404 = "E100001";
+
+        varReplacer1405 = "{\"code\":\"E100001\",\"error\":\"Authentication error by response signature incorrect.\"}";
+
+        specialinvoke $r4.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.String,java.lang.String)>(varReplacer1404, varReplacer1405);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r4;
+
+        varReplacer1400 = 0;
+
+        return varReplacer1400;
+
+     label4:
+        varReplacer1398 = 1;
+
+        return varReplacer1398;
+    }
+
+    void connect()
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        null_type varReplacer1368;
+
+        nop;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        varReplacer1368 = null;
+
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void connect(java.lang.String)>(varReplacer1368);
+
+        return;
+    }
+
+    void connect(java.lang.String)
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        java.lang.String $r1, $r9, varReplacer1370, varReplacer1371, varReplacer1372, varReplacer1373, varReplacer1374, varReplacer1376, varReplacer1377;
+        java.io.ByteArrayOutputStream $r2, r30;
+        org.json.JSONObject $r3, r36;
+        org.apache.http.impl.client.DefaultHttpClient $r4, r28;
+        org.apache.http.client.HttpClient $r5;
+        org.apache.http.params.HttpParams $r6;
+        int[] $r7;
+        com.nifty.cloud.mb.CommonConstant$ConnectType $r8;
+        int $i0, varReplacer1369, varReplacer1375;
+        boolean $z0;
+        org.apache.http.client.methods.HttpUriRequest $r10;
+        org.apache.http.client.methods.HttpPost $r11, r32;
+        org.apache.http.entity.StringEntity $r12, r29;
+        org.apache.http.HttpResponse $r13;
+        org.apache.http.StatusLine $r14;
+        org.apache.http.HttpEntity $r15;
+        org.apache.http.Header $r16;
+        org.apache.http.client.methods.HttpGet $r17, r31;
+        java.lang.Throwable $r18, $r21, $r22, $r24, $r25, $r26;
+        org.apache.http.client.methods.HttpPut $r19, r33;
+        org.apache.http.client.methods.HttpDelete $r20, r34;
+        com.nifty.cloud.mb.NCMBException $r23, r35;
+        org.json.JSONException $r27;
+
+        nop;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        $r1 := @parameter0: java.lang.String;
+
+     label001:
+        r28 = new org.apache.http.impl.client.DefaultHttpClient;
+
+     label002:
+        $r4 = r28;
+
+     label003:
+        specialinvoke r28.<org.apache.http.impl.client.DefaultHttpClient: void <init>()>();
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.HttpClient httpClient> = $r4;
+
+        $r5 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.HttpClient httpClient>;
+
+        $r6 = interfaceinvoke $r5.<org.apache.http.client.HttpClient: org.apache.http.params.HttpParams getParams()>();
+
+        varReplacer1369 = 10000;
+
+        staticinvoke <org.apache.http.params.HttpConnectionParams: void setConnectionTimeout(org.apache.http.params.HttpParams,int)>($r6, varReplacer1369);
+
+        varReplacer1375 = 10000;
+
+        staticinvoke <org.apache.http.params.HttpConnectionParams: void setSoTimeout(org.apache.http.params.HttpParams,int)>($r6, varReplacer1375);
+
+        $r7 = staticinvoke <com.nifty.cloud.mb.CommonConnection: int[] $SWITCH_TABLE$com$nifty$cloud$mb$CommonConstant$ConnectType()>();
+
+        $r8 = $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.CommonConstant$ConnectType type>;
+
+        $i0 = virtualinvoke $r8.<com.nifty.cloud.mb.CommonConstant$ConnectType: int ordinal()>();
+
+        $i0 = $r7[$i0];
+
+     label004:
+        lookupswitch($i0)
+        {
+            case 1: goto label030;
+            case 2: goto label035;
+            case 3: goto label039;
+            case 4: goto label043;
+            default: goto label005;
+        };
+
+     label005:
+        $z0 = $r0.<com.nifty.cloud.mb.CommonConnection: boolean isDebug>;
+
+     label006:
+        if $z0 != 0 goto label020;
+
+     label007:
+        $r9 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String content>;
+
+     label008:
+        if $r9 == null goto label019;
+
+     label009:
+        $r9 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String content>;
+
+        $i0 = virtualinvoke $r9.<java.lang.String: int length()>();
+
+     label010:
+        if $i0 <= 0 goto label019;
+
+     label011:
+        $r10 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+        $z0 = $r10 instanceof org.apache.http.client.methods.HttpPost;
+
+     label012:
+        if $z0 == 0 goto label047;
+
+     label013:
+        $r10 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+        $r11 = (org.apache.http.client.methods.HttpPost) $r10;
+
+        r29 = new org.apache.http.entity.StringEntity;
+
+     label014:
+        $r12 = r29;
+
+     label015:
+        $r9 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String content>;
+
+     label016:
+        varReplacer1371 = "UTF-8";
+
+        specialinvoke r29.<org.apache.http.entity.StringEntity: void <init>(java.lang.String,java.lang.String)>($r9, varReplacer1371);
+
+     label017:
+        $r15 = (org.apache.http.HttpEntity) $r12;
+
+     label018:
+        virtualinvoke $r11.<org.apache.http.client.methods.HttpPost: void setEntity(org.apache.http.HttpEntity)>($r15);
+
+     label019:
+        specialinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void addHeader()>();
+
+     label020:
+        $r5 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.HttpClient httpClient>;
+
+        $r10 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+     label021:
+        $r13 = interfaceinvoke $r5.<org.apache.http.client.HttpClient: org.apache.http.HttpResponse execute(org.apache.http.client.methods.HttpUriRequest)>($r10);
+
+     label022:
+        $r14 = interfaceinvoke $r13.<org.apache.http.HttpResponse: org.apache.http.StatusLine getStatusLine()>();
+
+        $i0 = interfaceinvoke $r14.<org.apache.http.StatusLine: int getStatusCode()>();
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: int statusCode> = $i0;
+
+     label023:
+        r30 = new java.io.ByteArrayOutputStream;
+
+     label024:
+        $r2 = r30;
+
+     label025:
+        specialinvoke r30.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        $r15 = interfaceinvoke $r13.<org.apache.http.HttpResponse: org.apache.http.HttpEntity getEntity()>();
+
+        interfaceinvoke $r15.<org.apache.http.HttpEntity: void writeTo(java.io.OutputStream)>($r2);
+
+     label026:
+        $z0 = <com.nifty.cloud.mb.NCMB: boolean responseValidationFlag>;
+
+     label027:
+        if $z0 == 0 goto label067;
+
+     label028:
+        $r9 = virtualinvoke $r2.<java.io.ByteArrayOutputStream: java.lang.String toString()>();
+
+        varReplacer1372 = "X-NCMB-Response-Signature";
+
+        $r16 = interfaceinvoke $r13.<org.apache.http.HttpResponse: org.apache.http.Header getFirstHeader(java.lang.String)>(varReplacer1372);
+
+        $z0 = virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: boolean checkResponseSignature(java.lang.String,org.apache.http.Header)>($r9, $r16);
+
+     label029:
+        if $z0 != 0 goto label067;
+
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label030:
+        r31 = new org.apache.http.client.methods.HttpGet;
+
+     label031:
+        $r17 = r31;
+
+     label032:
+        $r9 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String url>;
+
+        specialinvoke r31.<org.apache.http.client.methods.HttpGet: void <init>(java.lang.String)>($r9);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest> = $r17;
+
+     label033:
+        goto label005;
+
+     label034:
+        $r18 := @caughtexception;
+
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        throw $r18;
+
+     label035:
+        r32 = new org.apache.http.client.methods.HttpPost;
+
+     label036:
+        $r11 = r32;
+
+     label037:
+        $r9 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String url>;
+
+        specialinvoke r32.<org.apache.http.client.methods.HttpPost: void <init>(java.lang.String)>($r9);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest> = $r11;
+
+     label038:
+        goto label005;
+
+     label039:
+        r33 = new org.apache.http.client.methods.HttpPut;
+
+     label040:
+        $r19 = r33;
+
+     label041:
+        $r9 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String url>;
+
+        specialinvoke r33.<org.apache.http.client.methods.HttpPut: void <init>(java.lang.String)>($r9);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest> = $r19;
+
+     label042:
+        goto label005;
+
+     label043:
+        r34 = new org.apache.http.client.methods.HttpDelete;
+
+     label044:
+        $r20 = r34;
+
+     label045:
+        $r9 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String url>;
+
+        specialinvoke r34.<org.apache.http.client.methods.HttpDelete: void <init>(java.lang.String)>($r9);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest> = $r20;
+
+     label046:
+        goto label005;
+
+     label047:
+        $r10 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+        $z0 = $r10 instanceof org.apache.http.client.methods.HttpPut;
+
+     label048:
+        if $z0 == 0 goto label019;
+
+     label049:
+        $r10 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+        $r19 = (org.apache.http.client.methods.HttpPut) $r10;
+
+        r29 = new org.apache.http.entity.StringEntity;
+
+     label050:
+        $r12 = r29;
+
+     label051:
+        $r9 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String content>;
+
+     label052:
+        varReplacer1374 = "UTF-8";
+
+        specialinvoke r29.<org.apache.http.entity.StringEntity: void <init>(java.lang.String,java.lang.String)>($r9, varReplacer1374);
+
+     label053:
+        $r15 = (org.apache.http.HttpEntity) $r12;
+
+     label054:
+        virtualinvoke $r19.<org.apache.http.client.methods.HttpPut: void setEntity(org.apache.http.HttpEntity)>($r15);
+
+     label055:
+        goto label019;
+
+     label056:
+        $r21 := @caughtexception;
+
+        goto label019;
+
+     label057:
+        $r22 := @caughtexception;
+
+     label058:
+        r35 = new com.nifty.cloud.mb.NCMBException;
+
+     label059:
+        $r23 = r35;
+
+     label060:
+        specialinvoke r35.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.Throwable)>($r22);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r23;
+
+     label061:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label062:
+        $r24 := @caughtexception;
+
+     label063:
+        r35 = new com.nifty.cloud.mb.NCMBException;
+
+     label064:
+        $r23 = r35;
+
+     label065:
+        specialinvoke r35.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.Throwable)>($r24);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r23;
+
+     label066:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label067:
+        $r9 = virtualinvoke $r2.<java.io.ByteArrayOutputStream: java.lang.String toString()>();
+
+     label068:
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String result> = $r9;
+
+     label069:
+        $r9 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String result>;
+
+        varReplacer1377 = "com.nifty.cloud.mb.CommonConnection";
+
+        staticinvoke <com.nifty.cloud.mb.NCMB: void logD(java.lang.String,java.lang.String)>(varReplacer1377, $r9);
+
+        $z0 = $r0.<com.nifty.cloud.mb.CommonConnection: boolean isDebug>;
+
+     label070:
+        if $z0 == 0 goto label072;
+
+     label071:
+        varReplacer1376 = "{\"results\":[{\"objectId\":\"d9k32ja8Da\",\"createDate\":\"2013-04-16T10:24:41.214Z\",\"updateDate\":\"2013-04-16T10:24:41.214Z\"}]}";
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String result> = varReplacer1376;
+
+     label072:
+        $i0 = $r0.<com.nifty.cloud.mb.CommonConnection: int statusCode>;
+
+     label073:
+        lookupswitch($i0)
+        {
+            case 200: goto label100;
+            case 201: goto label100;
+            default: goto label074;
+        };
+
+     label074:
+        r36 = new org.json.JSONObject;
+
+     label075:
+        $r3 = r36;
+
+     label076:
+        $r1 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String result>;
+
+     label077:
+        specialinvoke r36.<org.json.JSONObject: void <init>(java.lang.String)>($r1);
+
+     label078:
+        $r1 = null;
+
+     label079:
+        varReplacer1373 = "code";
+
+        $z0 = virtualinvoke $r3.<org.json.JSONObject: boolean has(java.lang.String)>(varReplacer1373);
+
+     label080:
+        if $z0 == 0 goto label084;
+
+     label081:
+        varReplacer1370 = "code";
+
+        $r9 = virtualinvoke $r3.<org.json.JSONObject: java.lang.String getString(java.lang.String)>(varReplacer1370);
+
+     label082:
+        $r1 = $r9;
+
+     label083:
+        specialinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void checkInvalidSessionToken(java.lang.String)>($r9);
+
+     label084:
+        r35 = new com.nifty.cloud.mb.NCMBException;
+
+     label085:
+        $r23 = r35;
+
+     label086:
+        $r9 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String result>;
+
+     label087:
+        specialinvoke r35.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.String,java.lang.String)>($r1, $r9);
+
+     label088:
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r23;
+
+     label089:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label090:
+        $r25 := @caughtexception;
+
+     label091:
+        r35 = new com.nifty.cloud.mb.NCMBException;
+
+     label092:
+        $r23 = r35;
+
+     label093:
+        specialinvoke r35.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.Throwable)>($r25);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r23;
+
+     label094:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label095:
+        $r26 := @caughtexception;
+
+     label096:
+        r35 = new com.nifty.cloud.mb.NCMBException;
+
+     label097:
+        $r23 = r35;
+
+     label098:
+        specialinvoke r35.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.Throwable)>($r26);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r23;
+
+     label099:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label100:
+        goto label101;
+
+     label101:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label102:
+        $r27 := @caughtexception;
+
+     label103:
+        r35 = new com.nifty.cloud.mb.NCMBException;
+
+     label104:
+        $r23 = r35;
+
+     label105:
+        specialinvoke r35.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.Throwable)>($r27);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r23;
+
+     label106:
+        goto label089;
+
+        catch java.lang.Throwable from label001 to label002 with label034;
+        catch java.lang.Throwable from label003 to label004 with label034;
+        catch java.lang.Throwable from label005 to label006 with label034;
+        catch java.lang.Throwable from label007 to label008 with label034;
+        catch java.lang.Throwable from label009 to label010 with label034;
+        catch java.io.UnsupportedEncodingException from label016 to label017 with label056;
+        catch java.io.UnsupportedEncodingException from label018 to label019 with label056;
+        catch java.lang.Throwable from label011 to label012 with label034;
+        catch java.lang.Throwable from label013 to label014 with label034;
+        catch java.lang.Throwable from label015 to label019 with label034;
+        catch java.lang.Throwable from label019 to label020 with label034;
+        catch org.apache.http.client.ClientProtocolException from label021 to label022 with label057;
+        catch java.io.IOException from label021 to label022 with label062;
+        catch java.lang.Throwable from label020 to label022 with label034;
+        catch java.lang.Throwable from label022 to label023 with label034;
+        catch java.io.IOException from label025 to label026 with label090;
+        catch java.io.IOException from label028 to label029 with label090;
+        catch java.lang.IllegalArgumentException from label025 to label026 with label095;
+        catch java.lang.IllegalArgumentException from label028 to label029 with label095;
+        catch java.lang.Throwable from label023 to label024 with label034;
+        catch java.lang.Throwable from label025 to label027 with label034;
+        catch java.lang.Throwable from label028 to label029 with label034;
+        catch java.lang.Throwable from label030 to label031 with label034;
+        catch java.lang.Throwable from label032 to label033 with label034;
+        catch java.lang.Throwable from label035 to label036 with label034;
+        catch java.lang.Throwable from label037 to label038 with label034;
+        catch java.lang.Throwable from label039 to label040 with label034;
+        catch java.lang.Throwable from label041 to label042 with label034;
+        catch java.lang.Throwable from label043 to label044 with label034;
+        catch java.lang.Throwable from label045 to label046 with label034;
+        catch java.io.UnsupportedEncodingException from label052 to label053 with label056;
+        catch java.io.UnsupportedEncodingException from label054 to label055 with label056;
+        catch java.lang.Throwable from label047 to label048 with label034;
+        catch java.lang.Throwable from label049 to label050 with label034;
+        catch java.lang.Throwable from label051 to label055 with label034;
+        catch java.lang.Throwable from label058 to label059 with label034;
+        catch java.lang.Throwable from label060 to label061 with label034;
+        catch java.lang.Throwable from label063 to label064 with label034;
+        catch java.lang.Throwable from label065 to label066 with label034;
+        catch java.io.IOException from label067 to label068 with label090;
+        catch java.lang.IllegalArgumentException from label067 to label068 with label095;
+        catch java.lang.Throwable from label067 to label069 with label034;
+        catch java.lang.Throwable from label069 to label070 with label034;
+        catch java.lang.Throwable from label071 to label073 with label034;
+        catch org.json.JSONException from label077 to label078 with label102;
+        catch org.json.JSONException from label079 to label080 with label102;
+        catch org.json.JSONException from label081 to label082 with label102;
+        catch org.json.JSONException from label083 to label084 with label102;
+        catch org.json.JSONException from label087 to label088 with label102;
+        catch java.lang.Throwable from label074 to label075 with label034;
+        catch java.lang.Throwable from label076 to label078 with label034;
+        catch java.lang.Throwable from label079 to label080 with label034;
+        catch java.lang.Throwable from label081 to label082 with label034;
+        catch java.lang.Throwable from label083 to label085 with label034;
+        catch java.lang.Throwable from label086 to label089 with label034;
+        catch java.lang.Throwable from label091 to label092 with label034;
+        catch java.lang.Throwable from label093 to label094 with label034;
+        catch java.lang.Throwable from label096 to label097 with label034;
+        catch java.lang.Throwable from label098 to label099 with label034;
+        catch java.lang.Throwable from label101 to label101 with label034;
+        catch java.lang.Throwable from label103 to label104 with label034;
+        catch java.lang.Throwable from label105 to label106 with label034;
+    }
+
+    void execute(java.lang.String)
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        java.lang.String $r1;
+        int $i0;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 = $r0.<com.nifty.cloud.mb.CommonConnection: int connectEvent>;
+
+        lookupswitch($i0)
+        {
+            case 1: goto label2;
+            case 2: goto label3;
+            case 3: goto label4;
+            default: goto label1;
+        };
+
+     label1:
+        return;
+
+     label2:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void connect(java.lang.String)>($r1);
+
+        return;
+
+     label3:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void getFile()>();
+
+        return;
+
+     label4:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void postFile()>();
+
+        return;
+    }
+
+    com.nifty.cloud.mb.NCMBException getException()
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        com.nifty.cloud.mb.NCMBException r1;
+
+        nop;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        r1 = $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception>;
+
+        return r1;
+    }
+
+    void getFile()
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        java.io.ByteArrayOutputStream $r1, r29;
+        byte[] $r2;
+        org.json.JSONObject $r3, r31;
+        com.nifty.cloud.mb.CommonConstant$ConnectType $r4;
+        org.apache.http.impl.client.DefaultHttpClient $r5, r27;
+        org.apache.http.client.HttpClient $r6;
+        org.apache.http.params.HttpParams $r7;
+        org.apache.http.client.methods.HttpGet $r8, r28;
+        java.lang.String $r9, $r23;
+        org.apache.http.client.methods.HttpUriRequest $r10;
+        org.apache.http.HttpResponse $r11;
+        org.apache.http.StatusLine $r12;
+        int $i0, $i1, $i2;
+        org.apache.http.HttpEntity $r13;
+        boolean $z0;
+        org.apache.http.Header $r14;
+        java.lang.Throwable $r15, $r17, $r22, $r24, $r26;
+        com.nifty.cloud.mb.NCMBException $r16, r30;
+        org.apache.http.Header[] $r18;
+        java.io.InputStream $r19;
+        com.nifty.cloud.mb.ProgressCallback $r20;
+        float $f0, $f1;
+        java.lang.Integer $r21;
+        org.json.JSONException $r25;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+     label01:
+        $r4 = <com.nifty.cloud.mb.CommonConstant$ConnectType: com.nifty.cloud.mb.CommonConstant$ConnectType GET>;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.CommonConstant$ConnectType type> = $r4;
+
+        r27 = new org.apache.http.impl.client.DefaultHttpClient;
+
+     label02:
+        $r5 = r27;
+
+     label03:
+        specialinvoke r27.<org.apache.http.impl.client.DefaultHttpClient: void <init>()>();
+
+        $r6 = (org.apache.http.client.HttpClient) $r5;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.HttpClient httpClient> = $r6;
+
+        $r6 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.HttpClient httpClient>;
+
+        $r7 = interfaceinvoke $r6.<org.apache.http.client.HttpClient: org.apache.http.params.HttpParams getParams()>();
+
+        staticinvoke <org.apache.http.params.HttpConnectionParams: void setConnectionTimeout(org.apache.http.params.HttpParams,int)>($r7, 10000);
+
+        staticinvoke <org.apache.http.params.HttpConnectionParams: void setSoTimeout(org.apache.http.params.HttpParams,int)>($r7, 10000);
+
+        r28 = new org.apache.http.client.methods.HttpGet;
+
+     label04:
+        $r8 = r28;
+
+     label05:
+        $r9 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String url>;
+
+        specialinvoke r28.<org.apache.http.client.methods.HttpGet: void <init>(java.lang.String)>($r9);
+
+        $r10 = (org.apache.http.client.methods.HttpUriRequest) $r8;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest> = $r10;
+
+        specialinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void addHeader()>();
+
+     label06:
+        $r6 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.HttpClient httpClient>;
+
+        $r10 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+     label07:
+        $r11 = interfaceinvoke $r6.<org.apache.http.client.HttpClient: org.apache.http.HttpResponse execute(org.apache.http.client.methods.HttpUriRequest)>($r10);
+
+     label08:
+        $r12 = interfaceinvoke $r11.<org.apache.http.HttpResponse: org.apache.http.StatusLine getStatusLine()>();
+
+        $i0 = interfaceinvoke $r12.<org.apache.http.StatusLine: int getStatusCode()>();
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: int statusCode> = $i0;
+
+        $i0 = $r0.<com.nifty.cloud.mb.CommonConnection: int statusCode>;
+
+     label09:
+        lookupswitch($i0)
+        {
+            case 200: goto label27;
+            case 201: goto label27;
+            default: goto label10;
+        };
+
+     label10:
+        r29 = new java.io.ByteArrayOutputStream;
+
+     label11:
+        $r1 = r29;
+
+     label12:
+        specialinvoke r29.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        $r13 = interfaceinvoke $r11.<org.apache.http.HttpResponse: org.apache.http.HttpEntity getEntity()>();
+
+        interfaceinvoke $r13.<org.apache.http.HttpEntity: void writeTo(java.io.OutputStream)>($r1);
+
+     label13:
+        $z0 = <com.nifty.cloud.mb.NCMB: boolean responseValidationFlag>;
+
+     label14:
+        if $z0 == 0 goto label63;
+
+     label15:
+        $r9 = virtualinvoke $r1.<java.io.ByteArrayOutputStream: java.lang.String toString()>();
+
+        $r14 = interfaceinvoke $r11.<org.apache.http.HttpResponse: org.apache.http.Header getFirstHeader(java.lang.String)>("X-NCMB-Response-Signature");
+
+        $z0 = virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: boolean checkResponseSignature(java.lang.String,org.apache.http.Header)>($r9, $r14);
+
+     label16:
+        if $z0 != 0 goto label63;
+
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label17:
+        $r15 := @caughtexception;
+
+     label18:
+        r30 = new com.nifty.cloud.mb.NCMBException;
+
+     label19:
+        $r16 = r30;
+
+     label20:
+        specialinvoke r30.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.Throwable)>($r15);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r16;
+
+     label21:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label22:
+        $r17 := @caughtexception;
+
+     label23:
+        r30 = new com.nifty.cloud.mb.NCMBException;
+
+     label24:
+        $r16 = r30;
+
+     label25:
+        specialinvoke r30.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.Throwable)>($r17);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r16;
+
+     label26:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label27:
+        $i0 = -1;
+
+     label28:
+        $r18 = interfaceinvoke $r11.<org.apache.http.HttpResponse: org.apache.http.Header[] getHeaders(java.lang.String)>("Content-Length");
+
+     label29:
+        $i1 = lengthof $r18;
+
+     label30:
+        if $i1 <= 0 goto label33;
+
+     label31:
+        $r14 = $r18[0];
+
+     label32:
+        $r9 = interfaceinvoke $r14.<org.apache.http.Header: java.lang.String getValue()>();
+
+        $i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r9);
+
+     label33:
+        $i1 = 0;
+
+     label34:
+        $r13 = interfaceinvoke $r11.<org.apache.http.HttpResponse: org.apache.http.HttpEntity getEntity()>();
+
+        $r19 = interfaceinvoke $r13.<org.apache.http.HttpEntity: java.io.InputStream getContent()>();
+
+     label35:
+        r29 = new java.io.ByteArrayOutputStream;
+
+     label36:
+        $r1 = r29;
+
+     label37:
+        specialinvoke r29.<java.io.ByteArrayOutputStream: void <init>()>();
+
+     label38:
+        $r2 = newarray (byte)[32768];
+
+     label39:
+        $i2 = lengthof $r2;
+
+     label40:
+        $i2 = virtualinvoke $r19.<java.io.InputStream: int read(byte[],int,int)>($r2, 0, $i2);
+
+     label41:
+        if $i2 != -1 goto label46;
+
+     label42:
+        $z0 = <com.nifty.cloud.mb.NCMB: boolean responseValidationFlag>;
+
+     label43:
+        if $z0 == 0 goto label59;
+
+     label44:
+        $r2 = virtualinvoke $r1.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        $r9 = virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String bin2hex(byte[])>($r2);
+
+        $r14 = interfaceinvoke $r11.<org.apache.http.HttpResponse: org.apache.http.Header getFirstHeader(java.lang.String)>("X-NCMB-Response-Signature");
+
+        $z0 = virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: boolean checkResponseSignature(java.lang.String,org.apache.http.Header)>($r9, $r14);
+
+     label45:
+        if $z0 != 0 goto label59;
+
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label46:
+        virtualinvoke $r1.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r2, 0, $i2);
+
+     label47:
+        $i1 = $i1 + $i2;
+
+     label48:
+        $r20 = $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.ProgressCallback callback>;
+
+     label49:
+        if $r20 == null goto label39;
+
+        if $i0 == -1 goto label39;
+
+        $f0 = (float) $i1;
+
+        $f1 = (float) $i0;
+
+        $f0 = $f0 / $f1;
+
+        $f0 = $f0 * 100.0F;
+
+     label50:
+        $i2 = staticinvoke <java.lang.Math: int round(float)>($f0);
+
+     label51:
+        $r20 = $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.ProgressCallback callback>;
+
+     label52:
+        $r21 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i2);
+
+        virtualinvoke $r20.<com.nifty.cloud.mb.ProgressCallback: void internalDone(java.lang.Integer,com.nifty.cloud.mb.NCMBException)>($r21, null);
+
+     label53:
+        goto label39;
+
+     label54:
+        $r22 := @caughtexception;
+
+     label55:
+        r30 = new com.nifty.cloud.mb.NCMBException;
+
+     label56:
+        $r16 = r30;
+
+     label57:
+        specialinvoke r30.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.Throwable)>($r22);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r16;
+
+     label58:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label59:
+        $r2 = virtualinvoke $r1.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+     label60:
+        $r0.<com.nifty.cloud.mb.CommonConnection: byte[] resultData> = $r2;
+
+     label61:
+        virtualinvoke $r1.<java.io.ByteArrayOutputStream: void flush()>();
+
+     label62:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label63:
+        $r9 = virtualinvoke $r1.<java.io.ByteArrayOutputStream: java.lang.String toString()>();
+
+     label64:
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String result> = $r9;
+
+     label65:
+        r31 = new org.json.JSONObject;
+
+     label66:
+        $r3 = r31;
+
+     label67:
+        $r9 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String result>;
+
+     label68:
+        specialinvoke r31.<org.json.JSONObject: void <init>(java.lang.String)>($r9);
+
+     label69:
+        $r9 = null;
+
+     label70:
+        $z0 = virtualinvoke $r3.<org.json.JSONObject: boolean has(java.lang.String)>("code");
+
+     label71:
+        if $z0 == 0 goto label75;
+
+     label72:
+        $r23 = virtualinvoke $r3.<org.json.JSONObject: java.lang.String getString(java.lang.String)>("code");
+
+     label73:
+        $r9 = $r23;
+
+     label74:
+        specialinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void checkInvalidSessionToken(java.lang.String)>($r23);
+
+     label75:
+        r30 = new com.nifty.cloud.mb.NCMBException;
+
+     label76:
+        $r16 = r30;
+
+     label77:
+        $r23 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String result>;
+
+     label78:
+        specialinvoke r30.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.String,java.lang.String)>($r9, $r23);
+
+     label79:
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r16;
+
+     label80:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label81:
+        $r24 := @caughtexception;
+
+     label82:
+        r30 = new com.nifty.cloud.mb.NCMBException;
+
+     label83:
+        $r16 = r30;
+
+     label84:
+        specialinvoke r30.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.Throwable)>($r24);
+
+     label85:
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r16;
+
+     label86:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label87:
+        $r25 := @caughtexception;
+
+     label88:
+        r30 = new com.nifty.cloud.mb.NCMBException;
+
+     label89:
+        $r16 = r30;
+
+     label90:
+        specialinvoke r30.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.Throwable)>($r25);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r16;
+
+     label91:
+        goto label80;
+
+     label92:
+        $r26 := @caughtexception;
+
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        throw $r26;
+
+        catch java.lang.Throwable from label01 to label02 with label92;
+        catch java.lang.Throwable from label03 to label04 with label92;
+        catch java.lang.Throwable from label05 to label06 with label92;
+        catch org.apache.http.client.ClientProtocolException from label07 to label08 with label17;
+        catch java.io.IOException from label07 to label08 with label22;
+        catch java.lang.Throwable from label06 to label08 with label92;
+        catch java.lang.Throwable from label08 to label09 with label92;
+        catch java.io.IOException from label12 to label13 with label81;
+        catch java.io.IOException from label15 to label16 with label81;
+        catch org.json.JSONException from label12 to label13 with label87;
+        catch org.json.JSONException from label15 to label16 with label87;
+        catch java.lang.Throwable from label10 to label11 with label92;
+        catch java.lang.Throwable from label12 to label14 with label92;
+        catch java.lang.Throwable from label15 to label16 with label92;
+        catch java.lang.Throwable from label18 to label19 with label92;
+        catch java.lang.Throwable from label20 to label21 with label92;
+        catch java.lang.Throwable from label23 to label24 with label92;
+        catch java.lang.Throwable from label25 to label26 with label92;
+        catch java.io.IOException from label28 to label29 with label54;
+        catch java.io.IOException from label32 to label33 with label54;
+        catch java.io.IOException from label34 to label35 with label54;
+        catch java.io.IOException from label37 to label38 with label54;
+        catch java.io.IOException from label40 to label41 with label54;
+        catch java.io.IOException from label44 to label45 with label54;
+        catch java.lang.Throwable from label28 to label30 with label92;
+        catch java.lang.Throwable from label31 to label33 with label92;
+        catch java.lang.Throwable from label34 to label36 with label92;
+        catch java.lang.Throwable from label37 to label41 with label92;
+        catch java.lang.Throwable from label42 to label43 with label92;
+        catch java.lang.Throwable from label44 to label45 with label92;
+        catch java.io.IOException from label46 to label47 with label54;
+        catch java.io.IOException from label50 to label51 with label54;
+        catch java.io.IOException from label52 to label53 with label54;
+        catch java.lang.Throwable from label46 to label47 with label92;
+        catch java.lang.Throwable from label48 to label49 with label92;
+        catch java.lang.Throwable from label50 to label53 with label92;
+        catch java.lang.Throwable from label55 to label56 with label92;
+        catch java.lang.Throwable from label57 to label58 with label92;
+        catch java.io.IOException from label59 to label60 with label54;
+        catch java.io.IOException from label61 to label62 with label54;
+        catch java.lang.Throwable from label59 to label62 with label92;
+        catch java.io.IOException from label63 to label64 with label81;
+        catch org.json.JSONException from label63 to label64 with label87;
+        catch java.lang.Throwable from label63 to label65 with label92;
+        catch org.json.JSONException from label68 to label69 with label87;
+        catch org.json.JSONException from label70 to label71 with label87;
+        catch org.json.JSONException from label72 to label73 with label87;
+        catch org.json.JSONException from label74 to label75 with label87;
+        catch org.json.JSONException from label78 to label79 with label87;
+        catch java.lang.Throwable from label65 to label66 with label92;
+        catch java.lang.Throwable from label67 to label69 with label92;
+        catch java.lang.Throwable from label70 to label71 with label92;
+        catch java.lang.Throwable from label72 to label73 with label92;
+        catch java.lang.Throwable from label74 to label76 with label92;
+        catch java.lang.Throwable from label77 to label80 with label92;
+        catch org.json.JSONException from label84 to label85 with label87;
+        catch java.lang.Throwable from label82 to label83 with label92;
+        catch java.lang.Throwable from label84 to label86 with label92;
+        catch java.lang.Throwable from label88 to label89 with label92;
+        catch java.lang.Throwable from label90 to label91 with label92;
+    }
+
+    java.lang.String getResult()
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        java.lang.String r1;
+
+        nop;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        r1 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String result>;
+
+        return r1;
+    }
+
+    byte[] getResultData()
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        byte[] r1;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        r1 = $r0.<com.nifty.cloud.mb.CommonConnection: byte[] resultData>;
+
+        return r1;
+    }
+
+    int getStatusCode()
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        int i0;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        i0 = $r0.<com.nifty.cloud.mb.CommonConnection: int statusCode>;
+
+        return i0;
+    }
+
+    void postFile()
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        com.nifty.cloud.mb.CountingMultipartEntity $r1, r34;
+        java.io.ByteArrayOutputStream $r2, r36;
+        org.json.JSONObject $r3, r39;
+        com.nifty.cloud.mb.CommonConstant$ConnectType $r4;
+        org.apache.http.impl.client.DefaultHttpClient $r5, r32;
+        org.apache.http.client.HttpClient $r6;
+        org.apache.http.params.HttpParams $r7;
+        org.apache.http.client.methods.HttpPost $r8, r33;
+        java.lang.String $r9, $r23;
+        com.nifty.cloud.mb.HttpMultipartMode $r10;
+        com.nifty.cloud.mb.ProgressCallback $r11;
+        com.nifty.cloud.mb.ByteArrayBody $r12, r35;
+        byte[] $r13;
+        java.util.Iterator $r14;
+        boolean $z0;
+        org.apache.http.client.methods.HttpUriRequest $r15;
+        org.apache.http.Header $r16;
+        org.apache.http.HttpResponse $r17;
+        org.apache.http.StatusLine $r18;
+        int $i0;
+        org.apache.http.HttpEntity $r19;
+        java.lang.Throwable $r20, $r24, $r27, $r28, $r29, $r30;
+        java.lang.Object $r21;
+        com.nifty.cloud.mb.StringBody $r22, r37;
+        com.nifty.cloud.mb.NCMBException $r25, r38;
+        org.json.JSONException $r26, $r31;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+     label01:
+        $r4 = <com.nifty.cloud.mb.CommonConstant$ConnectType: com.nifty.cloud.mb.CommonConstant$ConnectType POST>;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.CommonConstant$ConnectType type> = $r4;
+
+        r32 = new org.apache.http.impl.client.DefaultHttpClient;
+
+     label02:
+        $r5 = r32;
+
+     label03:
+        specialinvoke r32.<org.apache.http.impl.client.DefaultHttpClient: void <init>()>();
+
+        $r6 = (org.apache.http.client.HttpClient) $r5;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.HttpClient httpClient> = $r6;
+
+        $r6 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.HttpClient httpClient>;
+
+        $r7 = interfaceinvoke $r6.<org.apache.http.client.HttpClient: org.apache.http.params.HttpParams getParams()>();
+
+        staticinvoke <org.apache.http.params.HttpConnectionParams: void setConnectionTimeout(org.apache.http.params.HttpParams,int)>($r7, 10000);
+
+        staticinvoke <org.apache.http.params.HttpConnectionParams: void setSoTimeout(org.apache.http.params.HttpParams,int)>($r7, 10000);
+
+        r33 = new org.apache.http.client.methods.HttpPost;
+
+     label04:
+        $r8 = r33;
+
+     label05:
+        $r9 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String url>;
+
+        specialinvoke r33.<org.apache.http.client.methods.HttpPost: void <init>(java.lang.String)>($r9);
+
+        $r15 = (org.apache.http.client.methods.HttpUriRequest) $r8;
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest> = $r15;
+
+        r34 = new com.nifty.cloud.mb.CountingMultipartEntity;
+
+     label06:
+        $r1 = r34;
+
+     label07:
+        $r10 = <com.nifty.cloud.mb.HttpMultipartMode: com.nifty.cloud.mb.HttpMultipartMode BROWSER_COMPATIBLE>;
+
+        $r11 = $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.ProgressCallback callback>;
+
+        specialinvoke r34.<com.nifty.cloud.mb.CountingMultipartEntity: void <init>(com.nifty.cloud.mb.HttpMultipartMode,com.nifty.cloud.mb.ProgressCallback)>($r10, $r11);
+
+        $r9 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String contentType>;
+
+     label08:
+        if $r9 == null goto label26;
+
+     label09:
+        r35 = new com.nifty.cloud.mb.ByteArrayBody;
+
+     label10:
+        $r12 = r35;
+
+     label11:
+        $r13 = $r0.<com.nifty.cloud.mb.CommonConnection: byte[] postData>;
+
+        $r9 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String contentType>;
+
+        specialinvoke r35.<com.nifty.cloud.mb.ByteArrayBody: void <init>(byte[],java.lang.String,java.lang.String)>($r13, $r9, "file");
+
+        virtualinvoke $r1.<com.nifty.cloud.mb.CountingMultipartEntity: void addPart(java.lang.String,com.nifty.cloud.mb.ContentBody)>("file", $r12);
+
+     label12:
+        $r3 = $r0.<com.nifty.cloud.mb.CommonConnection: org.json.JSONObject jsonContent>;
+
+        $r14 = virtualinvoke $r3.<org.json.JSONObject: java.util.Iterator keys()>();
+
+     label13:
+        $z0 = interfaceinvoke $r14.<java.util.Iterator: boolean hasNext()>();
+
+     label14:
+        if $z0 != 0 goto label31;
+
+     label15:
+        $r15 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+        $r8 = (org.apache.http.client.methods.HttpPost) $r15;
+
+        virtualinvoke $r8.<org.apache.http.client.methods.HttpPost: void setEntity(org.apache.http.HttpEntity)>($r1);
+
+        $r16 = virtualinvoke $r1.<com.nifty.cloud.mb.CountingMultipartEntity: org.apache.http.Header getContentType()>();
+
+        $r9 = interfaceinvoke $r16.<org.apache.http.Header: java.lang.String getValue()>();
+
+        specialinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void addHeader(java.lang.String)>($r9);
+
+     label16:
+        $r6 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.HttpClient httpClient>;
+
+        $r15 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.methods.HttpUriRequest httpRequest>;
+
+     label17:
+        $r17 = interfaceinvoke $r6.<org.apache.http.client.HttpClient: org.apache.http.HttpResponse execute(org.apache.http.client.methods.HttpUriRequest)>($r15);
+
+     label18:
+        $r18 = interfaceinvoke $r17.<org.apache.http.HttpResponse: org.apache.http.StatusLine getStatusLine()>();
+
+        $i0 = interfaceinvoke $r18.<org.apache.http.StatusLine: int getStatusCode()>();
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: int statusCode> = $i0;
+
+     label19:
+        r36 = new java.io.ByteArrayOutputStream;
+
+     label20:
+        $r2 = r36;
+
+     label21:
+        specialinvoke r36.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        $r19 = interfaceinvoke $r17.<org.apache.http.HttpResponse: org.apache.http.HttpEntity getEntity()>();
+
+        interfaceinvoke $r19.<org.apache.http.HttpEntity: void writeTo(java.io.OutputStream)>($r2);
+
+     label22:
+        $z0 = <com.nifty.cloud.mb.NCMB: boolean responseValidationFlag>;
+
+     label23:
+        if $z0 == 0 goto label58;
+
+     label24:
+        $r9 = virtualinvoke $r2.<java.io.ByteArrayOutputStream: java.lang.String toString()>();
+
+        $r16 = interfaceinvoke $r17.<org.apache.http.HttpResponse: org.apache.http.Header getFirstHeader(java.lang.String)>("X-NCMB-Response-Signature");
+
+        $z0 = virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: boolean checkResponseSignature(java.lang.String,org.apache.http.Header)>($r9, $r16);
+
+     label25:
+        if $z0 != 0 goto label58;
+
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label26:
+        r35 = new com.nifty.cloud.mb.ByteArrayBody;
+
+     label27:
+        $r12 = r35;
+
+     label28:
+        $r13 = $r0.<com.nifty.cloud.mb.CommonConnection: byte[] postData>;
+
+        specialinvoke r35.<com.nifty.cloud.mb.ByteArrayBody: void <init>(byte[],java.lang.String)>($r13, "file");
+
+        virtualinvoke $r1.<com.nifty.cloud.mb.CountingMultipartEntity: void addPart(java.lang.String,com.nifty.cloud.mb.ContentBody)>("file", $r12);
+
+     label29:
+        goto label12;
+
+     label30:
+        $r20 := @caughtexception;
+
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        throw $r20;
+
+     label31:
+        $r21 = interfaceinvoke $r14.<java.util.Iterator: java.lang.Object next()>();
+
+        $r9 = (java.lang.String) $r21;
+
+        $z0 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>("acl");
+
+     label32:
+        if $z0 == 0 goto label13;
+
+     label33:
+        r37 = new com.nifty.cloud.mb.StringBody;
+
+     label34:
+        $r22 = r37;
+
+     label35:
+        $r3 = $r0.<com.nifty.cloud.mb.CommonConnection: org.json.JSONObject jsonContent>;
+
+     label36:
+        $r23 = virtualinvoke $r3.<org.json.JSONObject: java.lang.String getString(java.lang.String)>($r9);
+
+        specialinvoke r37.<com.nifty.cloud.mb.StringBody: void <init>(java.lang.String)>($r23);
+
+        virtualinvoke $r1.<com.nifty.cloud.mb.CountingMultipartEntity: void addPart(java.lang.String,com.nifty.cloud.mb.ContentBody)>($r9, $r22);
+
+     label37:
+        goto label13;
+
+     label38:
+        $r24 := @caughtexception;
+
+     label39:
+        r38 = new com.nifty.cloud.mb.NCMBException;
+
+     label40:
+        $r25 = r38;
+
+     label41:
+        specialinvoke r38.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.Throwable)>($r24);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r25;
+
+     label42:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label43:
+        $r26 := @caughtexception;
+
+     label44:
+        r38 = new com.nifty.cloud.mb.NCMBException;
+
+     label45:
+        $r25 = r38;
+
+     label46:
+        specialinvoke r38.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.Throwable)>($r26);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r25;
+
+     label47:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label48:
+        $r27 := @caughtexception;
+
+     label49:
+        r38 = new com.nifty.cloud.mb.NCMBException;
+
+     label50:
+        $r25 = r38;
+
+     label51:
+        specialinvoke r38.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.Throwable)>($r27);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r25;
+
+     label52:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label53:
+        $r28 := @caughtexception;
+
+     label54:
+        r38 = new com.nifty.cloud.mb.NCMBException;
+
+     label55:
+        $r25 = r38;
+
+     label56:
+        specialinvoke r38.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.Throwable)>($r28);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r25;
+
+     label57:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label58:
+        $r9 = virtualinvoke $r2.<java.io.ByteArrayOutputStream: java.lang.String toString()>();
+
+     label59:
+        $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String result> = $r9;
+
+     label60:
+        $r9 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String result>;
+
+        staticinvoke <com.nifty.cloud.mb.NCMB: void logD(java.lang.String,java.lang.String)>("com.nifty.cloud.mb.CommonConnection", $r9);
+
+        $i0 = $r0.<com.nifty.cloud.mb.CommonConnection: int statusCode>;
+
+     label61:
+        lookupswitch($i0)
+        {
+            case 200: goto label93;
+            case 201: goto label93;
+            default: goto label62;
+        };
+
+     label62:
+        r39 = new org.json.JSONObject;
+
+     label63:
+        $r3 = r39;
+
+     label64:
+        $r9 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String result>;
+
+     label65:
+        specialinvoke r39.<org.json.JSONObject: void <init>(java.lang.String)>($r9);
+
+     label66:
+        $r9 = null;
+
+     label67:
+        $z0 = virtualinvoke $r3.<org.json.JSONObject: boolean has(java.lang.String)>("code");
+
+     label68:
+        if $z0 == 0 goto label72;
+
+     label69:
+        $r23 = virtualinvoke $r3.<org.json.JSONObject: java.lang.String getString(java.lang.String)>("code");
+
+     label70:
+        $r9 = $r23;
+
+     label71:
+        specialinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void checkInvalidSessionToken(java.lang.String)>($r23);
+
+     label72:
+        r38 = new com.nifty.cloud.mb.NCMBException;
+
+     label73:
+        $r25 = r38;
+
+     label74:
+        $r23 = $r0.<com.nifty.cloud.mb.CommonConnection: java.lang.String result>;
+
+     label75:
+        specialinvoke r38.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.String,java.lang.String)>($r9, $r23);
+
+     label76:
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r25;
+
+     label77:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label78:
+        $r29 := @caughtexception;
+
+     label79:
+        r38 = new com.nifty.cloud.mb.NCMBException;
+
+     label80:
+        $r25 = r38;
+
+     label81:
+        specialinvoke r38.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.Throwable)>($r29);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r25;
+
+     label82:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label83:
+        $r30 := @caughtexception;
+
+     label84:
+        r38 = new com.nifty.cloud.mb.NCMBException;
+
+     label85:
+        $r25 = r38;
+
+     label86:
+        specialinvoke r38.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.Throwable)>($r30);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r25;
+
+     label87:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+     label88:
+        $r31 := @caughtexception;
+
+     label89:
+        r38 = new com.nifty.cloud.mb.NCMBException;
+
+     label90:
+        $r25 = r38;
+
+     label91:
+        specialinvoke r38.<com.nifty.cloud.mb.NCMBException: void <init>(java.lang.Throwable)>($r31);
+
+        $r0.<com.nifty.cloud.mb.CommonConnection: com.nifty.cloud.mb.NCMBException exception> = $r25;
+
+     label92:
+        goto label77;
+
+     label93:
+        virtualinvoke $r0.<com.nifty.cloud.mb.CommonConnection: void shutdown()>();
+
+        return;
+
+        catch java.lang.Throwable from label01 to label02 with label30;
+        catch java.lang.Throwable from label03 to label04 with label30;
+        catch java.lang.Throwable from label05 to label06 with label30;
+        catch java.lang.Throwable from label07 to label08 with label30;
+        catch java.lang.Throwable from label09 to label10 with label30;
+        catch java.lang.Throwable from label11 to label14 with label30;
+        catch java.lang.Throwable from label15 to label16 with label30;
+        catch org.apache.http.client.ClientProtocolException from label17 to label18 with label48;
+        catch java.io.IOException from label17 to label18 with label53;
+        catch java.lang.Throwable from label16 to label18 with label30;
+        catch java.lang.Throwable from label18 to label19 with label30;
+        catch java.io.IOException from label21 to label22 with label78;
+        catch java.io.IOException from label24 to label25 with label78;
+        catch java.lang.IllegalArgumentException from label21 to label22 with label83;
+        catch java.lang.IllegalArgumentException from label24 to label25 with label83;
+        catch java.lang.Throwable from label19 to label20 with label30;
+        catch java.lang.Throwable from label21 to label23 with label30;
+        catch java.lang.Throwable from label24 to label25 with label30;
+        catch java.lang.Throwable from label26 to label27 with label30;
+        catch java.lang.Throwable from label28 to label29 with label30;
+        catch java.lang.Throwable from label31 to label32 with label30;
+        catch java.io.UnsupportedEncodingException from label36 to label37 with label38;
+        catch org.json.JSONException from label36 to label37 with label43;
+        catch java.lang.Throwable from label33 to label34 with label30;
+        catch java.lang.Throwable from label35 to label37 with label30;
+        catch java.lang.Throwable from label39 to label40 with label30;
+        catch java.lang.Throwable from label41 to label42 with label30;
+        catch java.lang.Throwable from label44 to label45 with label30;
+        catch java.lang.Throwable from label46 to label47 with label30;
+        catch java.lang.Throwable from label49 to label50 with label30;
+        catch java.lang.Throwable from label51 to label52 with label30;
+        catch java.lang.Throwable from label54 to label55 with label30;
+        catch java.lang.Throwable from label56 to label57 with label30;
+        catch java.io.IOException from label58 to label59 with label78;
+        catch java.lang.IllegalArgumentException from label58 to label59 with label83;
+        catch java.lang.Throwable from label58 to label60 with label30;
+        catch java.lang.Throwable from label60 to label61 with label30;
+        catch org.json.JSONException from label65 to label66 with label88;
+        catch org.json.JSONException from label67 to label68 with label88;
+        catch org.json.JSONException from label69 to label70 with label88;
+        catch org.json.JSONException from label71 to label72 with label88;
+        catch org.json.JSONException from label75 to label76 with label88;
+        catch java.lang.Throwable from label62 to label63 with label30;
+        catch java.lang.Throwable from label64 to label66 with label30;
+        catch java.lang.Throwable from label67 to label68 with label30;
+        catch java.lang.Throwable from label69 to label70 with label30;
+        catch java.lang.Throwable from label71 to label73 with label30;
+        catch java.lang.Throwable from label74 to label77 with label30;
+        catch java.lang.Throwable from label79 to label80 with label30;
+        catch java.lang.Throwable from label81 to label82 with label30;
+        catch java.lang.Throwable from label84 to label85 with label30;
+        catch java.lang.Throwable from label86 to label87 with label30;
+        catch java.lang.Throwable from label89 to label90 with label30;
+        catch java.lang.Throwable from label91 to label92 with label30;
+    }
+
+    void shutdown()
+    {
+        com.nifty.cloud.mb.CommonConnection $r0;
+        org.apache.http.conn.ClientConnectionManager $r1;
+        org.apache.http.client.HttpClient $r2;
+
+        nop;
+
+        $r0 := @this: com.nifty.cloud.mb.CommonConnection;
+
+        $r2 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.HttpClient httpClient>;
+
+        if $r2 == null goto label1;
+
+        $r2 = $r0.<com.nifty.cloud.mb.CommonConnection: org.apache.http.client.HttpClient httpClient>;
+
+        $r1 = interfaceinvoke $r2.<org.apache.http.client.HttpClient: org.apache.http.conn.ClientConnectionManager getConnectionManager()>();
+
+        interfaceinvoke $r1.<org.apache.http.conn.ClientConnectionManager: void shutdown()>();
+
+     label1:
+        return;
+    }
+}

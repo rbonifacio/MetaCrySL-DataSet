@@ -1,0 +1,94 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/info.colorstheapp.colors-10B08A4DDEB79E1D4F0E16443B58E632F759E76367CB77C04CCA0238D0F485FF.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: varReplacer557
+		Type: java.lang.String
+		Statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer557)
+		Method: <com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters: java.lang.String calculateSignature(java.lang.String)>
+		SHA-256: 55a0c54930aaf6b779afeb8eebc6179b8b0a350120f41f53ef96844b05afc273
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer557)
+		Method: <com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters: java.lang.String calculateSignature(java.lang.String)>
+		SHA-256: e701208bdafbb6459275a2acaf14aa8693987ec6a1deb1d4fe19f6cce1b54fbc
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: java.security.SecureRandom
+		Statement: specialinvoke $r0.<java.security.SecureRandom: void <init>()>()
+		Method: <com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters: void <clinit>()>
+		SHA-256: 81571f0f65b71822bd958d9fd94e85c4e0b32e123ab4c4b6ad790e4712eb88cf
+		Secure: true
+	Object:
+		Variable: $r6
+		Type: javax.crypto.Mac
+		Statement: $r6 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer548)
+		Method: <com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters: java.lang.String calculateSignature(java.lang.String)>
+		SHA-256: 20552d9a7a318f3b0d2d2307cc9836a43699686475fbceecaa2f3819a7f9ea44
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r6.<javax.crypto.Mac: byte[] doFinal(byte[])>($r4)
+		Method: <com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters: java.lang.String calculateSignature(java.lang.String)>
+		SHA-256: bc6a5a23c9b257d27fea5f7f4a4a7d418b13648ef9703f300ba1ae12b45ffeb1
+		Secure: false
+
+Findings in Java Class: com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters
+
+	 in Method: java.lang.String calculateSignature(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer557)
+
+		ConstraintError violating CrySL rule for javax.crypto.Mac (on Object #20552d9a7a318f3b0d2d2307cc9836a43699686475fbceecaa2f3819a7f9ea44)
+			First parameter (with value "HmacSHA1") should be any of {PBEwithHmacSHA512, PBEwithHmacSHA224, PBEwithHmacSHA256, HmacSHA224, HmacSHA256, HmacSHA384, HmacSHA512, PBEwithHmacSHA384}
+			at statement: $r6 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer548)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 5
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 1
+	RequiredPredicateError: 1
+=====================================================================

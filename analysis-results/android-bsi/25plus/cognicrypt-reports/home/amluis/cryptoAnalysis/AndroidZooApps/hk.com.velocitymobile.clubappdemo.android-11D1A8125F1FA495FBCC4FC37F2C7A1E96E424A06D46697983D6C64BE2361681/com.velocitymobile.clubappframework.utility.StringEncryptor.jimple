@@ -1,0 +1,174 @@
+public class com.velocitymobile.clubappframework.utility.StringEncryptor extends java.lang.Object
+{
+    private static final int KEY_SIZE_AES128;
+    private static final int KEY_SIZE_AES192;
+    private static final int KEY_SIZE_AES256;
+    private static final java.lang.String PLAINTEXT_CHARSET;
+    private static byte[] iVector;
+
+    static void <clinit>()
+    {
+        byte[] $r0;
+
+        nop;
+
+        $r0 = newarray (byte)[16];
+
+        <com.velocitymobile.clubappframework.utility.StringEncryptor: byte[] iVector> = $r0;
+
+        return;
+    }
+
+    private void <init>()
+    {
+        com.velocitymobile.clubappframework.utility.StringEncryptor $r0;
+
+        $r0 := @this: com.velocitymobile.clubappframework.utility.StringEncryptor;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String decrypt(java.lang.String, java.lang.String) throws java.security.InvalidKeyException, java.security.NoSuchAlgorithmException, javax.crypto.NoSuchPaddingException, javax.crypto.IllegalBlockSizeException, javax.crypto.BadPaddingException, java.security.InvalidAlgorithmParameterException, java.io.UnsupportedEncodingException
+    {
+        java.lang.String $r0, $r1, varReplacer1985, varReplacer1986, varReplacer1988;
+        byte[] $r2;
+        javax.crypto.spec.SecretKeySpec $r3;
+        int $i0, $i1, varReplacer1984, varReplacer1987;
+        char $c2;
+        byte $b3;
+        javax.crypto.Cipher $r4;
+        javax.crypto.spec.IvParameterSpec $r5;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 = newarray (byte)[32];
+
+        $i0 = 0;
+
+     label1:
+        $i1 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i0 >= $i1 goto label2;
+
+        $c2 = virtualinvoke $r0.<java.lang.String: char charAt(int)>($i0);
+
+        $b3 = (byte) $c2;
+
+        $r2[$i0] = $b3;
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label2:
+        $r3 = new javax.crypto.spec.SecretKeySpec;
+
+        varReplacer1985 = "AES";
+
+        specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, varReplacer1985);
+
+        varReplacer1986 = "AES/CBC/PKCS5Padding";
+
+        $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1986);
+
+        $r5 = new javax.crypto.spec.IvParameterSpec;
+
+        $r2 = <com.velocitymobile.clubappframework.utility.StringEncryptor: byte[] iVector>;
+
+        specialinvoke $r5.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r2);
+
+        varReplacer1984 = 2;
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1984, $r3, $r5);
+
+        varReplacer1987 = 0;
+
+        $r2 = staticinvoke <android.util.Base64: byte[] decode(java.lang.String,int)>($r1, varReplacer1987);
+
+        $r2 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r2);
+
+        $r0 = new java.lang.String;
+
+        varReplacer1988 = "UTF8";
+
+        specialinvoke $r0.<java.lang.String: void <init>(byte[],java.lang.String)>($r2, varReplacer1988);
+
+        return $r0;
+    }
+
+    public static java.lang.String encrypt(java.lang.String, java.lang.String) throws java.security.NoSuchAlgorithmException, javax.crypto.NoSuchPaddingException, java.security.InvalidKeyException, javax.crypto.IllegalBlockSizeException, javax.crypto.BadPaddingException, java.security.InvalidAlgorithmParameterException, java.io.UnsupportedEncodingException, java.security.spec.InvalidKeySpecException
+    {
+        java.lang.String $r0, $r1, varReplacer7822, varReplacer7823, varReplacer7825;
+        byte[] $r2;
+        javax.crypto.spec.SecretKeySpec $r3;
+        javax.crypto.spec.IvParameterSpec $r4;
+        int $i0, $i1, varReplacer7824, varReplacer7826;
+        char $c2;
+        byte $b3;
+        javax.crypto.Cipher $r5;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 = newarray (byte)[32];
+
+        $i0 = 0;
+
+     label1:
+        $i1 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i0 >= $i1 goto label2;
+
+        $c2 = virtualinvoke $r0.<java.lang.String: char charAt(int)>($i0);
+
+        $b3 = (byte) $c2;
+
+        $r2[$i0] = $b3;
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label2:
+        $r3 = new javax.crypto.spec.SecretKeySpec;
+
+        varReplacer7825 = "AES";
+
+        specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, varReplacer7825);
+
+        varReplacer7822 = "AES/CBC/PKCS5Padding";
+
+        $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7822);
+
+        $r4 = new javax.crypto.spec.IvParameterSpec;
+
+        $r2 = <com.velocitymobile.clubappframework.utility.StringEncryptor: byte[] iVector>;
+
+        specialinvoke $r4.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r2);
+
+        varReplacer7826 = 1;
+
+        virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7826, $r3, $r4);
+
+        varReplacer7823 = "UTF8";
+
+        $r2 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer7823);
+
+        $r2 = virtualinvoke $r5.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r2);
+
+        varReplacer7824 = 0;
+
+        $r0 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r2, varReplacer7824);
+
+        return $r0;
+    }
+}

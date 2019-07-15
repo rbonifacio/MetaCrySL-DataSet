@@ -1,0 +1,358 @@
+class com.splunk.mint.UidManager extends java.lang.Object
+{
+    private static final char[] DIGITS;
+    private static final int UID_CORRECT_LENTH;
+    private static final java.lang.String UID_ERROR_ID;
+    private static final java.lang.String UID_FIELD;
+    private static final java.lang.String UID_NOSAVED;
+    private static final java.lang.String UID_PREFERENCES;
+
+    static void <clinit>()
+    {
+        char[] $r0;
+
+        nop;
+
+        $r0 = newarray (char)[16];
+
+        $r0[0] = 48;
+
+        $r0[1] = 49;
+
+        $r0[2] = 50;
+
+        $r0[3] = 51;
+
+        $r0[4] = 52;
+
+        $r0[5] = 53;
+
+        $r0[6] = 54;
+
+        $r0[7] = 55;
+
+        $r0[8] = 56;
+
+        $r0[9] = 57;
+
+        $r0[10] = 97;
+
+        $r0[11] = 98;
+
+        $r0[12] = 99;
+
+        $r0[13] = 100;
+
+        $r0[14] = 101;
+
+        $r0[15] = 102;
+
+        <com.splunk.mint.UidManager: char[] DIGITS> = $r0;
+
+        return;
+    }
+
+    void <init>()
+    {
+        com.splunk.mint.UidManager $r0;
+
+        $r0 := @this: com.splunk.mint.UidManager;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static final char[] encodeHex(byte[])
+    {
+        byte[] $r0;
+        int $i0, $i1, $i2, $i3;
+        char[] $r1, $r2;
+        byte $b4;
+        short $s5;
+        char $c6;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $i0 = lengthof $r0;
+
+        $i1 = $i0 << 1;
+
+        $r1 = newarray (char)[$i1];
+
+        $i1 = 0;
+
+        $i2 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label2;
+
+        $i3 = $i2 + 1;
+
+        $r2 = <com.splunk.mint.UidManager: char[] DIGITS>;
+
+        $b4 = $r0[$i1];
+
+        $s5 = $b4 & 240;
+
+        $s5 = $s5 >>> 4;
+
+        $c6 = $r2[$s5];
+
+        $r1[$i2] = $c6;
+
+        $i2 = $i3 + 1;
+
+        $r2 = <com.splunk.mint.UidManager: char[] DIGITS>;
+
+        $b4 = $r0[$i1];
+
+        $b4 = $b4 & 15;
+
+        $c6 = $r2[$b4];
+
+        $r1[$i3] = $c6;
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        return $r1;
+    }
+
+    private static final java.lang.String generateUid()
+    {
+        long $l0;
+        java.lang.Long $r0;
+        java.lang.String $r1, $r2, $r3, $r4, varReplacer477, varReplacer478, varReplacer479;
+        double $d0;
+        int $i1;
+        java.lang.StringBuilder $r5, r15;
+        byte[] $r6, $r7;
+        java.security.MessageDigest $r8;
+        char[] $r9;
+        java.lang.Throwable $r10, $r11;
+        java.util.Date r12;
+        java.lang.Object r13;
+        java.util.Random r14;
+        java.io.UnsupportedEncodingException r16;
+        java.security.NoSuchAlgorithmException r17;
+
+        nop;
+
+        r12 = new java.util.Date;
+
+        specialinvoke r12.<java.util.Date: void <init>()>();
+
+        $l0 = virtualinvoke r12.<java.util.Date: long getTime()>();
+
+        $r0 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        $r1 = virtualinvoke $r0.<java.lang.Long: java.lang.String toString()>();
+
+        r13 = new java.lang.Object;
+
+        specialinvoke r13.<java.lang.Object: void <init>()>();
+
+        $r2 = virtualinvoke r13.<java.lang.Object: java.lang.String toString()>();
+
+        $l0 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String valueOf(long)>($l0);
+
+        r14 = new java.util.Random;
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        specialinvoke r14.<java.util.Random: void <init>(long)>($l0);
+
+        $d0 = virtualinvoke r14.<java.util.Random: double nextDouble()>();
+
+        $d0 = $d0 * 65535.0;
+
+        $i1 = (int) $d0;
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i1);
+
+        r15 = new java.lang.StringBuilder;
+
+        specialinvoke r15.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        varReplacer479 = "android_id";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer479);
+
+        $r1 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = null;
+
+     label1:
+        varReplacer477 = "UTF-8";
+
+        $r7 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer477);
+
+        varReplacer478 = "MD5";
+
+        $r8 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer478);
+
+        $r7 = virtualinvoke $r8.<java.security.MessageDigest: byte[] digest(byte[])>($r7);
+
+     label2:
+        $r6 = $r7;
+
+     label3:
+        $r2 = new java.lang.String;
+
+        $r9 = staticinvoke <com.splunk.mint.UidManager: char[] encodeHex(byte[])>($r6);
+
+        specialinvoke $r2.<java.lang.String: void <init>(char[])>($r9);
+
+        return $r2;
+
+     label4:
+        $r10 := @caughtexception;
+
+        r16 = (java.io.UnsupportedEncodingException) $r10;
+
+        virtualinvoke r16.<java.io.UnsupportedEncodingException: void printStackTrace()>();
+
+        goto label3;
+
+     label5:
+        $r11 := @caughtexception;
+
+        r17 = (java.security.NoSuchAlgorithmException) $r11;
+
+        virtualinvoke r17.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        goto label3;
+
+        catch java.io.UnsupportedEncodingException from label1 to label2 with label4;
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+    }
+
+    protected static final java.lang.String getUid(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, varReplacer456, varReplacer457, varReplacer458, varReplacer459, varReplacer461;
+        int $i0, varReplacer460;
+        android.content.SharedPreferences $r2;
+        boolean $z0;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = <com.splunk.mint.Properties: java.lang.String UID>;
+
+        if $r1 == null goto label1;
+
+        $r1 = <com.splunk.mint.Properties: java.lang.String UID>;
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int length()>();
+
+        if $i0 != 32 goto label1;
+
+        $r1 = <com.splunk.mint.Properties: java.lang.String UID>;
+
+        return $r1;
+
+     label1:
+        $r1 = "12345678901234567890123456789012";
+
+        if $r0 == null goto label2;
+
+        varReplacer459 = "UIDPREFERENCES";
+
+        varReplacer460 = 0;
+
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>(varReplacer459, varReplacer460);
+
+        if $r2 == null goto label2;
+
+        varReplacer456 = "UID_FIELD";
+
+        varReplacer457 = "UID_NOSAVED";
+
+        $r1 = interfaceinvoke $r2.<android.content.SharedPreferences: java.lang.String getString(java.lang.String,java.lang.String)>(varReplacer456, varReplacer457);
+
+     label2:
+        varReplacer458 = "UID_NOSAVED";
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer458);
+
+        if $z0 != 0 goto label3;
+
+        varReplacer461 = "12345678901234567890123456789012";
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer461);
+
+        if $z0 == 0 goto label4;
+
+     label3:
+        $r1 = staticinvoke <com.splunk.mint.UidManager: java.lang.String generateUid()>();
+
+        staticinvoke <com.splunk.mint.UidManager: boolean saveUid(android.content.Context,java.lang.String)>($r0, $r1);
+
+     label4:
+        return $r1;
+    }
+
+    protected static boolean saveUid(android.content.Context, java.lang.String)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, varReplacer473, varReplacer474;
+        int $i0, varReplacer475, varReplacer476;
+        android.content.SharedPreferences $r2;
+        android.content.SharedPreferences$Editor $r3;
+        boolean $z0;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        if $r1 == null goto label1;
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int length()>();
+
+        if $i0 != 32 goto label1;
+
+        <com.splunk.mint.Properties: java.lang.String UID> = $r1;
+
+        varReplacer474 = "UIDPREFERENCES";
+
+        varReplacer475 = 0;
+
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>(varReplacer474, varReplacer475);
+
+        if $r2 == null goto label1;
+
+        $r3 = interfaceinvoke $r2.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        varReplacer473 = "UID_FIELD";
+
+        $r3 = interfaceinvoke $r3.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putString(java.lang.String,java.lang.String)>(varReplacer473, $r1);
+
+        $z0 = interfaceinvoke $r3.<android.content.SharedPreferences$Editor: boolean commit()>();
+
+        return $z0;
+
+     label1:
+        varReplacer476 = 0;
+
+        return varReplacer476;
+    }
+}

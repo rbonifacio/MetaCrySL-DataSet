@@ -1,0 +1,135 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.b.asr: java.lang.String a(java.lang.String)>
+		SHA-256: e536f96649aeb52a4185bc8464261305c508800f927294c3b12c63e13b6c0df8
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2643)
+		Method: <com.google.android.gms.b.asr: java.lang.String a(java.lang.String)>
+		SHA-256: e1724bc63790b19068460f6cf72bd93e6d2d2622f3b9f6a9dd2424bc4cfa23ea
+		Secure: true
+	Object:
+		Variable: $r6
+		Type: javax.crypto.Cipher
+		Statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer3027)
+		Method: <tools.p: java.lang.String a(java.lang.String)>
+		SHA-256: 4b1eba5f65ef61fa2954a341e231d9e2b1f11346555ffd951b11ff89d181c86a
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: javax.crypto.SecretKeyFactory
+		Statement: $r4 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer3026)
+		Method: <tools.p: java.lang.String a(java.lang.String)>
+		SHA-256: bdb4ff9c9515f913c3970c549a074d456dd1a4a0087465a288eb15592b7d94c8
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4)
+		Method: <com.a.a.a.q: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: fe647732e846642aa9fdd507e54c1cc7f2a1aebfb067e46afc0476511f1d46d
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.Signature
+		Statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer2167)
+		Method: <com.a.a.a.q: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: e4822ca55a3946ccbb45ed76bd48175129a0bda1f36c91547f41fa45732c9e24
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r3)
+		Method: <tools.p: java.lang.String a(java.lang.String)>
+		SHA-256: 13ffc493390512cbe4a40e0339a516bdf5d31ae6c3d45afa5d18c104ba331f84
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.SecureRandom
+		Statement: specialinvoke $r1.<java.security.SecureRandom: void <init>()>()
+		Method: <com.google.android.gms.b.jp: void a()>
+		SHA-256: 6473c70e99553203fcf9dfe90a49e2d58995c5dc35f002453896047b9236489f
+		Secure: true
+	Object:
+		Variable: $r5
+		Type: javax.crypto.SecretKey
+		Statement: $r5 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
+		Method: <tools.p: java.lang.String a(java.lang.String)>
+		SHA-256: 9e3948807939571efe8ac13d774cd3ccc48b3cb8fabae65153e60761664c6e64
+		Secure: false
+
+Findings in Java Class: tools.p
+
+	 in Method: java.lang.String a(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
+			First parameter was not properly generated as specced Key
+			at statement: $r5 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
+
+		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #bdb4ff9c9515f913c3970c549a074d456dd1a4a0087465a288eb15592b7d94c8)
+			First parameter (with value "DES") should be any of {PBEwithSHA1ANDRC2, PBEwithHmacSHA1, PBEwithSHAANDTWOFISH-CBC	, PBEwithSHAAND192BITAES-CBC-BC, DESede, PBEwithMD5AND128BITAES-CBC-OPENSSL, PBEwithSHAAND40BITRC4, PBEwithMD5ANDDES, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithMD5AND192BITAES-CBC-OPENSSL, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC, PBEwithMD5AND256BITAES-CBC-OPENSSL, PBEwithMD5ANDRC2, PBKDF2withHmacSHA1, PBEwithSHAAND128BITRC4, PBEwithSHA1ANDDES, PBEwithSHA256AND128BITAES-CBC-BC, PBEwithSHAAND128BITRC2-CBC, PBEwithSHAAND128BITAES-CBC-BC}
+			at statement: $r4 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer3026)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #4b1eba5f65ef61fa2954a341e231d9e2b1f11346555ffd951b11ff89d181c86a)
+			First parameter (with value "DES") should be any of {ARC4, AES, BLOWFISH, DESede, RSA}
+			at statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer3027)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3025, $r5)
+
+
+Findings in Java Class: com.a.a.a.q
+
+	 in Method: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 9
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 3
+	ConstraintError: 2
+=====================================================================

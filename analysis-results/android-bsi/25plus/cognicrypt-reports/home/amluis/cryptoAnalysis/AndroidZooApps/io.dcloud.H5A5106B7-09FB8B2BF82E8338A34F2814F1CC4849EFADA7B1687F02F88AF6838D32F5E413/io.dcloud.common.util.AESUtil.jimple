@@ -1,0 +1,403 @@
+public class io.dcloud.common.util.AESUtil extends java.lang.Object
+{
+    public static final java.lang.String TAG;
+
+    public void <init>()
+    {
+        io.dcloud.common.util.AESUtil $r0;
+
+        $r0 := @this: io.dcloud.common.util.AESUtil;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static void appendHex(java.lang.StringBuffer, byte)
+    {
+        java.lang.StringBuffer $r0;
+        byte $b0, $b1;
+        java.lang.String $r1;
+        char $c2;
+
+        $r0 := @parameter0: java.lang.StringBuffer;
+
+        $b0 := @parameter1: byte;
+
+        $r1 = "0123456789ABCDEF";
+
+        $b1 = $b0 >> 4;
+
+        $b1 = $b1 & 15;
+
+        $c2 = virtualinvoke $r1.<java.lang.String: char charAt(int)>($b1);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuffer: java.lang.StringBuffer append(char)>($c2);
+
+        $r1 = "0123456789ABCDEF";
+
+        $b0 = $b0 & 15;
+
+        $c2 = virtualinvoke $r1.<java.lang.String: char charAt(int)>($b0);
+
+        virtualinvoke $r0.<java.lang.StringBuffer: java.lang.StringBuffer append(char)>($c2);
+
+        return;
+    }
+
+    public static java.lang.String decrypt(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1;
+        byte[] $r2, $r3;
+        java.lang.Exception $r4;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+     label1:
+        $r2 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        $r2 = staticinvoke <io.dcloud.common.util.AESUtil: byte[] getRawKey(byte[])>($r2);
+
+        $r3 = staticinvoke <io.dcloud.common.util.AESUtil: byte[] toByte(java.lang.String)>($r1);
+
+        $r2 = staticinvoke <io.dcloud.common.util.AESUtil: byte[] decrypt(byte[],byte[])>($r2, $r3);
+
+     label2:
+        $r0 = new java.lang.String;
+
+     label3:
+        specialinvoke $r0.<java.lang.String: void <init>(byte[])>($r2);
+
+     label4:
+        return $r0;
+
+     label5:
+        $r4 := @caughtexception;
+
+        virtualinvoke $r4.<java.lang.Exception: void printStackTrace()>();
+
+        return null;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    private static byte[] decrypt(byte[], byte[]) throws java.lang.Exception
+    {
+        byte[] $r0, $r1;
+        javax.crypto.spec.IvParameterSpec $r2;
+        javax.crypto.spec.SecretKeySpec $r3;
+        javax.crypto.Cipher $r4;
+        int $i0;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: byte[];
+
+        $r3 = new javax.crypto.spec.SecretKeySpec;
+
+        specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, "AES");
+
+        $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>("AES/CBC/PKCS5Padding");
+
+        $r2 = new javax.crypto.spec.IvParameterSpec;
+
+        $i0 = virtualinvoke $r4.<javax.crypto.Cipher: int getBlockSize()>();
+
+        $r0 = newarray (byte)[$i0];
+
+        specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r0);
+
+        virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(2, $r3, $r2);
+
+        $r0 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1);
+
+        return $r0;
+    }
+
+    public static java.lang.String encrypt(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1;
+        byte[] $r2, $r3, $r4;
+        java.lang.Exception $r5;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 = null;
+
+     label1:
+        $r3 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        $r3 = staticinvoke <io.dcloud.common.util.AESUtil: byte[] getRawKey(byte[])>($r3);
+
+        $r4 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        $r3 = staticinvoke <io.dcloud.common.util.AESUtil: byte[] encrypt(byte[],byte[])>($r3, $r4);
+
+     label2:
+        $r2 = $r3;
+
+     label3:
+        $r0 = staticinvoke <io.dcloud.common.util.AESUtil: java.lang.String toHex(byte[])>($r2);
+
+        return $r0;
+
+     label4:
+        $r5 := @caughtexception;
+
+        virtualinvoke $r5.<java.lang.Exception: void printStackTrace()>();
+
+        goto label3;
+
+        catch java.lang.Exception from label1 to label2 with label4;
+    }
+
+    public static byte[] encrypt(java.lang.String, int, java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, $r2, varReplacer1613;
+        int $i0;
+        byte[] $r3, $r4, $r5;
+        java.lang.Exception $r6;
+        null_type varReplacer1614;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        $r1 := @parameter2: java.lang.String;
+
+        $r2 := @parameter3: java.lang.String;
+
+     label1:
+        $r3 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        $r4 = virtualinvoke $r2.<java.lang.String: byte[] getBytes()>();
+
+     label2:
+        $r5 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+     label3:
+        varReplacer1613 = "AES/CBC/PKCS5Padding";
+
+        $r3 = staticinvoke <io.dcloud.common.util.AESUtil: byte[] encrypt(byte[],byte[],java.lang.String,byte[])>($r3, $r4, varReplacer1613, $r5);
+
+     label4:
+        return $r3;
+
+     label5:
+        $r6 := @caughtexception;
+
+        virtualinvoke $r6.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer1614 = null;
+
+        return varReplacer1614;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label2 to label3 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    private static byte[] encrypt(byte[], byte[]) throws java.lang.Exception
+    {
+        byte[] $r0, $r1;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: byte[];
+
+        $r0 = staticinvoke <io.dcloud.common.util.AESUtil: byte[] encrypt(byte[],byte[],java.lang.String,byte[])>($r0, $r1, "AES/CBC/PKCS5Padding", null);
+
+        return $r0;
+    }
+
+    private static byte[] encrypt(byte[], byte[], java.lang.String, byte[]) throws java.lang.Exception
+    {
+        byte[] $r0, $r1, $r4;
+        java.lang.String $r2, varReplacer1631, varReplacer1632;
+        javax.crypto.spec.IvParameterSpec $r3;
+        javax.crypto.spec.SecretKeySpec $r5;
+        javax.crypto.Cipher $r6;
+        int $i0, varReplacer1630;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: byte[];
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r4 := @parameter3: byte[];
+
+        $r5 = new javax.crypto.spec.SecretKeySpec;
+
+        varReplacer1632 = "AES";
+
+        specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer1632);
+
+        varReplacer1631 = "AES/CBC/PKCS5Padding";
+
+        $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1631);
+
+        $r3 = new javax.crypto.spec.IvParameterSpec;
+
+        if $r4 != null goto label1;
+
+        $i0 = virtualinvoke $r6.<javax.crypto.Cipher: int getBlockSize()>();
+
+        $r4 = newarray (byte)[$i0];
+
+     label1:
+        specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4);
+
+        varReplacer1630 = 1;
+
+        virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1630, $r5, $r3);
+
+        $r0 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1);
+
+        return $r0;
+    }
+
+    private static byte[] getRawKey(byte[]) throws java.lang.Exception
+    {
+        byte[] $r0;
+
+        $r0 := @parameter0: byte[];
+
+        $r0 = staticinvoke <io.dcloud.common.util.AESUtil: byte[] getRawKey(byte[],int)>($r0, 256);
+
+        return $r0;
+    }
+
+    private static byte[] getRawKey(byte[], int) throws java.lang.Exception
+    {
+        byte[] $r0;
+        int $i0, $i1;
+        javax.crypto.KeyGenerator $r1;
+        java.security.SecureRandom $r2;
+        javax.crypto.SecretKey $r3;
+
+        $r0 := @parameter0: byte[];
+
+        $i0 := @parameter1: int;
+
+        $r1 = staticinvoke <javax.crypto.KeyGenerator: javax.crypto.KeyGenerator getInstance(java.lang.String)>("AES");
+
+        $i1 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i1 < 17 goto label2;
+
+        $r2 = staticinvoke <java.security.SecureRandom: java.security.SecureRandom getInstance(java.lang.String,java.lang.String)>("SHA1PRNG", "Crypto");
+
+     label1:
+        virtualinvoke $r2.<java.security.SecureRandom: void setSeed(byte[])>($r0);
+
+        virtualinvoke $r1.<javax.crypto.KeyGenerator: void init(int,java.security.SecureRandom)>($i0, $r2);
+
+        $r3 = virtualinvoke $r1.<javax.crypto.KeyGenerator: javax.crypto.SecretKey generateKey()>();
+
+        $r0 = interfaceinvoke $r3.<javax.crypto.SecretKey: byte[] getEncoded()>();
+
+        return $r0;
+
+     label2:
+        $r2 = staticinvoke <java.security.SecureRandom: java.security.SecureRandom getInstance(java.lang.String)>("SHA1PRNG");
+
+        goto label1;
+    }
+
+    private static byte[] toByte(java.lang.String)
+    {
+        java.lang.String $r0, $r2;
+        int $i0, $i1, $i2, $i3;
+        byte[] $r1;
+        java.lang.Integer $r3;
+        byte $b4;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        $i0 = $i0 / 2;
+
+        $r1 = newarray (byte)[$i0];
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label2;
+
+        $i2 = $i1 * 2;
+
+        $i3 = $i1 * 2;
+
+        $i3 = $i3 + 2;
+
+        $r2 = virtualinvoke $r0.<java.lang.String: java.lang.String substring(int,int)>($i2, $i3);
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(java.lang.String,int)>($r2, 16);
+
+        $b4 = virtualinvoke $r3.<java.lang.Integer: byte byteValue()>();
+
+        $r1[$i1] = $b4;
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        return $r1;
+    }
+
+    private static java.lang.String toHex(byte[])
+    {
+        byte[] $r0;
+        java.lang.StringBuffer $r1;
+        java.lang.String $r2;
+        int $i0, $i1;
+        byte $b2;
+
+        $r0 := @parameter0: byte[];
+
+        if $r0 != null goto label1;
+
+        return "";
+
+     label1:
+        $r1 = new java.lang.StringBuffer;
+
+        $i0 = lengthof $r0;
+
+        $i0 = $i0 * 2;
+
+        specialinvoke $r1.<java.lang.StringBuffer: void <init>(int)>($i0);
+
+        $i0 = 0;
+
+     label2:
+        $i1 = lengthof $r0;
+
+        if $i0 >= $i1 goto label3;
+
+        $b2 = $r0[$i0];
+
+        staticinvoke <io.dcloud.common.util.AESUtil: void appendHex(java.lang.StringBuffer,byte)>($r1, $b2);
+
+        $i0 = $i0 + 1;
+
+        goto label2;
+
+     label3:
+        $r2 = virtualinvoke $r1.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        return $r2;
+    }
+}

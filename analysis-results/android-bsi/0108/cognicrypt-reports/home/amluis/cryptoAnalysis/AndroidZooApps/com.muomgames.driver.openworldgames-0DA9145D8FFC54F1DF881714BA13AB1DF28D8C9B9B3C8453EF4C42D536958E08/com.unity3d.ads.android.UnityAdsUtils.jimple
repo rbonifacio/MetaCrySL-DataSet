@@ -1,0 +1,558 @@
+public class com.unity3d.ads.android.UnityAdsUtils extends java.lang.Object
+{
+    private static final javax.security.auth.x500.X500Principal DEBUG_DN;
+
+    static void <clinit>()
+    {
+        javax.security.auth.x500.X500Principal $r0;
+        java.lang.String varReplacer820;
+
+        nop;
+
+        $r0 = new javax.security.auth.x500.X500Principal;
+
+        varReplacer820 = "CN=Android Debug,O=Android,C=US";
+
+        specialinvoke $r0.<javax.security.auth.x500.X500Principal: void <init>(java.lang.String)>(varReplacer820);
+
+        <com.unity3d.ads.android.UnityAdsUtils: javax.security.auth.x500.X500Principal DEBUG_DN> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.unity3d.ads.android.UnityAdsUtils $r0;
+
+        $r0 := @this: com.unity3d.ads.android.UnityAdsUtils;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String Md5(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer1768, varReplacer1770;
+        byte $b0;
+        short $s1;
+        java.lang.Throwable $r1;
+        java.security.MessageDigest $r2, $r3;
+        byte[] $r4;
+        int $i2, $i3, varReplacer1767;
+        java.lang.StringBuilder $r5, r7;
+        java.util.Locale $r6;
+        java.security.NoSuchAlgorithmException r8;
+        null_type varReplacer1766, varReplacer1769;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        if $r0 != null goto label1;
+
+        varReplacer1766 = null;
+
+        return varReplacer1766;
+
+     label1:
+        $r2 = null;
+
+     label2:
+        varReplacer1768 = "MD5";
+
+        $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1768);
+
+     label3:
+        $r2 = $r3;
+
+     label4:
+        if $r2 == null goto label9;
+
+        $r4 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        $i2 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        varReplacer1767 = 0;
+
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r4, varReplacer1767, $i2);
+
+        $r4 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>();
+
+        $r0 = "";
+
+        $i2 = lengthof $r4;
+
+        $i3 = 0;
+
+     label5:
+        if $i3 >= $i2 goto label8;
+
+        $b0 = $r4[$i3];
+
+        $s1 = $b0 & 255;
+
+        if $s1 > 15 goto label6;
+
+        r7 = new java.lang.StringBuilder;
+
+        specialinvoke r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        varReplacer1770 = "0";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1770);
+
+        $r0 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label6:
+        r7 = new java.lang.StringBuilder;
+
+        specialinvoke r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s1);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $i3 = $i3 + 1;
+
+        goto label5;
+
+     label7:
+        $r1 := @caughtexception;
+
+        r8 = (java.security.NoSuchAlgorithmException) $r1;
+
+        virtualinvoke r8.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        goto label4;
+
+     label8:
+        $r6 = <java.util.Locale: java.util.Locale US>;
+
+        $r0 = virtualinvoke $r0.<java.lang.String: java.lang.String toUpperCase(java.util.Locale)>($r6);
+
+        return $r0;
+
+     label9:
+        varReplacer1769 = null;
+
+        return varReplacer1769;
+
+        catch java.security.NoSuchAlgorithmException from label2 to label3 with label7;
+    }
+
+    public static boolean canUseExternalStorage()
+    {
+        java.lang.String $r0;
+        boolean $z0;
+
+        $r0 = staticinvoke <android.os.Environment: java.lang.String getExternalStorageState()>();
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean equals(java.lang.Object)>("mounted");
+
+        return $z0;
+    }
+
+    public static boolean isDebuggable()
+    {
+        android.content.pm.Signature $r0;
+        android.content.pm.Signature[] $r1;
+        java.io.ByteArrayInputStream $r2;
+        javax.security.auth.x500.X500Principal $r3, $r13;
+        int $i0, $i1, varReplacer812, varReplacer813, varReplacer816;
+        boolean $z0, $z1;
+        android.content.Context $r4;
+        android.content.pm.PackageManager $r5;
+        java.lang.String $r6, varReplacer814, varReplacer815, varReplacer817, varReplacer818;
+        android.content.pm.ApplicationInfo $r7;
+        android.content.pm.PackageInfo $r8;
+        java.security.cert.CertificateFactory $r9;
+        byte[] $r10;
+        java.security.cert.Certificate $r11;
+        java.security.cert.X509Certificate $r12;
+        java.lang.Throwable $r14, $r15, $r16;
+
+        nop;
+
+        $i0 = 0;
+
+        $z0 = 0;
+
+        $z1 = 0;
+
+        $r4 = <com.unity3d.ads.android.properties.UnityAdsProperties: android.content.Context APPLICATION_CONTEXT>;
+
+        if $r4 == null goto label15;
+
+        $r4 = <com.unity3d.ads.android.properties.UnityAdsProperties: android.content.Context APPLICATION_CONTEXT>;
+
+        $r5 = virtualinvoke $r4.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r4 = <com.unity3d.ads.android.properties.UnityAdsProperties: android.content.Context APPLICATION_CONTEXT>;
+
+        $r6 = virtualinvoke $r4.<android.content.Context: java.lang.String getPackageName()>();
+
+     label01:
+        varReplacer813 = 0;
+
+        $r7 = virtualinvoke $r5.<android.content.pm.PackageManager: android.content.pm.ApplicationInfo getApplicationInfo(java.lang.String,int)>($r6, varReplacer813);
+
+     label02:
+        $i1 = $r7.<android.content.pm.ApplicationInfo: int flags>;
+
+        $i1 = $i1 & 2;
+
+        $r7.<android.content.pm.ApplicationInfo: int flags> = $i1;
+
+        if $i1 == 0 goto label16;
+
+        $z0 = 1;
+
+     label03:
+        if $z1 == 0 goto label21;
+
+     label04:
+        varReplacer816 = 64;
+
+        $r8 = virtualinvoke $r5.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>($r6, varReplacer816);
+
+     label05:
+        $r1 = $r8.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        $i1 = lengthof $r1;
+
+     label06:
+        if $i0 >= $i1 goto label21;
+
+        $r0 = $r1[$i0];
+
+     label07:
+        varReplacer814 = "X.509";
+
+        $r9 = staticinvoke <java.security.cert.CertificateFactory: java.security.cert.CertificateFactory getInstance(java.lang.String)>(varReplacer814);
+
+     label08:
+        $r2 = new java.io.ByteArrayInputStream;
+
+     label09:
+        $r10 = virtualinvoke $r0.<android.content.pm.Signature: byte[] toByteArray()>();
+
+        specialinvoke $r2.<java.io.ByteArrayInputStream: void <init>(byte[])>($r10);
+
+        $r11 = virtualinvoke $r9.<java.security.cert.CertificateFactory: java.security.cert.Certificate generateCertificate(java.io.InputStream)>($r2);
+
+     label10:
+        $r12 = (java.security.cert.X509Certificate) $r11;
+
+     label11:
+        $r13 = virtualinvoke $r12.<java.security.cert.X509Certificate: javax.security.auth.x500.X500Principal getSubjectX500Principal()>();
+
+     label12:
+        $r3 = <com.unity3d.ads.android.UnityAdsUtils: javax.security.auth.x500.X500Principal DEBUG_DN>;
+
+     label13:
+        $z1 = virtualinvoke $r13.<javax.security.auth.x500.X500Principal: boolean equals(java.lang.Object)>($r3);
+
+     label14:
+        $z0 = $z1;
+
+        if $z1 == 0 goto label18;
+
+        return $z1;
+
+     label15:
+        varReplacer812 = 0;
+
+        return varReplacer812;
+
+     label16:
+        $z0 = 0;
+
+        goto label03;
+
+     label17:
+        $r14 := @caughtexception;
+
+        varReplacer817 = "Could not find name";
+
+        staticinvoke <com.unity3d.ads.android.UnityAdsDeviceLog: void debug(java.lang.String)>(varReplacer817);
+
+        $z1 = 1;
+
+        goto label03;
+
+     label18:
+        $i0 = $i0 + 1;
+
+        goto label06;
+
+     label19:
+        $r15 := @caughtexception;
+
+        varReplacer815 = "Could not find name";
+
+        staticinvoke <com.unity3d.ads.android.UnityAdsDeviceLog: void debug(java.lang.String)>(varReplacer815);
+
+        return $z0;
+
+     label20:
+        $r16 := @caughtexception;
+
+        varReplacer818 = "Certificate exception";
+
+        staticinvoke <com.unity3d.ads.android.UnityAdsDeviceLog: void debug(java.lang.String)>(varReplacer818);
+
+     label21:
+        return $z0;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label01 to label02 with label17;
+        catch android.content.pm.PackageManager$NameNotFoundException from label04 to label05 with label19;
+        catch android.content.pm.PackageManager$NameNotFoundException from label07 to label08 with label19;
+        catch android.content.pm.PackageManager$NameNotFoundException from label09 to label10 with label19;
+        catch android.content.pm.PackageManager$NameNotFoundException from label11 to label12 with label19;
+        catch android.content.pm.PackageManager$NameNotFoundException from label13 to label14 with label19;
+        catch java.security.cert.CertificateException from label04 to label05 with label20;
+        catch java.security.cert.CertificateException from label07 to label08 with label20;
+        catch java.security.cert.CertificateException from label09 to label10 with label20;
+        catch java.security.cert.CertificateException from label11 to label12 with label20;
+        catch java.security.cert.CertificateException from label13 to label14 with label20;
+    }
+
+    public static java.lang.String readFile(java.io.File, boolean)
+    {
+        java.io.File $r0;
+        boolean $z0, $z1;
+        java.io.BufferedReader $r1;
+        java.lang.String $r2, $r4, varReplacer1689, varReplacer1691, varReplacer1692, varReplacer1693;
+        java.io.FileReader $r3;
+        java.lang.Exception $r5, $r7;
+        java.lang.StringBuilder $r6;
+        null_type varReplacer1690, varReplacer1694;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $z0 := @parameter1: boolean;
+
+        $r2 = "";
+
+        $z1 = virtualinvoke $r0.<java.io.File: boolean exists()>();
+
+        if $z1 == 0 goto label12;
+
+        $z1 = virtualinvoke $r0.<java.io.File: boolean canRead()>();
+
+        if $z1 == 0 goto label12;
+
+        $r1 = new java.io.BufferedReader;
+
+        $r3 = new java.io.FileReader;
+
+     label01:
+        specialinvoke $r3.<java.io.FileReader: void <init>(java.io.File)>($r0);
+
+        specialinvoke $r1.<java.io.BufferedReader: void <init>(java.io.Reader)>($r3);
+
+     label02:
+        $r4 = virtualinvoke $r1.<java.io.BufferedReader: java.lang.String readLine()>();
+
+     label03:
+        if $r4 == null goto label09;
+
+     label04:
+        $r4 = virtualinvoke $r2.<java.lang.String: java.lang.String concat(java.lang.String)>($r4);
+
+     label05:
+        $r2 = $r4;
+
+     label06:
+        varReplacer1692 = "\n";
+
+        $r2 = virtualinvoke $r4.<java.lang.String: java.lang.String concat(java.lang.String)>(varReplacer1692);
+
+     label07:
+        goto label02;
+
+     label08:
+        $r5 := @caughtexception;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1693 = "Problem reading file: ";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1693);
+
+        $r2 = virtualinvoke $r5.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.unity3d.ads.android.UnityAdsDeviceLog: void error(java.lang.String)>($r2);
+
+        varReplacer1690 = null;
+
+        return varReplacer1690;
+
+     label09:
+        virtualinvoke $r1.<java.io.BufferedReader: void close()>();
+
+     label10:
+        return $r2;
+
+     label11:
+        $r7 := @caughtexception;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1689 = "Problem closing reader: ";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1689);
+
+        $r4 = virtualinvoke $r7.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.unity3d.ads.android.UnityAdsDeviceLog: void error(java.lang.String)>($r4);
+
+        goto label10;
+
+     label12:
+        varReplacer1691 = "File did not exist or couldn\'t be read";
+
+        staticinvoke <com.unity3d.ads.android.UnityAdsDeviceLog: void error(java.lang.String)>(varReplacer1691);
+
+        varReplacer1694 = null;
+
+        return varReplacer1694;
+
+        catch java.lang.Exception from label01 to label03 with label08;
+        catch java.lang.Exception from label04 to label05 with label08;
+        catch java.lang.Exception from label06 to label07 with label08;
+        catch java.lang.Exception from label09 to label10 with label11;
+    }
+
+    public static void runOnUiThread(java.lang.Runnable)
+    {
+        java.lang.Runnable $r0;
+        long varReplacer811;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.Runnable;
+
+        varReplacer811 = 0L;
+
+        staticinvoke <com.unity3d.ads.android.UnityAdsUtils: void runOnUiThread(java.lang.Runnable,long)>($r0, varReplacer811);
+
+        return;
+    }
+
+    private static void runOnUiThread(java.lang.Runnable, long)
+    {
+        java.lang.Runnable $r0;
+        long $l0;
+        android.os.Handler $r1;
+        android.os.Looper $r2;
+        byte $b1;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.Runnable;
+
+        $l0 := @parameter1: long;
+
+        $r1 = new android.os.Handler;
+
+        $r2 = staticinvoke <android.os.Looper: android.os.Looper getMainLooper()>();
+
+        specialinvoke $r1.<android.os.Handler: void <init>(android.os.Looper)>($r2);
+
+        $b1 = 0;
+
+        goto label1;
+
+     label1:
+        virtualinvoke $r1.<android.os.Handler: boolean post(java.lang.Runnable)>($r0);
+
+        return;
+    }
+
+    public static boolean writeFile(java.io.File, java.lang.String)
+    {
+        java.io.File $r0;
+        java.lang.String $r1;
+        java.lang.Exception $r2;
+        java.io.FileOutputStream $r3;
+        byte[] $r4;
+        java.lang.StringBuilder $r5;
+
+        $r0 := @parameter0: java.io.File;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r3 = new java.io.FileOutputStream;
+
+     label1:
+        specialinvoke $r3.<java.io.FileOutputStream: void <init>(java.io.File)>($r0);
+
+        $r4 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r3.<java.io.FileOutputStream: void write(byte[])>($r4);
+
+        virtualinvoke $r3.<java.io.FileOutputStream: void flush()>();
+
+        virtualinvoke $r3.<java.io.FileOutputStream: void close()>();
+
+     label2:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Wrote file: ");
+
+        $r1 = virtualinvoke $r0.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.unity3d.ads.android.UnityAdsDeviceLog: void debug(java.lang.String)>($r1);
+
+        return 1;
+
+     label3:
+        $r2 := @caughtexception;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Could not write file: ");
+
+        $r1 = virtualinvoke $r2.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.unity3d.ads.android.UnityAdsDeviceLog: void error(java.lang.String)>($r1);
+
+        return 0;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+}

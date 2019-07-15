@@ -1,0 +1,115 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r7
+		Type: javax.crypto.CipherInputStream
+		Statement: specialinvoke $r7.<javax.crypto.CipherInputStream: void <init>(java.io.InputStream,javax.crypto.Cipher)>($r2, $r6)
+		Method: <com.pcckha.bwpwqx.ChickenAcitivity: byte[] b(android.content.res.AssetManager,java.lang.String)>
+		SHA-256: a049ab924fe94ccc01495df734f006a047aebede379fb92e760f607efd68d3e6
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r4.<java.security.Signature: boolean verify(byte[])>($r3)
+		Method: <com.android.vending.billing.util.s: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 45be329dc7c8217f95e0c435d32d8566ac31d3c55f6b27e95e804c7ba1663c69
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: javax.crypto.Cipher
+		Statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1915)
+		Method: <com.pcckha.bwpwqx.ChickenAcitivity: byte[] b(android.content.res.AssetManager,java.lang.String)>
+		SHA-256: 2a52c8c296652b86a07567ad11be695b7c7b3da18a404f4b4209ceeb8f027af4
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: java.security.Signature
+		Statement: $r4 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer853)
+		Method: <com.android.vending.billing.util.s: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: d75042c8acea56079148a3a1eb55262aca1718f5ebd67b56b3aac264bf6f2be6
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1916)
+		Method: <com.pcckha.bwpwqx.ChickenAcitivity: byte[] b(android.content.res.AssetManager,java.lang.String)>
+		SHA-256: e4a7a50c3e384d0ecb872f46264e05dd874d7461baac9ee571de1e6aef95ff53
+		Secure: false
+	Object:
+		Variable: varReplacer1916
+		Type: java.lang.String
+		Statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1916)
+		Method: <com.pcckha.bwpwqx.ChickenAcitivity: byte[] b(android.content.res.AssetManager,java.lang.String)>
+		SHA-256: 819859b594b11f7150ab8627fa3afec4afdd6c2836dc308530706e7a20a7b4eb
+		Secure: false
+
+Findings in Java Class: com.android.vending.billing.util.s
+
+	 in Method: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r4.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
+
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #d75042c8acea56079148a3a1eb55262aca1718f5ebd67b56b3aac264bf6f2be6)
+			First parameter (with value "SHA1withRSA") should be any of {SHA256withDSA, SHA256withRSA, DSA, SHA512withRSA, SHA384withRSA}
+			at statement: $r4 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer853)
+
+
+Findings in Java Class: com.pcckha.bwpwqx.ChickenAcitivity
+
+	 in Method: byte[] b(android.content.res.AssetManager,java.lang.String)
+		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #2a52c8c296652b86a07567ad11be695b7c7b3da18a404f4b4209ceeb8f027af4)
+			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init, update, wrap, doFinal
+			at statement: specialinvoke $r7.<javax.crypto.CipherInputStream: void <init>(java.io.InputStream,javax.crypto.Cipher)>($r2, $r6)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #2a52c8c296652b86a07567ad11be695b7c7b3da18a404f4b4209ceeb8f027af4)
+			First parameter (with value "DES/ECB/PKCS5Padding") should be any of {AES, RSA}
+			at statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1915)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1916)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 1
+	ConstraintError: 2
+	RequiredPredicateError: 2
+=====================================================================

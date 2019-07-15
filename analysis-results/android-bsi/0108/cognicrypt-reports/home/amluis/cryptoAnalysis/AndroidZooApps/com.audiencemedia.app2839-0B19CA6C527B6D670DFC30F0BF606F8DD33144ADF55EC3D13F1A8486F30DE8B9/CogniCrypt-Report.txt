@@ -1,0 +1,152 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r16
+		Type: javax.net.ssl.SSLContext
+		Statement: $r16 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer6118)
+		Method: <com.braintreepayments.api.internal.TLSSocketFactory: void <init>()>
+		SHA-256: 8a28ec913d952ba614681b2d6d5cff54f9ef1898012a98b559b9ddc6237bdf5c
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer6740)
+		Method: <com.audiencemedia.amreader.analytics.service.b: void b(java.lang.String)>
+		SHA-256: 24dc5769d8aa7f6a11041a7dd42a902669146a3e9a7e41b9ca2047f6c99937f2
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.KeyStore
+		Statement: $r3 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r2)
+		Method: <com.braintreepayments.api.internal.TLSSocketFactory: void <init>()>
+		SHA-256: 572fdc3edab0336e37de7d5010d20e571e5fd4592034144bbc4ee1bb46a46df2
+		Secure: true
+	Object:
+		Variable: $r7
+		Type: javax.crypto.Cipher
+		Statement: $r7 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer6467)
+		Method: <com.audiencemedia.android.core.serviceAPI.b: void a(android.content.Context,java.io.InputStream)>
+		SHA-256: 6c6b4c0b0540fa1d65dbca47915ee44ad5757f0737e57708a1d3d6564dee42e
+		Secure: false
+	Object:
+		Variable: $r9
+		Type: javax.crypto.CipherInputStream
+		Statement: specialinvoke $r9.<javax.crypto.CipherInputStream: void <init>(java.io.InputStream,javax.crypto.Cipher)>($r1, $r7)
+		Method: <com.audiencemedia.android.core.serviceAPI.b: void a(android.content.Context,java.io.InputStream)>
+		SHA-256: 74ab4c6691f06cd4a5aef4cba49144f7b157116cf722dffdc24e5ef5624f934b
+		Secure: false
+	Object:
+		Variable: $r8
+		Type: javax.crypto.spec.IvParameterSpec
+		Statement: specialinvoke $r8.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r6)
+		Method: <com.audiencemedia.android.core.serviceAPI.b: void a(android.content.Context,java.io.InputStream)>
+		SHA-256: b8cda662ab4729d1274b6cf527d11503ba13d548f10ed015da24f11402e55684
+		Secure: false
+	Object:
+		Variable: varReplacer6424
+		Type: java.lang.String
+		Statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer6424)
+		Method: <com.audiencemedia.android.core.serviceAPI.b: void a(android.content.Context,java.io.InputStream)>
+		SHA-256: 599216e81516be41b2c58b487c32530a08bd7768372afd3eafcdfec9408657f4
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer6424)
+		Method: <com.audiencemedia.android.core.serviceAPI.b: void a(android.content.Context,java.io.InputStream)>
+		SHA-256: 53f7dc93478d92946082b77435efe681ee5a47e71cdde9211755753cbc34900a
+		Secure: false
+
+Findings in Java Class: com.audiencemedia.android.core.serviceAPI.b
+
+	 in Method: void a(android.content.Context,java.io.InputStream)
+		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #6c6b4c0b0540fa1d65dbca47915ee44ad5757f0737e57708a1d3d6564dee42e)
+			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init, update, wrap, doFinal
+			at statement: specialinvoke $r9.<javax.crypto.CipherInputStream: void <init>(java.io.InputStream,javax.crypto.Cipher)>($r1, $r7)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer6424)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #6c6b4c0b0540fa1d65dbca47915ee44ad5757f0737e57708a1d3d6564dee42e)
+			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
+			at statement: $r7 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer6467)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r8.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r6)
+
+
+	 in Method: java.lang.String a(java.io.InputStream)
+		TypestateError violating CrySL rule for javax.crypto.CipherInputStream (on Object #74ab4c6691f06cd4a5aef4cba49144f7b157116cf722dffdc24e5ef5624f934b)
+			Unexpected call to method close on object of type javax.crypto.CipherInputStream. Expect a call to one of the following methods read
+			at statement: virtualinvoke $r0.<java.io.InputStream: void close()>()
+
+
+Findings in Java Class: com.braintreepayments.api.internal.TLSSocketFactory
+
+	 in Method: void <init>()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r16.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6121, $r17, varReplacer6121)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r16.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6121, $r17, varReplacer6121)
+
+
+Findings in Java Class: com.audiencemedia.amreader.analytics.service.b
+
+	 in Method: void b(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6738, r9, varReplacer6738)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6738, r9, varReplacer6738)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 8
+
+	CogniCrypt found the following violations. For details see description above.
+	TypestateError: 1
+	IncompleteOperationError: 1
+	ConstraintError: 1
+	RequiredPredicateError: 6
+=====================================================================

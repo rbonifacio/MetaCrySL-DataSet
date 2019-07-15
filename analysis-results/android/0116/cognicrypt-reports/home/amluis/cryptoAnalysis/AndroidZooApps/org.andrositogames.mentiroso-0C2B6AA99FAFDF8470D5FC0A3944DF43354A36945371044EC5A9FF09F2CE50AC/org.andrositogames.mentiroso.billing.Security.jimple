@@ -1,0 +1,268 @@
+public class org.andrositogames.mentiroso.billing.Security extends java.lang.Object
+{
+    private static final java.lang.String KEY_FACTORY_ALGORITHM;
+    private static final java.lang.String SIGNATURE_ALGORITHM;
+    private static final java.lang.String TAG;
+
+    public void <init>()
+    {
+        org.andrositogames.mentiroso.billing.Security $r0;
+
+        $r0 := @this: org.andrositogames.mentiroso.billing.Security;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.security.PublicKey generatePublicKey(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer9983, varReplacer9984, varReplacer9985, varReplacer9986, varReplacer9987;
+        byte[] $r1;
+        java.security.KeyFactory $r2;
+        java.security.spec.X509EncodedKeySpec $r3;
+        java.security.PublicKey $r4;
+        java.lang.Throwable $r5, $r7;
+        java.lang.RuntimeException $r6;
+        java.lang.IllegalArgumentException $r8;
+        org.andrositogames.mentiroso.billing.Base64DecoderException $r9;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        $r1 = staticinvoke <org.andrositogames.mentiroso.billing.Base64: byte[] decode(java.lang.String)>($r0);
+
+        varReplacer9987 = "RSA";
+
+        $r2 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer9987);
+
+     label2:
+        $r3 = new java.security.spec.X509EncodedKeySpec;
+
+     label3:
+        specialinvoke $r3.<java.security.spec.X509EncodedKeySpec: void <init>(byte[])>($r1);
+
+        $r4 = virtualinvoke $r2.<java.security.KeyFactory: java.security.PublicKey generatePublic(java.security.spec.KeySpec)>($r3);
+
+     label4:
+        return $r4;
+
+     label5:
+        $r5 := @caughtexception;
+
+        $r6 = new java.lang.RuntimeException;
+
+        specialinvoke $r6.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r5);
+
+        throw $r6;
+
+     label6:
+        $r7 := @caughtexception;
+
+        varReplacer9985 = "IABUtil/Security";
+
+        varReplacer9986 = "Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer9985, varReplacer9986);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r7);
+
+        throw $r8;
+
+     label7:
+        $r9 := @caughtexception;
+
+        varReplacer9983 = "IABUtil/Security";
+
+        varReplacer9984 = "Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer9983, varReplacer9984);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r9);
+
+        throw $r8;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label5;
+        catch java.security.spec.InvalidKeySpecException from label1 to label2 with label6;
+        catch java.security.spec.InvalidKeySpecException from label3 to label4 with label6;
+        catch org.andrositogames.mentiroso.billing.Base64DecoderException from label1 to label2 with label7;
+        catch org.andrositogames.mentiroso.billing.Base64DecoderException from label3 to label4 with label7;
+    }
+
+    public static boolean verify(java.security.PublicKey, java.lang.String, java.lang.String)
+    {
+        java.security.PublicKey $r0;
+        java.lang.String $r1, $r2, varReplacer9967, varReplacer9968, varReplacer9969, varReplacer9970, varReplacer9972, varReplacer9973, varReplacer9975, varReplacer9976, varReplacer9979, varReplacer9980, varReplacer9981;
+        java.security.Signature $r3;
+        byte[] $r4;
+        boolean $z0;
+        java.lang.Throwable $r5, $r6, $r7;
+        org.andrositogames.mentiroso.billing.Base64DecoderException $r8;
+        int varReplacer9966, varReplacer9971, varReplacer9974, varReplacer9977, varReplacer9978, varReplacer9982;
+
+        nop;
+
+        $r0 := @parameter0: java.security.PublicKey;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+     label1:
+        varReplacer9981 = "SHA1withRSA";
+
+        $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer9981);
+
+        virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0);
+
+        $r4 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r3.<java.security.Signature: void update(byte[])>($r4);
+
+        $r4 = staticinvoke <org.andrositogames.mentiroso.billing.Base64: byte[] decode(java.lang.String)>($r2);
+
+        $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4);
+
+     label2:
+        if $z0 != 0 goto label5;
+
+     label3:
+        varReplacer9975 = "IABUtil/Security";
+
+        varReplacer9976 = "Signature verification failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer9975, varReplacer9976);
+
+     label4:
+        varReplacer9977 = 0;
+
+        return varReplacer9977;
+
+     label5:
+        varReplacer9978 = 1;
+
+        return varReplacer9978;
+
+     label6:
+        $r5 := @caughtexception;
+
+        varReplacer9967 = "IABUtil/Security";
+
+        varReplacer9968 = "NoSuchAlgorithmException.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer9967, varReplacer9968);
+
+        varReplacer9982 = 0;
+
+        return varReplacer9982;
+
+     label7:
+        $r6 := @caughtexception;
+
+        varReplacer9972 = "IABUtil/Security";
+
+        varReplacer9973 = "Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer9972, varReplacer9973);
+
+        varReplacer9971 = 0;
+
+        return varReplacer9971;
+
+     label8:
+        $r7 := @caughtexception;
+
+        varReplacer9969 = "IABUtil/Security";
+
+        varReplacer9970 = "Signature exception.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer9969, varReplacer9970);
+
+        varReplacer9974 = 0;
+
+        return varReplacer9974;
+
+     label9:
+        $r8 := @caughtexception;
+
+        varReplacer9979 = "IABUtil/Security";
+
+        varReplacer9980 = "Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer9979, varReplacer9980);
+
+        varReplacer9966 = 0;
+
+        return varReplacer9966;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label6;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label6;
+        catch java.security.InvalidKeyException from label1 to label2 with label7;
+        catch java.security.InvalidKeyException from label3 to label4 with label7;
+        catch java.security.SignatureException from label1 to label2 with label8;
+        catch java.security.SignatureException from label3 to label4 with label8;
+        catch org.andrositogames.mentiroso.billing.Base64DecoderException from label1 to label2 with label9;
+        catch org.andrositogames.mentiroso.billing.Base64DecoderException from label3 to label4 with label9;
+    }
+
+    public static boolean verifyPurchase(java.lang.String, java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, $r2, varReplacer9960, varReplacer9961, varReplacer9964, varReplacer9965;
+        boolean $z0;
+        java.security.PublicKey $r3;
+        int varReplacer9959, varReplacer9962, varReplacer9963;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        if $r1 != null goto label1;
+
+        varReplacer9964 = "IABUtil/Security";
+
+        varReplacer9965 = "data is null";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer9964, varReplacer9965);
+
+        varReplacer9959 = 0;
+
+        return varReplacer9959;
+
+     label1:
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 != 0 goto label2;
+
+        $r3 = staticinvoke <org.andrositogames.mentiroso.billing.Security: java.security.PublicKey generatePublicKey(java.lang.String)>($r0);
+
+        $z0 = staticinvoke <org.andrositogames.mentiroso.billing.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>($r3, $r1, $r2);
+
+        if $z0 != 0 goto label2;
+
+        varReplacer9960 = "IABUtil/Security";
+
+        varReplacer9961 = "signature does not match data.";
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>(varReplacer9960, varReplacer9961);
+
+        varReplacer9962 = 0;
+
+        return varReplacer9962;
+
+     label2:
+        varReplacer9963 = 1;
+
+        return varReplacer9963;
+    }
+}
