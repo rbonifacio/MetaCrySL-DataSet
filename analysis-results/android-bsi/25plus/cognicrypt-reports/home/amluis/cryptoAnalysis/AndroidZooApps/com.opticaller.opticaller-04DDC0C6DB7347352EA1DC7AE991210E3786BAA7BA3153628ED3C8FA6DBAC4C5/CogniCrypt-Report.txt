@@ -1,0 +1,92 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer3886)
+		Method: <com.opticaller.services.AccessNumberAPI: void trustAllHosts()>
+		SHA-256: 7dcce69cd4f99ed5324e91afc7edaf084940c7b210a9f53982389641da87b574
+		Secure: false
+	Object:
+		Variable: r7
+		Type: java.security.SecureRandom
+		Statement: specialinvoke r7.<java.security.SecureRandom: void <init>()>()
+		Method: <com.opticaller.services.AccessNumberAPI: void trustAllHosts()>
+		SHA-256: 8ca879ec14807265229a086dd1c3c626eadd16cecc37c01b982aadf01048e6c9
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer586)
+		Method: <com.opticaller.oclibrary.License: java.lang.String getSHA1Hex(byte[])>
+		SHA-256: f46d8dbe3cc94fd317ee9263da8886113fe991ab6a51a8ea96ffcb846a1e22aa
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.opticaller.oclibrary.License: java.lang.String getSHA1Hex(byte[])>
+		SHA-256: 8acae09fa3cc708e139e0b984816c908ce826401936f4b73422fd8f56ea11df6
+		Secure: false
+
+Findings in Java Class: com.opticaller.oclibrary.License
+
+	 in Method: java.lang.String getSHA1Hex(byte[])
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #f46d8dbe3cc94fd317ee9263da8886113fe991ab6a51a8ea96ffcb846a1e22aa)
+			First parameter (with value "SHA1") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer586)
+
+
+Findings in Java Class: com.opticaller.services.AccessNumberAPI
+
+	 in Method: void trustAllHosts()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer3887, r8, $r3)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer3887, r8, $r3)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 2
+	ConstraintError: 1
+=====================================================================

@@ -1,0 +1,906 @@
+public class com.igaworks.core.DeviceIDManger extends java.lang.Object
+{
+    private static com.igaworks.core.DeviceIDManger singleton;
+    public final int MD5_TYPE;
+    public final int SHA1_TYPE;
+    private com.igaworks.core.AdvertisingIdClient$AdInfo adidInfo;
+    private android.content.Context context;
+
+    private void <init>(android.content.Context)
+    {
+        com.igaworks.core.DeviceIDManger $r0;
+        android.content.Context $r1;
+        int varReplacer3077, varReplacer3078;
+
+        nop;
+
+        $r0 := @this: com.igaworks.core.DeviceIDManger;
+
+        $r1 := @parameter0: android.content.Context;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer3077 = 100;
+
+        $r0.<com.igaworks.core.DeviceIDManger: int MD5_TYPE> = varReplacer3077;
+
+        varReplacer3078 = 101;
+
+        $r0.<com.igaworks.core.DeviceIDManger: int SHA1_TYPE> = varReplacer3078;
+
+        $r0.<com.igaworks.core.DeviceIDManger: android.content.Context context> = $r1;
+
+        return;
+    }
+
+    public static java.lang.String getAndroidId(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.Exception $r1;
+        android.content.ContentResolver $r2;
+        java.lang.String $r3, varReplacer8108, varReplacer8109;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+     label1:
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        varReplacer8108 = "android_id";
+
+        $r3 = staticinvoke <android.provider.Settings$Secure: java.lang.String getString(android.content.ContentResolver,java.lang.String)>($r2, varReplacer8108);
+
+     label2:
+        return $r3;
+
+     label3:
+        $r1 := @caughtexception;
+
+        virtualinvoke $r1.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer8109 = "unKnown";
+
+        return varReplacer8109;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public static com.igaworks.core.DeviceIDManger getInstance(android.content.Context)
+    {
+        android.content.Context $r0;
+        com.igaworks.core.DeviceIDManger $r1;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = <com.igaworks.core.DeviceIDManger: com.igaworks.core.DeviceIDManger singleton>;
+
+        if $r1 != null goto label1;
+
+        $r1 = new com.igaworks.core.DeviceIDManger;
+
+        specialinvoke $r1.<com.igaworks.core.DeviceIDManger: void <init>(android.content.Context)>($r0);
+
+        <com.igaworks.core.DeviceIDManger: com.igaworks.core.DeviceIDManger singleton> = $r1;
+
+     label1:
+        $r1 = <com.igaworks.core.DeviceIDManger: com.igaworks.core.DeviceIDManger singleton>;
+
+        return $r1;
+    }
+
+    public static java.lang.String getMd5Value(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer5140, varReplacer5142, varReplacer5143;
+        java.lang.Exception $r1;
+        java.math.BigInteger $r2;
+        java.security.MessageDigest $r3;
+        byte[] $r4;
+        int $i0, varReplacer5139, varReplacer5141;
+        java.lang.StringBuilder $r5;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer5143 = "MD5";
+
+        $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5143);
+
+        $r4 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r4);
+
+     label2:
+        $r2 = new java.math.BigInteger;
+
+     label3:
+        varReplacer5141 = 1;
+
+        specialinvoke $r2.<java.math.BigInteger: void <init>(int,byte[])>(varReplacer5141, $r4);
+
+        varReplacer5139 = 16;
+
+        $r0 = virtualinvoke $r2.<java.math.BigInteger: java.lang.String toString(int)>(varReplacer5139);
+
+     label4:
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+     label5:
+        if $i0 < 32 goto label6;
+
+        return $r0;
+
+     label6:
+        $r5 = new java.lang.StringBuilder;
+
+     label7:
+        varReplacer5142 = "0";
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer5142);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label8:
+        goto label4;
+
+     label9:
+        $r1 := @caughtexception;
+
+        virtualinvoke $r1.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer5140 = "";
+
+        return varReplacer5140;
+
+        catch java.lang.Exception from label1 to label2 with label9;
+        catch java.lang.Exception from label3 to label4 with label9;
+        catch java.lang.Exception from label4 to label5 with label9;
+        catch java.lang.Exception from label7 to label8 with label9;
+    }
+
+    public java.lang.String getAESPuid(android.content.Context)
+    {
+        com.igaworks.core.DeviceIDManger $r0;
+        android.content.Context $r1, $r2;
+        java.lang.Object $r3;
+        android.telephony.TelephonyManager $r4;
+        java.lang.String $r5, varReplacer3848, varReplacer3849, varReplacer3850, varReplacer3851, varReplacer3853, varReplacer3854, varReplacer3855, varReplacer3856;
+        java.lang.Exception $r6, $r7;
+        int varReplacer3852, varReplacer3857;
+
+        nop;
+
+        $r0 := @this: com.igaworks.core.DeviceIDManger;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r0.<com.igaworks.core.DeviceIDManger: android.content.Context context> = $r1;
+
+        $r2 = $r0.<com.igaworks.core.DeviceIDManger: android.content.Context context>;
+
+        varReplacer3849 = "phone";
+
+        $r3 = virtualinvoke $r2.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer3849);
+
+        $r4 = (android.telephony.TelephonyManager) $r3;
+
+        if $r4 == null goto label1;
+
+        $r5 = virtualinvoke $r4.<android.telephony.TelephonyManager: java.lang.String getDeviceId()>();
+
+        if $r5 != null goto label5;
+
+     label1:
+        $r5 = virtualinvoke $r0.<com.igaworks.core.DeviceIDManger: java.lang.String getAnotherPUID()>();
+
+        if $r5 != null goto label2;
+
+        varReplacer3848 = "";
+
+        return varReplacer3848;
+
+     label2:
+        $r5 = staticinvoke <com.igaworks.core.AESGetPuid: java.lang.String encrypt(java.lang.String)>($r5);
+
+     label3:
+        return $r5;
+
+     label4:
+        $r6 := @caughtexception;
+
+        varReplacer3850 = "IGAW_QA";
+
+        varReplacer3851 = "get AES puid ERROR : ";
+
+        varReplacer3852 = 0;
+
+        staticinvoke <com.igaworks.core.IgawLogger: void Logging(android.content.Context,java.lang.String,java.lang.String,int)>($r1, varReplacer3850, varReplacer3851, varReplacer3852);
+
+        virtualinvoke $r6.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer3853 = "";
+
+        return varReplacer3853;
+
+     label5:
+        $r5 = virtualinvoke $r4.<android.telephony.TelephonyManager: java.lang.String getDeviceId()>();
+
+        $r5 = staticinvoke <com.igaworks.core.AESGetPuid: java.lang.String encrypt(java.lang.String)>($r5);
+
+     label6:
+        return $r5;
+
+     label7:
+        $r7 := @caughtexception;
+
+        varReplacer3855 = "IGAW_QA";
+
+        varReplacer3856 = "get AES puid ERROR";
+
+        varReplacer3857 = 0;
+
+        staticinvoke <com.igaworks.core.IgawLogger: void Logging(android.content.Context,java.lang.String,java.lang.String,int)>($r1, varReplacer3855, varReplacer3856, varReplacer3857);
+
+        virtualinvoke $r7.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer3854 = "";
+
+        return varReplacer3854;
+
+        catch java.lang.Exception from label2 to label3 with label4;
+        catch java.lang.Exception from label5 to label6 with label7;
+    }
+
+    public com.igaworks.core.AdvertisingIdClient$AdInfo getAdidInfo()
+    {
+        com.igaworks.core.DeviceIDManger $r0;
+        com.igaworks.core.AdvertisingIdClient$AdInfo r1;
+
+        $r0 := @this: com.igaworks.core.DeviceIDManger;
+
+        r1 = $r0.<com.igaworks.core.DeviceIDManger: com.igaworks.core.AdvertisingIdClient$AdInfo adidInfo>;
+
+        return r1;
+    }
+
+    public com.igaworks.core.AdvertisingIdClient$AdInfo getAndroidADID(android.content.Context, com.igaworks.core.AdvertisingIdClient$ADIDCallbackListener)
+    {
+        com.igaworks.core.DeviceIDManger $r0;
+        android.content.Context $r1;
+        com.igaworks.core.AdvertisingIdClient$ADIDCallbackListener $r2;
+        java.lang.Exception $r3;
+        com.igaworks.core.AdvertisingIdClient$AdInfo $r4;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r6, varReplacer2968, varReplacer2969;
+        int varReplacer2970, varReplacer2971;
+
+        nop;
+
+        $r0 := @this: com.igaworks.core.DeviceIDManger;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r2 := @parameter1: com.igaworks.core.AdvertisingIdClient$ADIDCallbackListener;
+
+     label1:
+        $r4 = staticinvoke <com.igaworks.core.AdvertisingIdClient: com.igaworks.core.AdvertisingIdClient$AdInfo getAdvertisingIdInfo(android.content.Context,com.igaworks.core.AdvertisingIdClient$ADIDCallbackListener)>($r1, $r2);
+
+     label2:
+        if $r4 == null goto label4;
+
+     label3:
+        $r0.<com.igaworks.core.DeviceIDManger: com.igaworks.core.AdvertisingIdClient$AdInfo adidInfo> = $r4;
+
+     label4:
+        $r4 = $r0.<com.igaworks.core.DeviceIDManger: com.igaworks.core.AdvertisingIdClient$AdInfo adidInfo>;
+
+        return $r4;
+
+     label5:
+        $r3 := @caughtexception;
+
+        if $r3 == null goto label4;
+
+        $r5 = new java.lang.StringBuilder;
+
+        varReplacer2968 = "getAndroidADID error : ";
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer2968);
+
+        $r6 = virtualinvoke $r3.<java.lang.Exception: java.lang.String toString()>();
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer2969 = "IGAW_QA";
+
+        varReplacer2970 = 3;
+
+        varReplacer2971 = 1;
+
+        staticinvoke <com.igaworks.core.IgawLogger: void Logging(android.content.Context,java.lang.String,java.lang.String,int,boolean)>($r1, varReplacer2969, $r6, varReplacer2970, varReplacer2971);
+
+        goto label4;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    public java.lang.String getAndroidId(android.content.Context, int)
+    {
+        com.igaworks.core.DeviceIDManger $r0;
+        android.content.Context $r1;
+        int $i0;
+        java.lang.Exception $r2;
+        android.content.ContentResolver $r3;
+        java.lang.String $r4, $r5, varReplacer8178, varReplacer8179;
+
+        nop;
+
+        $r0 := @this: com.igaworks.core.DeviceIDManger;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $i0 := @parameter1: int;
+
+        $r0.<com.igaworks.core.DeviceIDManger: android.content.Context context> = $r1;
+
+     label1:
+        $r1 = $r0.<com.igaworks.core.DeviceIDManger: android.content.Context context>;
+
+        $r3 = virtualinvoke $r1.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        varReplacer8178 = "android_id";
+
+        $r4 = staticinvoke <android.provider.Settings$Secure: java.lang.String getString(android.content.ContentResolver,java.lang.String)>($r3, varReplacer8178);
+
+     label2:
+        $r5 = $r4;
+
+        if $i0 != 100 goto label6;
+
+     label3:
+        $r4 = staticinvoke <com.igaworks.core.DeviceIDManger: java.lang.String getMd5Value(java.lang.String)>($r4);
+
+     label4:
+        $r5 = $r4;
+
+     label5:
+        return $r5;
+
+     label6:
+        if $i0 != 101 goto label5;
+
+     label7:
+        $r4 = virtualinvoke $r0.<com.igaworks.core.DeviceIDManger: java.lang.String getSha1Value(java.lang.String)>($r4);
+
+     label8:
+        $r5 = $r4;
+
+        goto label5;
+
+     label9:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r2.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer8179 = "";
+
+        return varReplacer8179;
+
+        catch java.lang.Exception from label1 to label2 with label9;
+        catch java.lang.Exception from label3 to label4 with label9;
+        catch java.lang.Exception from label7 to label8 with label9;
+    }
+
+    public java.lang.String getAnotherPUID()
+    {
+        com.igaworks.core.DeviceIDManger $r0;
+        java.lang.Exception $r1;
+        android.content.Context $r2;
+        java.lang.Object $r3;
+        android.net.wifi.WifiManager $r4;
+        android.net.wifi.WifiInfo $r5;
+        java.lang.String $r6, varReplacer3858, varReplacer3859, varReplacer3860, varReplacer3862, varReplacer3863;
+        int varReplacer3861;
+
+        nop;
+
+        $r0 := @this: com.igaworks.core.DeviceIDManger;
+
+     label1:
+        $r2 = $r0.<com.igaworks.core.DeviceIDManger: android.content.Context context>;
+
+        varReplacer3858 = "wifi";
+
+        $r3 = virtualinvoke $r2.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer3858);
+
+        $r4 = (android.net.wifi.WifiManager) $r3;
+
+        $r5 = virtualinvoke $r4.<android.net.wifi.WifiManager: android.net.wifi.WifiInfo getConnectionInfo()>();
+
+        $r6 = virtualinvoke $r5.<android.net.wifi.WifiInfo: java.lang.String getMacAddress()>();
+
+     label2:
+        if $r6 != null goto label3;
+
+        varReplacer3863 = "";
+
+        return varReplacer3863;
+
+     label3:
+        $r6 = virtualinvoke $r5.<android.net.wifi.WifiInfo: java.lang.String getMacAddress()>();
+
+     label4:
+        return $r6;
+
+     label5:
+        $r1 := @caughtexception;
+
+        $r2 = $r0.<com.igaworks.core.DeviceIDManger: android.content.Context context>;
+
+        varReplacer3859 = "IGAW_QA";
+
+        varReplacer3860 = "get AES puid ERROR";
+
+        varReplacer3861 = 0;
+
+        staticinvoke <com.igaworks.core.IgawLogger: void Logging(android.content.Context,java.lang.String,java.lang.String,int)>($r2, varReplacer3859, varReplacer3860, varReplacer3861);
+
+        virtualinvoke $r1.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer3862 = "";
+
+        return varReplacer3862;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    public java.lang.String getDeviceID(android.content.Context, int)
+    {
+        com.igaworks.core.DeviceIDManger $r0;
+        android.content.Context $r1;
+        int $i0;
+        java.lang.Exception $r2;
+        java.lang.String $r3, $r6, varReplacer8180, varReplacer8181;
+        java.lang.Object $r4;
+        android.telephony.TelephonyManager $r5;
+        null_type varReplacer8182;
+
+        nop;
+
+        $r0 := @this: com.igaworks.core.DeviceIDManger;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $i0 := @parameter1: int;
+
+        $r3 = "";
+
+        $r0.<com.igaworks.core.DeviceIDManger: android.content.Context context> = $r1;
+
+     label01:
+        $r1 = $r0.<com.igaworks.core.DeviceIDManger: android.content.Context context>;
+
+        varReplacer8180 = "phone";
+
+        $r4 = virtualinvoke $r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer8180);
+
+        $r5 = (android.telephony.TelephonyManager) $r4;
+
+     label02:
+        if $r5 == null goto label05;
+
+     label03:
+        $r6 = virtualinvoke $r5.<android.telephony.TelephonyManager: java.lang.String getDeviceId()>();
+
+     label04:
+        if $r6 != null goto label06;
+
+     label05:
+        varReplacer8182 = null;
+
+        return varReplacer8182;
+
+     label06:
+        $r6 = virtualinvoke $r5.<android.telephony.TelephonyManager: java.lang.String getDeviceId()>();
+
+     label07:
+        if $i0 != 100 goto label10;
+
+     label08:
+        $r3 = staticinvoke <com.igaworks.core.DeviceIDManger: java.lang.String getMd5Value(java.lang.String)>($r6);
+
+     label09:
+        return $r3;
+
+     label10:
+        if $i0 != 101 goto label09;
+
+     label11:
+        $r3 = virtualinvoke $r0.<com.igaworks.core.DeviceIDManger: java.lang.String getSha1Value(java.lang.String)>($r6);
+
+     label12:
+        goto label09;
+
+     label13:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r2.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer8181 = "";
+
+        return varReplacer8181;
+
+        catch java.lang.Exception from label01 to label02 with label13;
+        catch java.lang.Exception from label03 to label04 with label13;
+        catch java.lang.Exception from label06 to label07 with label13;
+        catch java.lang.Exception from label08 to label09 with label13;
+        catch java.lang.Exception from label11 to label12 with label13;
+    }
+
+    public java.lang.String getMacAddress(android.content.Context, int, boolean)
+    {
+        com.igaworks.core.DeviceIDManger $r0;
+        android.content.Context $r1;
+        int $i0;
+        boolean $z0, $z1;
+        java.lang.Exception $r2;
+        java.lang.Object $r3;
+        android.net.wifi.WifiManager $r4;
+        android.net.wifi.WifiInfo $r5;
+        java.lang.String $r6, varReplacer8171, varReplacer8172, varReplacer8173, varReplacer8174, varReplacer8175;
+
+        nop;
+
+        $r0 := @this: com.igaworks.core.DeviceIDManger;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $i0 := @parameter1: int;
+
+        $z0 := @parameter2: boolean;
+
+     label01:
+        varReplacer8172 = "wifi";
+
+        $r3 = virtualinvoke $r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer8172);
+
+        $r4 = (android.net.wifi.WifiManager) $r3;
+
+        $r5 = virtualinvoke $r4.<android.net.wifi.WifiManager: android.net.wifi.WifiInfo getConnectionInfo()>();
+
+        $r6 = virtualinvoke $r5.<android.net.wifi.WifiInfo: java.lang.String getMacAddress()>();
+
+     label02:
+        if $r6 != null goto label03;
+
+        varReplacer8173 = "";
+
+        return varReplacer8173;
+
+     label03:
+        $r6 = virtualinvoke $r5.<android.net.wifi.WifiInfo: java.lang.String getMacAddress()>();
+
+        varReplacer8175 = "";
+
+        $z1 = virtualinvoke $r6.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer8175);
+
+     label04:
+        if $z1 == 0 goto label05;
+
+        varReplacer8171 = "";
+
+        return varReplacer8171;
+
+     label05:
+        if $z0 == 0 goto label10;
+
+     label06:
+        $r6 = virtualinvoke $r6.<java.lang.String: java.lang.String toUpperCase()>();
+
+     label07:
+        if $i0 != 1 goto label12;
+
+     label08:
+        $r6 = virtualinvoke $r5.<android.net.wifi.WifiInfo: java.lang.String getMacAddress()>();
+
+     label09:
+        return $r6;
+
+     label10:
+        $r6 = virtualinvoke $r6.<java.lang.String: java.lang.String toLowerCase()>();
+
+     label11:
+        goto label07;
+
+     label12:
+        if $i0 != 2 goto label15;
+
+     label13:
+        $r6 = staticinvoke <com.igaworks.core.DeviceIDManger: java.lang.String getMd5Value(java.lang.String)>($r6);
+
+     label14:
+        goto label09;
+
+     label15:
+        if $i0 != 3 goto label09;
+
+     label16:
+        $r6 = virtualinvoke $r0.<com.igaworks.core.DeviceIDManger: java.lang.String getSha1Value(java.lang.String)>($r6);
+
+     label17:
+        goto label09;
+
+     label18:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r2.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer8174 = "";
+
+        return varReplacer8174;
+
+        catch java.lang.Exception from label01 to label02 with label18;
+        catch java.lang.Exception from label03 to label04 with label18;
+        catch java.lang.Exception from label06 to label07 with label18;
+        catch java.lang.Exception from label08 to label09 with label18;
+        catch java.lang.Exception from label10 to label11 with label18;
+        catch java.lang.Exception from label13 to label14 with label18;
+        catch java.lang.Exception from label16 to label17 with label18;
+    }
+
+    public java.lang.String getODIN1(android.content.Context)
+    {
+        com.igaworks.core.DeviceIDManger $r0;
+        android.content.Context $r1;
+        java.lang.Exception $r2;
+        android.content.ContentResolver $r3;
+        java.lang.String $r4, varReplacer8183, varReplacer8184;
+
+        nop;
+
+        $r0 := @this: com.igaworks.core.DeviceIDManger;
+
+        $r1 := @parameter0: android.content.Context;
+
+     label1:
+        $r3 = virtualinvoke $r1.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        varReplacer8184 = "android_id";
+
+        $r4 = staticinvoke <android.provider.Settings$Secure: java.lang.String getString(android.content.ContentResolver,java.lang.String)>($r3, varReplacer8184);
+
+     label2:
+        $r4 = virtualinvoke $r0.<com.igaworks.core.DeviceIDManger: java.lang.String getSha1Value(java.lang.String)>($r4);
+
+        return $r4;
+
+     label3:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r2.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer8183 = "";
+
+        return varReplacer8183;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public java.lang.String getOPENUDID(java.lang.String, int)
+    {
+        com.igaworks.core.DeviceIDManger $r0;
+        java.lang.String $r1, varReplacer8177;
+        int $i0;
+
+        nop;
+
+        $r0 := @this: com.igaworks.core.DeviceIDManger;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        if $i0 != 100 goto label1;
+
+        $r1 = staticinvoke <com.igaworks.core.DeviceIDManger: java.lang.String getMd5Value(java.lang.String)>($r1);
+
+        return $r1;
+
+     label1:
+        if $i0 != 101 goto label2;
+
+        $r1 = virtualinvoke $r0.<com.igaworks.core.DeviceIDManger: java.lang.String getSha1Value(java.lang.String)>($r1);
+
+        return $r1;
+
+     label2:
+        varReplacer8177 = "";
+
+        return varReplacer8177;
+    }
+
+    public java.lang.String getOpenUDID()
+    {
+        com.igaworks.core.DeviceIDManger $r0;
+        java.lang.Exception $r1;
+        java.lang.String $r2, varReplacer8176;
+
+        nop;
+
+        $r0 := @this: com.igaworks.core.DeviceIDManger;
+
+     label1:
+        $r2 = staticinvoke <com.igaworks.core.OpenUDID_manager: java.lang.String getOpenUDID()>();
+
+     label2:
+        return $r2;
+
+     label3:
+        $r1 := @caughtexception;
+
+        virtualinvoke $r1.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer8176 = "";
+
+        return varReplacer8176;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public java.lang.String getPUID(android.content.Context)
+    {
+        com.igaworks.core.DeviceIDManger $r0;
+        android.content.Context $r1;
+        java.lang.Object $r2;
+        android.telephony.TelephonyManager $r3;
+        java.lang.String $r4;
+
+        $r0 := @this: com.igaworks.core.DeviceIDManger;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r0.<com.igaworks.core.DeviceIDManger: android.content.Context context> = $r1;
+
+        $r1 = $r0.<com.igaworks.core.DeviceIDManger: android.content.Context context>;
+
+        $r2 = virtualinvoke $r1.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("phone");
+
+        $r3 = (android.telephony.TelephonyManager) $r2;
+
+        if $r3 == null goto label1;
+
+        $r4 = virtualinvoke $r3.<android.telephony.TelephonyManager: java.lang.String getDeviceId()>();
+
+        if $r4 != null goto label2;
+
+     label1:
+        $r4 = virtualinvoke $r0.<com.igaworks.core.DeviceIDManger: java.lang.String getAnotherPUID()>();
+
+        if $r4 != null goto label3;
+
+        return null;
+
+     label2:
+        $r4 = virtualinvoke $r3.<android.telephony.TelephonyManager: java.lang.String getDeviceId()>();
+
+        $r4 = staticinvoke <com.igaworks.core.DeviceIDManger: java.lang.String getMd5Value(java.lang.String)>($r4);
+
+     label3:
+        return $r4;
+    }
+
+    public java.lang.String getSha1Value(java.lang.String)
+    {
+        com.igaworks.core.DeviceIDManger $r0;
+        java.lang.String $r1, varReplacer8185, varReplacer8186;
+        java.lang.Exception $r2;
+        java.lang.StringBuffer $r3;
+        java.security.MessageDigest $r4;
+        byte[] $r5;
+        int $i0, $i1, varReplacer8187, varReplacer8188;
+        byte $b2;
+        short $s3;
+
+        nop;
+
+        $r0 := @this: com.igaworks.core.DeviceIDManger;
+
+        $r1 := @parameter0: java.lang.String;
+
+     label01:
+        varReplacer8185 = "SHA-1";
+
+        $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer8185);
+
+        $r5 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r4.<java.security.MessageDigest: void update(byte[])>($r5);
+
+        $r5 = virtualinvoke $r4.<java.security.MessageDigest: byte[] digest()>();
+
+     label02:
+        $r3 = new java.lang.StringBuffer;
+
+     label03:
+        specialinvoke $r3.<java.lang.StringBuffer: void <init>()>();
+
+     label04:
+        $i0 = 0;
+
+     label05:
+        $i1 = lengthof $r5;
+
+     label06:
+        if $i0 < $i1 goto label09;
+
+     label07:
+        $r1 = virtualinvoke $r3.<java.lang.StringBuffer: java.lang.String toString()>();
+
+     label08:
+        return $r1;
+
+     label09:
+        $b2 = $r5[$i0];
+
+     label10:
+        $s3 = $b2 & 255;
+
+        $i1 = $s3 + 256;
+
+     label11:
+        varReplacer8187 = 16;
+
+        $r1 = staticinvoke <java.lang.Integer: java.lang.String toString(int,int)>($i1, varReplacer8187);
+
+        varReplacer8188 = 1;
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String substring(int)>(varReplacer8188);
+
+        virtualinvoke $r3.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>($r1);
+
+     label12:
+        $i0 = $i0 + 1;
+
+        goto label05;
+
+     label13:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r2.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer8186 = "";
+
+        return varReplacer8186;
+
+        catch java.lang.Exception from label01 to label02 with label13;
+        catch java.lang.Exception from label03 to label04 with label13;
+        catch java.lang.Exception from label05 to label06 with label13;
+        catch java.lang.Exception from label07 to label08 with label13;
+        catch java.lang.Exception from label09 to label10 with label13;
+        catch java.lang.Exception from label11 to label12 with label13;
+    }
+
+    public void setAdidInfo(com.igaworks.core.AdvertisingIdClient$AdInfo)
+    {
+        com.igaworks.core.DeviceIDManger $r0;
+        com.igaworks.core.AdvertisingIdClient$AdInfo $r1;
+
+        $r0 := @this: com.igaworks.core.DeviceIDManger;
+
+        $r1 := @parameter0: com.igaworks.core.AdvertisingIdClient$AdInfo;
+
+        $r0.<com.igaworks.core.DeviceIDManger: com.igaworks.core.AdvertisingIdClient$AdInfo adidInfo> = $r1;
+
+        return;
+    }
+}

@@ -1,0 +1,3921 @@
+public class com.google.android.gms.GameHelper extends java.lang.Object implements com.google.android.gms.common.GooglePlayServicesClient$ConnectionCallbacks, com.google.android.gms.common.GooglePlayServicesClient$OnConnectionFailedListener
+{
+    public static final int CLIENT_ALL;
+    public static final int CLIENT_APPSTATE;
+    public static final int CLIENT_GAMES;
+    public static final int CLIENT_NONE;
+    public static final int CLIENT_PLUS;
+    static final int RC_RESOLVE;
+    static final int RC_UNUSED;
+    public static final int STATE_CONNECTED;
+    public static final int STATE_CONNECTING;
+    public static final int STATE_DISCONNECTED;
+    public static final java.lang.String[] STATE_NAMES;
+    public static final int STATE_STAND_BY;
+    public static final int STATE_UNCONFIGURED;
+    private static final int TYPE_DEVELOPER_ERROR;
+    private static final int TYPE_GAMEHELPER_BUG;
+    android.app.Activity mActivity;
+    com.google.android.gms.appstate.AppStateClient mAppStateClient;
+    boolean mAutoSignIn;
+    int mClientCurrentlyConnecting;
+    int mConnectedClients;
+    com.google.android.gms.common.ConnectionResult mConnectionResult;
+    boolean mDebugLog;
+    java.lang.String mDebugTag;
+    boolean mExpectingResolution;
+    com.google.android.gms.games.GamesClient mGamesClient;
+    java.lang.String mInvitationId;
+    com.google.android.gms.GameHelper$GameHelperListener mListener;
+    com.google.android.gms.plus.PlusClient mPlusClient;
+    int mRequestedClients;
+    java.lang.String[] mScopes;
+    com.google.android.gms.GameHelper$SignInFailureReason mSignInFailureReason;
+    int mState;
+    boolean mUserInitiatedSignIn;
+
+    static void <clinit>()
+    {
+        java.lang.String[] $r0;
+
+        nop;
+
+        $r0 = newarray (java.lang.String)[5];
+
+        $r0[0] = "UNCONFIGURED";
+
+        $r0[1] = "STAND BY";
+
+        $r0[2] = "DISCONNECTED";
+
+        $r0[3] = "CONNECTING";
+
+        $r0[4] = "CONNECTED";
+
+        <com.google.android.gms.GameHelper: java.lang.String[] STATE_NAMES> = $r0;
+
+        return;
+    }
+
+    public void <init>(android.app.Activity)
+    {
+        com.google.android.gms.GameHelper $r0;
+        android.app.Activity $r1;
+        null_type varReplacer311, varReplacer312, varReplacer314, varReplacer315, varReplacer319, varReplacer325, varReplacer326;
+        int varReplacer313, varReplacer316, varReplacer317, varReplacer318, varReplacer320, varReplacer322, varReplacer323, varReplacer324;
+        java.lang.String varReplacer321;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 := @parameter0: android.app.Activity;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer317 = 0;
+
+        $r0.<com.google.android.gms.GameHelper: int mState> = varReplacer317;
+
+        varReplacer318 = 0;
+
+        $r0.<com.google.android.gms.GameHelper: boolean mExpectingResolution> = varReplacer318;
+
+        varReplacer319 = null;
+
+        $r0.<com.google.android.gms.GameHelper: android.app.Activity mActivity> = varReplacer319;
+
+        varReplacer314 = null;
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient> = varReplacer314;
+
+        varReplacer311 = null;
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient> = varReplacer311;
+
+        varReplacer312 = null;
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient> = varReplacer312;
+
+        varReplacer322 = 0;
+
+        $r0.<com.google.android.gms.GameHelper: int mRequestedClients> = varReplacer322;
+
+        varReplacer316 = 0;
+
+        $r0.<com.google.android.gms.GameHelper: int mConnectedClients> = varReplacer316;
+
+        varReplacer324 = 0;
+
+        $r0.<com.google.android.gms.GameHelper: int mClientCurrentlyConnecting> = varReplacer324;
+
+        varReplacer320 = 1;
+
+        $r0.<com.google.android.gms.GameHelper: boolean mAutoSignIn> = varReplacer320;
+
+        varReplacer323 = 0;
+
+        $r0.<com.google.android.gms.GameHelper: boolean mUserInitiatedSignIn> = varReplacer323;
+
+        varReplacer325 = null;
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult> = varReplacer325;
+
+        varReplacer315 = null;
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$SignInFailureReason mSignInFailureReason> = varReplacer315;
+
+        varReplacer313 = 0;
+
+        $r0.<com.google.android.gms.GameHelper: boolean mDebugLog> = varReplacer313;
+
+        varReplacer321 = "game";
+
+        $r0.<com.google.android.gms.GameHelper: java.lang.String mDebugTag> = varReplacer321;
+
+        varReplacer326 = null;
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$GameHelperListener mListener> = varReplacer326;
+
+        $r0.<com.google.android.gms.GameHelper: android.app.Activity mActivity> = $r1;
+
+        return;
+    }
+
+    static java.lang.String activityResponseCodeToString(int)
+    {
+        int $i0;
+        java.lang.String $r0, varReplacer1176, varReplacer1177, varReplacer1178, varReplacer1179, varReplacer1180, varReplacer1181, varReplacer1182;
+
+        nop;
+
+        $i0 := @parameter0: int;
+
+        lookupswitch($i0)
+        {
+            case -1: goto label2;
+            case 0: goto label3;
+            case 10001: goto label7;
+            case 10002: goto label8;
+            case 10003: goto label6;
+            case 10004: goto label4;
+            case 10005: goto label5;
+            default: goto label1;
+        };
+
+     label1:
+        $r0 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+        return $r0;
+
+     label2:
+        varReplacer1182 = "RESULT_OK";
+
+        return varReplacer1182;
+
+     label3:
+        varReplacer1181 = "RESULT_CANCELED";
+
+        return varReplacer1181;
+
+     label4:
+        varReplacer1177 = "RESULT_APP_MISCONFIGURED";
+
+        return varReplacer1177;
+
+     label5:
+        varReplacer1176 = "RESULT_LEFT_ROOM";
+
+        return varReplacer1176;
+
+     label6:
+        varReplacer1180 = "RESULT_LICENSE_FAILED";
+
+        return varReplacer1180;
+
+     label7:
+        varReplacer1179 = "RESULT_RECONNECT_REQUIRED";
+
+        return varReplacer1179;
+
+     label8:
+        varReplacer1178 = "SIGN_IN_FAILED";
+
+        return varReplacer1178;
+    }
+
+    static java.lang.String errorCodeToString(int)
+    {
+        int $i0;
+        java.lang.StringBuilder $r0;
+        java.lang.String $r1, varReplacer1240, varReplacer1241, varReplacer1242, varReplacer1243, varReplacer1244, varReplacer1245, varReplacer1246, varReplacer1247, varReplacer1248, varReplacer1249, varReplacer1250, varReplacer1251, varReplacer1252, varReplacer1253, varReplacer1254, varReplacer1255, varReplacer1256, varReplacer1257, varReplacer1258, varReplacer1259, varReplacer1260, varReplacer1261, varReplacer1262, varReplacer1263, varReplacer1264;
+
+        nop;
+
+        $i0 := @parameter0: int;
+
+        lookupswitch($i0)
+        {
+            case 0: goto label13;
+            case 1: goto label10;
+            case 2: goto label11;
+            case 3: goto label08;
+            case 4: goto label12;
+            case 5: goto label04;
+            case 6: goto label07;
+            case 7: goto label06;
+            case 8: goto label03;
+            case 9: goto label09;
+            case 10: goto label02;
+            case 11: goto label05;
+            default: goto label01;
+        };
+
+     label01:
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1248 = "Unknown error code ";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1248);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label02:
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1252 = "DEVELOPER_ERROR(";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1252);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1245 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1245);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label03:
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1258 = "INTERNAL_ERROR(";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1258);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1244 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1244);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label04:
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1241 = "INVALID_ACCOUNT(";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1241);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1242 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1242);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label05:
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1261 = "LICENSE_CHECK_FAILED(";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1261);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1251 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1251);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label06:
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1249 = "NETWORK_ERROR(";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1249);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1257 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1257);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label07:
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1260 = "RESOLUTION_REQUIRED(";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1260);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1263 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1263);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label08:
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1240 = "SERVICE_DISABLED(";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1240);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1250 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1250);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label09:
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1254 = "SERVICE_INVALID(";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1254);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1255 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1255);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label10:
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1246 = "SERVICE_MISSING(";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1246);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1259 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1259);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label11:
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1247 = "SERVICE_VERSION_UPDATE_REQUIRED(";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1247);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1264 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1264);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label12:
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1256 = "SIGN_IN_REQUIRED(";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1256);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1243 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1243);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+
+     label13:
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1253 = "SUCCESS(";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1253);
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1262 = ")";
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1262);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    private void saveCancelAction()
+    {
+        com.google.android.gms.GameHelper $r0;
+        android.app.Activity $r1;
+        android.content.SharedPreferences $r2;
+        android.content.SharedPreferences$Editor $r3;
+        java.lang.String varReplacer1186, varReplacer1188, varReplacer1190;
+        int varReplacer1187, varReplacer1189;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 = $r0.<com.google.android.gms.GameHelper: android.app.Activity mActivity>;
+
+        if $r1 == null goto label1;
+
+        $r1 = $r0.<com.google.android.gms.GameHelper: android.app.Activity mActivity>;
+
+        varReplacer1186 = "gplay_services";
+
+        varReplacer1187 = 0;
+
+        $r2 = virtualinvoke $r1.<android.app.Activity: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>(varReplacer1186, varReplacer1187);
+
+        $r3 = interfaceinvoke $r2.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        if $r3 == null goto label1;
+
+        varReplacer1188 = "gp_srv_login_attemption";
+
+        varReplacer1189 = 1;
+
+        interfaceinvoke $r3.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putInt(java.lang.String,int)>(varReplacer1188, varReplacer1189);
+
+        interfaceinvoke $r3.<android.content.SharedPreferences$Editor: boolean commit()>();
+
+        varReplacer1190 = "Save gp_srv_login_attemption";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1190);
+
+     label1:
+        return;
+    }
+
+    void addToScope(java.lang.StringBuilder, java.lang.String)
+    {
+        com.google.android.gms.GameHelper $r0;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2;
+        int $i0;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 := @parameter0: java.lang.StringBuilder;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $i0 = virtualinvoke $r1.<java.lang.StringBuilder: int length()>();
+
+        if $i0 != 0 goto label2;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("oauth2:");
+
+     label1:
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        return;
+
+     label2:
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ");
+
+        goto label1;
+    }
+
+    void assertConfigured(java.lang.String)
+    {
+        com.google.android.gms.GameHelper $r0;
+        java.lang.String $r1, varReplacer1152, varReplacer1153;
+        int $i0;
+        java.lang.StringBuilder $r2;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+        if $i0 != 0 goto label1;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1153 = "GameHelper error: Operation attempted without setup: ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1153);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer1152 = ". The setup() method must be called before attempting any other operation.";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1152);
+
+        $r1 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void logError(java.lang.String)>($r1);
+
+     label1:
+        return;
+    }
+
+    public void beginUserInitiatedSignIn()
+    {
+        com.google.android.gms.GameHelper $r0;
+        int $i0;
+        android.content.Context $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3;
+        com.google.android.gms.GameHelper$SignInFailureReason $r4;
+        com.google.android.gms.common.ConnectionResult $r5;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+        if $i0 != 4 goto label1;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void logWarn(java.lang.String)>("beginUserInitiatedSignIn() called when already connected. Calling listener directly to notify of success.");
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void notifyListener(boolean)>(1);
+
+        return;
+
+     label1:
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+        if $i0 != 3 goto label2;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void logWarn(java.lang.String)>("beginUserInitiatedSignIn() called when already connecting. Be patient! You can only call this method after you get an onSignInSucceeded() or onSignInFailed() callback. Suggestion: disable the sign-in button on startup and also when it\'s clicked, and re-enable when you get the callback.");
+
+        return;
+
+     label2:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("Starting USER-INITIATED sign-in flow.");
+
+        $r0.<com.google.android.gms.GameHelper: boolean mAutoSignIn> = 1;
+
+        $r1 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.content.Context getContext()>();
+
+        $i0 = staticinvoke <com.google.android.gms.common.GooglePlayServicesUtil: int isGooglePlayServicesAvailable(android.content.Context)>($r1);
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("isGooglePlayServicesAvailable returned ");
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        if $i0 == 0 goto label3;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("Google Play services not available. Show error dialog.");
+
+        $r4 = new com.google.android.gms.GameHelper$SignInFailureReason;
+
+        specialinvoke $r4.<com.google.android.gms.GameHelper$SignInFailureReason: void <init>(int,int)>($i0, 0);
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$SignInFailureReason mSignInFailureReason> = $r4;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void showFailureDialog()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void notifyListener(boolean)>(0);
+
+        return;
+
+     label3:
+        $r0.<com.google.android.gms.GameHelper: boolean mUserInitiatedSignIn> = 1;
+
+        $r5 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        if $r5 == null goto label4;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("beginUserInitiatedSignIn: continuing pending sign-in flow.");
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void setState(int)>(3);
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void resolveConnectionResult()>();
+
+        return;
+
+     label4:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("beginUserInitiatedSignIn: starting new sign-in flow.");
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void startConnections()>();
+
+        return;
+    }
+
+    void byteToString(java.lang.StringBuilder, byte)
+    {
+        com.google.android.gms.GameHelper $r0;
+        java.lang.StringBuilder $r1;
+        byte $b0;
+        int $i1, $i2, $i3;
+        java.lang.String $r2;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 := @parameter0: java.lang.StringBuilder;
+
+        $b0 := @parameter1: byte;
+
+        if $b0 >= 0 goto label2;
+
+        $i2 = $b0 + 256;
+
+     label1:
+        $i1 = $i2 / 16;
+
+        $i2 = $i2 % 16;
+
+        $r2 = "0123456789ABCDEF";
+
+        $i3 = $i1 + 1;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>($i1, $i3);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = "0123456789ABCDEF";
+
+        $i1 = $i2 + 1;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int,int)>($i2, $i1);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        return;
+
+     label2:
+        $i2 = $b0;
+
+        goto label1;
+    }
+
+    public boolean checkGPServices()
+    {
+        com.google.android.gms.GameHelper $r0;
+        java.lang.Exception $r1;
+        android.app.Activity $r2;
+        int $i0, varReplacer329, varReplacer330, varReplacer331, varReplacer333;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r4, varReplacer328, varReplacer332;
+        boolean $z0;
+        com.google.android.gms.GameHelper$1 $r5;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r2 = $r0.<com.google.android.gms.GameHelper: android.app.Activity mActivity>;
+
+        if $r2 != null goto label01;
+
+        varReplacer331 = 0;
+
+        return varReplacer331;
+
+     label01:
+        $r2 = $r0.<com.google.android.gms.GameHelper: android.app.Activity mActivity>;
+
+        $i0 = staticinvoke <com.google.android.gms.common.GooglePlayServicesUtil: int isGooglePlayServicesAvailable(android.content.Context)>($r2);
+
+     label02:
+        $r3 = new java.lang.StringBuilder;
+
+     label03:
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer332 = "checkGPServices - ";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer332);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r4);
+
+     label04:
+        if $i0 != 0 goto label05;
+
+        varReplacer330 = 1;
+
+        return varReplacer330;
+
+     label05:
+        $z0 = staticinvoke <com.google.android.gms.common.GooglePlayServicesUtil: boolean isUserRecoverableError(int)>($i0);
+
+     label06:
+        if $z0 == 0 goto label12;
+
+     label07:
+        $r2 = $r0.<com.google.android.gms.GameHelper: android.app.Activity mActivity>;
+
+     label08:
+        $r5 = new com.google.android.gms.GameHelper$1;
+
+     label09:
+        specialinvoke $r5.<com.google.android.gms.GameHelper$1: void <init>(com.google.android.gms.GameHelper,int)>($r0, $i0);
+
+        virtualinvoke $r2.<android.app.Activity: void runOnUiThread(java.lang.Runnable)>($r5);
+
+     label10:
+        varReplacer333 = 0;
+
+        return varReplacer333;
+
+     label11:
+        $r1 := @caughtexception;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer328 = "checkGPServices - exp: ";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer328);
+
+        $r4 = virtualinvoke $r1.<java.lang.Exception: java.lang.String toString()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r4);
+
+     label12:
+        varReplacer329 = 0;
+
+        return varReplacer329;
+
+        catch java.lang.Exception from label01 to label02 with label11;
+        catch java.lang.Exception from label03 to label04 with label11;
+        catch java.lang.Exception from label05 to label06 with label11;
+        catch java.lang.Exception from label07 to label08 with label11;
+        catch java.lang.Exception from label09 to label10 with label11;
+    }
+
+    transient boolean checkState(int, java.lang.String, java.lang.String, int[])
+    {
+        com.google.android.gms.GameHelper $r0;
+        int $i0, $i1, $i2, $i3, $i4, varReplacer1219, varReplacer1220;
+        java.lang.String $r1, $r2, varReplacer1218, varReplacer1221, varReplacer1222, varReplacer1223, varReplacer1224, varReplacer1225, varReplacer1226, varReplacer1227, varReplacer1228, varReplacer1229, varReplacer1230, varReplacer1231;
+        int[] $r3;
+        java.lang.StringBuilder $r4, $r5;
+        java.lang.String[] $r6;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: int[];
+
+        $i1 = lengthof $r3;
+
+        $i2 = 0;
+
+     label1:
+        if $i2 >= $i1 goto label3;
+
+        $i3 = $r3[$i2];
+
+        $i4 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+        if $i4 != $i3 goto label2;
+
+        varReplacer1220 = 1;
+
+        return varReplacer1220;
+
+     label2:
+        $i2 = $i2 + 1;
+
+        goto label1;
+
+     label3:
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        if $i0 != 1001 goto label6;
+
+        varReplacer1225 = "GameHelper: you attempted an operation at an invalid. ";
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1225);
+
+     label4:
+        varReplacer1228 = "Explanation: ";
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1228);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        varReplacer1226 = "Operation: ";
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1226);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer1223 = ". ";
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1223);
+
+        varReplacer1227 = "State: ";
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1227);
+
+        $r6 = <com.google.android.gms.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+        $r1 = $r6[$i0];
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer1230 = ". ";
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1230);
+
+        $i0 = lengthof $r3;
+
+        if $i0 != 1 goto label7;
+
+        varReplacer1224 = "Expected state: ";
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1224);
+
+        $r6 = <com.google.android.gms.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $i0 = $r3[0];
+
+        $r1 = $r6[$i0];
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer1229 = ".";
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1229);
+
+     label5:
+        $r1 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void logWarn(java.lang.String)>($r1);
+
+        varReplacer1219 = 0;
+
+        return varReplacer1219;
+
+     label6:
+        varReplacer1222 = "GameHelper: bug detected.";
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1222);
+
+        goto label4;
+
+     label7:
+        varReplacer1221 = "Expected states:";
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1221);
+
+        $i0 = lengthof $r3;
+
+        $i1 = 0;
+
+     label8:
+        if $i1 >= $i0 goto label9;
+
+        $i2 = $r3[$i1];
+
+        varReplacer1231 = " ";
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1231);
+
+        $r6 = <com.google.android.gms.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $r1 = $r6[$i2];
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $i1 = $i1 + 1;
+
+        goto label8;
+
+     label9:
+        varReplacer1218 = ".";
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1218);
+
+        goto label5;
+    }
+
+    void connectCurrentClient()
+    {
+        com.google.android.gms.GameHelper $r0;
+        int $i0, varReplacer1191;
+        int[] $r1;
+        boolean $z0;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3, varReplacer1192, varReplacer1193, varReplacer1194, varReplacer1195;
+        com.google.android.gms.games.GamesClient $r4;
+        com.google.android.gms.appstate.AppStateClient $r5;
+        com.google.android.gms.plus.PlusClient $r6;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+        if $i0 != 2 goto label1;
+
+        varReplacer1194 = "GameHelper got disconnected during connection process. Aborting.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void logWarn(java.lang.String)>(varReplacer1194);
+
+        return;
+
+     label1:
+        $r1 = newarray (int)[1];
+
+        $r1[0] = 3;
+
+        varReplacer1191 = 1002;
+
+        varReplacer1192 = "connectCurrentClient";
+
+        varReplacer1193 = "connectCurrentClient should only get called when connecting.";
+
+        $z0 = virtualinvoke $r0.<com.google.android.gms.GameHelper: boolean checkState(int,java.lang.String,java.lang.String,int[])>(varReplacer1191, varReplacer1192, varReplacer1193, $r1);
+
+        if $z0 == 0 goto label6;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1195 = "connectCurrentClient - ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1195);
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mClientCurrentlyConnecting>;
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mClientCurrentlyConnecting>;
+
+        lookupswitch($i0)
+        {
+            case 1: goto label3;
+            case 2: goto label5;
+            case 3: goto label2;
+            case 4: goto label4;
+            default: goto label2;
+        };
+
+     label2:
+        return;
+
+     label3:
+        $r4 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        if $r4 == null goto label6;
+
+        $r4 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        virtualinvoke $r4.<com.google.android.gms.games.GamesClient: void connect()>();
+
+        return;
+
+     label4:
+        $r5 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        if $r5 == null goto label6;
+
+        $r5 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        virtualinvoke $r5.<com.google.android.gms.appstate.AppStateClient: void connect()>();
+
+        return;
+
+     label5:
+        $r6 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        if $r6 == null goto label6;
+
+        $r6 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        virtualinvoke $r6.<com.google.android.gms.plus.PlusClient: void connect()>();
+
+     label6:
+        return;
+    }
+
+    void connectNextClient()
+    {
+        com.google.android.gms.GameHelper $r0;
+        int $i0, $i1;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2;
+        com.google.android.gms.games.GamesClient $r3;
+        boolean $z0;
+        com.google.android.gms.plus.PlusClient $r4;
+        com.google.android.gms.appstate.AppStateClient $r5;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("connectNextClient: requested clients: ");
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mRequestedClients>;
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", connected clients: ");
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mConnectedClients>;
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r2);
+
+        $r3 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        if $r3 == null goto label1;
+
+        $r3 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        $z0 = virtualinvoke $r3.<com.google.android.gms.games.GamesClient: boolean isConnected()>();
+
+        if $z0 == 0 goto label1;
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mConnectedClients>;
+
+        $i0 = $i0 & 1;
+
+        if $i0 != 0 goto label1;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void logWarn(java.lang.String)>("GamesClient was already connected. Fixing.");
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mConnectedClients>;
+
+        $i0 = $i0 | 1;
+
+        $r0.<com.google.android.gms.GameHelper: int mConnectedClients> = $i0;
+
+     label1:
+        $r4 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        if $r4 == null goto label2;
+
+        $r4 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        $z0 = virtualinvoke $r4.<com.google.android.gms.plus.PlusClient: boolean isConnected()>();
+
+        if $z0 == 0 goto label2;
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mConnectedClients>;
+
+        $i0 = $i0 & 2;
+
+        if $i0 != 0 goto label2;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void logWarn(java.lang.String)>("PlusClient was already connected. Fixing.");
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mConnectedClients>;
+
+        $i0 = $i0 | 2;
+
+        $r0.<com.google.android.gms.GameHelper: int mConnectedClients> = $i0;
+
+     label2:
+        $r5 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        if $r5 == null goto label3;
+
+        $r5 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        $z0 = virtualinvoke $r5.<com.google.android.gms.appstate.AppStateClient: boolean isConnected()>();
+
+        if $z0 == 0 goto label3;
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mConnectedClients>;
+
+        $i0 = $i0 & 4;
+
+        if $i0 != 0 goto label3;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void logWarn(java.lang.String)>("AppStateClient was already connected. Fixing");
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mConnectedClients>;
+
+        $i0 = $i0 | 4;
+
+        $r0.<com.google.android.gms.GameHelper: int mConnectedClients> = $i0;
+
+     label3:
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mRequestedClients>;
+
+        $i1 = $r0.<com.google.android.gms.GameHelper: int mConnectedClients>;
+
+        $i1 = $i1 ^ -1;
+
+        $i0 = $i0 & $i1;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Pending clients: ");
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r2);
+
+        if $i0 != 0 goto label4;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("All clients now connected. Sign-in successful!");
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void succeedSignIn()>();
+
+        return;
+
+     label4:
+        $r3 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        if $r3 == null goto label6;
+
+        $i1 = $i0 & 1;
+
+        if $i1 == 0 goto label6;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("Connecting GamesClient.");
+
+        $r0.<com.google.android.gms.GameHelper: int mClientCurrentlyConnecting> = 1;
+
+     label5:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void connectCurrentClient()>();
+
+        return;
+
+     label6:
+        $r4 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        if $r4 == null goto label7;
+
+        $i1 = $i0 & 2;
+
+        if $i1 == 0 goto label7;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("Connecting PlusClient.");
+
+        $r0.<com.google.android.gms.GameHelper: int mClientCurrentlyConnecting> = 2;
+
+        goto label5;
+
+     label7:
+        $r5 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        if $r5 == null goto label8;
+
+        $i0 = $i0 & 4;
+
+        if $i0 == 0 goto label8;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("Connecting AppStateClient.");
+
+        $r0.<com.google.android.gms.GameHelper: int mClientCurrentlyConnecting> = 4;
+
+        goto label5;
+
+     label8:
+        return;
+    }
+
+    void debugLog(java.lang.String)
+    {
+        com.google.android.gms.GameHelper $r0;
+        java.lang.String $r1, $r2, varReplacer413;
+        boolean $z0;
+        java.lang.StringBuilder $r3;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 = $r0.<com.google.android.gms.GameHelper: boolean mDebugLog>;
+
+        if $z0 == 0 goto label1;
+
+        $r2 = $r0.<com.google.android.gms.GameHelper: java.lang.String mDebugTag>;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer413 = "GameHelper: ";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer413);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r2, $r1);
+
+     label1:
+        return;
+    }
+
+    public void enableDebugLog(boolean, java.lang.String)
+    {
+        com.google.android.gms.GameHelper $r0;
+        boolean $z0;
+        java.lang.String $r1, varReplacer327;
+        java.lang.StringBuilder $r2;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r0.<com.google.android.gms.GameHelper: boolean mDebugLog> = $z0;
+
+        $r0.<com.google.android.gms.GameHelper: java.lang.String mDebugTag> = $r1;
+
+        if $z0 == 0 goto label1;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer327 = "Debug log enabled, tag: ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer327);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r1);
+
+     label1:
+        return;
+    }
+
+    java.lang.String getAppIdFromResource()
+    {
+        com.google.android.gms.GameHelper $r0;
+        java.lang.Exception $r1;
+        android.content.Context $r2;
+        android.content.res.Resources $r3;
+        java.lang.String $r4, varReplacer1354, varReplacer1355, varReplacer1356;
+        int $i0;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+     label1:
+        $r2 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.content.Context getContext()>();
+
+        $r3 = virtualinvoke $r2.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r2 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.content.Context getContext()>();
+
+        $r4 = virtualinvoke $r2.<android.content.Context: java.lang.String getPackageName()>();
+
+        varReplacer1354 = "app_id";
+
+        varReplacer1355 = "string";
+
+        $i0 = virtualinvoke $r3.<android.content.res.Resources: int getIdentifier(java.lang.String,java.lang.String,java.lang.String)>(varReplacer1354, varReplacer1355, $r4);
+
+        $r4 = virtualinvoke $r3.<android.content.res.Resources: java.lang.String getString(int)>($i0);
+
+     label2:
+        return $r4;
+
+     label3:
+        $r1 := @caughtexception;
+
+        virtualinvoke $r1.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer1356 = "??? (failed to retrieve APP ID)";
+
+        return varReplacer1356;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public com.google.android.gms.appstate.AppStateClient getAppStateClient()
+    {
+        com.google.android.gms.GameHelper $r0;
+        com.google.android.gms.appstate.AppStateClient $r1;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        if $r1 != null goto label1;
+
+        return null;
+
+     label1:
+        $r1 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        return $r1;
+    }
+
+    android.content.Context getContext()
+    {
+        com.google.android.gms.GameHelper $r0;
+        android.app.Activity r1;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        r1 = $r0.<com.google.android.gms.GameHelper: android.app.Activity mActivity>;
+
+        return r1;
+    }
+
+    public com.google.android.gms.games.GamesClient getGamesClient()
+    {
+        com.google.android.gms.GameHelper $r0;
+        com.google.android.gms.games.GamesClient $r1;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        if $r1 != null goto label1;
+
+        return null;
+
+     label1:
+        $r1 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        return $r1;
+    }
+
+    public java.lang.String getInvitationId()
+    {
+        com.google.android.gms.GameHelper $r0;
+        boolean $z0;
+        int[] $r1;
+        java.lang.String r2;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 = newarray (int)[1];
+
+        $r1[0] = 4;
+
+        $z0 = virtualinvoke $r0.<com.google.android.gms.GameHelper: boolean checkState(int,java.lang.String,java.lang.String,int[])>(1001, "getInvitationId", "Invitation ID is only available when connected (after getting the onSignInSucceeded callback).", $r1);
+
+        if $z0 != 0 goto label1;
+
+        return null;
+
+     label1:
+        r2 = $r0.<com.google.android.gms.GameHelper: java.lang.String mInvitationId>;
+
+        return r2;
+    }
+
+    public com.google.android.gms.plus.PlusClient getPlusClient()
+    {
+        com.google.android.gms.GameHelper $r0;
+        com.google.android.gms.plus.PlusClient $r1;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        if $r1 != null goto label1;
+
+        return null;
+
+     label1:
+        $r1 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        return $r1;
+    }
+
+    java.lang.String getSHA1CertFingerprint()
+    {
+        com.google.android.gms.GameHelper $r0;
+        java.lang.StringBuilder $r1, r12;
+        android.content.pm.Signature[] $r2;
+        android.content.Context $r3;
+        android.content.pm.PackageManager $r4;
+        java.lang.String $r5, varReplacer1347, varReplacer1348, varReplacer1349, varReplacer1350, varReplacer1351, varReplacer1352;
+        android.content.pm.PackageInfo $r6;
+        int $i0, $i1, varReplacer1353;
+        java.security.MessageDigest $r7;
+        android.content.pm.Signature $r8;
+        byte[] $r9;
+        byte $b2;
+        java.lang.Throwable $r10, $r11;
+        android.content.pm.PackageManager$NameNotFoundException r13;
+        java.security.NoSuchAlgorithmException r14;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+     label01:
+        $r3 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.content.Context getContext()>();
+
+        $r4 = virtualinvoke $r3.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r3 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.content.Context getContext()>();
+
+        $r5 = virtualinvoke $r3.<android.content.Context: java.lang.String getPackageName()>();
+
+        varReplacer1353 = 64;
+
+        $r6 = virtualinvoke $r4.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>($r5, varReplacer1353);
+
+     label02:
+        $r2 = $r6.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        $i0 = lengthof $r2;
+
+        if $i0 != 0 goto label03;
+
+        varReplacer1349 = "ERROR: NO SIGNATURE.";
+
+        return varReplacer1349;
+
+     label03:
+        $i0 = lengthof $r2;
+
+        if $i0 <= 1 goto label04;
+
+        varReplacer1350 = "ERROR: MULTIPLE SIGNATURES";
+
+        return varReplacer1350;
+
+     label04:
+        varReplacer1347 = "SHA1";
+
+        $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1347);
+
+     label05:
+        $r8 = $r2[0];
+
+     label06:
+        $r9 = virtualinvoke $r8.<android.content.pm.Signature: byte[] toByteArray()>();
+
+        $r9 = virtualinvoke $r7.<java.security.MessageDigest: byte[] digest(byte[])>($r9);
+
+     label07:
+        r12 = new java.lang.StringBuilder;
+
+        $r1 = r12;
+
+     label08:
+        specialinvoke r12.<java.lang.StringBuilder: void <init>()>();
+
+     label09:
+        $i0 = 0;
+
+     label10:
+        $i1 = lengthof $r9;
+
+        if $i0 >= $i1 goto label15;
+
+        if $i0 <= 0 goto label12;
+
+     label11:
+        varReplacer1348 = ":";
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1348);
+
+     label12:
+        $b2 = $r9[$i0];
+
+     label13:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void byteToString(java.lang.StringBuilder,byte)>($r1, $b2);
+
+     label14:
+        $i0 = $i0 + 1;
+
+        goto label10;
+
+     label15:
+        $r5 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label16:
+        return $r5;
+
+     label17:
+        $r10 := @caughtexception;
+
+        r13 = (android.content.pm.PackageManager$NameNotFoundException) $r10;
+
+        virtualinvoke r13.<android.content.pm.PackageManager$NameNotFoundException: void printStackTrace()>();
+
+        varReplacer1351 = "(ERROR: package not found)";
+
+        return varReplacer1351;
+
+     label18:
+        $r11 := @caughtexception;
+
+        r14 = (java.security.NoSuchAlgorithmException) $r11;
+
+        virtualinvoke r14.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        varReplacer1352 = "(ERROR: SHA1 algorithm not found)";
+
+        return varReplacer1352;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label01 to label02 with label17;
+        catch android.content.pm.PackageManager$NameNotFoundException from label04 to label05 with label17;
+        catch android.content.pm.PackageManager$NameNotFoundException from label06 to label07 with label17;
+        catch android.content.pm.PackageManager$NameNotFoundException from label08 to label09 with label17;
+        catch android.content.pm.PackageManager$NameNotFoundException from label11 to label12 with label17;
+        catch android.content.pm.PackageManager$NameNotFoundException from label13 to label14 with label17;
+        catch android.content.pm.PackageManager$NameNotFoundException from label15 to label16 with label17;
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label18;
+        catch java.security.NoSuchAlgorithmException from label04 to label05 with label18;
+        catch java.security.NoSuchAlgorithmException from label06 to label07 with label18;
+        catch java.security.NoSuchAlgorithmException from label08 to label09 with label18;
+        catch java.security.NoSuchAlgorithmException from label11 to label12 with label18;
+        catch java.security.NoSuchAlgorithmException from label13 to label14 with label18;
+        catch java.security.NoSuchAlgorithmException from label15 to label16 with label18;
+    }
+
+    public java.lang.String getScopes()
+    {
+        com.google.android.gms.GameHelper $r0;
+        java.lang.String $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String[] $r3;
+        int $i0, $i1;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = $r0.<com.google.android.gms.GameHelper: java.lang.String[] mScopes>;
+
+        if $r3 == null goto label2;
+
+        $r3 = $r0.<com.google.android.gms.GameHelper: java.lang.String[] mScopes>;
+
+        $i0 = lengthof $r3;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label2;
+
+        $r1 = $r3[$i1];
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void addToScope(java.lang.StringBuilder,java.lang.String)>($r2, $r1);
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r1 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    public java.lang.String[] getScopesArray()
+    {
+        com.google.android.gms.GameHelper $r0;
+        java.lang.String[] r1;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        r1 = $r0.<com.google.android.gms.GameHelper: java.lang.String[] mScopes>;
+
+        return r1;
+    }
+
+    public com.google.android.gms.GameHelper$SignInFailureReason getSignInError()
+    {
+        com.google.android.gms.GameHelper $r0;
+        com.google.android.gms.GameHelper$SignInFailureReason r1;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        r1 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$SignInFailureReason mSignInFailureReason>;
+
+        return r1;
+    }
+
+    void giveUp(com.google.android.gms.GameHelper$SignInFailureReason)
+    {
+        com.google.android.gms.GameHelper $r0;
+        com.google.android.gms.GameHelper$SignInFailureReason $r1;
+        int[] $r2;
+        int varReplacer1213, varReplacer1214, varReplacer1215;
+        java.lang.String varReplacer1216, varReplacer1217;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 := @parameter0: com.google.android.gms.GameHelper$SignInFailureReason;
+
+        $r2 = newarray (int)[1];
+
+        $r2[0] = 3;
+
+        varReplacer1215 = 1002;
+
+        varReplacer1216 = "giveUp";
+
+        varReplacer1217 = "giveUp should only be called when connecting. Proceeding anyway.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: boolean checkState(int,java.lang.String,java.lang.String,int[])>(varReplacer1215, varReplacer1216, varReplacer1217, $r2);
+
+        varReplacer1213 = 0;
+
+        $r0.<com.google.android.gms.GameHelper: boolean mAutoSignIn> = varReplacer1213;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void killConnections()>();
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$SignInFailureReason mSignInFailureReason> = $r1;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void showFailureDialog()>();
+
+        varReplacer1214 = 0;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void notifyListener(boolean)>(varReplacer1214);
+
+        return;
+    }
+
+    public boolean hasSignInError()
+    {
+        com.google.android.gms.GameHelper $r0;
+        com.google.android.gms.GameHelper$SignInFailureReason $r1;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$SignInFailureReason mSignInFailureReason>;
+
+        if $r1 == null goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public boolean isSignedIn()
+    {
+        com.google.android.gms.GameHelper $r0;
+        int $i0;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+        if $i0 != 4 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    void killConnections()
+    {
+        com.google.android.gms.GameHelper $r0;
+        int[] $r1;
+        boolean $z0;
+        com.google.android.gms.games.GamesClient $r2;
+        com.google.android.gms.plus.PlusClient $r3;
+        com.google.android.gms.appstate.AppStateClient $r4;
+        java.lang.Exception $r5;
+        int varReplacer1196, varReplacer1199, varReplacer1203;
+        java.lang.String varReplacer1197, varReplacer1198, varReplacer1200, varReplacer1201, varReplacer1202, varReplacer1204, varReplacer1205;
+        null_type varReplacer1206, varReplacer1207;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 = newarray (int)[2];
+
+        $r1[0] = 4;
+
+        $r1[1] = 3;
+
+        varReplacer1196 = 1002;
+
+        varReplacer1197 = "killConnections";
+
+        varReplacer1198 = "killConnections() should only get called while connected or connecting.";
+
+        $z0 = virtualinvoke $r0.<com.google.android.gms.GameHelper: boolean checkState(int,java.lang.String,java.lang.String,int[])>(varReplacer1196, varReplacer1197, varReplacer1198, $r1);
+
+        if $z0 != 0 goto label01;
+
+        return;
+
+     label01:
+        varReplacer1204 = "killConnections: killing connections.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1204);
+
+        varReplacer1206 = null;
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult> = varReplacer1206;
+
+        varReplacer1207 = null;
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$SignInFailureReason mSignInFailureReason> = varReplacer1207;
+
+     label02:
+        $r2 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+     label03:
+        if $r2 == null goto label07;
+
+     label04:
+        $r2 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        $z0 = virtualinvoke $r2.<com.google.android.gms.games.GamesClient: boolean isConnected()>();
+
+     label05:
+        if $z0 == 0 goto label07;
+
+     label06:
+        varReplacer1200 = "Disconnecting GamesClient.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1200);
+
+        $r2 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        virtualinvoke $r2.<com.google.android.gms.games.GamesClient: void disconnect()>();
+
+     label07:
+        $r3 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+     label08:
+        if $r3 == null goto label12;
+
+     label09:
+        $r3 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        $z0 = virtualinvoke $r3.<com.google.android.gms.plus.PlusClient: boolean isConnected()>();
+
+     label10:
+        if $z0 == 0 goto label12;
+
+     label11:
+        varReplacer1201 = "Disconnecting PlusClient.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1201);
+
+        $r3 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        virtualinvoke $r3.<com.google.android.gms.plus.PlusClient: void disconnect()>();
+
+     label12:
+        $r4 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+     label13:
+        if $r4 == null goto label17;
+
+     label14:
+        $r4 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        $z0 = virtualinvoke $r4.<com.google.android.gms.appstate.AppStateClient: boolean isConnected()>();
+
+     label15:
+        if $z0 == 0 goto label17;
+
+     label16:
+        varReplacer1202 = "Disconnecting AppStateClient.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1202);
+
+        $r4 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        virtualinvoke $r4.<com.google.android.gms.appstate.AppStateClient: void disconnect()>();
+
+     label17:
+        varReplacer1203 = 0;
+
+        $r0.<com.google.android.gms.GameHelper: int mConnectedClients> = varReplacer1203;
+
+        varReplacer1205 = "killConnections: all clients disconnected.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1205);
+
+        varReplacer1199 = 2;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void setState(int)>(varReplacer1199);
+
+     label18:
+        return;
+
+     label19:
+        $r5 := @caughtexception;
+
+        return;
+
+        catch java.lang.Exception from label02 to label03 with label19;
+        catch java.lang.Exception from label04 to label05 with label19;
+        catch java.lang.Exception from label06 to label08 with label19;
+        catch java.lang.Exception from label09 to label10 with label19;
+        catch java.lang.Exception from label11 to label13 with label19;
+        catch java.lang.Exception from label14 to label15 with label19;
+        catch java.lang.Exception from label16 to label18 with label19;
+    }
+
+    void logError(java.lang.String)
+    {
+        com.google.android.gms.GameHelper $r0;
+        java.lang.String $r1, $r2, varReplacer1154;
+        java.lang.StringBuilder $r3;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = $r0.<com.google.android.gms.GameHelper: java.lang.String mDebugTag>;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1154 = "*** GameHelper ERROR: ";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1154);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r2, $r1);
+
+        return;
+    }
+
+    void logWarn(java.lang.String)
+    {
+        com.google.android.gms.GameHelper $r0;
+        java.lang.String $r1, $r2, varReplacer1357;
+        java.lang.StringBuilder $r3;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = $r0.<com.google.android.gms.GameHelper: java.lang.String mDebugTag>;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1357 = "!!! GameHelper WARNING: ";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1357);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>($r2, $r1);
+
+        return;
+    }
+
+    android.app.Dialog makeSimpleDialog(java.lang.String)
+    {
+        com.google.android.gms.GameHelper $r0;
+        java.lang.String $r1;
+        android.app.AlertDialog$Builder $r2;
+        android.content.Context $r3;
+        android.app.AlertDialog $r4;
+        int varReplacer1321;
+        null_type varReplacer1322;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = new android.app.AlertDialog$Builder;
+
+        $r3 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.content.Context getContext()>();
+
+        specialinvoke $r2.<android.app.AlertDialog$Builder: void <init>(android.content.Context)>($r3);
+
+        $r2 = virtualinvoke $r2.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setMessage(java.lang.CharSequence)>($r1);
+
+        varReplacer1321 = 17039370;
+
+        varReplacer1322 = null;
+
+        $r2 = virtualinvoke $r2.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setNeutralButton(int,android.content.DialogInterface$OnClickListener)>(varReplacer1321, varReplacer1322);
+
+        $r4 = virtualinvoke $r2.<android.app.AlertDialog$Builder: android.app.AlertDialog create()>();
+
+        return $r4;
+    }
+
+    void notifyListener(boolean)
+    {
+        com.google.android.gms.GameHelper $r0;
+        boolean $z0;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2, varReplacer1208, varReplacer1210, varReplacer1212;
+        com.google.android.gms.GameHelper$GameHelperListener $r3;
+        android.app.Activity $r4;
+        android.content.SharedPreferences $r5;
+        android.content.SharedPreferences$Editor $r6;
+        com.google.android.gms.GameHelper$SignInFailureReason $r7;
+        int varReplacer1209, varReplacer1211;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1212 = "Notifying LISTENER of sign-in ";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1212);
+
+        if $z0 == 0 goto label3;
+
+        $r2 = "SUCCESS";
+
+     label1:
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r2);
+
+        $r3 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$GameHelperListener mListener>;
+
+        if $r3 == null goto label6;
+
+        if $z0 == 0 goto label5;
+
+        $r4 = $r0.<com.google.android.gms.GameHelper: android.app.Activity mActivity>;
+
+        if $r4 == null goto label2;
+
+        $r4 = $r0.<com.google.android.gms.GameHelper: android.app.Activity mActivity>;
+
+        varReplacer1208 = "gplay_services";
+
+        varReplacer1209 = 0;
+
+        $r5 = virtualinvoke $r4.<android.app.Activity: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>(varReplacer1208, varReplacer1209);
+
+        $r6 = interfaceinvoke $r5.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        if $r6 == null goto label2;
+
+        varReplacer1210 = "gp_srv_login_attemption";
+
+        varReplacer1211 = 0;
+
+        interfaceinvoke $r6.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putInt(java.lang.String,int)>(varReplacer1210, varReplacer1211);
+
+        interfaceinvoke $r6.<android.content.SharedPreferences$Editor: boolean commit()>();
+
+     label2:
+        $r3 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$GameHelperListener mListener>;
+
+        interfaceinvoke $r3.<com.google.android.gms.GameHelper$GameHelperListener: void onSignInSucceeded()>();
+
+        return;
+
+     label3:
+        $r7 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$SignInFailureReason mSignInFailureReason>;
+
+        if $r7 == null goto label4;
+
+        $r2 = "FAILURE (error)";
+
+        goto label1;
+
+     label4:
+        $r2 = "FAILURE (no error)";
+
+        goto label1;
+
+     label5:
+        $r3 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$GameHelperListener mListener>;
+
+        interfaceinvoke $r3.<com.google.android.gms.GameHelper$GameHelperListener: void onSignInFailed()>();
+
+     label6:
+        return;
+    }
+
+    public void onActivityResult(int, int, android.content.Intent)
+    {
+        com.google.android.gms.GameHelper $r0;
+        int $i0, $i1, varReplacer1165, varReplacer1168, varReplacer1169, varReplacer1172;
+        android.content.Intent $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3, varReplacer1161, varReplacer1162, varReplacer1163, varReplacer1164, varReplacer1166, varReplacer1167, varReplacer1171, varReplacer1173, varReplacer1174, varReplacer1175;
+        java.lang.String[] $r4;
+        java.lang.Exception $r5;
+        com.google.android.gms.common.ConnectionResult $r6;
+        com.google.android.gms.GameHelper$SignInFailureReason $r7;
+        null_type varReplacer1170;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        $r1 := @parameter2: android.content.Intent;
+
+        $r2 = new java.lang.StringBuilder;
+
+     label01:
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1175 = "onActivityResult: req=";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1175);
+
+     label02:
+        if $i0 != 9001 goto label07;
+
+        $r3 = "RC_RESOLVE";
+
+     label03:
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer1164 = ", resp=";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1164);
+
+        $r3 = staticinvoke <com.google.android.gms.GameHelper: java.lang.String activityResponseCodeToString(int)>($i1);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r3);
+
+     label04:
+        if $i0 == 9001 goto label09;
+
+     label05:
+        varReplacer1163 = "onActivityResult: request code not meant for us. Ignoring.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1163);
+
+     label06:
+        return;
+
+     label07:
+        $r3 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+     label08:
+        goto label03;
+
+     label09:
+        varReplacer1165 = 0;
+
+        $r0.<com.google.android.gms.GameHelper: boolean mExpectingResolution> = varReplacer1165;
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+     label10:
+        if $i0 == 3 goto label18;
+
+        $r2 = new java.lang.StringBuilder;
+
+     label11:
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1173 = "onActivityResult: ignoring because state isn\'t STATE_CONNECTING (it\'s ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1173);
+
+     label12:
+        $r4 = <com.google.android.gms.GameHelper: java.lang.String[] STATE_NAMES>;
+
+     label13:
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+        $r3 = $r4[$i0];
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer1174 = ")";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1174);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r3);
+
+     label14:
+        if $i1 != 0 goto label31;
+
+     label15:
+        specialinvoke $r0.<com.google.android.gms.GameHelper: void saveCancelAction()>();
+
+     label16:
+        return;
+
+     label17:
+        $r5 := @caughtexception;
+
+        return;
+
+     label18:
+        if $i1 != -1 goto label21;
+
+     label19:
+        varReplacer1166 = "onAR: Resolution was RESULT_OK, so connecting current client again.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1166);
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void connectCurrentClient()>();
+
+     label20:
+        return;
+
+     label21:
+        if $i1 != 10001 goto label24;
+
+     label22:
+        varReplacer1161 = "onAR: Resolution was RECONNECT_REQUIRED, so reconnecting.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1161);
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void connectCurrentClient()>();
+
+     label23:
+        return;
+
+     label24:
+        if $i1 != 0 goto label27;
+
+     label25:
+        varReplacer1167 = "onAR: Got a cancellation result, so disconnecting.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1167);
+
+        varReplacer1168 = 0;
+
+        $r0.<com.google.android.gms.GameHelper: boolean mAutoSignIn> = varReplacer1168;
+
+        varReplacer1172 = 0;
+
+        $r0.<com.google.android.gms.GameHelper: boolean mUserInitiatedSignIn> = varReplacer1172;
+
+        varReplacer1170 = null;
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$SignInFailureReason mSignInFailureReason> = varReplacer1170;
+
+        specialinvoke $r0.<com.google.android.gms.GameHelper: void saveCancelAction()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void killConnections()>();
+
+        varReplacer1169 = 0;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void notifyListener(boolean)>(varReplacer1169);
+
+     label26:
+        return;
+
+     label27:
+        $r2 = new java.lang.StringBuilder;
+
+     label28:
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1171 = "onAR: responseCode=";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1171);
+
+        $r3 = staticinvoke <com.google.android.gms.GameHelper: java.lang.String activityResponseCodeToString(int)>($i1);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer1162 = ", so giving up.";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1162);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        $r6 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+     label29:
+        if $r6 == null goto label31;
+
+        $r7 = new com.google.android.gms.GameHelper$SignInFailureReason;
+
+     label30:
+        $r6 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        $i0 = virtualinvoke $r6.<com.google.android.gms.common.ConnectionResult: int getErrorCode()>();
+
+        specialinvoke $r7.<com.google.android.gms.GameHelper$SignInFailureReason: void <init>(int,int)>($i0, $i1);
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void giveUp(com.google.android.gms.GameHelper$SignInFailureReason)>($r7);
+
+     label31:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label17;
+        catch java.lang.Exception from label03 to label04 with label17;
+        catch java.lang.Exception from label05 to label06 with label17;
+        catch java.lang.Exception from label07 to label08 with label17;
+        catch java.lang.Exception from label09 to label10 with label17;
+        catch java.lang.Exception from label11 to label12 with label17;
+        catch java.lang.Exception from label13 to label14 with label17;
+        catch java.lang.Exception from label15 to label16 with label17;
+        catch java.lang.Exception from label19 to label20 with label17;
+        catch java.lang.Exception from label22 to label23 with label17;
+        catch java.lang.Exception from label25 to label26 with label17;
+        catch java.lang.Exception from label28 to label29 with label17;
+        catch java.lang.Exception from label30 to label31 with label17;
+    }
+
+    public void onConnected(android.os.Bundle)
+    {
+        com.google.android.gms.GameHelper $r0;
+        android.os.Bundle $r1;
+        java.lang.StringBuilder $r2;
+        int $i0, $i1;
+        java.lang.String $r3;
+        android.os.Parcelable $r4;
+        com.google.android.gms.games.multiplayer.Invitation $r5;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 := @parameter0: android.os.Bundle;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("onConnected: connected! client=");
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mClientCurrentlyConnecting>;
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mConnectedClients>;
+
+        $i1 = $r0.<com.google.android.gms.GameHelper: int mClientCurrentlyConnecting>;
+
+        $i0 = $i0 | $i1;
+
+        $r0.<com.google.android.gms.GameHelper: int mConnectedClients> = $i0;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Connected clients updated to: ");
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mConnectedClients>;
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mClientCurrentlyConnecting>;
+
+        if $i0 != 1 goto label1;
+
+        if $r1 == null goto label1;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("onConnected: connection hint provided. Checking for invite.");
+
+        $r4 = virtualinvoke $r1.<android.os.Bundle: android.os.Parcelable getParcelable(java.lang.String)>("invitation");
+
+        $r5 = (com.google.android.gms.games.multiplayer.Invitation) $r4;
+
+        if $r5 == null goto label1;
+
+        $r3 = interfaceinvoke $r5.<com.google.android.gms.games.multiplayer.Invitation: java.lang.String getInvitationId()>();
+
+        if $r3 == null goto label1;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("onConnected: connection hint has a room invite!");
+
+        $r3 = interfaceinvoke $r5.<com.google.android.gms.games.multiplayer.Invitation: java.lang.String getInvitationId()>();
+
+        $r0.<com.google.android.gms.GameHelper: java.lang.String mInvitationId> = $r3;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invitation ID: ");
+
+        $r3 = $r0.<com.google.android.gms.GameHelper: java.lang.String mInvitationId>;
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r3);
+
+     label1:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void connectNextClient()>();
+
+        return;
+    }
+
+    public void onConnectionFailed(com.google.android.gms.common.ConnectionResult)
+    {
+        com.google.android.gms.GameHelper $r0;
+        com.google.android.gms.common.ConnectionResult $r1, $r3;
+        java.lang.StringBuilder $r2;
+        int $i0;
+        java.lang.String $r4;
+        boolean $z0;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 := @parameter0: com.google.android.gms.common.ConnectionResult;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("onConnectionFailed");
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult> = $r1;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("Connection failure:");
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("   - code: ");
+
+        $r3 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        $i0 = virtualinvoke $r3.<com.google.android.gms.common.ConnectionResult: int getErrorCode()>();
+
+        $r4 = staticinvoke <com.google.android.gms.GameHelper: java.lang.String errorCodeToString(int)>($i0);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r4);
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("   - resolvable: ");
+
+        $r3 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        $z0 = virtualinvoke $r3.<com.google.android.gms.common.ConnectionResult: boolean hasResolution()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>($z0);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r4);
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("   - details: ");
+
+        $r3 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        $r4 = virtualinvoke $r3.<com.google.android.gms.common.ConnectionResult: java.lang.String toString()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r4);
+
+        $z0 = $r0.<com.google.android.gms.GameHelper: boolean mUserInitiatedSignIn>;
+
+        if $z0 != 0 goto label1;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("onConnectionFailed: since user didn\'t initiate sign-in, failing now.");
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult> = $r1;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void setState(int)>(2);
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void notifyListener(boolean)>(0);
+
+        return;
+
+     label1:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("onConnectionFailed: since user initiated sign-in, resolving problem.");
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void resolveConnectionResult()>();
+
+        return;
+    }
+
+    public void onDisconnected()
+    {
+        com.google.android.gms.GameHelper $r0;
+        int $i0;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("onDisconnected.");
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+        if $i0 != 2 goto label1;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("onDisconnected is expected, so no action taken.");
+
+        return;
+
+     label1:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void logWarn(java.lang.String)>("Unexpectedly disconnected. Severing remaining connections.");
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void killConnections()>();
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$SignInFailureReason mSignInFailureReason> = null;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("Making extraordinary call to onSignInFailed callback");
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void notifyListener(boolean)>(0);
+
+        return;
+    }
+
+    public void onStart(android.app.Activity)
+    {
+        com.google.android.gms.GameHelper $r0;
+        android.app.Activity $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String[] $r3;
+        int $i0;
+        java.lang.String $r4, varReplacer1145, varReplacer1146, varReplacer1147, varReplacer1148, varReplacer1149, varReplacer1150, varReplacer1151;
+        boolean $z0;
+        com.google.android.gms.GameHelper$2 $r5;
+        java.lang.Exception $r6;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 := @parameter0: android.app.Activity;
+
+        $r0.<com.google.android.gms.GameHelper: android.app.Activity mActivity> = $r1;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1145 = "onStart, state = ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1145);
+
+        $r3 = <com.google.android.gms.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+        $r4 = $r3[$i0];
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r4);
+
+        varReplacer1151 = "onStart";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void assertConfigured(java.lang.String)>(varReplacer1151);
+
+     label01:
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+     label02:
+        lookupswitch($i0)
+        {
+            case 1: goto label08;
+            case 2: goto label15;
+            case 3: goto label17;
+            case 4: goto label19;
+            default: goto label03;
+        };
+
+     label03:
+        $r2 = new java.lang.StringBuilder;
+
+     label04:
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1150 = "onStart: BUG: unexpected state ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1150);
+
+     label05:
+        $r3 = <com.google.android.gms.GameHelper: java.lang.String[] STATE_NAMES>;
+
+     label06:
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+        $r4 = $r3[$i0];
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void logError(java.lang.String)>($r4);
+
+     label07:
+        return;
+
+     label08:
+        $z0 = $r0.<com.google.android.gms.GameHelper: boolean mAutoSignIn>;
+
+     label09:
+        if $z0 == 0 goto label20;
+
+     label10:
+        varReplacer1148 = "onStart: Now connecting clients.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1148);
+
+        $r1 = $r0.<com.google.android.gms.GameHelper: android.app.Activity mActivity>;
+
+     label11:
+        $r5 = new com.google.android.gms.GameHelper$2;
+
+     label12:
+        specialinvoke $r5.<com.google.android.gms.GameHelper$2: void <init>(com.google.android.gms.GameHelper)>($r0);
+
+        virtualinvoke $r1.<android.app.Activity: void runOnUiThread(java.lang.Runnable)>($r5);
+
+     label13:
+        return;
+
+     label14:
+        $r6 := @caughtexception;
+
+        return;
+
+     label15:
+        varReplacer1146 = "onStart: Not connecting (user specifically signed out).";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1146);
+
+     label16:
+        return;
+
+     label17:
+        varReplacer1149 = "onStart: connection process in progress, no action taken.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1149);
+
+     label18:
+        return;
+
+     label19:
+        varReplacer1147 = "onStart: already connected (unusual, but ok).";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1147);
+
+     label20:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label14;
+        catch java.lang.Exception from label04 to label05 with label14;
+        catch java.lang.Exception from label06 to label07 with label14;
+        catch java.lang.Exception from label08 to label09 with label14;
+        catch java.lang.Exception from label10 to label11 with label14;
+        catch java.lang.Exception from label12 to label13 with label14;
+        catch java.lang.Exception from label15 to label16 with label14;
+        catch java.lang.Exception from label17 to label18 with label14;
+        catch java.lang.Exception from label19 to label20 with label14;
+    }
+
+    public void onStop()
+    {
+        com.google.android.gms.GameHelper $r0;
+        java.lang.StringBuilder $r1;
+        java.lang.String[] $r2;
+        int $i0;
+        java.lang.String $r3, varReplacer1360, varReplacer1362, varReplacer1363, varReplacer1364, varReplacer1365;
+        null_type varReplacer1361;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1360 = "onStop, state = ";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1360);
+
+        $r2 = <com.google.android.gms.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+        $r3 = $r2[$i0];
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        varReplacer1365 = "onStop";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void assertConfigured(java.lang.String)>(varReplacer1365);
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+        lookupswitch($i0)
+        {
+            case 2: goto label4;
+            case 3: goto label3;
+            case 4: goto label3;
+            default: goto label1;
+        };
+
+     label1:
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1363 = "onStop: BUG: unexpected state ";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1363);
+
+        $r2 = <com.google.android.gms.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+        $r3 = $r2[$i0];
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void logError(java.lang.String)>($r3);
+
+     label2:
+        varReplacer1361 = null;
+
+        $r0.<com.google.android.gms.GameHelper: android.app.Activity mActivity> = varReplacer1361;
+
+        return;
+
+     label3:
+        varReplacer1364 = "onStop: Killing connections";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1364);
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void killConnections()>();
+
+        goto label2;
+
+     label4:
+        varReplacer1362 = "onStop: not connected, so no action taken.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1362);
+
+        goto label2;
+    }
+
+    void printMisconfiguredDebugInfo()
+    {
+        com.google.android.gms.GameHelper $r0;
+        android.content.Context $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3, varReplacer1323, varReplacer1324, varReplacer1325, varReplacer1326, varReplacer1327, varReplacer1328, varReplacer1329, varReplacer1330, varReplacer1331, varReplacer1332, varReplacer1333, varReplacer1334, varReplacer1335, varReplacer1336, varReplacer1337, varReplacer1338, varReplacer1339, varReplacer1340, varReplacer1341, varReplacer1342, varReplacer1343, varReplacer1344, varReplacer1345, varReplacer1346;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        varReplacer1346 = "****";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1346);
+
+        varReplacer1325 = "****";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1325);
+
+        varReplacer1327 = "**** APP NOT CORRECTLY CONFIGURED TO USE GOOGLE PLAY GAME SERVICES";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1327);
+
+        varReplacer1329 = "**** This is usually caused by one of these reasons:";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1329);
+
+        varReplacer1324 = "**** (1) Your package name and certificate fingerprint do not match";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1324);
+
+        varReplacer1333 = "****     the client ID you registered in Developer Console.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1333);
+
+        varReplacer1334 = "**** (2) Your App ID was incorrectly entered.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1334);
+
+        varReplacer1335 = "**** (3) Your game settings have not been published and you are ";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1335);
+
+        varReplacer1336 = "****     trying to log in with an account that is not listed as";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1336);
+
+        varReplacer1331 = "****     a test account.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1331);
+
+        varReplacer1323 = "****";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1323);
+
+        $r1 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.content.Context getContext()>();
+
+        if $r1 != null goto label1;
+
+        varReplacer1343 = "*** (no Context, so can\'t print more debug info)";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1343);
+
+        return;
+
+     label1:
+        varReplacer1330 = "**** To help you debug, here is the information about this app";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1330);
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1342 = "**** Package name         : ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1342);
+
+        $r1 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.content.Context getContext()>();
+
+        $r3 = virtualinvoke $r1.<android.content.Context: java.lang.String getPackageName()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1339 = "**** Cert SHA1 fingerprint: ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1339);
+
+        $r3 = virtualinvoke $r0.<com.google.android.gms.GameHelper: java.lang.String getSHA1CertFingerprint()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1345 = "**** App ID from          : ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1345);
+
+        $r3 = virtualinvoke $r0.<com.google.android.gms.GameHelper: java.lang.String getAppIdFromResource()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r3);
+
+        varReplacer1328 = "****";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1328);
+
+        varReplacer1340 = "**** Check that the above information matches your setup in ";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1340);
+
+        varReplacer1337 = "**** Developer Console. Also, check that you\'re logging in with the";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1337);
+
+        varReplacer1332 = "**** right account (it should be listed in the Testers section if";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1332);
+
+        varReplacer1326 = "**** your project is not yet published).";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1326);
+
+        varReplacer1344 = "****";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1344);
+
+        varReplacer1338 = "**** For more information, refer to the troubleshooting guide:";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1338);
+
+        varReplacer1341 = "****   http://developers.google.com/games/services/android/troubleshooting";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1341);
+
+        return;
+    }
+
+    public void reconnectClients(int)
+    {
+        com.google.android.gms.GameHelper $r0;
+        int $i0, $i1;
+        int[] $r1;
+        boolean $z0, $z1;
+        com.google.android.gms.games.GamesClient $r2;
+        com.google.android.gms.appstate.AppStateClient $r3;
+        com.google.android.gms.plus.PlusClient $r4;
+        java.lang.Exception $r5;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $i0 := @parameter0: int;
+
+        $r1 = newarray (int)[1];
+
+        $r1[0] = 4;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: boolean checkState(int,java.lang.String,java.lang.String,int[])>(1001, "reconnectClients", "reconnectClients should only be called when connected. Proceeding anyway.", $r1);
+
+        $z0 = 0;
+
+        $i1 = $i0 & 1;
+
+        if $i1 == 0 goto label10;
+
+     label01:
+        $r2 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+     label02:
+        if $r2 == null goto label10;
+
+     label03:
+        $r2 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        $z1 = virtualinvoke $r2.<com.google.android.gms.games.GamesClient: boolean isConnected()>();
+
+     label04:
+        if $z1 == 0 goto label10;
+
+     label05:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("Reconnecting GamesClient.");
+
+     label06:
+        $z0 = 1;
+
+     label07:
+        $i1 = $r0.<com.google.android.gms.GameHelper: int mConnectedClients>;
+
+     label08:
+        $i1 = $i1 & -2;
+
+     label09:
+        $r0.<com.google.android.gms.GameHelper: int mConnectedClients> = $i1;
+
+        $r2 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        virtualinvoke $r2.<com.google.android.gms.games.GamesClient: void reconnect()>();
+
+     label10:
+        $i1 = $i0 & 4;
+
+        if $i1 == 0 goto label20;
+
+     label11:
+        $r3 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+     label12:
+        if $r3 == null goto label20;
+
+     label13:
+        $r3 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        $z1 = virtualinvoke $r3.<com.google.android.gms.appstate.AppStateClient: boolean isConnected()>();
+
+     label14:
+        if $z1 == 0 goto label20;
+
+     label15:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("Reconnecting AppStateClient.");
+
+     label16:
+        $z0 = 1;
+
+     label17:
+        $i1 = $r0.<com.google.android.gms.GameHelper: int mConnectedClients>;
+
+     label18:
+        $i1 = $i1 & -5;
+
+     label19:
+        $r0.<com.google.android.gms.GameHelper: int mConnectedClients> = $i1;
+
+        $r3 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient>;
+
+        virtualinvoke $r3.<com.google.android.gms.appstate.AppStateClient: void reconnect()>();
+
+     label20:
+        $i0 = $i0 & 2;
+
+        if $i0 == 0 goto label26;
+
+     label21:
+        $r4 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+     label22:
+        if $r4 == null goto label26;
+
+     label23:
+        $r4 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        $z1 = virtualinvoke $r4.<com.google.android.gms.plus.PlusClient: boolean isConnected()>();
+
+     label24:
+        if $z1 == 0 goto label26;
+
+     label25:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void logWarn(java.lang.String)>("GameHelper is ignoring your request to reconnect PlusClient because this is unnecessary.");
+
+     label26:
+        if $z0 == 0 goto label29;
+
+     label27:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void setState(int)>(3);
+
+     label28:
+        return;
+
+     label29:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("No reconnections needed, so behaving as if sign in just succeeded");
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void notifyListener(boolean)>(1);
+
+     label30:
+        return;
+
+     label31:
+        $r5 := @caughtexception;
+
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label31;
+        catch java.lang.Exception from label03 to label04 with label31;
+        catch java.lang.Exception from label05 to label06 with label31;
+        catch java.lang.Exception from label07 to label08 with label31;
+        catch java.lang.Exception from label09 to label10 with label31;
+        catch java.lang.Exception from label11 to label12 with label31;
+        catch java.lang.Exception from label13 to label14 with label31;
+        catch java.lang.Exception from label15 to label16 with label31;
+        catch java.lang.Exception from label17 to label18 with label31;
+        catch java.lang.Exception from label19 to label20 with label31;
+        catch java.lang.Exception from label21 to label22 with label31;
+        catch java.lang.Exception from label23 to label24 with label31;
+        catch java.lang.Exception from label25 to label26 with label31;
+        catch java.lang.Exception from label27 to label28 with label31;
+        catch java.lang.Exception from label29 to label30 with label31;
+    }
+
+    void resolveConnectionResult()
+    {
+        com.google.android.gms.GameHelper $r0;
+        java.lang.Throwable $r1;
+        int[] $r2;
+        boolean $z0;
+        java.lang.StringBuilder $r3;
+        com.google.android.gms.common.ConnectionResult $r4;
+        java.lang.String $r5;
+        android.app.Activity $r6;
+        com.google.android.gms.GameHelper$SignInFailureReason $r7;
+        int $i0;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r2 = newarray (int)[1];
+
+        $r2[0] = 3;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: boolean checkState(int,java.lang.String,java.lang.String,int[])>(1002, "resolveConnectionResult", "resolveConnectionResult should only be called when connecting. Proceeding anyway.", $r2);
+
+        $z0 = $r0.<com.google.android.gms.GameHelper: boolean mExpectingResolution>;
+
+        if $z0 == 0 goto label1;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("We\'re already expecting the result of a previous resolution.");
+
+        return;
+
+     label1:
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("resolveConnectionResult: trying to resolve result: ");
+
+        $r4 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r5);
+
+        $r4 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        $z0 = virtualinvoke $r4.<com.google.android.gms.common.ConnectionResult: boolean hasResolution()>();
+
+        if $z0 == 0 goto label7;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("Result has resolution. Starting it.");
+
+        $r0.<com.google.android.gms.GameHelper: boolean mExpectingResolution> = 1;
+
+        $r6 = $r0.<com.google.android.gms.GameHelper: android.app.Activity mActivity>;
+
+        if $r6 == null goto label5;
+
+        $r4 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        $r6 = $r0.<com.google.android.gms.GameHelper: android.app.Activity mActivity>;
+
+     label2:
+        virtualinvoke $r4.<com.google.android.gms.common.ConnectionResult: void startResolutionForResult(android.app.Activity,int)>($r6, 9001);
+
+     label3:
+        return;
+
+     label4:
+        $r1 := @caughtexception;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("SendIntentException, so connecting again.");
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void connectCurrentClient()>();
+
+        return;
+
+     label5:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void connectCurrentClient()>();
+
+     label6:
+        return;
+
+     label7:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("resolveConnectionResult: result has no resolution. Giving up.");
+
+        $r7 = new com.google.android.gms.GameHelper$SignInFailureReason;
+
+        $r4 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.common.ConnectionResult mConnectionResult>;
+
+        $i0 = virtualinvoke $r4.<com.google.android.gms.common.ConnectionResult: int getErrorCode()>();
+
+        specialinvoke $r7.<com.google.android.gms.GameHelper$SignInFailureReason: void <init>(int)>($i0);
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void giveUp(com.google.android.gms.GameHelper$SignInFailureReason)>($r7);
+
+        return;
+
+        catch android.content.IntentSender$SendIntentException from label2 to label3 with label4;
+        catch android.content.IntentSender$SendIntentException from label5 to label6 with label4;
+    }
+
+    void setState(int)
+    {
+        com.google.android.gms.GameHelper $r0;
+        int $i0, $i1;
+        java.lang.String $r1, $r2, varReplacer1358, varReplacer1359;
+        java.lang.String[] $r3;
+        java.lang.StringBuilder $r4;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $i0 := @parameter0: int;
+
+        $r3 = <com.google.android.gms.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $i1 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+        $r2 = $r3[$i1];
+
+        $r3 = <com.google.android.gms.GameHelper: java.lang.String[] STATE_NAMES>;
+
+        $r1 = $r3[$i0];
+
+        $r0.<com.google.android.gms.GameHelper: int mState> = $i0;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1358 = "State change ";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1358);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        varReplacer1359 = " -> ";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1359);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r1);
+
+        return;
+    }
+
+    public void setup(com.google.android.gms.GameHelper$GameHelperListener)
+    {
+        com.google.android.gms.GameHelper $r0;
+        com.google.android.gms.GameHelper$GameHelperListener $r1;
+        java.lang.String[] $r2;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 := @parameter0: com.google.android.gms.GameHelper$GameHelperListener;
+
+        $r2 = newarray (java.lang.String)[0];
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void setup(com.google.android.gms.GameHelper$GameHelperListener,int,java.lang.String[])>($r1, 1, $r2);
+
+        return;
+    }
+
+    public transient void setup(com.google.android.gms.GameHelper$GameHelperListener, int, java.lang.String[])
+    {
+        com.google.android.gms.GameHelper $r0;
+        com.google.android.gms.GameHelper$GameHelperListener $r1;
+        int $i0, $i1, $i2, $i3;
+        java.lang.String[] $r2;
+        java.util.Vector $r3;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+        com.google.android.gms.games.GamesClient$Builder $r6;
+        android.content.Context $r7;
+        com.google.android.gms.games.GamesClient $r8;
+        com.google.android.gms.plus.PlusClient$Builder $r9;
+        com.google.android.gms.plus.PlusClient $r10;
+        com.google.android.gms.appstate.AppStateClient$Builder $r11;
+        com.google.android.gms.appstate.AppStateClient $r12;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 := @parameter0: com.google.android.gms.GameHelper$GameHelperListener;
+
+        $i0 := @parameter1: int;
+
+        $r2 := @parameter2: java.lang.String[];
+
+        $i1 = 0;
+
+        $i2 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+        if $i2 == 0 goto label01;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void logError(java.lang.String)>("GameHelper: you called GameHelper.setup() twice. You can only call it once.");
+
+     label01:
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$GameHelperListener mListener> = $r1;
+
+        $r0.<com.google.android.gms.GameHelper: int mRequestedClients> = $i0;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Setup: requested clients: ");
+
+        $i2 = $r0.<com.google.android.gms.GameHelper: int mRequestedClients>;
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i2);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r5);
+
+        $r3 = new java.util.Vector;
+
+        specialinvoke $r3.<java.util.Vector: void <init>()>();
+
+        $i2 = $i0 & 1;
+
+        if $i2 == 0 goto label02;
+
+        virtualinvoke $r3.<java.util.Vector: boolean add(java.lang.Object)>("https://www.googleapis.com/auth/games");
+
+     label02:
+        $i2 = $i0 & 2;
+
+        if $i2 == 0 goto label03;
+
+        virtualinvoke $r3.<java.util.Vector: boolean add(java.lang.Object)>("https://www.googleapis.com/auth/plus.login");
+
+     label03:
+        $i2 = $i0 & 4;
+
+        if $i2 == 0 goto label04;
+
+        virtualinvoke $r3.<java.util.Vector: boolean add(java.lang.Object)>("https://www.googleapis.com/auth/appstate");
+
+     label04:
+        if $r2 == null goto label06;
+
+        $i2 = lengthof $r2;
+
+        $i3 = 0;
+
+     label05:
+        if $i3 >= $i2 goto label06;
+
+        $r5 = $r2[$i3];
+
+        virtualinvoke $r3.<java.util.Vector: boolean add(java.lang.Object)>($r5);
+
+        $i3 = $i3 + 1;
+
+        goto label05;
+
+     label06:
+        $i2 = virtualinvoke $r3.<java.util.Vector: int size()>();
+
+        $r2 = newarray (java.lang.String)[$i2];
+
+        $r0.<com.google.android.gms.GameHelper: java.lang.String[] mScopes> = $r2;
+
+        $r2 = $r0.<com.google.android.gms.GameHelper: java.lang.String[] mScopes>;
+
+        virtualinvoke $r3.<java.util.Vector: void copyInto(java.lang.Object[])>($r2);
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("setup: scopes:");
+
+        $r2 = $r0.<com.google.android.gms.GameHelper: java.lang.String[] mScopes>;
+
+        $i2 = lengthof $r2;
+
+     label07:
+        if $i1 >= $i2 goto label08;
+
+        $r5 = $r2[$i1];
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("  - ");
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r5);
+
+        $i1 = $i1 + 1;
+
+        goto label07;
+
+     label08:
+        $i1 = $i0 & 1;
+
+        if $i1 == 0 goto label09;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("setup: creating GamesClient");
+
+        $r6 = new com.google.android.gms.games.GamesClient$Builder;
+
+        $r7 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.content.Context getContext()>();
+
+        specialinvoke $r6.<com.google.android.gms.games.GamesClient$Builder: void <init>(android.content.Context,com.google.android.gms.common.GooglePlayServicesClient$ConnectionCallbacks,com.google.android.gms.common.GooglePlayServicesClient$OnConnectionFailedListener)>($r7, $r0, $r0);
+
+        $r6 = virtualinvoke $r6.<com.google.android.gms.games.GamesClient$Builder: com.google.android.gms.games.GamesClient$Builder setGravityForPopups(int)>(49);
+
+        $r2 = $r0.<com.google.android.gms.GameHelper: java.lang.String[] mScopes>;
+
+        $r6 = virtualinvoke $r6.<com.google.android.gms.games.GamesClient$Builder: com.google.android.gms.games.GamesClient$Builder setScopes(java.lang.String[])>($r2);
+
+        $r8 = virtualinvoke $r6.<com.google.android.gms.games.GamesClient$Builder: com.google.android.gms.games.GamesClient create()>();
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient> = $r8;
+
+     label09:
+        $i1 = $i0 & 2;
+
+        if $i1 == 0 goto label10;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("setup: creating GamesPlusClient");
+
+        $r9 = new com.google.android.gms.plus.PlusClient$Builder;
+
+        $r7 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.content.Context getContext()>();
+
+        specialinvoke $r9.<com.google.android.gms.plus.PlusClient$Builder: void <init>(android.content.Context,com.google.android.gms.common.GooglePlayServicesClient$ConnectionCallbacks,com.google.android.gms.common.GooglePlayServicesClient$OnConnectionFailedListener)>($r7, $r0, $r0);
+
+        $r2 = $r0.<com.google.android.gms.GameHelper: java.lang.String[] mScopes>;
+
+        $r9 = virtualinvoke $r9.<com.google.android.gms.plus.PlusClient$Builder: com.google.android.gms.plus.PlusClient$Builder setScopes(java.lang.String[])>($r2);
+
+        $r10 = virtualinvoke $r9.<com.google.android.gms.plus.PlusClient$Builder: com.google.android.gms.plus.PlusClient build()>();
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient> = $r10;
+
+     label10:
+        $i0 = $i0 & 4;
+
+        if $i0 == 0 goto label11;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("setup: creating AppStateClient");
+
+        $r11 = new com.google.android.gms.appstate.AppStateClient$Builder;
+
+        $r7 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.content.Context getContext()>();
+
+        specialinvoke $r11.<com.google.android.gms.appstate.AppStateClient$Builder: void <init>(android.content.Context,com.google.android.gms.common.GooglePlayServicesClient$ConnectionCallbacks,com.google.android.gms.common.GooglePlayServicesClient$OnConnectionFailedListener)>($r7, $r0, $r0);
+
+        $r2 = $r0.<com.google.android.gms.GameHelper: java.lang.String[] mScopes>;
+
+        $r11 = virtualinvoke $r11.<com.google.android.gms.appstate.AppStateClient$Builder: com.google.android.gms.appstate.AppStateClient$Builder setScopes(java.lang.String[])>($r2);
+
+        $r12 = virtualinvoke $r11.<com.google.android.gms.appstate.AppStateClient$Builder: com.google.android.gms.appstate.AppStateClient create()>();
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.appstate.AppStateClient mAppStateClient> = $r12;
+
+     label11:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void setState(int)>(1);
+
+        return;
+    }
+
+    public void showAlert(java.lang.String)
+    {
+        com.google.android.gms.GameHelper $r0;
+        java.lang.String $r1;
+        android.app.AlertDialog$Builder $r2;
+        android.content.Context $r3;
+        android.app.AlertDialog $r4;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = new android.app.AlertDialog$Builder;
+
+        $r3 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.content.Context getContext()>();
+
+        specialinvoke $r2.<android.app.AlertDialog$Builder: void <init>(android.content.Context)>($r3);
+
+        $r2 = virtualinvoke $r2.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setMessage(java.lang.CharSequence)>($r1);
+
+        $r2 = virtualinvoke $r2.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setNeutralButton(int,android.content.DialogInterface$OnClickListener)>(17039370, null);
+
+        $r4 = virtualinvoke $r2.<android.app.AlertDialog$Builder: android.app.AlertDialog create()>();
+
+        virtualinvoke $r4.<android.app.AlertDialog: void show()>();
+
+        return;
+    }
+
+    public void showAlert(java.lang.String, java.lang.String)
+    {
+        com.google.android.gms.GameHelper $r0;
+        java.lang.String $r1, $r2;
+        android.app.AlertDialog$Builder $r3;
+        android.content.Context $r4;
+        android.app.AlertDialog $r5;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 = new android.app.AlertDialog$Builder;
+
+        $r4 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.content.Context getContext()>();
+
+        specialinvoke $r3.<android.app.AlertDialog$Builder: void <init>(android.content.Context)>($r4);
+
+        $r3 = virtualinvoke $r3.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setTitle(java.lang.CharSequence)>($r1);
+
+        $r3 = virtualinvoke $r3.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setMessage(java.lang.CharSequence)>($r2);
+
+        $r3 = virtualinvoke $r3.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setNeutralButton(int,android.content.DialogInterface$OnClickListener)>(17039370, null);
+
+        $r5 = virtualinvoke $r3.<android.app.AlertDialog$Builder: android.app.AlertDialog create()>();
+
+        virtualinvoke $r5.<android.app.AlertDialog: void show()>();
+
+        return;
+    }
+
+    void showFailureDialog()
+    {
+        com.google.android.gms.GameHelper $r0;
+        java.lang.Exception $r1;
+        android.content.Context $r2;
+        java.lang.StringBuilder $r3;
+        com.google.android.gms.GameHelper$SignInFailureReason $r4;
+        java.lang.String $r5, varReplacer1232, varReplacer1233, varReplacer1234, varReplacer1235, varReplacer1238, varReplacer1239;
+        android.app.Dialog $r6;
+        int $i0, $i1, varReplacer1236;
+        android.app.Activity $r7;
+        null_type varReplacer1237;
+
+        nop;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r2 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.content.Context getContext()>();
+
+        if $r2 != null goto label01;
+
+        varReplacer1234 = "*** No context. Can\'t show failure dialog.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1234);
+
+        return;
+
+     label01:
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1232 = "Making error dialog for failure: ";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1232);
+
+        $r4 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$SignInFailureReason mSignInFailureReason>;
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r5);
+
+        $r6 = null;
+
+     label02:
+        $r4 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$SignInFailureReason mSignInFailureReason>;
+
+        $i0 = virtualinvoke $r4.<com.google.android.gms.GameHelper$SignInFailureReason: int getServiceErrorCode()>();
+
+        $r4 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$SignInFailureReason mSignInFailureReason>;
+
+        $i1 = virtualinvoke $r4.<com.google.android.gms.GameHelper$SignInFailureReason: int getActivityResultCode()>();
+
+     label03:
+        lookupswitch($i1)
+        {
+            case 10002: goto label20;
+            case 10003: goto label23;
+            case 10004: goto label16;
+            default: goto label04;
+        };
+
+     label04:
+        $r7 = $r0.<com.google.android.gms.GameHelper: android.app.Activity mActivity>;
+
+     label05:
+        if $r7 == null goto label07;
+
+     label06:
+        $r7 = $r0.<com.google.android.gms.GameHelper: android.app.Activity mActivity>;
+
+        varReplacer1236 = 9002;
+
+        varReplacer1237 = null;
+
+        $r6 = staticinvoke <com.google.android.gms.common.GooglePlayServicesUtil: android.app.Dialog getErrorDialog(int,android.app.Activity,int,android.content.DialogInterface$OnCancelListener)>($i0, $r7, varReplacer1236, varReplacer1237);
+
+     label07:
+        if $r6 != null goto label13;
+
+     label08:
+        varReplacer1233 = "No standard error dialog available. Making fallback dialog.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1233);
+
+     label09:
+        $r3 = new java.lang.StringBuilder;
+
+     label10:
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+     label11:
+        $i1 = <com.google.android.gms.R$string: int gamehelper_unknown_error>;
+
+     label12:
+        $r5 = virtualinvoke $r2.<android.content.Context: java.lang.String getString(int)>($i1);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        varReplacer1235 = " ";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1235);
+
+        $r5 = staticinvoke <com.google.android.gms.GameHelper: java.lang.String errorCodeToString(int)>($i0);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r6 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.app.Dialog makeSimpleDialog(java.lang.String)>($r5);
+
+     label13:
+        varReplacer1239 = "Showing error dialog.";
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>(varReplacer1239);
+
+        virtualinvoke $r6.<android.app.Dialog: void show()>();
+
+     label14:
+        return;
+
+     label15:
+        $r1 := @caughtexception;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1238 = "showFailureDialog - exp: ";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1238);
+
+        $r5 = virtualinvoke $r1.<java.lang.Exception: java.lang.String toString()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>($r5);
+
+        return;
+
+     label16:
+        $i0 = <com.google.android.gms.R$string: int gamehelper_app_misconfigured>;
+
+     label17:
+        $r5 = virtualinvoke $r2.<android.content.Context: java.lang.String getString(int)>($i0);
+
+        $r6 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.app.Dialog makeSimpleDialog(java.lang.String)>($r5);
+
+     label18:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void printMisconfiguredDebugInfo()>();
+
+     label19:
+        goto label13;
+
+     label20:
+        $i0 = <com.google.android.gms.R$string: int gamehelper_sign_in_failed>;
+
+     label21:
+        $r5 = virtualinvoke $r2.<android.content.Context: java.lang.String getString(int)>($i0);
+
+        $r6 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.app.Dialog makeSimpleDialog(java.lang.String)>($r5);
+
+     label22:
+        goto label13;
+
+     label23:
+        $i0 = <com.google.android.gms.R$string: int gamehelper_license_failed>;
+
+     label24:
+        $r5 = virtualinvoke $r2.<android.content.Context: java.lang.String getString(int)>($i0);
+
+        $r6 = virtualinvoke $r0.<com.google.android.gms.GameHelper: android.app.Dialog makeSimpleDialog(java.lang.String)>($r5);
+
+     label25:
+        goto label13;
+
+        catch java.lang.Exception from label02 to label03 with label15;
+        catch java.lang.Exception from label04 to label05 with label15;
+        catch java.lang.Exception from label06 to label07 with label15;
+        catch java.lang.Exception from label08 to label09 with label15;
+        catch java.lang.Exception from label10 to label11 with label15;
+        catch java.lang.Exception from label12 to label13 with label15;
+        catch java.lang.Exception from label13 to label14 with label15;
+        catch java.lang.Exception from label17 to label18 with label15;
+        catch java.lang.Exception from label18 to label19 with label15;
+        catch java.lang.Exception from label21 to label22 with label15;
+        catch java.lang.Exception from label24 to label25 with label15;
+    }
+
+    public void signOut()
+    {
+        com.google.android.gms.GameHelper $r0;
+        int $i0;
+        com.google.android.gms.plus.PlusClient $r1;
+        boolean $z0;
+        com.google.android.gms.games.GamesClient $r2;
+        java.lang.Exception $r3;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("try to signOut!");
+
+     label01:
+        $i0 = $r0.<com.google.android.gms.GameHelper: int mState>;
+
+     label02:
+        if $i0 != 2 goto label05;
+
+     label03:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("signOut: state was already DISCONNECTED, ignoring.");
+
+     label04:
+        return;
+
+     label05:
+        $r1 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+     label06:
+        if $r1 == null goto label10;
+
+     label07:
+        $r1 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        $z0 = virtualinvoke $r1.<com.google.android.gms.plus.PlusClient: boolean isConnected()>();
+
+     label08:
+        if $z0 == 0 goto label10;
+
+     label09:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("Clearing default account on PlusClient.");
+
+        $r1 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.plus.PlusClient mPlusClient>;
+
+        virtualinvoke $r1.<com.google.android.gms.plus.PlusClient: void clearDefaultAccount()>();
+
+     label10:
+        $r2 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+     label11:
+        if $r2 == null goto label15;
+
+     label12:
+        $r2 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        $z0 = virtualinvoke $r2.<com.google.android.gms.games.GamesClient: boolean isConnected()>();
+
+     label13:
+        if $z0 == 0 goto label15;
+
+     label14:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("Signing out from GamesClient.");
+
+        $r2 = $r0.<com.google.android.gms.GameHelper: com.google.android.gms.games.GamesClient mGamesClient>;
+
+        virtualinvoke $r2.<com.google.android.gms.games.GamesClient: void signOut()>();
+
+     label15:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("Proceeding with disconnection.");
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void killConnections()>();
+
+     label16:
+        return;
+
+     label17:
+        $r3 := @caughtexception;
+
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label17;
+        catch java.lang.Exception from label03 to label04 with label17;
+        catch java.lang.Exception from label05 to label06 with label17;
+        catch java.lang.Exception from label07 to label08 with label17;
+        catch java.lang.Exception from label09 to label11 with label17;
+        catch java.lang.Exception from label12 to label13 with label17;
+        catch java.lang.Exception from label14 to label16 with label17;
+    }
+
+    void startConnections()
+    {
+        com.google.android.gms.GameHelper $r0;
+        int[] $r1;
+        boolean $z0;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 = newarray (int)[1];
+
+        $r1[0] = 2;
+
+        $z0 = virtualinvoke $r0.<com.google.android.gms.GameHelper: boolean checkState(int,java.lang.String,java.lang.String,int[])>(1002, "startConnections", "startConnections should get called when disconnected.", $r1);
+
+        if $z0 != 0 goto label1;
+
+        $r1 = newarray (int)[1];
+
+        $r1[0] = 1;
+
+        $z0 = virtualinvoke $r0.<com.google.android.gms.GameHelper: boolean checkState(int,java.lang.String,java.lang.String,int[])>(1002, "startConnections", "startConnections should get called when STATE_STAND_BY.", $r1);
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("Starting connections.");
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void setState(int)>(3);
+
+        $r0.<com.google.android.gms.GameHelper: java.lang.String mInvitationId> = null;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void connectNextClient()>();
+
+        return;
+    }
+
+    void succeedSignIn()
+    {
+        com.google.android.gms.GameHelper $r0;
+        int[] $r1;
+
+        $r0 := @this: com.google.android.gms.GameHelper;
+
+        $r1 = newarray (int)[2];
+
+        $r1[0] = 3;
+
+        $r1[1] = 4;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: boolean checkState(int,java.lang.String,java.lang.String,int[])>(1002, "succeedSignIn", "succeedSignIn should only get called in the connecting or connected state. Proceeding anyway.", $r1);
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void debugLog(java.lang.String)>("All requested clients connected. Sign-in succeeded!");
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void setState(int)>(4);
+
+        $r0.<com.google.android.gms.GameHelper: com.google.android.gms.GameHelper$SignInFailureReason mSignInFailureReason> = null;
+
+        $r0.<com.google.android.gms.GameHelper: boolean mAutoSignIn> = 1;
+
+        $r0.<com.google.android.gms.GameHelper: boolean mUserInitiatedSignIn> = 0;
+
+        virtualinvoke $r0.<com.google.android.gms.GameHelper: void notifyListener(boolean)>(1);
+
+        return;
+    }
+}

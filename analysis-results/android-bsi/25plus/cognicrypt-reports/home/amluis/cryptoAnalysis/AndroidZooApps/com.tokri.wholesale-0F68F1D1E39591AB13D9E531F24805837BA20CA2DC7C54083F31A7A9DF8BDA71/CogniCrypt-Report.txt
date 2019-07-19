@@ -1,0 +1,156 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r10
+		Type: java.security.MessageDigest
+		Statement: $r10 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7245)
+		Method: <com.payUMoney.sdk.Session: void addDeviceParams(com.loopj.android.http.RequestParams)>
+		SHA-256: 9fe5a11c7b438b556a238965517fbf239509548eb6c5be8631cc375cdb105421
+		Secure: false
+	Object:
+		Variable: $r12
+		Type: byte[]
+		Statement: $r12 = virtualinvoke $r10.<java.security.MessageDigest: byte[] digest(byte[])>($r12)
+		Method: <com.payUMoney.sdk.Session: void addDeviceParams(com.loopj.android.http.RequestParams)>
+		SHA-256: 9161d6dc5b844f217c71e38f0dcffcdfab38ad019b0f4ed2c5670b545564af28
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer3298)
+		Method: <com.loopj.android.http.MySSLSocketFactory: void <init>(java.security.KeyStore)>
+		SHA-256: abad171b7c79c3088cba8db82d72f3d13148af374be1e830a4b6c8445b3f60cd
+		Secure: false
+	Object:
+		Variable: $r10
+		Type: byte[]
+		Statement: $r10 = virtualinvoke $r7.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r10)
+		Method: <com.payUMoney.sdk.Session$32: void onSuccess(org.json.JSONObject)>
+		SHA-256: fb4422b55c52fd45899ed33d7d55749255c5cebee8ff14648f33e5621d18cbe4
+		Secure: false
+	Object:
+		Variable: $r7
+		Type: java.security.MessageDigest
+		Statement: $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7080)
+		Method: <com.tokri.wholesale.activities.PayUMoneyPaymentActivity: java.lang.String getPostString()>
+		SHA-256: 858f2de44216c269f98408e15fba6f1710478c07c78d55db5319cb6a882137af
+		Secure: true
+	Object:
+		Variable: $r7
+		Type: javax.crypto.Cipher
+		Statement: $r7 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer9727)
+		Method: <com.payUMoney.sdk.Session$32: void onSuccess(org.json.JSONObject)>
+		SHA-256: 5a104ebc1ea60f491200fa5816a3995efc23e58f3bae1d56e87d7a269a82eb66
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.KeyStore
+		Statement: $r3 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r2)
+		Method: <com.loopj.android.http.MySSLSocketFactory: java.security.KeyStore getKeystore()>
+		SHA-256: d011df71b400b4926b84dec0cad6ffb90a5bd3d26c43a5974bec9e614ef5edf5
+		Secure: true
+	Object:
+		Variable: $r8
+		Type: byte[]
+		Statement: $r8 = virtualinvoke $r7.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.tokri.wholesale.activities.PayUMoneyPaymentActivity: java.lang.String getPostString()>
+		SHA-256: f78203f9eac647a1ce30a9f32a050cf0096149e213b544a308a668d22d124188
+		Secure: true
+	Object:
+		Variable: $r12
+		Type: byte[]
+		Statement: $r12 = virtualinvoke $r10.<java.security.MessageDigest: byte[] digest(byte[])>($r12)
+		Method: <com.payUMoney.sdk.Session: void addDeviceParams(com.loopj.android.http.RequestParams)>
+		SHA-256: 9161d6dc5b844f217c71e38f0dcffcdfab38ad019b0f4ed2c5670b545564af28
+		Secure: false
+
+Findings in Java Class: com.payUMoney.sdk.Session
+
+	 in Method: void addDeviceParams(com.loopj.android.http.RequestParams)
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #9fe5a11c7b438b556a238965517fbf239509548eb6c5be8631cc375cdb105421)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to update, java.security.MessageDigest: byte[] digest(byte[])
+			at statement: $r12 = virtualinvoke $r10.<java.security.MessageDigest: byte[] digest(byte[])>($r12)
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #9fe5a11c7b438b556a238965517fbf239509548eb6c5be8631cc375cdb105421)
+			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r10 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7245)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #9fe5a11c7b438b556a238965517fbf239509548eb6c5be8631cc375cdb105421)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to update, java.security.MessageDigest: byte[] digest(byte[])
+			at statement: $r12 = virtualinvoke $r10.<java.security.MessageDigest: byte[] digest(byte[])>($r12)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #9fe5a11c7b438b556a238965517fbf239509548eb6c5be8631cc375cdb105421)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r10 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7245)
+
+
+Findings in Java Class: com.payUMoney.sdk.Session$32
+
+	 in Method: void onSuccess(org.json.JSONObject)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #5a104ebc1ea60f491200fa5816a3995efc23e58f3bae1d56e87d7a269a82eb66)
+			First parameter (with value "RSA/ECB/PKCS1Padding") should be any of RSA/ECB/{OAEPwithSHA-512andMGF1Padding, OAEPwithSHA-224andMGF1Padding, OAEPPadding, NoPadding, OAEPwithSHA-384andMGF1Padding}
+			at statement: $r7 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer9727)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #5a104ebc1ea60f491200fa5816a3995efc23e58f3bae1d56e87d7a269a82eb66)
+			First parameter (with value "RSA/ECB/PKCS1Padding") should be any of RSA/ECB/{OAEPwithSHA-512andMGF1Padding, OAEPwithSHA-224andMGF1Padding, OAEPPadding, NoPadding, OAEPwithSHA-384andMGF1Padding}
+			at statement: $r7 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer9727)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r7.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer9712, $r8)
+
+
+Findings in Java Class: com.loopj.android.http.MySSLSocketFactory
+
+	 in Method: void <init>(java.security.KeyStore)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer3299, r5, varReplacer3299)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer3299, r5, varReplacer3299)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 9
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 3
+	ConstraintError: 3
+	IncompleteOperationError: 3
+=====================================================================

@@ -1,0 +1,297 @@
+public class com.amazon.ags.storage.EncryptionStringObfuscator extends java.lang.Object implements com.amazon.ags.storage.StringObfuscator
+{
+    private static final java.lang.String ALGORITHM;
+    private static final java.lang.String TAG;
+    private static final java.lang.String UTF8;
+    private final javax.crypto.SecretKey key;
+    private final boolean valid;
+
+    static void <clinit>()
+    {
+        java.lang.StringBuilder $r0;
+        java.lang.Class $r1;
+        java.lang.String $r2, varReplacer1648;
+
+        nop;
+
+        $r0 = new java.lang.StringBuilder;
+
+        varReplacer1648 = "GC_";
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1648);
+
+        $r1 = class "Lcom/amazon/ags/storage/EncryptionStringObfuscator;";
+
+        $r2 = virtualinvoke $r1.<java.lang.Class: java.lang.String getSimpleName()>();
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <com.amazon.ags.storage.EncryptionStringObfuscator: java.lang.String TAG> = $r2;
+
+        return;
+    }
+
+    public void <init>(byte[])
+    {
+        com.amazon.ags.storage.EncryptionStringObfuscator $r0;
+        byte[] $r1, $r3;
+        boolean $z0;
+        int $i0, $i1, $i3;
+        java.lang.IllegalArgumentException $r2;
+        byte $b2;
+        javax.crypto.SecretKey $r4, $r7;
+        javax.crypto.spec.DESKeySpec $r5;
+        javax.crypto.SecretKeyFactory $r6;
+        java.lang.Exception $r8;
+        java.lang.String $r9, varReplacer3198, varReplacer3199, varReplacer3200;
+
+        nop;
+
+        $r0 := @this: com.amazon.ags.storage.EncryptionStringObfuscator;
+
+        $r1 := @parameter0: byte[];
+
+        $z0 = 0;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        if $r1 == null goto label01;
+
+        $i0 = lengthof $r1;
+
+        if $i0 != 0 goto label02;
+
+     label01:
+        $r2 = new java.lang.IllegalArgumentException;
+
+        varReplacer3198 = "secretKey must be non-null";
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer3198);
+
+        throw $r2;
+
+     label02:
+        $i0 = lengthof $r1;
+
+        if $i0 >= 8 goto label06;
+
+        $r3 = newarray (byte)[8];
+
+        $i0 = 0;
+
+        $i1 = 0;
+
+     label03:
+        if $i0 >= 8 goto label05;
+
+        $b2 = $r1[$i1];
+
+        $r3[$i0] = $b2;
+
+        $i1 = $i1 + 1;
+
+        $i3 = lengthof $r1;
+
+        if $i1 < $i3 goto label04;
+
+        $i1 = 0;
+
+     label04:
+        $i0 = $i0 + 1;
+
+        goto label03;
+
+     label05:
+        $r1 = $r3;
+
+     label06:
+        $r4 = null;
+
+        $r5 = new javax.crypto.spec.DESKeySpec;
+
+     label07:
+        specialinvoke $r5.<javax.crypto.spec.DESKeySpec: void <init>(byte[])>($r1);
+
+        varReplacer3199 = "DES";
+
+        $r6 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer3199);
+
+        $r7 = virtualinvoke $r6.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r5);
+
+     label08:
+        $r4 = $r7;
+
+        $z0 = 1;
+
+     label09:
+        $r0.<com.amazon.ags.storage.EncryptionStringObfuscator: javax.crypto.SecretKey key> = $r4;
+
+        $r0.<com.amazon.ags.storage.EncryptionStringObfuscator: boolean valid> = $z0;
+
+        return;
+
+     label10:
+        $r8 := @caughtexception;
+
+        $r9 = <com.amazon.ags.storage.EncryptionStringObfuscator: java.lang.String TAG>;
+
+        varReplacer3200 = "Failed to constructor secret key";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r9, varReplacer3200, $r8);
+
+        goto label09;
+
+        catch java.lang.Exception from label07 to label08 with label10;
+    }
+
+    public java.lang.String obfuscate(java.lang.String)
+    {
+        com.amazon.ags.storage.EncryptionStringObfuscator $r0;
+        java.lang.String $r1, varReplacer8490, varReplacer8491, varReplacer8492;
+        javax.crypto.SecretKey $r2;
+        boolean $z0;
+        javax.crypto.Cipher $r3;
+        byte[] $r4;
+        java.lang.Exception $r5;
+        null_type varReplacer8489, varReplacer8494;
+        int varReplacer8493, varReplacer8495;
+
+        nop;
+
+        $r0 := @this: com.amazon.ags.storage.EncryptionStringObfuscator;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 = $r0.<com.amazon.ags.storage.EncryptionStringObfuscator: boolean valid>;
+
+        if $z0 != 0 goto label1;
+
+        varReplacer8489 = null;
+
+        return varReplacer8489;
+
+     label1:
+        if $r1 == null goto label5;
+
+     label2:
+        varReplacer8492 = "DES";
+
+        $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer8492);
+
+        varReplacer8491 = "UTF8";
+
+        $r4 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer8491);
+
+        $r2 = $r0.<com.amazon.ags.storage.EncryptionStringObfuscator: javax.crypto.SecretKey key>;
+
+        varReplacer8493 = 1;
+
+        virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer8493, $r2);
+
+        $r4 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r4);
+
+        varReplacer8495 = 0;
+
+        $r1 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r4, varReplacer8495);
+
+     label3:
+        return $r1;
+
+     label4:
+        $r5 := @caughtexception;
+
+        $r1 = <com.amazon.ags.storage.EncryptionStringObfuscator: java.lang.String TAG>;
+
+        varReplacer8490 = "Failed to obfuscate string";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r1, varReplacer8490, $r5);
+
+     label5:
+        varReplacer8494 = null;
+
+        return varReplacer8494;
+
+        catch java.lang.Exception from label2 to label3 with label4;
+    }
+
+    public java.lang.String unobfuscate(java.lang.String)
+    {
+        com.amazon.ags.storage.EncryptionStringObfuscator $r0;
+        java.lang.String $r1, varReplacer7577, varReplacer7579, varReplacer7580, varReplacer7583;
+        javax.crypto.SecretKey $r2;
+        boolean $z0;
+        javax.crypto.Cipher $r3;
+        byte[] $r4;
+        java.lang.Exception $r5;
+        int varReplacer7578, varReplacer7582;
+        null_type varReplacer7581, varReplacer7584;
+
+        nop;
+
+        $r0 := @this: com.amazon.ags.storage.EncryptionStringObfuscator;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 = $r0.<com.amazon.ags.storage.EncryptionStringObfuscator: boolean valid>;
+
+        if $z0 != 0 goto label1;
+
+        varReplacer7584 = null;
+
+        return varReplacer7584;
+
+     label1:
+        if $r1 == null goto label7;
+
+     label2:
+        varReplacer7580 = "DES";
+
+        $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7580);
+
+        varReplacer7577 = "UTF8";
+
+        $r4 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer7577);
+
+        varReplacer7578 = 0;
+
+        $r4 = staticinvoke <android.util.Base64: byte[] decode(byte[],int)>($r4, varReplacer7578);
+
+        $r2 = $r0.<com.amazon.ags.storage.EncryptionStringObfuscator: javax.crypto.SecretKey key>;
+
+        varReplacer7582 = 2;
+
+        virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer7582, $r2);
+
+     label3:
+        $r1 = new java.lang.String;
+
+     label4:
+        $r4 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r4);
+
+        varReplacer7583 = "UTF8";
+
+        specialinvoke $r1.<java.lang.String: void <init>(byte[],java.lang.String)>($r4, varReplacer7583);
+
+     label5:
+        return $r1;
+
+     label6:
+        $r5 := @caughtexception;
+
+        $r1 = <com.amazon.ags.storage.EncryptionStringObfuscator: java.lang.String TAG>;
+
+        varReplacer7579 = "Failed to unobfuscate string";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r1, varReplacer7579, $r5);
+
+     label7:
+        varReplacer7581 = null;
+
+        return varReplacer7581;
+
+        catch java.lang.Exception from label2 to label3 with label6;
+        catch java.lang.Exception from label4 to label5 with label6;
+    }
+}

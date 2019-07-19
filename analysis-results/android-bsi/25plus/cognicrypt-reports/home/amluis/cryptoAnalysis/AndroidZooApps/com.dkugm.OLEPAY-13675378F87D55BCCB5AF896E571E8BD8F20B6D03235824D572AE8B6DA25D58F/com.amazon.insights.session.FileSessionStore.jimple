@@ -1,0 +1,992 @@
+public class com.amazon.insights.session.FileSessionStore extends java.lang.Object implements com.amazon.insights.session.SessionStore
+{
+    static final java.lang.String ENCRYPTION_ALGORITHM;
+    static final java.lang.String KEY_MAX_STORAGE_SIZE;
+    static final long MAX_STORAGE_SIZE;
+    protected static final java.lang.String SESSION_DIRECTORY;
+    protected static final java.lang.String SESSION_FILE_NAME;
+    private static final com.amazon.insights.core.log.Logger logger;
+    private final com.amazon.insights.core.InsightsContext context;
+    private final java.util.concurrent.locks.ReentrantReadWriteLock lock;
+    private final java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readSessionLock;
+    private com.amazon.insights.core.io.EncryptedBufferedReader reader;
+    private javax.crypto.SecretKey secretKey;
+    private java.io.File sessionFile;
+    private final java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock writeSessionLock;
+
+    static void <clinit>()
+    {
+        com.amazon.insights.core.log.Logger $r0;
+
+        nop;
+
+        $r0 = staticinvoke <com.amazon.insights.core.log.Logger: com.amazon.insights.core.log.Logger getLogger(java.lang.Class)>(class "Lcom/amazon/insights/delivery/FileEventStore;");
+
+        <com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.log.Logger logger> = $r0;
+
+        return;
+    }
+
+    public void <init>(com.amazon.insights.core.InsightsContext)
+    {
+        com.amazon.insights.session.FileSessionStore $r0;
+        com.amazon.insights.core.InsightsContext $r1;
+        byte[] $r2, $r18, $r20;
+        java.util.concurrent.locks.ReentrantReadWriteLock $r3;
+        java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock $r4;
+        java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock $r5;
+        com.amazon.insights.core.system.System $r6;
+        com.amazon.insights.core.system.FileManager $r7;
+        java.io.File $r8, $r9;
+        com.amazon.insights.InsightsCredentials $r10;
+        java.lang.String $r11, $r14, $r15, varReplacer895, varReplacer896, varReplacer897, varReplacer902, varReplacer904, varReplacer905, varReplacer906, varReplacer909, varReplacer910;
+        com.amazon.insights.core.idresolver.Id $r12, $r13;
+        int $i0, varReplacer899, varReplacer900, varReplacer901, varReplacer907, varReplacer908;
+        java.lang.StringBuilder $r16;
+        com.amazon.insights.core.configuration.Configuration $r17;
+        java.security.MessageDigest $r19;
+        javax.crypto.spec.SecretKeySpec $r21;
+        java.lang.Throwable $r22, $r24, $r25;
+        com.amazon.insights.core.log.Logger $r23;
+        null_type varReplacer898, varReplacer903;
+
+        nop;
+
+        $r0 := @this: com.amazon.insights.session.FileSessionStore;
+
+        $r1 := @parameter0: com.amazon.insights.core.InsightsContext;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r3 = new java.util.concurrent.locks.ReentrantReadWriteLock;
+
+        varReplacer908 = 1;
+
+        specialinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock: void <init>(boolean)>(varReplacer908);
+
+        $r0.<com.amazon.insights.session.FileSessionStore: java.util.concurrent.locks.ReentrantReadWriteLock lock> = $r3;
+
+        $r3 = $r0.<com.amazon.insights.session.FileSessionStore: java.util.concurrent.locks.ReentrantReadWriteLock lock>;
+
+        $r4 = virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readLock()>();
+
+        $r0.<com.amazon.insights.session.FileSessionStore: java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readSessionLock> = $r4;
+
+        $r3 = $r0.<com.amazon.insights.session.FileSessionStore: java.util.concurrent.locks.ReentrantReadWriteLock lock>;
+
+        $r5 = virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock: java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock writeLock()>();
+
+        $r0.<com.amazon.insights.session.FileSessionStore: java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock writeSessionLock> = $r5;
+
+        varReplacer903 = null;
+
+        $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.io.EncryptedBufferedReader reader> = varReplacer903;
+
+        $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.InsightsContext context> = $r1;
+
+        $r1 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.InsightsContext context>;
+
+        $r6 = interfaceinvoke $r1.<com.amazon.insights.core.InsightsContext: com.amazon.insights.core.system.System getSystem()>();
+
+        $r7 = interfaceinvoke $r6.<com.amazon.insights.core.system.System: com.amazon.insights.core.system.FileManager getFileManager()>();
+
+        varReplacer904 = "sessions";
+
+        $r8 = interfaceinvoke $r7.<com.amazon.insights.core.system.FileManager: java.io.File createDirectory(java.lang.String)>(varReplacer904);
+
+        $r9 = new java.io.File;
+
+     label01:
+        varReplacer897 = "sessionFile";
+
+        specialinvoke $r9.<java.io.File: void <init>(java.io.File,java.lang.String)>($r8, varReplacer897);
+
+        $r8 = interfaceinvoke $r7.<com.amazon.insights.core.system.FileManager: java.io.File createFile(java.io.File)>($r9);
+
+     label02:
+        $r0.<com.amazon.insights.session.FileSessionStore: java.io.File sessionFile> = $r8;
+
+     label03:
+        $r2 = newarray (byte)[32];
+
+        $r1 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.InsightsContext context>;
+
+     label04:
+        $r10 = interfaceinvoke $r1.<com.amazon.insights.core.InsightsContext: com.amazon.insights.InsightsCredentials getCredentials()>();
+
+        $r11 = interfaceinvoke $r10.<com.amazon.insights.InsightsCredentials: java.lang.String getPrivateKey()>();
+
+     label05:
+        $r1 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.InsightsContext context>;
+
+     label06:
+        $r12 = interfaceinvoke $r1.<com.amazon.insights.core.InsightsContext: com.amazon.insights.core.idresolver.Id getUniqueId()>();
+
+     label07:
+        if $r12 == null goto label13;
+
+        $r1 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.InsightsContext context>;
+
+     label08:
+        $r12 = interfaceinvoke $r1.<com.amazon.insights.core.InsightsContext: com.amazon.insights.core.idresolver.Id getUniqueId()>();
+
+        $r13 = staticinvoke <com.amazon.insights.core.idresolver.Id: com.amazon.insights.core.idresolver.Id getEmptyId()>();
+
+     label09:
+        if $r12 == $r13 goto label13;
+
+        $r1 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.InsightsContext context>;
+
+     label10:
+        $r12 = interfaceinvoke $r1.<com.amazon.insights.core.InsightsContext: com.amazon.insights.core.idresolver.Id getUniqueId()>();
+
+        $r14 = virtualinvoke $r12.<com.amazon.insights.core.idresolver.Id: java.lang.String getValue()>();
+
+     label11:
+        if $r14 == null goto label13;
+
+        $r1 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.InsightsContext context>;
+
+     label12:
+        $r12 = interfaceinvoke $r1.<com.amazon.insights.core.InsightsContext: com.amazon.insights.core.idresolver.Id getUniqueId()>();
+
+        $r11 = virtualinvoke $r12.<com.amazon.insights.core.idresolver.Id: java.lang.String getValue()>();
+
+     label13:
+        $r1 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.InsightsContext context>;
+
+     label14:
+        $r10 = interfaceinvoke $r1.<com.amazon.insights.core.InsightsContext: com.amazon.insights.InsightsCredentials getCredentials()>();
+
+        $r14 = interfaceinvoke $r10.<com.amazon.insights.InsightsCredentials: java.lang.String getPrivateKey()>();
+
+     label15:
+        $r15 = $r14;
+
+     label16:
+        $i0 = virtualinvoke $r14.<java.lang.String: int length()>();
+
+     label17:
+        if $i0 <= 16 goto label20;
+
+     label18:
+        varReplacer907 = 16;
+
+        $r14 = virtualinvoke $r14.<java.lang.String: java.lang.String substring(int)>(varReplacer907);
+
+     label19:
+        $r15 = $r14;
+
+     label20:
+        $r16 = new java.lang.StringBuilder;
+
+     label21:
+        specialinvoke $r16.<java.lang.StringBuilder: void <init>()>();
+
+     label22:
+        $r1 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.InsightsContext context>;
+
+     label23:
+        $r17 = interfaceinvoke $r1.<com.amazon.insights.core.InsightsContext: com.amazon.insights.core.configuration.Configuration getConfiguration()>();
+
+        varReplacer909 = "encryptionPrefix";
+
+        $r14 = interfaceinvoke $r17.<com.amazon.insights.core.configuration.Configuration: java.lang.String optString(java.lang.String,java.lang.String)>(varReplacer909, $r15);
+
+        $r16 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r14);
+
+        $r16 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        $r11 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer902 = "UTF-8";
+
+        $r18 = virtualinvoke $r11.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer902);
+
+     label24:
+        varReplacer906 = "SHA-256";
+
+        $r19 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer906);
+
+        varReplacer896 = "UTF-8";
+
+        $r20 = virtualinvoke $r11.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer896);
+
+        $r20 = virtualinvoke $r19.<java.security.MessageDigest: byte[] digest(byte[])>($r20);
+
+     label25:
+        $r18 = $r20;
+
+     label26:
+        varReplacer899 = 0;
+
+        varReplacer900 = 0;
+
+        varReplacer901 = 32;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r18, varReplacer899, $r2, varReplacer899, varReplacer901);
+
+     label27:
+        $r21 = new javax.crypto.spec.SecretKeySpec;
+
+     label28:
+        varReplacer905 = "AES";
+
+        specialinvoke $r21.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, varReplacer905);
+
+     label29:
+        $r0.<com.amazon.insights.session.FileSessionStore: javax.crypto.SecretKey secretKey> = $r21;
+
+        return;
+
+     label30:
+        $r22 := @caughtexception;
+
+        $r23 = <com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.log.Logger logger>;
+
+        varReplacer895 = "Unable to open session file";
+
+        virtualinvoke $r23.<com.amazon.insights.core.log.Logger: void deve(java.lang.String)>(varReplacer895);
+
+        $r23 = <com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.log.Logger logger>;
+
+        varReplacer910 = "An error occurred while attempting to create/open the session file";
+
+        virtualinvoke $r23.<com.amazon.insights.core.log.Logger: void e(java.lang.String,java.lang.Throwable)>(varReplacer910, $r22);
+
+        goto label03;
+
+     label31:
+        $r24 := @caughtexception;
+
+        varReplacer898 = null;
+
+        $r0.<com.amazon.insights.session.FileSessionStore: javax.crypto.SecretKey secretKey> = varReplacer898;
+
+        return;
+
+     label32:
+        $r25 := @caughtexception;
+
+        goto label26;
+
+        catch java.io.IOException from label01 to label02 with label30;
+        catch java.io.UnsupportedEncodingException from label04 to label05 with label31;
+        catch java.io.UnsupportedEncodingException from label06 to label07 with label31;
+        catch java.io.UnsupportedEncodingException from label08 to label09 with label31;
+        catch java.io.UnsupportedEncodingException from label10 to label11 with label31;
+        catch java.io.UnsupportedEncodingException from label12 to label13 with label31;
+        catch java.io.UnsupportedEncodingException from label14 to label15 with label31;
+        catch java.io.UnsupportedEncodingException from label16 to label17 with label31;
+        catch java.io.UnsupportedEncodingException from label18 to label19 with label31;
+        catch java.io.UnsupportedEncodingException from label21 to label22 with label31;
+        catch java.io.UnsupportedEncodingException from label23 to label24 with label31;
+        catch java.security.NoSuchAlgorithmException from label24 to label25 with label32;
+        catch java.io.UnsupportedEncodingException from label24 to label25 with label31;
+        catch java.io.UnsupportedEncodingException from label26 to label27 with label31;
+        catch java.io.UnsupportedEncodingException from label28 to label29 with label31;
+    }
+
+    private void tryCloseReader()
+    {
+        com.amazon.insights.session.FileSessionStore $r0;
+        java.lang.Throwable $r1, $r5, $r6;
+        com.amazon.insights.core.io.EncryptedBufferedReader $r2;
+        java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock $r3;
+        com.amazon.insights.core.log.Logger $r4;
+        null_type varReplacer887, varReplacer889, varReplacer890;
+        java.lang.String varReplacer888;
+
+        nop;
+
+        $r0 := @this: com.amazon.insights.session.FileSessionStore;
+
+        $r2 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.io.EncryptedBufferedReader reader>;
+
+        if $r2 == null goto label12;
+
+        $r3 = $r0.<com.amazon.insights.session.FileSessionStore: java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readSessionLock>;
+
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+     label01:
+        $r2 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.io.EncryptedBufferedReader reader>;
+
+     label02:
+        virtualinvoke $r2.<com.amazon.insights.core.io.EncryptedBufferedReader: void close()>();
+
+     label03:
+        varReplacer887 = null;
+
+        $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.io.EncryptedBufferedReader reader> = varReplacer887;
+
+     label04:
+        $r3 = $r0.<com.amazon.insights.session.FileSessionStore: java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readSessionLock>;
+
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        return;
+
+     label05:
+        $r1 := @caughtexception;
+
+     label06:
+        $r4 = <com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.log.Logger logger>;
+
+        varReplacer888 = "Unable to close reader for session file";
+
+        virtualinvoke $r4.<com.amazon.insights.core.log.Logger: void e(java.lang.String,java.lang.Throwable)>(varReplacer888, $r1);
+
+     label07:
+        varReplacer889 = null;
+
+        $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.io.EncryptedBufferedReader reader> = varReplacer889;
+
+     label08:
+        goto label04;
+
+     label09:
+        $r5 := @caughtexception;
+
+        $r3 = $r0.<com.amazon.insights.session.FileSessionStore: java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readSessionLock>;
+
+        virtualinvoke $r3.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        throw $r5;
+
+     label10:
+        $r6 := @caughtexception;
+
+     label11:
+        varReplacer890 = null;
+
+        $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.io.EncryptedBufferedReader reader> = varReplacer890;
+
+        throw $r6;
+
+     label12:
+        return;
+
+        catch java.io.IOException from label02 to label03 with label05;
+        catch java.lang.Throwable from label01 to label03 with label10;
+        catch java.lang.Throwable from label03 to label04 with label09;
+        catch java.lang.Throwable from label06 to label07 with label10;
+        catch java.lang.Throwable from label07 to label08 with label09;
+        catch java.lang.Throwable from label11 to label12 with label09;
+    }
+
+    private void tryCloseWriter(java.io.Writer) throws com.amazon.insights.session.SessionStoreException
+    {
+        com.amazon.insights.session.FileSessionStore $r0;
+        java.io.Writer $r1;
+        java.lang.Throwable $r2;
+        com.amazon.insights.core.log.Logger $r3;
+
+        $r0 := @this: com.amazon.insights.session.FileSessionStore;
+
+        $r1 := @parameter0: java.io.Writer;
+
+        if $r1 == null goto label4;
+
+     label1:
+        virtualinvoke $r1.<java.io.Writer: void close()>();
+
+     label2:
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        $r3 = <com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.log.Logger logger>;
+
+        virtualinvoke $r3.<com.amazon.insights.core.log.Logger: void e(java.lang.String,java.lang.Throwable)>("Unable to close writer for session file", $r2);
+
+     label4:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    private java.io.Writer tryInitializeWriter() throws com.amazon.insights.session.SessionStoreException
+    {
+        com.amazon.insights.session.FileSessionStore $r0;
+        java.io.OutputStreamWriter $r1;
+        com.amazon.insights.core.io.EncryptedWriter $r2;
+        com.amazon.insights.core.InsightsContext $r3;
+        com.amazon.insights.core.system.System $r4;
+        com.amazon.insights.core.system.FileManager $r5;
+        java.io.File $r6;
+        java.io.OutputStream $r7;
+        javax.crypto.SecretKey $r8;
+        java.lang.Throwable $r9;
+        com.amazon.insights.core.log.Logger $r10;
+        com.amazon.insights.delivery.EventStoreException $r11;
+        java.lang.Exception $r12;
+
+        $r0 := @this: com.amazon.insights.session.FileSessionStore;
+
+     label01:
+        $r3 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.InsightsContext context>;
+
+     label02:
+        $r4 = interfaceinvoke $r3.<com.amazon.insights.core.InsightsContext: com.amazon.insights.core.system.System getSystem()>();
+
+        $r5 = interfaceinvoke $r4.<com.amazon.insights.core.system.System: com.amazon.insights.core.system.FileManager getFileManager()>();
+
+     label03:
+        $r6 = $r0.<com.amazon.insights.session.FileSessionStore: java.io.File sessionFile>;
+
+     label04:
+        $r7 = interfaceinvoke $r5.<com.amazon.insights.core.system.FileManager: java.io.OutputStream newOutputStream(java.io.File,boolean)>($r6, 0);
+
+     label05:
+        $r1 = new java.io.OutputStreamWriter;
+
+     label06:
+        specialinvoke $r1.<java.io.OutputStreamWriter: void <init>(java.io.OutputStream)>($r7);
+
+     label07:
+        $r2 = new com.amazon.insights.core.io.EncryptedWriter;
+
+     label08:
+        $r8 = $r0.<com.amazon.insights.session.FileSessionStore: javax.crypto.SecretKey secretKey>;
+
+     label09:
+        specialinvoke $r2.<com.amazon.insights.core.io.EncryptedWriter: void <init>(java.io.Writer,javax.crypto.SecretKey)>($r1, $r8);
+
+     label10:
+        return $r2;
+
+     label11:
+        $r9 := @caughtexception;
+
+        $r10 = <com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.log.Logger logger>;
+
+        virtualinvoke $r10.<com.amazon.insights.core.log.Logger: void e(java.lang.String,java.lang.Throwable)>("Session file not found to persist session to", $r9);
+
+        $r11 = new com.amazon.insights.delivery.EventStoreException;
+
+        specialinvoke $r11.<com.amazon.insights.delivery.EventStoreException: void <init>(java.lang.String,java.lang.Throwable)>("Unable to open session file writer", $r9);
+
+        throw $r11;
+
+     label12:
+        $r12 := @caughtexception;
+
+        $r10 = <com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.log.Logger logger>;
+
+        virtualinvoke $r10.<com.amazon.insights.core.log.Logger: void e(java.lang.String,java.lang.Throwable)>("Unexpected exception", $r12);
+
+        return null;
+
+        catch java.io.FileNotFoundException from label02 to label03 with label11;
+        catch java.io.FileNotFoundException from label04 to label05 with label11;
+        catch java.io.FileNotFoundException from label06 to label07 with label11;
+        catch java.io.FileNotFoundException from label09 to label10 with label11;
+        catch java.lang.Exception from label01 to label05 with label12;
+        catch java.lang.Exception from label06 to label07 with label12;
+        catch java.lang.Exception from label08 to label10 with label12;
+    }
+
+    private boolean tryOpenReader()
+    {
+        com.amazon.insights.session.FileSessionStore $r0;
+        java.io.BufferedReader $r1;
+        java.lang.Throwable $r2;
+        java.io.InputStreamReader $r3, $r5;
+        com.amazon.insights.core.io.EncryptedBufferedReader $r4;
+        com.amazon.insights.core.InsightsContext $r6;
+        com.amazon.insights.core.system.System $r7;
+        com.amazon.insights.core.system.FileManager $r8;
+        java.io.File $r9;
+        java.io.InputStream $r10;
+        javax.crypto.SecretKey $r11;
+        com.amazon.insights.core.log.Logger $r12;
+        java.lang.String varReplacer883;
+        int varReplacer884, varReplacer885, varReplacer886;
+
+        nop;
+
+        $r0 := @this: com.amazon.insights.session.FileSessionStore;
+
+        $r4 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.io.EncryptedBufferedReader reader>;
+
+        if $r4 == null goto label1;
+
+        varReplacer885 = 1;
+
+        return varReplacer885;
+
+     label1:
+        $r5 = null;
+
+        $r3 = new java.io.InputStreamReader;
+
+        $r6 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.InsightsContext context>;
+
+     label2:
+        $r7 = interfaceinvoke $r6.<com.amazon.insights.core.InsightsContext: com.amazon.insights.core.system.System getSystem()>();
+
+        $r8 = interfaceinvoke $r7.<com.amazon.insights.core.system.System: com.amazon.insights.core.system.FileManager getFileManager()>();
+
+     label3:
+        $r9 = $r0.<com.amazon.insights.session.FileSessionStore: java.io.File sessionFile>;
+
+     label4:
+        $r10 = interfaceinvoke $r8.<com.amazon.insights.core.system.FileManager: java.io.InputStream newInputStream(java.io.File)>($r9);
+
+        specialinvoke $r3.<java.io.InputStreamReader: void <init>(java.io.InputStream)>($r10);
+
+     label5:
+        $r5 = $r3;
+
+     label6:
+        if $r5 == null goto label8;
+
+        $r1 = new java.io.BufferedReader;
+
+        specialinvoke $r1.<java.io.BufferedReader: void <init>(java.io.Reader)>($r5);
+
+        $r4 = new com.amazon.insights.core.io.EncryptedBufferedReader;
+
+        $r11 = $r0.<com.amazon.insights.session.FileSessionStore: javax.crypto.SecretKey secretKey>;
+
+        specialinvoke $r4.<com.amazon.insights.core.io.EncryptedBufferedReader: void <init>(java.io.BufferedReader,javax.crypto.SecretKey)>($r1, $r11);
+
+        $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.io.EncryptedBufferedReader reader> = $r4;
+
+        varReplacer886 = 1;
+
+        return varReplacer886;
+
+     label7:
+        $r2 := @caughtexception;
+
+        $r12 = <com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.log.Logger logger>;
+
+        varReplacer883 = "Could not open the session file";
+
+        virtualinvoke $r12.<com.amazon.insights.core.log.Logger: void e(java.lang.String,java.lang.Throwable)>(varReplacer883, $r2);
+
+        goto label6;
+
+     label8:
+        varReplacer884 = 0;
+
+        return varReplacer884;
+
+        catch java.io.FileNotFoundException from label2 to label3 with label7;
+        catch java.io.FileNotFoundException from label4 to label5 with label7;
+    }
+
+    public com.amazon.insights.session.Session getSession()
+    {
+        com.amazon.insights.session.FileSessionStore $r0;
+        java.lang.String $r1, $r4, varReplacer869, varReplacer870, varReplacer871, varReplacer872;
+        java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock $r2;
+        com.amazon.insights.core.io.EncryptedBufferedReader $r3;
+        com.amazon.insights.core.InsightsContext $r5;
+        com.amazon.insights.core.system.System $r6;
+        com.amazon.insights.core.system.FileManager $r7;
+        java.io.File $r8;
+        boolean $z0;
+        com.amazon.insights.session.Session $r9;
+        java.lang.Throwable $r10, $r12, $r13, $r14, $r15, $r16;
+        com.amazon.insights.core.log.Logger $r11;
+
+        nop;
+
+        $r0 := @this: com.amazon.insights.session.FileSessionStore;
+
+        $r1 = null;
+
+        $r2 = $r0.<com.amazon.insights.session.FileSessionStore: java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readSessionLock>;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void lock()>();
+
+     label01:
+        specialinvoke $r0.<com.amazon.insights.session.FileSessionStore: boolean tryOpenReader()>();
+
+     label02:
+        $r3 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.io.EncryptedBufferedReader reader>;
+
+     label03:
+        if $r3 == null goto label07;
+
+     label04:
+        $r3 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.io.EncryptedBufferedReader reader>;
+
+     label05:
+        $r4 = virtualinvoke $r3.<com.amazon.insights.core.io.EncryptedBufferedReader: java.lang.String readLine()>();
+
+     label06:
+        $r1 = $r4;
+
+     label07:
+        specialinvoke $r0.<com.amazon.insights.session.FileSessionStore: void tryCloseReader()>();
+
+        $r5 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.InsightsContext context>;
+
+        $r6 = interfaceinvoke $r5.<com.amazon.insights.core.InsightsContext: com.amazon.insights.core.system.System getSystem()>();
+
+        $r7 = interfaceinvoke $r6.<com.amazon.insights.core.system.System: com.amazon.insights.core.system.FileManager getFileManager()>();
+
+     label08:
+        $r8 = $r0.<com.amazon.insights.session.FileSessionStore: java.io.File sessionFile>;
+
+     label09:
+        $z0 = interfaceinvoke $r7.<com.amazon.insights.core.system.FileManager: boolean deleteFile(java.io.File)>($r8);
+
+     label10:
+        if $z0 != 0 goto label14;
+
+     label11:
+        $r8 = $r0.<com.amazon.insights.session.FileSessionStore: java.io.File sessionFile>;
+
+     label12:
+        $z0 = virtualinvoke $r8.<java.io.File: boolean exists()>();
+
+     label13:
+        if $z0 != 0 goto label17;
+
+     label14:
+        $r8 = $r0.<com.amazon.insights.session.FileSessionStore: java.io.File sessionFile>;
+
+     label15:
+        $r8 = interfaceinvoke $r7.<com.amazon.insights.core.system.FileManager: java.io.File createFile(java.io.File)>($r8);
+
+     label16:
+        $r0.<com.amazon.insights.session.FileSessionStore: java.io.File sessionFile> = $r8;
+
+     label17:
+        $r2 = $r0.<com.amazon.insights.session.FileSessionStore: java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readSessionLock>;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        $r9 = staticinvoke <com.amazon.insights.session.Session: com.amazon.insights.session.Session getSessionFromSerializedSession(java.lang.String)>($r1);
+
+        return $r9;
+
+     label18:
+        $r10 := @caughtexception;
+
+     label19:
+        $r11 = <com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.log.Logger logger>;
+
+        varReplacer869 = "Unable to clear session file";
+
+        virtualinvoke $r11.<com.amazon.insights.core.log.Logger: void e(java.lang.String,java.lang.Throwable)>(varReplacer869, $r10);
+
+     label20:
+        goto label17;
+
+     label21:
+        $r12 := @caughtexception;
+
+        $r2 = $r0.<com.amazon.insights.session.FileSessionStore: java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock readSessionLock>;
+
+        virtualinvoke $r2.<java.util.concurrent.locks.ReentrantReadWriteLock$ReadLock: void unlock()>();
+
+        throw $r12;
+
+     label22:
+        $r13 := @caughtexception;
+
+     label23:
+        $r11 = <com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.log.Logger logger>;
+
+        varReplacer871 = "Failed to read the session";
+
+        virtualinvoke $r11.<com.amazon.insights.core.log.Logger: void e(java.lang.String,java.lang.Throwable)>(varReplacer871, $r13);
+
+     label24:
+        specialinvoke $r0.<com.amazon.insights.session.FileSessionStore: void tryCloseReader()>();
+
+        $r5 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.InsightsContext context>;
+
+        $r6 = interfaceinvoke $r5.<com.amazon.insights.core.InsightsContext: com.amazon.insights.core.system.System getSystem()>();
+
+        $r7 = interfaceinvoke $r6.<com.amazon.insights.core.system.System: com.amazon.insights.core.system.FileManager getFileManager()>();
+
+     label25:
+        $r8 = $r0.<com.amazon.insights.session.FileSessionStore: java.io.File sessionFile>;
+
+     label26:
+        $z0 = interfaceinvoke $r7.<com.amazon.insights.core.system.FileManager: boolean deleteFile(java.io.File)>($r8);
+
+     label27:
+        if $z0 != 0 goto label31;
+
+     label28:
+        $r8 = $r0.<com.amazon.insights.session.FileSessionStore: java.io.File sessionFile>;
+
+     label29:
+        $z0 = virtualinvoke $r8.<java.io.File: boolean exists()>();
+
+     label30:
+        if $z0 != 0 goto label17;
+
+     label31:
+        $r8 = $r0.<com.amazon.insights.session.FileSessionStore: java.io.File sessionFile>;
+
+     label32:
+        $r8 = interfaceinvoke $r7.<com.amazon.insights.core.system.FileManager: java.io.File createFile(java.io.File)>($r8);
+
+     label33:
+        $r0.<com.amazon.insights.session.FileSessionStore: java.io.File sessionFile> = $r8;
+
+     label34:
+        goto label17;
+
+     label35:
+        $r14 := @caughtexception;
+
+     label36:
+        $r11 = <com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.log.Logger logger>;
+
+        varReplacer872 = "Unable to clear session file";
+
+        virtualinvoke $r11.<com.amazon.insights.core.log.Logger: void e(java.lang.String,java.lang.Throwable)>(varReplacer872, $r14);
+
+     label37:
+        goto label17;
+
+     label38:
+        $r15 := @caughtexception;
+
+     label39:
+        specialinvoke $r0.<com.amazon.insights.session.FileSessionStore: void tryCloseReader()>();
+
+        $r5 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.InsightsContext context>;
+
+        $r6 = interfaceinvoke $r5.<com.amazon.insights.core.InsightsContext: com.amazon.insights.core.system.System getSystem()>();
+
+        $r7 = interfaceinvoke $r6.<com.amazon.insights.core.system.System: com.amazon.insights.core.system.FileManager getFileManager()>();
+
+     label40:
+        $r8 = $r0.<com.amazon.insights.session.FileSessionStore: java.io.File sessionFile>;
+
+     label41:
+        $z0 = interfaceinvoke $r7.<com.amazon.insights.core.system.FileManager: boolean deleteFile(java.io.File)>($r8);
+
+     label42:
+        if $z0 != 0 goto label46;
+
+     label43:
+        $r8 = $r0.<com.amazon.insights.session.FileSessionStore: java.io.File sessionFile>;
+
+     label44:
+        $z0 = virtualinvoke $r8.<java.io.File: boolean exists()>();
+
+     label45:
+        if $z0 != 0 goto label49;
+
+     label46:
+        $r8 = $r0.<com.amazon.insights.session.FileSessionStore: java.io.File sessionFile>;
+
+     label47:
+        $r8 = interfaceinvoke $r7.<com.amazon.insights.core.system.FileManager: java.io.File createFile(java.io.File)>($r8);
+
+     label48:
+        $r0.<com.amazon.insights.session.FileSessionStore: java.io.File sessionFile> = $r8;
+
+     label49:
+        throw $r15;
+
+     label50:
+        $r16 := @caughtexception;
+
+     label51:
+        $r11 = <com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.log.Logger logger>;
+
+        varReplacer870 = "Unable to clear session file";
+
+        virtualinvoke $r11.<com.amazon.insights.core.log.Logger: void e(java.lang.String,java.lang.Throwable)>(varReplacer870, $r16);
+
+     label52:
+        goto label49;
+
+        catch java.io.IOException from label01 to label02 with label22;
+        catch java.io.IOException from label05 to label06 with label22;
+        catch java.lang.Throwable from label01 to label03 with label38;
+        catch java.lang.Throwable from label04 to label06 with label38;
+        catch java.lang.Throwable from label07 to label08 with label21;
+        catch java.io.IOException from label09 to label10 with label18;
+        catch java.io.IOException from label12 to label13 with label18;
+        catch java.io.IOException from label15 to label16 with label18;
+        catch java.lang.Throwable from label08 to label10 with label21;
+        catch java.lang.Throwable from label11 to label13 with label21;
+        catch java.lang.Throwable from label14 to label17 with label21;
+        catch java.lang.Throwable from label19 to label20 with label21;
+        catch java.lang.Throwable from label23 to label24 with label38;
+        catch java.lang.Throwable from label24 to label25 with label21;
+        catch java.io.IOException from label26 to label27 with label35;
+        catch java.io.IOException from label29 to label30 with label35;
+        catch java.io.IOException from label32 to label33 with label35;
+        catch java.lang.Throwable from label25 to label27 with label21;
+        catch java.lang.Throwable from label28 to label30 with label21;
+        catch java.lang.Throwable from label31 to label34 with label21;
+        catch java.lang.Throwable from label36 to label37 with label21;
+        catch java.lang.Throwable from label39 to label40 with label21;
+        catch java.io.IOException from label41 to label42 with label50;
+        catch java.io.IOException from label44 to label45 with label50;
+        catch java.io.IOException from label47 to label48 with label50;
+        catch java.lang.Throwable from label40 to label42 with label21;
+        catch java.lang.Throwable from label43 to label45 with label21;
+        catch java.lang.Throwable from label46 to label49 with label21;
+        catch java.lang.Throwable from label49 to label50 with label21;
+        catch java.lang.Throwable from label51 to label52 with label21;
+    }
+
+    public void storeSession(com.amazon.insights.session.Session) throws com.amazon.insights.session.SessionStoreException
+    {
+        com.amazon.insights.session.FileSessionStore $r0;
+        com.amazon.insights.session.Session $r1;
+        java.lang.Throwable $r2, $r13, $r14;
+        java.lang.String $r3;
+        java.io.Writer $r4, $r6;
+        java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock $r5;
+        com.amazon.insights.core.InsightsContext $r7;
+        com.amazon.insights.core.configuration.Configuration $r8;
+        java.lang.Long $r9;
+        long $l0, $l1, $l3;
+        java.io.File $r10;
+        int $i2;
+        byte $b4;
+        com.amazon.insights.core.log.Logger $r11;
+        java.lang.StringBuilder $r12;
+
+        $r0 := @this: com.amazon.insights.session.FileSessionStore;
+
+        $r1 := @parameter0: com.amazon.insights.session.Session;
+
+        $r3 = virtualinvoke $r1.<com.amazon.insights.session.Session: java.lang.String toString()>();
+
+        $r4 = null;
+
+        $r5 = $r0.<com.amazon.insights.session.FileSessionStore: java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock writeSessionLock>;
+
+        virtualinvoke $r5.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void lock()>();
+
+     label01:
+        $r6 = specialinvoke $r0.<com.amazon.insights.session.FileSessionStore: java.io.Writer tryInitializeWriter()>();
+
+     label02:
+        $r4 = $r6;
+
+        if $r6 == null goto label09;
+
+     label03:
+        $r7 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.InsightsContext context>;
+
+     label04:
+        $r8 = interfaceinvoke $r7.<com.amazon.insights.core.InsightsContext: com.amazon.insights.core.configuration.Configuration getConfiguration()>();
+
+        $r9 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(22560L);
+
+        $r9 = interfaceinvoke $r8.<com.amazon.insights.core.configuration.Configuration: java.lang.Long optLong(java.lang.String,java.lang.Long)>("maxStorageSize", $r9);
+
+        $l0 = virtualinvoke $r9.<java.lang.Long: long longValue()>();
+
+     label05:
+        $r10 = $r0.<com.amazon.insights.session.FileSessionStore: java.io.File sessionFile>;
+
+     label06:
+        $l1 = virtualinvoke $r10.<java.io.File: long length()>();
+
+        $i2 = virtualinvoke $r3.<java.lang.String: int length()>();
+
+     label07:
+        $l3 = (long) $i2;
+
+        $l1 = $l1 + $l3;
+
+        $b4 = $l1 cmp $l0;
+
+        if $b4 > 0 goto label11;
+
+     label08:
+        virtualinvoke $r6.<java.io.Writer: void write(java.lang.String)>($r3);
+
+        virtualinvoke $r6.<java.io.Writer: void flush()>();
+
+     label09:
+        specialinvoke $r0.<com.amazon.insights.session.FileSessionStore: void tryCloseWriter(java.io.Writer)>($r6);
+
+     label10:
+        $r5 = $r0.<com.amazon.insights.session.FileSessionStore: java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock writeSessionLock>;
+
+        virtualinvoke $r5.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        return;
+
+     label11:
+        $r11 = <com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.log.Logger logger>;
+
+        $r12 = new java.lang.StringBuilder;
+
+     label12:
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>()>();
+
+        $r12 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("The session file exceeded its allowed size of ");
+
+        $r12 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        $r12 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" bytes");
+
+        $r3 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r11.<com.amazon.insights.core.log.Logger: void e(java.lang.String)>($r3);
+
+     label13:
+        goto label09;
+
+     label14:
+        $r2 := @caughtexception;
+
+     label15:
+        $r11 = <com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.log.Logger logger>;
+
+        virtualinvoke $r11.<com.amazon.insights.core.log.Logger: void e(java.lang.String,java.lang.Throwable)>("Failed to persist the session", $r2);
+
+     label16:
+        specialinvoke $r0.<com.amazon.insights.session.FileSessionStore: void tryCloseWriter(java.io.Writer)>($r4);
+
+     label17:
+        goto label10;
+
+     label18:
+        $r13 := @caughtexception;
+
+        $r5 = $r0.<com.amazon.insights.session.FileSessionStore: java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock writeSessionLock>;
+
+        virtualinvoke $r5.<java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock: void unlock()>();
+
+        throw $r13;
+
+     label19:
+        $r14 := @caughtexception;
+
+     label20:
+        specialinvoke $r0.<com.amazon.insights.session.FileSessionStore: void tryCloseWriter(java.io.Writer)>($r4);
+
+        throw $r14;
+
+     label21:
+        nop;
+
+        catch java.io.IOException from label01 to label02 with label14;
+        catch java.io.IOException from label04 to label05 with label14;
+        catch java.io.IOException from label06 to label07 with label14;
+        catch java.io.IOException from label08 to label09 with label14;
+        catch java.lang.Throwable from label01 to label02 with label19;
+        catch java.lang.Throwable from label03 to label07 with label19;
+        catch java.lang.Throwable from label08 to label09 with label19;
+        catch java.lang.Throwable from label09 to label10 with label18;
+        catch java.io.IOException from label12 to label13 with label14;
+        catch java.lang.Throwable from label11 to label13 with label19;
+        catch java.lang.Throwable from label15 to label16 with label19;
+        catch java.lang.Throwable from label16 to label17 with label18;
+        catch java.lang.Throwable from label20 to label21 with label18;
+    }
+}

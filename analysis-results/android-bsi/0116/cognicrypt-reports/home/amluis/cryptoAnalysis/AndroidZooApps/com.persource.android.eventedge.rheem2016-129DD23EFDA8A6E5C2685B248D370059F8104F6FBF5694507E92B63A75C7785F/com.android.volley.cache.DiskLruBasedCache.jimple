@@ -1,0 +1,1825 @@
+public class com.android.volley.cache.DiskLruBasedCache extends java.lang.Object implements com.android.volley.Cache
+{
+    private static final int APP_VERSION;
+    private static final android.graphics.Bitmap$CompressFormat DEFAULT_COMPRESS_FORMAT;
+    private static final int DEFAULT_COMPRESS_QUALITY;
+    private static final boolean DEFAULT_DISK_CACHE_ENABLED;
+    private static final int DEFAULT_DISK_CACHE_SIZE;
+    private static final boolean DEFAULT_INIT_DISK_CACHE_ON_CREATE;
+    private static final boolean DEFAULT_MEM_CACHE_ENABLED;
+    private static final int DEFAULT_MEM_CACHE_SIZE;
+    private static final int DISK_CACHE_INDEX;
+    private static int IO_BUFFER_SIZE;
+    private static final java.lang.String TAG;
+    private static final int VALUE_COUNT;
+    private com.android.volley.cache.DiskLruBasedCache$ImageCacheParams mCacheParams;
+    private android.graphics.Bitmap$CompressFormat mCompressFormat;
+    private int mCompressQuality;
+    private final java.lang.Object mDiskCacheLock;
+    private boolean mDiskCacheStarting;
+    private com.android.volley.misc.DiskLruCache mDiskLruCache;
+
+    static void <clinit>()
+    {
+        android.graphics.Bitmap$CompressFormat $r0;
+        int varReplacer11700;
+
+        nop;
+
+        $r0 = <android.graphics.Bitmap$CompressFormat: android.graphics.Bitmap$CompressFormat JPEG>;
+
+        <com.android.volley.cache.DiskLruBasedCache: android.graphics.Bitmap$CompressFormat DEFAULT_COMPRESS_FORMAT> = $r0;
+
+        varReplacer11700 = 8192;
+
+        <com.android.volley.cache.DiskLruBasedCache: int IO_BUFFER_SIZE> = varReplacer11700;
+
+        return;
+    }
+
+    public void <init>(com.android.volley.cache.DiskLruBasedCache$ImageCacheParams)
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+        com.android.volley.cache.DiskLruBasedCache$ImageCacheParams $r1;
+        android.graphics.Bitmap$CompressFormat $r2;
+        java.lang.Object $r3;
+        int varReplacer11717, varReplacer11718;
+
+        nop;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        $r1 := @parameter0: com.android.volley.cache.DiskLruBasedCache$ImageCacheParams;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r2 = <com.android.volley.cache.DiskLruBasedCache: android.graphics.Bitmap$CompressFormat DEFAULT_COMPRESS_FORMAT>;
+
+        $r0.<com.android.volley.cache.DiskLruBasedCache: android.graphics.Bitmap$CompressFormat mCompressFormat> = $r2;
+
+        varReplacer11717 = 70;
+
+        $r0.<com.android.volley.cache.DiskLruBasedCache: int mCompressQuality> = varReplacer11717;
+
+        $r3 = new java.lang.Object;
+
+        specialinvoke $r3.<java.lang.Object: void <init>()>();
+
+        $r0.<com.android.volley.cache.DiskLruBasedCache: java.lang.Object mDiskCacheLock> = $r3;
+
+        varReplacer11718 = 1;
+
+        $r0.<com.android.volley.cache.DiskLruBasedCache: boolean mDiskCacheStarting> = varReplacer11718;
+
+        $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.cache.DiskLruBasedCache$ImageCacheParams mCacheParams> = $r1;
+
+        return;
+    }
+
+    public void <init>(java.io.File)
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+        java.io.File $r1;
+        android.graphics.Bitmap$CompressFormat $r2;
+        java.lang.Object $r3;
+        com.android.volley.cache.DiskLruBasedCache$ImageCacheParams $r4;
+        int varReplacer11719, varReplacer11720;
+
+        nop;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        $r1 := @parameter0: java.io.File;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r2 = <com.android.volley.cache.DiskLruBasedCache: android.graphics.Bitmap$CompressFormat DEFAULT_COMPRESS_FORMAT>;
+
+        $r0.<com.android.volley.cache.DiskLruBasedCache: android.graphics.Bitmap$CompressFormat mCompressFormat> = $r2;
+
+        varReplacer11720 = 70;
+
+        $r0.<com.android.volley.cache.DiskLruBasedCache: int mCompressQuality> = varReplacer11720;
+
+        $r3 = new java.lang.Object;
+
+        specialinvoke $r3.<java.lang.Object: void <init>()>();
+
+        $r0.<com.android.volley.cache.DiskLruBasedCache: java.lang.Object mDiskCacheLock> = $r3;
+
+        varReplacer11719 = 1;
+
+        $r0.<com.android.volley.cache.DiskLruBasedCache: boolean mDiskCacheStarting> = varReplacer11719;
+
+        $r4 = new com.android.volley.cache.DiskLruBasedCache$ImageCacheParams;
+
+        specialinvoke $r4.<com.android.volley.cache.DiskLruBasedCache$ImageCacheParams: void <init>(java.io.File)>($r1);
+
+        $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.cache.DiskLruBasedCache$ImageCacheParams mCacheParams> = $r4;
+
+        return;
+    }
+
+    static android.graphics.Bitmap$CompressFormat access$000()
+    {
+        android.graphics.Bitmap$CompressFormat r0;
+
+        nop;
+
+        r0 = <com.android.volley.cache.DiskLruBasedCache: android.graphics.Bitmap$CompressFormat DEFAULT_COMPRESS_FORMAT>;
+
+        return r0;
+    }
+
+    private static java.lang.String bytesToHexString(byte[])
+    {
+        byte[] $r0;
+        java.lang.StringBuilder $r1;
+        int $i0, $i1, varReplacer11893;
+        byte $b2;
+        short $s3;
+        java.lang.String $r2;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $i0 = 0;
+
+     label1:
+        $i1 = lengthof $r0;
+
+        if $i0 >= $i1 goto label3;
+
+        $b2 = $r0[$i0];
+
+        $s3 = $b2 & 255;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s3);
+
+        $i1 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        if $i1 != 1 goto label2;
+
+        varReplacer11893 = 48;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(varReplacer11893);
+
+     label2:
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label3:
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r2;
+    }
+
+    private java.lang.String getFilenameForKey(java.lang.String)
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+        java.lang.String $r1, $r2;
+        int $i0, $i1;
+        java.lang.StringBuilder $r3;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int length()>();
+
+        $i0 = $i0 / 2;
+
+        $r2 = virtualinvoke $r1.<java.lang.String: java.lang.String substring(int,int)>(0, $i0);
+
+        $i1 = virtualinvoke $r2.<java.lang.String: int hashCode()>();
+
+        $r2 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i1);
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String substring(int)>($i0);
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int hashCode()>();
+
+        $r1 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    public static java.lang.String hashKeyForDisk(java.lang.String)
+    {
+        java.lang.String $r0, $r4, varReplacer11891;
+        java.lang.Throwable $r1;
+        java.security.MessageDigest $r2;
+        byte[] $r3;
+        int $i0;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer11891 = "MD5";
+
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer11891);
+
+        $r3 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte[])>($r3);
+
+        $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>();
+
+        $r4 = staticinvoke <com.android.volley.cache.DiskLruBasedCache: java.lang.String bytesToHexString(byte[])>($r3);
+
+     label2:
+        return $r4;
+
+     label3:
+        $r1 := @caughtexception;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int hashCode()>();
+
+        $r0 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+        return $r0;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+    }
+
+    public void clear()
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+        java.lang.Throwable $r1, $r6;
+        java.lang.Object $r2;
+        com.android.volley.misc.DiskLruCache $r3;
+        boolean $z0;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        $r2 = $r0.<com.android.volley.cache.DiskLruBasedCache: java.lang.Object mDiskCacheLock>;
+
+        entermonitor $r2;
+
+     label01:
+        $r0.<com.android.volley.cache.DiskLruBasedCache: boolean mDiskCacheStarting> = 1;
+
+        $r3 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+        if $r3 == null goto label06;
+
+        $r3 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+        $z0 = virtualinvoke $r3.<com.android.volley.misc.DiskLruCache: boolean isClosed()>();
+
+     label02:
+        if $z0 != 0 goto label06;
+
+     label03:
+        $r3 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+     label04:
+        virtualinvoke $r3.<com.android.volley.misc.DiskLruCache: void delete()>();
+
+     label05:
+        $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache> = null;
+
+        virtualinvoke $r0.<com.android.volley.cache.DiskLruBasedCache: void initDiskCache()>();
+
+     label06:
+        exitmonitor $r2;
+
+     label07:
+        return;
+
+     label08:
+        $r1 := @caughtexception;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("clearCache - ");
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("DiskLruImageCache", $r5);
+
+        goto label05;
+
+     label09:
+        $r6 := @caughtexception;
+
+        exitmonitor $r2;
+
+     label10:
+        throw $r6;
+
+        catch java.lang.Throwable from label01 to label02 with label09;
+        catch java.io.IOException from label04 to label05 with label08;
+        catch java.lang.Throwable from label03 to label05 with label09;
+        catch java.lang.Throwable from label05 to label07 with label09;
+        catch java.lang.Throwable from label08 to label10 with label09;
+    }
+
+    public void clearCache()
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+        java.lang.Throwable $r1;
+        com.android.volley.misc.DiskLruCache $r2;
+        java.io.IOException r3;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        $r2 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+     label1:
+        virtualinvoke $r2.<com.android.volley.misc.DiskLruCache: void delete()>();
+
+     label2:
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        r3 = (java.io.IOException) $r1;
+
+        virtualinvoke r3.<java.io.IOException: void printStackTrace()>();
+
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public void close()
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+        java.lang.Throwable $r1, $r6;
+        java.lang.Object $r2;
+        com.android.volley.misc.DiskLruCache $r3;
+        boolean $z0;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        $r2 = $r0.<com.android.volley.cache.DiskLruBasedCache: java.lang.Object mDiskCacheLock>;
+
+        entermonitor $r2;
+
+     label01:
+        $r3 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+     label02:
+        if $r3 == null goto label08;
+
+     label03:
+        $r3 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+     label04:
+        $z0 = virtualinvoke $r3.<com.android.volley.misc.DiskLruCache: boolean isClosed()>();
+
+     label05:
+        if $z0 != 0 goto label08;
+
+        $r3 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+     label06:
+        virtualinvoke $r3.<com.android.volley.misc.DiskLruCache: void close()>();
+
+     label07:
+        $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache> = null;
+
+     label08:
+        exitmonitor $r2;
+
+     label09:
+        return;
+
+     label10:
+        $r1 := @caughtexception;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("close - ");
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("DiskLruImageCache", $r5);
+
+        goto label08;
+
+     label11:
+        $r6 := @caughtexception;
+
+        exitmonitor $r2;
+
+     label12:
+        throw $r6;
+
+        catch java.lang.Throwable from label01 to label02 with label11;
+        catch java.io.IOException from label04 to label05 with label10;
+        catch java.io.IOException from label06 to label07 with label10;
+        catch java.lang.Throwable from label03 to label08 with label11;
+        catch java.lang.Throwable from label08 to label09 with label11;
+        catch java.lang.Throwable from label10 to label12 with label11;
+    }
+
+    public boolean containsKey(java.lang.String)
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+        java.lang.String $r1;
+        java.lang.Throwable $r2, $r5;
+        com.android.volley.misc.DiskLruCache$Snapshot $r3;
+        com.android.volley.misc.DiskLruCache $r4;
+        boolean $z0;
+        java.io.IOException r6;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        $r1 := @parameter0: java.lang.String;
+
+     label01:
+        $r4 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+     label02:
+        $r3 = virtualinvoke $r4.<com.android.volley.misc.DiskLruCache: com.android.volley.misc.DiskLruCache$Snapshot get(java.lang.String)>($r1);
+
+     label03:
+        if $r3 == null goto label05;
+
+        $z0 = 1;
+
+     label04:
+        if $r3 == null goto label11;
+
+        virtualinvoke $r3.<com.android.volley.misc.DiskLruCache$Snapshot: void close()>();
+
+        return $z0;
+
+     label05:
+        $z0 = 0;
+
+        goto label04;
+
+     label06:
+        $r2 := @caughtexception;
+
+     label07:
+        r6 = (java.io.IOException) $r2;
+
+        virtualinvoke r6.<java.io.IOException: void printStackTrace()>();
+
+     label08:
+        goto label12;
+
+     label09:
+        $r5 := @caughtexception;
+
+        goto label10;
+
+     label10:
+        throw $r5;
+
+     label11:
+        return $z0;
+
+     label12:
+        return 0;
+
+        catch java.io.IOException from label02 to label03 with label06;
+        catch java.lang.Throwable from label01 to label03 with label09;
+        catch java.lang.Throwable from label07 to label08 with label09;
+    }
+
+    public void flush()
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+        java.lang.Throwable $r1, $r6;
+        java.lang.Object $r2;
+        com.android.volley.misc.DiskLruCache $r3;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        $r2 = $r0.<com.android.volley.cache.DiskLruBasedCache: java.lang.Object mDiskCacheLock>;
+
+        entermonitor $r2;
+
+     label1:
+        $r3 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+     label2:
+        if $r3 == null goto label5;
+
+     label3:
+        $r3 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+     label4:
+        virtualinvoke $r3.<com.android.volley.misc.DiskLruCache: void flush()>();
+
+     label5:
+        exitmonitor $r2;
+
+     label6:
+        return;
+
+     label7:
+        $r1 := @caughtexception;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("flush - ");
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("DiskLruImageCache", $r5);
+
+        goto label5;
+
+     label8:
+        $r6 := @caughtexception;
+
+        exitmonitor $r2;
+
+     label9:
+        throw $r6;
+
+        catch java.lang.Throwable from label1 to label2 with label8;
+        catch java.io.IOException from label4 to label5 with label7;
+        catch java.lang.Throwable from label3 to label5 with label8;
+        catch java.lang.Throwable from label5 to label6 with label8;
+        catch java.lang.Throwable from label7 to label9 with label8;
+    }
+
+    public com.android.volley.Cache$Entry get(java.lang.String)
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+        java.lang.String $r1, $r4, varReplacer11879, varReplacer11883, varReplacer11884;
+        com.android.volley.misc.IOUtils$CountingInputStream $r2;
+        java.lang.Object $r3, $r5;
+        boolean $z0;
+        java.lang.Throwable $r6, $r15, $r16, $r21, $r22, $r23, $r24, $r25, $r26;
+        com.android.volley.misc.DiskLruCache $r7;
+        java.io.InputStream $r8, $r11;
+        java.io.File $r9;
+        com.android.volley.misc.DiskLruCache$Snapshot $r10;
+        com.android.volley.cache.DiskBasedCache$CacheHeader $r12;
+        long $l0, $l1;
+        int $i2, varReplacer11880;
+        byte[] $r13;
+        com.android.volley.Cache$Entry $r14;
+        java.lang.StringBuilder $r17;
+        java.lang.OutOfMemoryError $r18;
+        java.lang.Object[] $r19;
+        java.lang.Long $r20;
+        null_type varReplacer11878, varReplacer11881, varReplacer11882, varReplacer11885;
+
+        nop;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r4 = staticinvoke <com.android.volley.cache.DiskLruBasedCache: java.lang.String hashKeyForDisk(java.lang.String)>($r1);
+
+        if $r1 != null goto label01;
+
+        varReplacer11882 = null;
+
+        return varReplacer11882;
+
+     label01:
+        $r3 = $r0.<com.android.volley.cache.DiskLruBasedCache: java.lang.Object mDiskCacheLock>;
+
+        entermonitor $r3;
+
+     label02:
+        $z0 = $r0.<com.android.volley.cache.DiskLruBasedCache: boolean mDiskCacheStarting>;
+
+     label03:
+        if $z0 == 0 goto label08;
+
+     label04:
+        $r5 = $r0.<com.android.volley.cache.DiskLruBasedCache: java.lang.Object mDiskCacheLock>;
+
+     label05:
+        virtualinvoke $r5.<java.lang.Object: void wait()>();
+
+     label06:
+        goto label02;
+
+     label07:
+        $r6 := @caughtexception;
+
+        goto label02;
+
+     label08:
+        $r7 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+        if $r7 == null goto label26;
+
+        $r8 = null;
+
+        $r9 = virtualinvoke $r0.<com.android.volley.cache.DiskLruBasedCache: java.io.File getFileForKey(java.lang.String)>($r4);
+
+     label09:
+        $r7 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+     label10:
+        $r10 = virtualinvoke $r7.<com.android.volley.misc.DiskLruCache: com.android.volley.misc.DiskLruCache$Snapshot get(java.lang.String)>($r4);
+
+     label11:
+        if $r10 == null goto label24;
+
+     label12:
+        varReplacer11880 = 0;
+
+        $r11 = virtualinvoke $r10.<com.android.volley.misc.DiskLruCache$Snapshot: java.io.InputStream getInputStream(int)>(varReplacer11880);
+
+     label13:
+        $r8 = $r11;
+
+        if $r11 == null goto label24;
+
+     label14:
+        $r2 = new com.android.volley.misc.IOUtils$CountingInputStream;
+
+     label15:
+        specialinvoke $r2.<com.android.volley.misc.IOUtils$CountingInputStream: void <init>(java.io.InputStream)>($r11);
+
+        $r12 = staticinvoke <com.android.volley.cache.DiskBasedCache$CacheHeader: com.android.volley.cache.DiskBasedCache$CacheHeader readHeader(java.io.InputStream)>($r2);
+
+        $l0 = virtualinvoke $r9.<java.io.File: long length()>();
+
+        $l1 = virtualinvoke $r2.<com.android.volley.misc.IOUtils$CountingInputStream: long getBytesRead()>();
+
+     label16:
+        $l0 = $l0 - $l1;
+
+        $i2 = (int) $l0;
+
+     label17:
+        $r13 = staticinvoke <com.android.volley.misc.IOUtils: byte[] streamToBytes(java.io.InputStream,int)>($r2, $i2);
+
+        $r14 = virtualinvoke $r12.<com.android.volley.cache.DiskBasedCache$CacheHeader: com.android.volley.Cache$Entry toCacheEntry(byte[])>($r13);
+
+     label18:
+        if $r11 == null goto label20;
+
+     label19:
+        virtualinvoke $r11.<java.io.InputStream: void close()>();
+
+     label20:
+        exitmonitor $r3;
+
+     label21:
+        return $r14;
+
+     label22:
+        $r15 := @caughtexception;
+
+        exitmonitor $r3;
+
+     label23:
+        throw $r15;
+
+     label24:
+        if $r8 == null goto label26;
+
+     label25:
+        virtualinvoke $r8.<java.io.InputStream: void close()>();
+
+     label26:
+        exitmonitor $r3;
+
+     label27:
+        varReplacer11878 = null;
+
+        return varReplacer11878;
+
+     label28:
+        $r16 := @caughtexception;
+
+     label29:
+        virtualinvoke $r0.<com.android.volley.cache.DiskLruBasedCache: void remove(java.lang.String)>($r4);
+
+        $r17 = new java.lang.StringBuilder;
+
+        specialinvoke $r17.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer11884 = "getDiskLruBasedCache - ";
+
+        $r17 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer11884);
+
+        $r17 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r16);
+
+        $r1 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer11879 = "DiskLruImageCache";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer11879, $r1);
+
+     label30:
+        if $r8 == null goto label32;
+
+     label31:
+        virtualinvoke $r8.<java.io.InputStream: void close()>();
+
+     label32:
+        exitmonitor $r3;
+
+     label33:
+        varReplacer11881 = null;
+
+        return varReplacer11881;
+
+     label34:
+        $r18 := @caughtexception;
+
+     label35:
+        $r19 = newarray (java.lang.Object)[3];
+
+        $l0 = virtualinvoke $r9.<java.io.File: long length()>();
+
+        $r20 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        $r19[0] = $r20;
+
+        $r1 = virtualinvoke $r9.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $r19[1] = $r1;
+
+        $r1 = virtualinvoke $r18.<java.lang.OutOfMemoryError: java.lang.String toString()>();
+
+        $r19[2] = $r1;
+
+        varReplacer11883 = "Caught OOM for %d byte image, path=%s: %s";
+
+        staticinvoke <com.android.volley.VolleyLog: void e(java.lang.String,java.lang.Object[])>(varReplacer11883, $r19);
+
+     label36:
+        if $r8 == null goto label38;
+
+     label37:
+        virtualinvoke $r8.<java.io.InputStream: void close()>();
+
+     label38:
+        exitmonitor $r3;
+
+     label39:
+        varReplacer11885 = null;
+
+        return varReplacer11885;
+
+     label40:
+        $r21 := @caughtexception;
+
+        if $r8 == null goto label42;
+
+     label41:
+        virtualinvoke $r8.<java.io.InputStream: void close()>();
+
+     label42:
+        throw $r21;
+
+     label43:
+        $r22 := @caughtexception;
+
+        goto label20;
+
+     label44:
+        $r23 := @caughtexception;
+
+        goto label26;
+
+     label45:
+        $r24 := @caughtexception;
+
+        goto label32;
+
+     label46:
+        $r25 := @caughtexception;
+
+        goto label38;
+
+     label47:
+        $r26 := @caughtexception;
+
+        goto label42;
+
+        catch java.lang.Throwable from label02 to label03 with label22;
+        catch java.lang.InterruptedException from label05 to label06 with label07;
+        catch java.lang.Throwable from label04 to label06 with label22;
+        catch java.lang.Throwable from label08 to label09 with label22;
+        catch java.io.IOException from label10 to label11 with label28;
+        catch java.io.IOException from label12 to label13 with label28;
+        catch java.io.IOException from label15 to label16 with label28;
+        catch java.io.IOException from label17 to label18 with label28;
+        catch java.lang.OutOfMemoryError from label10 to label11 with label34;
+        catch java.lang.OutOfMemoryError from label12 to label13 with label34;
+        catch java.lang.OutOfMemoryError from label14 to label16 with label34;
+        catch java.lang.OutOfMemoryError from label17 to label18 with label34;
+        catch java.lang.Throwable from label09 to label18 with label40;
+        catch java.io.IOException from label19 to label20 with label43;
+        catch java.lang.Throwable from label19 to label20 with label22;
+        catch java.lang.Throwable from label20 to label21 with label22;
+        catch java.lang.Throwable from label22 to label23 with label22;
+        catch java.io.IOException from label25 to label26 with label44;
+        catch java.lang.Throwable from label25 to label26 with label22;
+        catch java.lang.Throwable from label26 to label27 with label22;
+        catch java.lang.Throwable from label29 to label30 with label40;
+        catch java.io.IOException from label31 to label32 with label45;
+        catch java.lang.Throwable from label31 to label32 with label22;
+        catch java.lang.Throwable from label32 to label33 with label22;
+        catch java.lang.Throwable from label35 to label36 with label40;
+        catch java.io.IOException from label37 to label38 with label46;
+        catch java.lang.Throwable from label37 to label38 with label22;
+        catch java.lang.Throwable from label38 to label39 with label22;
+        catch java.io.IOException from label41 to label42 with label47;
+        catch java.lang.Throwable from label41 to label42 with label22;
+        catch java.lang.Throwable from label42 to label43 with label22;
+    }
+
+    public android.graphics.Bitmap getBitmap(java.lang.String)
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+        java.lang.String $r1;
+        java.lang.Throwable $r2, $r6, $r15, $r16, $r17, $r18, $r19;
+        java.lang.Object $r3, $r5;
+        android.graphics.Bitmap $r4, $r13;
+        boolean $z0;
+        com.android.volley.misc.DiskLruCache $r7;
+        java.io.InputStream $r8, $r10;
+        com.android.volley.misc.DiskLruCache$Snapshot $r9;
+        java.io.FileInputStream $r11;
+        java.io.FileDescriptor $r12;
+        java.lang.StringBuilder $r14;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <com.android.volley.cache.DiskLruBasedCache: java.lang.String hashKeyForDisk(java.lang.String)>($r1);
+
+        $r4 = null;
+
+        $r3 = $r0.<com.android.volley.cache.DiskLruBasedCache: java.lang.Object mDiskCacheLock>;
+
+        entermonitor $r3;
+
+     label01:
+        $z0 = $r0.<com.android.volley.cache.DiskLruBasedCache: boolean mDiskCacheStarting>;
+
+     label02:
+        if $z0 == 0 goto label07;
+
+     label03:
+        $r5 = $r0.<com.android.volley.cache.DiskLruBasedCache: java.lang.Object mDiskCacheLock>;
+
+     label04:
+        virtualinvoke $r5.<java.lang.Object: void wait()>();
+
+     label05:
+        goto label01;
+
+     label06:
+        $r6 := @caughtexception;
+
+        goto label01;
+
+     label07:
+        $r7 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+     label08:
+        if $r7 == null goto label18;
+
+        $r8 = null;
+
+     label09:
+        $r7 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+     label10:
+        $r9 = virtualinvoke $r7.<com.android.volley.misc.DiskLruCache: com.android.volley.misc.DiskLruCache$Snapshot get(java.lang.String)>($r1);
+
+     label11:
+        if $r9 == null goto label16;
+
+     label12:
+        $r10 = virtualinvoke $r9.<com.android.volley.misc.DiskLruCache$Snapshot: java.io.InputStream getInputStream(int)>(0);
+
+     label13:
+        $r8 = $r10;
+
+        if $r10 == null goto label16;
+
+        $r11 = (java.io.FileInputStream) $r10;
+
+     label14:
+        $r12 = virtualinvoke $r11.<java.io.FileInputStream: java.io.FileDescriptor getFD()>();
+
+        $r13 = staticinvoke <com.android.volley.misc.ImageUtils: android.graphics.Bitmap decodeSampledBitmapFromDescriptor(java.io.FileDescriptor,int,int)>($r12, 2147483647, 2147483647);
+
+     label15:
+        $r4 = $r13;
+
+     label16:
+        if $r8 == null goto label18;
+
+     label17:
+        virtualinvoke $r8.<java.io.InputStream: void close()>();
+
+     label18:
+        exitmonitor $r3;
+
+     label19:
+        return $r4;
+
+     label20:
+        $r2 := @caughtexception;
+
+     label21:
+        $r14 = new java.lang.StringBuilder;
+
+        specialinvoke $r14.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("getBitmapFromDiskCache - ");
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r2);
+
+        $r1 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("DiskLruImageCache", $r1);
+
+     label22:
+        if $r8 == null goto label18;
+
+     label23:
+        virtualinvoke $r8.<java.io.InputStream: void close()>();
+
+     label24:
+        goto label18;
+
+     label25:
+        $r15 := @caughtexception;
+
+        goto label18;
+
+     label26:
+        $r16 := @caughtexception;
+
+        if $r8 == null goto label28;
+
+     label27:
+        virtualinvoke $r8.<java.io.InputStream: void close()>();
+
+     label28:
+        throw $r16;
+
+     label29:
+        $r17 := @caughtexception;
+
+        exitmonitor $r3;
+
+     label30:
+        throw $r17;
+
+     label31:
+        $r18 := @caughtexception;
+
+        goto label18;
+
+     label32:
+        $r19 := @caughtexception;
+
+        goto label28;
+
+        catch java.lang.Throwable from label01 to label02 with label29;
+        catch java.lang.InterruptedException from label04 to label05 with label06;
+        catch java.lang.Throwable from label03 to label05 with label29;
+        catch java.lang.Throwable from label07 to label08 with label29;
+        catch java.io.IOException from label10 to label11 with label20;
+        catch java.io.IOException from label12 to label13 with label20;
+        catch java.io.IOException from label14 to label15 with label20;
+        catch java.lang.Throwable from label09 to label15 with label26;
+        catch java.io.IOException from label17 to label18 with label31;
+        catch java.lang.Throwable from label17 to label18 with label29;
+        catch java.lang.Throwable from label18 to label19 with label29;
+        catch java.lang.Throwable from label21 to label22 with label26;
+        catch java.io.IOException from label23 to label24 with label25;
+        catch java.lang.Throwable from label23 to label24 with label29;
+        catch java.io.IOException from label27 to label28 with label32;
+        catch java.lang.Throwable from label27 to label28 with label29;
+        catch java.lang.Throwable from label28 to label30 with label29;
+    }
+
+    public java.io.File getCacheFolder()
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+        java.io.File $r1;
+        com.android.volley.misc.DiskLruCache $r2;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        $r2 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+        $r1 = virtualinvoke $r2.<com.android.volley.misc.DiskLruCache: java.io.File getDirectory()>();
+
+        return $r1;
+    }
+
+    public java.io.File getFileForKey(java.lang.String)
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+        java.lang.String $r1, varReplacer11895;
+        java.io.File $r2, $r4;
+        com.android.volley.cache.DiskLruBasedCache$ImageCacheParams $r3;
+        java.lang.StringBuilder $r5;
+
+        nop;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = new java.io.File;
+
+        $r3 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.cache.DiskLruBasedCache$ImageCacheParams mCacheParams>;
+
+        $r4 = $r3.<com.android.volley.cache.DiskLruBasedCache$ImageCacheParams: java.io.File diskCacheDir>;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer11895 = ".0";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer11895);
+
+        $r1 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<java.io.File: void <init>(java.io.File,java.lang.String)>($r4, $r1);
+
+        return $r2;
+    }
+
+    public void initDiskCache()
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+        java.io.File $r1;
+        java.lang.Throwable $r2, $r10;
+        java.lang.Object $r3, $r6;
+        com.android.volley.misc.DiskLruCache $r4;
+        boolean $z0;
+        com.android.volley.cache.DiskLruBasedCache$ImageCacheParams $r5;
+        long $l0, $l2;
+        int $i1, varReplacer11901, varReplacer11902, varReplacer11904;
+        byte $b3;
+        java.lang.StringBuilder $r7;
+        java.lang.String $r8, varReplacer11900;
+        java.lang.Object[] $r9;
+        null_type varReplacer11903;
+
+        nop;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        $r3 = $r0.<com.android.volley.cache.DiskLruBasedCache: java.lang.Object mDiskCacheLock>;
+
+        entermonitor $r3;
+
+     label01:
+        $r4 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+        if $r4 == null goto label02;
+
+        $r4 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+        $z0 = virtualinvoke $r4.<com.android.volley.misc.DiskLruCache: boolean isClosed()>();
+
+        if $z0 == 0 goto label08;
+
+     label02:
+        $r5 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.cache.DiskLruBasedCache$ImageCacheParams mCacheParams>;
+
+        $r1 = $r5.<com.android.volley.cache.DiskLruBasedCache$ImageCacheParams: java.io.File diskCacheDir>;
+
+        $r5 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.cache.DiskLruBasedCache$ImageCacheParams mCacheParams>;
+
+        $z0 = $r5.<com.android.volley.cache.DiskLruBasedCache$ImageCacheParams: boolean diskCacheEnabled>;
+
+        if $z0 == 0 goto label08;
+
+        if $r1 == null goto label08;
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label03;
+
+        virtualinvoke $r1.<java.io.File: boolean mkdirs()>();
+
+     label03:
+        $l0 = staticinvoke <com.android.volley.misc.Utils: long getUsableSpace(java.io.File)>($r1);
+
+        $r5 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.cache.DiskLruBasedCache$ImageCacheParams mCacheParams>;
+
+        $i1 = $r5.<com.android.volley.cache.DiskLruBasedCache$ImageCacheParams: int diskCacheSize>;
+
+     label04:
+        $l2 = (long) $i1;
+
+        $b3 = $l0 cmp $l2;
+
+        if $b3 <= 0 goto label08;
+
+     label05:
+        $r5 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.cache.DiskLruBasedCache$ImageCacheParams mCacheParams>;
+
+        $i1 = $r5.<com.android.volley.cache.DiskLruBasedCache$ImageCacheParams: int diskCacheSize>;
+
+        $l0 = (long) $i1;
+
+     label06:
+        varReplacer11901 = 1;
+
+        varReplacer11902 = 1;
+
+        $r4 = staticinvoke <com.android.volley.misc.DiskLruCache: com.android.volley.misc.DiskLruCache open(java.io.File,int,int,long)>($r1, varReplacer11901, varReplacer11901, $l0);
+
+     label07:
+        $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache> = $r4;
+
+     label08:
+        varReplacer11904 = 0;
+
+        $r0.<com.android.volley.cache.DiskLruBasedCache: boolean mDiskCacheStarting> = varReplacer11904;
+
+        $r6 = $r0.<com.android.volley.cache.DiskLruBasedCache: java.lang.Object mDiskCacheLock>;
+
+        virtualinvoke $r6.<java.lang.Object: void notifyAll()>();
+
+        exitmonitor $r3;
+
+     label09:
+        return;
+
+     label10:
+        $r2 := @caughtexception;
+
+        $r5 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.cache.DiskLruBasedCache$ImageCacheParams mCacheParams>;
+
+        varReplacer11903 = null;
+
+        $r5.<com.android.volley.cache.DiskLruBasedCache$ImageCacheParams: java.io.File diskCacheDir> = varReplacer11903;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer11900 = "initDiskCache - ";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer11900);
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r2);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r9 = newarray (java.lang.Object)[0];
+
+        staticinvoke <com.android.volley.VolleyLog: void e(java.lang.String,java.lang.Object[])>($r8, $r9);
+
+        goto label08;
+
+     label11:
+        $r10 := @caughtexception;
+
+        exitmonitor $r3;
+
+     label12:
+        throw $r10;
+
+        catch java.lang.Throwable from label01 to label04 with label11;
+        catch java.io.IOException from label06 to label07 with label10;
+        catch java.lang.Throwable from label05 to label08 with label11;
+        catch java.lang.Throwable from label08 to label09 with label11;
+        catch java.lang.Throwable from label10 to label12 with label11;
+    }
+
+    public void initialize()
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+
+        nop;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        virtualinvoke $r0.<com.android.volley.cache.DiskLruBasedCache: void initDiskCache()>();
+
+        return;
+    }
+
+    public void invalidate(java.lang.String, boolean)
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+        java.lang.String $r1;
+        boolean $z0;
+        com.android.volley.Cache$Entry $r2;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $z0 := @parameter1: boolean;
+
+        $r2 = virtualinvoke $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.Cache$Entry get(java.lang.String)>($r1);
+
+        if $r2 == null goto label2;
+
+        $r2.<com.android.volley.Cache$Entry: long softTtl> = -1L;
+
+        if $z0 == 0 goto label1;
+
+        $r2.<com.android.volley.Cache$Entry: long ttl> = -1L;
+
+     label1:
+        virtualinvoke $r0.<com.android.volley.cache.DiskLruBasedCache: void put(java.lang.String,com.android.volley.Cache$Entry)>($r1, $r2);
+
+     label2:
+        return;
+    }
+
+    public void put(java.lang.String, com.android.volley.Cache$Entry)
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+        java.lang.String $r1, varReplacer12007, varReplacer12008, varReplacer12010, varReplacer12011;
+        com.android.volley.Cache$Entry $r2;
+        java.lang.Object $r3;
+        com.android.volley.misc.DiskLruCache $r4;
+        java.io.OutputStream $r5, $r7;
+        com.android.volley.misc.DiskLruCache$Editor $r6;
+        com.android.volley.cache.DiskBasedCache$CacheHeader $r8;
+        byte[] $r9;
+        java.lang.Throwable $r10, $r11, $r13, $r15, $r16, $r17, $r18;
+        java.lang.StringBuilder $r12;
+        java.lang.Exception $r14;
+        int varReplacer12009;
+
+        nop;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: com.android.volley.Cache$Entry;
+
+        if $r1 == null goto label35;
+
+        if $r2 != null goto label01;
+
+        return;
+
+     label01:
+        $r3 = $r0.<com.android.volley.cache.DiskLruBasedCache: java.lang.Object mDiskCacheLock>;
+
+        entermonitor $r3;
+
+     label02:
+        $r4 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+        if $r4 == null goto label14;
+
+        $r1 = staticinvoke <com.android.volley.cache.DiskLruBasedCache: java.lang.String hashKeyForDisk(java.lang.String)>($r1);
+
+     label03:
+        $r5 = null;
+
+     label04:
+        $r4 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+     label05:
+        $r6 = virtualinvoke $r4.<com.android.volley.misc.DiskLruCache: com.android.volley.misc.DiskLruCache$Editor edit(java.lang.String)>($r1);
+
+     label06:
+        if $r6 == null goto label12;
+
+     label07:
+        varReplacer12009 = 0;
+
+        $r7 = virtualinvoke $r6.<com.android.volley.misc.DiskLruCache$Editor: java.io.OutputStream newOutputStream(int)>(varReplacer12009);
+
+     label08:
+        $r5 = $r7;
+
+        $r8 = new com.android.volley.cache.DiskBasedCache$CacheHeader;
+
+     label09:
+        specialinvoke $r8.<com.android.volley.cache.DiskBasedCache$CacheHeader: void <init>(java.lang.String,com.android.volley.Cache$Entry)>($r1, $r2);
+
+        virtualinvoke $r8.<com.android.volley.cache.DiskBasedCache$CacheHeader: boolean writeHeader(java.io.OutputStream)>($r7);
+
+     label10:
+        $r9 = $r2.<com.android.volley.Cache$Entry: byte[] data>;
+
+     label11:
+        virtualinvoke $r7.<java.io.OutputStream: void write(byte[])>($r9);
+
+        virtualinvoke $r6.<com.android.volley.misc.DiskLruCache$Editor: void commit()>();
+
+        virtualinvoke $r7.<java.io.OutputStream: void close()>();
+
+     label12:
+        if $r5 == null goto label14;
+
+     label13:
+        virtualinvoke $r5.<java.io.OutputStream: void close()>();
+
+     label14:
+        exitmonitor $r3;
+
+     label15:
+        return;
+
+     label16:
+        $r10 := @caughtexception;
+
+        exitmonitor $r3;
+
+     label17:
+        throw $r10;
+
+     label18:
+        $r11 := @caughtexception;
+
+     label19:
+        $r12 = new java.lang.StringBuilder;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer12010 = "putDiskLruBasedCache - ";
+
+        $r12 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer12010);
+
+        $r12 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r11);
+
+        $r1 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer12007 = "DiskLruImageCache";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer12007, $r1);
+
+     label20:
+        if $r5 == null goto label14;
+
+     label21:
+        virtualinvoke $r5.<java.io.OutputStream: void close()>();
+
+     label22:
+        goto label14;
+
+     label23:
+        $r13 := @caughtexception;
+
+        goto label14;
+
+     label24:
+        $r14 := @caughtexception;
+
+     label25:
+        $r12 = new java.lang.StringBuilder;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer12008 = "putDiskLruBasedCache - ";
+
+        $r12 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer12008);
+
+        $r12 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r14);
+
+        $r1 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer12011 = "DiskLruImageCache";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer12011, $r1);
+
+     label26:
+        if $r5 == null goto label14;
+
+     label27:
+        virtualinvoke $r5.<java.io.OutputStream: void close()>();
+
+     label28:
+        goto label14;
+
+     label29:
+        $r15 := @caughtexception;
+
+        goto label14;
+
+     label30:
+        $r16 := @caughtexception;
+
+        if $r5 == null goto label32;
+
+     label31:
+        virtualinvoke $r5.<java.io.OutputStream: void close()>();
+
+     label32:
+        throw $r16;
+
+     label33:
+        $r17 := @caughtexception;
+
+        goto label14;
+
+     label34:
+        $r18 := @caughtexception;
+
+        goto label32;
+
+     label35:
+        return;
+
+        catch java.lang.Throwable from label02 to label03 with label16;
+        catch java.io.IOException from label05 to label06 with label18;
+        catch java.io.IOException from label07 to label08 with label18;
+        catch java.io.IOException from label09 to label10 with label18;
+        catch java.io.IOException from label11 to label12 with label18;
+        catch java.lang.Exception from label04 to label06 with label24;
+        catch java.lang.Exception from label07 to label08 with label24;
+        catch java.lang.Exception from label09 to label12 with label24;
+        catch java.lang.Throwable from label04 to label12 with label30;
+        catch java.io.IOException from label13 to label14 with label33;
+        catch java.lang.Throwable from label13 to label14 with label16;
+        catch java.lang.Throwable from label14 to label15 with label16;
+        catch java.lang.Throwable from label16 to label17 with label16;
+        catch java.lang.Throwable from label19 to label20 with label30;
+        catch java.io.IOException from label21 to label22 with label23;
+        catch java.lang.Throwable from label21 to label22 with label16;
+        catch java.lang.Throwable from label25 to label26 with label30;
+        catch java.io.IOException from label27 to label28 with label29;
+        catch java.lang.Throwable from label27 to label28 with label16;
+        catch java.io.IOException from label31 to label32 with label34;
+        catch java.lang.Throwable from label31 to label32 with label16;
+        catch java.lang.Throwable from label32 to label33 with label16;
+    }
+
+    public void putBitmap(java.lang.String, android.graphics.Bitmap)
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+        java.lang.String $r1;
+        android.graphics.Bitmap $r2;
+        java.lang.Object $r3;
+        com.android.volley.misc.DiskLruCache $r4;
+        java.io.OutputStream $r5, $r8;
+        com.android.volley.misc.DiskLruCache$Snapshot $r6;
+        com.android.volley.misc.DiskLruCache$Editor $r7;
+        com.android.volley.cache.DiskLruBasedCache$ImageCacheParams $r9;
+        android.graphics.Bitmap$CompressFormat $r10;
+        int $i0;
+        java.lang.Throwable $r11, $r13, $r15, $r17, $r18, $r19, $r20;
+        java.io.InputStream $r12;
+        java.lang.StringBuilder $r14;
+        java.lang.Exception $r16;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: android.graphics.Bitmap;
+
+        if $r1 == null goto label39;
+
+        if $r2 != null goto label01;
+
+        return;
+
+     label01:
+        $r3 = $r0.<com.android.volley.cache.DiskLruBasedCache: java.lang.Object mDiskCacheLock>;
+
+        entermonitor $r3;
+
+     label02:
+        $r4 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+        if $r4 == null goto label16;
+
+        $r1 = staticinvoke <com.android.volley.cache.DiskLruBasedCache: java.lang.String hashKeyForDisk(java.lang.String)>($r1);
+
+     label03:
+        $r5 = null;
+
+     label04:
+        $r4 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+     label05:
+        $r6 = virtualinvoke $r4.<com.android.volley.misc.DiskLruCache: com.android.volley.misc.DiskLruCache$Snapshot get(java.lang.String)>($r1);
+
+     label06:
+        if $r6 != null goto label20;
+
+     label07:
+        $r4 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+     label08:
+        $r7 = virtualinvoke $r4.<com.android.volley.misc.DiskLruCache: com.android.volley.misc.DiskLruCache$Editor edit(java.lang.String)>($r1);
+
+     label09:
+        if $r7 == null goto label14;
+
+     label10:
+        $r8 = virtualinvoke $r7.<com.android.volley.misc.DiskLruCache$Editor: java.io.OutputStream newOutputStream(int)>(0);
+
+     label11:
+        $r5 = $r8;
+
+     label12:
+        $r9 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.cache.DiskLruBasedCache$ImageCacheParams mCacheParams>;
+
+        $r10 = $r9.<com.android.volley.cache.DiskLruBasedCache$ImageCacheParams: android.graphics.Bitmap$CompressFormat compressFormat>;
+
+        $r9 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.cache.DiskLruBasedCache$ImageCacheParams mCacheParams>;
+
+        $i0 = $r9.<com.android.volley.cache.DiskLruBasedCache$ImageCacheParams: int compressQuality>;
+
+     label13:
+        virtualinvoke $r2.<android.graphics.Bitmap: boolean compress(android.graphics.Bitmap$CompressFormat,int,java.io.OutputStream)>($r10, $i0, $r8);
+
+        virtualinvoke $r7.<com.android.volley.misc.DiskLruCache$Editor: void commit()>();
+
+        virtualinvoke $r8.<java.io.OutputStream: void close()>();
+
+     label14:
+        if $r5 == null goto label16;
+
+     label15:
+        virtualinvoke $r5.<java.io.OutputStream: void close()>();
+
+     label16:
+        exitmonitor $r3;
+
+     label17:
+        return;
+
+     label18:
+        $r11 := @caughtexception;
+
+        exitmonitor $r3;
+
+     label19:
+        throw $r11;
+
+     label20:
+        $r12 = virtualinvoke $r6.<com.android.volley.misc.DiskLruCache$Snapshot: java.io.InputStream getInputStream(int)>(0);
+
+        virtualinvoke $r12.<java.io.InputStream: void close()>();
+
+     label21:
+        goto label14;
+
+     label22:
+        $r13 := @caughtexception;
+
+     label23:
+        $r14 = new java.lang.StringBuilder;
+
+        specialinvoke $r14.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("addBitmapToCache - ");
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r13);
+
+        $r1 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("DiskLruImageCache", $r1);
+
+     label24:
+        if $r5 == null goto label16;
+
+     label25:
+        virtualinvoke $r5.<java.io.OutputStream: void close()>();
+
+     label26:
+        goto label16;
+
+     label27:
+        $r15 := @caughtexception;
+
+        goto label16;
+
+     label28:
+        $r16 := @caughtexception;
+
+     label29:
+        $r14 = new java.lang.StringBuilder;
+
+        specialinvoke $r14.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("addBitmapToCache - ");
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r16);
+
+        $r1 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>("DiskLruImageCache", $r1);
+
+     label30:
+        if $r5 == null goto label16;
+
+     label31:
+        virtualinvoke $r5.<java.io.OutputStream: void close()>();
+
+     label32:
+        goto label16;
+
+     label33:
+        $r17 := @caughtexception;
+
+        goto label16;
+
+     label34:
+        $r18 := @caughtexception;
+
+        if $r5 == null goto label36;
+
+     label35:
+        virtualinvoke $r5.<java.io.OutputStream: void close()>();
+
+     label36:
+        throw $r18;
+
+     label37:
+        $r19 := @caughtexception;
+
+        goto label16;
+
+     label38:
+        $r20 := @caughtexception;
+
+        goto label36;
+
+     label39:
+        return;
+
+        catch java.lang.Throwable from label02 to label03 with label18;
+        catch java.io.IOException from label05 to label06 with label22;
+        catch java.io.IOException from label08 to label09 with label22;
+        catch java.io.IOException from label10 to label11 with label22;
+        catch java.io.IOException from label13 to label14 with label22;
+        catch java.lang.Exception from label04 to label06 with label28;
+        catch java.lang.Exception from label07 to label09 with label28;
+        catch java.lang.Exception from label10 to label11 with label28;
+        catch java.lang.Exception from label12 to label14 with label28;
+        catch java.lang.Throwable from label04 to label14 with label34;
+        catch java.io.IOException from label15 to label16 with label37;
+        catch java.lang.Throwable from label15 to label16 with label18;
+        catch java.lang.Throwable from label16 to label17 with label18;
+        catch java.lang.Throwable from label18 to label19 with label18;
+        catch java.io.IOException from label20 to label21 with label22;
+        catch java.lang.Exception from label20 to label21 with label28;
+        catch java.lang.Throwable from label20 to label21 with label34;
+        catch java.lang.Throwable from label23 to label24 with label34;
+        catch java.io.IOException from label25 to label26 with label27;
+        catch java.lang.Throwable from label25 to label26 with label18;
+        catch java.lang.Throwable from label29 to label30 with label34;
+        catch java.io.IOException from label31 to label32 with label33;
+        catch java.lang.Throwable from label31 to label32 with label18;
+        catch java.io.IOException from label35 to label36 with label38;
+        catch java.lang.Throwable from label35 to label36 with label18;
+        catch java.lang.Throwable from label36 to label37 with label18;
+    }
+
+    public void remove(java.lang.String)
+    {
+        com.android.volley.cache.DiskLruBasedCache $r0;
+        java.lang.String $r1, varReplacer11896, varReplacer11897, varReplacer11898, varReplacer11899;
+        java.lang.Object $r2;
+        com.android.volley.misc.DiskLruCache $r3;
+        java.lang.Throwable $r4, $r5;
+        java.lang.StringBuilder $r6;
+        java.lang.Exception $r7;
+
+        nop;
+
+        $r0 := @this: com.android.volley.cache.DiskLruBasedCache;
+
+        $r1 := @parameter0: java.lang.String;
+
+        if $r1 != null goto label01;
+
+        return;
+
+     label01:
+        $r2 = $r0.<com.android.volley.cache.DiskLruBasedCache: java.lang.Object mDiskCacheLock>;
+
+        entermonitor $r2;
+
+     label02:
+        $r3 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+        if $r3 == null goto label05;
+
+        $r1 = staticinvoke <com.android.volley.cache.DiskLruBasedCache: java.lang.String hashKeyForDisk(java.lang.String)>($r1);
+
+     label03:
+        $r3 = $r0.<com.android.volley.cache.DiskLruBasedCache: com.android.volley.misc.DiskLruCache mDiskLruCache>;
+
+     label04:
+        virtualinvoke $r3.<com.android.volley.misc.DiskLruCache: boolean remove(java.lang.String)>($r1);
+
+     label05:
+        exitmonitor $r2;
+
+     label06:
+        return;
+
+     label07:
+        $r4 := @caughtexception;
+
+        exitmonitor $r2;
+
+     label08:
+        throw $r4;
+
+     label09:
+        $r5 := @caughtexception;
+
+     label10:
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer11897 = "removeDiskLruBasedCache - ";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer11897);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r5);
+
+        $r1 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer11896 = "DiskLruImageCache";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer11896, $r1);
+
+        goto label05;
+
+     label11:
+        $r7 := @caughtexception;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer11898 = "removeDiskLruBasedCache - ";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer11898);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r7);
+
+        $r1 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer11899 = "DiskLruImageCache";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer11899, $r1);
+
+     label12:
+        goto label05;
+
+        catch java.lang.Throwable from label02 to label03 with label07;
+        catch java.io.IOException from label04 to label05 with label09;
+        catch java.lang.Exception from label03 to label05 with label11;
+        catch java.lang.Throwable from label03 to label05 with label07;
+        catch java.lang.Throwable from label05 to label06 with label07;
+        catch java.lang.Throwable from label07 to label08 with label07;
+        catch java.lang.Throwable from label10 to label12 with label07;
+    }
+}

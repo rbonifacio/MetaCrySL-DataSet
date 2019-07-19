@@ -1,0 +1,2831 @@
+public class com.narvii.account.LoginActivity extends com.narvii.app.NVActivity
+{
+    static final int JOIN_REQUEST;
+    public static final int NOTIFY_ID;
+    float[] accMax;
+    float[] accMin;
+    com.narvii.account.AccountService account;
+    com.narvii.widget.BlurImageView blurImageView;
+    private float density;
+    android.view.animation.Animation fadeIn;
+    android.view.animation.Animation fadeOut;
+    com.narvii.widget.Flipper flipper;
+    private com.narvii.widget.Flipper$FlipperAdapter flipperAdapter;
+    private com.narvii.widget.Flipper$OnFlipperScrollListener flipperScrollListener;
+    private int[] gradientColors1;
+    private int[] gradientColors2;
+    com.narvii.account.GradientView gradientView;
+    float[] gyoMax;
+    float[] gyoMin;
+    private int ic;
+    boolean joiningCommunity;
+    int lastErrorCode;
+    java.lang.String lastErrorMsg;
+    float[] lightMax;
+    float[] lightMin;
+    private android.hardware.SensorManager mSensorManager;
+    int maxLoginStep;
+    int maxSignupStep;
+    private int mc;
+    private java.security.MessageDigest md;
+    android.view.View overlayView;
+    private final android.content.BroadcastReceiver receiver;
+    private final java.lang.Runnable scheduleSignupWakeup;
+    private android.hardware.SensorEventListener sel;
+    boolean signupWakeup;
+    boolean startingActivity;
+    com.narvii.account.LoginBaseFragment submittingFragment;
+    private int ut;
+    public android.content.Intent ipcIntent;
+    public android.content.Intent ipcResultIntent;
+
+    public void <init>()
+    {
+        com.narvii.account.LoginActivity $r0;
+        com.narvii.account.LoginActivity$2 $r1;
+        com.narvii.account.LoginActivity$3 $r2;
+        int[] $r3;
+        com.narvii.account.LoginActivity$4 $r4;
+        com.narvii.account.LoginActivity$5 $r5;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        specialinvoke $r0.<com.narvii.app.NVActivity: void <init>()>();
+
+        $r1 = new com.narvii.account.LoginActivity$2;
+
+        specialinvoke $r1.<com.narvii.account.LoginActivity$2: void <init>(com.narvii.account.LoginActivity)>($r0);
+
+        $r0.<com.narvii.account.LoginActivity: java.lang.Runnable scheduleSignupWakeup> = $r1;
+
+        $r2 = new com.narvii.account.LoginActivity$3;
+
+        specialinvoke $r2.<com.narvii.account.LoginActivity$3: void <init>(com.narvii.account.LoginActivity)>($r0);
+
+        $r0.<com.narvii.account.LoginActivity: android.content.BroadcastReceiver receiver> = $r2;
+
+        $r3 = newarray (int)[4];
+
+        $r3[0] = -228545;
+
+        $r3[1] = -3274201;
+
+        $r3[2] = -13622354;
+
+        $r3[3] = -12414175;
+
+        $r0.<com.narvii.account.LoginActivity: int[] gradientColors1> = $r3;
+
+        $r3 = newarray (int)[4];
+
+        $r3[0] = -734669;
+
+        $r3[1] = -700065;
+
+        $r3[2] = -3641897;
+
+        $r3[3] = -7351274;
+
+        $r0.<com.narvii.account.LoginActivity: int[] gradientColors2> = $r3;
+
+        $r4 = new com.narvii.account.LoginActivity$4;
+
+        specialinvoke $r4.<com.narvii.account.LoginActivity$4: void <init>(com.narvii.account.LoginActivity)>($r0);
+
+        $r0.<com.narvii.account.LoginActivity: com.narvii.widget.Flipper$OnFlipperScrollListener flipperScrollListener> = $r4;
+
+        $r5 = new com.narvii.account.LoginActivity$5;
+
+        specialinvoke $r5.<com.narvii.account.LoginActivity$5: void <init>(com.narvii.account.LoginActivity)>($r0);
+
+        $r0.<com.narvii.account.LoginActivity: com.narvii.widget.Flipper$FlipperAdapter flipperAdapter> = $r5;
+
+        return;
+    }
+
+    static com.narvii.widget.Flipper$FlipperAdapter access$000(com.narvii.account.LoginActivity)
+    {
+        com.narvii.account.LoginActivity $r0;
+        com.narvii.widget.Flipper$FlipperAdapter r1;
+
+        nop;
+
+        $r0 := @parameter0: com.narvii.account.LoginActivity;
+
+        r1 = $r0.<com.narvii.account.LoginActivity: com.narvii.widget.Flipper$FlipperAdapter flipperAdapter>;
+
+        return r1;
+    }
+
+    private byte[] getIds(int)
+    {
+        com.narvii.account.LoginActivity $r0;
+        int $i0, $i1, $i2;
+        java.lang.String[] $r1;
+        byte[] $r2, $r7;
+        java.lang.String $r3;
+        android.content.Intent $r4;
+        java.security.MessageDigest $r5;
+        java.lang.StringBuilder $r6;
+        java.io.FileInputStream $r8;
+        java.lang.Exception $r9;
+        boolean $z0;
+        android.content.pm.PackageManager $r10;
+        java.util.List $r11;
+        java.util.Iterator $r12;
+        java.lang.Object $r13;
+        android.content.pm.ResolveInfo $r14;
+        android.content.pm.ActivityInfo $r15;
+        android.content.pm.ApplicationInfo $r16;
+        android.content.ContentResolver $r17;
+        android.net.Uri $r18;
+        android.database.Cursor $r19;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $i0 := @parameter0: int;
+
+        lookupswitch($i0)
+        {
+            case 2: goto label02;
+            case 3: goto label33;
+            case 4: goto label51;
+            case 5: goto label64;
+            default: goto label01;
+        };
+
+     label01:
+        return null;
+
+     label02:
+        $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("SHA-1");
+
+        $r2 = newarray (byte)[4096];
+
+     label03:
+        $r6 = new java.lang.StringBuilder;
+
+     label04:
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+     label05:
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+     label06:
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+     label07:
+        $r3 = <android.os.Build$VERSION: java.lang.String RELEASE>;
+
+     label08:
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+     label09:
+        $r3 = <android.os.Build$VERSION: java.lang.String INCREMENTAL>;
+
+     label10:
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r7 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r5.<java.security.MessageDigest: void update(byte[])>($r7);
+
+        $r1 = newarray (java.lang.String)[3];
+
+        $r1[0] = "/proc/cpuinfo";
+
+        $r1[1] = "/proc/partitions";
+
+        $r1[2] = "/proc/version";
+
+        $i0 = lengthof $r1;
+
+     label11:
+        $i1 = 0;
+
+     label12:
+        if $i1 >= $i0 goto label23;
+
+     label13:
+        $r3 = $r1[$i1];
+
+     label14:
+        $r8 = new java.io.FileInputStream;
+
+     label15:
+        specialinvoke $r8.<java.io.FileInputStream: void <init>(java.lang.String)>($r3);
+
+     label16:
+        $i2 = virtualinvoke $r8.<java.io.FileInputStream: int read(byte[])>($r2);
+
+     label17:
+        if $i2 == -1 goto label21;
+
+     label18:
+        virtualinvoke $r5.<java.security.MessageDigest: void update(byte[],int,int)>($r2, 0, $i2);
+
+     label19:
+        goto label16;
+
+     label20:
+        $r9 := @caughtexception;
+
+        goto label01;
+
+     label21:
+        virtualinvoke $r8.<java.io.FileInputStream: void close()>();
+
+     label22:
+        $i1 = $i1 + 1;
+
+        goto label12;
+
+     label23:
+        $r8 = new java.io.FileInputStream;
+
+     label24:
+        specialinvoke $r8.<java.io.FileInputStream: void <init>(java.lang.String)>("/proc/meminfo");
+
+        $i0 = virtualinvoke $r8.<java.io.FileInputStream: int read(byte[])>($r2);
+
+        virtualinvoke $r8.<java.io.FileInputStream: void close()>();
+
+     label25:
+        $r3 = new java.lang.String;
+
+     label26:
+        specialinvoke $r3.<java.lang.String: void <init>(byte[],int,int)>($r2, 0, $i0);
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean startsWith(java.lang.String)>("MemTotal:");
+
+     label27:
+        if $z0 == 0 goto label31;
+
+     label28:
+        $i0 = virtualinvoke $r3.<java.lang.String: int indexOf(int)>(10);
+
+     label29:
+        if $i0 == -1 goto label31;
+
+     label30:
+        $r3 = virtualinvoke $r3.<java.lang.String: java.lang.String substring(int,int)>(0, $i0);
+
+        $r2 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r5.<java.security.MessageDigest: void update(byte[])>($r2);
+
+     label31:
+        $r2 = virtualinvoke $r5.<java.security.MessageDigest: byte[] digest()>();
+
+     label32:
+        return $r2;
+
+     label33:
+        $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("SHA-1");
+
+        $r10 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.content.pm.PackageManager getPackageManager()>();
+
+        $r11 = virtualinvoke $r10.<android.content.pm.PackageManager: java.util.List getInstalledApplications(int)>(128);
+
+        $i0 = interfaceinvoke $r11.<java.util.List: int size()>();
+
+     label34:
+        if $i0 >= 16 goto label44;
+
+        $r4 = new android.content.Intent;
+
+     label35:
+        specialinvoke $r4.<android.content.Intent: void <init>(java.lang.String)>("android.intent.action.MAIN");
+
+        $r11 = virtualinvoke $r10.<android.content.pm.PackageManager: java.util.List queryIntentActivities(android.content.Intent,int)>($r4, 131072);
+
+        $r12 = interfaceinvoke $r11.<java.util.List: java.util.Iterator iterator()>();
+
+     label36:
+        $z0 = interfaceinvoke $r12.<java.util.Iterator: boolean hasNext()>();
+
+     label37:
+        if $z0 == 0 goto label49;
+
+     label38:
+        $r13 = interfaceinvoke $r12.<java.util.Iterator: java.lang.Object next()>();
+
+        $r14 = (android.content.pm.ResolveInfo) $r13;
+
+        $r15 = $r14.<android.content.pm.ResolveInfo: android.content.pm.ActivityInfo activityInfo>;
+
+     label39:
+        if $r15 != null goto label42;
+
+        $r3 = null;
+
+     label40:
+        $r2 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r5.<java.security.MessageDigest: void update(byte[])>($r2);
+
+     label41:
+        goto label36;
+
+     label42:
+        $r15 = $r14.<android.content.pm.ResolveInfo: android.content.pm.ActivityInfo activityInfo>;
+
+        $r3 = $r15.<android.content.pm.ActivityInfo: java.lang.String packageName>;
+
+     label43:
+        goto label40;
+
+     label44:
+        $r12 = interfaceinvoke $r11.<java.util.List: java.util.Iterator iterator()>();
+
+     label45:
+        $z0 = interfaceinvoke $r12.<java.util.Iterator: boolean hasNext()>();
+
+     label46:
+        if $z0 == 0 goto label49;
+
+     label47:
+        $r13 = interfaceinvoke $r12.<java.util.Iterator: java.lang.Object next()>();
+
+        $r16 = (android.content.pm.ApplicationInfo) $r13;
+
+        $r3 = $r16.<android.content.pm.ApplicationInfo: java.lang.String packageName>;
+
+        $r2 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r5.<java.security.MessageDigest: void update(byte[])>($r2);
+
+     label48:
+        goto label45;
+
+     label49:
+        $r2 = virtualinvoke $r5.<java.security.MessageDigest: byte[] digest()>();
+
+     label50:
+        return $r2;
+
+     label51:
+        $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("SHA-1");
+
+        $r1 = newarray (java.lang.String)[3];
+
+        $r1[0] = "_data";
+
+        $r1[1] = "width";
+
+        $r1[2] = "height";
+
+        $r17 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.content.ContentResolver getContentResolver()>();
+
+     label52:
+        $r18 = <android.provider.MediaStore$Images$Media: android.net.Uri EXTERNAL_CONTENT_URI>;
+
+     label53:
+        $r19 = virtualinvoke $r17.<android.content.ContentResolver: android.database.Cursor query(android.net.Uri,java.lang.String[],java.lang.String,java.lang.String[],java.lang.String)>($r18, $r1, null, null, null);
+
+        $i0 = interfaceinvoke $r19.<android.database.Cursor: int getCount()>();
+
+        $r0.<com.narvii.account.LoginActivity: int ic> = $i0;
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+        $r2 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r5.<java.security.MessageDigest: void update(byte[])>($r2);
+
+     label54:
+        if $r19 == null goto label62;
+
+     label55:
+        $z0 = interfaceinvoke $r19.<android.database.Cursor: boolean moveToLast()>();
+
+     label56:
+        if $z0 == 0 goto label62;
+
+        $i0 = 0;
+
+     label57:
+        $r6 = new java.lang.StringBuilder;
+
+     label58:
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = interfaceinvoke $r19.<android.database.Cursor: java.lang.String getString(int)>(0);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $i1 = interfaceinvoke $r19.<android.database.Cursor: int getInt(int)>(1);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $i1 = interfaceinvoke $r19.<android.database.Cursor: int getInt(int)>(2);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r3 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r2 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r5.<java.security.MessageDigest: void update(byte[])>($r2);
+
+     label59:
+        $i0 = $i0 + 1;
+
+        if $i0 >= 16 goto label62;
+
+     label60:
+        $z0 = interfaceinvoke $r19.<android.database.Cursor: boolean moveToPrevious()>();
+
+     label61:
+        if $z0 != 0 goto label57;
+
+     label62:
+        interfaceinvoke $r19.<android.database.Cursor: void close()>();
+
+        $r2 = virtualinvoke $r5.<java.security.MessageDigest: byte[] digest()>();
+
+     label63:
+        return $r2;
+
+     label64:
+        $r5 = $r0.<com.narvii.account.LoginActivity: java.security.MessageDigest md>;
+
+        $r2 = virtualinvoke $r5.<java.security.MessageDigest: byte[] digest()>();
+
+     label65:
+        return $r2;
+
+        catch java.lang.Exception from label02 to label03 with label20;
+        catch java.lang.Exception from label04 to label05 with label20;
+        catch java.lang.Exception from label06 to label07 with label20;
+        catch java.lang.Exception from label08 to label09 with label20;
+        catch java.lang.Exception from label10 to label11 with label20;
+        catch java.lang.Exception from label13 to label14 with label20;
+        catch java.lang.Exception from label15 to label17 with label20;
+        catch java.lang.Exception from label18 to label19 with label20;
+        catch java.lang.Exception from label21 to label22 with label20;
+        catch java.lang.Exception from label24 to label25 with label20;
+        catch java.lang.Exception from label26 to label27 with label20;
+        catch java.lang.Exception from label28 to label29 with label20;
+        catch java.lang.Exception from label30 to label32 with label20;
+        catch java.lang.Exception from label33 to label34 with label20;
+        catch java.lang.Exception from label35 to label37 with label20;
+        catch java.lang.Exception from label38 to label39 with label20;
+        catch java.lang.Exception from label40 to label41 with label20;
+        catch java.lang.Exception from label42 to label43 with label20;
+        catch java.lang.Exception from label44 to label46 with label20;
+        catch java.lang.Exception from label47 to label48 with label20;
+        catch java.lang.Exception from label49 to label50 with label20;
+        catch java.lang.Exception from label51 to label52 with label20;
+        catch java.lang.Exception from label53 to label54 with label20;
+        catch java.lang.Exception from label55 to label56 with label20;
+        catch java.lang.Exception from label58 to label59 with label20;
+        catch java.lang.Exception from label60 to label61 with label20;
+        catch java.lang.Exception from label62 to label63 with label20;
+        catch java.lang.Exception from label64 to label65 with label20;
+    }
+
+    private int[] getVals()
+    {
+        com.narvii.account.LoginActivity $r0;
+        int $i0, $i2, $i3, $i4;
+        float $f0, $f1, $f2, $f3;
+        float[] $r1;
+        byte $b1;
+        android.content.pm.PackageManager $r2;
+        boolean $z0;
+        android.content.IntentFilter $r3;
+        android.content.Intent $r4;
+        int[] $r5;
+        java.lang.Exception $r6;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $i0 = 0;
+
+        $f0 = 0.0F;
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: float[] lightMin>;
+
+        if $r1 == null goto label03;
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: float[] lightMax>;
+
+        if $r1 == null goto label03;
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: float[] lightMax>;
+
+        $f0 = $r1[0];
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: float[] lightMin>;
+
+        $f1 = $r1[0];
+
+        $f0 = $f0 - $f1;
+
+        $b1 = $f0 cmpl 0.0F;
+
+        if $b1 != 0 goto label06;
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: float[] lightMax>;
+
+        $f0 = $r1[0];
+
+        $b1 = $f0 cmpl 0.0F;
+
+        if $b1 != 0 goto label05;
+
+        $f0 = -20.0F;
+
+     label01:
+        $i0 = 2;
+
+     label02:
+        $f0 = 0.0F + $f0;
+
+     label03:
+        $r1 = $r0.<com.narvii.account.LoginActivity: float[] accMin>;
+
+        if $r1 == null goto label09;
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: float[] accMax>;
+
+        if $r1 == null goto label09;
+
+        $f1 = 0.0F;
+
+        $i2 = 0;
+
+     label04:
+        $r1 = $r0.<com.narvii.account.LoginActivity: float[] accMax>;
+
+        $i3 = lengthof $r1;
+
+        if $i2 >= $i3 goto label07;
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: float[] accMax>;
+
+        $f2 = $r1[$i2];
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: float[] accMin>;
+
+        $f3 = $r1[$i2];
+
+        $f2 = $f2 - $f3;
+
+        $f1 = $f1 + $f2;
+
+        $i2 = $i2 + 1;
+
+        goto label04;
+
+     label05:
+        $f0 = -5.0F;
+
+        goto label01;
+
+     label06:
+        $f0 = 1.0F * $f0;
+
+        $f1 = staticinvoke <java.lang.Math: float min(float,float)>(15.0F, $f0);
+
+        $f0 = $f1;
+
+        $b1 = $f1 cmpg 15.0F;
+
+        if $b1 >= 0 goto label02;
+
+        $i0 = 4;
+
+        goto label02;
+
+     label07:
+        $b1 = $f1 cmpl 0.0F;
+
+        if $b1 != 0 goto label11;
+
+        $f1 = -30.0F;
+
+        $i0 = $i0 | 8;
+
+     label08:
+        $f0 = $f0 + $f1;
+
+     label09:
+        $r1 = $r0.<com.narvii.account.LoginActivity: float[] gyoMin>;
+
+        if $r1 == null goto label14;
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: float[] gyoMax>;
+
+        if $r1 == null goto label14;
+
+        $f1 = 0.0F;
+
+        $i2 = 0;
+
+     label10:
+        $r1 = $r0.<com.narvii.account.LoginActivity: float[] gyoMax>;
+
+        $i3 = lengthof $r1;
+
+        if $i2 >= $i3 goto label12;
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: float[] gyoMax>;
+
+        $f2 = $r1[$i2];
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: float[] gyoMin>;
+
+        $f3 = $r1[$i2];
+
+        $f2 = $f2 - $f3;
+
+        $f1 = $f1 + $f2;
+
+        $i2 = $i2 + 1;
+
+        goto label10;
+
+     label11:
+        $f1 = 3.0F * $f1;
+
+        $f2 = staticinvoke <java.lang.Math: float min(float,float)>(30.0F, $f1);
+
+        $f1 = $f2;
+
+        $b1 = $f2 cmpg 30.0F;
+
+        if $b1 >= 0 goto label08;
+
+        $i0 = $i0 | 16;
+
+        goto label08;
+
+     label12:
+        $b1 = $f1 cmpl 0.0F;
+
+        if $b1 != 0 goto label33;
+
+        $f1 = -10.0F;
+
+        $i0 = $i0 | 32;
+
+     label13:
+        $f0 = $f0 + $f1;
+
+     label14:
+        $r2 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.content.pm.PackageManager getPackageManager()>();
+
+        $z0 = virtualinvoke $r2.<android.content.pm.PackageManager: boolean hasSystemFeature(java.lang.String)>("android.hardware.bluetooth");
+
+        if $z0 == 0 goto label34;
+
+        $f0 = $f0 + 10.0F;
+
+     label15:
+        $z0 = virtualinvoke $r2.<android.content.pm.PackageManager: boolean hasSystemFeature(java.lang.String)>("android.hardware.bluetooth_le");
+
+        if $z0 == 0 goto label35;
+
+        $f0 = $f0 + 5.0F;
+
+     label16:
+        $z0 = virtualinvoke $r2.<android.content.pm.PackageManager: boolean hasSystemFeature(java.lang.String)>("android.hardware.camera.autofocus");
+
+        if $z0 == 0 goto label36;
+
+        $f0 = $f0 + 10.0F;
+
+     label17:
+        $z0 = virtualinvoke $r2.<android.content.pm.PackageManager: boolean hasSystemFeature(java.lang.String)>("android.hardware.camera.flash");
+
+        if $z0 == 0 goto label37;
+
+        $f0 = $f0 + 10.0F;
+
+     label18:
+        $z0 = virtualinvoke $r2.<android.content.pm.PackageManager: boolean hasSystemFeature(java.lang.String)>("android.hardware.sensor.barometer");
+
+        if $z0 == 0 goto label38;
+
+        $f0 = $f0 + 5.0F;
+
+     label19:
+        $z0 = virtualinvoke $r2.<android.content.pm.PackageManager: boolean hasSystemFeature(java.lang.String)>("android.hardware.sensor.compass");
+
+        if $z0 == 0 goto label39;
+
+        $f0 = $f0 + 10.0F;
+
+     label20:
+        $z0 = virtualinvoke $r2.<android.content.pm.PackageManager: boolean hasSystemFeature(java.lang.String)>("android.hardware.sensor.gyroscope");
+
+        if $z0 == 0 goto label40;
+
+        $f0 = $f0 + 10.0F;
+
+     label21:
+        $z0 = virtualinvoke $r2.<android.content.pm.PackageManager: boolean hasSystemFeature(java.lang.String)>("android.hardware.sensor.light");
+
+        if $z0 == 0 goto label41;
+
+        $f0 = $f0 + 10.0F;
+
+     label22:
+        $z0 = virtualinvoke $r2.<android.content.pm.PackageManager: boolean hasSystemFeature(java.lang.String)>("android.hardware.sensor.proximity");
+
+        if $z0 == 0 goto label42;
+
+        $f0 = $f0 + 5.0F;
+
+     label23:
+        $i2 = -1;
+
+        $i3 = -1;
+
+        $r3 = new android.content.IntentFilter;
+
+     label24:
+        specialinvoke $r3.<android.content.IntentFilter: void <init>(java.lang.String)>("android.intent.action.BATTERY_CHANGED");
+
+        $r4 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.content.Intent registerReceiver(android.content.BroadcastReceiver,android.content.IntentFilter)>(null, $r3);
+
+        $i4 = virtualinvoke $r4.<android.content.Intent: int getIntExtra(java.lang.String,int)>("level", -1);
+
+     label25:
+        $i2 = $i4;
+
+     label26:
+        $i4 = virtualinvoke $r4.<android.content.Intent: int getIntExtra(java.lang.String,int)>("scale", -1);
+
+     label27:
+        $i3 = $i4;
+
+     label28:
+        if $i2 != 50 goto label43;
+
+        if $i3 != 100 goto label43;
+
+        $f1 = 0.0F;
+
+        $i0 = $i0 | 1048576;
+
+     label29:
+        $f0 = $f0 + $f1;
+
+        $i2 = $r0.<com.narvii.account.LoginActivity: int ut>;
+
+        if $i2 >= 30000 goto label46;
+
+        $f1 = -20.0F;
+
+        $i0 = $i0 | 4194304;
+
+     label30:
+        $f0 = $f0 + $f1;
+
+        $i2 = $r0.<com.narvii.account.LoginActivity: int ic>;
+
+        if $i2 >= 2 goto label47;
+
+        $f1 = -10.0F;
+
+        $i0 = $i0 | 16777216;
+
+     label31:
+        $f0 = $f0 + $f1;
+
+        $i2 = $r0.<com.narvii.account.LoginActivity: int mc>;
+
+        $i2 = $i2 + -6;
+
+        $i2 = $i2 * 5;
+
+        $i2 = staticinvoke <java.lang.Math: int min(int,int)>(20, $i2);
+
+        $f1 = (float) $i2;
+
+        $b1 = $f1 cmpg 0.0F;
+
+        if $b1 >= 0 goto label48;
+
+        $i0 = $i0 | 67108864;
+
+     label32:
+        $f0 = $f0 + $f1;
+
+        $r5 = newarray (int)[2];
+
+        $f0 = 100.0F * $f0;
+
+        $f0 = $f0 / 195.0F;
+
+        $i2 = (int) $f0;
+
+        $i2 = 100 - $i2;
+
+        $r5[0] = $i2;
+
+        $r5[1] = $i0;
+
+        return $r5;
+
+     label33:
+        $f1 = 10.0F * $f1;
+
+        $f2 = staticinvoke <java.lang.Math: float min(float,float)>(15.0F, $f1);
+
+        $f1 = $f2;
+
+        $b1 = $f2 cmpg 15.0F;
+
+        if $b1 >= 0 goto label13;
+
+        $i0 = $i0 | 64;
+
+        goto label13;
+
+     label34:
+        $i0 = $i0 | 1024;
+
+        goto label15;
+
+     label35:
+        $i0 = $i0 | 2048;
+
+        goto label16;
+
+     label36:
+        $i0 = $i0 | 4096;
+
+        goto label17;
+
+     label37:
+        $i0 = $i0 | 8192;
+
+        goto label18;
+
+     label38:
+        $i0 = $i0 | 16384;
+
+        goto label19;
+
+     label39:
+        $i0 = $i0 | 32768;
+
+        goto label20;
+
+     label40:
+        $i0 = $i0 | 65536;
+
+        goto label21;
+
+     label41:
+        $i0 = $i0 | 131072;
+
+        goto label22;
+
+     label42:
+        $i0 = $i0 | 262144;
+
+        goto label23;
+
+     label43:
+        if $i2 >= 0 goto label44;
+
+        if $i3 >= 0 goto label44;
+
+        $f1 = 0.0F;
+
+        $i0 = $i0 | 2097152;
+
+        goto label29;
+
+     label44:
+        if $i2 != 100 goto label45;
+
+        if $i3 != 100 goto label45;
+
+        $f1 = 5.0F;
+
+        goto label29;
+
+     label45:
+        $f1 = 10.0F;
+
+        goto label29;
+
+     label46:
+        $i2 = $r0.<com.narvii.account.LoginActivity: int ut>;
+
+        $i2 = $i2 + -30;
+
+        $f1 = (float) $i2;
+
+        $f1 = 1.0F * $f1;
+
+        $f1 = $f1 / 90.0F;
+
+        $f2 = staticinvoke <java.lang.Math: float min(float,float)>(20.0F, $f1);
+
+        $f1 = $f2;
+
+        $b1 = $f2 cmpg 20.0F;
+
+        if $b1 >= 0 goto label30;
+
+        $i0 = $i0 | 8388608;
+
+        goto label30;
+
+     label47:
+        $i2 = $r0.<com.narvii.account.LoginActivity: int ic>;
+
+        $i2 = $i2 + -2;
+
+        $i2 = staticinvoke <java.lang.Math: int min(int,int)>(10, $i2);
+
+        $f1 = (float) $i2;
+
+        $b1 = $f1 cmpg 10.0F;
+
+        if $b1 >= 0 goto label31;
+
+        $i0 = $i0 | 33554432;
+
+        goto label31;
+
+     label48:
+        $b1 = $f1 cmpg 20.0F;
+
+        if $b1 >= 0 goto label32;
+
+        $i0 = $i0 | 134217728;
+
+        goto label32;
+
+     label49:
+        $r6 := @caughtexception;
+
+        goto label28;
+
+        catch java.lang.Exception from label24 to label25 with label49;
+        catch java.lang.Exception from label26 to label27 with label49;
+    }
+
+    private void setVisibilityAnim(android.view.View, boolean)
+    {
+        com.narvii.account.LoginActivity $r0;
+        android.view.View $r1;
+        boolean $z0;
+        int $i0, varReplacer3156, varReplacer3157;
+        android.view.animation.Animation $r2;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $r1 := @parameter0: android.view.View;
+
+        $z0 := @parameter1: boolean;
+
+        if $z0 == 0 goto label1;
+
+        $i0 = virtualinvoke $r1.<android.view.View: int getVisibility()>();
+
+        if $i0 == 0 goto label1;
+
+        varReplacer3156 = 0;
+
+        virtualinvoke $r1.<android.view.View: void setVisibility(int)>(varReplacer3156);
+
+        $r2 = $r0.<com.narvii.account.LoginActivity: android.view.animation.Animation fadeIn>;
+
+        virtualinvoke $r1.<android.view.View: void startAnimation(android.view.animation.Animation)>($r2);
+
+        return;
+
+     label1:
+        if $z0 != 0 goto label2;
+
+        $i0 = virtualinvoke $r1.<android.view.View: int getVisibility()>();
+
+        if $i0 != 0 goto label2;
+
+        varReplacer3157 = 8;
+
+        virtualinvoke $r1.<android.view.View: void setVisibility(int)>(varReplacer3157);
+
+        $r2 = $r0.<com.narvii.account.LoginActivity: android.view.animation.Animation fadeOut>;
+
+        virtualinvoke $r1.<android.view.View: void startAnimation(android.view.animation.Animation)>($r2);
+
+     label2:
+        return;
+    }
+
+    public boolean dispatchTouchEvent(android.view.MotionEvent)
+    {
+        com.narvii.account.LoginActivity $r0;
+        android.view.MotionEvent $r1;
+        int $i0;
+        boolean $z0;
+        java.security.MessageDigest $r2;
+        byte $b1;
+        float $f0, $f1;
+        java.lang.String $r3;
+        byte[] $r4;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $r1 := @parameter0: android.view.MotionEvent;
+
+        $i0 = virtualinvoke $r1.<android.view.MotionEvent: int getAction()>();
+
+        lookupswitch($i0)
+        {
+            case 0: goto label2;
+            case 1: goto label2;
+            case 2: goto label1;
+            case 3: goto label2;
+            default: goto label1;
+        };
+
+     label1:
+        $z0 = specialinvoke $r0.<com.narvii.app.NVActivity: boolean dispatchTouchEvent(android.view.MotionEvent)>($r1);
+
+        return $z0;
+
+     label2:
+        $r2 = $r0.<com.narvii.account.LoginActivity: java.security.MessageDigest md>;
+
+        if $r2 == null goto label3;
+
+        $r2 = $r0.<com.narvii.account.LoginActivity: java.security.MessageDigest md>;
+
+        $i0 = virtualinvoke $r1.<android.view.MotionEvent: int getAction()>();
+
+        $b1 = (byte) $i0;
+
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte)>($b1);
+
+        $r2 = $r0.<com.narvii.account.LoginActivity: java.security.MessageDigest md>;
+
+        $f0 = virtualinvoke $r1.<android.view.MotionEvent: float getRawX()>();
+
+        $f1 = $r0.<com.narvii.account.LoginActivity: float density>;
+
+        $f0 = $f0 / $f1;
+
+        $i0 = (int) $f0;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte[])>($r4);
+
+        $r2 = $r0.<com.narvii.account.LoginActivity: java.security.MessageDigest md>;
+
+        $f0 = virtualinvoke $r1.<android.view.MotionEvent: float getRawY()>();
+
+        $f1 = $r0.<com.narvii.account.LoginActivity: float density>;
+
+        $f0 = $f0 / $f1;
+
+        $i0 = (int) $f0;
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte[])>($r4);
+
+     label3:
+        $i0 = $r0.<com.narvii.account.LoginActivity: int mc>;
+
+        $i0 = $i0 + 1;
+
+        $r0.<com.narvii.account.LoginActivity: int mc> = $i0;
+
+        goto label1;
+    }
+
+    void fakeFade(java.lang.Runnable)
+    {
+        com.narvii.account.LoginActivity $r0;
+        java.lang.Runnable $r1;
+        android.view.View $r2;
+        android.view.ViewPropertyAnimator $r3;
+        com.narvii.account.LoginActivity$6 $r4;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $r1 := @parameter0: java.lang.Runnable;
+
+        $r2 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.view.View findViewById(int)>(2131427447);
+
+        $r3 = virtualinvoke $r2.<android.view.View: android.view.ViewPropertyAnimator animate()>();
+
+        $r3 = virtualinvoke $r3.<android.view.ViewPropertyAnimator: android.view.ViewPropertyAnimator setDuration(long)>(200L);
+
+        $r3 = virtualinvoke $r3.<android.view.ViewPropertyAnimator: android.view.ViewPropertyAnimator alpha(float)>(0.0F);
+
+        $r4 = new com.narvii.account.LoginActivity$6;
+
+        specialinvoke $r4.<com.narvii.account.LoginActivity$6: void <init>(com.narvii.account.LoginActivity,java.lang.Runnable,android.view.View)>($r0, $r1, $r2);
+
+        virtualinvoke $r3.<android.view.ViewPropertyAnimator: android.view.ViewPropertyAnimator setListener(android.animation.Animator$AnimatorListener)>($r4);
+
+        return;
+    }
+
+    public void finish()
+    {
+        com.narvii.account.LoginActivity $r0;
+        int $i0, varReplacer3115;
+        com.narvii.account.AccountService $r1;
+        boolean $z0;
+        com.narvii.app.NVApplication $r2;
+        java.lang.Object $r3;
+        com.narvii.services.EnterCommunityHelper $r4;
+        java.lang.String varReplacer3116;
+        long varReplacer3117;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $i0 = <com.narvii.app.NVApplication: int CLIENT_TYPE>;
+
+        if $i0 != 101 goto label1;
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: com.narvii.account.AccountService account>;
+
+        $z0 = virtualinvoke $r1.<com.narvii.account.AccountService: boolean hasAccount()>();
+
+        if $z0 == 0 goto label1;
+
+        varReplacer3115 = 1048608;
+
+        staticinvoke <com.narvii.amino.MainActivity: void setPendingCommand(int)>(varReplacer3115);
+
+        $r2 = staticinvoke <com.narvii.app.NVApplication: com.narvii.app.NVApplication instance()>();
+
+        varReplacer3116 = "_enterCommunityHelper";
+
+        $r3 = virtualinvoke $r2.<com.narvii.app.NVApplication: java.lang.Object getService(java.lang.String)>(varReplacer3116);
+
+        $r4 = (com.narvii.services.EnterCommunityHelper) $r3;
+
+        if $r4 == null goto label1;
+
+        $r2 = staticinvoke <com.narvii.app.NVApplication: com.narvii.app.NVApplication instance()>();
+
+        varReplacer3117 = 0L;
+
+        virtualinvoke $r4.<com.narvii.services.EnterCommunityHelper: void logEnterCommunity(com.narvii.app.NVContext,long)>($r2, varReplacer3117);
+
+     label1:
+        specialinvoke $r0.<com.narvii.app.NVActivity: void finish()>();
+
+        return;
+    }
+
+    void finishWithResult(com.narvii.account.LoginBaseFragment, boolean, int, java.lang.String)
+    {
+        com.narvii.account.LoginActivity $r0;
+        com.narvii.account.LoginBaseFragment $r1, $r15;
+        boolean $z0, $z1;
+        int $i0;
+        java.lang.String $r2;
+        android.app.AlertDialog$Builder $r3;
+        com.narvii.app.NVApplication $r4;
+        java.lang.Object $r5;
+        com.narvii.config.ConfigService $r6;
+        com.narvii.util.http.ApiRequest$Builder $r7;
+        com.narvii.util.http.ApiRequest $r8;
+        com.narvii.util.http.ApiService $r9;
+        com.narvii.account.LoginActivity$7 $r10;
+        com.narvii.util.statistics.StatisticsService $r11;
+        com.narvii.util.statistics.StatisticsEventBuilder $r12;
+        com.narvii.services.AffiliationsHelper $r13;
+        android.content.Intent $r14;
+        android.content.DialogInterface$OnClickListener $r16;
+        android.content.Context $r17;
+        android.widget.Toast $r18;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $r1 := @parameter0: com.narvii.account.LoginBaseFragment;
+
+        $z0 := @parameter1: boolean;
+
+        $i0 := @parameter2: int;
+
+        $r2 := @parameter3: java.lang.String;
+
+        $z1 = virtualinvoke $r0.<com.narvii.account.LoginActivity: boolean isDestoryed()>();
+
+        if $z1 == 0 goto label01;
+
+        return;
+
+     label01:
+        if $z0 == 0 goto label08;
+
+        if $i0 != 1 goto label05;
+
+        $z0 = 1;
+
+     label02:
+        $i0 = <com.narvii.app.NVApplication: int CLIENT_TYPE>;
+
+        if $i0 != 101 goto label06;
+
+        $r4 = staticinvoke <com.narvii.app.NVApplication: com.narvii.app.NVApplication instance()>();
+
+        $r5 = virtualinvoke $r4.<com.narvii.app.NVApplication: java.lang.Object getService(java.lang.String)>("config");
+
+        $r6 = (com.narvii.config.ConfigService) $r5;
+
+        $r7 = staticinvoke <com.narvii.util.http.ApiRequest: com.narvii.util.http.ApiRequest$Builder builder()>();
+
+        $r7 = virtualinvoke $r7.<com.narvii.util.http.ApiRequest$Builder: com.narvii.util.http.ApiRequest$Builder post()>();
+
+        $i0 = virtualinvoke $r6.<com.narvii.config.ConfigService: int getCommunityId()>();
+
+        $r7 = virtualinvoke $r7.<com.narvii.util.http.ApiRequest$Builder: com.narvii.util.http.ApiRequest$Builder communityId(int)>($i0);
+
+        $r7 = virtualinvoke $r7.<com.narvii.util.http.ApiRequest$Builder: com.narvii.util.http.ApiRequest$Builder path(java.lang.String)>("/community/join");
+
+        $r8 = virtualinvoke $r7.<com.narvii.util.http.ApiRequest$Builder: com.narvii.util.http.ApiRequest build()>();
+
+        $r4 = staticinvoke <com.narvii.app.NVApplication: com.narvii.app.NVApplication instance()>();
+
+        $r5 = virtualinvoke $r4.<com.narvii.app.NVApplication: java.lang.Object getService(java.lang.String)>("api");
+
+        $r9 = (com.narvii.util.http.ApiService) $r5;
+
+        $r10 = new com.narvii.account.LoginActivity$7;
+
+        specialinvoke $r10.<com.narvii.account.LoginActivity$7: void <init>(com.narvii.account.LoginActivity,java.lang.Class,com.narvii.config.ConfigService,boolean)>($r0, class "Lcom/narvii/model/api/UserResponse;", $r6, $z0);
+
+        virtualinvoke $r9.<com.narvii.util.http.ApiService: void exec(com.narvii.util.http.ApiRequest,com.narvii.util.http.ApiResponseListener)>($r8, $r10);
+
+        $r0.<com.narvii.account.LoginActivity: boolean joiningCommunity> = 1;
+
+     label03:
+        if $r1 != null goto label07;
+
+        $r2 = "Auto Login";
+
+     label04:
+        if $r2 == null goto label11;
+
+        $r5 = virtualinvoke $r0.<com.narvii.account.LoginActivity: java.lang.Object getService(java.lang.String)>("statistics");
+
+        $r11 = (com.narvii.util.statistics.StatisticsService) $r5;
+
+        $r12 = interfaceinvoke $r11.<com.narvii.util.statistics.StatisticsService: com.narvii.util.statistics.StatisticsEventBuilder event(java.lang.String)>("Registration Succeed");
+
+        $r12 = virtualinvoke $r12.<com.narvii.util.statistics.StatisticsEventBuilder: com.narvii.util.statistics.StatisticsEventBuilder priority(int)>(10);
+
+        $r12 = virtualinvoke $r12.<com.narvii.util.statistics.StatisticsEventBuilder: com.narvii.util.statistics.StatisticsEventBuilder param(java.lang.String,java.lang.String)>("Type", $r2);
+
+        $r2 = virtualinvoke $r0.<com.narvii.account.LoginActivity: java.lang.String getStringParam(java.lang.String)>("Source");
+
+        virtualinvoke $r12.<com.narvii.util.statistics.StatisticsEventBuilder: com.narvii.util.statistics.StatisticsEventBuilder source(java.lang.String)>($r2);
+
+        return;
+
+     label05:
+        $z0 = 0;
+
+        goto label02;
+
+     label06:
+        $r4 = staticinvoke <com.narvii.app.NVApplication: com.narvii.app.NVApplication instance()>();
+
+        $r5 = virtualinvoke $r4.<com.narvii.app.NVApplication: java.lang.Object getService(java.lang.String)>("_affiliationsHelper");
+
+        $r13 = (com.narvii.services.AffiliationsHelper) $r5;
+
+        $r4 = staticinvoke <com.narvii.app.NVApplication: com.narvii.app.NVApplication instance()>();
+
+        virtualinvoke $r13.<com.narvii.services.AffiliationsHelper: void check(com.narvii.app.NVContext)>($r4);
+
+        $r14 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.content.Intent getIntent()>();
+
+        virtualinvoke $r14.<android.content.Intent: android.content.Intent putExtra(java.lang.String,boolean)>("newAccount", $z0);
+
+        virtualinvoke $r0.<com.narvii.account.LoginActivity: void setResult(int,android.content.Intent)>(-1, $r14);
+
+        virtualinvoke $r0.<com.narvii.account.LoginActivity: void finish()>();
+
+        goto label03;
+
+     label07:
+        $r2 = virtualinvoke $r1.<com.narvii.account.LoginBaseFragment: java.lang.String getName()>();
+
+        goto label04;
+
+     label08:
+        $r15 = $r0.<com.narvii.account.LoginActivity: com.narvii.account.LoginBaseFragment submittingFragment>;
+
+        if $r15 != $r1 goto label11;
+
+        virtualinvoke $r0.<com.narvii.account.LoginActivity: void setSubmitting(com.narvii.account.LoginBaseFragment)>(null);
+
+        if $r2 == null goto label09;
+
+        $r0.<com.narvii.account.LoginActivity: int lastErrorCode> = $i0;
+
+        $r0.<com.narvii.account.LoginActivity: java.lang.String lastErrorMsg> = $r2;
+
+     label09:
+        if $r2 == null goto label11;
+
+        $i0 = $i0 / 100;
+
+        if $i0 != 2 goto label10;
+
+        $r3 = new android.app.AlertDialog$Builder;
+
+        specialinvoke $r3.<android.app.AlertDialog$Builder: void <init>(android.content.Context)>($r0);
+
+        virtualinvoke $r3.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setMessage(java.lang.CharSequence)>($r2);
+
+        $r16 = <com.narvii.util.Utils: android.content.DialogInterface$OnClickListener DIALOG_BUTTON_EMPTY_LISTENER>;
+
+        virtualinvoke $r3.<android.app.AlertDialog$Builder: android.app.AlertDialog$Builder setNegativeButton(int,android.content.DialogInterface$OnClickListener)>(17039370, $r16);
+
+        virtualinvoke $r3.<android.app.AlertDialog$Builder: android.app.AlertDialog show()>();
+
+        return;
+
+     label10:
+        $r17 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.content.Context getContext()>();
+
+        $r18 = staticinvoke <android.widget.Toast: android.widget.Toast makeText(android.content.Context,java.lang.CharSequence,int)>($r17, $r2, 0);
+
+        virtualinvoke $r18.<android.widget.Toast: void show()>();
+
+     label11:
+        return;
+    }
+
+    public boolean isGlobal()
+    {
+        com.narvii.account.LoginActivity $r0;
+        int varReplacer3167;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        varReplacer3167 = 1;
+
+        return varReplacer3167;
+    }
+
+    public boolean isModel()
+    {
+        com.narvii.account.LoginActivity $r0;
+        int varReplacer3143;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        varReplacer3143 = 1;
+
+        return varReplacer3143;
+    }
+
+    protected void onActivityResult(int, int, android.content.Intent)
+    {
+        com.narvii.account.LoginActivity $r0;
+        int $i0, $i1, varReplacer3109;
+        android.content.Intent $r1;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        $r1 := @parameter2: android.content.Intent;
+
+        if $i0 != 2 goto label1;
+
+        varReplacer3109 = -1;
+
+        virtualinvoke $r0.<com.narvii.account.LoginActivity: void setResult(int)>(varReplacer3109);
+
+        virtualinvoke $r0.<com.narvii.account.LoginActivity: void finish()>();
+
+     label1:
+        specialinvoke $r0.<com.narvii.app.NVActivity: void onActivityResult(int,int,android.content.Intent)>($i0, $i1, $r1);
+
+        return;
+    }
+
+    public void onBackPressed()
+    {
+        com.narvii.account.LoginActivity $r0;
+        boolean $z0;
+        com.narvii.account.LoginBaseFragment $r1;
+        null_type varReplacer3110;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $z0 = $r0.<com.narvii.account.LoginActivity: boolean joiningCommunity>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $r1 = $r0.<com.narvii.account.LoginActivity: com.narvii.account.LoginBaseFragment submittingFragment>;
+
+        if $r1 == null goto label2;
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: com.narvii.account.LoginBaseFragment submittingFragment>;
+
+        $z0 = virtualinvoke $r1.<com.narvii.account.LoginBaseFragment: boolean cancel()>();
+
+        if $z0 == 0 goto label2;
+
+        varReplacer3110 = null;
+
+        virtualinvoke $r0.<com.narvii.account.LoginActivity: void setSubmitting(com.narvii.account.LoginBaseFragment)>(varReplacer3110);
+
+        return;
+
+     label2:
+        specialinvoke $r0.<com.narvii.app.NVActivity: void onBackPressed()>();
+
+        return;
+    }
+
+    protected void onCreate(android.os.Bundle)
+    {
+        com.narvii.account.LoginActivity $r0;
+        android.os.Bundle $r1;
+        android.graphics.Rect $r2;
+        java.lang.Object $r3;
+        com.narvii.account.AccountService $r4;
+        android.view.View $r5;
+        com.narvii.account.GradientView $r6;
+        android.view.animation.Animation $r7;
+        com.narvii.widget.BlurImageView $r8;
+        com.narvii.widget.Flipper $r9;
+        int $i0, $i1, varReplacer3073, varReplacer3075, varReplacer3076, varReplacer3078, varReplacer3079, varReplacer3081, varReplacer3082, varReplacer3083, varReplacer3084, varReplacer3085, varReplacer3086, varReplacer3087, varReplacer3088, varReplacer3089, varReplacer3092, varReplacer3093, varReplacer3095, varReplacer3096, varReplacer3098, varReplacer3099, varReplacer3101;
+        android.view.Window $r10;
+        com.narvii.util.image.NVImageLoader $r11;
+        android.graphics.Bitmap $r12;
+        android.graphics.drawable.BitmapDrawable $r13;
+        android.graphics.drawable.Drawable $r14;
+        boolean $z0;
+        android.support.v4.app.FragmentManager $r15;
+        android.support.v4.app.FragmentTransaction $r16;
+        com.narvii.account.SignupLocationFragment $r17;
+        com.narvii.account.LoginOrSignupFragment $r18;
+        android.content.BroadcastReceiver $r19;
+        android.content.IntentFilter $r20;
+        android.app.ActionBar $r21;
+        long $l2;
+        android.hardware.SensorManager $r22;
+        com.narvii.account.LoginActivity$SEL $r23;
+        android.hardware.Sensor $r24;
+        android.hardware.SensorEventListener $r25;
+        java.security.MessageDigest $r26;
+        android.content.res.Resources $r27;
+        android.util.DisplayMetrics $r28;
+        float $f0;
+        com.narvii.widget.Flipper$OnFlipperScrollListener $r29;
+        com.narvii.widget.Flipper$FlipperAdapter $r30;
+        java.lang.Integer $r31;
+        com.narvii.account.LoginActivity$1 $r32;
+        java.lang.Exception $r33;
+        java.lang.Throwable $r34;
+        java.lang.String varReplacer3074, varReplacer3077, varReplacer3090, varReplacer3091, varReplacer3094, varReplacer3097, varReplacer3100, varReplacer3102;
+        null_type varReplacer3080;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $r1 := @parameter0: android.os.Bundle;
+
+        specialinvoke $r0.<com.narvii.app.NVActivity: void onCreate(android.os.Bundle)>($r1);
+
+        varReplacer3102 = "account";
+
+        $r3 = virtualinvoke $r0.<com.narvii.account.LoginActivity: java.lang.Object getService(java.lang.String)>(varReplacer3102);
+
+        $r4 = (com.narvii.account.AccountService) $r3;
+
+        $r0.<com.narvii.account.LoginActivity: com.narvii.account.AccountService account> = $r4;
+
+        varReplacer3101 = 2130903048;
+
+        virtualinvoke $r0.<com.narvii.account.LoginActivity: void setContentView(int)>(varReplacer3101);
+
+        staticinvoke <com.narvii.util.AndroidBug5497Workaround: void assistActivity(android.app.Activity)>($r0);
+
+        varReplacer3082 = 2131427446;
+
+        $r5 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.view.View findViewById(int)>(varReplacer3082);
+
+        $r6 = (com.narvii.account.GradientView) $r5;
+
+        $r0.<com.narvii.account.LoginActivity: com.narvii.account.GradientView gradientView> = $r6;
+
+        varReplacer3084 = 17432577;
+
+        $r7 = staticinvoke <android.view.animation.AnimationUtils: android.view.animation.Animation loadAnimation(android.content.Context,int)>($r0, varReplacer3084);
+
+        $r0.<com.narvii.account.LoginActivity: android.view.animation.Animation fadeOut> = $r7;
+
+        varReplacer3073 = 17432576;
+
+        $r7 = staticinvoke <android.view.animation.AnimationUtils: android.view.animation.Animation loadAnimation(android.content.Context,int)>($r0, varReplacer3073);
+
+        $r0.<com.narvii.account.LoginActivity: android.view.animation.Animation fadeIn> = $r7;
+
+        varReplacer3079 = 2131427443;
+
+        $r5 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.view.View findViewById(int)>(varReplacer3079);
+
+        $r8 = (com.narvii.widget.BlurImageView) $r5;
+
+        $r0.<com.narvii.account.LoginActivity: com.narvii.widget.BlurImageView blurImageView> = $r8;
+
+        varReplacer3086 = 2131427445;
+
+        $r5 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.view.View findViewById(int)>(varReplacer3086);
+
+        $r9 = (com.narvii.widget.Flipper) $r5;
+
+        $r0.<com.narvii.account.LoginActivity: com.narvii.widget.Flipper flipper> = $r9;
+
+        varReplacer3088 = 2131427444;
+
+        $r5 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.view.View findViewById(int)>(varReplacer3088);
+
+        $r0.<com.narvii.account.LoginActivity: android.view.View overlayView> = $r5;
+
+        $i0 = <com.narvii.app.NVApplication: int CLIENT_TYPE>;
+
+        if $i0 != 101 goto label08;
+
+        $r8 = $r0.<com.narvii.account.LoginActivity: com.narvii.widget.BlurImageView blurImageView>;
+
+        varReplacer3081 = 0;
+
+        virtualinvoke $r8.<com.narvii.widget.BlurImageView: void setVisibility(int)>(varReplacer3081);
+
+        $r2 = new android.graphics.Rect;
+
+        specialinvoke $r2.<android.graphics.Rect: void <init>()>();
+
+        $r10 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.view.Window getWindow()>();
+
+        $r5 = virtualinvoke $r10.<android.view.Window: android.view.View getDecorView()>();
+
+        virtualinvoke $r5.<android.view.View: void getWindowVisibleDisplayFrame(android.graphics.Rect)>($r2);
+
+        varReplacer3074 = "imageLoader";
+
+        $r3 = virtualinvoke $r0.<com.narvii.account.LoginActivity: java.lang.Object getService(java.lang.String)>(varReplacer3074);
+
+        $r11 = (com.narvii.util.image.NVImageLoader) $r3;
+
+        $i0 = virtualinvoke $r2.<android.graphics.Rect: int width()>();
+
+        $i0 = $i0 / 2;
+
+        $i1 = virtualinvoke $r2.<android.graphics.Rect: int height()>();
+
+        $i1 = $i1 / 2;
+
+        varReplacer3097 = "assets://icon-community.jpg";
+
+        varReplacer3098 = 1;
+
+        $r12 = virtualinvoke $r11.<com.narvii.util.image.NVImageLoader: android.graphics.Bitmap getLocal(java.lang.String,int,int,boolean)>(varReplacer3097, $i0, $i1, varReplacer3098);
+
+        $r8 = $r0.<com.narvii.account.LoginActivity: com.narvii.widget.BlurImageView blurImageView>;
+
+        if $r12 != null goto label07;
+
+        $r13 = null;
+
+     label01:
+        virtualinvoke $r8.<com.narvii.widget.BlurImageView: void setImageDrawable2(android.graphics.drawable.Drawable)>($r13);
+
+        $r9 = $r0.<com.narvii.account.LoginActivity: com.narvii.widget.Flipper flipper>;
+
+        varReplacer3076 = 8;
+
+        virtualinvoke $r9.<com.narvii.widget.Flipper: void setVisibility(int)>(varReplacer3076);
+
+        $r6 = $r0.<com.narvii.account.LoginActivity: com.narvii.account.GradientView gradientView>;
+
+        varReplacer3099 = 8;
+
+        virtualinvoke $r6.<com.narvii.account.GradientView: void setVisibility(int)>(varReplacer3099);
+
+        $r8 = $r0.<com.narvii.account.LoginActivity: com.narvii.widget.BlurImageView blurImageView>;
+
+        $r14 = virtualinvoke $r8.<com.narvii.widget.BlurImageView: android.graphics.drawable.Drawable getDrawable()>();
+
+        if $r14 == null goto label02;
+
+        $r8 = $r0.<com.narvii.account.LoginActivity: com.narvii.widget.BlurImageView blurImageView>;
+
+        $r14 = virtualinvoke $r8.<com.narvii.widget.BlurImageView: android.graphics.drawable.Drawable getDrawable()>();
+
+        $z0 = $r14 instanceof android.graphics.drawable.BitmapDrawable;
+
+        if $z0 == 0 goto label02;
+
+        $r8 = $r0.<com.narvii.account.LoginActivity: com.narvii.widget.BlurImageView blurImageView>;
+
+        $r14 = virtualinvoke $r8.<com.narvii.widget.BlurImageView: android.graphics.drawable.Drawable getDrawable()>();
+
+        $r13 = (android.graphics.drawable.BitmapDrawable) $r14;
+
+        $r12 = virtualinvoke $r13.<android.graphics.drawable.BitmapDrawable: android.graphics.Bitmap getBitmap()>();
+
+        if $r12 == null goto label02;
+
+        $r8 = $r0.<com.narvii.account.LoginActivity: com.narvii.widget.BlurImageView blurImageView>;
+
+        $z0 = staticinvoke <com.narvii.util.PaletteUtils: boolean isLightTone(android.widget.ImageView)>($r8);
+
+        if $z0 == 0 goto label02;
+
+        $r5 = $r0.<com.narvii.account.LoginActivity: android.view.View overlayView>;
+
+        varReplacer3096 = 0;
+
+        virtualinvoke $r5.<android.view.View: void setVisibility(int)>(varReplacer3096);
+
+     label02:
+        if $r1 != null goto label03;
+
+        $r15 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.support.v4.app.FragmentManager getSupportFragmentManager()>();
+
+        $r16 = virtualinvoke $r15.<android.support.v4.app.FragmentManager: android.support.v4.app.FragmentTransaction beginTransaction()>();
+
+        $r17 = new com.narvii.account.SignupLocationFragment;
+
+        specialinvoke $r17.<com.narvii.account.SignupLocationFragment: void <init>()>();
+
+        varReplacer3094 = "signupLocation";
+
+        $r16 = virtualinvoke $r16.<android.support.v4.app.FragmentTransaction: android.support.v4.app.FragmentTransaction add(android.support.v4.app.Fragment,java.lang.String)>($r17, varReplacer3094);
+
+        virtualinvoke $r16.<android.support.v4.app.FragmentTransaction: int commit()>();
+
+        $r15 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.support.v4.app.FragmentManager getSupportFragmentManager()>();
+
+        $r16 = virtualinvoke $r15.<android.support.v4.app.FragmentManager: android.support.v4.app.FragmentTransaction beginTransaction()>();
+
+        $r18 = new com.narvii.account.LoginOrSignupFragment;
+
+        specialinvoke $r18.<com.narvii.account.LoginOrSignupFragment: void <init>()>();
+
+        varReplacer3083 = 2131427447;
+
+        $r16 = virtualinvoke $r16.<android.support.v4.app.FragmentTransaction: android.support.v4.app.FragmentTransaction add(int,android.support.v4.app.Fragment)>(varReplacer3083, $r18);
+
+        virtualinvoke $r16.<android.support.v4.app.FragmentTransaction: int commit()>();
+
+     label03:
+        virtualinvoke $r0.<com.narvii.account.LoginActivity: void updateViews()>();
+
+        $r19 = $r0.<com.narvii.account.LoginActivity: android.content.BroadcastReceiver receiver>;
+
+        $r20 = new android.content.IntentFilter;
+
+        varReplacer3077 = "com.narvii.action.KEYCHAIN_STATUS_CHANGED";
+
+        specialinvoke $r20.<android.content.IntentFilter: void <init>(java.lang.String)>(varReplacer3077);
+
+        virtualinvoke $r0.<com.narvii.account.LoginActivity: void registerLocalReceiver(android.content.BroadcastReceiver,android.content.IntentFilter)>($r19, $r20);
+
+        $r21 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.app.ActionBar getActionBar()>();
+
+        virtualinvoke $r21.<android.app.ActionBar: void hide()>();
+
+        varReplacer3100 = "signupWakeup";
+
+        $z0 = virtualinvoke $r0.<com.narvii.account.LoginActivity: boolean getBooleanParam(java.lang.String)>(varReplacer3100);
+
+        $r0.<com.narvii.account.LoginActivity: boolean signupWakeup> = $z0;
+
+        varReplacer3089 = 2131427447;
+
+        $r5 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.view.View findViewById(int)>(varReplacer3089);
+
+        staticinvoke <com.narvii.util.statusbar.StatusBarUtils: void addMarginTopToContentChild(android.app.Activity,android.view.View)>($r0, $r5);
+
+        $l2 = staticinvoke <android.os.SystemClock: long uptimeMillis()>();
+
+        $i0 = (int) $l2;
+
+        $r0.<com.narvii.account.LoginActivity: int ut> = $i0;
+
+     label04:
+        varReplacer3090 = "sensor";
+
+        $r3 = virtualinvoke $r0.<com.narvii.account.LoginActivity: java.lang.Object getSystemService(java.lang.String)>(varReplacer3090);
+
+        $r22 = (android.hardware.SensorManager) $r3;
+
+        $r0.<com.narvii.account.LoginActivity: android.hardware.SensorManager mSensorManager> = $r22;
+
+        $r23 = new com.narvii.account.LoginActivity$SEL;
+
+        varReplacer3080 = null;
+
+        specialinvoke $r23.<com.narvii.account.LoginActivity$SEL: void <init>(com.narvii.account.LoginActivity,com.narvii.account.LoginActivity$1)>($r0, varReplacer3080);
+
+        $r0.<com.narvii.account.LoginActivity: android.hardware.SensorEventListener sel> = $r23;
+
+        $r22 = $r0.<com.narvii.account.LoginActivity: android.hardware.SensorManager mSensorManager>;
+
+        varReplacer3087 = 5;
+
+        $r24 = virtualinvoke $r22.<android.hardware.SensorManager: android.hardware.Sensor getDefaultSensor(int)>(varReplacer3087);
+
+        $r22 = $r0.<com.narvii.account.LoginActivity: android.hardware.SensorManager mSensorManager>;
+
+        $r25 = $r0.<com.narvii.account.LoginActivity: android.hardware.SensorEventListener sel>;
+
+        varReplacer3085 = 3;
+
+        virtualinvoke $r22.<android.hardware.SensorManager: boolean registerListener(android.hardware.SensorEventListener,android.hardware.Sensor,int)>($r25, $r24, varReplacer3085);
+
+        $r22 = $r0.<com.narvii.account.LoginActivity: android.hardware.SensorManager mSensorManager>;
+
+        varReplacer3078 = 1;
+
+        $r24 = virtualinvoke $r22.<android.hardware.SensorManager: android.hardware.Sensor getDefaultSensor(int)>(varReplacer3078);
+
+        $r22 = $r0.<com.narvii.account.LoginActivity: android.hardware.SensorManager mSensorManager>;
+
+        $r25 = $r0.<com.narvii.account.LoginActivity: android.hardware.SensorEventListener sel>;
+
+        varReplacer3093 = 3;
+
+        virtualinvoke $r22.<android.hardware.SensorManager: boolean registerListener(android.hardware.SensorEventListener,android.hardware.Sensor,int)>($r25, $r24, varReplacer3093);
+
+        $r22 = $r0.<com.narvii.account.LoginActivity: android.hardware.SensorManager mSensorManager>;
+
+        varReplacer3092 = 4;
+
+        $r24 = virtualinvoke $r22.<android.hardware.SensorManager: android.hardware.Sensor getDefaultSensor(int)>(varReplacer3092);
+
+        $r22 = $r0.<com.narvii.account.LoginActivity: android.hardware.SensorManager mSensorManager>;
+
+        $r25 = $r0.<com.narvii.account.LoginActivity: android.hardware.SensorEventListener sel>;
+
+        varReplacer3095 = 3;
+
+        virtualinvoke $r22.<android.hardware.SensorManager: boolean registerListener(android.hardware.SensorEventListener,android.hardware.Sensor,int)>($r25, $r24, varReplacer3095);
+
+     label05:
+        varReplacer3091 = "SHA-1";
+
+        $r26 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3091);
+
+        $r0.<com.narvii.account.LoginActivity: java.security.MessageDigest md> = $r26;
+
+     label06:
+        $r27 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.content.res.Resources getResources()>();
+
+        $r28 = virtualinvoke $r27.<android.content.res.Resources: android.util.DisplayMetrics getDisplayMetrics()>();
+
+        $f0 = $r28.<android.util.DisplayMetrics: float density>;
+
+        $r0.<com.narvii.account.LoginActivity: float density> = $f0;
+
+        return;
+
+     label07:
+        $r13 = new android.graphics.drawable.BitmapDrawable;
+
+        specialinvoke $r13.<android.graphics.drawable.BitmapDrawable: void <init>(android.graphics.Bitmap)>($r12);
+
+        goto label01;
+
+     label08:
+        $r9 = $r0.<com.narvii.account.LoginActivity: com.narvii.widget.Flipper flipper>;
+
+        $r29 = $r0.<com.narvii.account.LoginActivity: com.narvii.widget.Flipper$OnFlipperScrollListener flipperScrollListener>;
+
+        virtualinvoke $r9.<com.narvii.widget.Flipper: void setOnFlipperScrollListener(com.narvii.widget.Flipper$OnFlipperScrollListener)>($r29);
+
+        $r9 = $r0.<com.narvii.account.LoginActivity: com.narvii.widget.Flipper flipper>;
+
+        $r30 = $r0.<com.narvii.account.LoginActivity: com.narvii.widget.Flipper$FlipperAdapter flipperAdapter>;
+
+        virtualinvoke $r9.<com.narvii.widget.Flipper: void setAdapter(com.narvii.widget.Flipper$FlipperAdapter)>($r30);
+
+        $r9 = $r0.<com.narvii.account.LoginActivity: com.narvii.widget.Flipper flipper>;
+
+        varReplacer3075 = 0;
+
+        $r31 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(varReplacer3075);
+
+        virtualinvoke $r9.<com.narvii.widget.Flipper: void setCurrentItem(java.lang.Object)>($r31);
+
+        $r32 = new com.narvii.account.LoginActivity$1;
+
+        specialinvoke $r32.<com.narvii.account.LoginActivity$1: void <init>(com.narvii.account.LoginActivity)>($r0);
+
+        virtualinvoke $r32.<com.narvii.account.LoginActivity$1: void start()>();
+
+        virtualinvoke $r0.<com.narvii.account.LoginActivity: void updateGradient()>();
+
+        goto label02;
+
+     label09:
+        $r33 := @caughtexception;
+
+        goto label06;
+
+     label10:
+        $r34 := @caughtexception;
+
+        goto label05;
+
+        catch java.lang.Throwable from label04 to label05 with label10;
+        catch java.lang.Exception from label05 to label06 with label09;
+    }
+
+    protected void onDestroy()
+    {
+        com.narvii.account.LoginActivity $r0;
+        boolean $z0;
+        android.hardware.SensorManager $r1;
+        android.hardware.SensorEventListener $r2;
+        android.content.BroadcastReceiver $r3;
+        android.os.Handler $r4;
+        java.lang.Runnable $r5;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: android.hardware.SensorManager mSensorManager>;
+
+        if $r1 == null goto label1;
+
+        $r2 = $r0.<com.narvii.account.LoginActivity: android.hardware.SensorEventListener sel>;
+
+        if $r2 == null goto label1;
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: android.hardware.SensorManager mSensorManager>;
+
+        $r2 = $r0.<com.narvii.account.LoginActivity: android.hardware.SensorEventListener sel>;
+
+        virtualinvoke $r1.<android.hardware.SensorManager: void unregisterListener(android.hardware.SensorEventListener)>($r2);
+
+     label1:
+        $r3 = $r0.<com.narvii.account.LoginActivity: android.content.BroadcastReceiver receiver>;
+
+        virtualinvoke $r0.<com.narvii.account.LoginActivity: void unregisterLocalReceiver(android.content.BroadcastReceiver)>($r3);
+
+        $z0 = virtualinvoke $r0.<com.narvii.account.LoginActivity: boolean isFinishing()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = <com.narvii.util.Utils: android.os.Handler handler>;
+
+        $r5 = $r0.<com.narvii.account.LoginActivity: java.lang.Runnable scheduleSignupWakeup>;
+
+        virtualinvoke $r4.<android.os.Handler: void removeCallbacks(java.lang.Runnable)>($r5);
+
+     label2:
+        specialinvoke $r0.<com.narvii.app.NVActivity: void onDestroy()>();
+
+        return;
+    }
+
+    protected void onNewIntent(android.content.Intent)
+    {
+        com.narvii.account.LoginActivity $r0;
+        android.content.Intent $r1;
+        boolean $z0, $z1;
+        java.lang.String varReplacer3111;
+        int varReplacer3112;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $r1 := @parameter0: android.content.Intent;
+
+        specialinvoke $r0.<com.narvii.app.NVActivity: void onNewIntent(android.content.Intent)>($r1);
+
+        $z1 = $r0.<com.narvii.account.LoginActivity: boolean signupWakeup>;
+
+        varReplacer3111 = "signupWakeup";
+
+        varReplacer3112 = 0;
+
+        $z0 = virtualinvoke $r1.<android.content.Intent: boolean getBooleanExtra(java.lang.String,boolean)>(varReplacer3111, varReplacer3112);
+
+        $z0 = $z1 | $z0;
+
+        $r0.<com.narvii.account.LoginActivity: boolean signupWakeup> = $z0;
+
+        return;
+    }
+
+    protected void onResume()
+    {
+        com.narvii.account.LoginActivity $r0;
+        int varReplacer3108;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        specialinvoke $r0.<com.narvii.app.NVActivity: void onResume()>();
+
+        varReplacer3108 = 0;
+
+        $r0.<com.narvii.account.LoginActivity: boolean startingActivity> = varReplacer3108;
+
+        return;
+    }
+
+    protected void onStart()
+    {
+        com.narvii.account.LoginActivity $r0;
+        java.lang.Object $r1;
+        android.app.AlarmManager $r2;
+        android.content.Intent $r3;
+        android.app.PendingIntent $r4;
+        android.app.NotificationManager $r5;
+        int varReplacer3103, varReplacer3104, varReplacer3105;
+        java.lang.String varReplacer3106, varReplacer3107;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        varReplacer3107 = "alarm";
+
+        $r1 = virtualinvoke $r0.<com.narvii.account.LoginActivity: java.lang.Object getSystemService(java.lang.String)>(varReplacer3107);
+
+        $r2 = (android.app.AlarmManager) $r1;
+
+        $r3 = new android.content.Intent;
+
+        specialinvoke $r3.<android.content.Intent: void <init>(android.content.Context,java.lang.Class)>($r0, class "Lcom/narvii/account/FinishSignupNotificationService;");
+
+        varReplacer3104 = 0;
+
+        varReplacer3105 = 0;
+
+        $r4 = staticinvoke <android.app.PendingIntent: android.app.PendingIntent getService(android.content.Context,int,android.content.Intent,int)>($r0, varReplacer3104, $r3, varReplacer3104);
+
+        virtualinvoke $r2.<android.app.AlarmManager: void cancel(android.app.PendingIntent)>($r4);
+
+        varReplacer3106 = "notification";
+
+        $r1 = virtualinvoke $r0.<com.narvii.account.LoginActivity: java.lang.Object getSystemService(java.lang.String)>(varReplacer3106);
+
+        $r5 = (android.app.NotificationManager) $r1;
+
+        varReplacer3103 = 4609;
+
+        virtualinvoke $r5.<android.app.NotificationManager: void cancel(int)>(varReplacer3103);
+
+        specialinvoke $r0.<com.narvii.app.NVActivity: void onStart()>();
+
+        return;
+    }
+
+    protected void onStop()
+    {
+        com.narvii.account.LoginActivity $r0;
+        boolean $z0, $z1;
+        com.narvii.account.AccountService $r1;
+        java.lang.Object $r2;
+        com.narvii.util.statistics.StatisticsService $r3;
+        int $i0, varReplacer3124;
+        java.lang.String $r4, varReplacer3118, varReplacer3119, varReplacer3120, varReplacer3121, varReplacer3122, varReplacer3125, varReplacer3126, varReplacer3127;
+        com.narvii.util.statistics.StatisticsEventBuilder $r5;
+        java.lang.StringBuilder $r6;
+        android.support.v4.app.FragmentManager $r7;
+        java.util.List $r8;
+        java.util.Iterator $r9;
+        android.support.v4.app.Fragment $r10;
+        java.lang.Runnable $r11;
+        long varReplacer3123;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        specialinvoke $r0.<com.narvii.app.NVActivity: void onStop()>();
+
+        $z0 = $r0.<com.narvii.account.LoginActivity: boolean startingActivity>;
+
+        if $z0 != 0 goto label03;
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: com.narvii.account.AccountService account>;
+
+        $z0 = virtualinvoke $r1.<com.narvii.account.AccountService: boolean hasAccount()>();
+
+        if $z0 != 0 goto label03;
+
+        varReplacer3120 = "statistics";
+
+        $r2 = virtualinvoke $r0.<com.narvii.account.LoginActivity: java.lang.Object getService(java.lang.String)>(varReplacer3120);
+
+        $r3 = (com.narvii.util.statistics.StatisticsService) $r2;
+
+        $i0 = $r0.<com.narvii.account.LoginActivity: int maxLoginStep>;
+
+        if $i0 <= 0 goto label07;
+
+        $r4 = "Login";
+
+     label01:
+        varReplacer3121 = "Registration Quit";
+
+        $r5 = interfaceinvoke $r3.<com.narvii.util.statistics.StatisticsService: com.narvii.util.statistics.StatisticsEventBuilder event(java.lang.String)>(varReplacer3121);
+
+        varReplacer3124 = 10;
+
+        $r5 = virtualinvoke $r5.<com.narvii.util.statistics.StatisticsEventBuilder: com.narvii.util.statistics.StatisticsEventBuilder priority(int)>(varReplacer3124);
+
+        varReplacer3125 = "Step";
+
+        $r5 = virtualinvoke $r5.<com.narvii.util.statistics.StatisticsEventBuilder: com.narvii.util.statistics.StatisticsEventBuilder param(java.lang.String,java.lang.String)>(varReplacer3125, $r4);
+
+        varReplacer3126 = "Source";
+
+        $r4 = virtualinvoke $r0.<com.narvii.account.LoginActivity: java.lang.String getStringParam(java.lang.String)>(varReplacer3126);
+
+        $r5 = virtualinvoke $r5.<com.narvii.util.statistics.StatisticsEventBuilder: com.narvii.util.statistics.StatisticsEventBuilder source(java.lang.String)>($r4);
+
+        $r4 = $r0.<com.narvii.account.LoginActivity: java.lang.String lastErrorMsg>;
+
+        if $r4 == null goto label03;
+
+        $i0 = $r0.<com.narvii.account.LoginActivity: int lastErrorCode>;
+
+        lookupswitch($i0)
+        {
+            case 213: goto label09;
+            case 214: goto label10;
+            case 215: goto label11;
+            case 216: goto label02;
+            case 217: goto label02;
+            case 218: goto label12;
+            case 219: goto label13;
+            default: goto label02;
+        };
+
+     label02:
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $i0 = $r0.<com.narvii.account.LoginActivity: int lastErrorCode>;
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer3127 = " - ";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3127);
+
+        $r4 = $r0.<com.narvii.account.LoginActivity: java.lang.String lastErrorMsg>;
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer3122 = "Error";
+
+        virtualinvoke $r5.<com.narvii.util.statistics.StatisticsEventBuilder: com.narvii.util.statistics.StatisticsEventBuilder param(java.lang.String,java.lang.String)>(varReplacer3122, $r4);
+
+        $i0 = $r0.<com.narvii.account.LoginActivity: int lastErrorCode>;
+
+        varReplacer3118 = "Error Code";
+
+        virtualinvoke $r5.<com.narvii.util.statistics.StatisticsEventBuilder: com.narvii.util.statistics.StatisticsEventBuilder param(java.lang.String,int)>(varReplacer3118, $i0);
+
+     label03:
+        $z0 = $r0.<com.narvii.account.LoginActivity: boolean signupWakeup>;
+
+        if $z0 != 0 goto label14;
+
+        $z0 = 0;
+
+        $r7 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.support.v4.app.FragmentManager getSupportFragmentManager()>();
+
+        $r8 = virtualinvoke $r7.<android.support.v4.app.FragmentManager: java.util.List getFragments()>();
+
+        $r9 = interfaceinvoke $r8.<java.util.List: java.util.Iterator iterator()>();
+
+     label04:
+        $z1 = interfaceinvoke $r9.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label06;
+
+        $r2 = interfaceinvoke $r9.<java.util.Iterator: java.lang.Object next()>();
+
+        $r10 = (android.support.v4.app.Fragment) $r2;
+
+        $z1 = $r10 instanceof com.narvii.account.Signup1Fragment;
+
+        if $z1 != 0 goto label05;
+
+        $z1 = $r10 instanceof com.narvii.account.Signup2Fragment;
+
+        if $z1 == 0 goto label04;
+
+     label05:
+        $z0 = 1;
+
+     label06:
+        if $z0 == 0 goto label14;
+
+        $r11 = $r0.<com.narvii.account.LoginActivity: java.lang.Runnable scheduleSignupWakeup>;
+
+        varReplacer3123 = 100L;
+
+        staticinvoke <com.narvii.util.Utils: void postDelayed(java.lang.Runnable,long)>($r11, varReplacer3123);
+
+        return;
+
+     label07:
+        $i0 = $r0.<com.narvii.account.LoginActivity: int maxSignupStep>;
+
+        if $i0 <= 0 goto label08;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer3119 = "Signup ";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3119);
+
+        $i0 = $r0.<com.narvii.account.LoginActivity: int maxSignupStep>;
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r4 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        goto label01;
+
+     label08:
+        $r4 = "Zero";
+
+        goto label01;
+
+     label09:
+        goto label02;
+
+     label10:
+        goto label02;
+
+     label11:
+        goto label02;
+
+     label12:
+        goto label02;
+
+     label13:
+        goto label02;
+
+     label14:
+        return;
+    }
+
+    void procReq(com.narvii.util.http.ApiRequest$Builder)
+    {
+        com.narvii.account.LoginActivity $r0;
+        com.narvii.util.http.ApiRequest$Builder $r1;
+        int[] $r2;
+        java.lang.String $r3, $r5, $r7;
+        int $i0, $i1, $i2;
+        byte[] $r4;
+        java.lang.StringBuilder $r6;
+        java.lang.Integer $r8;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $r1 := @parameter0: com.narvii.util.http.ApiRequest$Builder;
+
+        $r2 = newarray (int)[4];
+
+        $r2[0] = 2;
+
+        $r2[1] = 3;
+
+        $r2[2] = 4;
+
+        $r2[3] = 5;
+
+        $r3 = virtualinvoke $r0.<com.narvii.account.LoginActivity: java.lang.String getString(int)>(2131100898);
+
+        $i0 = lengthof $r2;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label3;
+
+        $i2 = $r2[$i1];
+
+        $r4 = specialinvoke $r0.<com.narvii.account.LoginActivity: byte[] getIds(int)>($i2);
+
+        if $r4 == null goto label2;
+
+        $r5 = staticinvoke <com.narvii.util.NativeHelper: java.lang.String C(byte[],java.lang.String,int)>($r4, $r3, 1);
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("deviceID");
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i2);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r1.<com.narvii.util.http.ApiRequest$Builder: com.narvii.util.http.ApiRequest$Builder param(java.lang.String,java.lang.Object)>($r7, $r5);
+
+     label2:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        $r2 = specialinvoke $r0.<com.narvii.account.LoginActivity: int[] getVals()>();
+
+        $i0 = 0;
+
+     label4:
+        $i1 = lengthof $r2;
+
+        if $i0 >= $i1 goto label5;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("val");
+
+        $i1 = $i0 + 1;
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r3 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $i1 = $r2[$i0];
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        virtualinvoke $r1.<com.narvii.util.http.ApiRequest$Builder: com.narvii.util.http.ApiRequest$Builder param(java.lang.String,java.lang.Object)>($r3, $r8);
+
+        $i0 = $i0 + 1;
+
+        goto label4;
+
+     label5:
+        return;
+    }
+
+    void setSubmitting(com.narvii.account.LoginBaseFragment)
+    {
+        com.narvii.account.LoginActivity $r0;
+        com.narvii.account.LoginBaseFragment $r1;
+        null_type varReplacer3148;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $r1 := @parameter0: com.narvii.account.LoginBaseFragment;
+
+        goto label1;
+
+     label1:
+        varReplacer3148 = null;
+
+        $r0.<com.narvii.account.LoginActivity: com.narvii.account.LoginBaseFragment submittingFragment> = varReplacer3148;
+
+        virtualinvoke $r0.<com.narvii.account.LoginActivity: void updateViews()>();
+
+        return;
+    }
+
+    public void startActivityForResult(android.content.Intent, int)
+    {
+        com.narvii.account.LoginActivity $r0;
+        android.content.Intent $r1;
+        int $i0, varReplacer3114;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $r1 := @parameter0: android.content.Intent;
+
+        $i0 := @parameter1: int;
+
+        varReplacer3114 = 1;
+
+        $r0.<com.narvii.account.LoginActivity: boolean startingActivity> = varReplacer3114;
+
+        specialinvoke $r0.<com.narvii.app.NVActivity: void startActivityForResult(android.content.Intent,int)>($r1, $i0);
+
+        return;
+    }
+
+    public void startActivityFromFragment(android.support.v4.app.Fragment, android.content.Intent, int, android.os.Bundle)
+    {
+        com.narvii.account.LoginActivity $r0;
+        android.support.v4.app.Fragment $r1;
+        android.content.Intent $r2;
+        int $i0, varReplacer3113;
+        android.os.Bundle $r3;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $r1 := @parameter0: android.support.v4.app.Fragment;
+
+        $r2 := @parameter1: android.content.Intent;
+
+        $i0 := @parameter2: int;
+
+        $r3 := @parameter3: android.os.Bundle;
+
+        varReplacer3113 = 1;
+
+        $r0.<com.narvii.account.LoginActivity: boolean startingActivity> = varReplacer3113;
+
+        specialinvoke $r0.<com.narvii.app.NVActivity: void startActivityFromFragment(android.support.v4.app.Fragment,android.content.Intent,int,android.os.Bundle)>($r1, $r2, $i0, $r3);
+
+        return;
+    }
+
+    void updateGradient()
+    {
+        com.narvii.account.LoginActivity $r0;
+        int $i0, $i1, $i2, $i4, $i5, $i6;
+        float $f0, $f1, $f2, $f3, varReplacer3161, varReplacer3162;
+        com.narvii.account.GradientView $r1;
+        com.narvii.widget.Flipper $r2;
+        java.lang.Object $r3;
+        java.lang.Integer $r4;
+        int[] $r5;
+        boolean $z0;
+        byte $b3;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: com.narvii.account.GradientView gradientView>;
+
+        $i1 = virtualinvoke $r1.<com.narvii.account.GradientView: int getWidth()>();
+
+        $r2 = $r0.<com.narvii.account.LoginActivity: com.narvii.widget.Flipper flipper>;
+
+        $r3 = virtualinvoke $r2.<com.narvii.widget.Flipper: java.lang.Object getCurrentItem()>();
+
+        $r4 = (java.lang.Integer) $r3;
+
+        $i2 = virtualinvoke $r4.<java.lang.Integer: int intValue()>();
+
+        $r5 = $r0.<com.narvii.account.LoginActivity: int[] gradientColors1>;
+
+        $i0 = lengthof $r5;
+
+        $r2 = $r0.<com.narvii.account.LoginActivity: com.narvii.widget.Flipper flipper>;
+
+        $f0 = virtualinvoke $r2.<com.narvii.widget.Flipper: float flipDistance()>();
+
+        $f1 = $f0;
+
+        $z0 = staticinvoke <com.narvii.util.Utils: boolean isRtl()>();
+
+        if $z0 == 0 goto label1;
+
+        $f1 = neg $f0;
+
+     label1:
+        if $i1 != 0 goto label3;
+
+        $f1 = 0.0F;
+
+     label2:
+        $b3 = $f1 cmpg 0.0F;
+
+        if $b3 >= 0 goto label4;
+
+        $f0 = (float) $i0;
+
+        $f1 = $f1 + $f0;
+
+        goto label2;
+
+     label3:
+        $f0 = (float) $i2;
+
+        $f2 = (float) $i1;
+
+        $f1 = $f1 / $f2;
+
+        varReplacer3161 = 0.0F;
+
+        $f1 = staticinvoke <java.lang.Math: float max(float,float)>(varReplacer3161, $f1);
+
+        varReplacer3162 = 1.0F;
+
+        $f1 = staticinvoke <java.lang.Math: float min(float,float)>(varReplacer3162, $f1);
+
+        $f1 = $f0 + $f1;
+
+        goto label2;
+
+     label4:
+        $f0 = (float) $i0;
+
+        $b3 = $f1 cmpl $f0;
+
+        if $b3 < 0 goto label5;
+
+        $f0 = (float) $i0;
+
+        $f1 = $f1 - $f0;
+
+        goto label4;
+
+     label5:
+        $r5 = $r0.<com.narvii.account.LoginActivity: int[] gradientColors1>;
+
+        $i0 = (int) $f1;
+
+        $i0 = $r5[$i0];
+
+        $r5 = $r0.<com.narvii.account.LoginActivity: int[] gradientColors1>;
+
+        $i1 = (int) $f1;
+
+        if $i1 != 3 goto label8;
+
+        $i1 = 0;
+
+     label6:
+        $i1 = $r5[$i1];
+
+        $i2 = (int) $f1;
+
+        $f0 = (float) $i2;
+
+        $f0 = $f1 - $f0;
+
+        $i2 = staticinvoke <android.graphics.Color: int alpha(int)>($i0);
+
+        $f2 = (float) $i2;
+
+        $f3 = 1.0F - $f0;
+
+        $f2 = $f2 * $f3;
+
+        $i2 = staticinvoke <android.graphics.Color: int alpha(int)>($i1);
+
+        $f3 = (float) $i2;
+
+        $f3 = $f3 * $f0;
+
+        $f2 = $f2 + $f3;
+
+        $i2 = (int) $f2;
+
+        $i4 = staticinvoke <android.graphics.Color: int red(int)>($i0);
+
+        $f2 = (float) $i4;
+
+        $f3 = 1.0F - $f0;
+
+        $f2 = $f2 * $f3;
+
+        $i4 = staticinvoke <android.graphics.Color: int red(int)>($i1);
+
+        $f3 = (float) $i4;
+
+        $f3 = $f3 * $f0;
+
+        $f2 = $f2 + $f3;
+
+        $i4 = (int) $f2;
+
+        $i5 = staticinvoke <android.graphics.Color: int green(int)>($i0);
+
+        $f2 = (float) $i5;
+
+        $f3 = 1.0F - $f0;
+
+        $f2 = $f2 * $f3;
+
+        $i5 = staticinvoke <android.graphics.Color: int green(int)>($i1);
+
+        $f3 = (float) $i5;
+
+        $f3 = $f3 * $f0;
+
+        $f2 = $f2 + $f3;
+
+        $i5 = (int) $f2;
+
+        $i0 = staticinvoke <android.graphics.Color: int blue(int)>($i0);
+
+        $f2 = (float) $i0;
+
+        $f3 = 1.0F - $f0;
+
+        $f2 = $f2 * $f3;
+
+        $i0 = staticinvoke <android.graphics.Color: int blue(int)>($i1);
+
+        $f3 = (float) $i0;
+
+        $f3 = $f3 * $f0;
+
+        $f2 = $f2 + $f3;
+
+        $i0 = (int) $f2;
+
+        $i0 = staticinvoke <android.graphics.Color: int argb(int,int,int,int)>($i2, $i4, $i5, $i0);
+
+        $r5 = $r0.<com.narvii.account.LoginActivity: int[] gradientColors2>;
+
+        $i1 = (int) $f1;
+
+        $i1 = $r5[$i1];
+
+        $r5 = $r0.<com.narvii.account.LoginActivity: int[] gradientColors2>;
+
+        $i2 = (int) $f1;
+
+        if $i2 != 3 goto label9;
+
+        $i2 = 0;
+
+     label7:
+        $i2 = $r5[$i2];
+
+        $i4 = staticinvoke <android.graphics.Color: int alpha(int)>($i1);
+
+        $f1 = (float) $i4;
+
+        $f2 = 1.0F - $f0;
+
+        $f1 = $f1 * $f2;
+
+        $i4 = staticinvoke <android.graphics.Color: int alpha(int)>($i2);
+
+        $f2 = (float) $i4;
+
+        $f2 = $f2 * $f0;
+
+        $f1 = $f1 + $f2;
+
+        $i4 = (int) $f1;
+
+        $i5 = staticinvoke <android.graphics.Color: int red(int)>($i1);
+
+        $f1 = (float) $i5;
+
+        $f2 = 1.0F - $f0;
+
+        $f1 = $f1 * $f2;
+
+        $i5 = staticinvoke <android.graphics.Color: int red(int)>($i2);
+
+        $f2 = (float) $i5;
+
+        $f2 = $f2 * $f0;
+
+        $f1 = $f1 + $f2;
+
+        $i5 = (int) $f1;
+
+        $i6 = staticinvoke <android.graphics.Color: int green(int)>($i1);
+
+        $f1 = (float) $i6;
+
+        $f2 = 1.0F - $f0;
+
+        $f1 = $f1 * $f2;
+
+        $i6 = staticinvoke <android.graphics.Color: int green(int)>($i2);
+
+        $f2 = (float) $i6;
+
+        $f2 = $f2 * $f0;
+
+        $f1 = $f1 + $f2;
+
+        $i6 = (int) $f1;
+
+        $i1 = staticinvoke <android.graphics.Color: int blue(int)>($i1);
+
+        $f1 = (float) $i1;
+
+        $f2 = 1.0F - $f0;
+
+        $f1 = $f1 * $f2;
+
+        $i1 = staticinvoke <android.graphics.Color: int blue(int)>($i2);
+
+        $f2 = (float) $i1;
+
+        $f0 = $f2 * $f0;
+
+        $f0 = $f1 + $f0;
+
+        $i1 = (int) $f0;
+
+        $i1 = staticinvoke <android.graphics.Color: int argb(int,int,int,int)>($i4, $i5, $i6, $i1);
+
+        $r1 = $r0.<com.narvii.account.LoginActivity: com.narvii.account.GradientView gradientView>;
+
+        virtualinvoke $r1.<com.narvii.account.GradientView: void setColor(int,int)>($i0, $i1);
+
+        return;
+
+     label8:
+        $i1 = (int) $f1;
+
+        $i1 = $i1 + 1;
+
+        goto label6;
+
+     label9:
+        $i2 = (int) $f1;
+
+        $i2 = $i2 + 1;
+
+        goto label7;
+    }
+
+    void updateViews()
+    {
+        com.narvii.account.LoginActivity $r0;
+        boolean $z0, $z1;
+        android.view.View $r1, $r2, $r3;
+        android.widget.TextView $r4;
+        com.narvii.account.LoginBaseFragment $r5;
+        com.narvii.account.AccountService $r6;
+        int $i0, varReplacer3153, varReplacer3154, varReplacer3155;
+        java.lang.String $r7;
+
+        nop;
+
+        $r0 := @this: com.narvii.account.LoginActivity;
+
+        $z0 = 1;
+
+        varReplacer3155 = 2131427447;
+
+        $r1 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.view.View findViewById(int)>(varReplacer3155);
+
+        varReplacer3154 = 2131427448;
+
+        $r2 = virtualinvoke $r0.<com.narvii.account.LoginActivity: android.view.View findViewById(int)>(varReplacer3154);
+
+        varReplacer3153 = 2131427449;
+
+        $r3 = virtualinvoke $r2.<android.view.View: android.view.View findViewById(int)>(varReplacer3153);
+
+        $r4 = (android.widget.TextView) $r3;
+
+        $r5 = $r0.<com.narvii.account.LoginActivity: com.narvii.account.LoginBaseFragment submittingFragment>;
+
+        if $r5 != null goto label1;
+
+        $r6 = $r0.<com.narvii.account.LoginActivity: com.narvii.account.AccountService account>;
+
+        $i0 = virtualinvoke $r6.<com.narvii.account.AccountService: int getKeychainStatus()>();
+
+        if $i0 <= 0 goto label5;
+
+     label1:
+        $z1 = 1;
+
+     label2:
+        if $z1 != 0 goto label6;
+
+     label3:
+        specialinvoke $r0.<com.narvii.account.LoginActivity: void setVisibilityAnim(android.view.View,boolean)>($r1, $z0);
+
+        specialinvoke $r0.<com.narvii.account.LoginActivity: void setVisibilityAnim(android.view.View,boolean)>($r2, $z1);
+
+        $r5 = $r0.<com.narvii.account.LoginActivity: com.narvii.account.LoginBaseFragment submittingFragment>;
+
+        if $r5 != null goto label7;
+
+        $r7 = null;
+
+     label4:
+        virtualinvoke $r4.<android.widget.TextView: void setText(java.lang.CharSequence)>($r7);
+
+        return;
+
+     label5:
+        $z1 = 0;
+
+        goto label2;
+
+     label6:
+        $z0 = 0;
+
+        goto label3;
+
+     label7:
+        $r5 = $r0.<com.narvii.account.LoginActivity: com.narvii.account.LoginBaseFragment submittingFragment>;
+
+        $r7 = virtualinvoke $r5.<com.narvii.account.LoginBaseFragment: java.lang.String getProgressText()>();
+
+        goto label4;
+    }
+
+    public android.content.Intent getIntent()
+    {
+        com.narvii.account.LoginActivity this;
+        android.content.Intent $r0;
+
+        nop;
+
+        this := @this: com.narvii.account.LoginActivity;
+
+        $r0 = this.<com.narvii.account.LoginActivity: android.content.Intent ipcIntent>;
+
+        return $r0;
+    }
+
+    public void setIntent(android.content.Intent)
+    {
+        com.narvii.account.LoginActivity this;
+        android.content.Intent parameter0;
+
+        nop;
+
+        this := @this: com.narvii.account.LoginActivity;
+
+        parameter0 := @parameter0: android.content.Intent;
+
+        this.<com.narvii.account.LoginActivity: android.content.Intent ipcIntent> = parameter0;
+
+        return;
+    }
+
+    public void setResult(int, android.content.Intent)
+    {
+        com.narvii.account.LoginActivity this;
+        int parameter0;
+        android.content.Intent parameter1;
+
+        this := @this: com.narvii.account.LoginActivity;
+
+        parameter0 := @parameter0: int;
+
+        parameter1 := @parameter1: android.content.Intent;
+
+        this.<com.narvii.account.LoginActivity: android.content.Intent ipcResultIntent> = parameter1;
+
+        return;
+    }
+}

@@ -1,0 +1,688 @@
+class com.googlecode.andoku.BackupUtil extends android.app.Activity
+{
+    private static final java.lang.String DATABASE_BACKUP_FILE;
+    private static final java.lang.String DATABASE_BACKUP_FILE_SIGNATURE;
+    private static final java.lang.String DATABASE_UPDATE_FILE;
+    private static final java.lang.String MAC_NAME;
+    private static final java.lang.String SD_CARD_BACKUP_DIR;
+    private static final java.lang.String TAG;
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+        java.lang.Class $r1;
+
+        nop;
+
+        $r1 = class "Lcom/googlecode/andoku/BackupUtil;";
+
+        $r0 = virtualinvoke $r1.<java.lang.Class: java.lang.String getName()>();
+
+        <com.googlecode.andoku.BackupUtil: java.lang.String TAG> = $r0;
+
+        return;
+    }
+
+    private void <init>()
+    {
+        com.googlecode.andoku.BackupUtil $r0;
+
+        $r0 := @this: com.googlecode.andoku.BackupUtil;
+
+        specialinvoke $r0.<android.app.Activity: void <init>()>();
+
+        return;
+    }
+
+    private static void copy(java.io.InputStream, java.io.OutputStream) throws java.io.IOException
+    {
+        java.io.InputStream $r0;
+        java.io.OutputStream $r1;
+        byte[] $r2;
+        int $i0, varReplacer734;
+        java.lang.Throwable $r3, $r4, $r5;
+
+        nop;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+        $r1 := @parameter1: java.io.OutputStream;
+
+        $r2 = newarray (byte)[4096];
+
+     label01:
+        $i0 = virtualinvoke $r0.<java.io.InputStream: int read(byte[])>($r2);
+
+     label02:
+        if $i0 != -1 goto label06;
+
+     label03:
+        virtualinvoke $r1.<java.io.OutputStream: void flush()>();
+
+     label04:
+        virtualinvoke $r0.<java.io.InputStream: void close()>();
+
+     label05:
+        virtualinvoke $r1.<java.io.OutputStream: void close()>();
+
+        return;
+
+     label06:
+        varReplacer734 = 0;
+
+        virtualinvoke $r1.<java.io.OutputStream: void write(byte[],int,int)>($r2, varReplacer734, $i0);
+
+     label07:
+        goto label01;
+
+     label08:
+        $r3 := @caughtexception;
+
+     label09:
+        virtualinvoke $r0.<java.io.InputStream: void close()>();
+
+     label10:
+        virtualinvoke $r1.<java.io.OutputStream: void close()>();
+
+        throw $r3;
+
+     label11:
+        $r4 := @caughtexception;
+
+        virtualinvoke $r1.<java.io.OutputStream: void close()>();
+
+        throw $r4;
+
+     label12:
+        $r5 := @caughtexception;
+
+        virtualinvoke $r1.<java.io.OutputStream: void close()>();
+
+        throw $r5;
+
+        catch java.lang.Throwable from label01 to label02 with label08;
+        catch java.lang.Throwable from label03 to label04 with label08;
+        catch java.lang.Throwable from label04 to label05 with label12;
+        catch java.lang.Throwable from label06 to label07 with label08;
+        catch java.lang.Throwable from label09 to label10 with label11;
+    }
+
+    private static boolean copyFile(java.io.File, java.io.File)
+    {
+        java.io.File $r0, $r1;
+        java.lang.Throwable $r2;
+        java.io.FileInputStream $r3;
+        java.io.FileOutputStream $r4;
+        java.lang.String $r5, $r7, varReplacer716, varReplacer717;
+        java.lang.StringBuilder $r6;
+        int varReplacer715, varReplacer718;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $r1 := @parameter1: java.io.File;
+
+        $r3 = new java.io.FileInputStream;
+
+     label1:
+        specialinvoke $r3.<java.io.FileInputStream: void <init>(java.io.File)>($r0);
+
+     label2:
+        $r4 = new java.io.FileOutputStream;
+
+     label3:
+        specialinvoke $r4.<java.io.FileOutputStream: void <init>(java.io.File)>($r1);
+
+        staticinvoke <com.googlecode.andoku.BackupUtil: void copy(java.io.InputStream,java.io.OutputStream)>($r3, $r4);
+
+     label4:
+        varReplacer718 = 1;
+
+        return varReplacer718;
+
+     label5:
+        $r2 := @caughtexception;
+
+        $r5 = <com.googlecode.andoku.BackupUtil: java.lang.String TAG>;
+
+        $r6 = new java.lang.StringBuilder;
+
+        varReplacer717 = "Could not copy ";
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer717);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        varReplacer716 = " to ";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer716);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r5, $r7, $r2);
+
+        varReplacer715 = 0;
+
+        return varReplacer715;
+
+        catch java.io.IOException from label1 to label2 with label5;
+        catch java.io.IOException from label3 to label4 with label5;
+    }
+
+    private static boolean createDir(java.io.File)
+    {
+        java.io.File $r0;
+        boolean $z0;
+        java.lang.String $r1, $r3, varReplacer727;
+        java.lang.StringBuilder $r2;
+        int varReplacer726;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $z0 = virtualinvoke $r0.<java.io.File: boolean isDirectory()>();
+
+        if $z0 == 0 goto label1;
+
+        varReplacer726 = 1;
+
+        return varReplacer726;
+
+     label1:
+        $z0 = virtualinvoke $r0.<java.io.File: boolean mkdirs()>();
+
+        if $z0 != 0 goto label2;
+
+        $r1 = <com.googlecode.andoku.BackupUtil: java.lang.String TAG>;
+
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer727 = "Could not create directory ";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer727);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r0);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r1, $r3);
+
+     label2:
+        return $z0;
+    }
+
+    private static boolean createSignature(java.lang.String, java.io.File, java.io.File)
+    {
+        java.lang.String $r0, varReplacer730, varReplacer732, varReplacer733;
+        java.io.File $r1, $r2;
+        java.io.FileOutputStream $r3;
+        byte[] $r4;
+        java.lang.Throwable $r5, $r6;
+        int varReplacer728, varReplacer729, varReplacer731;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.io.File;
+
+        $r2 := @parameter2: java.io.File;
+
+     label1:
+        $r4 = staticinvoke <com.googlecode.andoku.BackupUtil: byte[] load(java.io.File)>($r1);
+
+        varReplacer733 = "secretandoku";
+
+        $r4 = staticinvoke <com.googlecode.andoku.BackupUtil: byte[] sign(java.lang.String,byte[])>(varReplacer733, $r4);
+
+     label2:
+        $r3 = new java.io.FileOutputStream;
+
+     label3:
+        specialinvoke $r3.<java.io.FileOutputStream: void <init>(java.io.File)>($r2);
+
+        virtualinvoke $r3.<java.io.OutputStream: void write(byte[])>($r4);
+
+        virtualinvoke $r3.<java.io.OutputStream: void close()>();
+
+     label4:
+        varReplacer728 = 1;
+
+        return varReplacer728;
+
+     label5:
+        $r5 := @caughtexception;
+
+        $r0 = <com.googlecode.andoku.BackupUtil: java.lang.String TAG>;
+
+        varReplacer730 = "Could not sign database";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r0, varReplacer730, $r5);
+
+        varReplacer731 = 0;
+
+        return varReplacer731;
+
+     label6:
+        $r6 := @caughtexception;
+
+        $r0 = <com.googlecode.andoku.BackupUtil: java.lang.String TAG>;
+
+        varReplacer732 = "Could not sign database";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r0, varReplacer732, $r6);
+
+        varReplacer729 = 0;
+
+        return varReplacer729;
+
+        catch java.io.IOException from label1 to label2 with label5;
+        catch java.io.IOException from label3 to label4 with label5;
+        catch java.security.GeneralSecurityException from label1 to label2 with label6;
+        catch java.security.GeneralSecurityException from label3 to label4 with label6;
+    }
+
+    private static byte[] load(java.io.File) throws java.io.IOException
+    {
+        java.io.File $r0;
+        java.io.ByteArrayOutputStream $r1;
+        byte[] $r2;
+        java.io.FileInputStream $r3;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $r1 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r1.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        $r3 = new java.io.FileInputStream;
+
+        specialinvoke $r3.<java.io.FileInputStream: void <init>(java.io.File)>($r0);
+
+        staticinvoke <com.googlecode.andoku.BackupUtil: void copy(java.io.InputStream,java.io.OutputStream)>($r3, $r1);
+
+        $r2 = virtualinvoke $r1.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        return $r2;
+    }
+
+    public static void restoreOrBackupDatabase(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.io.File $r1, $r2, $r3, $r4, $r7;
+        java.lang.String $r5, $r6, varReplacer699, varReplacer700, varReplacer701, varReplacer702, varReplacer703, varReplacer704, varReplacer705, varReplacer706, varReplacer707, varReplacer708, varReplacer709, varReplacer710, varReplacer711, varReplacer712, varReplacer713, varReplacer714;
+        boolean $z0;
+        java.lang.StringBuilder $r8;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r5 = "mounted";
+
+        $r6 = staticinvoke <android.os.Environment: java.lang.String getExternalStorageState()>();
+
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean equals(java.lang.Object)>($r6);
+
+        if $z0 != 0 goto label1;
+
+        $r5 = <com.googlecode.andoku.BackupUtil: java.lang.String TAG>;
+
+        varReplacer704 = "Cannot restore or back up database; external storage not mounted";
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>($r5, varReplacer704);
+
+        return;
+
+     label1:
+        varReplacer700 = "save_games.db";
+
+        $r7 = virtualinvoke $r0.<android.content.Context: java.io.File getDatabasePath(java.lang.String)>(varReplacer700);
+
+        $r2 = staticinvoke <android.os.Environment: java.io.File getExternalStorageDirectory()>();
+
+        $r1 = new java.io.File;
+
+        varReplacer701 = "Andoku";
+
+        specialinvoke $r1.<java.io.File: void <init>(java.io.File,java.lang.String)>($r2, varReplacer701);
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean isDirectory()>();
+
+        if $z0 != 0 goto label2;
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean mkdirs()>();
+
+        if $z0 != 0 goto label2;
+
+        $r5 = <com.googlecode.andoku.BackupUtil: java.lang.String TAG>;
+
+        varReplacer708 = "Could not create root directory \"Andoku\" on external storage";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r5, varReplacer708);
+
+        return;
+
+     label2:
+        $r2 = new java.io.File;
+
+        varReplacer710 = "database.bak";
+
+        specialinvoke $r2.<java.io.File: void <init>(java.io.File,java.lang.String)>($r1, varReplacer710);
+
+        $r3 = new java.io.File;
+
+        varReplacer713 = "database.bak.sig";
+
+        specialinvoke $r3.<java.io.File: void <init>(java.io.File,java.lang.String)>($r1, varReplacer713);
+
+        $r4 = new java.io.File;
+
+        varReplacer699 = "database.update";
+
+        specialinvoke $r4.<java.io.File: void <init>(java.io.File,java.lang.String)>($r1, varReplacer699);
+
+        $z0 = virtualinvoke $r4.<java.io.File: boolean isFile()>();
+
+        if $z0 == 0 goto label5;
+
+        $r1 = virtualinvoke $r7.<java.io.File: java.io.File getParentFile()>();
+
+        $z0 = staticinvoke <com.googlecode.andoku.BackupUtil: boolean createDir(java.io.File)>($r1);
+
+        if $z0 == 0 goto label4;
+
+        $r5 = <com.googlecode.andoku.BackupUtil: java.lang.String TAG>;
+
+        $r8 = new java.lang.StringBuilder;
+
+        varReplacer712 = "Updating database from ";
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer712);
+
+        $r6 = virtualinvoke $r4.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>($r5, $r6);
+
+        $z0 = virtualinvoke $r7.<java.io.File: boolean isFile()>();
+
+        if $z0 == 0 goto label3;
+
+        $r5 = <com.googlecode.andoku.BackupUtil: java.lang.String TAG>;
+
+        varReplacer702 = "Overwriting existing database!";
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>($r5, varReplacer702);
+
+     label3:
+        $z0 = staticinvoke <com.googlecode.andoku.BackupUtil: boolean copyFile(java.io.File,java.io.File)>($r4, $r7);
+
+        if $z0 == 0 goto label4;
+
+        virtualinvoke $r4.<java.io.File: boolean delete()>();
+
+     label4:
+        $z0 = virtualinvoke $r7.<java.io.File: boolean isFile()>();
+
+        if $z0 == 0 goto label7;
+
+        $r5 = <com.googlecode.andoku.BackupUtil: java.lang.String TAG>;
+
+        $r8 = new java.lang.StringBuilder;
+
+        varReplacer709 = "Writing database signature to ";
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer709);
+
+        $r6 = virtualinvoke $r3.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>($r5, $r6);
+
+        varReplacer707 = "secretandoku";
+
+        $z0 = staticinvoke <com.googlecode.andoku.BackupUtil: boolean createSignature(java.lang.String,java.io.File,java.io.File)>(varReplacer707, $r7, $r3);
+
+        if $z0 == 0 goto label7;
+
+        $r5 = <com.googlecode.andoku.BackupUtil: java.lang.String TAG>;
+
+        $r8 = new java.lang.StringBuilder;
+
+        varReplacer703 = "Backing up database to ";
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer703);
+
+        $r6 = virtualinvoke $r2.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>($r5, $r6);
+
+        staticinvoke <com.googlecode.andoku.BackupUtil: boolean copyFile(java.io.File,java.io.File)>($r7, $r2);
+
+        return;
+
+     label5:
+        $z0 = virtualinvoke $r2.<java.io.File: boolean isFile()>();
+
+        if $z0 == 0 goto label4;
+
+        $z0 = virtualinvoke $r7.<java.io.File: boolean isFile()>();
+
+        if $z0 != 0 goto label4;
+
+        $r1 = virtualinvoke $r7.<java.io.File: java.io.File getParentFile()>();
+
+        $z0 = staticinvoke <com.googlecode.andoku.BackupUtil: boolean createDir(java.io.File)>($r1);
+
+        if $z0 == 0 goto label7;
+
+        $r5 = <com.googlecode.andoku.BackupUtil: java.lang.String TAG>;
+
+        $r8 = new java.lang.StringBuilder;
+
+        varReplacer706 = "Verifying database signature ";
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer706);
+
+        $r6 = virtualinvoke $r3.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>($r5, $r6);
+
+        varReplacer714 = "secretandoku";
+
+        $z0 = staticinvoke <com.googlecode.andoku.BackupUtil: boolean verifySignature(java.lang.String,java.io.File,java.io.File)>(varReplacer714, $r2, $r3);
+
+        if $z0 == 0 goto label6;
+
+        $r5 = <com.googlecode.andoku.BackupUtil: java.lang.String TAG>;
+
+        $r8 = new java.lang.StringBuilder;
+
+        varReplacer711 = "Restoring database from backup ";
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer711);
+
+        $r6 = virtualinvoke $r2.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>($r5, $r6);
+
+        staticinvoke <com.googlecode.andoku.BackupUtil: boolean copyFile(java.io.File,java.io.File)>($r2, $r7);
+
+        return;
+
+     label6:
+        $r5 = <com.googlecode.andoku.BackupUtil: java.lang.String TAG>;
+
+        varReplacer705 = "Signature broken; ignoring database backup!";
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>($r5, varReplacer705);
+
+     label7:
+        return;
+    }
+
+    private static byte[] sign(java.lang.String, byte[]) throws java.security.GeneralSecurityException
+    {
+        java.lang.String $r0, varReplacer735, varReplacer736, varReplacer737;
+        byte[] $r1, $r3;
+        javax.crypto.spec.SecretKeySpec $r2;
+        javax.crypto.Mac $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: byte[];
+
+        varReplacer735 = "secretandoku";
+
+        $r3 = staticinvoke <com.googlecode.andoku.BackupUtil: byte[] utf8(java.lang.String)>(varReplacer735);
+
+        $r2 = new javax.crypto.spec.SecretKeySpec;
+
+        varReplacer736 = "HmacSHA1";
+
+        specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer736);
+
+        varReplacer737 = "HmacSHA1";
+
+        $r4 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer737);
+
+        virtualinvoke $r4.<javax.crypto.Mac: void init(java.security.Key)>($r2);
+
+        $r1 = virtualinvoke $r4.<javax.crypto.Mac: byte[] doFinal(byte[])>($r1);
+
+        return $r1;
+    }
+
+    private static byte[] utf8(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer738;
+        java.lang.Throwable $r1;
+        byte[] $r2;
+        java.lang.IllegalStateException $r3;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer738 = "utf-8";
+
+        $r2 = virtualinvoke $r0.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer738);
+
+     label2:
+        return $r2;
+
+     label3:
+        $r1 := @caughtexception;
+
+        $r3 = new java.lang.IllegalStateException;
+
+        specialinvoke $r3.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r1);
+
+        throw $r3;
+
+        catch java.io.UnsupportedEncodingException from label1 to label2 with label3;
+    }
+
+    private static boolean verifySignature(java.lang.String, java.io.File, java.io.File)
+    {
+        java.lang.String $r0, varReplacer719, varReplacer720, varReplacer724, varReplacer725;
+        java.io.File $r1, $r2;
+        boolean $z0;
+        byte[] $r3, $r4;
+        java.lang.Throwable $r5, $r6;
+        int varReplacer721, varReplacer722, varReplacer723;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.io.File;
+
+        $r2 := @parameter2: java.io.File;
+
+        $z0 = virtualinvoke $r2.<java.io.File: boolean isFile()>();
+
+        if $z0 != 0 goto label1;
+
+        $r0 = <com.googlecode.andoku.BackupUtil: java.lang.String TAG>;
+
+        varReplacer719 = "Database backup not signed!";
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>($r0, varReplacer719);
+
+        varReplacer722 = 1;
+
+        return varReplacer722;
+
+     label1:
+        $r3 = staticinvoke <com.googlecode.andoku.BackupUtil: byte[] load(java.io.File)>($r1);
+
+        varReplacer724 = "secretandoku";
+
+        $r3 = staticinvoke <com.googlecode.andoku.BackupUtil: byte[] sign(java.lang.String,byte[])>(varReplacer724, $r3);
+
+        $r4 = staticinvoke <com.googlecode.andoku.BackupUtil: byte[] load(java.io.File)>($r2);
+
+        $z0 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>($r3, $r4);
+
+     label2:
+        return $z0;
+
+     label3:
+        $r5 := @caughtexception;
+
+        $r0 = <com.googlecode.andoku.BackupUtil: java.lang.String TAG>;
+
+        varReplacer725 = "Could not verify database signature";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r0, varReplacer725, $r5);
+
+        varReplacer723 = 0;
+
+        return varReplacer723;
+
+     label4:
+        $r6 := @caughtexception;
+
+        $r0 = <com.googlecode.andoku.BackupUtil: java.lang.String TAG>;
+
+        varReplacer720 = "Could not verify database signature";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r0, varReplacer720, $r6);
+
+        varReplacer721 = 0;
+
+        return varReplacer721;
+
+        catch java.io.IOException from label1 to label2 with label3;
+        catch java.security.GeneralSecurityException from label1 to label2 with label4;
+    }
+}

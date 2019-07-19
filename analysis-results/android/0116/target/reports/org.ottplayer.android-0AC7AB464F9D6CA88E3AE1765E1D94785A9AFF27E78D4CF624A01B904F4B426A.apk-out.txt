@@ -1,0 +1,103 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/org.ottplayer.android-0AC7AB464F9D6CA88E3AE1765E1D94785A9AFF27E78D4CF624A01B904F4B426A.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r0
+		Type: javax.net.ssl.SSLContext
+		Statement: $r0 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1055)
+		Method: <crittercism.android.y: java.security.Provider a()>
+		SHA-256: 492ccc1fd4b27f4d114daccfcf918ed3da650740204362ec9e8be7a984f87fe5
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: javax.net.ssl.SSLContext
+		Statement: $r5 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer2220)
+		Method: <crittercism.android.g: java.net.HttpURLConnection c()>
+		SHA-256: 34daa3d41e5e9b66f23e4680f1963bb4382dd6d9a5338c80a0b1590588860818
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: javax.net.ssl.SSLContext
+		Statement: $r0 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer2556)
+		Method: <crittercism.android.dd: void <clinit>()>
+		SHA-256: 379125f77add01ef68eff859c7e23488bcac47a268ee4566b00a60d41bbc8df
+		Secure: false
+
+Findings in Java Class: crittercism.android.y
+
+	 in Method: java.security.Provider a()
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #492ccc1fd4b27f4d114daccfcf918ed3da650740204362ec9e8be7a984f87fe5)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to init
+			at statement: $r1 = virtualinvoke $r0.<javax.net.ssl.SSLContext: java.security.Provider getProvider()>()
+
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #492ccc1fd4b27f4d114daccfcf918ed3da650740204362ec9e8be7a984f87fe5)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to init
+			at statement: $r0 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1055)
+
+
+Findings in Java Class: crittercism.android.g
+
+	 in Method: java.net.HttpURLConnection c()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r5.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2227, varReplacer2227, varReplacer2227)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r5.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2227, varReplacer2227, varReplacer2227)
+
+
+Findings in Java Class: crittercism.android.dd
+
+	 in Method: void <clinit>()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r0.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2552, varReplacer2552, varReplacer2552)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r0.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2552, varReplacer2552, varReplacer2552)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 3
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 2
+	RequiredPredicateError: 4
+=====================================================================

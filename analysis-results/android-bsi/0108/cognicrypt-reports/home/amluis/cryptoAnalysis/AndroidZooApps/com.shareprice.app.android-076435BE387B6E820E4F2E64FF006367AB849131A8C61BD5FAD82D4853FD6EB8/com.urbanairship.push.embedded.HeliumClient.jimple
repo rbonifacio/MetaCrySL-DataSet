@@ -1,0 +1,729 @@
+public class com.urbanairship.push.embedded.HeliumClient extends java.lang.Object
+{
+    private com.urbanairship.push.embedded.BoxOfficeClient boxOfficeClient;
+    private com.google.protobuf.CodedInputStream in;
+    private java.io.OutputStream out;
+    private com.urbanairship.push.PushPreferences prefs;
+    private java.util.HashMap pushIDs;
+
+    public void <init>(java.net.Socket, com.urbanairship.push.embedded.BoxOfficeClient) throws java.io.IOException
+    {
+        com.urbanairship.push.embedded.HeliumClient $r0;
+        java.net.Socket $r1;
+        com.urbanairship.push.embedded.BoxOfficeClient $r2;
+        com.urbanairship.push.PushManager $r3;
+        com.urbanairship.push.PushPreferences $r4;
+        java.io.InputStream $r5;
+        com.google.protobuf.CodedInputStream $r6;
+        java.io.OutputStream $r7;
+        java.util.HashMap $r8;
+
+        nop;
+
+        $r0 := @this: com.urbanairship.push.embedded.HeliumClient;
+
+        $r1 := @parameter0: java.net.Socket;
+
+        $r2 := @parameter1: com.urbanairship.push.embedded.BoxOfficeClient;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        $r3 = staticinvoke <com.urbanairship.push.PushManager: com.urbanairship.push.PushManager shared()>();
+
+        $r4 = virtualinvoke $r3.<com.urbanairship.push.PushManager: com.urbanairship.push.PushPreferences getPreferences()>();
+
+        $r0.<com.urbanairship.push.embedded.HeliumClient: com.urbanairship.push.PushPreferences prefs> = $r4;
+
+        $r0.<com.urbanairship.push.embedded.HeliumClient: com.urbanairship.push.embedded.BoxOfficeClient boxOfficeClient> = $r2;
+
+        $r5 = virtualinvoke $r1.<java.net.Socket: java.io.InputStream getInputStream()>();
+
+        $r6 = staticinvoke <com.google.protobuf.CodedInputStream: com.google.protobuf.CodedInputStream newInstance(java.io.InputStream)>($r5);
+
+        $r0.<com.urbanairship.push.embedded.HeliumClient: com.google.protobuf.CodedInputStream in> = $r6;
+
+        $r7 = virtualinvoke $r1.<java.net.Socket: java.io.OutputStream getOutputStream()>();
+
+        $r0.<com.urbanairship.push.embedded.HeliumClient: java.io.OutputStream out> = $r7;
+
+        $r8 = new java.util.HashMap;
+
+        specialinvoke $r8.<java.util.HashMap: void <init>()>();
+
+        $r0.<com.urbanairship.push.embedded.HeliumClient: java.util.HashMap pushIDs> = $r8;
+
+        return;
+    }
+
+    private void handleNotification(com.urbanairship.push.proto.Messages$PushNotification)
+    {
+        com.urbanairship.push.embedded.HeliumClient $r0;
+        com.urbanairship.push.proto.Messages$PushNotification $r1;
+        java.lang.String $r2, $r3, $r5, varReplacer3014, varReplacer3015, varReplacer3016, varReplacer3017, varReplacer3018, varReplacer3019;
+        java.lang.StringBuilder $r4;
+        boolean $z0;
+        com.urbanairship.push.PushPreferences $r6;
+        java.lang.Object[] $r7;
+
+        nop;
+
+        $r0 := @this: com.urbanairship.push.embedded.HeliumClient;
+
+        $r1 := @parameter0: com.urbanairship.push.proto.Messages$PushNotification;
+
+        $r2 = virtualinvoke $r1.<com.urbanairship.push.proto.Messages$PushNotification: java.lang.String getPackageName()>();
+
+        $r3 = virtualinvoke $r1.<com.urbanairship.push.proto.Messages$PushNotification: java.lang.String getMessageId()>();
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer3017 = "Got app id: ";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3017);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.urbanairship.Logger: void verbose(java.lang.String)>($r5);
+
+        $z0 = specialinvoke $r0.<com.urbanairship.push.embedded.HeliumClient: boolean messageAlreadySent(java.lang.String,java.lang.String)>($r2, $r3);
+
+        if $z0 == 0 goto label1;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer3015 = "Message ";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3015);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer3014 = " already sent. Discarding.";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3014);
+
+        $r2 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.urbanairship.Logger: void info(java.lang.String)>($r2);
+
+        return;
+
+     label1:
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer3019 = "Message ";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3019);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer3018 = " received.";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3018);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.urbanairship.Logger: void info(java.lang.String)>($r5);
+
+        specialinvoke $r0.<com.urbanairship.push.embedded.HeliumClient: void recordMessage(java.lang.String,java.lang.String)>($r2, $r3);
+
+        $r6 = $r0.<com.urbanairship.push.embedded.HeliumClient: com.urbanairship.push.PushPreferences prefs>;
+
+        $z0 = virtualinvoke $r6.<com.urbanairship.push.PushPreferences: boolean isPushEnabled()>();
+
+        if $z0 != 0 goto label2;
+
+        $r7 = newarray (java.lang.Object)[0];
+
+        varReplacer3016 = "Got push notification, but Push is disabled";
+
+        $r2 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer3016, $r7);
+
+        staticinvoke <com.urbanairship.Logger: void warn(java.lang.String)>($r2);
+
+        return;
+
+     label2:
+        staticinvoke <com.urbanairship.push.embedded.EmbeddedPushManager: void deliverPush(com.urbanairship.push.proto.Messages$PushNotification)>($r1);
+
+        return;
+    }
+
+    private void handleRegistration(com.urbanairship.push.proto.Messages$RegistrationResponse) throws com.urbanairship.push.embedded.HeliumClient$HeliumInvalidPackageException
+    {
+        com.urbanairship.push.embedded.HeliumClient $r0;
+        com.urbanairship.push.proto.Messages$RegistrationResponse $r1;
+        java.lang.StringBuilder $r2;
+        com.urbanairship.push.PushPreferences $r3;
+        java.lang.String $r4, $r10, varReplacer3007, varReplacer3008, varReplacer3010, varReplacer3011, varReplacer3012, varReplacer3013;
+        java.util.List $r5, $r6;
+        java.util.Iterator $r7;
+        boolean $z0;
+        java.lang.Object $r8;
+        com.urbanairship.push.proto.Messages$Relier $r9;
+        int $i0, varReplacer3009;
+        com.urbanairship.push.embedded.BoxOfficeClient $r11;
+        com.urbanairship.push.embedded.HeliumClient$HeliumInvalidPackageException $r12;
+
+        nop;
+
+        $r0 := @this: com.urbanairship.push.embedded.HeliumClient;
+
+        $r1 := @parameter0: com.urbanairship.push.proto.Messages$RegistrationResponse;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer3007 = "Registration response received for APID: ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3007);
+
+        $r3 = $r0.<com.urbanairship.push.embedded.HeliumClient: com.urbanairship.push.PushPreferences prefs>;
+
+        $r4 = virtualinvoke $r3.<com.urbanairship.push.PushPreferences: java.lang.String getPushId()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.urbanairship.Logger: void debug(java.lang.String)>($r4);
+
+        $r5 = virtualinvoke $r1.<com.urbanairship.push.proto.Messages$RegistrationResponse: java.util.List getValidReliersList()>();
+
+        $r6 = virtualinvoke $r1.<com.urbanairship.push.proto.Messages$RegistrationResponse: java.util.List getInvalidReliersList()>();
+
+        $r7 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+        $r4 = "";
+
+     label1:
+        $z0 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r8 = interfaceinvoke $r7.<java.util.Iterator: java.lang.Object next()>();
+
+        $r9 = (com.urbanairship.push.proto.Messages$Relier) $r8;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r9.<com.urbanairship.push.proto.Messages$Relier: java.lang.String getPackage()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        varReplacer3008 = " ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3008);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        goto label1;
+
+     label2:
+        $r7 = interfaceinvoke $r6.<java.util.List: java.util.Iterator iterator()>();
+
+        $r10 = "";
+
+     label3:
+        $z0 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r8 = interfaceinvoke $r7.<java.util.Iterator: java.lang.Object next()>();
+
+        $r9 = (com.urbanairship.push.proto.Messages$Relier) $r8;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        $r10 = virtualinvoke $r9.<com.urbanairship.push.proto.Messages$Relier: java.lang.String getPackage()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        varReplacer3011 = " ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3011);
+
+        $r10 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        goto label3;
+
+     label4:
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer3012 = "Valid: ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3012);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.urbanairship.Logger: void verbose(java.lang.String)>($r4);
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer3010 = "Invalid: ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3010);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.urbanairship.Logger: void verbose(java.lang.String)>($r4);
+
+        $i0 = interfaceinvoke $r5.<java.util.List: int size()>();
+
+        if $i0 <= 0 goto label6;
+
+        varReplacer3009 = 1;
+
+        staticinvoke <com.urbanairship.push.embedded.EmbeddedPushManager: void sendRegistrationResponse(boolean)>(varReplacer3009);
+
+     label5:
+        $r11 = $r0.<com.urbanairship.push.embedded.HeliumClient: com.urbanairship.push.embedded.BoxOfficeClient boxOfficeClient>;
+
+        virtualinvoke $r11.<com.urbanairship.push.embedded.BoxOfficeClient: void resetFailureCount()>();
+
+        return;
+
+     label6:
+        $i0 = interfaceinvoke $r6.<java.util.List: int size()>();
+
+        if $i0 <= 0 goto label5;
+
+        $r12 = new com.urbanairship.push.embedded.HeliumClient$HeliumInvalidPackageException;
+
+        varReplacer3013 = "Package name on server does not match the application package name.";
+
+        specialinvoke $r12.<com.urbanairship.push.embedded.HeliumClient$HeliumInvalidPackageException: void <init>(com.urbanairship.push.embedded.HeliumClient,java.lang.String)>($r0, varReplacer3013);
+
+        throw $r12;
+    }
+
+    private boolean messageAlreadySent(java.lang.String, java.lang.String)
+    {
+        com.urbanairship.push.embedded.HeliumClient $r0;
+        java.lang.String $r1, $r2;
+        java.util.HashMap $r3;
+        boolean $z0;
+        java.lang.Object $r4;
+        int varReplacer3022, varReplacer3023;
+
+        nop;
+
+        $r0 := @this: com.urbanairship.push.embedded.HeliumClient;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 = $r0.<com.urbanairship.push.embedded.HeliumClient: java.util.HashMap pushIDs>;
+
+        $z0 = virtualinvoke $r3.<java.util.HashMap: boolean containsKey(java.lang.Object)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        $r3 = $r0.<com.urbanairship.push.embedded.HeliumClient: java.util.HashMap pushIDs>;
+
+        $r4 = virtualinvoke $r3.<java.util.HashMap: java.lang.Object get(java.lang.Object)>($r1);
+
+        $r1 = (java.lang.String) $r4;
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>($r2);
+
+        if $z0 == 0 goto label1;
+
+        varReplacer3022 = 1;
+
+        return varReplacer3022;
+
+     label1:
+        varReplacer3023 = 0;
+
+        return varReplacer3023;
+    }
+
+    private static java.util.ArrayList protoReliers(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1;
+        java.util.ArrayList $r2;
+        com.urbanairship.push.proto.Messages$Relier$Builder $r3;
+        com.urbanairship.push.proto.Messages$Relier $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 = new java.util.ArrayList;
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>()>();
+
+        $r3 = staticinvoke <com.urbanairship.push.proto.Messages$Relier: com.urbanairship.push.proto.Messages$Relier$Builder newBuilder()>();
+
+        $r3 = virtualinvoke $r3.<com.urbanairship.push.proto.Messages$Relier$Builder: com.urbanairship.push.proto.Messages$Relier$Builder setPackage(java.lang.String)>($r0);
+
+        $r3 = virtualinvoke $r3.<com.urbanairship.push.proto.Messages$Relier$Builder: com.urbanairship.push.proto.Messages$Relier$Builder setAppKey(java.lang.String)>($r1);
+
+        $r4 = virtualinvoke $r3.<com.urbanairship.push.proto.Messages$Relier$Builder: com.urbanairship.push.proto.Messages$Relier build()>();
+
+        virtualinvoke $r2.<java.util.ArrayList: boolean add(java.lang.Object)>($r4);
+
+        return $r2;
+    }
+
+    private void recordMessage(java.lang.String, java.lang.String)
+    {
+        com.urbanairship.push.embedded.HeliumClient $r0;
+        java.lang.String $r1, $r2;
+        java.util.HashMap $r3;
+
+        nop;
+
+        $r0 := @this: com.urbanairship.push.embedded.HeliumClient;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 = $r0.<com.urbanairship.push.embedded.HeliumClient: java.util.HashMap pushIDs>;
+
+        virtualinvoke $r3.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r1, $r2);
+
+        return;
+    }
+
+    private void sendRequest(com.urbanairship.push.proto.Messages$AirshipMethod, com.google.protobuf.ByteString) throws java.io.IOException
+    {
+        com.urbanairship.push.embedded.HeliumClient $r0;
+        com.urbanairship.push.proto.Messages$AirshipMethod $r1;
+        com.google.protobuf.ByteString $r2;
+        com.urbanairship.push.proto.Rpc$Request$Builder $r3;
+        com.urbanairship.push.proto.Rpc$Request $r4;
+        int $i0;
+        short $s1, $s2;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r6, varReplacer3027;
+        java.io.ByteArrayOutputStream $r7;
+        java.io.OutputStream $r8;
+        byte[] $r9;
+
+        nop;
+
+        $r0 := @this: com.urbanairship.push.embedded.HeliumClient;
+
+        $r1 := @parameter0: com.urbanairship.push.proto.Messages$AirshipMethod;
+
+        $r2 := @parameter1: com.google.protobuf.ByteString;
+
+        $r3 = staticinvoke <com.urbanairship.push.proto.Rpc$Request: com.urbanairship.push.proto.Rpc$Request$Builder newBuilder()>();
+
+        $r3 = virtualinvoke $r3.<com.urbanairship.push.proto.Rpc$Request$Builder: com.urbanairship.push.proto.Rpc$Request$Builder setBody(com.google.protobuf.ByteString)>($r2);
+
+        $r3 = virtualinvoke $r3.<com.urbanairship.push.proto.Rpc$Request$Builder: com.urbanairship.push.proto.Rpc$Request$Builder setMethodId(com.urbanairship.push.proto.Messages$AirshipMethod)>($r1);
+
+        $r4 = virtualinvoke $r3.<com.urbanairship.push.proto.Rpc$Request$Builder: com.urbanairship.push.proto.Rpc$Request build()>();
+
+        $i0 = virtualinvoke $r4.<com.urbanairship.push.proto.Rpc$Request: int getSerializedSize()>();
+
+        $s1 = (short) $i0;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer3027 = "HeliumClient.sendRequest() - Protobuf Request Size: ";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3027);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($s1);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.urbanairship.Logger: void verbose(java.lang.String)>($r6);
+
+        $r7 = new java.io.ByteArrayOutputStream;
+
+        $i0 = $s1 + 2;
+
+        specialinvoke $r7.<java.io.ByteArrayOutputStream: void <init>(int)>($i0);
+
+        $s2 = $s1 >> 8;
+
+        $s2 = $s2 & 255;
+
+        virtualinvoke $r7.<java.io.ByteArrayOutputStream: void write(int)>($s2);
+
+        $s1 = $s1 & 255;
+
+        virtualinvoke $r7.<java.io.ByteArrayOutputStream: void write(int)>($s1);
+
+        virtualinvoke $r4.<com.urbanairship.push.proto.Rpc$Request: void writeTo(java.io.OutputStream)>($r7);
+
+        $r8 = $r0.<com.urbanairship.push.embedded.HeliumClient: java.io.OutputStream out>;
+
+        $r9 = virtualinvoke $r7.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        virtualinvoke $r8.<java.io.OutputStream: void write(byte[])>($r9);
+
+        $r8 = $r0.<com.urbanairship.push.embedded.HeliumClient: java.io.OutputStream out>;
+
+        virtualinvoke $r8.<java.io.OutputStream: void flush()>();
+
+        return;
+    }
+
+    protected void readResponse() throws java.io.IOException, com.urbanairship.push.embedded.HeliumClient$HeliumException, com.urbanairship.push.embedded.Crypto$NullUUID, com.urbanairship.util.Base64DecoderException
+    {
+        com.urbanairship.push.embedded.HeliumClient $r0;
+        com.google.protobuf.CodedInputStream $r1;
+        byte[] $r2;
+        java.nio.ByteBuffer $r3;
+        short $s0;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5, varReplacer2646, varReplacer2647, varReplacer2648, varReplacer2649, varReplacer2651;
+        com.urbanairship.push.embedded.BoxOfficeClient $r6;
+        java.util.UUID $r7;
+        com.urbanairship.push.embedded.HeliumClient$HeliumException $r8;
+        com.urbanairship.push.embedded.Crypto $r9;
+        com.urbanairship.push.proto.Rpc$Request $r10;
+        com.urbanairship.push.proto.Messages$AirshipMethod $r11, $r12;
+        com.google.protobuf.ByteString $r13;
+        com.urbanairship.push.proto.Messages$RegistrationResponse $r14;
+        com.urbanairship.push.proto.Messages$PushNotification $r15;
+        int varReplacer2650;
+
+        nop;
+
+        $r0 := @this: com.urbanairship.push.embedded.HeliumClient;
+
+        $r1 = $r0.<com.urbanairship.push.embedded.HeliumClient: com.google.protobuf.CodedInputStream in>;
+
+        varReplacer2650 = 2;
+
+        $r2 = virtualinvoke $r1.<com.google.protobuf.CodedInputStream: byte[] readRawBytes(int)>(varReplacer2650);
+
+        $r3 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer wrap(byte[])>($r2);
+
+        $s0 = virtualinvoke $r3.<java.nio.ByteBuffer: short getShort()>();
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer2647 = "HeliumClient.readResponse() - Protobuf Response Size: ";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer2647);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($s0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.urbanairship.Logger: void verbose(java.lang.String)>($r5);
+
+        if $s0 != 0 goto label1;
+
+        varReplacer2648 = "HeliumClient.readResponse() - Keepalive Read";
+
+        staticinvoke <com.urbanairship.Logger: void verbose(java.lang.String)>(varReplacer2648);
+
+        return;
+
+     label1:
+        $r6 = $r0.<com.urbanairship.push.embedded.HeliumClient: com.urbanairship.push.embedded.BoxOfficeClient boxOfficeClient>;
+
+        $r7 = virtualinvoke $r6.<com.urbanairship.push.embedded.BoxOfficeClient: java.util.UUID getEncryptionKey()>();
+
+        if $r7 != null goto label2;
+
+        $r8 = new com.urbanairship.push.embedded.HeliumClient$HeliumException;
+
+        varReplacer2651 = "HeliumClient.readResponse() - No Key";
+
+        specialinvoke $r8.<com.urbanairship.push.embedded.HeliumClient$HeliumException: void <init>(com.urbanairship.push.embedded.HeliumClient,java.lang.String)>($r0, varReplacer2651);
+
+        throw $r8;
+
+     label2:
+        $r1 = $r0.<com.urbanairship.push.embedded.HeliumClient: com.google.protobuf.CodedInputStream in>;
+
+        $r2 = virtualinvoke $r1.<com.google.protobuf.CodedInputStream: byte[] readRawBytes(int)>($s0);
+
+        $r2 = staticinvoke <com.urbanairship.util.Base64: byte[] decode(byte[])>($r2);
+
+        $r9 = new com.urbanairship.push.embedded.Crypto;
+
+        $r6 = $r0.<com.urbanairship.push.embedded.HeliumClient: com.urbanairship.push.embedded.BoxOfficeClient boxOfficeClient>;
+
+        $r7 = virtualinvoke $r6.<com.urbanairship.push.embedded.BoxOfficeClient: java.util.UUID getEncryptionKey()>();
+
+        specialinvoke $r9.<com.urbanairship.push.embedded.Crypto: void <init>(java.util.UUID)>($r7);
+
+        $r2 = virtualinvoke $r9.<com.urbanairship.push.embedded.Crypto: byte[] decrypt(byte[])>($r2);
+
+        $r10 = staticinvoke <com.urbanairship.push.proto.Rpc$Request: com.urbanairship.push.proto.Rpc$Request parseFrom(byte[])>($r2);
+
+        varReplacer2649 = "response read";
+
+        staticinvoke <com.urbanairship.Logger: void verbose(java.lang.String)>(varReplacer2649);
+
+        $r11 = virtualinvoke $r10.<com.urbanairship.push.proto.Rpc$Request: com.urbanairship.push.proto.Messages$AirshipMethod getMethodId()>();
+
+        $r12 = <com.urbanairship.push.proto.Messages$AirshipMethod: com.urbanairship.push.proto.Messages$AirshipMethod REGISTER>;
+
+        if $r11 != $r12 goto label3;
+
+        $r13 = virtualinvoke $r10.<com.urbanairship.push.proto.Rpc$Request: com.google.protobuf.ByteString getBody()>();
+
+        $r14 = staticinvoke <com.urbanairship.push.proto.Messages$RegistrationResponse: com.urbanairship.push.proto.Messages$RegistrationResponse parseFrom(com.google.protobuf.ByteString)>($r13);
+
+        specialinvoke $r0.<com.urbanairship.push.embedded.HeliumClient: void handleRegistration(com.urbanairship.push.proto.Messages$RegistrationResponse)>($r14);
+
+        return;
+
+     label3:
+        $r11 = virtualinvoke $r10.<com.urbanairship.push.proto.Rpc$Request: com.urbanairship.push.proto.Messages$AirshipMethod getMethodId()>();
+
+        $r12 = <com.urbanairship.push.proto.Messages$AirshipMethod: com.urbanairship.push.proto.Messages$AirshipMethod PUSH_NOTIFICATION>;
+
+        if $r11 != $r12 goto label4;
+
+        $r13 = virtualinvoke $r10.<com.urbanairship.push.proto.Rpc$Request: com.google.protobuf.ByteString getBody()>();
+
+        $r15 = staticinvoke <com.urbanairship.push.proto.Messages$PushNotification: com.urbanairship.push.proto.Messages$PushNotification parseFrom(com.google.protobuf.ByteString)>($r13);
+
+        specialinvoke $r0.<com.urbanairship.push.embedded.HeliumClient: void handleNotification(com.urbanairship.push.proto.Messages$PushNotification)>($r15);
+
+        return;
+
+     label4:
+        varReplacer2646 = "HeliumClient.readResponse() - Recevied an unknown Helium method type.";
+
+        staticinvoke <com.urbanairship.Logger: void error(java.lang.String)>(varReplacer2646);
+
+        return;
+    }
+
+    protected void register() throws java.io.IOException, com.urbanairship.push.embedded.Crypto$NullUUID
+    {
+        com.urbanairship.push.embedded.HeliumClient $r0;
+        com.urbanairship.UAirship $r1;
+        com.urbanairship.AirshipConfigOptions $r2;
+        java.lang.String $r3, $r6, varReplacer2645;
+        com.urbanairship.push.proto.Messages$Register$Builder $r4;
+        com.urbanairship.push.PushPreferences $r5;
+        com.urbanairship.push.proto.Messages$OS $r7;
+        java.util.ArrayList $r8;
+        com.urbanairship.push.proto.Messages$Register $r9;
+        byte[] $r10;
+        com.urbanairship.push.embedded.Crypto $r11;
+        com.urbanairship.push.embedded.BoxOfficeClient $r12;
+        java.util.UUID $r13;
+        com.google.protobuf.ByteString $r14;
+        com.urbanairship.push.proto.Messages$RegistrationEnvelope$Builder $r15;
+        com.urbanairship.push.proto.Messages$RegistrationEnvelope $r16;
+        com.urbanairship.push.proto.Messages$AirshipMethod $r17;
+
+        nop;
+
+        $r0 := @this: com.urbanairship.push.embedded.HeliumClient;
+
+        $r1 = staticinvoke <com.urbanairship.UAirship: com.urbanairship.UAirship shared()>();
+
+        $r2 = virtualinvoke $r1.<com.urbanairship.UAirship: com.urbanairship.AirshipConfigOptions getAirshipConfigOptions()>();
+
+        $r3 = virtualinvoke $r2.<com.urbanairship.AirshipConfigOptions: java.lang.String getAppKey()>();
+
+        $r4 = staticinvoke <com.urbanairship.push.proto.Messages$Register: com.urbanairship.push.proto.Messages$Register$Builder newBuilder()>();
+
+        $r5 = $r0.<com.urbanairship.push.embedded.HeliumClient: com.urbanairship.push.PushPreferences prefs>;
+
+        $r6 = virtualinvoke $r5.<com.urbanairship.push.PushPreferences: java.lang.String getPushId()>();
+
+        $r4 = virtualinvoke $r4.<com.urbanairship.push.proto.Messages$Register$Builder: com.urbanairship.push.proto.Messages$Register$Builder setApid(java.lang.String)>($r6);
+
+        $r7 = <com.urbanairship.push.proto.Messages$OS: com.urbanairship.push.proto.Messages$OS ANDROID>;
+
+        $r4 = virtualinvoke $r4.<com.urbanairship.push.proto.Messages$Register$Builder: com.urbanairship.push.proto.Messages$Register$Builder setOs(com.urbanairship.push.proto.Messages$OS)>($r7);
+
+        $r6 = <android.os.Build$VERSION: java.lang.String RELEASE>;
+
+        $r4 = virtualinvoke $r4.<com.urbanairship.push.proto.Messages$Register$Builder: com.urbanairship.push.proto.Messages$Register$Builder setOsVersion(java.lang.String)>($r6);
+
+        varReplacer2645 = "4.1.4";
+
+        $r4 = virtualinvoke $r4.<com.urbanairship.push.proto.Messages$Register$Builder: com.urbanairship.push.proto.Messages$Register$Builder setUaVersion(java.lang.String)>(varReplacer2645);
+
+        $r5 = $r0.<com.urbanairship.push.embedded.HeliumClient: com.urbanairship.push.PushPreferences prefs>;
+
+        $r6 = virtualinvoke $r5.<com.urbanairship.push.PushPreferences: java.lang.String getPushSecret()>();
+
+        $r4 = virtualinvoke $r4.<com.urbanairship.push.proto.Messages$Register$Builder: com.urbanairship.push.proto.Messages$Register$Builder setSecret(java.lang.String)>($r6);
+
+        $r6 = staticinvoke <com.urbanairship.UAirship: java.lang.String getPackageName()>();
+
+        $r8 = staticinvoke <com.urbanairship.push.embedded.HeliumClient: java.util.ArrayList protoReliers(java.lang.String,java.lang.String)>($r6, $r3);
+
+        $r4 = virtualinvoke $r4.<com.urbanairship.push.proto.Messages$Register$Builder: com.urbanairship.push.proto.Messages$Register$Builder addAllReliers(java.lang.Iterable)>($r8);
+
+        $r9 = virtualinvoke $r4.<com.urbanairship.push.proto.Messages$Register$Builder: com.urbanairship.push.proto.Messages$Register build()>();
+
+        $r10 = virtualinvoke $r9.<com.urbanairship.push.proto.Messages$Register: byte[] toByteArray()>();
+
+        $r11 = new com.urbanairship.push.embedded.Crypto;
+
+        $r12 = $r0.<com.urbanairship.push.embedded.HeliumClient: com.urbanairship.push.embedded.BoxOfficeClient boxOfficeClient>;
+
+        $r13 = virtualinvoke $r12.<com.urbanairship.push.embedded.BoxOfficeClient: java.util.UUID getEncryptionKey()>();
+
+        specialinvoke $r11.<com.urbanairship.push.embedded.Crypto: void <init>(java.util.UUID)>($r13);
+
+        $r10 = virtualinvoke $r11.<com.urbanairship.push.embedded.Crypto: byte[] encrypt(byte[])>($r10);
+
+        $r10 = staticinvoke <com.urbanairship.util.Base64: byte[] encodeBytesToBytes(byte[])>($r10);
+
+        $r14 = staticinvoke <com.google.protobuf.ByteString: com.google.protobuf.ByteString copyFrom(byte[])>($r10);
+
+        $r15 = staticinvoke <com.urbanairship.push.proto.Messages$RegistrationEnvelope: com.urbanairship.push.proto.Messages$RegistrationEnvelope$Builder newBuilder()>();
+
+        $r5 = $r0.<com.urbanairship.push.embedded.HeliumClient: com.urbanairship.push.PushPreferences prefs>;
+
+        $r3 = virtualinvoke $r5.<com.urbanairship.push.PushPreferences: java.lang.String getPushId()>();
+
+        $r15 = virtualinvoke $r15.<com.urbanairship.push.proto.Messages$RegistrationEnvelope$Builder: com.urbanairship.push.proto.Messages$RegistrationEnvelope$Builder setApid(java.lang.String)>($r3);
+
+        $r15 = virtualinvoke $r15.<com.urbanairship.push.proto.Messages$RegistrationEnvelope$Builder: com.urbanairship.push.proto.Messages$RegistrationEnvelope$Builder setRegistration(com.google.protobuf.ByteString)>($r14);
+
+        $r16 = virtualinvoke $r15.<com.urbanairship.push.proto.Messages$RegistrationEnvelope$Builder: com.urbanairship.push.proto.Messages$RegistrationEnvelope build()>();
+
+        $r17 = <com.urbanairship.push.proto.Messages$AirshipMethod: com.urbanairship.push.proto.Messages$AirshipMethod REGISTER>;
+
+        $r14 = virtualinvoke $r16.<com.urbanairship.push.proto.Messages$RegistrationEnvelope: com.google.protobuf.ByteString toByteString()>();
+
+        specialinvoke $r0.<com.urbanairship.push.embedded.HeliumClient: void sendRequest(com.urbanairship.push.proto.Messages$AirshipMethod,com.google.protobuf.ByteString)>($r17, $r14);
+
+        return;
+    }
+}

@@ -1,0 +1,93 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/jp.co.jal.skywifi-021F45DC11B73C083152ED3CB7A87C58DD5D305B25AD51E9C6EDBA9DAFF19913.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r0
+		Type: java.lang.String
+		Statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, $r0)
+		Method: <jp.co.jal.util.CryptUtil: java.security.Key createKey(java.lang.String,java.lang.String)>
+		SHA-256: 179108bbaea6ba69958cf77a9f6da16950c8c4baba582e4f2d8c4ca87fa1a833
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, $r0)
+		Method: <jp.co.jal.util.CryptUtil: java.security.Key createKey(java.lang.String,java.lang.String)>
+		SHA-256: 76b0f315f4d3df0aa6f412cee8e06968f2a0ca4940b997fc06aba1cc6384a6b3
+		Secure: false
+	Object:
+		Variable: $r7
+		Type: byte[]
+		Statement: $r7 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r7)
+		Method: <jp.co.jal.util.CryptUtil: java.lang.String decode(android.content.Context,java.lang.String,java.lang.String)>
+		SHA-256: e9dc420ad344485c34a752685e0a0005cea89f425900e8dfadd91f725f77146a
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: javax.crypto.Cipher
+		Statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>($r2)
+		Method: <jp.co.jal.util.CryptUtil: java.lang.String decode(android.content.Context,java.lang.String,java.lang.String)>
+		SHA-256: 4ad25208f34b426e28cbd65e5faca559dd76be5dce911315e05441addcb1e988
+		Secure: false
+
+Findings in Java Class: jp.co.jal.util.CryptUtil
+
+	 in Method: java.lang.String decode(android.content.Context,java.lang.String,java.lang.String)
+		ForbiddenMethodError violating CrySL rule for javax.crypto.Cipher
+			Detected call to forbidden method void init(int,java.security.Key) of class javax.crypto.Cipher. Instead, call method <javax.crypto.Cipher: void init(int,java.security.Key)>.
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer586, $r5)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer586, $r5)
+
+
+	 in Method: java.security.Key createKey(java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, $r0)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 2
+	ForbiddenMethodError: 1
+=====================================================================

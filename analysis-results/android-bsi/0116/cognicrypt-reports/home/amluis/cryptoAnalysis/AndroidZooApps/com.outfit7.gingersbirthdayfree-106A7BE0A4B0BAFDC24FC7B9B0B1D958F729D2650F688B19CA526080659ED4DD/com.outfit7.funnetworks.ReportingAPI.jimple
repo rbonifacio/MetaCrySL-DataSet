@@ -1,0 +1,1085 @@
+public class com.outfit7.funnetworks.ReportingAPI extends java.lang.Object
+{
+    private static final int MAX_ERR_LEN;
+    private static final double REPORTING_RATIO;
+    private static final java.lang.String TAG;
+    private static final java.lang.String UDID_HASH_PREFIX;
+    private static java.util.Set ignoreReportingId;
+    private static java.util.Set ignoreSessionCompleted;
+    private android.app.Activity activity;
+    private com.outfit7.funnetworks.ReportingAPI$EventLog eventLog;
+    private com.outfit7.funnetworks.ReportingAPI$GridResponse gridResponse;
+    private android.os.Handler handler;
+    private android.os.HandlerThread handlerThread;
+    private android.os.Handler logHandler;
+    private android.os.HandlerThread logHandlerThread;
+    private long sessionStart;
+
+    static void <clinit>()
+    {
+        java.util.HashSet $r0;
+        java.util.Set $r1;
+        java.lang.String varReplacer4059, varReplacer4060, varReplacer4061, varReplacer4062, varReplacer4063, varReplacer4064, varReplacer4065, varReplacer4066, varReplacer4067;
+
+        nop;
+
+        $r0 = new java.util.HashSet;
+
+        specialinvoke $r0.<java.util.HashSet: void <init>()>();
+
+        <com.outfit7.funnetworks.ReportingAPI: java.util.Set ignoreReportingId> = $r0;
+
+        $r1 = <com.outfit7.funnetworks.ReportingAPI: java.util.Set ignoreReportingId>;
+
+        varReplacer4060 = "ReadyForNewGrid";
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>(varReplacer4060);
+
+        $r1 = <com.outfit7.funnetworks.ReportingAPI: java.util.Set ignoreReportingId>;
+
+        varReplacer4059 = "fetch-new-grid-start";
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>(varReplacer4059);
+
+        $r1 = <com.outfit7.funnetworks.ReportingAPI: java.util.Set ignoreReportingId>;
+
+        varReplacer4064 = "fetch-new-grid-loop-start";
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>(varReplacer4064);
+
+        $r1 = <com.outfit7.funnetworks.ReportingAPI: java.util.Set ignoreReportingId>;
+
+        varReplacer4061 = "fetch-new-grid-regular";
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>(varReplacer4061);
+
+        $r1 = <com.outfit7.funnetworks.ReportingAPI: java.util.Set ignoreReportingId>;
+
+        varReplacer4063 = "fetch-new-grid-alternate";
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>(varReplacer4063);
+
+        $r1 = <com.outfit7.funnetworks.ReportingAPI: java.util.Set ignoreReportingId>;
+
+        varReplacer4065 = "fetch-new-grid-failed";
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>(varReplacer4065);
+
+        $r1 = <com.outfit7.funnetworks.ReportingAPI: java.util.Set ignoreReportingId>;
+
+        varReplacer4066 = "got-grid";
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>(varReplacer4066);
+
+        $r0 = new java.util.HashSet;
+
+        specialinvoke $r0.<java.util.HashSet: void <init>()>();
+
+        <com.outfit7.funnetworks.ReportingAPI: java.util.Set ignoreSessionCompleted> = $r0;
+
+        $r1 = <com.outfit7.funnetworks.ReportingAPI: java.util.Set ignoreSessionCompleted>;
+
+        varReplacer4067 = "creative-click";
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>(varReplacer4067);
+
+        $r1 = <com.outfit7.funnetworks.ReportingAPI: java.util.Set ignoreSessionCompleted>;
+
+        varReplacer4062 = "video-creative-click";
+
+        interfaceinvoke $r1.<java.util.Set: boolean add(java.lang.Object)>(varReplacer4062);
+
+        return;
+    }
+
+    public void <init>(android.app.Activity)
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        android.app.Activity $r1;
+        android.os.HandlerThread $r2;
+        android.os.Looper $r3;
+        android.os.Handler $r4;
+        java.lang.String varReplacer4622, varReplacer4623;
+
+        nop;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        $r1 := @parameter0: android.app.Activity;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        staticinvoke <com.outfit7.funnetworks.util.Util: void ensureUiThread()>();
+
+        $r0.<com.outfit7.funnetworks.ReportingAPI: android.app.Activity activity> = $r1;
+
+        $r2 = new android.os.HandlerThread;
+
+        varReplacer4623 = "ReportingAPI";
+
+        specialinvoke $r2.<android.os.HandlerThread: void <init>(java.lang.String)>(varReplacer4623);
+
+        $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.HandlerThread handlerThread> = $r2;
+
+        $r2 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.HandlerThread handlerThread>;
+
+        virtualinvoke $r2.<android.os.HandlerThread: void start()>();
+
+        $r2 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.HandlerThread handlerThread>;
+
+        $r3 = virtualinvoke $r2.<android.os.HandlerThread: android.os.Looper getLooper()>();
+
+        $r4 = new android.os.Handler;
+
+        specialinvoke $r4.<android.os.Handler: void <init>(android.os.Looper)>($r3);
+
+        $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.Handler handler> = $r4;
+
+        $r2 = new android.os.HandlerThread;
+
+        varReplacer4622 = "ReportingAPILogThread";
+
+        specialinvoke $r2.<android.os.HandlerThread: void <init>(java.lang.String)>(varReplacer4622);
+
+        $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.HandlerThread logHandlerThread> = $r2;
+
+        $r2 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.HandlerThread logHandlerThread>;
+
+        virtualinvoke $r2.<android.os.HandlerThread: void start()>();
+
+        $r2 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.HandlerThread logHandlerThread>;
+
+        $r3 = virtualinvoke $r2.<android.os.HandlerThread: android.os.Looper getLooper()>();
+
+        $r4 = new android.os.Handler;
+
+        specialinvoke $r4.<android.os.Handler: void <init>(android.os.Looper)>($r3);
+
+        $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.Handler logHandler> = $r4;
+
+        return;
+    }
+
+    static android.app.Activity access$000(com.outfit7.funnetworks.ReportingAPI)
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        android.app.Activity r1;
+
+        nop;
+
+        $r0 := @parameter0: com.outfit7.funnetworks.ReportingAPI;
+
+        r1 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.app.Activity activity>;
+
+        return r1;
+    }
+
+    static com.outfit7.funnetworks.ReportingAPI$EventLog access$100(com.outfit7.funnetworks.ReportingAPI)
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        com.outfit7.funnetworks.ReportingAPI$EventLog r1;
+
+        nop;
+
+        $r0 := @parameter0: com.outfit7.funnetworks.ReportingAPI;
+
+        r1 = $r0.<com.outfit7.funnetworks.ReportingAPI: com.outfit7.funnetworks.ReportingAPI$EventLog eventLog>;
+
+        return r1;
+    }
+
+    static java.util.Set access$1200()
+    {
+        java.util.Set r0;
+
+        r0 = <com.outfit7.funnetworks.ReportingAPI: java.util.Set ignoreReportingId>;
+
+        return r0;
+    }
+
+    static java.util.Set access$1300()
+    {
+        java.util.Set r0;
+
+        r0 = <com.outfit7.funnetworks.ReportingAPI: java.util.Set ignoreSessionCompleted>;
+
+        return r0;
+    }
+
+    static android.os.Handler access$200(com.outfit7.funnetworks.ReportingAPI)
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        android.os.Handler r1;
+
+        nop;
+
+        $r0 := @parameter0: com.outfit7.funnetworks.ReportingAPI;
+
+        r1 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.Handler handler>;
+
+        return r1;
+    }
+
+    static com.outfit7.funnetworks.ReportingAPI$GridResponse access$400(com.outfit7.funnetworks.ReportingAPI)
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        com.outfit7.funnetworks.ReportingAPI$GridResponse r1;
+
+        $r0 := @parameter0: com.outfit7.funnetworks.ReportingAPI;
+
+        r1 = $r0.<com.outfit7.funnetworks.ReportingAPI: com.outfit7.funnetworks.ReportingAPI$GridResponse gridResponse>;
+
+        return r1;
+    }
+
+    static com.outfit7.funnetworks.ReportingAPI$GridResponse access$402(com.outfit7.funnetworks.ReportingAPI, com.outfit7.funnetworks.ReportingAPI$GridResponse)
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        com.outfit7.funnetworks.ReportingAPI$GridResponse $r1;
+
+        $r0 := @parameter0: com.outfit7.funnetworks.ReportingAPI;
+
+        $r1 := @parameter1: com.outfit7.funnetworks.ReportingAPI$GridResponse;
+
+        $r0.<com.outfit7.funnetworks.ReportingAPI: com.outfit7.funnetworks.ReportingAPI$GridResponse gridResponse> = $r1;
+
+        return $r1;
+    }
+
+    static void access$500(com.outfit7.funnetworks.ReportingAPI)
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+
+        $r0 := @parameter0: com.outfit7.funnetworks.ReportingAPI;
+
+        specialinvoke $r0.<com.outfit7.funnetworks.ReportingAPI: void loadEventLog()>();
+
+        return;
+    }
+
+    static long access$602(com.outfit7.funnetworks.ReportingAPI, long)
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        long $l0;
+
+        $r0 := @parameter0: com.outfit7.funnetworks.ReportingAPI;
+
+        $l0 := @parameter1: long;
+
+        $r0.<com.outfit7.funnetworks.ReportingAPI: long sessionStart> = $l0;
+
+        return $l0;
+    }
+
+    static void access$700(com.outfit7.funnetworks.ReportingAPI)
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+
+        $r0 := @parameter0: com.outfit7.funnetworks.ReportingAPI;
+
+        specialinvoke $r0.<com.outfit7.funnetworks.ReportingAPI: void storeEventLog()>();
+
+        return;
+    }
+
+    static java.lang.String access$800(com.outfit7.funnetworks.ReportingAPI)
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        java.lang.String $r1;
+
+        $r0 := @parameter0: com.outfit7.funnetworks.ReportingAPI;
+
+        $r1 = specialinvoke $r0.<com.outfit7.funnetworks.ReportingAPI: java.lang.String getNewsID()>();
+
+        return $r1;
+    }
+
+    public static java.lang.String convertByteToHex(byte[])
+    {
+        byte[] $r0;
+        java.lang.StringBuffer $r1;
+        int $i0, $i1, varReplacer5656;
+        byte $b2;
+        short $s3;
+        java.lang.String $r2;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 = new java.lang.StringBuffer;
+
+        specialinvoke $r1.<java.lang.StringBuffer: void <init>()>();
+
+        $i0 = 0;
+
+     label1:
+        $i1 = lengthof $r0;
+
+        if $i0 >= $i1 goto label3;
+
+        $b2 = $r0[$i0];
+
+        $s3 = $b2 & 255;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s3);
+
+        $i1 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        if $i1 != 1 goto label2;
+
+        varReplacer5656 = 48;
+
+        virtualinvoke $r1.<java.lang.StringBuffer: java.lang.StringBuffer append(char)>(varReplacer5656);
+
+     label2:
+        virtualinvoke $r1.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>($r2);
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label3:
+        $r2 = virtualinvoke $r1.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        return $r2;
+    }
+
+    private static java.lang.String createUdidHash(java.lang.String)
+    {
+        java.lang.String $r0;
+        java.lang.StringBuilder $r1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        if $r0 != null goto label1;
+
+        return null;
+
+     label1:
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("f56468NBVte:;uzbdapkmklbn@{@{}56$%#?*$$");
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r0 = staticinvoke <com.outfit7.funnetworks.ReportingAPI: java.lang.String sha1(java.lang.String)>($r0);
+
+        return $r0;
+    }
+
+    private static java.lang.String generateReportURL(java.lang.String)
+    {
+        java.lang.String $r0;
+        int $i0;
+        double $d0;
+        byte $b1;
+        boolean $z0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r0 = staticinvoke <com.outfit7.funnetworks.ReportingAPI: java.lang.String createUdidHash(java.lang.String)>($r0);
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int hashCode()>();
+
+        $i0 = staticinvoke <java.lang.Math: int abs(int)>($i0);
+
+        $i0 = $i0 % 100;
+
+        $d0 = (double) $i0;
+
+        $b1 = $d0 cmpg 20.0;
+
+        if $b1 >= 0 goto label2;
+
+        $z0 = 1;
+
+     label1:
+        if $z0 != 0 goto label3;
+
+        return null;
+
+     label2:
+        $z0 = 0;
+
+        goto label1;
+
+     label3:
+        return "http://apps.outfit7.com/rest/data/news-reporting";
+    }
+
+    private static java.lang.String generateReportingId(java.lang.String, java.lang.String, java.lang.String, long)
+    {
+        java.lang.String $r0, $r1, $r2;
+        long $l0;
+        java.lang.StringBuilder $r3, $r4;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $l0 := @parameter3: long;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        $r0 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r0 = staticinvoke <com.outfit7.funnetworks.ReportingAPI: java.lang.String md5(java.lang.String)>($r0);
+
+        return $r0;
+    }
+
+    private java.lang.String getNewsID()
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        android.app.Activity $r1;
+        android.content.SharedPreferences $r2;
+        java.lang.String $r3;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        $r1 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.app.Activity activity>;
+
+        $r2 = virtualinvoke $r1.<android.app.Activity: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>("prefs", 0);
+
+        $r3 = interfaceinvoke $r2.<android.content.SharedPreferences: java.lang.String getString(java.lang.String,java.lang.String)>("newsId", null);
+
+        return $r3;
+    }
+
+    private void loadEventLog()
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        java.lang.Throwable $r1;
+        android.app.Activity $r2;
+        java.lang.Object $r3;
+        com.outfit7.funnetworks.ReportingAPI$EventLog $r4;
+        com.outfit7.funnetworks.ReportingAPI$GridResponse $r5;
+        java.lang.StringBuilder $r6;
+        java.lang.String $r7;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        $r2 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.app.Activity activity>;
+
+     label1:
+        $r3 = staticinvoke <com.outfit7.funnetworks.util.Util: java.lang.Object JSONToObj(android.content.Context,java.lang.String,java.lang.Class)>($r2, "reportEventLog", class "Lcom/outfit7/funnetworks/ReportingAPI$EventLog;");
+
+     label2:
+        $r4 = (com.outfit7.funnetworks.ReportingAPI$EventLog) $r3;
+
+        $r0.<com.outfit7.funnetworks.ReportingAPI: com.outfit7.funnetworks.ReportingAPI$EventLog eventLog> = $r4;
+
+     label3:
+        $r4 = $r0.<com.outfit7.funnetworks.ReportingAPI: com.outfit7.funnetworks.ReportingAPI$EventLog eventLog>;
+
+        $r5 = $r0.<com.outfit7.funnetworks.ReportingAPI: com.outfit7.funnetworks.ReportingAPI$GridResponse gridResponse>;
+
+        staticinvoke <com.outfit7.funnetworks.ReportingAPI$EventLog: com.outfit7.funnetworks.ReportingAPI$GridResponse access$1102(com.outfit7.funnetworks.ReportingAPI$EventLog,com.outfit7.funnetworks.ReportingAPI$GridResponse)>($r4, $r5);
+
+        $r4 = $r0.<com.outfit7.funnetworks.ReportingAPI: com.outfit7.funnetworks.ReportingAPI$EventLog eventLog>;
+
+        $r2 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.app.Activity activity>;
+
+        staticinvoke <com.outfit7.funnetworks.ReportingAPI$EventLog: android.app.Activity access$1502(com.outfit7.funnetworks.ReportingAPI$EventLog,android.app.Activity)>($r4, $r2);
+
+        $r4 = $r0.<com.outfit7.funnetworks.ReportingAPI: com.outfit7.funnetworks.ReportingAPI$EventLog eventLog>;
+
+        staticinvoke <com.outfit7.funnetworks.ReportingAPI$EventLog: com.outfit7.funnetworks.ReportingAPI access$1602(com.outfit7.funnetworks.ReportingAPI$EventLog,com.outfit7.funnetworks.ReportingAPI)>($r4, $r0);
+
+        return;
+
+     label4:
+        $r1 := @caughtexception;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("");
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.outfit7.funnetworks.util.Logger: void error(java.lang.String,java.lang.String,java.lang.Throwable)>("==NEWS-TRACKING-REPORTING==", $r7, $r1);
+
+        $r4 = new com.outfit7.funnetworks.ReportingAPI$EventLog;
+
+        specialinvoke $r4.<com.outfit7.funnetworks.ReportingAPI$EventLog: void <init>()>();
+
+        $r0.<com.outfit7.funnetworks.ReportingAPI: com.outfit7.funnetworks.ReportingAPI$EventLog eventLog> = $r4;
+
+        goto label3;
+
+        catch java.io.IOException from label1 to label2 with label4;
+    }
+
+    private static java.lang.String md5(java.lang.String)
+    {
+        java.lang.String $r0;
+        java.lang.Exception $r1;
+        java.lang.StringBuffer $r2;
+        java.security.MessageDigest $r3;
+        byte[] $r4;
+        int $i0, $i1;
+        byte $b2;
+        short $s3;
+        java.lang.RuntimeException $r5;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label01:
+        $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("MD5");
+
+        virtualinvoke $r3.<java.security.MessageDigest: void reset()>();
+
+        $r4 = virtualinvoke $r0.<java.lang.String: byte[] getBytes(java.lang.String)>("UTF-8");
+
+        virtualinvoke $r3.<java.security.MessageDigest: void update(byte[])>($r4);
+
+        $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>();
+
+     label02:
+        $r2 = new java.lang.StringBuffer;
+
+     label03:
+        specialinvoke $r2.<java.lang.StringBuffer: void <init>()>();
+
+     label04:
+        $i0 = 0;
+
+     label05:
+        $i1 = lengthof $r4;
+
+     label06:
+        if $i0 >= $i1 goto label14;
+
+     label07:
+        $b2 = $r4[$i0];
+
+     label08:
+        $s3 = $b2 & 255;
+
+     label09:
+        $r0 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s3);
+
+        $i1 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+     label10:
+        if $i1 != 1 goto label12;
+
+     label11:
+        virtualinvoke $r2.<java.lang.StringBuffer: java.lang.StringBuffer append(char)>(48);
+
+     label12:
+        virtualinvoke $r2.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>($r0);
+
+     label13:
+        $i0 = $i0 + 1;
+
+        goto label05;
+
+     label14:
+        $r0 = virtualinvoke $r2.<java.lang.StringBuffer: java.lang.String toString()>();
+
+     label15:
+        return $r0;
+
+     label16:
+        $r1 := @caughtexception;
+
+        $r5 = new java.lang.RuntimeException;
+
+        specialinvoke $r5.<java.lang.RuntimeException: void <init>()>();
+
+        throw $r5;
+
+        catch java.lang.Exception from label01 to label02 with label16;
+        catch java.lang.Exception from label03 to label04 with label16;
+        catch java.lang.Exception from label05 to label06 with label16;
+        catch java.lang.Exception from label07 to label08 with label16;
+        catch java.lang.Exception from label09 to label10 with label16;
+        catch java.lang.Exception from label11 to label13 with label16;
+        catch java.lang.Exception from label14 to label15 with label16;
+    }
+
+    public static java.lang.String sha1(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer5654, varReplacer5655;
+        java.lang.Exception $r1;
+        java.security.MessageDigest $r2;
+        byte[] $r3;
+        java.lang.RuntimeException $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer5655 = "SHA-1";
+
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5655);
+
+        virtualinvoke $r2.<java.security.MessageDigest: void reset()>();
+
+        varReplacer5654 = "UTF-8";
+
+        $r3 = virtualinvoke $r0.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer5654);
+
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte[])>($r3);
+
+        $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>();
+
+        $r0 = staticinvoke <com.outfit7.funnetworks.ReportingAPI: java.lang.String convertByteToHex(byte[])>($r3);
+
+     label2:
+        return $r0;
+
+     label3:
+        $r1 := @caughtexception;
+
+        $r4 = new java.lang.RuntimeException;
+
+        specialinvoke $r4.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r1);
+
+        throw $r4;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    private void storeEventLog()
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        com.outfit7.funnetworks.ReportingAPI$EventLog $r1;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        $r1 = $r0.<com.outfit7.funnetworks.ReportingAPI: com.outfit7.funnetworks.ReportingAPI$EventLog eventLog>;
+
+        staticinvoke <com.outfit7.funnetworks.ReportingAPI$EventLog: void access$1000(com.outfit7.funnetworks.ReportingAPI$EventLog)>($r1);
+
+        return;
+    }
+
+    public java.lang.String getReportingURLEncoded()
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        java.lang.String $r1;
+        com.outfit7.funnetworks.ReportingAPI$GridResponse $r2;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        $r2 = $r0.<com.outfit7.funnetworks.ReportingAPI: com.outfit7.funnetworks.ReportingAPI$GridResponse gridResponse>;
+
+        $r1 = $r2.<com.outfit7.funnetworks.ReportingAPI$GridResponse: java.lang.String newsReportingUrl>;
+
+        if $r1 != null goto label1;
+
+        return "";
+
+     label1:
+        $r2 = $r0.<com.outfit7.funnetworks.ReportingAPI: com.outfit7.funnetworks.ReportingAPI$GridResponse gridResponse>;
+
+        $r1 = $r2.<com.outfit7.funnetworks.ReportingAPI$GridResponse: java.lang.String newsReportingUrl>;
+
+        $r1 = staticinvoke <java.net.URLEncoder: java.lang.String encode(java.lang.String)>($r1);
+
+        return $r1;
+    }
+
+    public int getSessionCount()
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        int $i0;
+        com.outfit7.funnetworks.ReportingAPI$EventLog $r1;
+        com.outfit7.funnetworks.ReportingAPI$GridResponse $r2;
+        java.lang.String $r3;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        staticinvoke <com.outfit7.funnetworks.util.Util: void ensureUiThread()>();
+
+        $r1 = $r0.<com.outfit7.funnetworks.ReportingAPI: com.outfit7.funnetworks.ReportingAPI$EventLog eventLog>;
+
+        $r2 = $r0.<com.outfit7.funnetworks.ReportingAPI: com.outfit7.funnetworks.ReportingAPI$GridResponse gridResponse>;
+
+        $r3 = $r2.<com.outfit7.funnetworks.ReportingAPI$GridResponse: java.lang.String newsReportingId>;
+
+        $i0 = virtualinvoke $r1.<com.outfit7.funnetworks.ReportingAPI$EventLog: int getSessionCount(java.lang.String)>($r3);
+
+        return $i0;
+    }
+
+    public long getSessionDuration()
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        long $l0, $l2;
+        byte $b1;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        $l0 = $r0.<com.outfit7.funnetworks.ReportingAPI: long sessionStart>;
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 != 0 goto label1;
+
+        return -1L;
+
+     label1:
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $l2 = $r0.<com.outfit7.funnetworks.ReportingAPI: long sessionStart>;
+
+        $l0 = $l0 - $l2;
+
+        return $l0;
+    }
+
+    public long getSessionStart()
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        long l0;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        l0 = $r0.<com.outfit7.funnetworks.ReportingAPI: long sessionStart>;
+
+        return l0;
+    }
+
+    public boolean gotNews()
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        java.lang.String $r1;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        $r1 = specialinvoke $r0.<com.outfit7.funnetworks.ReportingAPI: java.lang.String getNewsID()>();
+
+        if $r1 == null goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public void gridDownloadFailed(boolean, java.lang.StringBuilder)
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        boolean $z0;
+        java.lang.StringBuilder $r1;
+        int $i0, $i1;
+        char $c2;
+        java.lang.String $r2, $r4;
+        com.outfit7.funnetworks.ReportingAPI$EventLog $r3;
+        android.os.Handler $r5;
+        com.outfit7.funnetworks.ReportingAPI$QRunner $r6;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        $z0 := @parameter0: boolean;
+
+        $r1 := @parameter1: java.lang.StringBuilder;
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $i0 = 0;
+
+     label2:
+        $i1 = virtualinvoke $r1.<java.lang.StringBuilder: int length()>();
+
+        if $i0 >= $i1 goto label7;
+
+        $c2 = virtualinvoke $r1.<java.lang.StringBuilder: char charAt(int)>($i0);
+
+        if $c2 >= 48 goto label4;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: void setCharAt(int,char)>($i0, 95);
+
+     label3:
+        $i0 = $i0 + 1;
+
+        goto label2;
+
+     label4:
+        $c2 = virtualinvoke $r1.<java.lang.StringBuilder: char charAt(int)>($i0);
+
+        if $c2 <= 57 goto label5;
+
+        $c2 = virtualinvoke $r1.<java.lang.StringBuilder: char charAt(int)>($i0);
+
+        if $c2 >= 65 goto label5;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: void setCharAt(int,char)>($i0, 95);
+
+        goto label3;
+
+     label5:
+        $c2 = virtualinvoke $r1.<java.lang.StringBuilder: char charAt(int)>($i0);
+
+        if $c2 <= 90 goto label6;
+
+        $c2 = virtualinvoke $r1.<java.lang.StringBuilder: char charAt(int)>($i0);
+
+        if $c2 >= 97 goto label6;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: void setCharAt(int,char)>($i0, 95);
+
+        goto label3;
+
+     label6:
+        $c2 = virtualinvoke $r1.<java.lang.StringBuilder: char charAt(int)>($i0);
+
+        if $c2 <= 122 goto label3;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: void setCharAt(int,char)>($i0, 95);
+
+        goto label3;
+
+     label7:
+        $i0 = virtualinvoke $r1.<java.lang.StringBuilder: int length()>();
+
+        if $i0 <= 200 goto label8;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: void setLength(int)>(200);
+
+     label8:
+        $r2 = staticinvoke <com.outfit7.funnetworks.FunNetworks: java.lang.String getUDID()>();
+
+        $r2 = staticinvoke <com.outfit7.funnetworks.ReportingAPI: java.lang.String generateReportURL(java.lang.String)>($r2);
+
+        if $r2 == null goto label9;
+
+        $r3 = $r0.<com.outfit7.funnetworks.ReportingAPI: com.outfit7.funnetworks.ReportingAPI$EventLog eventLog>;
+
+        $r4 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r3.<com.outfit7.funnetworks.ReportingAPI$EventLog: void logGridFailure(java.lang.String,java.lang.String)>($r2, $r4);
+
+        $r5 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.Handler handler>;
+
+        if $r5 == null goto label9;
+
+        $r5 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.Handler handler>;
+
+        $r6 = new com.outfit7.funnetworks.ReportingAPI$QRunner;
+
+        specialinvoke $r6.<com.outfit7.funnetworks.ReportingAPI$QRunner: void <init>(com.outfit7.funnetworks.ReportingAPI,com.outfit7.funnetworks.ReportingAPI$1)>($r0, null);
+
+        virtualinvoke $r5.<android.os.Handler: boolean post(java.lang.Runnable)>($r6);
+
+     label9:
+        return;
+    }
+
+    public void logEvent(java.lang.String, java.lang.String, java.lang.String)
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        java.lang.String $r1, $r2, $r3, varReplacer6555;
+        java.lang.String[] $r4;
+
+        nop;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 = newarray (java.lang.String)[2];
+
+        $r4[0] = "duration";
+
+        $r4[1] = $r3;
+
+        varReplacer6555 = "exit";
+
+        virtualinvoke $r0.<com.outfit7.funnetworks.ReportingAPI: void logEvent(java.lang.String,java.lang.String[])>(varReplacer6555, $r4);
+
+        return;
+    }
+
+    public transient void logEvent(java.lang.String, java.lang.String[])
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        java.lang.String $r1, varReplacer6556;
+        java.lang.String[] $r2;
+        android.os.Handler $r3;
+        com.outfit7.funnetworks.ReportingAPI$3 $r4;
+
+        nop;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: java.lang.String[];
+
+        $r3 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.Handler logHandler>;
+
+        $r4 = new com.outfit7.funnetworks.ReportingAPI$3;
+
+        varReplacer6556 = "exit";
+
+        specialinvoke $r4.<com.outfit7.funnetworks.ReportingAPI$3: void <init>(com.outfit7.funnetworks.ReportingAPI,java.lang.String[],java.lang.String)>($r0, $r2, varReplacer6556);
+
+        virtualinvoke $r3.<android.os.Handler: boolean post(java.lang.Runnable)>($r4);
+
+        return;
+    }
+
+    public void markSessionCompleted()
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        android.os.Handler $r1;
+        com.outfit7.funnetworks.ReportingAPI$4 $r2;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        staticinvoke <com.outfit7.funnetworks.util.Util: void ensureUiThread()>();
+
+        $r1 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.Handler logHandler>;
+
+        $r2 = new com.outfit7.funnetworks.ReportingAPI$4;
+
+        specialinvoke $r2.<com.outfit7.funnetworks.ReportingAPI$4: void <init>(com.outfit7.funnetworks.ReportingAPI)>($r0);
+
+        virtualinvoke $r1.<android.os.Handler: boolean post(java.lang.Runnable)>($r2);
+
+        return;
+    }
+
+    public void quit()
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        android.os.HandlerThread $r1;
+        null_type varReplacer6723;
+
+        nop;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        staticinvoke <com.outfit7.funnetworks.util.Util: void ensureUiThread()>();
+
+        $r1 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.HandlerThread handlerThread>;
+
+        if $r1 == null goto label1;
+
+        $r1 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.HandlerThread handlerThread>;
+
+        virtualinvoke $r1.<android.os.HandlerThread: boolean quit()>();
+
+     label1:
+        $r1 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.HandlerThread logHandlerThread>;
+
+        if $r1 == null goto label2;
+
+        $r1 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.HandlerThread logHandlerThread>;
+
+        virtualinvoke $r1.<android.os.HandlerThread: boolean quit()>();
+
+     label2:
+        varReplacer6723 = null;
+
+        $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.Handler handler> = varReplacer6723;
+
+        return;
+    }
+
+    public void runOnLogHandler(java.lang.Runnable)
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        java.lang.Runnable $r1;
+        android.os.Handler $r2;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        $r1 := @parameter0: java.lang.Runnable;
+
+        $r2 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.Handler logHandler>;
+
+        virtualinvoke $r2.<android.os.Handler: boolean post(java.lang.Runnable)>($r1);
+
+        return;
+    }
+
+    public void setup()
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        android.os.Handler $r1;
+        com.outfit7.funnetworks.ReportingAPI$1 $r2;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        staticinvoke <com.outfit7.funnetworks.util.Util: void ensureUiThread()>();
+
+        $r1 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.Handler logHandler>;
+
+        $r2 = new com.outfit7.funnetworks.ReportingAPI$1;
+
+        specialinvoke $r2.<com.outfit7.funnetworks.ReportingAPI$1: void <init>(com.outfit7.funnetworks.ReportingAPI)>($r0);
+
+        virtualinvoke $r1.<android.os.Handler: boolean post(java.lang.Runnable)>($r2);
+
+        return;
+    }
+
+    public void startSession()
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        virtualinvoke $r0.<com.outfit7.funnetworks.ReportingAPI: void startSession(boolean)>(0);
+
+        return;
+    }
+
+    public void startSession(boolean)
+    {
+        com.outfit7.funnetworks.ReportingAPI $r0;
+        boolean $z0;
+        android.os.Handler $r1;
+        com.outfit7.funnetworks.ReportingAPI$2 $r2;
+
+        $r0 := @this: com.outfit7.funnetworks.ReportingAPI;
+
+        $z0 := @parameter0: boolean;
+
+        staticinvoke <com.outfit7.funnetworks.util.Logger: void debug(java.lang.String,java.lang.String)>("==060==", "startSession");
+
+        $r1 = $r0.<com.outfit7.funnetworks.ReportingAPI: android.os.Handler logHandler>;
+
+        $r2 = new com.outfit7.funnetworks.ReportingAPI$2;
+
+        specialinvoke $r2.<com.outfit7.funnetworks.ReportingAPI$2: void <init>(com.outfit7.funnetworks.ReportingAPI,boolean)>($r0, $z0);
+
+        virtualinvoke $r1.<android.os.Handler: boolean post(java.lang.Runnable)>($r2);
+
+        return;
+    }
+}

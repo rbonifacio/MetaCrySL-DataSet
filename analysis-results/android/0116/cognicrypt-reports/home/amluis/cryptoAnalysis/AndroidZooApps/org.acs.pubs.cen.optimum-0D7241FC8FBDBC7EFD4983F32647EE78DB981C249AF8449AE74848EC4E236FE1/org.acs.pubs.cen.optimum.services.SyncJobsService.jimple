@@ -1,0 +1,395 @@
+public class org.acs.pubs.cen.optimum.services.SyncJobsService extends android.app.IntentService
+{
+    private static final boolean DEBUG;
+    public static final java.lang.String EXTRA_STATUS_RECEIVER;
+    public static final int STATUS_CONNECTION_ERROR;
+    public static final int STATUS_ERROR;
+    public static final int STATUS_FINISHED;
+    public static final java.lang.String STATUS_KEY;
+    public static final int STATUS_NETWORK_ERROR;
+    public static final int STATUS_RUNNING;
+    public static final int STATUS_SERVER_ERROR;
+    public static final int STATUS_SOCKET_ERROR;
+    private static final java.lang.String TAG;
+    public android.content.Intent ipcIntent;
+    public android.os.IBinder ipcBinder_0;
+
+    static void <clinit>()
+    {
+        boolean $z0;
+
+        nop;
+
+        $z0 = <org.acs.pubs.cen.optimum.utils.CENConstants: boolean DEBUG>;
+
+        <org.acs.pubs.cen.optimum.services.SyncJobsService: boolean DEBUG> = $z0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        org.acs.pubs.cen.optimum.services.SyncJobsService $r0;
+        java.lang.String varReplacer1501;
+
+        nop;
+
+        $r0 := @this: org.acs.pubs.cen.optimum.services.SyncJobsService;
+
+        varReplacer1501 = "SyncJobsService";
+
+        specialinvoke $r0.<android.app.IntentService: void <init>(java.lang.String)>(varReplacer1501);
+
+        return;
+    }
+
+    private static javax.net.ssl.SSLSocketFactory createSslSocketFactory() throws java.lang.Exception
+    {
+        java.lang.Object[] $r0;
+        javax.net.ssl.SSLContext $r1;
+        javax.net.ssl.SSLSocketFactory $r2;
+        org.acs.pubs.cen.optimum.services.SyncJobsService$1 r3;
+        java.security.SecureRandom r4;
+        javax.net.ssl.TrustManager[] r5;
+        null_type varReplacer1523;
+        java.lang.String varReplacer1524;
+
+        nop;
+
+        $r0 = newarray (javax.net.ssl.TrustManager)[1];
+
+        r3 = new org.acs.pubs.cen.optimum.services.SyncJobsService$1;
+
+        specialinvoke r3.<org.acs.pubs.cen.optimum.services.SyncJobsService$1: void <init>()>();
+
+        $r0[0] = r3;
+
+        varReplacer1524 = "TLS";
+
+        $r1 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1524);
+
+        r4 = new java.security.SecureRandom;
+
+        specialinvoke r4.<java.security.SecureRandom: void <init>()>();
+
+        r5 = (javax.net.ssl.TrustManager[]) $r0;
+
+        varReplacer1523 = null;
+
+        virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1523, r5, r4);
+
+        $r2 = virtualinvoke $r1.<javax.net.ssl.SSLContext: javax.net.ssl.SSLSocketFactory getSocketFactory()>();
+
+        return $r2;
+    }
+
+    public void onCreate()
+    {
+        org.acs.pubs.cen.optimum.services.SyncJobsService $r0;
+
+        nop;
+
+        $r0 := @this: org.acs.pubs.cen.optimum.services.SyncJobsService;
+
+        specialinvoke $r0.<android.app.IntentService: void onCreate()>();
+
+        return;
+    }
+
+    protected void onHandleIntent(android.content.Intent)
+    {
+        org.acs.pubs.cen.optimum.services.SyncJobsService $r0;
+        android.content.Intent $r1;
+        java.net.URL $r2;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r4, varReplacer1505, varReplacer1506, varReplacer1508, varReplacer1509, varReplacer1513, varReplacer1514, varReplacer1515, varReplacer1516, varReplacer1517, varReplacer1518, varReplacer1519, varReplacer1521;
+        android.os.Parcelable $r5;
+        android.os.ResultReceiver $r6;
+        android.os.Bundle $r7;
+        android.content.res.Resources $r8;
+        java.net.URLConnection $r9;
+        javax.net.ssl.HttpsURLConnection $r10;
+        javax.net.ssl.SSLSocketFactory $r11;
+        java.io.InputStream $r12;
+        org.xmlpull.v1.XmlPullParser $r13;
+        org.acs.pubs.cen.optimum.api.JobsHandler $r14;
+        android.content.ContentResolver $r15;
+        org.acs.pubs.cen.optimum.utils.ConnectionUtils $r16;
+        org.xmlpull.v1.XmlPullParserException $r17;
+        org.acs.pubs.cen.optimum.api.XmlHandler$HandlerException $r18;
+        java.lang.Throwable $r19;
+        java.lang.Exception $r20;
+        boolean $z0;
+        int varReplacer1502, varReplacer1503, varReplacer1504, varReplacer1507, varReplacer1510, varReplacer1511, varReplacer1512, varReplacer1520;
+
+        nop;
+
+        $r0 := @this: org.acs.pubs.cen.optimum.services.SyncJobsService;
+
+        $r1 := @parameter0: android.content.Intent;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1517 = "onHandleIntent(intent=";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1517);
+
+        $r4 = virtualinvoke $r1.<android.content.Intent: java.lang.String toString()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        varReplacer1513 = ")";
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1513);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer1521 = "SyncJobsService";
+
+        staticinvoke <org.acs.pubs.cen.optimum.utils.Log: void info(java.lang.String,java.lang.String)>(varReplacer1521, $r4);
+
+        varReplacer1509 = "org.acs.cen.jobs.STATUS_RECEIVER";
+
+        $r5 = virtualinvoke $r1.<android.content.Intent: android.os.Parcelable getParcelableExtra(java.lang.String)>(varReplacer1509);
+
+        $r6 = (android.os.ResultReceiver) $r5;
+
+        if $r6 == null goto label01;
+
+        $r7 = <android.os.Bundle: android.os.Bundle EMPTY>;
+
+        varReplacer1512 = 1;
+
+        virtualinvoke $r6.<android.os.ResultReceiver: void send(int,android.os.Bundle)>(varReplacer1512, $r7);
+
+     label01:
+        $r2 = new java.net.URL;
+
+     label02:
+        $r8 = virtualinvoke $r0.<org.acs.pubs.cen.optimum.services.SyncJobsService: android.content.res.Resources getResources()>();
+
+        varReplacer1520 = 2131558466;
+
+        $r4 = virtualinvoke $r8.<android.content.res.Resources: java.lang.String getString(int)>(varReplacer1520);
+
+        specialinvoke $r2.<java.net.URL: void <init>(java.lang.String)>($r4);
+
+        $r9 = virtualinvoke $r2.<java.net.URL: java.net.URLConnection openConnection()>();
+
+        $r10 = (javax.net.ssl.HttpsURLConnection) $r9;
+
+        $r11 = staticinvoke <org.acs.pubs.cen.optimum.services.SyncJobsService: javax.net.ssl.SSLSocketFactory createSslSocketFactory()>();
+
+        virtualinvoke $r10.<javax.net.ssl.HttpsURLConnection: void setSSLSocketFactory(javax.net.ssl.SSLSocketFactory)>($r11);
+
+        $r12 = virtualinvoke $r10.<javax.net.ssl.HttpsURLConnection: java.io.InputStream getInputStream()>();
+
+     label03:
+        $r13 = staticinvoke <org.acs.pubs.cen.optimum.utils.ParserUtils: org.xmlpull.v1.XmlPullParser newPullParser(java.io.InputStream)>($r12);
+
+     label04:
+        $r14 = new org.acs.pubs.cen.optimum.api.JobsHandler;
+
+     label05:
+        varReplacer1514 = "org.acs.pubs.cen.optimum.content";
+
+        specialinvoke $r14.<org.acs.pubs.cen.optimum.api.JobsHandler: void <init>(java.lang.String)>(varReplacer1514);
+
+        $r15 = virtualinvoke $r0.<org.acs.pubs.cen.optimum.services.SyncJobsService: android.content.ContentResolver getContentResolver()>();
+
+        virtualinvoke $r14.<org.acs.pubs.cen.optimum.api.JobsHandler: void parseAndApply(org.xmlpull.v1.XmlPullParser,android.content.ContentResolver)>($r13, $r15);
+
+     label06:
+        $r16 = <org.acs.pubs.cen.optimum.utils.ConnectionUtils: org.acs.pubs.cen.optimum.utils.ConnectionUtils INSTANCE>;
+
+     label07:
+        virtualinvoke $r16.<org.acs.pubs.cen.optimum.utils.ConnectionUtils: void closeQuietly(java.io.InputStream)>($r12);
+
+        varReplacer1518 = "SyncJobsService";
+
+        varReplacer1519 = "central science sync finished";
+
+        staticinvoke <org.acs.pubs.cen.optimum.utils.Log: void info(java.lang.String,java.lang.String)>(varReplacer1518, varReplacer1519);
+
+     label08:
+        varReplacer1515 = "SyncJobsService";
+
+        varReplacer1516 = "sync finished";
+
+        staticinvoke <org.acs.pubs.cen.optimum.utils.Log: void info(java.lang.String,java.lang.String)>(varReplacer1515, varReplacer1516);
+
+        if $r6 == null goto label18;
+
+        $r7 = <android.os.Bundle: android.os.Bundle EMPTY>;
+
+        varReplacer1510 = 6;
+
+        virtualinvoke $r6.<android.os.ResultReceiver: void send(int,android.os.Bundle)>(varReplacer1510, $r7);
+
+        return;
+
+     label09:
+        $r17 := @caughtexception;
+
+     label10:
+        $r18 = new org.acs.pubs.cen.optimum.api.XmlHandler$HandlerException;
+
+        varReplacer1508 = "Malformed response for Error in parsing";
+
+        specialinvoke $r18.<org.acs.pubs.cen.optimum.api.XmlHandler$HandlerException: void <init>(java.lang.String,java.lang.Throwable)>(varReplacer1508, $r17);
+
+        throw $r18;
+
+     label11:
+        $r19 := @caughtexception;
+
+        $r16 = <org.acs.pubs.cen.optimum.utils.ConnectionUtils: org.acs.pubs.cen.optimum.utils.ConnectionUtils INSTANCE>;
+
+     label12:
+        virtualinvoke $r16.<org.acs.pubs.cen.optimum.utils.ConnectionUtils: void closeQuietly(java.io.InputStream)>($r12);
+
+        throw $r19;
+
+     label13:
+        $r20 := @caughtexception;
+
+        varReplacer1505 = "SyncJobsService";
+
+        varReplacer1506 = "Problem while syncing";
+
+        staticinvoke <org.acs.pubs.cen.optimum.utils.Log: void error(java.lang.String,java.lang.String)>(varReplacer1505, varReplacer1506);
+
+        $z0 = $r20 instanceof java.net.SocketTimeoutException;
+
+        if $z0 == 0 goto label14;
+
+        if $r6 == null goto label18;
+
+        $r7 = <android.os.Bundle: android.os.Bundle EMPTY>;
+
+        varReplacer1504 = 3;
+
+        virtualinvoke $r6.<android.os.ResultReceiver: void send(int,android.os.Bundle)>(varReplacer1504, $r7);
+
+        return;
+
+     label14:
+        $z0 = $r20 instanceof org.apache.http.conn.ConnectTimeoutException;
+
+        if $z0 == 0 goto label15;
+
+        if $r6 == null goto label18;
+
+        $r7 = <android.os.Bundle: android.os.Bundle EMPTY>;
+
+        varReplacer1507 = 4;
+
+        virtualinvoke $r6.<android.os.ResultReceiver: void send(int,android.os.Bundle)>(varReplacer1507, $r7);
+
+        return;
+
+     label15:
+        $z0 = $r20 instanceof java.net.SocketException;
+
+        if $z0 == 0 goto label16;
+
+        if $r6 == null goto label18;
+
+        $r7 = <android.os.Bundle: android.os.Bundle EMPTY>;
+
+        varReplacer1502 = 7;
+
+        virtualinvoke $r6.<android.os.ResultReceiver: void send(int,android.os.Bundle)>(varReplacer1502, $r7);
+
+        return;
+
+     label16:
+        $z0 = $r20 instanceof java.io.IOException;
+
+        if $z0 == 0 goto label17;
+
+        if $r6 == null goto label18;
+
+        $r7 = <android.os.Bundle: android.os.Bundle EMPTY>;
+
+        varReplacer1511 = 5;
+
+        virtualinvoke $r6.<android.os.ResultReceiver: void send(int,android.os.Bundle)>(varReplacer1511, $r7);
+
+        return;
+
+     label17:
+        if $r6 == null goto label18;
+
+        $r7 = <android.os.Bundle: android.os.Bundle EMPTY>;
+
+        varReplacer1503 = 2;
+
+        virtualinvoke $r6.<android.os.ResultReceiver: void send(int,android.os.Bundle)>(varReplacer1503, $r7);
+
+     label18:
+        return;
+
+        catch java.lang.Exception from label02 to label03 with label13;
+        catch org.xmlpull.v1.XmlPullParserException from label03 to label04 with label09;
+        catch org.xmlpull.v1.XmlPullParserException from label05 to label06 with label09;
+        catch java.lang.Throwable from label03 to label06 with label11;
+        catch java.lang.Exception from label07 to label08 with label13;
+        catch java.lang.Throwable from label10 to label11 with label11;
+        catch java.lang.Exception from label12 to label13 with label13;
+    }
+
+    public java.lang.String readFully(java.io.InputStream) throws java.io.IOException
+    {
+        org.acs.pubs.cen.optimum.services.SyncJobsService $r0;
+        java.io.InputStream $r1;
+        java.io.ByteArrayOutputStream $r2;
+        byte[] $r3;
+        int $i0;
+        java.lang.String $r4;
+
+        $r0 := @this: org.acs.pubs.cen.optimum.services.SyncJobsService;
+
+        $r1 := @parameter0: java.io.InputStream;
+
+        $r2 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r2.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        $r3 = newarray (byte)[1024];
+
+     label1:
+        $i0 = virtualinvoke $r1.<java.io.InputStream: int read(byte[])>($r3);
+
+        if $i0 == -1 goto label2;
+
+        virtualinvoke $r2.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r3, 0, $i0);
+
+        goto label1;
+
+     label2:
+        $r4 = virtualinvoke $r2.<java.io.ByteArrayOutputStream: java.lang.String toString()>();
+
+        return $r4;
+    }
+
+    public android.os.IBinder onBind(android.content.Intent)
+    {
+        org.acs.pubs.cen.optimum.services.SyncJobsService this;
+        android.content.Intent parameter0;
+
+        nop;
+
+        this := @this: org.acs.pubs.cen.optimum.services.SyncJobsService;
+
+        parameter0 := @parameter0: android.content.Intent;
+
+        this.<org.acs.pubs.cen.optimum.services.SyncJobsService: android.os.IBinder ipcBinder_0> = parameter0;
+
+        this.<org.acs.pubs.cen.optimum.services.SyncJobsService: android.os.IBinder ipcBinder_0> = parameter0;
+
+        return parameter0;
+    }
+}

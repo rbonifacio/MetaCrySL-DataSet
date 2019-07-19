@@ -1,0 +1,109 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/air.u.live.video.chat-0DC5EFEB6E8D53207ED185068CF06BEA08BC8D42A685382469F1719B985E00A5.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r9
+		Type: java.security.MessageDigest
+		Statement: $r9 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2488)
+		Method: <com.vk.sdk.util.VKUtil: java.lang.String[] getCertificateFingerprint(android.content.Context,java.lang.String)>
+		SHA-256: 97a035008ea2a2fcbcfe1bf274591ba212f10b95f374f6b7e3fe305ee8bef282
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2307)
+		Method: <com.facebook.appevents.AppEvent: java.lang.String md5Checksum(java.lang.String)>
+		SHA-256: 4db0d520c436640552208665443b2cec2ba670ed69d623525eac18b6b5540197
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.vk.sdk.util.VKUtil: java.lang.String md5(java.lang.String)>
+		SHA-256: 2c29116256948103b2ea2c4cdfc5a05c42c3fb6b97f4cbcc1e5c3995389dfe38
+		Secure: false
+	Object:
+		Variable: $r10
+		Type: byte[]
+		Statement: $r10 = virtualinvoke $r9.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.vk.sdk.util.VKUtil: java.lang.String[] getCertificateFingerprint(android.content.Context,java.lang.String)>
+		SHA-256: be5b5fb254ce9976cd4b62d3a9b157564674a56192306d9fcc1d72d64d2540ef
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2662)
+		Method: <com.vk.sdk.util.VKUtil: java.lang.String md5(java.lang.String)>
+		SHA-256: 1eb5c8cad1e4bd7b0c9a2aaa03871ad193785a1f19b8319e8a1b682b1f506272
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.facebook.appevents.AppEvent: java.lang.String md5Checksum(java.lang.String)>
+		SHA-256: eb5aa20233d0a39f9efa2c49b15b711fba57bf442f97f41aee15900a081180c4
+		Secure: false
+
+Findings in Java Class: com.facebook.appevents.AppEvent
+
+	 in Method: java.lang.String md5Checksum(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #4db0d520c436640552208665443b2cec2ba670ed69d623525eac18b6b5540197)
+			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2307)
+
+
+Findings in Java Class: com.vk.sdk.util.VKUtil
+
+	 in Method: java.lang.String[] getCertificateFingerprint(android.content.Context,java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #97a035008ea2a2fcbcfe1bf274591ba212f10b95f374f6b7e3fe305ee8bef282)
+			First parameter (with value "SHA") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r9 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2488)
+
+
+	 in Method: java.lang.String md5(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #1eb5c8cad1e4bd7b0c9a2aaa03871ad193785a1f19b8319e8a1b682b1f506272)
+			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2662)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 3
+=====================================================================

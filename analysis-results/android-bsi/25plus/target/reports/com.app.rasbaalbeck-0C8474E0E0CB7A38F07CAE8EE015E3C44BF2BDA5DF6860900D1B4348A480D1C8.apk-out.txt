@@ -1,0 +1,115 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.app.rasbaalbeck-0C8474E0E0CB7A38F07CAE8EE015E3C44BF2BDA5DF6860900D1B4348A480D1C8.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r5
+		Type: javax.crypto.KeyGenerator
+		Statement: $r5 = staticinvoke <javax.crypto.KeyGenerator: javax.crypto.KeyGenerator getInstance(java.lang.String,java.lang.String)>(varReplacer8090, varReplacer8091)
+		Method: <com.snappy.appypie.fingerprintLogin.FingerprintActivity: void generateKey()>
+		SHA-256: 34101f8d9d1be5a983e78cf209942a587577312f2b33fa41509cb0e350d1ae99
+		Secure: true
+	Object:
+		Variable: $r6
+		Type: byte[]
+		Statement: $r6 = virtualinvoke $r5.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.snappy.appypie.payment.AppypiePayUActivity: java.lang.String getPostString()>
+		SHA-256: 5a19a588dcc03d86c7f710efee8c3f5d5d12addd163be706ba8ef65c9f1c68a6
+		Secure: true
+	Object:
+		Variable: $r8
+		Type: byte[]
+		Statement: $r8 = virtualinvoke $r7.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.snappy.appypie.utils.StaticData: java.lang.String getHashKey(java.lang.String,android.content.Context)>
+		SHA-256: 485e8d61b3a3136be390b20030ba34125db21d6d6b3c0e6e269060401252c5a2
+		Secure: false
+	Object:
+		Variable: $r7
+		Type: java.security.MessageDigest
+		Statement: $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6944)
+		Method: <com.snappy.appypie.utils.StaticData: java.lang.String getHashKey(java.lang.String,android.content.Context)>
+		SHA-256: e55b3fa8201f0ceb41b04721f2ffd06e5519dae7b394b343d64e07893e051cd0
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: java.security.MessageDigest
+		Statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5170)
+		Method: <com.snappy.appypie.payment.AppypiePayUActivity: java.lang.String getPostString()>
+		SHA-256: a6940e09d39eaf0f8e3e79a7d1d7f73093826adc8d5decd48697bcf462e33cc4
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: java.security.KeyStore
+		Statement: $r1 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer8098)
+		Method: <com.snappy.appypie.fingerprintLogin.FingerprintActivity: void generateKey()>
+		SHA-256: c0c5e440c0c426ad576f37474820757a53e4169e9f2cac3dacda23958707f138
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: javax.crypto.Cipher
+		Statement: $r1 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer8107)
+		Method: <com.snappy.appypie.fingerprintLogin.FingerprintActivity: boolean cipherInit()>
+		SHA-256: aa86dc4f5b040b715ddb1a0a41b30d7ea7fa8978d2aa39cac2d20b4e31d4a8cb
+		Secure: false
+
+Findings in Java Class: com.snappy.appypie.utils.StaticData
+
+	 in Method: java.lang.String getHashKey(java.lang.String,android.content.Context)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #e55b3fa8201f0ceb41b04721f2ffd06e5519dae7b394b343d64e07893e051cd0)
+			First parameter (with value "SHA") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6944)
+
+
+Findings in Java Class: com.snappy.appypie.fingerprintLogin.FingerprintActivity
+
+	 in Method: boolean cipherInit()
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #aa86dc4f5b040b715ddb1a0a41b30d7ea7fa8978d2aa39cac2d20b4e31d4a8cb)
+			First parameter (with value "AES/CBC/PKCS7Padding") should be any of AES/CBC/{ISO10126Padding}
+			at statement: $r1 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer8107)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #aa86dc4f5b040b715ddb1a0a41b30d7ea7fa8978d2aa39cac2d20b4e31d4a8cb)
+			First parameter (with value "AES/CBC/PKCS7Padding") should be any of AES/CBC/{ISO10126Padding}
+			at statement: $r1 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer8107)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 7
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 3
+=====================================================================

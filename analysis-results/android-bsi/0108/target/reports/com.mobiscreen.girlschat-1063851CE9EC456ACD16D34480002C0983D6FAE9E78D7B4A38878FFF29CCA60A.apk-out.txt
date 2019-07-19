@@ -1,0 +1,98 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.mobiscreen.girlschat-1063851CE9EC456ACD16D34480002C0983D6FAE9E78D7B4A38878FFF29CCA60A.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r4)
+		Method: <com.mobiscreen.girlschat.a.a: java.lang.String a(java.lang.String,java.lang.String)>
+		SHA-256: 83800ab520dfbf96375afce1af57d177a62869f0256e2d4fa8475e3f03ac6dde
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.Signature
+		Statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer607)
+		Method: <com.anjlab.android.iab.v3.j: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 2ebb20b5eea835b114456b5100a86caad182f510d3c9241b17b0eb2c762a50e4
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4)
+		Method: <com.anjlab.android.iab.v3.j: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 28407483637a088f1010a1681eff6fec34d14ec3561ac6c66441a497ebe094dc
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: javax.crypto.Cipher
+		Statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer123)
+		Method: <com.mobiscreen.girlschat.a.a: java.lang.String a(java.lang.String,java.lang.String)>
+		SHA-256: 5cc3e62ef58e557faba7fe1d522a8b37efe192e26cb756b36cb5cb920dfc3c7b
+		Secure: false
+
+Findings in Java Class: com.mobiscreen.girlschat.a.a
+
+	 in Method: java.lang.String a(java.lang.String,java.lang.String)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #5cc3e62ef58e557faba7fe1d522a8b37efe192e26cb756b36cb5cb920dfc3c7b)
+			First parameter (with value "RSA/ECB/PKCS1Padding") should be any of RSA/ECB/{OAEPPadding, NoPadding}
+			at statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer123)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer120, $r5)
+
+
+Findings in Java Class: com.anjlab.android.iab.v3.j
+
+	 in Method: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #2ebb20b5eea835b114456b5100a86caad182f510d3c9241b17b0eb2c762a50e4)
+			First parameter (with value "SHA1withRSA") should be any of {SHA256withDSA, SHA256withRSA, DSA, SHA512withRSA, SHA384withRSA}
+			at statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer607)
+
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 2
+	ConstraintError: 2
+=====================================================================

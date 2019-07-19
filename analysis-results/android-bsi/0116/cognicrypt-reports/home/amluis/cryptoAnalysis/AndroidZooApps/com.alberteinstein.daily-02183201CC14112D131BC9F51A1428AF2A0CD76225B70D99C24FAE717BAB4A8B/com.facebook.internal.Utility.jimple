@@ -1,0 +1,1086 @@
+public final class com.facebook.internal.Utility extends java.lang.Object
+{
+    private static final java.lang.String APPLICATION_FIELDS;
+    public static final int DEFAULT_STREAM_BUFFER_SIZE;
+    private static final java.lang.String HASH_ALGORITHM_MD5;
+    private static final java.lang.Object LOCK;
+    static final java.lang.String LOG_TAG;
+    static final java.lang.String SHAREPRE_NAME;
+    private static final java.lang.String SUPPORTS_ATTRIBUTION;
+    private static final java.lang.String URL_SCHEME;
+    static java.lang.String appId;
+    private static volatile boolean attributionAllowedForLastAppChecked;
+    static android.content.Context context;
+    private static volatile java.lang.String lastAppCheckedForAttributionStatus;
+
+    static void <clinit>()
+    {
+        java.lang.Object $r0;
+        int varReplacer243;
+        java.lang.String varReplacer244;
+
+        nop;
+
+        $r0 = new java.lang.Object;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        <com.facebook.internal.Utility: java.lang.Object LOCK> = $r0;
+
+        varReplacer243 = 0;
+
+        <com.facebook.internal.Utility: boolean attributionAllowedForLastAppChecked> = varReplacer243;
+
+        varReplacer244 = "";
+
+        <com.facebook.internal.Utility: java.lang.String lastAppCheckedForAttributionStatus> = varReplacer244;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.facebook.internal.Utility $r0;
+
+        $r0 := @this: com.facebook.internal.Utility;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static transient java.util.ArrayList arrayList(java.lang.Object[])
+    {
+        java.lang.Object[] $r0;
+        java.util.ArrayList $r1;
+        java.lang.Object $r2;
+        int $i0, $i1;
+
+        $r0 := @parameter0: java.lang.Object[];
+
+        $r1 = new java.util.ArrayList;
+
+        $i0 = lengthof $r0;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>(int)>($i0);
+
+        $i0 = lengthof $r0;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 < $i0 goto label2;
+
+        return $r1;
+
+     label2:
+        $r2 = $r0[$i1];
+
+        virtualinvoke $r1.<java.util.ArrayList: boolean add(java.lang.Object)>($r2);
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+    }
+
+    public static android.net.Uri buildUri(java.lang.String, java.lang.String, android.os.Bundle)
+    {
+        java.lang.String $r0, $r1;
+        android.os.Bundle $r2;
+        android.net.Uri$Builder $r3;
+        java.util.Set $r4;
+        java.util.Iterator $r5;
+        boolean $z0;
+        android.net.Uri $r6;
+        java.lang.Object $r7;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: android.os.Bundle;
+
+        $r3 = new android.net.Uri$Builder;
+
+        specialinvoke $r3.<android.net.Uri$Builder: void <init>()>();
+
+        virtualinvoke $r3.<android.net.Uri$Builder: android.net.Uri$Builder scheme(java.lang.String)>("https");
+
+        virtualinvoke $r3.<android.net.Uri$Builder: android.net.Uri$Builder authority(java.lang.String)>($r0);
+
+        virtualinvoke $r3.<android.net.Uri$Builder: android.net.Uri$Builder path(java.lang.String)>($r1);
+
+        $r4 = virtualinvoke $r2.<android.os.Bundle: java.util.Set keySet()>();
+
+        $r5 = interfaceinvoke $r4.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 != 0 goto label2;
+
+        $r6 = virtualinvoke $r3.<android.net.Uri$Builder: android.net.Uri build()>();
+
+        return $r6;
+
+     label2:
+        $r7 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r0 = (java.lang.String) $r7;
+
+        $r7 = virtualinvoke $r2.<android.os.Bundle: java.lang.Object get(java.lang.String)>($r0);
+
+        $z0 = $r7 instanceof java.lang.String;
+
+        if $z0 == 0 goto label1;
+
+        $r1 = (java.lang.String) $r7;
+
+        virtualinvoke $r3.<android.net.Uri$Builder: android.net.Uri$Builder appendQueryParameter(java.lang.String,java.lang.String)>($r0, $r1);
+
+        goto label1;
+    }
+
+    private static void clearCookiesForDomain(android.content.Context, java.lang.String)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, $r2;
+        int $i0, $i1, $i2;
+        android.webkit.CookieSyncManager $r3;
+        android.webkit.CookieManager $r4;
+        java.lang.String[] $r5, $r6;
+        java.lang.StringBuilder $r7;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r3 = staticinvoke <android.webkit.CookieSyncManager: android.webkit.CookieSyncManager createInstance(android.content.Context)>($r0);
+
+        virtualinvoke $r3.<android.webkit.CookieSyncManager: void sync()>();
+
+        $r4 = staticinvoke <android.webkit.CookieManager: android.webkit.CookieManager getInstance()>();
+
+        $r2 = virtualinvoke $r4.<android.webkit.CookieManager: java.lang.String getCookie(java.lang.String)>($r1);
+
+        if $r2 != null goto label1;
+
+        return;
+
+     label1:
+        $r5 = virtualinvoke $r2.<java.lang.String: java.lang.String[] split(java.lang.String)>(";");
+
+        $i0 = lengthof $r5;
+
+        $i1 = 0;
+
+     label2:
+        if $i1 < $i0 goto label3;
+
+        virtualinvoke $r4.<android.webkit.CookieManager: void removeExpiredCookie()>();
+
+        return;
+
+     label3:
+        $r2 = $r5[$i1];
+
+        $r6 = virtualinvoke $r2.<java.lang.String: java.lang.String[] split(java.lang.String)>("=");
+
+        $i2 = lengthof $r6;
+
+        if $i2 <= 0 goto label4;
+
+        $r7 = new java.lang.StringBuilder;
+
+        $r2 = $r6[0];
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String trim()>();
+
+        $r2 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r2);
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>($r2);
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("=;expires=Sat, 1 Jan 2000 00:00:01 UTC;");
+
+        $r2 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r4.<android.webkit.CookieManager: void setCookie(java.lang.String,java.lang.String)>($r1, $r2);
+
+     label4:
+        $i1 = $i1 + 1;
+
+        goto label2;
+    }
+
+    public static void clearFacebookCookies(android.content.Context)
+    {
+        android.content.Context $r0;
+
+        $r0 := @parameter0: android.content.Context;
+
+        staticinvoke <com.facebook.internal.Utility: void clearCookiesForDomain(android.content.Context,java.lang.String)>($r0, "facebook.com");
+
+        staticinvoke <com.facebook.internal.Utility: void clearCookiesForDomain(android.content.Context,java.lang.String)>($r0, ".facebook.com");
+
+        staticinvoke <com.facebook.internal.Utility: void clearCookiesForDomain(android.content.Context,java.lang.String)>($r0, "https://facebook.com");
+
+        staticinvoke <com.facebook.internal.Utility: void clearCookiesForDomain(android.content.Context,java.lang.String)>($r0, "https://.facebook.com");
+
+        return;
+    }
+
+    public static void closeQuietly(java.io.Closeable)
+    {
+        java.io.Closeable $r0;
+        java.lang.Throwable $r1;
+
+        nop;
+
+        $r0 := @parameter0: java.io.Closeable;
+
+        if $r0 == null goto label4;
+
+     label1:
+        interfaceinvoke $r0.<java.io.Closeable: void close()>();
+
+     label2:
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+     label4:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    static java.util.Map convertJSONObjectToHashMap(org.json.JSONObject)
+    {
+        org.json.JSONObject $r0, $r6;
+        java.util.HashMap $r1;
+        org.json.JSONArray $r2;
+        int $i0, $i1;
+        java.lang.String $r3;
+        java.lang.Object $r4, $r5;
+        boolean $z0;
+        java.util.Map $r7;
+        org.json.JSONException $r8;
+
+        $r0 := @parameter0: org.json.JSONObject;
+
+        $r1 = new java.util.HashMap;
+
+        specialinvoke $r1.<java.util.HashMap: void <init>()>();
+
+        $r2 = virtualinvoke $r0.<org.json.JSONObject: org.json.JSONArray names()>();
+
+        $i0 = 0;
+
+     label1:
+        $i1 = virtualinvoke $r2.<org.json.JSONArray: int length()>();
+
+        if $i0 < $i1 goto label2;
+
+        return $r1;
+
+     label2:
+        $r3 = virtualinvoke $r2.<org.json.JSONArray: java.lang.String getString(int)>($i0);
+
+        $r4 = virtualinvoke $r0.<org.json.JSONObject: java.lang.Object get(java.lang.String)>($r3);
+
+     label3:
+        $r5 = $r4;
+
+        $z0 = $r4 instanceof org.json.JSONObject;
+
+        if $z0 == 0 goto label6;
+
+        $r6 = (org.json.JSONObject) $r4;
+
+     label4:
+        $r7 = staticinvoke <com.facebook.internal.Utility: java.util.Map convertJSONObjectToHashMap(org.json.JSONObject)>($r6);
+
+     label5:
+        $r5 = $r7;
+
+     label6:
+        virtualinvoke $r1.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r3, $r5);
+
+     label7:
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label8:
+        $r8 := @caughtexception;
+
+        goto label7;
+
+        catch org.json.JSONException from label2 to label3 with label8;
+        catch org.json.JSONException from label4 to label5 with label8;
+        catch org.json.JSONException from label6 to label7 with label8;
+    }
+
+    public static void disconnectQuietly(java.net.URLConnection)
+    {
+        boolean $z0;
+        java.net.URLConnection $r0;
+        java.net.HttpURLConnection $r1;
+
+        nop;
+
+        $r0 := @parameter0: java.net.URLConnection;
+
+        $z0 = $r0 instanceof java.net.HttpURLConnection;
+
+        if $z0 == 0 goto label1;
+
+        $r1 = (java.net.HttpURLConnection) $r0;
+
+        virtualinvoke $r1.<java.net.HttpURLConnection: void disconnect()>();
+
+     label1:
+        return;
+    }
+
+    public static java.lang.String getMetadataApplicationId(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, varReplacer433, varReplacer434;
+        android.content.SharedPreferences $r2;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = <com.facebook.internal.Utility: java.lang.String appId>;
+
+        if $r1 != null goto label1;
+
+        $r2 = staticinvoke <com.facebook.internal.Utility: android.content.SharedPreferences getSharedPreferences()>();
+
+        if $r2 == null goto label1;
+
+        $r2 = staticinvoke <com.facebook.internal.Utility: android.content.SharedPreferences getSharedPreferences()>();
+
+        varReplacer433 = "fbAppId";
+
+        varReplacer434 = "";
+
+        $r1 = interfaceinvoke $r2.<android.content.SharedPreferences: java.lang.String getString(java.lang.String,java.lang.String)>(varReplacer433, varReplacer434);
+
+        <com.facebook.internal.Utility: java.lang.String appId> = $r1;
+
+        return $r1;
+
+     label1:
+        $r1 = <com.facebook.internal.Utility: java.lang.String appId>;
+
+        return $r1;
+    }
+
+    private static android.content.SharedPreferences getSharedPreferences()
+    {
+        java.lang.Exception $r0;
+        java.lang.StringBuilder $r1;
+        android.content.Context $r2, $r4;
+        java.lang.String $r3, varReplacer440, varReplacer441;
+        android.content.SharedPreferences $r5;
+        int varReplacer439;
+        null_type varReplacer442;
+
+        nop;
+
+        $r1 = new java.lang.StringBuilder;
+
+     label1:
+        varReplacer441 = "Utility.context: ";
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer441);
+
+     label2:
+        $r2 = <com.facebook.internal.Utility: android.content.Context context>;
+
+     label3:
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r2);
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer440 = "FacebookSDK";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer440, $r3);
+
+     label4:
+        $r2 = <com.facebook.internal.Utility: android.content.Context context>;
+
+        $r4 = <com.facebook.internal.Utility: android.content.Context context>;
+
+     label5:
+        $r3 = virtualinvoke $r4.<android.content.Context: java.lang.String getPackageName()>();
+
+        varReplacer439 = 0;
+
+        $r5 = virtualinvoke $r2.<android.content.Context: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>($r3, varReplacer439);
+
+     label6:
+        return $r5;
+
+     label7:
+        $r0 := @caughtexception;
+
+        virtualinvoke $r0.<java.lang.Exception: void printStackTrace()>();
+
+        varReplacer442 = null;
+
+        return varReplacer442;
+
+        catch java.lang.Exception from label1 to label2 with label7;
+        catch java.lang.Exception from label3 to label4 with label7;
+        catch java.lang.Exception from label5 to label6 with label7;
+    }
+
+    public static java.lang.Object getStringPropertyAsJSON(org.json.JSONObject, java.lang.String, java.lang.String) throws org.json.JSONException
+    {
+        java.lang.String $r0, $r1, varReplacer904;
+        org.json.JSONTokener $r2;
+        org.json.JSONObject $r3;
+        java.lang.Object $r4, $r5;
+        boolean $z0;
+        com.facebook.FacebookException $r6;
+
+        nop;
+
+        $r3 := @parameter0: org.json.JSONObject;
+
+        $r0 := @parameter1: java.lang.String;
+
+        $r1 := @parameter2: java.lang.String;
+
+        $r4 = virtualinvoke $r3.<org.json.JSONObject: java.lang.Object opt(java.lang.String)>($r0);
+
+        $r5 = $r4;
+
+        if $r4 == null goto label1;
+
+        $z0 = $r4 instanceof java.lang.String;
+
+        if $z0 == 0 goto label1;
+
+        $r2 = new org.json.JSONTokener;
+
+        $r0 = (java.lang.String) $r4;
+
+        specialinvoke $r2.<org.json.JSONTokener: void <init>(java.lang.String)>($r0);
+
+        $r5 = virtualinvoke $r2.<org.json.JSONTokener: java.lang.Object nextValue()>();
+
+     label1:
+        if $r5 == null goto label3;
+
+        $z0 = $r5 instanceof org.json.JSONObject;
+
+        if $z0 != 0 goto label3;
+
+        $z0 = $r5 instanceof org.json.JSONArray;
+
+        if $z0 != 0 goto label3;
+
+        if $r1 == null goto label2;
+
+        $r3 = new org.json.JSONObject;
+
+        specialinvoke $r3.<org.json.JSONObject: void <init>()>();
+
+        virtualinvoke $r3.<org.json.JSONObject: org.json.JSONObject putOpt(java.lang.String,java.lang.Object)>($r1, $r5);
+
+        return $r3;
+
+     label2:
+        $r6 = new com.facebook.FacebookException;
+
+        varReplacer904 = "Got an unexpected non-JSON object.";
+
+        specialinvoke $r6.<com.facebook.FacebookException: void <init>(java.lang.String)>(varReplacer904);
+
+        throw $r6;
+
+     label3:
+        return $r5;
+    }
+
+    public static boolean isNullOrEmpty(java.lang.String)
+    {
+        java.lang.String $r0;
+        int $i0, varReplacer324, varReplacer325;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        if $r0 == null goto label1;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i0 == 0 goto label1;
+
+        varReplacer324 = 0;
+
+        return varReplacer324;
+
+     label1:
+        varReplacer325 = 1;
+
+        return varReplacer325;
+    }
+
+    public static boolean isNullOrEmpty(java.util.Collection)
+    {
+        java.util.Collection $r0;
+        int $i0, varReplacer775, varReplacer776;
+
+        nop;
+
+        $r0 := @parameter0: java.util.Collection;
+
+        if $r0 == null goto label1;
+
+        $i0 = interfaceinvoke $r0.<java.util.Collection: int size()>();
+
+        if $i0 == 0 goto label1;
+
+        varReplacer776 = 0;
+
+        return varReplacer776;
+
+     label1:
+        varReplacer775 = 1;
+
+        return varReplacer775;
+    }
+
+    public static boolean isSubset(java.util.Collection, java.util.Collection)
+    {
+        java.util.Collection $r0, $r1;
+        java.util.HashSet $r2;
+        int $i0, varReplacer771, varReplacer772, varReplacer773, varReplacer774;
+        java.util.Iterator $r3;
+        boolean $z0;
+        java.lang.Object $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.util.Collection;
+
+        $r1 := @parameter1: java.util.Collection;
+
+        if $r1 == null goto label1;
+
+        $i0 = interfaceinvoke $r1.<java.util.Collection: int size()>();
+
+        if $i0 != 0 goto label3;
+
+     label1:
+        if $r0 == null goto label2;
+
+        $i0 = interfaceinvoke $r0.<java.util.Collection: int size()>();
+
+        if $i0 == 0 goto label2;
+
+        varReplacer773 = 0;
+
+        return varReplacer773;
+
+     label2:
+        varReplacer772 = 1;
+
+        return varReplacer772;
+
+     label3:
+        $r2 = new java.util.HashSet;
+
+        specialinvoke $r2.<java.util.HashSet: void <init>(java.util.Collection)>($r1);
+
+        $r3 = interfaceinvoke $r0.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label4:
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 != 0 goto label5;
+
+        varReplacer771 = 1;
+
+        return varReplacer771;
+
+     label5:
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $z0 = virtualinvoke $r2.<java.util.HashSet: boolean contains(java.lang.Object)>($r4);
+
+        if $z0 != 0 goto label4;
+
+        varReplacer774 = 0;
+
+        return varReplacer774;
+    }
+
+    public static void logd(java.lang.String, java.lang.Exception)
+    {
+        java.lang.String $r0, $r4, varReplacer822, varReplacer823;
+        java.lang.Exception $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.Class $r3;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.Exception;
+
+        if $r1 == null goto label1;
+
+        $r2 = new java.lang.StringBuilder;
+
+        $r3 = virtualinvoke $r1.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.Class: java.lang.String getSimpleName()>();
+
+        $r4 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r4);
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>($r4);
+
+        varReplacer823 = ": ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer823);
+
+        $r4 = virtualinvoke $r1.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer822 = "Facebook-publish";
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>(varReplacer822, $r4);
+
+     label1:
+        return;
+    }
+
+    public static void logd(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        if $r0 == null goto label1;
+
+        if $r1 == null goto label1;
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r0, $r1);
+
+     label1:
+        return;
+    }
+
+    static java.lang.String md5hash(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer1089;
+        byte $b0, $b3;
+        java.lang.StringBuilder $r1;
+        java.lang.Throwable $r2;
+        int $i1, $i2;
+        java.security.MessageDigest $r3;
+        byte[] $r4;
+        null_type varReplacer1090;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer1089 = "MD5";
+
+        $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1089);
+
+     label2:
+        $r4 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r3.<java.security.MessageDigest: void update(byte[])>($r4);
+
+        $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>();
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $i1 = lengthof $r4;
+
+        $i2 = 0;
+
+     label3:
+        if $i2 < $i1 goto label5;
+
+        $r0 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r0;
+
+     label4:
+        $r2 := @caughtexception;
+
+        varReplacer1090 = null;
+
+        return varReplacer1090;
+
+     label5:
+        $b0 = $r4[$i2];
+
+        $b3 = $b0 >> 4;
+
+        $b3 = $b3 & 15;
+
+        $r0 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($b3);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $b0 = $b0 >> 0;
+
+        $b0 = $b0 & 15;
+
+        $r0 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($b0);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $i2 = $i2 + 1;
+
+        goto label3;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label4;
+    }
+
+    public static void putObjectInBundle(android.os.Bundle, java.lang.String, java.lang.Object)
+    {
+        android.os.Bundle $r0;
+        java.lang.String $r1, $r3;
+        java.lang.Object $r2;
+        boolean $z0;
+        android.os.Parcelable $r4;
+        byte[] $r5;
+        com.facebook.FacebookException $r6;
+
+        $r0 := @parameter0: android.os.Bundle;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.Object;
+
+        $z0 = $r2 instanceof java.lang.String;
+
+        if $z0 == 0 goto label1;
+
+        $r3 = (java.lang.String) $r2;
+
+        virtualinvoke $r0.<android.os.Bundle: void putString(java.lang.String,java.lang.String)>($r1, $r3);
+
+        return;
+
+     label1:
+        $z0 = $r2 instanceof android.os.Parcelable;
+
+        if $z0 == 0 goto label2;
+
+        $r4 = (android.os.Parcelable) $r2;
+
+        virtualinvoke $r0.<android.os.Bundle: void putParcelable(java.lang.String,android.os.Parcelable)>($r1, $r4);
+
+        return;
+
+     label2:
+        $z0 = $r2 instanceof byte[];
+
+        if $z0 == 0 goto label3;
+
+        $r5 = (byte[]) $r2;
+
+        virtualinvoke $r0.<android.os.Bundle: void putByteArray(java.lang.String,byte[])>($r1, $r5);
+
+        return;
+
+     label3:
+        $r6 = new com.facebook.FacebookException;
+
+        specialinvoke $r6.<com.facebook.FacebookException: void <init>(java.lang.String)>("attempted to add unsupported type to Bundle");
+
+        throw $r6;
+    }
+
+    public static boolean queryAppAttributionSupportAndWait(java.lang.String)
+    {
+        java.lang.String $r0, $r3, varReplacer852, varReplacer853, varReplacer858;
+        android.os.Bundle $r1;
+        java.lang.Object $r2, $r8;
+        boolean $z0;
+        com.facebook.Request $r4;
+        com.facebook.Response $r5;
+        com.facebook.model.GraphObject $r6;
+        java.lang.Boolean $r7;
+        java.lang.Throwable $r9;
+        int varReplacer854, varReplacer857;
+        null_type varReplacer855, varReplacer856;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r2 = <com.facebook.internal.Utility: java.lang.Object LOCK>;
+
+        entermonitor $r2;
+
+     label1:
+        $r3 = <com.facebook.internal.Utility: java.lang.String lastAppCheckedForAttributionStatus>;
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean equals(java.lang.Object)>($r3);
+
+        if $z0 == 0 goto label3;
+
+        $z0 = <com.facebook.internal.Utility: boolean attributionAllowedForLastAppChecked>;
+
+        exitmonitor $r2;
+
+     label2:
+        return $z0;
+
+     label3:
+        $r1 = new android.os.Bundle;
+
+        specialinvoke $r1.<android.os.Bundle: void <init>()>();
+
+        varReplacer852 = "fields";
+
+        varReplacer853 = "supports_attribution";
+
+        virtualinvoke $r1.<android.os.Bundle: void putString(java.lang.String,java.lang.String)>(varReplacer852, varReplacer853);
+
+        varReplacer855 = null;
+
+        varReplacer856 = null;
+
+        $r4 = staticinvoke <com.facebook.Request: com.facebook.Request newGraphPathRequest(com.facebook.Session,java.lang.String,com.facebook.Request$Callback)>(varReplacer855, $r0, varReplacer855);
+
+        virtualinvoke $r4.<com.facebook.Request: void setParameters(android.os.Bundle)>($r1);
+
+        $r5 = virtualinvoke $r4.<com.facebook.Request: com.facebook.Response executeAndWait()>();
+
+        $r6 = virtualinvoke $r5.<com.facebook.Response: com.facebook.model.GraphObject getGraphObject()>();
+
+        varReplacer854 = 0;
+
+        $r8 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(varReplacer854);
+
+        if $r6 == null goto label4;
+
+        varReplacer858 = "supports_attribution";
+
+        $r8 = interfaceinvoke $r6.<com.facebook.model.GraphObject: java.lang.Object getProperty(java.lang.String)>(varReplacer858);
+
+     label4:
+        $z0 = $r8 instanceof java.lang.Boolean;
+
+        if $z0 != 0 goto label9;
+
+        varReplacer857 = 0;
+
+        $r8 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(varReplacer857);
+
+     label5:
+        <com.facebook.internal.Utility: java.lang.String lastAppCheckedForAttributionStatus> = $r0;
+
+        $r7 = (java.lang.Boolean) $r8;
+
+        $z0 = virtualinvoke $r7.<java.lang.Boolean: boolean booleanValue()>();
+
+        <com.facebook.internal.Utility: boolean attributionAllowedForLastAppChecked> = $z0;
+
+        $z0 = <com.facebook.internal.Utility: boolean attributionAllowedForLastAppChecked>;
+
+        exitmonitor $r2;
+
+     label6:
+        return $z0;
+
+     label7:
+        $r9 := @caughtexception;
+
+        exitmonitor $r2;
+
+     label8:
+        throw $r9;
+
+     label9:
+        goto label5;
+
+        catch java.lang.Throwable from label1 to label2 with label7;
+        catch java.lang.Throwable from label3 to label6 with label7;
+        catch java.lang.Throwable from label7 to label8 with label7;
+    }
+
+    public static java.lang.String readStreamToString(java.io.InputStream) throws java.io.IOException
+    {
+        java.io.InputStream $r0;
+        char[] $r1;
+        java.io.BufferedInputStream $r2, $r5;
+        java.io.InputStreamReader $r3, $r6;
+        java.lang.StringBuilder $r4;
+        int $i0, varReplacer1007;
+        java.lang.String $r7;
+        java.lang.Throwable $r8;
+
+        nop;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+        $r5 = null;
+
+        $r6 = null;
+
+     label01:
+        $r2 = new java.io.BufferedInputStream;
+
+        specialinvoke $r2.<java.io.BufferedInputStream: void <init>(java.io.InputStream)>($r0);
+
+     label02:
+        $r3 = new java.io.InputStreamReader;
+
+        specialinvoke $r3.<java.io.InputStreamReader: void <init>(java.io.InputStream)>($r2);
+
+     label03:
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = newarray (char)[2048];
+
+     label04:
+        $i0 = virtualinvoke $r3.<java.io.InputStreamReader: int read(char[])>($r1);
+
+     label05:
+        if $i0 != -1 goto label08;
+
+     label06:
+        $r7 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label07:
+        staticinvoke <com.facebook.internal.Utility: void closeQuietly(java.io.Closeable)>($r2);
+
+        staticinvoke <com.facebook.internal.Utility: void closeQuietly(java.io.Closeable)>($r3);
+
+        return $r7;
+
+     label08:
+        varReplacer1007 = 0;
+
+        virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(char[],int,int)>($r1, varReplacer1007, $i0);
+
+     label09:
+        goto label04;
+
+     label10:
+        $r8 := @caughtexception;
+
+        $r6 = $r3;
+
+        $r5 = $r2;
+
+     label11:
+        staticinvoke <com.facebook.internal.Utility: void closeQuietly(java.io.Closeable)>($r5);
+
+        staticinvoke <com.facebook.internal.Utility: void closeQuietly(java.io.Closeable)>($r6);
+
+        throw $r8;
+
+     label12:
+        $r8 := @caughtexception;
+
+        goto label11;
+
+     label13:
+        $r8 := @caughtexception;
+
+        $r5 = $r2;
+
+        goto label11;
+
+        catch java.lang.Throwable from label01 to label02 with label12;
+        catch java.lang.Throwable from label02 to label03 with label13;
+        catch java.lang.Throwable from label03 to label05 with label10;
+        catch java.lang.Throwable from label06 to label07 with label10;
+        catch java.lang.Throwable from label08 to label09 with label10;
+    }
+
+    public static void setApplicationId(android.content.Context, java.lang.String)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        <com.facebook.internal.Utility: android.content.Context context> = $r0;
+
+        <com.facebook.internal.Utility: java.lang.String appId> = $r1;
+
+        return;
+    }
+
+    public static boolean stringsEqualOrEmpty(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1;
+        boolean $z0, $z1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r0);
+
+        $z1 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+        if $z0 == 0 goto label1;
+
+        if $z1 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        if $z0 != 0 goto label2;
+
+        if $z1 != 0 goto label2;
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean equals(java.lang.Object)>($r1);
+
+        return $z0;
+
+     label2:
+        return 0;
+    }
+
+    public static transient java.util.Collection unmodifiableCollection(java.lang.Object[])
+    {
+        java.lang.Object[] $r0;
+        java.util.List $r1;
+        java.util.Collection $r2;
+
+        $r0 := @parameter0: java.lang.Object[];
+
+        $r1 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r0);
+
+        $r2 = staticinvoke <java.util.Collections: java.util.Collection unmodifiableCollection(java.util.Collection)>($r1);
+
+        return $r2;
+    }
+}

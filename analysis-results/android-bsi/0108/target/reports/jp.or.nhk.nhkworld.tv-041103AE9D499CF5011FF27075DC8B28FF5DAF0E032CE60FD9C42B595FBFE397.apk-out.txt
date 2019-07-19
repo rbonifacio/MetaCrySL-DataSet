@@ -1,0 +1,101 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/jp.or.nhk.nhkworld.tv-041103AE9D499CF5011FF27075DC8B28FF5DAF0E032CE60FD9C42B595FBFE397.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r16
+		Type: javax.net.ssl.SSLContext
+		Statement: $r16 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer2588)
+		Method: <a.aq: void <init>(a.as)>
+		SHA-256: e78415d21030f2d69f9f3b6260b56b4ece6844c9268602ce1b715ab69e6679d6
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.adobe.mobile.RemoteDownload: java.lang.String md5hash(java.lang.String)>
+		SHA-256: ed41ad573c829c0bbdb09fc4519c60f5eecade129c0f4b26fbc4706f90601f31
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: java.security.SecureRandom
+		Statement: specialinvoke $r0.<java.security.SecureRandom: void <init>()>()
+		Method: <com.adobe.mobile.AnalyticsWorker: void <clinit>()>
+		SHA-256: 2de2cf26ad51d5ef519d606a7af872a50cb4cb40c6bfbe18ad44b5d767efc275
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer826)
+		Method: <com.adobe.mobile.RemoteDownload: java.lang.String md5hash(java.lang.String)>
+		SHA-256: 6dd6dac880056a5e1c8f0be9760a6b1d5454b16b97a9fce49e5276bc496d511b
+		Secure: false
+	Object:
+		Variable: $r8
+		Type: java.security.SecureRandom
+		Statement: specialinvoke $r8.<java.security.SecureRandom: void <init>()>()
+		Method: <com.adobe.mobile.StaticMethods: java.lang.String generateAID()>
+		SHA-256: d81a805c928cf32898014c19a6e0b896c0b350c51c7f6b605e026258eec87ec8
+		Secure: true
+
+Findings in Java Class: com.adobe.mobile.RemoteDownload
+
+	 in Method: java.lang.String md5hash(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #6dd6dac880056a5e1c8f0be9760a6b1d5454b16b97a9fce49e5276bc496d511b)
+			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer826)
+
+
+Findings in Java Class: a.aq
+
+	 in Method: void <init>(a.as)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r16.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2589, varReplacer2589, varReplacer2589)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r16.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2589, varReplacer2589, varReplacer2589)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 5
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 1
+	RequiredPredicateError: 2
+=====================================================================

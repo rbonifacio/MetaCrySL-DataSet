@@ -1,0 +1,678 @@
+public final class com.swrve.sdk.SwrveHelper extends java.lang.Object
+{
+    private static final java.lang.String CHARSET;
+    private static final java.lang.String LOG_TAG;
+
+    public void <init>()
+    {
+        com.swrve.sdk.SwrveHelper $r0;
+
+        $r0 := @this: com.swrve.sdk.SwrveHelper;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.util.Map JSONToMap(org.json.JSONObject) throws org.json.JSONException
+    {
+        org.json.JSONObject $r0;
+        java.util.HashMap $r1;
+        java.util.Iterator $r2;
+        boolean $z0;
+        java.lang.Object $r3;
+        java.lang.String $r4, $r5;
+
+        $r0 := @parameter0: org.json.JSONObject;
+
+        $r1 = new java.util.HashMap;
+
+        specialinvoke $r1.<java.util.HashMap: void <init>()>();
+
+        $r2 = virtualinvoke $r0.<org.json.JSONObject: java.util.Iterator keys()>();
+
+     label1:
+        $z0 = interfaceinvoke $r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r3 = interfaceinvoke $r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = (java.lang.String) $r3;
+
+        $r5 = virtualinvoke $r0.<org.json.JSONObject: java.lang.String getString(java.lang.String)>($r4);
+
+        interfaceinvoke $r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r4, $r5);
+
+        goto label1;
+
+     label2:
+        return $r1;
+    }
+
+    public static java.util.Date addTimeInterval(java.util.Date, int, int)
+    {
+        java.util.Date $r0;
+        int $i0, $i1;
+        java.util.Calendar $r1;
+
+        $r0 := @parameter0: java.util.Date;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r1 = staticinvoke <java.util.Calendar: java.util.Calendar getInstance()>();
+
+        virtualinvoke $r1.<java.util.Calendar: void setTime(java.util.Date)>($r0);
+
+        virtualinvoke $r1.<java.util.Calendar: void add(int,int)>($i1, $i0);
+
+        $r0 = virtualinvoke $r1.<java.util.Calendar: java.util.Date getTime()>();
+
+        return $r0;
+    }
+
+    public static java.lang.String createHMACWithMD5(java.lang.String, java.lang.String) throws java.security.NoSuchAlgorithmException, java.security.InvalidKeyException
+    {
+        java.lang.String $r0, $r1;
+        javax.crypto.spec.SecretKeySpec $r2;
+        javax.crypto.Mac $r3;
+        byte[] $r4;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r3 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>("HmacMD5");
+
+        $r2 = new javax.crypto.spec.SecretKeySpec;
+
+        $r4 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        $r1 = virtualinvoke $r3.<javax.crypto.Mac: java.lang.String getAlgorithm()>();
+
+        specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, $r1);
+
+        virtualinvoke $r3.<javax.crypto.Mac: void init(java.security.Key)>($r2);
+
+        $r4 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        $r4 = virtualinvoke $r3.<javax.crypto.Mac: byte[] doFinal(byte[])>($r4);
+
+        $r0 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r4, 0);
+
+        return $r0;
+    }
+
+    public static java.lang.String encodeParameters(java.util.Map) throws java.io.UnsupportedEncodingException
+    {
+        java.util.Map $r0;
+        java.lang.StringBuilder $r1, $r6;
+        java.util.Set $r2;
+        java.util.Iterator $r3;
+        boolean $z0, $z1;
+        java.lang.Object $r4;
+        java.util.Map$Entry $r5;
+        java.lang.String $r7;
+
+        $r0 := @parameter0: java.util.Map;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = interfaceinvoke $r0.<java.util.Map: java.util.Set entrySet()>();
+
+        $r3 = interfaceinvoke $r2.<java.util.Set: java.util.Iterator iterator()>();
+
+        $z0 = 1;
+
+     label1:
+        $z1 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label6;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (java.util.Map$Entry) $r4;
+
+        if $z0 == 0 goto label4;
+
+        $z0 = 0;
+
+     label2:
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = interfaceinvoke $r5.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r7 = (java.lang.String) $r4;
+
+        $r7 = staticinvoke <java.net.URLEncoder: java.lang.String encode(java.lang.String,java.lang.String)>($r7, "UTF-8");
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("=");
+
+        $r4 = interfaceinvoke $r5.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        if $r4 != null goto label5;
+
+        $r7 = "null";
+
+     label3:
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        goto label1;
+
+     label4:
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("&");
+
+        goto label2;
+
+     label5:
+        $r4 = interfaceinvoke $r5.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r7 = (java.lang.String) $r4;
+
+        $r7 = staticinvoke <java.net.URLEncoder: java.lang.String encode(java.lang.String,java.lang.String)>($r7, "UTF-8");
+
+        goto label3;
+
+     label6:
+        $r7 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r7;
+    }
+
+    public static java.lang.String generateSessionToken(java.lang.String, int, java.lang.String)
+    {
+        java.lang.String $r0, $r1, $r3, varReplacer231, varReplacer232, varReplacer233;
+        int $i0;
+        java.util.Date $r2;
+        long $l1;
+        java.lang.StringBuilder $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        $r1 := @parameter2: java.lang.String;
+
+        $r2 = new java.util.Date;
+
+        specialinvoke $r2.<java.util.Date: void <init>()>();
+
+        $l1 = virtualinvoke $r2.<java.util.Date: long getTime()>();
+
+        $l1 = $l1 / 1000L;
+
+        $r3 = staticinvoke <java.lang.Long: java.lang.String toString(long)>($l1);
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r0 = staticinvoke <com.swrve.sdk.SwrveHelper: java.lang.String md5(java.lang.String)>($r0);
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer231 = "=";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer231);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer233 = "=";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer233);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer232 = "=";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer232);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r0;
+    }
+
+    public static boolean hasFileAccess(java.lang.String)
+    {
+        java.lang.String $r0;
+        java.io.File $r1;
+        boolean $z0;
+        int $i0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 > 21 goto label1;
+
+        return 1;
+
+     label1:
+        $r1 = new java.io.File;
+
+        specialinvoke $r1.<java.io.File: void <init>(java.lang.String)>($r0);
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean canRead()>();
+
+        if $z0 != 0 goto label2;
+
+        return 0;
+
+     label2:
+        return 1;
+    }
+
+    public static boolean isNullOrEmpty(java.lang.String)
+    {
+        java.lang.String $r0;
+        int $i0, varReplacer3097, varReplacer3098;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        if $r0 == null goto label1;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i0 != 0 goto label2;
+
+     label1:
+        varReplacer3097 = 1;
+
+        return varReplacer3097;
+
+     label2:
+        varReplacer3098 = 0;
+
+        return varReplacer3098;
+    }
+
+    public static void logAndThrowException(java.lang.String) throws java.lang.IllegalArgumentException
+    {
+        java.lang.String $r0;
+        java.lang.IllegalArgumentException $r1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        staticinvoke <com.swrve.sdk.SwrveLogger: void e(java.lang.String,java.lang.String)>("SwrveSDK", $r0);
+
+        $r1 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r1.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r0);
+
+        throw $r1;
+    }
+
+    public static java.lang.String md5(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer239, varReplacer241, varReplacer242, varReplacer243, varReplacer244;
+        java.lang.StringBuilder $r1;
+        java.lang.Throwable $r2;
+        byte[] $r3;
+        java.security.MessageDigest $r4;
+        int $i0, $i1;
+        byte $b2;
+        short $s3;
+        null_type varReplacer240;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        if $r0 != null goto label01;
+
+        varReplacer240 = null;
+
+        return varReplacer240;
+
+     label01:
+        $r3 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        varReplacer239 = "MD5";
+
+        $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer239);
+
+        $r3 = virtualinvoke $r4.<java.security.MessageDigest: byte[] digest(byte[])>($r3);
+
+     label02:
+        $r1 = new java.lang.StringBuilder;
+
+     label03:
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+     label04:
+        $i0 = 0;
+
+     label05:
+        $i1 = lengthof $r3;
+
+        if $i0 >= $i1 goto label10;
+
+        $b2 = $r3[$i0];
+
+        $s3 = $b2 & 255;
+
+        if $s3 >= 16 goto label07;
+
+     label06:
+        varReplacer243 = "0";
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer243);
+
+     label07:
+        $b2 = $r3[$i0];
+
+        $s3 = $b2 & 255;
+
+     label08:
+        $r0 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s3);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+     label09:
+        $i0 = $i0 + 1;
+
+        goto label05;
+
+     label10:
+        $r0 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label11:
+        return $r0;
+
+     label12:
+        $r2 := @caughtexception;
+
+        varReplacer241 = "SwrveSDK";
+
+        varReplacer242 = "Couldn\'t find MD5 - what a strange JVM";
+
+        staticinvoke <com.swrve.sdk.SwrveLogger: void wtf(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer241, varReplacer242, $r2);
+
+        varReplacer244 = "";
+
+        return varReplacer244;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label12;
+        catch java.security.NoSuchAlgorithmException from label03 to label04 with label12;
+        catch java.security.NoSuchAlgorithmException from label06 to label07 with label12;
+        catch java.security.NoSuchAlgorithmException from label08 to label09 with label12;
+        catch java.security.NoSuchAlgorithmException from label10 to label11 with label12;
+    }
+
+    public static java.lang.String readStringFromInputStream(java.io.InputStream) throws java.io.IOException
+    {
+        java.io.InputStream $r0;
+        java.lang.StringBuilder $r1;
+        java.io.BufferedReader $r2;
+        java.io.InputStreamReader $r3;
+        java.lang.String $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+        $r2 = new java.io.BufferedReader;
+
+        $r3 = new java.io.InputStreamReader;
+
+        specialinvoke $r3.<java.io.InputStreamReader: void <init>(java.io.InputStream)>($r0);
+
+        specialinvoke $r2.<java.io.BufferedReader: void <init>(java.io.Reader)>($r3);
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+     label1:
+        $r4 = virtualinvoke $r2.<java.io.BufferedReader: java.lang.String readLine()>();
+
+        if $r4 == null goto label2;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        goto label1;
+
+     label2:
+        $r4 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r4;
+    }
+
+    public static boolean sdkAvailable()
+    {
+        int $i0;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 10 goto label1;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public static boolean serverErrorResponseCode(int)
+    {
+        int $i0, varReplacer3799, varReplacer3800;
+
+        nop;
+
+        $i0 := @parameter0: int;
+
+        if $i0 < 500 goto label1;
+
+        varReplacer3799 = 1;
+
+        return varReplacer3799;
+
+     label1:
+        varReplacer3800 = 0;
+
+        return varReplacer3800;
+    }
+
+    public static java.lang.String sha1(byte[])
+    {
+        byte[] $r0;
+        java.lang.StringBuilder $r1;
+        java.lang.Throwable $r2;
+        int $i0, $i1;
+        java.security.MessageDigest $r3;
+        byte $b2;
+        short $s3;
+        java.lang.String $r4;
+
+        $r0 := @parameter0: byte[];
+
+        $i0 = lengthof $r0;
+
+        if $i0 != 0 goto label01;
+
+        return null;
+
+     label01:
+        $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("SHA1");
+
+        $r0 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r0);
+
+     label02:
+        $r1 = new java.lang.StringBuilder;
+
+     label03:
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+     label04:
+        $i0 = 0;
+
+     label05:
+        $i1 = lengthof $r0;
+
+        if $i0 >= $i1 goto label10;
+
+        $b2 = $r0[$i0];
+
+        $s3 = $b2 & 255;
+
+        if $s3 >= 16 goto label07;
+
+     label06:
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("0");
+
+     label07:
+        $b2 = $r0[$i0];
+
+        $s3 = $b2 & 255;
+
+     label08:
+        $r4 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s3);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+     label09:
+        $i0 = $i0 + 1;
+
+        goto label05;
+
+     label10:
+        $r4 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label11:
+        return $r4;
+
+     label12:
+        $r2 := @caughtexception;
+
+        staticinvoke <com.swrve.sdk.SwrveLogger: void wtf(java.lang.String,java.lang.String,java.lang.Throwable)>("SwrveSDK", "Couldn\'t find SHA1 - what a strange JVM", $r2);
+
+        return "";
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label12;
+        catch java.security.NoSuchAlgorithmException from label03 to label04 with label12;
+        catch java.security.NoSuchAlgorithmException from label06 to label07 with label12;
+        catch java.security.NoSuchAlgorithmException from label08 to label09 with label12;
+        catch java.security.NoSuchAlgorithmException from label10 to label11 with label12;
+    }
+
+    public static boolean successResponseCode(int)
+    {
+        int $i0, varReplacer3801, varReplacer3802;
+
+        nop;
+
+        $i0 := @parameter0: int;
+
+        if $i0 < 200 goto label1;
+
+        if $i0 >= 300 goto label1;
+
+        varReplacer3801 = 1;
+
+        return varReplacer3801;
+
+     label1:
+        varReplacer3802 = 0;
+
+        return varReplacer3802;
+    }
+
+    public static java.lang.String toLanguageTag(java.util.Locale)
+    {
+        java.util.Locale $r0;
+        java.lang.StringBuilder $r1, $r3;
+        java.lang.String $r2;
+        boolean $z0;
+
+        $r0 := @parameter0: java.util.Locale;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r0.<java.util.Locale: java.lang.String getLanguage()>();
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r0.<java.util.Locale: java.lang.String getCountry()>();
+
+        $z0 = staticinvoke <com.swrve.sdk.SwrveHelper: boolean isNullOrEmpty(java.lang.String)>($r2);
+
+        if $z0 != 0 goto label1;
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(45);
+
+        $r2 = virtualinvoke $r0.<java.util.Locale: java.lang.String getCountry()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+     label1:
+        $r2 = virtualinvoke $r0.<java.util.Locale: java.lang.String getVariant()>();
+
+        $z0 = staticinvoke <com.swrve.sdk.SwrveHelper: boolean isNullOrEmpty(java.lang.String)>($r2);
+
+        if $z0 != 0 goto label2;
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(45);
+
+        $r2 = virtualinvoke $r0.<java.util.Locale: java.lang.String getVariant()>();
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+     label2:
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r2;
+    }
+
+    public static boolean userErrorResponseCode(int)
+    {
+        int $i0, varReplacer3803, varReplacer3804;
+
+        nop;
+
+        $i0 := @parameter0: int;
+
+        if $i0 < 400 goto label1;
+
+        if $i0 >= 500 goto label1;
+
+        varReplacer3804 = 1;
+
+        return varReplacer3804;
+
+     label1:
+        varReplacer3803 = 0;
+
+        return varReplacer3803;
+    }
+}

@@ -1,0 +1,105 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r10
+		Type: java.security.Signature
+		Statement: $r10 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer416)
+		Method: <de.defim.apk.b.a.e: boolean a(java.lang.String,java.lang.String,java.lang.String)>
+		SHA-256: 7f17a74951b46b6e63a415c73e9257b08a9b41fcf3b1a3085072990d56e8a168
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: java.security.MessageDigest
+		Statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer829)
+		Method: <de.defim.apk.c.a.c: java.lang.String b(android.content.Context,java.lang.String)>
+		SHA-256: bb28396cadfe035259535d1a101accad026605b54ec25c867a3c295e51f0d4eb
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer477)
+		Method: <de.defim.apk.c.a.c: java.lang.String a(byte[])>
+		SHA-256: 63d3317ab3e2e608430588517c10681e3a0147e24866f141358ee7e82dd6ee38
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <de.defim.apk.c.a.c: java.lang.String a(byte[])>
+		SHA-256: 80ac997c05895a17381f441b983207814c35e4f423937420f8639f745f05e612
+		Secure: false
+	Object:
+		Variable: $r8
+		Type: byte[]
+		Statement: $r8 = virtualinvoke $r5.<java.security.MessageDigest: byte[] digest(byte[])>($r8)
+		Method: <de.defim.apk.c.a.c: java.lang.String b(android.content.Context,java.lang.String)>
+		SHA-256: 65ec4630a1b2e40893e63a4d8377047777de2e4198ddbc9481e9a67234112ef5
+		Secure: false
+
+Findings in Java Class: de.defim.apk.b.a.e
+
+	 in Method: boolean a(java.lang.String,java.lang.String,java.lang.String)
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #7f17a74951b46b6e63a415c73e9257b08a9b41fcf3b1a3085072990d56e8a168)
+			First parameter (with value "SHA1withRSA") should be any of {RSASSA-PSS, SHA256withDSA, SHA256withRSA, DSA, SHA512withRSA, SHA384withRSA, DSS}
+			at statement: $r10 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer416)
+
+		IncompleteOperationError violating CrySL rule for java.security.Signature (on Object #7f17a74951b46b6e63a415c73e9257b08a9b41fcf3b1a3085072990d56e8a168)
+			Operation on object of type java.security.Signature object not completed. Expected call to update, verify
+			at statement: $r16 = virtualinvoke $r14.<java.lang.reflect.Method: java.lang.Object invoke(java.lang.Object,java.lang.Object[])>($r10, $r15)
+
+
+Findings in Java Class: de.defim.apk.c.a.c
+
+	 in Method: java.lang.String a(byte[])
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #63d3317ab3e2e608430588517c10681e3a0147e24866f141358ee7e82dd6ee38)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer477)
+
+
+	 in Method: java.lang.String b(android.content.Context,java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #bb28396cadfe035259535d1a101accad026605b54ec25c867a3c295e51f0d4eb)
+			First parameter (with value "SHA1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer829)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 5
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 1
+	ConstraintError: 3
+=====================================================================

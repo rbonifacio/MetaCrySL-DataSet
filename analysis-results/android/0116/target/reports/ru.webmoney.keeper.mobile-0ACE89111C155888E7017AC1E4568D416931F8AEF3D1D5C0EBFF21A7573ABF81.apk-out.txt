@@ -1,0 +1,143 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/ru.webmoney.keeper.mobile-0ACE89111C155888E7017AC1E4568D416931F8AEF3D1D5C0EBFF21A7573ABF81.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.spec.PBEParameterSpec.PBEParameterSpec( salt iterationCount paramSpec);
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: javax.crypto.Cipher
+		Statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1573)
+		Method: <akb: void <init>()>
+		SHA-256: 7c86827df19bf0441ee538d77c96701344e5a3d30fa84a657b2d5ab2da3ecf82
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r5.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r4)
+		Method: <akb: java.lang.String c(java.lang.String)>
+		SHA-256: 2bca54ca42957735cd0f0f5b918a1a677a7bb614bea2e662baeffdadffdbb5f9
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: javax.crypto.spec.PBEParameterSpec
+		Statement: specialinvoke $r4.<javax.crypto.spec.PBEParameterSpec: void <init>(byte[],int)>($r1, varReplacer1574)
+		Method: <akb: void <init>()>
+		SHA-256: 5c80dae56fbd0523bf92a2c1b2e5f38e953c4a0799f8946038ce78f3a036c6b2
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: javax.crypto.SecretKeyFactory
+		Statement: $r2 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer1572)
+		Method: <akb: void <init>()>
+		SHA-256: 8d5e0dd3d6c835fa9c3c4f3c6f961efd7a569a74aeb30e51018d49a050c2063b
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1567)
+		Method: <acv: java.lang.String b(java.lang.String)>
+		SHA-256: b2072712fce937b78bcaefaf2dca604e52dcab10c5e48ad1d51f91aaa5008fbd
+		Secure: true
+	Object:
+		Variable: $r5
+		Type: javax.crypto.SecretKey
+		Statement: $r5 = virtualinvoke $r3.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
+		Method: <akb: void a(java.lang.String)>
+		SHA-256: c65401ca4d89f9c40c4119c2aa260501400103bdffd4cd8425df2d12af531162
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <acv: java.lang.String b(java.lang.String)>
+		SHA-256: c7701fd883019c463f52bae39560fffac892de1695e7971c008d1bc20564ef02
+		Secure: true
+
+Findings in Java Class: akb
+
+	 in Method: void a(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
+			First parameter was not properly generated as specced Key
+			at statement: $r5 = virtualinvoke $r3.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
+
+		ForbiddenMethodError violating CrySL rule for javax.crypto.spec.PBEKeySpec
+			Detected call to forbidden method void <init>(char[]) of class javax.crypto.spec.PBEKeySpec. Instead, call method <javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>.
+			at statement: specialinvoke $r2.<javax.crypto.spec.PBEKeySpec: void <init>(char[])>($r4)
+
+
+	 in Method: void <init>()
+		ConstraintError violating CrySL rule for javax.crypto.spec.PBEParameterSpec (on Object #5c80dae56fbd0523bf92a2c1b2e5f38e953c4a0799f8946038ce78f3a036c6b2)
+			Second parameter (with value 20)Variable iterationCountmust be  at least 10000
+			at statement: specialinvoke $r4.<javax.crypto.spec.PBEParameterSpec: void <init>(byte[],int)>($r1, varReplacer1574)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r4.<javax.crypto.spec.PBEParameterSpec: void <init>(byte[],int)>($r1, varReplacer1574)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #7c86827df19bf0441ee538d77c96701344e5a3d30fa84a657b2d5ab2da3ecf82)
+			First parameter (with value "PBEWithMD5AndDES") should be any of {ARC4, AES, BLOWFISH, DESede, RSA}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1573)
+
+
+	 in Method: java.lang.String c(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1575, $r2, $r3)
+
+
+Findings in Java Class: asr
+
+	 in Method: java.lang.String a(android.content.Context,java.lang.String)
+		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #7c86827df19bf0441ee538d77c96701344e5a3d30fa84a657b2d5ab2da3ecf82)
+			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
+			at statement: $r2 = virtualinvoke $r4.<akb: java.lang.String c(java.lang.String)>($r2)
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #8d5e0dd3d6c835fa9c3c4f3c6f961efd7a569a74aeb30e51018d49a050c2063b)
+			Operation on object of type javax.crypto.SecretKeyFactory object not completed. Expected call to translateKey, generateSecret
+			at statement: $r2 = virtualinvoke $r4.<akb: java.lang.String c(java.lang.String)>($r2)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 7
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 3
+	ConstraintError: 2
+	ForbiddenMethodError: 1
+	IncompleteOperationError: 2
+=====================================================================

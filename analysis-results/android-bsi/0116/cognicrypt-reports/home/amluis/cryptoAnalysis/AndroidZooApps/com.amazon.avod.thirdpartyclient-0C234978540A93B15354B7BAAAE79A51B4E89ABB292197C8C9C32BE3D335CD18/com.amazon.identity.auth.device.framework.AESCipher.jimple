@@ -1,0 +1,572 @@
+public class com.amazon.identity.auth.device.framework.AESCipher extends java.lang.Object
+{
+    private static final java.lang.String TAG;
+    private final javax.crypto.spec.SecretKeySpec mKeySpec;
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+        java.lang.Class $r1;
+
+        nop;
+
+        $r1 = class "Lcom/amazon/identity/auth/device/framework/AESCipher;";
+
+        $r0 = virtualinvoke $r1.<java.lang.Class: java.lang.String getName()>();
+
+        <com.amazon.identity.auth.device.framework.AESCipher: java.lang.String TAG> = $r0;
+
+        return;
+    }
+
+    public void <init>(byte[])
+    {
+        com.amazon.identity.auth.device.framework.AESCipher $r0;
+        byte[] $r1;
+        java.lang.IllegalArgumentException $r2;
+        javax.crypto.spec.SecretKeySpec $r3;
+        java.lang.String varReplacer10893, varReplacer10894;
+
+        nop;
+
+        $r0 := @this: com.amazon.identity.auth.device.framework.AESCipher;
+
+        $r1 := @parameter0: byte[];
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        if $r1 != null goto label1;
+
+        $r2 = new java.lang.IllegalArgumentException;
+
+        varReplacer10894 = "encryption key was null";
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer10894);
+
+        throw $r2;
+
+     label1:
+        $r3 = new javax.crypto.spec.SecretKeySpec;
+
+        varReplacer10893 = "AES";
+
+        specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer10893);
+
+        $r0.<com.amazon.identity.auth.device.framework.AESCipher: javax.crypto.spec.SecretKeySpec mKeySpec> = $r3;
+
+        return;
+    }
+
+    private static byte[] concat(byte[], byte[])
+    {
+        byte[] $r0, $r1, $r3;
+        java.lang.Exception $r2;
+        int $i0, varReplacer11063, varReplacer11064, varReplacer11065, varReplacer11066, varReplacer11067;
+        java.lang.String $r4, varReplacer11068;
+        null_type varReplacer11069;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: byte[];
+
+     label1:
+        $i0 = lengthof $r1;
+
+     label2:
+        $i0 = $i0 + 16;
+
+     label3:
+        $r3 = newarray (byte)[$i0];
+
+        varReplacer11063 = 0;
+
+        varReplacer11064 = 0;
+
+        varReplacer11065 = 16;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r0, varReplacer11063, $r3, varReplacer11063, varReplacer11065);
+
+        $i0 = lengthof $r1;
+
+        varReplacer11066 = 0;
+
+        varReplacer11067 = 16;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r1, varReplacer11066, $r3, varReplacer11067, $i0);
+
+     label4:
+        return $r3;
+
+     label5:
+        $r2 := @caughtexception;
+
+        $r4 = <com.amazon.identity.auth.device.framework.AESCipher: java.lang.String TAG>;
+
+        varReplacer11068 = "Exception happended during concatenating the initialization vectors and the cipher text";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String,java.lang.Throwable)>($r4, varReplacer11068, $r2);
+
+        varReplacer11069 = null;
+
+        return varReplacer11069;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    private javax.crypto.Cipher createAESCipher(int, java.lang.String, java.security.spec.AlgorithmParameterSpec)
+    {
+        com.amazon.identity.auth.device.framework.AESCipher $r0;
+        int $i0;
+        java.lang.String $r1, varReplacer10889, varReplacer10890, varReplacer10891, varReplacer10892;
+        java.security.spec.AlgorithmParameterSpec $r2;
+        javax.crypto.Cipher $r3, $r4;
+        javax.crypto.spec.SecretKeySpec $r5;
+        java.lang.Throwable $r6, $r7, $r8, $r9;
+
+        nop;
+
+        $r0 := @this: com.amazon.identity.auth.device.framework.AESCipher;
+
+        $i0 := @parameter0: int;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.security.spec.AlgorithmParameterSpec;
+
+        $r4 = null;
+
+     label1:
+        $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>($r1);
+
+     label2:
+        $r4 = $r3;
+
+        $r5 = $r0.<com.amazon.identity.auth.device.framework.AESCipher: javax.crypto.spec.SecretKeySpec mKeySpec>;
+
+     label3:
+        virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>($i0, $r5, $r2);
+
+     label4:
+        return $r3;
+
+     label5:
+        $r6 := @caughtexception;
+
+        $r1 = <com.amazon.identity.auth.device.framework.AESCipher: java.lang.String TAG>;
+
+        varReplacer10892 = "Aborting cipher creation";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String,java.lang.Throwable)>($r1, varReplacer10892, $r6);
+
+        return $r4;
+
+     label6:
+        $r7 := @caughtexception;
+
+        $r1 = <com.amazon.identity.auth.device.framework.AESCipher: java.lang.String TAG>;
+
+        varReplacer10890 = "Aborting cipher creation";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String,java.lang.Throwable)>($r1, varReplacer10890, $r7);
+
+        return $r4;
+
+     label7:
+        $r8 := @caughtexception;
+
+        $r1 = <com.amazon.identity.auth.device.framework.AESCipher: java.lang.String TAG>;
+
+        varReplacer10889 = "Aborting cipher creation because the key was invalid";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String,java.lang.Throwable)>($r1, varReplacer10889, $r8);
+
+        return $r4;
+
+     label8:
+        $r9 := @caughtexception;
+
+        $r1 = <com.amazon.identity.auth.device.framework.AESCipher: java.lang.String TAG>;
+
+        varReplacer10891 = "Aborting cipher creation due to the occurrence of invalid algorithm parameters.";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String,java.lang.Throwable)>($r1, varReplacer10891, $r9);
+
+        return $r4;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label5;
+        catch javax.crypto.NoSuchPaddingException from label1 to label2 with label6;
+        catch javax.crypto.NoSuchPaddingException from label3 to label4 with label6;
+        catch java.security.InvalidKeyException from label1 to label2 with label7;
+        catch java.security.InvalidKeyException from label3 to label4 with label7;
+        catch java.security.InvalidAlgorithmParameterException from label1 to label2 with label8;
+        catch java.security.InvalidAlgorithmParameterException from label3 to label4 with label8;
+    }
+
+    public static java.lang.String generateAesSecureStorageKey()
+    {
+        javax.crypto.KeyGenerator $r0;
+        javax.crypto.SecretKey $r1;
+        byte[] $r2;
+        java.lang.String $r3, varReplacer11054, varReplacer11055;
+        java.lang.Throwable $r4;
+        int varReplacer11051, varReplacer11052;
+        null_type varReplacer11053;
+
+     label1:
+        nop;
+
+        varReplacer11055 = "AES";
+
+        $r0 = staticinvoke <javax.crypto.KeyGenerator: javax.crypto.KeyGenerator getInstance(java.lang.String)>(varReplacer11055);
+
+        varReplacer11051 = 128;
+
+        virtualinvoke $r0.<javax.crypto.KeyGenerator: void init(int)>(varReplacer11051);
+
+        $r1 = virtualinvoke $r0.<javax.crypto.KeyGenerator: javax.crypto.SecretKey generateKey()>();
+
+        $r2 = interfaceinvoke $r1.<javax.crypto.SecretKey: byte[] getEncoded()>();
+
+        varReplacer11052 = 0;
+
+        $r3 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r2, varReplacer11052);
+
+     label2:
+        return $r3;
+
+     label3:
+        $r4 := @caughtexception;
+
+        $r3 = <com.amazon.identity.auth.device.framework.AESCipher: java.lang.String TAG>;
+
+        varReplacer11054 = "Could not generate a symmetric key for algorithm AES";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r3, varReplacer11054);
+
+        varReplacer11053 = null;
+
+        return varReplacer11053;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+    }
+
+    public static java.lang.String generateAesSecureStorageKeyForDevice(com.amazon.identity.auth.device.framework.SSODeviceInfo)
+    {
+        com.amazon.identity.auth.device.framework.SSODeviceInfo $r0;
+        javax.crypto.spec.PBEKeySpec $r1;
+        java.lang.String $r2, $r3, varReplacer11191, varReplacer11192;
+        javax.crypto.SecretKeyFactory $r4;
+        char[] $r5;
+        byte[] $r6;
+        javax.crypto.SecretKey $r7;
+        java.lang.Throwable $r8;
+        int varReplacer11193, varReplacer11194, varReplacer11195;
+
+        nop;
+
+        $r0 := @parameter0: com.amazon.identity.auth.device.framework.SSODeviceInfo;
+
+        $r2 = virtualinvoke $r0.<com.amazon.identity.auth.device.framework.SSODeviceInfo: java.lang.String getDeviceSecret()>();
+
+        if $r2 == null goto label6;
+
+        $r3 = virtualinvoke $r0.<com.amazon.identity.auth.device.framework.SSODeviceInfo: java.lang.String getDeviceSerialNumber()>();
+
+        if $r3 == null goto label6;
+
+     label1:
+        varReplacer11192 = "PBKDF2WithHmacSHA1";
+
+        $r4 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer11192);
+
+     label2:
+        $r1 = new javax.crypto.spec.PBEKeySpec;
+
+     label3:
+        $r5 = virtualinvoke $r2.<java.lang.String: char[] toCharArray()>();
+
+        $r6 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        varReplacer11194 = 1000;
+
+        varReplacer11195 = 128;
+
+        specialinvoke $r1.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r5, $r6, varReplacer11194, varReplacer11195);
+
+        $r7 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r1);
+
+        $r6 = interfaceinvoke $r7.<javax.crypto.SecretKey: byte[] getEncoded()>();
+
+        varReplacer11193 = 0;
+
+        $r2 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r6, varReplacer11193);
+
+     label4:
+        return $r2;
+
+     label5:
+        $r8 := @caughtexception;
+
+        $r2 = <com.amazon.identity.auth.device.framework.AESCipher: java.lang.String TAG>;
+
+        varReplacer11191 = "Could not generate a symmetric key with PBKDF2";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String)>($r2, varReplacer11191);
+
+     label6:
+        $r2 = staticinvoke <com.amazon.identity.auth.device.framework.AESCipher: java.lang.String generateAesSecureStorageKey()>();
+
+        return $r2;
+
+        catch java.security.GeneralSecurityException from label1 to label2 with label5;
+        catch java.security.GeneralSecurityException from label3 to label4 with label5;
+    }
+
+    private static byte[] performCipherOperation(javax.crypto.Cipher, byte[], int, int)
+    {
+        javax.crypto.Cipher $r0;
+        byte[] $r1;
+        int $i0, $i1;
+        java.lang.Exception $r2;
+        java.lang.String $r3, varReplacer10886;
+        null_type varReplacer10887, varReplacer10888;
+
+        nop;
+
+        $r0 := @parameter0: javax.crypto.Cipher;
+
+        $r1 := @parameter1: byte[];
+
+        $i0 := @parameter2: int;
+
+        $i1 := @parameter3: int;
+
+        if $r0 != null goto label1;
+
+        varReplacer10888 = null;
+
+        return varReplacer10888;
+
+     label1:
+        $r1 = virtualinvoke $r0.<javax.crypto.Cipher: byte[] doFinal(byte[],int,int)>($r1, $i0, $i1);
+
+     label2:
+        return $r1;
+
+     label3:
+        $r2 := @caughtexception;
+
+        $r3 = <com.amazon.identity.auth.device.framework.AESCipher: java.lang.String TAG>;
+
+        varReplacer10886 = "Encrypting / Decrypting failed with the given key. Aborting!";
+
+        staticinvoke <com.amazon.identity.auth.device.utils.MAPLog: void e(java.lang.String,java.lang.String,java.lang.Throwable)>($r3, varReplacer10886, $r2);
+
+        varReplacer10887 = null;
+
+        return varReplacer10887;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public final byte[] decryptCBCMode(byte[])
+    {
+        com.amazon.identity.auth.device.framework.AESCipher $r0;
+        byte[] $r1;
+        javax.crypto.spec.IvParameterSpec $r2;
+        java.lang.IllegalArgumentException $r3;
+        javax.crypto.Cipher $r4;
+        int $i0, varReplacer11269, varReplacer11270, varReplacer11271, varReplacer11274;
+        java.lang.String varReplacer11272, varReplacer11273;
+
+        nop;
+
+        $r0 := @this: com.amazon.identity.auth.device.framework.AESCipher;
+
+        $r1 := @parameter0: byte[];
+
+        if $r1 != null goto label1;
+
+        $r3 = new java.lang.IllegalArgumentException;
+
+        varReplacer11273 = "dataToDecrypt is null";
+
+        specialinvoke $r3.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer11273);
+
+        throw $r3;
+
+     label1:
+        $r2 = new javax.crypto.spec.IvParameterSpec;
+
+        varReplacer11269 = 0;
+
+        varReplacer11270 = 16;
+
+        specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[],int,int)>($r1, varReplacer11269, varReplacer11270);
+
+        varReplacer11271 = 2;
+
+        varReplacer11272 = "AES/CBC/PKCS7Padding";
+
+        $r4 = specialinvoke $r0.<com.amazon.identity.auth.device.framework.AESCipher: javax.crypto.Cipher createAESCipher(int,java.lang.String,java.security.spec.AlgorithmParameterSpec)>(varReplacer11271, varReplacer11272, $r2);
+
+        $i0 = lengthof $r1;
+
+        $i0 = $i0 + -16;
+
+        varReplacer11274 = 16;
+
+        $r1 = staticinvoke <com.amazon.identity.auth.device.framework.AESCipher: byte[] performCipherOperation(javax.crypto.Cipher,byte[],int,int)>($r4, $r1, varReplacer11274, $i0);
+
+        return $r1;
+    }
+
+    public final byte[] decryptECBMode(byte[])
+    {
+        com.amazon.identity.auth.device.framework.AESCipher $r0;
+        byte[] $r1;
+        java.lang.IllegalArgumentException $r2;
+        javax.crypto.Cipher $r3;
+        int $i0, varReplacer10881, varReplacer10882;
+        java.lang.String varReplacer10883, varReplacer10885;
+        null_type varReplacer10884;
+
+        nop;
+
+        $r0 := @this: com.amazon.identity.auth.device.framework.AESCipher;
+
+        $r1 := @parameter0: byte[];
+
+        if $r1 != null goto label1;
+
+        $r2 = new java.lang.IllegalArgumentException;
+
+        varReplacer10885 = "dataToDecrypt is null";
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer10885);
+
+        throw $r2;
+
+     label1:
+        varReplacer10882 = 2;
+
+        varReplacer10883 = "AES";
+
+        varReplacer10884 = null;
+
+        $r3 = specialinvoke $r0.<com.amazon.identity.auth.device.framework.AESCipher: javax.crypto.Cipher createAESCipher(int,java.lang.String,java.security.spec.AlgorithmParameterSpec)>(varReplacer10882, varReplacer10883, varReplacer10884);
+
+        $i0 = lengthof $r1;
+
+        varReplacer10881 = 0;
+
+        $r1 = staticinvoke <com.amazon.identity.auth.device.framework.AESCipher: byte[] performCipherOperation(javax.crypto.Cipher,byte[],int,int)>($r3, $r1, varReplacer10881, $i0);
+
+        return $r1;
+    }
+
+    public final byte[] encryptCBCMode(byte[])
+    {
+        com.amazon.identity.auth.device.framework.AESCipher $r0;
+        byte[] $r1, $r2;
+        java.lang.IllegalArgumentException $r3;
+        java.security.SecureRandom $r4;
+        javax.crypto.spec.IvParameterSpec $r5;
+        javax.crypto.Cipher $r6;
+        int $i0, varReplacer11059, varReplacer11060;
+        java.lang.String varReplacer11061, varReplacer11062;
+
+        nop;
+
+        $r0 := @this: com.amazon.identity.auth.device.framework.AESCipher;
+
+        $r1 := @parameter0: byte[];
+
+        if $r1 != null goto label1;
+
+        $r3 = new java.lang.IllegalArgumentException;
+
+        varReplacer11062 = "dataToEncrypt is null";
+
+        specialinvoke $r3.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer11062);
+
+        throw $r3;
+
+     label1:
+        $r4 = new java.security.SecureRandom;
+
+        specialinvoke $r4.<java.security.SecureRandom: void <init>()>();
+
+        $r2 = newarray (byte)[16];
+
+        virtualinvoke $r4.<java.security.SecureRandom: void nextBytes(byte[])>($r2);
+
+        $r5 = new javax.crypto.spec.IvParameterSpec;
+
+        specialinvoke $r5.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r2);
+
+        varReplacer11060 = 1;
+
+        varReplacer11061 = "AES/CBC/PKCS7Padding";
+
+        $r6 = specialinvoke $r0.<com.amazon.identity.auth.device.framework.AESCipher: javax.crypto.Cipher createAESCipher(int,java.lang.String,java.security.spec.AlgorithmParameterSpec)>(varReplacer11060, varReplacer11061, $r5);
+
+        $i0 = lengthof $r1;
+
+        varReplacer11059 = 0;
+
+        $r1 = staticinvoke <com.amazon.identity.auth.device.framework.AESCipher: byte[] performCipherOperation(javax.crypto.Cipher,byte[],int,int)>($r6, $r1, varReplacer11059, $i0);
+
+        $r1 = staticinvoke <com.amazon.identity.auth.device.framework.AESCipher: byte[] concat(byte[],byte[])>($r2, $r1);
+
+        return $r1;
+    }
+
+    public final byte[] encryptECBMode(byte[])
+    {
+        com.amazon.identity.auth.device.framework.AESCipher $r0;
+        byte[] $r1;
+        java.lang.IllegalArgumentException $r2;
+        javax.crypto.Cipher $r3;
+        int $i0, varReplacer18699, varReplacer18700;
+        java.lang.String varReplacer18698, varReplacer18701;
+        null_type varReplacer18702;
+
+        nop;
+
+        $r0 := @this: com.amazon.identity.auth.device.framework.AESCipher;
+
+        $r1 := @parameter0: byte[];
+
+        if $r1 != null goto label1;
+
+        $r2 = new java.lang.IllegalArgumentException;
+
+        varReplacer18698 = "dataToEncrypt is null";
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>(varReplacer18698);
+
+        throw $r2;
+
+     label1:
+        varReplacer18700 = 1;
+
+        varReplacer18701 = "AES";
+
+        varReplacer18702 = null;
+
+        $r3 = specialinvoke $r0.<com.amazon.identity.auth.device.framework.AESCipher: javax.crypto.Cipher createAESCipher(int,java.lang.String,java.security.spec.AlgorithmParameterSpec)>(varReplacer18700, varReplacer18701, varReplacer18702);
+
+        $i0 = lengthof $r1;
+
+        varReplacer18699 = 0;
+
+        $r1 = staticinvoke <com.amazon.identity.auth.device.framework.AESCipher: byte[] performCipherOperation(javax.crypto.Cipher,byte[],int,int)>($r3, $r1, varReplacer18699, $i0);
+
+        return $r1;
+    }
+}

@@ -1,0 +1,253 @@
+public class com.tapdaq.sdk.helpers.Encrypter extends java.lang.Object
+{
+    protected static final char[] hexArray;
+
+    static void <clinit>()
+    {
+        char[] $r0;
+        java.lang.String $r1;
+
+        nop;
+
+        $r1 = "0123456789ABCDEF";
+
+        $r0 = virtualinvoke $r1.<java.lang.String: char[] toCharArray()>();
+
+        <com.tapdaq.sdk.helpers.Encrypter: char[] hexArray> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.tapdaq.sdk.helpers.Encrypter $r0;
+
+        $r0 := @this: com.tapdaq.sdk.helpers.Encrypter;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String Base64(java.lang.String) throws java.io.IOException
+    {
+        java.lang.String $r0, varReplacer3668;
+        byte[] $r1;
+        int varReplacer3669;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        varReplacer3668 = "UTF-8";
+
+        $r1 = virtualinvoke $r0.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer3668);
+
+        varReplacer3669 = 0;
+
+        $r0 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r1, varReplacer3669);
+
+        return $r0;
+    }
+
+    public static byte[] MacAddressToByteArr(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer3670;
+        java.lang.Exception $r1;
+        java.lang.String[] $r2;
+        java.util.List $r3;
+        int $i0, $i1, varReplacer3671;
+        byte[] $r4;
+        java.util.Iterator $r5;
+        boolean $z0;
+        java.lang.Object $r6;
+        java.lang.Integer $r7;
+        byte $b2;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        if $r0 == null goto label5;
+
+        varReplacer3670 = ":";
+
+        $r2 = virtualinvoke $r0.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer3670);
+
+        $r3 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r2);
+
+        $i0 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        $r4 = newarray (byte)[$i0];
+
+        $i0 = 0;
+
+        $r5 = interfaceinvoke $r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label6;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r0 = (java.lang.String) $r6;
+
+     label2:
+        varReplacer3671 = 16;
+
+        $i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String,int)>($r0, varReplacer3671);
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        $b2 = virtualinvoke $r7.<java.lang.Integer: byte byteValue()>();
+
+        $r4[$i0] = $b2;
+
+     label3:
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label4:
+        $r1 := @caughtexception;
+
+        staticinvoke <com.tapdaq.sdk.helpers.TLog: void error(java.lang.Exception)>($r1);
+
+        goto label3;
+
+     label5:
+        $r4 = newarray (byte)[0];
+
+     label6:
+        return $r4;
+
+        catch java.lang.Exception from label2 to label3 with label4;
+    }
+
+    public static java.lang.String SHA1(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer3521, varReplacer3524;
+        int $i0, varReplacer3522;
+        java.security.MessageDigest $r1;
+        byte[] $r2;
+        java.lang.Throwable $r3;
+        java.lang.Exception r4;
+        null_type varReplacer3523;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer3524 = "SHA-1";
+
+        $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3524);
+
+        varReplacer3521 = "UTF-8";
+
+        $r2 = virtualinvoke $r0.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer3521);
+
+     label2:
+        $i0 = lengthof $r2;
+
+     label3:
+        varReplacer3522 = 0;
+
+        virtualinvoke $r1.<java.security.MessageDigest: void update(byte[],int,int)>($r2, varReplacer3522, $i0);
+
+        $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>();
+
+        $r0 = staticinvoke <com.tapdaq.sdk.helpers.Encrypter: java.lang.String bytesToHex(byte[])>($r2);
+
+     label4:
+        return $r0;
+
+     label5:
+        $r3 := @caughtexception;
+
+     label6:
+        r4 = (java.lang.Exception) $r3;
+
+        staticinvoke <com.tapdaq.sdk.helpers.TLog: void error(java.lang.Exception)>(r4);
+
+        varReplacer3523 = null;
+
+        return varReplacer3523;
+
+     label7:
+        $r3 := @caughtexception;
+
+        goto label6;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label5;
+        catch java.io.UnsupportedEncodingException from label1 to label2 with label7;
+        catch java.io.UnsupportedEncodingException from label3 to label4 with label7;
+    }
+
+    private static java.lang.String bytesToHex(byte[])
+    {
+        byte[] $r0;
+        char[] $r1, $r2;
+        short $s0, $s4;
+        int $i1, $i2;
+        byte $b3;
+        char $c5;
+        java.lang.String $r3;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $i1 = lengthof $r0;
+
+        $i1 = $i1 * 2;
+
+        $r1 = newarray (char)[$i1];
+
+        $i1 = 0;
+
+     label1:
+        $i2 = lengthof $r0;
+
+        if $i1 >= $i2 goto label2;
+
+        $b3 = $r0[$i1];
+
+        $s0 = $b3 & 255;
+
+        $i2 = $i1 * 2;
+
+        $r2 = <com.tapdaq.sdk.helpers.Encrypter: char[] hexArray>;
+
+        $s4 = $s0 >>> 4;
+
+        $c5 = $r2[$s4];
+
+        $r1[$i2] = $c5;
+
+        $i2 = $i1 * 2;
+
+        $i2 = $i2 + 1;
+
+        $r2 = <com.tapdaq.sdk.helpers.Encrypter: char[] hexArray>;
+
+        $s0 = $s0 & 15;
+
+        $c5 = $r2[$s0];
+
+        $r1[$i2] = $c5;
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r3 = new java.lang.String;
+
+        specialinvoke $r3.<java.lang.String: void <init>(char[])>($r1);
+
+        return $r3;
+    }
+}

@@ -1,0 +1,363 @@
+class com.Tobit.android.log.sdk.Utils extends java.lang.Object
+{
+    private static com.google.gson.Gson gson;
+
+    void <init>()
+    {
+        com.Tobit.android.log.sdk.Utils $r0;
+
+        $r0 := @this: com.Tobit.android.log.sdk.Utils;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static int getAppVersion(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.Throwable $r1;
+        android.content.pm.PackageManager $r2;
+        java.lang.String $r3;
+        android.content.pm.PackageInfo $r4;
+        int i0, varReplacer8794, varReplacer8795;
+        android.content.pm.PackageManager$NameNotFoundException r5;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+     label1:
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r3 = virtualinvoke $r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        varReplacer8794 = 0;
+
+        $r4 = virtualinvoke $r2.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>($r3, varReplacer8794);
+
+     label2:
+        i0 = $r4.<android.content.pm.PackageInfo: int versionCode>;
+
+        return i0;
+
+     label3:
+        $r1 := @caughtexception;
+
+        r5 = (android.content.pm.PackageManager$NameNotFoundException) $r1;
+
+        virtualinvoke r5.<android.content.pm.PackageManager$NameNotFoundException: void printStackTrace()>();
+
+        varReplacer8795 = 0;
+
+        return varReplacer8795;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label3;
+    }
+
+    static java.lang.String getDeviceUUID(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.content.ContentResolver $r1;
+        java.lang.String $r2, varReplacer8793;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        varReplacer8793 = "android_id";
+
+        $r2 = staticinvoke <android.provider.Settings$Secure: java.lang.String getString(android.content.ContentResolver,java.lang.String)>($r1, varReplacer8793);
+
+        return $r2;
+    }
+
+    static com.google.gson.Gson getGson()
+    {
+        com.google.gson.Gson $r0;
+
+        nop;
+
+        $r0 = <com.Tobit.android.log.sdk.Utils: com.google.gson.Gson gson>;
+
+        if $r0 != null goto label1;
+
+        $r0 = new com.google.gson.Gson;
+
+        specialinvoke $r0.<com.google.gson.Gson: void <init>()>();
+
+        <com.Tobit.android.log.sdk.Utils: com.google.gson.Gson gson> = $r0;
+
+     label1:
+        $r0 = <com.Tobit.android.log.sdk.Utils: com.google.gson.Gson gson>;
+
+        return $r0;
+    }
+
+    static java.lang.String getMetaData(android.content.Context, java.lang.String)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, $r5, varReplacer8797, varReplacer8798;
+        java.lang.Throwable $r2;
+        android.content.pm.ApplicationInfo $r3, $r6;
+        android.content.pm.PackageManager $r4;
+        android.os.Bundle $r7;
+        java.lang.StringBuilder $r8, r9;
+        android.content.pm.PackageManager$NameNotFoundException r10;
+        null_type varReplacer8796;
+        int varReplacer8799;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r3 = null;
+
+     label1:
+        $r4 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r5 = virtualinvoke $r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        varReplacer8799 = 128;
+
+        $r6 = virtualinvoke $r4.<android.content.pm.PackageManager: android.content.pm.ApplicationInfo getApplicationInfo(java.lang.String,int)>($r5, varReplacer8799);
+
+     label2:
+        $r3 = $r6;
+
+     label3:
+        if $r3 == null goto label5;
+
+        $r7 = $r3.<android.content.pm.ApplicationInfo: android.os.Bundle metaData>;
+
+        if $r7 == null goto label5;
+
+        $r7 = $r3.<android.content.pm.ApplicationInfo: android.os.Bundle metaData>;
+
+        $r1 = virtualinvoke $r7.<android.os.Bundle: java.lang.String getString(java.lang.String)>($r1);
+
+        return $r1;
+
+     label4:
+        $r2 := @caughtexception;
+
+        r9 = new java.lang.StringBuilder;
+
+        specialinvoke r9.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer8797 = "Failed to load meta-data, NameNotFound: ";
+
+        $r8 = virtualinvoke r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer8797);
+
+        r10 = (android.content.pm.PackageManager$NameNotFoundException) $r2;
+
+        $r5 = virtualinvoke r10.<android.content.pm.PackageManager$NameNotFoundException: java.lang.String getMessage()>();
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer8798 = "metadata";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer8798, $r5);
+
+        goto label3;
+
+     label5:
+        varReplacer8796 = null;
+
+        return varReplacer8796;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label4;
+    }
+
+    static boolean isConnected(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.Object $r1;
+        android.net.ConnectivityManager $r2;
+        android.net.NetworkInfo $r3;
+        boolean $z0;
+        java.lang.String varReplacer10549;
+        int varReplacer10550;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        varReplacer10549 = "connectivity";
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer10549);
+
+        $r2 = (android.net.ConnectivityManager) $r1;
+
+        $r3 = virtualinvoke $r2.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+        if $r3 == null goto label1;
+
+        $r3 = virtualinvoke $r2.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+        $z0 = virtualinvoke $r3.<android.net.NetworkInfo: boolean isConnected()>();
+
+        return $z0;
+
+     label1:
+        varReplacer10550 = 0;
+
+        return varReplacer10550;
+    }
+
+    static boolean isWifiConnected(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.Object $r1;
+        android.net.ConnectivityManager $r2;
+        android.net.NetworkInfo $r3;
+        int $i0, varReplacer10551, varReplacer10553;
+        boolean $z0;
+        java.lang.String varReplacer10552;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        varReplacer10552 = "connectivity";
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer10552);
+
+        $r2 = (android.net.ConnectivityManager) $r1;
+
+        $r3 = virtualinvoke $r2.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+        if $r3 == null goto label1;
+
+        $i0 = virtualinvoke $r3.<android.net.NetworkInfo: int getType()>();
+
+        if $i0 != 1 goto label1;
+
+        $z0 = virtualinvoke $r3.<android.net.NetworkInfo: boolean isConnected()>();
+
+        if $z0 == 0 goto label1;
+
+        varReplacer10553 = 1;
+
+        return varReplacer10553;
+
+     label1:
+        varReplacer10551 = 0;
+
+        return varReplacer10551;
+    }
+
+    public static final java.lang.String md5(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer8790, varReplacer8791, varReplacer8792;
+        byte $b0;
+        java.lang.Throwable $r1;
+        java.lang.StringBuilder $r2, $r5, r6;
+        int $i1, $i2, $i4;
+        java.security.MessageDigest $r3;
+        byte[] $r4;
+        short $s3;
+        java.security.NoSuchAlgorithmException r7;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label01:
+        varReplacer8791 = "MD5";
+
+        $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer8791);
+
+        $r4 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r3.<java.security.MessageDigest: void update(byte[])>($r4);
+
+        $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>();
+
+     label02:
+        $r5 = new java.lang.StringBuilder;
+
+        $r2 = $r5;
+
+     label03:
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+     label04:
+        $i1 = lengthof $r4;
+
+        $i2 = 0;
+
+     label05:
+        if $i2 >= $i1 goto label13;
+
+        $b0 = $r4[$i2];
+
+        $s3 = $b0 & 255;
+
+     label06:
+        $r0 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s3);
+
+     label07:
+        $i4 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+     label08:
+        if $i4 >= 2 goto label11;
+
+        r6 = new java.lang.StringBuilder;
+
+        $r5 = r6;
+
+     label09:
+        specialinvoke r6.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer8790 = "0";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer8790);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label10:
+        goto label07;
+
+     label11:
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+     label12:
+        $i2 = $i2 + 1;
+
+        goto label05;
+
+     label13:
+        $r0 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label14:
+        return $r0;
+
+     label15:
+        $r1 := @caughtexception;
+
+        r7 = (java.security.NoSuchAlgorithmException) $r1;
+
+        virtualinvoke r7.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        varReplacer8792 = "";
+
+        return varReplacer8792;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label15;
+        catch java.security.NoSuchAlgorithmException from label03 to label04 with label15;
+        catch java.security.NoSuchAlgorithmException from label06 to label07 with label15;
+        catch java.security.NoSuchAlgorithmException from label07 to label08 with label15;
+        catch java.security.NoSuchAlgorithmException from label09 to label10 with label15;
+        catch java.security.NoSuchAlgorithmException from label11 to label12 with label15;
+        catch java.security.NoSuchAlgorithmException from label13 to label14 with label15;
+    }
+}

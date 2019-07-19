@@ -1,0 +1,87 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r5
+		Type: byte[]
+		Statement: $r5 = virtualinvoke $r4.<java.security.MessageDigest: byte[] digest(byte[])>($r5)
+		Method: <com.smartexpose.updatedexpose.application.SESesame: java.lang.String getSHA1(java.lang.String)>
+		SHA-256: ebcdf35d66470aae014b0c0996d33fd302005bef232d22aa7230a5f4960d89b4
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: byte[]
+		Statement: $r6 = virtualinvoke $r5.<java.security.MessageDigest: byte[] digest()>()
+		Method: <net.hockeyapp.android.Constants: void loadCrashIdentifier(android.content.Context)>
+		SHA-256: ed889f4295e234485f0c60f24b7d9258ce6347b24c571ec21325bade4675c1ae
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: java.security.MessageDigest
+		Statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1562)
+		Method: <net.hockeyapp.android.Constants: void loadCrashIdentifier(android.content.Context)>
+		SHA-256: e4e692c850fb5b019f86eec71d1197bfd7e2bb3a5aae606c0756fb8c9bc40bf7
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: java.security.MessageDigest
+		Statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2412)
+		Method: <com.smartexpose.updatedexpose.application.SESesame: java.lang.String getSHA1(java.lang.String)>
+		SHA-256: 385894b2d4afe8014863a6d29356939701e3825440b7f287d6d5cc74b38023cb
+		Secure: false
+
+Findings in Java Class: net.hockeyapp.android.Constants
+
+	 in Method: void loadCrashIdentifier(android.content.Context)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #e4e692c850fb5b019f86eec71d1197bfd7e2bb3a5aae606c0756fb8c9bc40bf7)
+			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1562)
+
+
+Findings in Java Class: com.smartexpose.updatedexpose.application.SESesame
+
+	 in Method: java.lang.String getSHA1(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #385894b2d4afe8014863a6d29356939701e3825440b7f287d6d5cc74b38023cb)
+			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2412)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
+=====================================================================

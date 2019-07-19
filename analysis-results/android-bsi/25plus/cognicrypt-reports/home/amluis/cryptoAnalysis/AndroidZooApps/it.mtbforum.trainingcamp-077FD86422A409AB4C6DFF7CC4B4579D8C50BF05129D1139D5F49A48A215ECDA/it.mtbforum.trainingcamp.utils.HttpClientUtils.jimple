@@ -1,0 +1,418 @@
+public class it.mtbforum.trainingcamp.utils.HttpClientUtils extends java.lang.Object
+{
+
+    public void <init>()
+    {
+        it.mtbforum.trainingcamp.utils.HttpClientUtils $r0;
+
+        $r0 := @this: it.mtbforum.trainingcamp.utils.HttpClientUtils;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String SHA1(java.lang.String) throws java.security.NoSuchAlgorithmException, java.io.UnsupportedEncodingException
+    {
+        java.lang.String $r0;
+        java.security.MessageDigest $r1;
+        byte[] $r2, $r3;
+        int $i0;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("SHA-1");
+
+        $r2 = virtualinvoke $r0.<java.lang.String: byte[] getBytes(java.lang.String)>("iso-8859-1");
+
+        $r3 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        $i0 = lengthof $r3;
+
+        virtualinvoke $r1.<java.security.MessageDigest: void update(byte[],int,int)>($r2, 0, $i0);
+
+        $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>();
+
+        $r0 = staticinvoke <it.mtbforum.trainingcamp.utils.HttpClientUtils: java.lang.String convertToHex(byte[])>($r2);
+
+        return $r0;
+    }
+
+    private static java.lang.String _getResponseBody(org.apache.http.HttpEntity) throws java.io.IOException, org.apache.http.ParseException
+    {
+        org.apache.http.HttpEntity $r0;
+        java.lang.StringBuilder $r1;
+        java.io.InputStreamReader $r2;
+        char[] $r3;
+        java.lang.IllegalArgumentException $r4;
+        java.io.InputStream $r5;
+        long $l0;
+        byte $b1;
+        java.lang.String $r6, $r7;
+        int $i2;
+        java.lang.Throwable $r8;
+
+        $r0 := @parameter0: org.apache.http.HttpEntity;
+
+        if $r0 != null goto label01;
+
+        $r4 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r4.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("HTTP entity may not be null");
+
+        throw $r4;
+
+     label01:
+        $r5 = interfaceinvoke $r0.<org.apache.http.HttpEntity: java.io.InputStream getContent()>();
+
+        if $r5 != null goto label02;
+
+        return "";
+
+     label02:
+        $l0 = interfaceinvoke $r0.<org.apache.http.HttpEntity: long getContentLength()>();
+
+        $b1 = $l0 cmp 2147483647L;
+
+        if $b1 <= 0 goto label03;
+
+        $r4 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r4.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("HTTP entity too large to be buffered in memory");
+
+        throw $r4;
+
+     label03:
+        $r6 = staticinvoke <it.mtbforum.trainingcamp.utils.HttpClientUtils: java.lang.String getContentCharSet(org.apache.http.HttpEntity)>($r0);
+
+        $r7 = $r6;
+
+        if $r6 != null goto label04;
+
+        $r7 = "ISO-8859-1";
+
+     label04:
+        $r2 = new java.io.InputStreamReader;
+
+        specialinvoke $r2.<java.io.InputStreamReader: void <init>(java.io.InputStream,java.lang.String)>($r5, $r7);
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+     label05:
+        $r3 = newarray (char)[1024];
+
+     label06:
+        $i2 = virtualinvoke $r2.<java.io.Reader: int read(char[])>($r3);
+
+     label07:
+        if $i2 != -1 goto label08;
+
+        virtualinvoke $r2.<java.io.Reader: void close()>();
+
+        $r6 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r6;
+
+     label08:
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char[],int,int)>($r3, 0, $i2);
+
+     label09:
+        goto label06;
+
+     label10:
+        $r8 := @caughtexception;
+
+        virtualinvoke $r2.<java.io.Reader: void close()>();
+
+        throw $r8;
+
+        catch java.lang.Throwable from label05 to label07 with label10;
+        catch java.lang.Throwable from label08 to label09 with label10;
+    }
+
+    private static java.lang.String convertToHex(byte[])
+    {
+        byte[] $r0;
+        byte $b0, $b3;
+        java.lang.StringBuilder $r1;
+        int $i1, $i2, $i4, $i5;
+        java.lang.String $r2;
+        char $c6;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $i1 = lengthof $r0;
+
+        $i2 = 0;
+
+     label1:
+        if $i2 < $i1 goto label2;
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r2;
+
+     label2:
+        $b0 = $r0[$i2];
+
+        $b3 = $b0 >>> 4;
+
+        $b3 = $b3 & 15;
+
+        $i4 = 0;
+
+     label3:
+        if $b3 < 0 goto label5;
+
+        if $b3 > 9 goto label5;
+
+        $i5 = $b3 + 48;
+
+        $c6 = (char) $i5;
+
+     label4:
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>($c6);
+
+        $b3 = $b0 & 15;
+
+        if $i4 < 1 goto label6;
+
+        $i2 = $i2 + 1;
+
+        goto label1;
+
+     label5:
+        $i5 = $b3 + -10;
+
+        $i5 = $i5 + 97;
+
+        $c6 = (char) $i5;
+
+        goto label4;
+
+     label6:
+        $i4 = $i4 + 1;
+
+        goto label3;
+    }
+
+    private static java.lang.String getContentCharSet(org.apache.http.HttpEntity) throws org.apache.http.ParseException
+    {
+        org.apache.http.HttpEntity $r0;
+        java.lang.IllegalArgumentException $r1;
+        org.apache.http.Header $r2;
+        org.apache.http.HeaderElement[] $r3;
+        int $i0;
+        org.apache.http.HeaderElement $r4;
+        org.apache.http.NameValuePair $r5;
+        java.lang.String $r6;
+
+        $r0 := @parameter0: org.apache.http.HttpEntity;
+
+        if $r0 != null goto label1;
+
+        $r1 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r1.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("HTTP entity may not be null");
+
+        throw $r1;
+
+     label1:
+        $r2 = interfaceinvoke $r0.<org.apache.http.HttpEntity: org.apache.http.Header getContentType()>();
+
+        if $r2 == null goto label2;
+
+        $r2 = interfaceinvoke $r0.<org.apache.http.HttpEntity: org.apache.http.Header getContentType()>();
+
+        $r3 = interfaceinvoke $r2.<org.apache.http.Header: org.apache.http.HeaderElement[] getElements()>();
+
+        $i0 = lengthof $r3;
+
+        if $i0 <= 0 goto label2;
+
+        $r4 = $r3[0];
+
+        $r5 = interfaceinvoke $r4.<org.apache.http.HeaderElement: org.apache.http.NameValuePair getParameterByName(java.lang.String)>("charset");
+
+        if $r5 == null goto label2;
+
+        $r6 = interfaceinvoke $r5.<org.apache.http.NameValuePair: java.lang.String getValue()>();
+
+        return $r6;
+
+     label2:
+        return null;
+    }
+
+    public static java.lang.String getResponseBody(org.apache.http.HttpResponse)
+    {
+        org.apache.http.HttpResponse $r0;
+        java.lang.Throwable $r1, $r5, $r6;
+        org.apache.http.HttpEntity $r2, $r3;
+        java.lang.String $r4;
+        org.apache.http.ParseException r7;
+
+        $r0 := @parameter0: org.apache.http.HttpResponse;
+
+        $r2 = null;
+
+     label01:
+        $r3 = interfaceinvoke $r0.<org.apache.http.HttpResponse: org.apache.http.HttpEntity getEntity()>();
+
+     label02:
+        $r2 = $r3;
+
+     label03:
+        $r4 = staticinvoke <it.mtbforum.trainingcamp.utils.HttpClientUtils: java.lang.String _getResponseBody(org.apache.http.HttpEntity)>($r3);
+
+     label04:
+        return $r4;
+
+     label05:
+        $r5 := @caughtexception;
+
+        r7 = (org.apache.http.ParseException) $r5;
+
+        virtualinvoke r7.<org.apache.http.ParseException: void printStackTrace()>();
+
+        return null;
+
+     label06:
+        $r6 := @caughtexception;
+
+        if $r2 == null goto label10;
+
+     label07:
+        interfaceinvoke $r2.<org.apache.http.HttpEntity: void consumeContent()>();
+
+     label08:
+        return null;
+
+     label09:
+        $r1 := @caughtexception;
+
+     label10:
+        return null;
+
+        catch org.apache.http.ParseException from label01 to label02 with label05;
+        catch org.apache.http.ParseException from label03 to label04 with label05;
+        catch java.io.IOException from label01 to label02 with label06;
+        catch java.io.IOException from label03 to label04 with label06;
+        catch java.io.IOException from label07 to label08 with label09;
+    }
+
+    public static java.lang.String md5(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer3386, varReplacer3387, varReplacer3388;
+        java.lang.Throwable $r1;
+        java.lang.StringBuffer $r2, r6;
+        java.security.MessageDigest $r3;
+        byte[] $r4;
+        int $i0, $i1;
+        byte $b2;
+        short $s3;
+        java.lang.StringBuilder $r5, r7;
+        java.security.NoSuchAlgorithmException r8;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label01:
+        varReplacer3386 = "MD5";
+
+        $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3386);
+
+        $r4 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r3.<java.security.MessageDigest: void update(byte[])>($r4);
+
+        $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>();
+
+     label02:
+        r6 = new java.lang.StringBuffer;
+
+        $r2 = r6;
+
+     label03:
+        specialinvoke r6.<java.lang.StringBuffer: void <init>()>();
+
+     label04:
+        $i0 = 0;
+
+     label05:
+        $i1 = lengthof $r4;
+
+        if $i0 < $i1 goto label08;
+
+     label06:
+        $r0 = virtualinvoke $r2.<java.lang.StringBuffer: java.lang.String toString()>();
+
+     label07:
+        return $r0;
+
+     label08:
+        $b2 = $r4[$i0];
+
+        $s3 = $b2 & 255;
+
+     label09:
+        $r0 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s3);
+
+     label10:
+        $i1 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+     label11:
+        if $i1 < 2 goto label14;
+
+     label12:
+        virtualinvoke $r2.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>($r0);
+
+     label13:
+        $i0 = $i0 + 1;
+
+        goto label05;
+
+     label14:
+        r7 = new java.lang.StringBuilder;
+
+        $r5 = r7;
+
+     label15:
+        varReplacer3387 = "0";
+
+        specialinvoke r7.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer3387);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label16:
+        goto label10;
+
+     label17:
+        $r1 := @caughtexception;
+
+        r8 = (java.security.NoSuchAlgorithmException) $r1;
+
+        virtualinvoke r8.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        varReplacer3388 = "";
+
+        return varReplacer3388;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label17;
+        catch java.security.NoSuchAlgorithmException from label03 to label04 with label17;
+        catch java.security.NoSuchAlgorithmException from label06 to label07 with label17;
+        catch java.security.NoSuchAlgorithmException from label09 to label10 with label17;
+        catch java.security.NoSuchAlgorithmException from label10 to label11 with label17;
+        catch java.security.NoSuchAlgorithmException from label12 to label13 with label17;
+        catch java.security.NoSuchAlgorithmException from label15 to label16 with label17;
+    }
+}

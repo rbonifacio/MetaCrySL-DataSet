@@ -1,0 +1,134 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r5
+		Type: javax.crypto.spec.IvParameterSpec
+		Statement: specialinvoke $r5.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r2)
+		Method: <com.bigbro.ProcessProfiler.a.o: void <init>()>
+		SHA-256: 766bfee941db3f1d67ef45c6af05da6cf8a3269fbbece0726bec1d69883ed361
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.crypto.Cipher
+		Statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>($r1)
+		Method: <com.bigbro.ProcessProfiler.a.o: void <init>()>
+		SHA-256: 82ba5805d09a96de0bf8c10b392f65b02edb9111bb5a2f99e4def483bd161981
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.ads.internal.util.client.a: java.lang.String a(java.lang.String)>
+		SHA-256: 9c928118487fae9d5eac892aa739474a497b63552a1867048909118d0f5dc27a
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: java.lang.String
+		Statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, $r1)
+		Method: <com.bigbro.ProcessProfiler.a.o: void <init>()>
+		SHA-256: a048bf1064eaf20d48ddee663aac539bb7e268321582cd219d01a691fee716f9
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, $r1)
+		Method: <com.bigbro.ProcessProfiler.a.o: void <init>()>
+		SHA-256: ad76c9dedac518633f88b8f1ae09bbaeab879eda0ebb65c8215d5e3faa996081
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer700)
+		Method: <com.google.android.gms.ads.internal.util.client.a: java.lang.String a(java.lang.String)>
+		SHA-256: 47087751b20d275961202bc6ac73d3ce9d4f3e5a7ceac2e3c0fd142d1a418958
+		Secure: true
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r3)
+		Method: <com.bigbro.ProcessProfiler.a.o: byte[] b(java.lang.String)>
+		SHA-256: 717713073f6f908dc23a865c41dec608080a840f74e95e86eed81f7015aade00
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r1)
+		Method: <com.bigbro.ProcessProfiler.a.o: byte[] b(java.lang.String)>
+		SHA-256: 1451372caae968a133b9553f738547858d764f479d68f448290d67df1ec66b7d
+		Secure: true
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r1.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r0)
+		Method: <com.bigbro.ProcessProfiler.a.o: byte[] a(byte[])>
+		SHA-256: ff74c00bf1958d26f5a6b51a4649ede682f33c900406e0814293a97c141fd397
+		Secure: false
+
+Findings in Java Class: com.bigbro.ProcessProfiler.a.o
+
+	 in Method: void <init>()
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #82ba5805d09a96de0bf8c10b392f65b02edb9111bb5a2f99e4def483bd161981)
+			First parameter (with value "s0mEthiGWicke@tWThisWayCOME!!S00299300$@#%^#") should be any of {ARC4, AES, BLOWFISH, DESede, RSA}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>($r1)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, $r1)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r5.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r2)
+
+
+	 in Method: byte[] a(byte[])
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r1.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer3084, $r2, $r3)
+
+		TypestateError violating CrySL rule for javax.crypto.Cipher (on Object #82ba5805d09a96de0bf8c10b392f65b02edb9111bb5a2f99e4def483bd161981)
+			Unexpected call to method init on object of type javax.crypto.Cipher.
+			at statement: virtualinvoke $r1.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer3084, $r2, $r3)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 9
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 1
+	TypestateError: 1
+	RequiredPredicateError: 3
+=====================================================================

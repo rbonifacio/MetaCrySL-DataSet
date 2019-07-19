@@ -1,0 +1,157 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r3)
+		Method: <com.facebook.ads.internal.util.r: java.lang.String b(java.lang.String)>
+		SHA-256: cc1dff182b963aee621690cd7528ea75a0a0bd805ec732248ec3710139373452
+		Secure: false
+	Object:
+		Variable: r10
+		Type: java.security.SecureRandom
+		Statement: specialinvoke r10.<java.security.SecureRandom: void <init>()>()
+		Method: <com.facebook.ads.internal.util.g: void b()>
+		SHA-256: c49baf8b2831a2be9aa3b8b2b456003f3087b1f5f20fd8411803ca8aa53c7285
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2568)
+		Method: <com.facebook.ads.internal.util.r: java.lang.String b(java.lang.String)>
+		SHA-256: e8e9654296afa8916e8ad6244c9da101dd182878a9c8547ad58fd6323c529aef
+		Secure: false
+	Object:
+		Variable: $r8
+		Type: byte[]
+		Statement: $r8 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest(byte[])>($r8)
+		Method: <com.dywx.larkplayer.gui.helpers.AudioUtil: java.lang.String getCoverFromVlc(android.content.Context,com.dywx.larkplayer.media.MediaWrapper)>
+		SHA-256: e9c3c7554dab6b1d8eaa62163e09a75f1c2afdcad067aa0de1a6c65cbe4ddef9
+		Secure: false
+	Object:
+		Variable: $r21
+		Type: byte[]
+		Statement: $r21 = virtualinvoke $r11.<java.security.MessageDigest: byte[] digest(byte[])>($r21)
+		Method: <com.google.android.gms.measurement.internal.zzn: void zzwv()>
+		SHA-256: c7d8d4ae6d649a15b69d6bac5c39f3c704fdb0d699178018396eff3d9e7c52a2
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: java.security.MessageDigest
+		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer627)
+		Method: <com.dywx.larkplayer.gui.helpers.AudioUtil: java.lang.String getCoverFromVlc(android.content.Context,com.dywx.larkplayer.media.MediaWrapper)>
+		SHA-256: 373a7a6975b04982ee09eb608081ab64466d91075556d7cac68581264de1d481
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer2032)
+		Method: <com.facebook.ads.internal.util.g: void b()>
+		SHA-256: 81cff80cb51e7166274c63524dcab00047747df988afd97a706d1df58d8986e5
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r0)
+		Method: <com.google.android.gms.measurement.internal.zzal: java.security.MessageDigest zzfb(java.lang.String)>
+		SHA-256: 449e096fe68adec1a79bd8692096597fb4a6d721b28f6c78c8c705640ab9bcd0
+		Secure: false
+
+Findings in Java Class: com.dywx.larkplayer.gui.helpers.AudioUtil
+
+	 in Method: java.lang.String getCoverFromVlc(android.content.Context,com.dywx.larkplayer.media.MediaWrapper)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #373a7a6975b04982ee09eb608081ab64466d91075556d7cac68581264de1d481)
+			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer627)
+
+
+Findings in Java Class: com.facebook.ads.internal.util.g
+
+	 in Method: void b()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2035, r12, $r3)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2035, r12, $r3)
+
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #81cff80cb51e7166274c63524dcab00047747df988afd97a706d1df58d8986e5)
+			First parameter (with value "SSL") should be any of {TLS}
+			at statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer2032)
+
+
+Findings in Java Class: com.facebook.ads.internal.util.r
+
+	 in Method: java.lang.String b(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #e8e9654296afa8916e8ad6244c9da101dd182878a9c8547ad58fd6323c529aef)
+			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2568)
+
+
+Findings in Java Class: com.google.android.gms.measurement.internal.zzal
+
+	 in Method: java.security.MessageDigest zzfb(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #449e096fe68adec1a79bd8692096597fb4a6d721b28f6c78c8c705640ab9bcd0)
+			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r0)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #449e096fe68adec1a79bd8692096597fb4a6d721b28f6c78c8c705640ab9bcd0)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r0)
+
+
+Findings in Java Class: com.google.android.gms.measurement.internal.zzn
+
+	 in Method: void zzwv()
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #449e096fe68adec1a79bd8692096597fb4a6d721b28f6c78c8c705640ab9bcd0)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to update, java.security.MessageDigest: byte[] digest(byte[])
+			at statement: $r21 = virtualinvoke $r11.<java.security.MessageDigest: byte[] digest(byte[])>($r21)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #449e096fe68adec1a79bd8692096597fb4a6d721b28f6c78c8c705640ab9bcd0)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r11 = staticinvoke <com.google.android.gms.measurement.internal.zzal: java.security.MessageDigest zzfb(java.lang.String)>(varReplacer4040)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 8
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 2
+	ConstraintError: 4
+	IncompleteOperationError: 3
+=====================================================================

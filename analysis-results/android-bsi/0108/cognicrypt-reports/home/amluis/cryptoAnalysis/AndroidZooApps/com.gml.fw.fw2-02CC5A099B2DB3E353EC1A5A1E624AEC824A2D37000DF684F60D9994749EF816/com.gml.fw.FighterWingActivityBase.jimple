@@ -1,0 +1,392 @@
+public abstract class com.gml.fw.FighterWingActivityBase extends android.app.Activity
+{
+
+    public void <init>()
+    {
+        com.gml.fw.FighterWingActivityBase $r0;
+
+        nop;
+
+        $r0 := @this: com.gml.fw.FighterWingActivityBase;
+
+        specialinvoke $r0.<android.app.Activity: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String bytesToHex(byte[])
+    {
+        byte[] $r0;
+        char[] $r1;
+        java.lang.StringBuffer $r2;
+        short $s0, $s4;
+        java.lang.String $r3;
+        int $i1, $i2;
+        byte $b3;
+        char $c5;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 = newarray (char)[16];
+
+        $r1[0] = 48;
+
+        $r1[1] = 49;
+
+        $r1[2] = 50;
+
+        $r1[3] = 51;
+
+        $r1[4] = 52;
+
+        $r1[5] = 53;
+
+        $r1[6] = 54;
+
+        $r1[7] = 55;
+
+        $r1[8] = 56;
+
+        $r1[9] = 57;
+
+        $r1[10] = 65;
+
+        $r1[11] = 66;
+
+        $r1[12] = 67;
+
+        $r1[13] = 68;
+
+        $r1[14] = 69;
+
+        $r1[15] = 70;
+
+        $r2 = new java.lang.StringBuffer;
+
+        specialinvoke $r2.<java.lang.StringBuffer: void <init>()>();
+
+        $i1 = 0;
+
+     label1:
+        $i2 = lengthof $r0;
+
+        if $i1 < $i2 goto label2;
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        return $r3;
+
+     label2:
+        $b3 = $r0[$i1];
+
+        $s0 = $b3 & 255;
+
+        $s4 = $s0 >>> 4;
+
+        $c5 = $r1[$s4];
+
+        virtualinvoke $r2.<java.lang.StringBuffer: java.lang.StringBuffer append(char)>($c5);
+
+        $s0 = $s0 & 15;
+
+        $c5 = $r1[$s0];
+
+        virtualinvoke $r2.<java.lang.StringBuffer: java.lang.StringBuffer append(char)>($c5);
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+    }
+
+    public static java.lang.String hash(byte[]) throws java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException
+    {
+        byte[] $r0;
+        java.security.MessageDigest $r1;
+        java.lang.String $r2, varReplacer4504;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        varReplacer4504 = "SHA1";
+
+        $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4504);
+
+        virtualinvoke $r1.<java.security.MessageDigest: void update(byte[])>($r0);
+
+        $r0 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>();
+
+        $r2 = staticinvoke <com.gml.fw.FighterWingActivityBase: java.lang.String bytesToHex(byte[])>($r0);
+
+        return $r2;
+    }
+
+    public static java.lang.String sig(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.content.pm.Signature $r1;
+        android.content.pm.PackageManager $r2;
+        java.lang.String $r3, varReplacer4443;
+        android.content.pm.PackageInfo $r4;
+        android.content.pm.Signature[] $r5;
+        int $i0, $i1, varReplacer4444;
+        byte[] $r6;
+        java.lang.Throwable $r7, $r8, $r9;
+        java.security.NoSuchAlgorithmException r10;
+        android.content.pm.PackageManager$NameNotFoundException r11;
+        java.security.NoSuchProviderException r12;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+     label01:
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r3 = virtualinvoke $r0.<android.content.Context: java.lang.String getPackageName()>();
+
+        varReplacer4444 = 64;
+
+        $r4 = virtualinvoke $r2.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>($r3, varReplacer4444);
+
+     label02:
+        $r5 = $r4.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        $i0 = lengthof $r5;
+
+        $i1 = 0;
+
+     label03:
+        if $i1 < $i0 goto label05;
+
+     label04:
+        varReplacer4443 = "";
+
+        return varReplacer4443;
+
+     label05:
+        $r1 = $r5[$i1];
+
+     label06:
+        $r6 = virtualinvoke $r1.<android.content.pm.Signature: byte[] toByteArray()>();
+
+        $r3 = staticinvoke <com.gml.fw.FighterWingActivityBase: java.lang.String hash(byte[])>($r6);
+
+     label07:
+        return $r3;
+
+     label08:
+        $r7 := @caughtexception;
+
+        r10 = (java.security.NoSuchAlgorithmException) $r7;
+
+     label09:
+        virtualinvoke r10.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+     label10:
+        $i1 = $i1 + 1;
+
+        goto label03;
+
+     label11:
+        $r8 := @caughtexception;
+
+        r11 = (android.content.pm.PackageManager$NameNotFoundException) $r8;
+
+        virtualinvoke r11.<android.content.pm.PackageManager$NameNotFoundException: void printStackTrace()>();
+
+        goto label04;
+
+     label12:
+        $r9 := @caughtexception;
+
+        r12 = (java.security.NoSuchProviderException) $r9;
+
+        virtualinvoke r12.<java.security.NoSuchProviderException: void printStackTrace()>();
+
+        goto label04;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label01 to label02 with label11;
+        catch java.security.NoSuchProviderException from label01 to label02 with label12;
+        catch java.security.NoSuchAlgorithmException from label06 to label07 with label08;
+        catch android.content.pm.PackageManager$NameNotFoundException from label06 to label07 with label11;
+        catch java.security.NoSuchProviderException from label06 to label07 with label12;
+        catch android.content.pm.PackageManager$NameNotFoundException from label09 to label10 with label11;
+        catch java.security.NoSuchProviderException from label09 to label10 with label12;
+    }
+
+    public static java.lang.String sig(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1;
+        java.lang.StringBuilder $r2, r6;
+        byte[] $r3;
+        java.lang.Throwable $r4, $r5;
+        java.security.NoSuchAlgorithmException r7;
+        java.security.NoSuchProviderException r8;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        r6 = new java.lang.StringBuilder;
+
+        $r2 = r6;
+
+     label1:
+        $r0 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r0);
+
+        specialinvoke r6.<java.lang.StringBuilder: void <init>(java.lang.String)>($r0);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r0 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r3 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        $r0 = staticinvoke <com.gml.fw.FighterWingActivityBase: java.lang.String hash(byte[])>($r3);
+
+     label2:
+        return $r0;
+
+     label3:
+        $r4 := @caughtexception;
+
+        r7 = (java.security.NoSuchAlgorithmException) $r4;
+
+        virtualinvoke r7.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+     label4:
+        return "";
+
+     label5:
+        $r5 := @caughtexception;
+
+        r8 = (java.security.NoSuchProviderException) $r5;
+
+        virtualinvoke r8.<java.security.NoSuchProviderException: void printStackTrace()>();
+
+        goto label4;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+        catch java.security.NoSuchProviderException from label1 to label2 with label5;
+    }
+
+    public void computeOrientation()
+    {
+        com.gml.fw.FighterWingActivityBase $r0;
+
+        $r0 := @this: com.gml.fw.FighterWingActivityBase;
+
+        return;
+    }
+
+    public abstract android.os.Handler getAndroidHandler();
+
+    public org.lwjgl.util.vector.Vector3f getSensorInput()
+    {
+        com.gml.fw.FighterWingActivityBase $r0;
+
+        $r0 := @this: com.gml.fw.FighterWingActivityBase;
+
+        return null;
+    }
+
+    protected void memoryCheck()
+    {
+        com.gml.fw.FighterWingActivityBase $r0;
+        android.app.ActivityManager$MemoryInfo $r1;
+        android.content.Context $r2;
+        java.lang.Object $r3;
+        android.app.ActivityManager $r4;
+        long $l0;
+        float $f0;
+        int $i1, $i2;
+        android.app.AlertDialog$Builder $r5;
+        android.app.AlertDialog $r6;
+        java.lang.StringBuilder $r7;
+        java.lang.String $r8;
+        com.gml.fw.FighterWingActivityBase$1 $r9;
+        com.gml.fw.FighterWingActivityBase$2 $r10;
+
+        $r0 := @this: com.gml.fw.FighterWingActivityBase;
+
+        $r2 = staticinvoke <com.gml.fw.game.Shared: android.content.Context getContext()>();
+
+        $r3 = virtualinvoke $r2.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("activity");
+
+        $r4 = (android.app.ActivityManager) $r3;
+
+        $r1 = new android.app.ActivityManager$MemoryInfo;
+
+        specialinvoke $r1.<android.app.ActivityManager$MemoryInfo: void <init>()>();
+
+        virtualinvoke $r4.<android.app.ActivityManager: void getMemoryInfo(android.app.ActivityManager$MemoryInfo)>($r1);
+
+        $l0 = $r1.<android.app.ActivityManager$MemoryInfo: long availMem>;
+
+        $f0 = (float) $l0;
+
+        $f0 = $f0 / 1024.0F;
+
+        $f0 = $f0 / 1024.0F;
+
+        $i1 = (int) $f0;
+
+        <com.gml.fw.game.Shared: int startFreeMemory> = $i1;
+
+        $i1 = <com.gml.fw.game.Shared: int startFreeMemory>;
+
+        $i2 = <com.gml.fw.game.Shared: int minStartMemory>;
+
+        if $i1 >= $i2 goto label1;
+
+        $r5 = new android.app.AlertDialog$Builder;
+
+        specialinvoke $r5.<android.app.AlertDialog$Builder: void <init>(android.content.Context)>($r0);
+
+        $r6 = virtualinvoke $r5.<android.app.AlertDialog$Builder: android.app.AlertDialog create()>();
+
+        virtualinvoke $r6.<android.app.AlertDialog: void setTitle(java.lang.CharSequence)>("Low Memory Warning");
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>("You only got ");
+
+        $i1 = <com.gml.fw.game.Shared: int startFreeMemory>;
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" M available.\nFighterWing may not run.\nTry freeing up some memory.");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r6.<android.app.AlertDialog: void setMessage(java.lang.CharSequence)>($r8);
+
+        $r9 = new com.gml.fw.FighterWingActivityBase$1;
+
+        specialinvoke $r9.<com.gml.fw.FighterWingActivityBase$1: void <init>(com.gml.fw.FighterWingActivityBase)>($r0);
+
+        virtualinvoke $r6.<android.app.AlertDialog: void setButton(java.lang.CharSequence,android.content.DialogInterface$OnClickListener)>("Quit", $r9);
+
+        $r10 = new com.gml.fw.FighterWingActivityBase$2;
+
+        specialinvoke $r10.<com.gml.fw.FighterWingActivityBase$2: void <init>(com.gml.fw.FighterWingActivityBase)>($r0);
+
+        virtualinvoke $r6.<android.app.AlertDialog: void setButton2(java.lang.CharSequence,android.content.DialogInterface$OnClickListener)>("Run anyway", $r10);
+
+        virtualinvoke $r6.<android.app.AlertDialog: void show()>();
+
+     label1:
+        return;
+    }
+
+    public abstract void showAdd();
+
+    public abstract void startPurchaseFlow(java.lang.String);
+
+    public abstract void updateIap(com.gml.fw.net.kryo.Network$IapUpdateRequest);
+
+    public abstract void updateInventory(java.lang.String);
+}

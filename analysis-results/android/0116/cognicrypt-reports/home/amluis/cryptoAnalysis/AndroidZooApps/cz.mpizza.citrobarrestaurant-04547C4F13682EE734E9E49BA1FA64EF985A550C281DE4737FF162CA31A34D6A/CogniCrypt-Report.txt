@@ -34,52 +34,60 @@ Ruleset:
 
 Analyzed Objects: 
 	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1296)
+		Method: <com.a.a.k: java.lang.String a(java.lang.String)>
+		SHA-256: 6d188ea4797f237e1c755c135558f4c93dd810d5540ed9d2aef97dda711039d5
+		Secure: true
+	Object:
+		Variable: $r6
+		Type: java.security.MessageDigest
+		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer770)
+		Method: <com.mixpanel.android.b.d: void <init>(android.content.Context,java.lang.String,com.mixpanel.android.b.g)>
+		SHA-256: ba4c0a407b9319e1ca207c87ab85a256a0fe9545a2ca0111fc091ec2a640474c
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: javax.net.ssl.SSLContext
+		Statement: $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer733)
+		Method: <com.mixpanel.android.mpmetrics.ag: void <init>(android.os.Bundle,android.content.Context)>
+		SHA-256: 5449f29d99b26bd16d4ecd7df814f74799d587a85022fb505f002c28e5dec4f6
+		Secure: false
+	Object:
 		Variable: $r2
 		Type: byte[]
 		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
 		Method: <com.a.a.k: java.lang.String a(java.lang.String)>
 		SHA-256: 26b60c203e0c31b594531c741f91c940f8bf5eeee04ee78b35df0f34f6e3992
 		Secure: true
-	Object:
-		Variable: $r1
-		Type: java.security.MessageDigest
-		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1087)
-		Method: <com.a.a.k: java.lang.String a(java.lang.String)>
-		SHA-256: 55dfa52ae4f75bc54fcffade27fb24b971ce4e8dee6c6e9dd70a1712445db752
-		Secure: true
-	Object:
-		Variable: $r4
-		Type: javax.net.ssl.SSLContext
-		Statement: $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer532)
-		Method: <com.mixpanel.android.mpmetrics.ag: void <init>(android.os.Bundle,android.content.Context)>
-		SHA-256: f81f047623af365dab555b2943d57190291ac0efb37f733447b4b144f6420779
-		Secure: false
-	Object:
-		Variable: $r6
-		Type: java.security.MessageDigest
-		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer601)
-		Method: <com.mixpanel.android.b.d: void <init>(android.content.Context,java.lang.String,com.mixpanel.android.b.g)>
-		SHA-256: 37e056cc69d7bd84eb040201c5daf16dd78346a8cc60fd4f3ef8e5b25dab263f
-		Secure: false
 
 Findings in Java Class: com.mixpanel.android.b.d
 
 	 in Method: void <init>(android.content.Context,java.lang.String,com.mixpanel.android.b.g)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #37e056cc69d7bd84eb040201c5daf16dd78346a8cc60fd4f3ef8e5b25dab263f)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #ba4c0a407b9319e1ca207c87ab85a256a0fe9545a2ca0111fc091ec2a640474c)
 			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer601)
+			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer770)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #ba4c0a407b9319e1ca207c87ab85a256a0fe9545a2ca0111fc091ec2a640474c)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r6 = null
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #ba4c0a407b9319e1ca207c87ab85a256a0fe9545a2ca0111fc091ec2a640474c)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer770)
 
 
 Findings in Java Class: com.mixpanel.android.mpmetrics.ag
 
 	 in Method: void <init>(android.os.Bundle,android.content.Context)
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer507, varReplacer507, varReplacer507)
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer699, varReplacer699, varReplacer699)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
-			at statement: virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer507, varReplacer507, varReplacer507)
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer699, varReplacer699, varReplacer699)
 
 
 ======================= CogniCrypt Summary ==========================
@@ -87,6 +95,7 @@ Findings in Java Class: com.mixpanel.android.mpmetrics.ag
 	Number of Objects Analyzed: 4
 
 	CogniCrypt found the following violations. For details see description above.
-	ConstraintError: 1
+	IncompleteOperationError: 2
 	RequiredPredicateError: 2
+	ConstraintError: 1
 =====================================================================

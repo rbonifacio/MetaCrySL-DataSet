@@ -1,0 +1,136 @@
+class com.parse.ParseDigestUtils extends java.lang.Object
+{
+    private static final char[] hexArray;
+
+    static void <clinit>()
+    {
+        char[] $r0;
+        java.lang.String $r1;
+
+        nop;
+
+        $r1 = "0123456789abcdef";
+
+        $r0 = virtualinvoke $r1.<java.lang.String: char[] toCharArray()>();
+
+        <com.parse.ParseDigestUtils: char[] hexArray> = $r0;
+
+        return;
+    }
+
+    private void <init>()
+    {
+        com.parse.ParseDigestUtils $r0;
+
+        $r0 := @this: com.parse.ParseDigestUtils;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String md5(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer3129;
+        java.lang.Throwable $r1;
+        java.security.MessageDigest $r2;
+        byte[] $r3;
+        java.lang.RuntimeException $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer3129 = "MD5";
+
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3129);
+
+     label2:
+        $r3 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte[])>($r3);
+
+        $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>();
+
+        $r0 = staticinvoke <com.parse.ParseDigestUtils: java.lang.String toHex(byte[])>($r3);
+
+        return $r0;
+
+     label3:
+        $r1 := @caughtexception;
+
+        $r4 = new java.lang.RuntimeException;
+
+        specialinvoke $r4.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r1);
+
+        throw $r4;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+    }
+
+    private static java.lang.String toHex(byte[])
+    {
+        byte[] $r0;
+        char[] $r1, $r2;
+        short $s0, $s4;
+        int $i1, $i2;
+        byte $b3;
+        char $c5;
+        java.lang.String $r3;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $i1 = lengthof $r0;
+
+        $i1 = $i1 * 2;
+
+        $r1 = newarray (char)[$i1];
+
+        $i1 = 0;
+
+     label1:
+        $i2 = lengthof $r0;
+
+        if $i1 >= $i2 goto label2;
+
+        $b3 = $r0[$i1];
+
+        $s0 = $b3 & 255;
+
+        $i2 = $i1 * 2;
+
+        $r2 = <com.parse.ParseDigestUtils: char[] hexArray>;
+
+        $s4 = $s0 >>> 4;
+
+        $c5 = $r2[$s4];
+
+        $r1[$i2] = $c5;
+
+        $i2 = $i1 * 2;
+
+        $i2 = $i2 + 1;
+
+        $r2 = <com.parse.ParseDigestUtils: char[] hexArray>;
+
+        $s0 = $s0 & 15;
+
+        $c5 = $r2[$s0];
+
+        $r1[$i2] = $c5;
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r3 = new java.lang.String;
+
+        specialinvoke $r3.<java.lang.String: void <init>(char[])>($r1);
+
+        return $r3;
+    }
+}

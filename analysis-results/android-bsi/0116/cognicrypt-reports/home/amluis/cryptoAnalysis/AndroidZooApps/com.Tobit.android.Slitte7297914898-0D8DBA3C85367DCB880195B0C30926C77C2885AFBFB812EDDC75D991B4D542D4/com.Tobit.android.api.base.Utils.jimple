@@ -1,0 +1,193 @@
+public class com.Tobit.android.api.base.Utils extends java.lang.Object
+{
+
+    public void <init>()
+    {
+        com.Tobit.android.api.base.Utils $r0;
+
+        $r0 := @this: com.Tobit.android.api.base.Utils;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String getApplicationSignature(android.content.Context, android.content.pm.PackageManager)
+    {
+        android.content.Context $r0;
+        android.content.pm.PackageManager $r1;
+        android.content.pm.Signature[] $r2;
+        java.lang.String $r3;
+        android.content.pm.PackageInfo $r4;
+        int $i0;
+        java.security.MessageDigest $r5;
+        android.content.pm.Signature $r6;
+        byte[] $r7;
+        java.lang.Throwable $r8, $r9;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: android.content.pm.PackageManager;
+
+        if $r0 != null goto label1;
+
+        return null;
+
+     label1:
+        if $r1 == null goto label8;
+
+        $r3 = virtualinvoke $r0.<android.content.Context: java.lang.String getPackageName()>();
+
+     label2:
+        $r4 = virtualinvoke $r1.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>($r3, 64);
+
+     label3:
+        $r2 = $r4.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        if $r2 == null goto label8;
+
+        $i0 = lengthof $r2;
+
+        if $i0 == 0 goto label8;
+
+     label4:
+        $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("SHA-1");
+
+     label5:
+        $r2 = $r4.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        $r6 = $r2[0];
+
+        $r7 = virtualinvoke $r6.<android.content.pm.Signature: byte[] toByteArray()>();
+
+        virtualinvoke $r5.<java.security.MessageDigest: void update(byte[])>($r7);
+
+        $r7 = virtualinvoke $r5.<java.security.MessageDigest: byte[] digest()>();
+
+        $r3 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r7, 9);
+
+        return $r3;
+
+     label6:
+        $r8 := @caughtexception;
+
+        return null;
+
+     label7:
+        $r9 := @caughtexception;
+
+     label8:
+        return null;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label2 to label3 with label6;
+        catch java.security.NoSuchAlgorithmException from label4 to label5 with label7;
+    }
+
+    public static final java.lang.String md5(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer1160, varReplacer1161, varReplacer1162;
+        byte $b0;
+        java.lang.Throwable $r1;
+        java.lang.StringBuilder $r2, $r5, r6;
+        int $i1, $i2, $i4;
+        java.security.MessageDigest $r3;
+        byte[] $r4;
+        short $s3;
+        java.security.NoSuchAlgorithmException r7;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label01:
+        varReplacer1160 = "MD5";
+
+        $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1160);
+
+        $r4 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r3.<java.security.MessageDigest: void update(byte[])>($r4);
+
+        $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>();
+
+     label02:
+        $r5 = new java.lang.StringBuilder;
+
+        $r2 = $r5;
+
+     label03:
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+     label04:
+        $i1 = lengthof $r4;
+
+        $i2 = 0;
+
+     label05:
+        if $i2 >= $i1 goto label13;
+
+        $b0 = $r4[$i2];
+
+        $s3 = $b0 & 255;
+
+     label06:
+        $r0 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s3);
+
+     label07:
+        $i4 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+     label08:
+        if $i4 >= 2 goto label11;
+
+        r6 = new java.lang.StringBuilder;
+
+        $r5 = r6;
+
+     label09:
+        specialinvoke r6.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1162 = "0";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1162);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label10:
+        goto label07;
+
+     label11:
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+     label12:
+        $i2 = $i2 + 1;
+
+        goto label05;
+
+     label13:
+        $r0 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label14:
+        return $r0;
+
+     label15:
+        $r1 := @caughtexception;
+
+        r7 = (java.security.NoSuchAlgorithmException) $r1;
+
+        virtualinvoke r7.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        varReplacer1161 = "";
+
+        return varReplacer1161;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label15;
+        catch java.security.NoSuchAlgorithmException from label03 to label04 with label15;
+        catch java.security.NoSuchAlgorithmException from label06 to label07 with label15;
+        catch java.security.NoSuchAlgorithmException from label07 to label08 with label15;
+        catch java.security.NoSuchAlgorithmException from label09 to label10 with label15;
+        catch java.security.NoSuchAlgorithmException from label11 to label12 with label15;
+        catch java.security.NoSuchAlgorithmException from label13 to label14 with label15;
+    }
+}

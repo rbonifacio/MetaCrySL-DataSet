@@ -1,0 +1,108 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.easyn.SmartEYE-0BDF436D4B9CDFC1CD518F3F947CBAC6E25C50102017FEBC9ADE625E39C278D3.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer638)
+		Method: <com.easyn.P2PCam264.DeviceOnCloud.MySSLSocketFactory: void <init>(java.security.KeyStore)>
+		SHA-256: f6b591c28a7a667ffe715bd73aa6245e779fef4acda9f2d9265cbd246ed1786d
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: byte[]
+		Statement: $r5 = virtualinvoke $r4.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.dropbox.client2.android.AuthActivity: java.lang.String getConsumerSig()>
+		SHA-256: 995749d3598cb7435b3a6efb05b31635338468d5a2803f7f90e1891770592d6b
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.SecureRandom
+		Statement: specialinvoke $r1.<java.security.SecureRandom: void <init>()>()
+		Method: <com.dropbox.client2.android.AuthActivity: java.security.SecureRandom getSecureRandom()>
+		SHA-256: 2fcacb2d62fc02fb574046d2496c74590923845392b0188123ba772a1e3f5ce9
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: java.security.SecureRandom
+		Statement: specialinvoke $r1.<java.security.SecureRandom: void <init>()>()
+		Method: <com.dropbox.client2.android.AuthActivity$1: java.security.SecureRandom getSecureRandom()>
+		SHA-256: b50f08338cfa86ffc376b0e2b8a60546ca98ef449ea1fa0d26ebe66f55d0ea65
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: java.security.MessageDigest
+		Statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2498)
+		Method: <com.dropbox.client2.android.AuthActivity: java.lang.String getConsumerSig()>
+		SHA-256: 1eaa8b24159bb0270684aff90297c0f182caca26f699547ee779b9293deb485
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: virtualinvoke $r3.<java.security.SecureRandom: void nextBytes(byte[])>($r1)
+		Method: <com.dropbox.client2.android.AuthActivity: java.lang.String createStateNonce()>
+		SHA-256: eb193a471c04f5d27a79a314b121b3925e4d3d3b10cfe53c2d5da8d82d60449c
+		Secure: true
+
+Findings in Java Class: com.dropbox.client2.android.AuthActivity
+
+	 in Method: java.lang.String getConsumerSig()
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #1eaa8b24159bb0270684aff90297c0f182caca26f699547ee779b9293deb485)
+			First parameter (with value "SHA-1") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			at statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2498)
+
+
+Findings in Java Class: com.easyn.P2PCam264.DeviceOnCloud.MySSLSocketFactory
+
+	 in Method: void <init>(java.security.KeyStore)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer639, r5, varReplacer639)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer639, r5, varReplacer639)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 2
+	ConstraintError: 1
+=====================================================================

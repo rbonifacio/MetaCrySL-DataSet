@@ -1,0 +1,255 @@
+public class com.evernote.clients.EvernoteUtil extends java.lang.Object
+{
+    private static final java.lang.String EDAM_HASH_ALGORITHM;
+    public static final java.lang.String NOTE_PREFIX;
+    public static final java.lang.String NOTE_SUFFIX;
+
+    public void <init>()
+    {
+        com.evernote.clients.EvernoteUtil $r0;
+
+        $r0 := @this: com.evernote.clients.EvernoteUtil;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String bytesToHex(byte[])
+    {
+        byte[] $r0;
+        java.lang.String $r1;
+        int varReplacer7831;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        varReplacer7831 = 0;
+
+        $r1 = staticinvoke <com.evernote.clients.EvernoteUtil: java.lang.String bytesToHex(byte[],boolean)>($r0, varReplacer7831);
+
+        return $r1;
+    }
+
+    public static java.lang.String bytesToHex(byte[], boolean)
+    {
+        byte[] $r0;
+        boolean $z0;
+        byte $b0;
+        short $s1;
+        java.lang.StringBuilder $r1;
+        int $i2, $i3, varReplacer7834;
+        java.lang.String $r2;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $z0 := @parameter1: boolean;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $i2 = lengthof $r0;
+
+        $i3 = 0;
+
+     label1:
+        if $i3 < $i2 goto label2;
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r2;
+
+     label2:
+        $b0 = $r0[$i3];
+
+        $s1 = $b0 & 255;
+
+        if $s1 >= 16 goto label3;
+
+        varReplacer7834 = 48;
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(varReplacer7834);
+
+     label3:
+        $r2 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s1);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        goto label4;
+
+     label4:
+        $i3 = $i3 + 1;
+
+        goto label1;
+    }
+
+    public static java.lang.String createEnMediaTag(com.evernote.edam.type.Resource)
+    {
+        com.evernote.edam.type.Resource $r0;
+        java.lang.StringBuilder $r1;
+        com.evernote.edam.type.Data $r2;
+        byte[] $r3;
+        java.lang.String $r4, varReplacer7625, varReplacer7626, varReplacer7627;
+
+        nop;
+
+        $r0 := @parameter0: com.evernote.edam.type.Resource;
+
+        $r1 = new java.lang.StringBuilder;
+
+        varReplacer7627 = "<en-media hash=\"";
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer7627);
+
+        $r2 = virtualinvoke $r0.<com.evernote.edam.type.Resource: com.evernote.edam.type.Data getData()>();
+
+        $r3 = virtualinvoke $r2.<com.evernote.edam.type.Data: byte[] getBodyHash()>();
+
+        $r4 = staticinvoke <com.evernote.clients.EvernoteUtil: java.lang.String bytesToHex(byte[])>($r3);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        varReplacer7626 = "\" type=\"";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7626);
+
+        $r4 = virtualinvoke $r0.<com.evernote.edam.type.Resource: java.lang.String getMime()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        varReplacer7625 = "\"/>";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7625);
+
+        $r4 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r4;
+    }
+
+    public static byte[] hash(java.io.InputStream) throws java.io.IOException
+    {
+        java.io.InputStream $r0;
+        byte[] $r1;
+        java.lang.Throwable $r2;
+        java.security.MessageDigest $r3;
+        int $i0, varReplacer7629;
+        com.evernote.clients.EvernoteUtil$EvernoteUtilException $r4;
+        java.lang.String varReplacer7628, varReplacer7630;
+
+        nop;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+     label1:
+        varReplacer7630 = "MD5";
+
+        $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7630);
+
+     label2:
+        $r1 = newarray (byte)[1024];
+
+     label3:
+        $i0 = virtualinvoke $r0.<java.io.InputStream: int read(byte[])>($r1);
+
+        if $i0 != -1 goto label5;
+
+        $r1 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>();
+
+        return $r1;
+
+     label4:
+        $r2 := @caughtexception;
+
+        $r4 = new com.evernote.clients.EvernoteUtil$EvernoteUtilException;
+
+        varReplacer7628 = "MD5 not supported";
+
+        specialinvoke $r4.<com.evernote.clients.EvernoteUtil$EvernoteUtilException: void <init>(java.lang.String,java.lang.Throwable)>(varReplacer7628, $r2);
+
+        throw $r4;
+
+     label5:
+        varReplacer7629 = 0;
+
+        virtualinvoke $r3.<java.security.MessageDigest: void update(byte[],int,int)>($r1, varReplacer7629, $i0);
+
+        goto label3;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label4;
+    }
+
+    public static byte[] hash(byte[])
+    {
+        byte[] $r0;
+        java.lang.Throwable $r1;
+        java.security.MessageDigest $r2;
+        com.evernote.clients.EvernoteUtil$EvernoteUtilException $r3;
+
+        $r0 := @parameter0: byte[];
+
+     label1:
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("MD5");
+
+        $r0 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r0);
+
+     label2:
+        return $r0;
+
+     label3:
+        $r1 := @caughtexception;
+
+        $r3 = new com.evernote.clients.EvernoteUtil$EvernoteUtilException;
+
+        specialinvoke $r3.<com.evernote.clients.EvernoteUtil$EvernoteUtilException: void <init>(java.lang.String,java.lang.Throwable)>("MD5 not supported", $r1);
+
+        throw $r3;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+    }
+
+    public static byte[] hexToBytes(java.lang.String)
+    {
+        java.lang.String $r0, $r2;
+        int $i0, $i1, $i2;
+        byte[] $r1;
+        byte $b3;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i1 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        $i1 = $i1 / 2;
+
+        $r1 = newarray (byte)[$i1];
+
+        $i1 = 0;
+
+     label1:
+        $i0 = lengthof $r1;
+
+        if $i1 < $i0 goto label2;
+
+        return $r1;
+
+     label2:
+        $i0 = $i1 * 2;
+
+        $i2 = $i0 + 2;
+
+        $r2 = virtualinvoke $r0.<java.lang.String: java.lang.String substring(int,int)>($i0, $i2);
+
+        $i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String,int)>($r2, 16);
+
+        $b3 = (byte) $i0;
+
+        $r1[$i1] = $b3;
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+    }
+}
