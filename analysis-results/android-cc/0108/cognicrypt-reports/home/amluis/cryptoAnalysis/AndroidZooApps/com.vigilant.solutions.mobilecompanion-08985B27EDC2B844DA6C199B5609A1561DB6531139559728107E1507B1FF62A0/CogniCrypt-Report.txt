@@ -1,0 +1,303 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r7
+		Type: java.security.KeyStore
+		Statement: $r7 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r6)
+		Method: <com.vigilant.solutions.thread.DfcThreadDownloadAddress: org.apache.http.client.HttpClient getNewHttpClient()>
+		SHA-256: 887ce7499b0c7c866a9d1d3af653dcd67d96f147ab13ce6eeac384a31eddc783
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: java.security.KeyStore
+		Statement: $r4 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r3)
+		Method: <com.vigilant.solutions.communicate.VAPIRequest: void generateOnce()>
+		SHA-256: c0540d166847209607e5248e26c0d06564d24e2d27ac6864404c2fce2024de4a
+		Secure: true
+	Object:
+		Variable: $r6
+		Type: javax.net.ssl.SSLContext
+		Statement: $r6 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer5184)
+		Method: <com.vigilant.solutions.socket.DfcSocket: boolean connect(java.lang.String,int,int)>
+		SHA-256: 210b7c223c7cbf901cfda92091963382c25fe7be2e4b996be47166069af2ea1d
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: java.security.KeyStore
+		Statement: $r4 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r3)
+		Method: <com.vigilant.solutions.thread.ThreadDownload: void generate()>
+		SHA-256: e152d6e358cf1d2a4e42f5cb3c9a998cc9990520e712d9bf191db5b026cb907b
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer3461)
+		Method: <com.vigilant.solutions.communicate.VAPIRequest$MySSLSocketFactory: void <init>(java.security.KeyStore)>
+		SHA-256: 8a566692a46e71d1fb5e50d18914bbae6dda31ad3f465396e481bb31519d7353
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.net.ssl.SSLContext
+		Statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1921)
+		Method: <com.vigilant.solutions.thread.DfcThreadDownloadAddress$MySSLSocketFactory: void <init>(com.vigilant.solutions.thread.DfcThreadDownloadAddress,java.security.KeyStore)>
+		SHA-256: 56c03a8404bb8b102e806d3879bd08a47e3ca48ef9eb386bf1f18d12b9d8abaa
+		Secure: false
+	Object:
+		Variable: r15
+		Type: java.security.SecureRandom
+		Statement: specialinvoke r15.<java.security.SecureRandom: void <init>()>()
+		Method: <com.vigilant.solutions.socket.DfcSocket: boolean connect(java.lang.String,int,int)>
+		SHA-256: 332e0a4e62243fed32a4403e41ad25c35ccc2f6211b05fffe2feb53ee090849c
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer4976)
+		Method: <com.vigilant.solutions.thread.ThreadDownload$MySSLSocketFactory: void <init>(java.security.KeyStore)>
+		SHA-256: 92b9291a30e9ee573ac805c95b28570844c13e8240e91cf883350cf42848b70d
+		Secure: false
+
+Findings in Java Class: com.vigilant.solutions.thread.DfcThreadDownloadAddress$MySSLSocketFactory
+
+	 in Method: void <init>(com.vigilant.solutions.thread.DfcThreadDownloadAddress,java.security.KeyStore)
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #56c03a8404bb8b102e806d3879bd08a47e3ca48ef9eb386bf1f18d12b9d8abaa)
+			First parameter (with value "TLS") should be any of {Insecure}
+			at statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1921)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1919, r6, varReplacer1919)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1919, r6, varReplacer1919)
+
+
+Findings in Java Class: com.vigilant.solutions.communicate.VAPIRequest$MySSLSocketFactory
+
+	 in Method: void <init>(java.security.KeyStore)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer3462, r5, varReplacer3462)
+
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #8a566692a46e71d1fb5e50d18914bbae6dda31ad3f465396e481bb31519d7353)
+			First parameter (with value "TLS") should be any of {Insecure}
+			at statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer3461)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer3462, r5, varReplacer3462)
+
+
+Findings in Java Class: com.vigilant.solutions.facesearch.ActivityMatchingFaceResult
+
+	 in Method: void processGetMetaDataRequest()
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #8a566692a46e71d1fb5e50d18914bbae6dda31ad3f465396e481bb31519d7353)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to getInstance
+			at statement: virtualinvoke $r8.<com.vigilant.solutions.communicate.VAPIRequest: android.os.AsyncTask execute(java.lang.Object[])>($r9)
+
+
+	 in Method: android.view.View addHistoryLine(com.vigilant.solutions.data.ResultGetHistory$HistoryInfo,int)
+		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #e152d6e358cf1d2a4e42f5cb3c9a998cc9990520e712d9bf191db5b026cb907b)
+			Operation on object of type java.security.KeyStore object not completed. Expected call to load, getInstance
+			at statement: virtualinvoke $r3.<com.vigilant.solutions.thread.ThreadDownloadImage: void Start()>()
+
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #92b9291a30e9ee573ac805c95b28570844c13e8240e91cf883350cf42848b70d)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to getInstance
+			at statement: virtualinvoke $r3.<com.vigilant.solutions.thread.ThreadDownloadImage: void Start()>()
+
+		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #e152d6e358cf1d2a4e42f5cb3c9a998cc9990520e712d9bf191db5b026cb907b)
+			Operation on object of type java.security.KeyStore object not completed. Expected call to load, getInstance
+			at statement: virtualinvoke $r2.<com.vigilant.solutions.thread.ThreadDownloadAddress: void Start()>()
+
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #92b9291a30e9ee573ac805c95b28570844c13e8240e91cf883350cf42848b70d)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to getInstance
+			at statement: virtualinvoke $r2.<com.vigilant.solutions.thread.ThreadDownloadAddress: void Start()>()
+
+
+Findings in Java Class: com.vigilant.solutions.facesearch.FaceSearchMobile
+
+	 in Method: void autoLoginFromOtherActivity()
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #8a566692a46e71d1fb5e50d18914bbae6dda31ad3f465396e481bb31519d7353)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to getInstance
+			at statement: virtualinvoke $r9.<com.vigilant.solutions.communicate.VAPIRequest: android.os.AsyncTask execute(java.lang.Object[])>($r10)
+
+
+Findings in Java Class: com.vigilant.solutions.mobilecompanion.ActivityLoader
+
+	 in Method: void autoLoginFaceSearch()
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #8a566692a46e71d1fb5e50d18914bbae6dda31ad3f465396e481bb31519d7353)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to getInstance
+			at statement: virtualinvoke $r10.<com.vigilant.solutions.communicate.FRAutoLogin: android.os.AsyncTask execute(java.lang.Object[])>($r11)
+
+
+Findings in Java Class: com.vigilant.solutions.facesearch.ActivityMainFR
+
+	 in Method: void getBase()
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #8a566692a46e71d1fb5e50d18914bbae6dda31ad3f465396e481bb31519d7353)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to getInstance
+			at statement: virtualinvoke $r5.<com.vigilant.solutions.communicate.VAPIRequest: android.os.AsyncTask execute(java.lang.Object[])>($r6)
+
+
+Findings in Java Class: com.vigilant.solutions.communicate.VAPIRequest
+
+	 in Method: int request(java.lang.String,java.io.OutputStream,byte[],com.vigilant.solutions.data.VBundle)
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #8a566692a46e71d1fb5e50d18914bbae6dda31ad3f465396e481bb31519d7353)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to getInstance
+			at statement: $z0 = virtualinvoke $r0.<com.vigilant.solutions.communicate.VAPIRequest: boolean isCancelled()>()
+
+
+Findings in Java Class: com.vigilant.solutions.facesearch.ActivityBrowseCaptured
+
+	 in Method: void showCaptured(android.database.Cursor)
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #8a566692a46e71d1fb5e50d18914bbae6dda31ad3f465396e481bb31519d7353)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to getInstance
+			at statement: virtualinvoke $r16.<com.vigilant.solutions.communicate.VAPIRequest: android.os.AsyncTask execute(java.lang.Object[])>($r17)
+
+
+Findings in Java Class: com.vigilant.solutions.facesearch.ActivityViewResults
+
+	 in Method: void loadNextPage()
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #8a566692a46e71d1fb5e50d18914bbae6dda31ad3f465396e481bb31519d7353)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to getInstance
+			at statement: virtualinvoke $r6.<com.vigilant.solutions.communicate.VAPIRequest: android.os.AsyncTask execute(java.lang.Object[])>($r7)
+
+
+	 in Method: void processGetMetaDataRequest()
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #8a566692a46e71d1fb5e50d18914bbae6dda31ad3f465396e481bb31519d7353)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to getInstance
+			at statement: virtualinvoke $r7.<com.vigilant.solutions.communicate.VAPIRequest: android.os.AsyncTask execute(java.lang.Object[])>($r8)
+
+
+	 in Method: android.view.View addHistoryLine(com.vigilant.solutions.data.ResultGetHistory$HistoryInfo,int)
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #92b9291a30e9ee573ac805c95b28570844c13e8240e91cf883350cf42848b70d)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to getInstance
+			at statement: virtualinvoke $r2.<com.vigilant.solutions.thread.ThreadDownloadAddress: void Start()>()
+
+		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #e152d6e358cf1d2a4e42f5cb3c9a998cc9990520e712d9bf191db5b026cb907b)
+			Operation on object of type java.security.KeyStore object not completed. Expected call to load, getInstance
+			at statement: virtualinvoke $r3.<com.vigilant.solutions.thread.ThreadDownloadImage: void Start()>()
+
+		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #e152d6e358cf1d2a4e42f5cb3c9a998cc9990520e712d9bf191db5b026cb907b)
+			Operation on object of type java.security.KeyStore object not completed. Expected call to load, getInstance
+			at statement: virtualinvoke $r2.<com.vigilant.solutions.thread.ThreadDownloadAddress: void Start()>()
+
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #92b9291a30e9ee573ac805c95b28570844c13e8240e91cf883350cf42848b70d)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to getInstance
+			at statement: virtualinvoke $r3.<com.vigilant.solutions.thread.ThreadDownloadImage: void Start()>()
+
+
+Findings in Java Class: com.vigilant.solutions.facesearch.ActivityCapturedConfirm
+
+	 in Method: void previewData()
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #8a566692a46e71d1fb5e50d18914bbae6dda31ad3f465396e481bb31519d7353)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to getInstance
+			at statement: virtualinvoke $r14.<com.vigilant.solutions.communicate.VAPIRequest: android.os.AsyncTask execute(java.lang.Object[])>($r15)
+
+
+Findings in Java Class: com.vigilant.solutions.app.VProgress
+
+	 in Method: void startCountThread()
+		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #e152d6e358cf1d2a4e42f5cb3c9a998cc9990520e712d9bf191db5b026cb907b)
+			Operation on object of type java.security.KeyStore object not completed. Expected call to load, getInstance
+			at statement: $r1 = $r0.<com.vigilant.solutions.app.VProgress: com.vigilant.solutions.app.VProgress$ThreadCountTime m_pThreadCountTime>
+
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #92b9291a30e9ee573ac805c95b28570844c13e8240e91cf883350cf42848b70d)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to getInstance
+			at statement: virtualinvoke $r1.<com.vigilant.solutions.app.VProgress$ThreadCountTime: void Start()>()
+
+		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #e152d6e358cf1d2a4e42f5cb3c9a998cc9990520e712d9bf191db5b026cb907b)
+			Operation on object of type java.security.KeyStore object not completed. Expected call to load, getInstance
+			at statement: virtualinvoke $r1.<com.vigilant.solutions.app.VProgress$ThreadCountTime: void Start()>()
+
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #92b9291a30e9ee573ac805c95b28570844c13e8240e91cf883350cf42848b70d)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to getInstance
+			at statement: $r1 = $r0.<com.vigilant.solutions.app.VProgress: com.vigilant.solutions.app.VProgress$ThreadCountTime m_pThreadCountTime>
+
+
+Findings in Java Class: com.vigilant.solutions.mobilecompanion.ViewLPScanConfirm
+
+	 in Method: java.lang.String getAddress(com.vigilant.solutions.app.VApplication,android.os.Handler)
+		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #e152d6e358cf1d2a4e42f5cb3c9a998cc9990520e712d9bf191db5b026cb907b)
+			Operation on object of type java.security.KeyStore object not completed. Expected call to load, getInstance
+			at statement: virtualinvoke $r3.<com.vigilant.solutions.thread.ThreadDownloadAddress: void Start()>()
+
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #92b9291a30e9ee573ac805c95b28570844c13e8240e91cf883350cf42848b70d)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to getInstance
+			at statement: virtualinvoke $r3.<com.vigilant.solutions.thread.ThreadDownloadAddress: void Start()>()
+
+
+Findings in Java Class: com.vigilant.solutions.thread.ThreadDownload$MySSLSocketFactory
+
+	 in Method: void <init>(java.security.KeyStore)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer4977, r5, varReplacer4977)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer4977, r5, varReplacer4977)
+
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #92b9291a30e9ee573ac805c95b28570844c13e8240e91cf883350cf42848b70d)
+			First parameter (with value "TLS") should be any of {Insecure}
+			at statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer4976)
+
+
+Findings in Java Class: com.vigilant.solutions.socket.DfcSocket
+
+	 in Method: boolean connect(java.lang.String,int,int)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r6.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer5181, r20, $r7)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r6.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer5181, r20, $r7)
+
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #210b7c223c7cbf901cfda92091963382c25fe7be2e4b996be47166069af2ea1d)
+			First parameter (with value "TLS") should be any of {Insecure}
+			at statement: $r6 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer5184)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 8
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 4
+	RequiredPredicateError: 8
+	IncompleteOperationError: 23
+=====================================================================

@@ -1,0 +1,1229 @@
+class com.adobe.mobile.RemoteDownload extends java.lang.Object
+{
+    private static final int DEFAULT_CONNECTION_TIMEOUT;
+    private static final int DEFAULT_READ_TIMEOUT;
+
+    void <init>()
+    {
+        com.adobe.mobile.RemoteDownload $r0;
+
+        $r0 := @this: com.adobe.mobile.RemoteDownload;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static java.text.SimpleDateFormat access$100()
+    {
+        java.text.SimpleDateFormat $r0;
+
+        nop;
+
+        $r0 = staticinvoke <com.adobe.mobile.RemoteDownload: java.text.SimpleDateFormat createRFC2822Formatter()>();
+
+        return $r0;
+    }
+
+    static java.lang.String access$200(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r0 = staticinvoke <com.adobe.mobile.RemoteDownload: java.lang.String getEtagOfFile(java.lang.String)>($r0);
+
+        return $r0;
+    }
+
+    static long access$300(java.lang.String)
+    {
+        java.lang.String $r0;
+        long $l0;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $l0 = staticinvoke <com.adobe.mobile.RemoteDownload: long getLastModifiedOfFile(java.lang.String)>($r0);
+
+        return $l0;
+    }
+
+    static java.io.File access$400(java.lang.String, java.util.Date, java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r2, $r3;
+        java.util.Date $r1;
+        java.io.File $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.util.Date;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: java.lang.String;
+
+        $r4 = staticinvoke <com.adobe.mobile.RemoteDownload: java.io.File getNewCachedFile(java.lang.String,java.util.Date,java.lang.String,java.lang.String)>($r0, $r1, $r2, $r3);
+
+        return $r4;
+    }
+
+    private static java.text.SimpleDateFormat createRFC2822Formatter()
+    {
+        java.text.SimpleDateFormat $r0;
+        java.util.Locale $r1;
+        java.util.TimeZone $r2;
+        java.lang.String varReplacer1559, varReplacer1560;
+
+        nop;
+
+        $r0 = new java.text.SimpleDateFormat;
+
+        $r1 = <java.util.Locale: java.util.Locale US>;
+
+        varReplacer1560 = "EEE, dd MMM yyyy HH:mm:ss Z";
+
+        specialinvoke $r0.<java.text.SimpleDateFormat: void <init>(java.lang.String,java.util.Locale)>(varReplacer1560, $r1);
+
+        varReplacer1559 = "GMT";
+
+        $r2 = staticinvoke <java.util.TimeZone: java.util.TimeZone getTimeZone(java.lang.String)>(varReplacer1559);
+
+        virtualinvoke $r0.<java.text.SimpleDateFormat: void setTimeZone(java.util.TimeZone)>($r2);
+
+        return $r0;
+    }
+
+    protected static boolean deleteCachedDataForURL(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, varReplacer1525;
+        int $i0, varReplacer1526, varReplacer1527, varReplacer1528;
+        java.lang.Object[] $r2;
+        java.io.File $r3;
+        boolean $z0;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        if $r0 == null goto label1;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i0 >= 1 goto label2;
+
+     label1:
+        $r2 = newarray (java.lang.Object)[0];
+
+        varReplacer1525 = "Cached File - tried to delete cached file, but file path was empty";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logWarningFormat(java.lang.String,java.lang.Object[])>(varReplacer1525, $r2);
+
+        varReplacer1528 = 0;
+
+        return varReplacer1528;
+
+     label2:
+        $r3 = staticinvoke <com.adobe.mobile.RemoteDownload: java.io.File getFileForCachedURL(java.lang.String,java.lang.String)>($r0, $r1);
+
+        if $r3 == null goto label3;
+
+        $z0 = virtualinvoke $r3.<java.io.File: boolean delete()>();
+
+        if $z0 != 0 goto label4;
+
+     label3:
+        varReplacer1526 = 0;
+
+        return varReplacer1526;
+
+     label4:
+        varReplacer1527 = 1;
+
+        return varReplacer1527;
+    }
+
+    protected static void deleteFilesForDirectoryNotInList(java.lang.String, java.util.List)
+    {
+        java.lang.String $r0, varReplacer9026, varReplacer9028, varReplacer9029, varReplacer9030, varReplacer9031;
+        java.util.List $r1;
+        java.io.File $r2;
+        java.util.ArrayList $r3;
+        int $i0, $i1, $i2, varReplacer9027;
+        java.io.File[] $r4;
+        java.util.Iterator $r5;
+        boolean $z0;
+        java.lang.Object $r6;
+        java.lang.Object[] $r7;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.util.List;
+
+        if $r1 == null goto label1;
+
+        $i0 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        if $i0 > 0 goto label2;
+
+     label1:
+        varReplacer9031 = "messageImages";
+
+        staticinvoke <com.adobe.mobile.RemoteDownload: void deleteFilesInDirectory(java.lang.String)>(varReplacer9031);
+
+        return;
+
+     label2:
+        varReplacer9028 = "messageImages";
+
+        $r2 = staticinvoke <com.adobe.mobile.RemoteDownload: java.io.File getDownloadCacheDirectory(java.lang.String)>(varReplacer9028);
+
+        if $r2 == null goto label8;
+
+        $r4 = virtualinvoke $r2.<java.io.File: java.io.File[] listFiles()>();
+
+        if $r4 == null goto label8;
+
+        $i0 = lengthof $r4;
+
+        if $i0 <= 0 goto label8;
+
+        $r3 = new java.util.ArrayList;
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>()>();
+
+        $r5 = interfaceinvoke $r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r0 = (java.lang.String) $r6;
+
+        $r0 = staticinvoke <com.adobe.mobile.RemoteDownload: java.lang.String md5hash(java.lang.String)>($r0);
+
+        virtualinvoke $r3.<java.util.ArrayList: boolean add(java.lang.Object)>($r0);
+
+        goto label3;
+
+     label4:
+        $i0 = lengthof $r4;
+
+        $i1 = 0;
+
+     label5:
+        if $i1 >= $i0 goto label8;
+
+        $r2 = $r4[$i1];
+
+        $r0 = virtualinvoke $r2.<java.io.File: java.lang.String getName()>();
+
+        varReplacer9030 = ".";
+
+        $i2 = virtualinvoke $r0.<java.lang.String: int indexOf(java.lang.String)>(varReplacer9030);
+
+        varReplacer9027 = 0;
+
+        $r0 = virtualinvoke $r0.<java.lang.String: java.lang.String substring(int,int)>(varReplacer9027, $i2);
+
+        $z0 = virtualinvoke $r3.<java.util.ArrayList: boolean contains(java.lang.Object)>($r0);
+
+        if $z0 != 0 goto label6;
+
+        $z0 = virtualinvoke $r2.<java.io.File: boolean delete()>();
+
+        if $z0 == 0 goto label7;
+
+        $r7 = newarray (java.lang.Object)[0];
+
+        varReplacer9026 = "Cached File - Removed unused cache file";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logDebugFormat(java.lang.String,java.lang.Object[])>(varReplacer9026, $r7);
+
+     label6:
+        $i1 = $i1 + 1;
+
+        goto label5;
+
+     label7:
+        $r7 = newarray (java.lang.Object)[0];
+
+        varReplacer9029 = "Cached File - Failed to remove unused cache file";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logWarningFormat(java.lang.String,java.lang.Object[])>(varReplacer9029, $r7);
+
+        goto label6;
+
+     label8:
+        return;
+    }
+
+    protected static void deleteFilesInDirectory(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer951, varReplacer952, varReplacer953;
+        java.io.File $r1;
+        int $i0, $i1;
+        java.io.File[] $r2;
+        boolean $z0;
+        java.lang.Object[] $r3;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        varReplacer952 = "messageImages";
+
+        $r1 = staticinvoke <com.adobe.mobile.RemoteDownload: java.io.File getDownloadCacheDirectory(java.lang.String)>(varReplacer952);
+
+        if $r1 != null goto label1;
+
+        return;
+
+     label1:
+        $r2 = virtualinvoke $r1.<java.io.File: java.io.File[] listFiles()>();
+
+        if $r2 == null goto label5;
+
+        $i0 = lengthof $r2;
+
+        if $i0 <= 0 goto label5;
+
+        $i0 = lengthof $r2;
+
+        $i1 = 0;
+
+     label2:
+        if $i1 >= $i0 goto label5;
+
+        $r1 = $r2[$i1];
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean delete()>();
+
+        if $z0 == 0 goto label4;
+
+        $r3 = newarray (java.lang.Object)[0];
+
+        varReplacer951 = "Cached File - Removed unused cache file";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logDebugFormat(java.lang.String,java.lang.Object[])>(varReplacer951, $r3);
+
+     label3:
+        $i1 = $i1 + 1;
+
+        goto label2;
+
+     label4:
+        $r3 = newarray (java.lang.Object)[0];
+
+        varReplacer953 = "Cached File - Failed to remove unused cache file";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logWarningFormat(java.lang.String,java.lang.Object[])>(varReplacer953, $r3);
+
+        goto label3;
+
+     label5:
+        return;
+    }
+
+    protected static java.io.File getDownloadCacheDirectory(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer889;
+        java.io.File $r1, $r2;
+        boolean $z0;
+        java.lang.Object[] $r3;
+        null_type varReplacer890;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = new java.io.File;
+
+        $r2 = staticinvoke <com.adobe.mobile.StaticMethods: java.io.File getCacheDirectory()>();
+
+        specialinvoke $r1.<java.io.File: void <init>(java.io.File,java.lang.String)>($r2, $r0);
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label1;
+
+        $z0 = virtualinvoke $r1.<java.io.File: boolean mkdir()>();
+
+        if $z0 != 0 goto label1;
+
+        $r3 = newarray (java.lang.Object)[0];
+
+        varReplacer889 = "Cached File - unable to open/make download cache directory";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logWarningFormat(java.lang.String,java.lang.Object[])>(varReplacer889, $r3);
+
+        varReplacer890 = null;
+
+        return varReplacer890;
+
+     label1:
+        return $r1;
+    }
+
+    private static java.lang.String getEtagOfFile(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer1555, varReplacer1556;
+        int $i0;
+        java.lang.Object[] $r1;
+        java.lang.String[] $r2;
+        null_type varReplacer1557, varReplacer1558;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        if $r0 == null goto label1;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i0 >= 1 goto label2;
+
+     label1:
+        $r1 = newarray (java.lang.Object)[0];
+
+        varReplacer1556 = "Cached File - Path was null or empty for Cache File";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logWarningFormat(java.lang.String,java.lang.Object[])>(varReplacer1556, $r1);
+
+        varReplacer1558 = null;
+
+        return varReplacer1558;
+
+     label2:
+        $r0 = staticinvoke <com.adobe.mobile.RemoteDownload: java.lang.String getPathExtension(java.lang.String)>($r0);
+
+        $r2 = staticinvoke <com.adobe.mobile.RemoteDownload: java.lang.String[] splitPathExtension(java.lang.String)>($r0);
+
+        if $r2 == null goto label3;
+
+        $i0 = lengthof $r2;
+
+        if $i0 >= 2 goto label4;
+
+     label3:
+        $r1 = newarray (java.lang.Object)[0];
+
+        varReplacer1555 = "Cached File - No etag for file. Extension had no second value after split.";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logWarningFormat(java.lang.String,java.lang.Object[])>(varReplacer1555, $r1);
+
+        varReplacer1557 = null;
+
+        return varReplacer1557;
+
+     label4:
+        $r0 = $r2[1];
+
+        return $r0;
+    }
+
+    protected static java.io.File getFileForCachedURL(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer873;
+        java.io.File $r1;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        varReplacer873 = "adbdownloadcache";
+
+        $r1 = staticinvoke <com.adobe.mobile.RemoteDownload: java.io.File getFileForCachedURL(java.lang.String,java.lang.String)>($r0, varReplacer873);
+
+        return $r1;
+    }
+
+    protected static java.io.File getFileForCachedURL(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, $r5, $r6, varReplacer874, varReplacer880;
+        int $i0, $i1, $i2, varReplacer876, varReplacer877;
+        java.io.File $r2, $r7;
+        java.lang.String[] $r3;
+        java.lang.Object[] $r4;
+        boolean $z0;
+        null_type varReplacer875, varReplacer878, varReplacer879;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        if $r0 == null goto label7;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i0 >= 1 goto label1;
+
+        varReplacer875 = null;
+
+        return varReplacer875;
+
+     label1:
+        $r2 = staticinvoke <com.adobe.mobile.RemoteDownload: java.io.File getDownloadCacheDirectory(java.lang.String)>($r1);
+
+        if $r2 == null goto label7;
+
+        $r3 = virtualinvoke $r2.<java.io.File: java.lang.String[] list()>();
+
+        if $r3 == null goto label2;
+
+        $i0 = lengthof $r3;
+
+        if $i0 >= 1 goto label3;
+
+     label2:
+        $r4 = newarray (java.lang.Object)[1];
+
+        $r0 = virtualinvoke $r2.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $r4[0] = $r0;
+
+        varReplacer880 = "Cached Files - Directory is empty (%s).";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logDebugFormat(java.lang.String,java.lang.Object[])>(varReplacer880, $r4);
+
+        varReplacer878 = null;
+
+        return varReplacer878;
+
+     label3:
+        $r5 = staticinvoke <com.adobe.mobile.RemoteDownload: java.lang.String md5hash(java.lang.String)>($r0);
+
+        $i0 = lengthof $r3;
+
+        $i1 = 0;
+
+     label4:
+        if $i1 >= $i0 goto label6;
+
+        $r1 = $r3[$i1];
+
+        varReplacer877 = 46;
+
+        $i2 = virtualinvoke $r1.<java.lang.String: int lastIndexOf(int)>(varReplacer877);
+
+        varReplacer876 = 0;
+
+        $r6 = virtualinvoke $r1.<java.lang.String: java.lang.String substring(int,int)>(varReplacer876, $i2);
+
+        $z0 = virtualinvoke $r6.<java.lang.String: boolean equals(java.lang.Object)>($r5);
+
+        if $z0 == 0 goto label5;
+
+        $r7 = new java.io.File;
+
+        specialinvoke $r7.<java.io.File: void <init>(java.io.File,java.lang.String)>($r2, $r1);
+
+        return $r7;
+
+     label5:
+        $i1 = $i1 + 1;
+
+        goto label4;
+
+     label6:
+        $r4 = newarray (java.lang.Object)[1];
+
+        $r4[0] = $r0;
+
+        varReplacer874 = "Cached Files - This file has not previously been cached (%s).";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logDebugFormat(java.lang.String,java.lang.Object[])>(varReplacer874, $r4);
+
+     label7:
+        varReplacer879 = null;
+
+        return varReplacer879;
+    }
+
+    private static long getLastModifiedOfFile(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer1550, varReplacer1552;
+        int $i0;
+        java.lang.Object[] $r1;
+        java.lang.String[] $r2;
+        long $l1, varReplacer1549, varReplacer1551;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        if $r0 == null goto label1;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i0 >= 1 goto label2;
+
+     label1:
+        $r1 = newarray (java.lang.Object)[0];
+
+        varReplacer1552 = "Cached File - Path was null or empty for Cache File. Could not get Last Modified Date.";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logWarningFormat(java.lang.String,java.lang.Object[])>(varReplacer1552, $r1);
+
+        varReplacer1551 = 0L;
+
+        return varReplacer1551;
+
+     label2:
+        $r0 = staticinvoke <com.adobe.mobile.RemoteDownload: java.lang.String getPathExtension(java.lang.String)>($r0);
+
+        $r2 = staticinvoke <com.adobe.mobile.RemoteDownload: java.lang.String[] splitPathExtension(java.lang.String)>($r0);
+
+        if $r2 == null goto label3;
+
+        $i0 = lengthof $r2;
+
+        if $i0 >= 1 goto label4;
+
+     label3:
+        $r1 = newarray (java.lang.Object)[0];
+
+        varReplacer1550 = "Cached File - No last modified date for file. Extension had no values after split.";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logWarningFormat(java.lang.String,java.lang.Object[])>(varReplacer1550, $r1);
+
+        varReplacer1549 = 0L;
+
+        return varReplacer1549;
+
+     label4:
+        $r0 = $r2[0];
+
+        $l1 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r0);
+
+        return $l1;
+    }
+
+    private static java.io.File getNewCachedFile(java.lang.String, java.util.Date, java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r2, $r3, varReplacer1540, varReplacer1543, varReplacer1544, varReplacer1545, varReplacer1548;
+        java.util.Date $r1;
+        int $i0;
+        java.lang.Object[] $r4;
+        java.io.File $r5, $r6;
+        java.lang.StringBuilder $r7;
+        long $l1;
+        null_type varReplacer1541, varReplacer1542, varReplacer1546, varReplacer1547;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.util.Date;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 := @parameter3: java.lang.String;
+
+        if $r0 == null goto label1;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i0 >= 1 goto label2;
+
+     label1:
+        $r4 = newarray (java.lang.Object)[0];
+
+        varReplacer1544 = "Cached File - Invalid url parameter while attempting to create cache file. Could not save data.";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logWarningFormat(java.lang.String,java.lang.Object[])>(varReplacer1544, $r4);
+
+        varReplacer1541 = null;
+
+        return varReplacer1541;
+
+     label2:
+        if $r1 != null goto label3;
+
+        $r4 = newarray (java.lang.Object)[0];
+
+        varReplacer1540 = "Cached File - Invalid lastModified parameter while attempting to create cache file. Could not save data.";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logWarningFormat(java.lang.String,java.lang.Object[])>(varReplacer1540, $r4);
+
+        varReplacer1542 = null;
+
+        return varReplacer1542;
+
+     label3:
+        if $r2 == null goto label4;
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        if $i0 >= 1 goto label5;
+
+     label4:
+        $r4 = newarray (java.lang.Object)[0];
+
+        varReplacer1545 = "Cached File - Invalid etag parameter while attempting to create cache file. Could not save data.";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logWarningFormat(java.lang.String,java.lang.Object[])>(varReplacer1545, $r4);
+
+        varReplacer1547 = null;
+
+        return varReplacer1547;
+
+     label5:
+        $r5 = staticinvoke <com.adobe.mobile.RemoteDownload: java.io.File getDownloadCacheDirectory(java.lang.String)>($r3);
+
+        if $r5 == null goto label6;
+
+        $r3 = staticinvoke <com.adobe.mobile.RemoteDownload: java.lang.String md5hash(java.lang.String)>($r0);
+
+        if $r3 == null goto label6;
+
+        $i0 = virtualinvoke $r3.<java.lang.String: int length()>();
+
+        if $i0 < 1 goto label6;
+
+        $r6 = new java.io.File;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r5.<java.io.File: java.lang.String getPath()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = <java.io.File: java.lang.String separator>;
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r0 = staticinvoke <com.adobe.mobile.RemoteDownload: java.lang.String md5hash(java.lang.String)>($r0);
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        varReplacer1543 = ".";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1543);
+
+        $l1 = virtualinvoke $r1.<java.util.Date: long getTime()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        varReplacer1548 = "_";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1548);
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r0 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r6.<java.io.File: void <init>(java.lang.String)>($r0);
+
+        return $r6;
+
+     label6:
+        varReplacer1546 = null;
+
+        return varReplacer1546;
+    }
+
+    private static java.lang.String getPathExtension(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer1568, varReplacer1569;
+        int $i0;
+        java.lang.Object[] $r1;
+        null_type varReplacer1567;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        if $r0 == null goto label1;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i0 >= 1 goto label2;
+
+     label1:
+        $r1 = newarray (java.lang.Object)[0];
+
+        varReplacer1568 = "Cached File - Path was null or empty for Cache File";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logWarningFormat(java.lang.String,java.lang.Object[])>(varReplacer1568, $r1);
+
+        varReplacer1567 = null;
+
+        return varReplacer1567;
+
+     label2:
+        varReplacer1569 = ".";
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int lastIndexOf(java.lang.String)>(varReplacer1569);
+
+        $i0 = $i0 + 1;
+
+        $r0 = virtualinvoke $r0.<java.lang.String: java.lang.String substring(int)>($i0);
+
+        return $r0;
+    }
+
+    private static java.lang.String md5hash(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer881, varReplacer882, varReplacer883, varReplacer886, varReplacer887;
+        byte $b0;
+        java.lang.StringBuilder $r1, $r4, r8;
+        int $i1, $i2, $i4;
+        java.security.MessageDigest $r2;
+        byte[] $r3;
+        short $s3;
+        java.lang.Throwable $r5, $r7;
+        java.lang.Object[] $r6;
+        java.security.NoSuchAlgorithmException r9;
+        java.io.UnsupportedEncodingException r10;
+        null_type varReplacer884, varReplacer885, varReplacer888;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        if $r0 == null goto label17;
+
+        $i1 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i1 >= 1 goto label01;
+
+        varReplacer885 = null;
+
+        return varReplacer885;
+
+     label01:
+        varReplacer883 = "MD5";
+
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer883);
+
+        varReplacer886 = "UTF-8";
+
+        $r3 = virtualinvoke $r0.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer886);
+
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte[])>($r3);
+
+        $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>();
+
+     label02:
+        $r4 = new java.lang.StringBuilder;
+
+        $r1 = $r4;
+
+     label03:
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+     label04:
+        $i1 = lengthof $r3;
+
+        $i2 = 0;
+
+     label05:
+        if $i2 >= $i1 goto label13;
+
+        $b0 = $r3[$i2];
+
+        $s3 = $b0 & 255;
+
+     label06:
+        $r0 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s3);
+
+     label07:
+        $i4 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+     label08:
+        if $i4 >= 2 goto label11;
+
+        r8 = new java.lang.StringBuilder;
+
+        $r4 = r8;
+
+     label09:
+        specialinvoke r8.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer881 = "0";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer881);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label10:
+        goto label07;
+
+     label11:
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+     label12:
+        $i2 = $i2 + 1;
+
+        goto label05;
+
+     label13:
+        $r0 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label14:
+        return $r0;
+
+     label15:
+        $r5 := @caughtexception;
+
+        $r6 = newarray (java.lang.Object)[1];
+
+        r9 = (java.security.NoSuchAlgorithmException) $r5;
+
+        $r0 = virtualinvoke r9.<java.security.NoSuchAlgorithmException: java.lang.String getMessage()>();
+
+        $r6[0] = $r0;
+
+        varReplacer882 = "Cached Files - unable to get md5 hash (%s)";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logErrorFormat(java.lang.String,java.lang.Object[])>(varReplacer882, $r6);
+
+        varReplacer888 = null;
+
+        return varReplacer888;
+
+     label16:
+        $r7 := @caughtexception;
+
+        $r6 = newarray (java.lang.Object)[1];
+
+        r10 = (java.io.UnsupportedEncodingException) $r7;
+
+        $r0 = virtualinvoke r10.<java.io.UnsupportedEncodingException: java.lang.String getMessage()>();
+
+        $r6[0] = $r0;
+
+        varReplacer887 = "Cached Files - Unsupported Encoding: UTF-8 (%s)";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logErrorFormat(java.lang.String,java.lang.Object[])>(varReplacer887, $r6);
+
+     label17:
+        varReplacer884 = null;
+
+        return varReplacer884;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label15;
+        catch java.security.NoSuchAlgorithmException from label03 to label04 with label15;
+        catch java.security.NoSuchAlgorithmException from label06 to label07 with label15;
+        catch java.security.NoSuchAlgorithmException from label07 to label08 with label15;
+        catch java.security.NoSuchAlgorithmException from label09 to label10 with label15;
+        catch java.security.NoSuchAlgorithmException from label11 to label12 with label15;
+        catch java.security.NoSuchAlgorithmException from label13 to label14 with label15;
+        catch java.io.UnsupportedEncodingException from label01 to label02 with label16;
+        catch java.io.UnsupportedEncodingException from label03 to label04 with label16;
+        catch java.io.UnsupportedEncodingException from label06 to label07 with label16;
+        catch java.io.UnsupportedEncodingException from label07 to label08 with label16;
+        catch java.io.UnsupportedEncodingException from label09 to label10 with label16;
+        catch java.io.UnsupportedEncodingException from label11 to label12 with label16;
+        catch java.io.UnsupportedEncodingException from label13 to label14 with label16;
+    }
+
+    protected static void remoteDownloadAsync(java.lang.String, int, int, com.adobe.mobile.RemoteDownload$RemoteDownloadBlock)
+    {
+        java.lang.String $r0;
+        int $i0, $i1;
+        com.adobe.mobile.RemoteDownload$RemoteDownloadBlock $r1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r1 := @parameter3: com.adobe.mobile.RemoteDownload$RemoteDownloadBlock;
+
+        staticinvoke <com.adobe.mobile.RemoteDownload: void remoteDownloadAsync(java.lang.String,int,int,com.adobe.mobile.RemoteDownload$RemoteDownloadBlock,java.lang.String)>($r0, $i0, $i1, $r1, "adbdownloadcache");
+
+        return;
+    }
+
+    protected static void remoteDownloadAsync(java.lang.String, int, int, com.adobe.mobile.RemoteDownload$RemoteDownloadBlock, java.lang.String)
+    {
+        java.lang.String $r0, $r2, varReplacer1463;
+        int $i0, $i1, varReplacer1461, varReplacer1462;
+        com.adobe.mobile.RemoteDownload$RemoteDownloadBlock $r1;
+        com.adobe.mobile.RemoteDownload$DownloadFileTask $r3;
+        java.lang.Thread $r4;
+        null_type varReplacer1464;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r1 := @parameter3: com.adobe.mobile.RemoteDownload$RemoteDownloadBlock;
+
+        $r2 := @parameter4: java.lang.String;
+
+        $r4 = new java.lang.Thread;
+
+        $r3 = new com.adobe.mobile.RemoteDownload$DownloadFileTask;
+
+        varReplacer1461 = 10000;
+
+        varReplacer1462 = 10000;
+
+        varReplacer1463 = "adbdownloadcache";
+
+        varReplacer1464 = null;
+
+        specialinvoke $r3.<com.adobe.mobile.RemoteDownload$DownloadFileTask: void <init>(java.lang.String,com.adobe.mobile.RemoteDownload$RemoteDownloadBlock,int,int,java.lang.String,com.adobe.mobile.RemoteDownload$1)>($r0, $r1, varReplacer1461, varReplacer1461, varReplacer1463, varReplacer1464);
+
+        specialinvoke $r4.<java.lang.Thread: void <init>(java.lang.Runnable)>($r3);
+
+        virtualinvoke $r4.<java.lang.Thread: void start()>();
+
+        return;
+    }
+
+    protected static void remoteDownloadAsync(java.lang.String, com.adobe.mobile.RemoteDownload$RemoteDownloadBlock)
+    {
+        java.lang.String $r0, varReplacer1460;
+        com.adobe.mobile.RemoteDownload$RemoteDownloadBlock $r1;
+        int varReplacer1458, varReplacer1459;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: com.adobe.mobile.RemoteDownload$RemoteDownloadBlock;
+
+        varReplacer1458 = 10000;
+
+        varReplacer1459 = 10000;
+
+        varReplacer1460 = "adbdownloadcache";
+
+        staticinvoke <com.adobe.mobile.RemoteDownload: void remoteDownloadAsync(java.lang.String,int,int,com.adobe.mobile.RemoteDownload$RemoteDownloadBlock,java.lang.String)>($r0, varReplacer1458, varReplacer1458, $r1, varReplacer1460);
+
+        return;
+    }
+
+    protected static void remoteDownloadAsync(java.lang.String, java.lang.String, com.adobe.mobile.RemoteDownload$RemoteDownloadBlock)
+    {
+        java.lang.String $r0, $r1;
+        com.adobe.mobile.RemoteDownload$RemoteDownloadBlock $r2;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: com.adobe.mobile.RemoteDownload$RemoteDownloadBlock;
+
+        staticinvoke <com.adobe.mobile.RemoteDownload: void remoteDownloadAsync(java.lang.String,int,int,com.adobe.mobile.RemoteDownload$RemoteDownloadBlock,java.lang.String)>($r0, 10000, 10000, $r2, $r1);
+
+        return;
+    }
+
+    protected static void remoteDownloadSync(java.lang.String, int, int, com.adobe.mobile.RemoteDownload$RemoteDownloadBlock)
+    {
+        java.lang.String $r0;
+        int $i0, $i1;
+        com.adobe.mobile.RemoteDownload$RemoteDownloadBlock $r1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r1 := @parameter3: com.adobe.mobile.RemoteDownload$RemoteDownloadBlock;
+
+        staticinvoke <com.adobe.mobile.RemoteDownload: void remoteDownloadSync(java.lang.String,int,int,com.adobe.mobile.RemoteDownload$RemoteDownloadBlock,java.lang.String)>($r0, $i0, $i1, $r1, "adbdownloadcache");
+
+        return;
+    }
+
+    protected static void remoteDownloadSync(java.lang.String, int, int, com.adobe.mobile.RemoteDownload$RemoteDownloadBlock, java.lang.String)
+    {
+        java.lang.String $r0, $r2;
+        int $i0, $i1, varReplacer1473, varReplacer1474;
+        com.adobe.mobile.RemoteDownload$RemoteDownloadBlock $r1;
+        com.adobe.mobile.RemoteDownload$DownloadFileTask $r3;
+        null_type varReplacer1475;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r1 := @parameter3: com.adobe.mobile.RemoteDownload$RemoteDownloadBlock;
+
+        $r2 := @parameter4: java.lang.String;
+
+        $r3 = new com.adobe.mobile.RemoteDownload$DownloadFileTask;
+
+        varReplacer1473 = 10000;
+
+        varReplacer1474 = 10000;
+
+        varReplacer1475 = null;
+
+        specialinvoke $r3.<com.adobe.mobile.RemoteDownload$DownloadFileTask: void <init>(java.lang.String,com.adobe.mobile.RemoteDownload$RemoteDownloadBlock,int,int,java.lang.String,com.adobe.mobile.RemoteDownload$1)>($r0, $r1, varReplacer1473, varReplacer1473, $r2, varReplacer1475);
+
+        interfaceinvoke $r3.<java.lang.Runnable: void run()>();
+
+        return;
+    }
+
+    protected static void remoteDownloadSync(java.lang.String, com.adobe.mobile.RemoteDownload$RemoteDownloadBlock)
+    {
+        java.lang.String $r0, varReplacer1472;
+        com.adobe.mobile.RemoteDownload$RemoteDownloadBlock $r1;
+        int varReplacer1470, varReplacer1471;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: com.adobe.mobile.RemoteDownload$RemoteDownloadBlock;
+
+        varReplacer1470 = 10000;
+
+        varReplacer1471 = 10000;
+
+        varReplacer1472 = "adbdownloadcache";
+
+        staticinvoke <com.adobe.mobile.RemoteDownload: void remoteDownloadSync(java.lang.String,int,int,com.adobe.mobile.RemoteDownload$RemoteDownloadBlock,java.lang.String)>($r0, varReplacer1470, varReplacer1470, $r1, varReplacer1472);
+
+        return;
+    }
+
+    protected static void remoteDownloadSync(java.lang.String, java.lang.String, com.adobe.mobile.RemoteDownload$RemoteDownloadBlock)
+    {
+        java.lang.String $r0, $r1;
+        com.adobe.mobile.RemoteDownload$RemoteDownloadBlock $r2;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: com.adobe.mobile.RemoteDownload$RemoteDownloadBlock;
+
+        staticinvoke <com.adobe.mobile.RemoteDownload: void remoteDownloadSync(java.lang.String,int,int,com.adobe.mobile.RemoteDownload$RemoteDownloadBlock,java.lang.String)>($r0, 10000, 10000, $r2, $r1);
+
+        return;
+    }
+
+    private static java.lang.String[] splitPathExtension(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer1563, varReplacer1565, varReplacer1566;
+        int $i0;
+        java.lang.Object[] $r1;
+        java.lang.String[] $r2;
+        null_type varReplacer1562, varReplacer1564;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        if $r0 == null goto label1;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i0 >= 1 goto label2;
+
+     label1:
+        $r1 = newarray (java.lang.Object)[0];
+
+        varReplacer1565 = "Cached File - Extension was null or empty on Cache File";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logWarningFormat(java.lang.String,java.lang.Object[])>(varReplacer1565, $r1);
+
+        varReplacer1564 = null;
+
+        return varReplacer1564;
+
+     label2:
+        varReplacer1566 = "_";
+
+        $r2 = virtualinvoke $r0.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer1566);
+
+        $i0 = lengthof $r2;
+
+        if $i0 == 2 goto label3;
+
+        $r1 = newarray (java.lang.Object)[1];
+
+        $r1[0] = $r0;
+
+        varReplacer1563 = "Cached File - Invalid Extension on Cache File (%s)";
+
+        staticinvoke <com.adobe.mobile.StaticMethods: void logWarningFormat(java.lang.String,java.lang.Object[])>(varReplacer1563, $r1);
+
+        varReplacer1562 = null;
+
+        return varReplacer1562;
+
+     label3:
+        return $r2;
+    }
+
+    protected static boolean stringIsUrl(java.lang.String)
+    {
+        java.lang.String $r0;
+        java.lang.Throwable $r1;
+        int $i0, varReplacer1537, varReplacer1538, varReplacer1539;
+        java.net.URL $r2;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        if $r0 == null goto label5;
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i0 > 0 goto label1;
+
+        varReplacer1538 = 0;
+
+        return varReplacer1538;
+
+     label1:
+        $r2 = new java.net.URL;
+
+     label2:
+        specialinvoke $r2.<java.net.URL: void <init>(java.lang.String)>($r0);
+
+     label3:
+        varReplacer1539 = 1;
+
+        return varReplacer1539;
+
+     label4:
+        $r1 := @caughtexception;
+
+     label5:
+        varReplacer1537 = 0;
+
+        return varReplacer1537;
+
+        catch java.net.MalformedURLException from label2 to label3 with label4;
+    }
+}

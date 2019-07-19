@@ -1,0 +1,128 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.xrce.xeroxmobilitylago-0EB98E0CF3206D46BBEC040BA86FEBDFC374A553B4E48DFC061A2501801212D8.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r22
+		Type: javax.net.ssl.SSLContext
+		Statement: $r22 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer2682)
+		Method: <okhttp3.OkHttpClient: void <init>(okhttp3.OkHttpClient$Builder)>
+		SHA-256: b0919bf5f077c74e7b6e117dfe616177ebefc94d89437ba41c5a020797c0bb33
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r3)
+		Method: <okhttp3.internal.Util: okio.ByteString sha1(okio.ByteString)>
+		SHA-256: 779fa9e7d07fc58ac6fb0f677b3796756777647dae3e7e2e128e2e27e33a0c70
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r3)
+		Method: <okhttp3.internal.Util: okio.ByteString sha256(okio.ByteString)>
+		SHA-256: b9fa638f7c73836986e4b143e5c8a0f5f8453b073695b12e807f45e7b460c05a
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4248)
+		Method: <okhttp3.internal.Util: okio.ByteString sha256(okio.ByteString)>
+		SHA-256: 1efc4b2527deb7395b6867fab33fddc98c3e9196ebec5853ddc2172c06d61376
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5138)
+		Method: <okhttp3.internal.Util: okio.ByteString sha1(okio.ByteString)>
+		SHA-256: a78a40c2e39cb413928f13ff08f4240750682c41f24a5c8f65b311935b7a1608
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3290)
+		Method: <com.android.volley.InternalUtils: java.lang.String sha1Hash(java.lang.String)>
+		SHA-256: b5c246a2c926b425d17795ca54b66b360b3a3aa9f6164cb23857c822cf08f8d4
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.android.volley.InternalUtils: java.lang.String sha1Hash(java.lang.String)>
+		SHA-256: 9a19a49c55901b0c39c97709d7d8f5821b2dd27fc9657b9d21f54aba78321c4c
+		Secure: false
+
+Findings in Java Class: okhttp3.OkHttpClient
+
+	 in Method: void <init>(okhttp3.OkHttpClient$Builder)
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #b0919bf5f077c74e7b6e117dfe616177ebefc94d89437ba41c5a020797c0bb33)
+			First parameter (with value "TLS") should be any of {Insecure}
+			at statement: $r22 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer2682)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r22.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2679, varReplacer2679, varReplacer2679)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r22.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2679, varReplacer2679, varReplacer2679)
+
+
+Findings in Java Class: com.android.volley.InternalUtils
+
+	 in Method: java.lang.String sha1Hash(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #b5c246a2c926b425d17795ca54b66b360b3a3aa9f6164cb23857c822cf08f8d4)
+			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3290)
+
+
+Findings in Java Class: okhttp3.internal.Util
+
+	 in Method: okio.ByteString sha1(okio.ByteString)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #a78a40c2e39cb413928f13ff08f4240750682c41f24a5c8f65b311935b7a1608)
+			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5138)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 7
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 3
+	RequiredPredicateError: 2
+=====================================================================

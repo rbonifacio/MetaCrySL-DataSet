@@ -1,0 +1,101 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r4
+		Type: java.security.MessageDigest
+		Statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer890)
+		Method: <net.hockeyapp.android.LoginActivity: java.lang.String md5(java.lang.String)>
+		SHA-256: 98e5c6b58be95242db739421021d4c6fe3a5099507d15e38e93f458baabf84b3
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: byte[]
+		Statement: $r5 = virtualinvoke $r4.<java.security.MessageDigest: byte[] digest()>()
+		Method: <net.hockeyapp.android.Constants: java.lang.String tryHashStringSha256(android.content.Context,java.lang.String)>
+		SHA-256: 1c4617f6643fd8a383be06a7beb8b7e7ccfaff6dbdea81a200db6a0e670576f1
+		Secure: true
+	Object:
+		Variable: $r6
+		Type: java.security.MessageDigest
+		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer688)
+		Method: <net.hockeyapp.android.Constants: void loadCrashIdentifier(android.content.Context)>
+		SHA-256: 913047d171343b021ab30eab4a539a769e35678be3d6f8c9293bc6cd8a5b09c9
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: java.security.MessageDigest
+		Statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer699)
+		Method: <net.hockeyapp.android.Constants: java.lang.String tryHashStringSha256(android.content.Context,java.lang.String)>
+		SHA-256: 6be45fbca94fafb33489b9f43d2e040dc9c32d98e3564ccbc266a4b70107fc11
+		Secure: true
+	Object:
+		Variable: $r7
+		Type: byte[]
+		Statement: $r7 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>()
+		Method: <net.hockeyapp.android.Constants: void loadCrashIdentifier(android.content.Context)>
+		SHA-256: 5f5a179e0565f0ae17032e50ed190af1bd79713bdf7f14beac52a1600e2ac5b3
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: byte[]
+		Statement: $r5 = virtualinvoke $r4.<java.security.MessageDigest: byte[] digest()>()
+		Method: <net.hockeyapp.android.LoginActivity: java.lang.String md5(java.lang.String)>
+		SHA-256: 35f23b6bb9c395cd8c9b4dd0137bf349da36824b18077d8a227a8351e7d80b6e
+		Secure: false
+
+Findings in Java Class: net.hockeyapp.android.Constants
+
+	 in Method: void loadCrashIdentifier(android.content.Context)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #913047d171343b021ab30eab4a539a769e35678be3d6f8c9293bc6cd8a5b09c9)
+			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer688)
+
+
+Findings in Java Class: net.hockeyapp.android.LoginActivity
+
+	 in Method: java.lang.String md5(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #98e5c6b58be95242db739421021d4c6fe3a5099507d15e38e93f458baabf84b3)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer890)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
+=====================================================================

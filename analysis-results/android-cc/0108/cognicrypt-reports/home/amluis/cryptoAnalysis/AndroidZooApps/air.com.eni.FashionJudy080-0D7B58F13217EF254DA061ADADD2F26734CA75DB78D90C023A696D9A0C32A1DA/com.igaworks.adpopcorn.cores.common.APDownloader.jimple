@@ -1,0 +1,1875 @@
+public class com.igaworks.adpopcorn.cores.common.APDownloader extends java.lang.Object
+{
+    public static int DEFAULT_SAMPLE_SIZE;
+    public static final int IMAGE_CACHE_LIMIT_SIZE;
+    public static final int IMAGE_STORAGE_MAX_CACHE_SIZE;
+    public static final java.lang.String TAG;
+    public static final int VIDEO_CACHE_LIMIT_SIZE;
+    public static java.util.ArrayList cacheKeyList;
+    public static android.content.Context context;
+    public static java.util.WeakHashMap mImageCache;
+
+    static void <clinit>()
+    {
+        java.util.WeakHashMap $r0;
+        java.util.ArrayList $r1;
+        int varReplacer4016;
+        null_type varReplacer4017;
+
+        nop;
+
+        $r0 = new java.util.WeakHashMap;
+
+        specialinvoke $r0.<java.util.WeakHashMap: void <init>()>();
+
+        <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache> = $r0;
+
+        $r1 = new java.util.ArrayList;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>()>();
+
+        <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList> = $r1;
+
+        varReplacer4017 = null;
+
+        <com.igaworks.adpopcorn.cores.common.APDownloader: android.content.Context context> = varReplacer4017;
+
+        varReplacer4016 = 1;
+
+        <com.igaworks.adpopcorn.cores.common.APDownloader: int DEFAULT_SAMPLE_SIZE> = varReplacer4016;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.igaworks.adpopcorn.cores.common.APDownloader $r0;
+
+        $r0 := @this: com.igaworks.adpopcorn.cores.common.APDownloader;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static int calculateInSampleSize(android.graphics.BitmapFactory$Options, int, int)
+    {
+        android.graphics.BitmapFactory$Options $r0;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+
+        nop;
+
+        $r0 := @parameter0: android.graphics.BitmapFactory$Options;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 = $r0.<android.graphics.BitmapFactory$Options: int outHeight>;
+
+        $i3 = $r0.<android.graphics.BitmapFactory$Options: int outWidth>;
+
+        $i4 = <com.igaworks.adpopcorn.cores.common.APDownloader: int DEFAULT_SAMPLE_SIZE>;
+
+        if $i2 > $i1 goto label1;
+
+        if $i3 <= $i0 goto label4;
+
+     label1:
+        $i2 = $i2 / 2;
+
+        $i3 = $i3 / 2;
+
+     label2:
+        $i5 = $i2 / $i4;
+
+        if $i5 <= $i1 goto label4;
+
+        $i5 = $i3 / $i4;
+
+        if $i5 > $i0 goto label3;
+
+        return $i4;
+
+     label3:
+        $i4 = $i4 * 2;
+
+        goto label2;
+
+     label4:
+        return $i4;
+    }
+
+    private static boolean cancelPotentialDownload(java.lang.String, android.widget.ImageView)
+    {
+        java.lang.String $r0, $r2;
+        android.widget.ImageView $r1;
+        com.igaworks.adpopcorn.cores.common.APDownloaderThread $r3;
+        boolean $z0;
+        int varReplacer4018, varReplacer4019, varReplacer4020, varReplacer4021;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: android.widget.ImageView;
+
+        $r3 = staticinvoke <com.igaworks.adpopcorn.cores.common.APDownloader: com.igaworks.adpopcorn.cores.common.APDownloaderThread getBitmapDownloaderTask(android.widget.ImageView)>($r1);
+
+        if $r3 == null goto label3;
+
+        $r2 = $r3.<com.igaworks.adpopcorn.cores.common.APDownloaderThread: java.lang.String url>;
+
+        if $r2 == null goto label1;
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r0);
+
+        if $z0 != 0 goto label2;
+
+     label1:
+        varReplacer4020 = 1;
+
+        virtualinvoke $r3.<com.igaworks.adpopcorn.cores.common.APDownloaderThread: void cancel(boolean)>(varReplacer4020);
+
+        varReplacer4019 = 1;
+
+        return varReplacer4019;
+
+     label2:
+        varReplacer4021 = 0;
+
+        return varReplacer4021;
+
+     label3:
+        varReplacer4018 = 1;
+
+        return varReplacer4018;
+    }
+
+    public static void clearImageCache()
+    {
+        java.io.File $r0, $r8;
+        com.igaworks.adpopcorn.cores.common.APDownloader$1 $r1;
+        java.lang.Exception $r2, $r14;
+        java.util.WeakHashMap $r3;
+        java.util.Set $r4;
+        java.lang.Object[] $r5;
+        int $i0, $i1, $i2, varReplacer7035, varReplacer7037;
+        java.util.ArrayList $r6;
+        java.lang.StringBuilder $r7;
+        java.lang.String $r9, varReplacer7032, varReplacer7033, varReplacer7034, varReplacer7036, varReplacer7038;
+        boolean $z0;
+        java.lang.Object $r10;
+        android.graphics.Bitmap $r11;
+        java.io.File[] $r12;
+        android.content.Context $r13;
+        java.util.Calendar $r15;
+        long $l3;
+
+        nop;
+
+        $r3 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+        if $r3 == null goto label06;
+
+        $r3 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label01:
+        $r4 = virtualinvoke $r3.<java.util.WeakHashMap: java.util.Set keySet()>();
+
+        $r5 = interfaceinvoke $r4.<java.util.Set: java.lang.Object[] toArray()>();
+
+     label02:
+        $i0 = 0;
+
+     label03:
+        $i1 = lengthof $r5;
+
+     label04:
+        if $i0 < $i1 goto label13;
+
+        $r3 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label05:
+        virtualinvoke $r3.<java.util.WeakHashMap: void clear()>();
+
+     label06:
+        $r6 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+        if $r6 == null goto label08;
+
+        $r6 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+     label07:
+        virtualinvoke $r6.<java.util.ArrayList: void clear()>();
+
+     label08:
+        $r0 = new java.io.File;
+
+        $r7 = new java.lang.StringBuilder;
+
+     label09:
+        $r8 = staticinvoke <android.os.Environment: java.io.File getExternalStorageDirectory()>();
+
+        $r9 = virtualinvoke $r8.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $r9 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r9);
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>($r9);
+
+        varReplacer7033 = "/igaw/cache";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7033);
+
+        $r9 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r0.<java.io.File: void <init>(java.lang.String)>($r9);
+
+     label10:
+        if $r0 == null goto label40;
+
+     label11:
+        $z0 = virtualinvoke $r0.<java.io.File: boolean exists()>();
+
+     label12:
+        if $z0 != 0 goto label21;
+
+        return;
+
+     label13:
+        $r10 = $r5[$i0];
+
+        $r9 = (java.lang.String) $r10;
+
+     label14:
+        $r3 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label15:
+        $r10 = virtualinvoke $r3.<java.util.WeakHashMap: java.lang.Object get(java.lang.Object)>($r9);
+
+        $r11 = (android.graphics.Bitmap) $r10;
+
+     label16:
+        if $r11 == null goto label18;
+
+        $r3 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label17:
+        virtualinvoke $r3.<java.util.WeakHashMap: java.lang.Object remove(java.lang.Object)>($r9);
+
+     label18:
+        $i0 = $i0 + 1;
+
+        goto label03;
+
+     label19:
+        $r2 := @caughtexception;
+
+        $r3 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+        if $r3 == null goto label20;
+
+        $r3 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+        virtualinvoke $r3.<java.util.WeakHashMap: void clear()>();
+
+     label20:
+        $r6 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+        if $r6 == null goto label08;
+
+        $r6 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+        virtualinvoke $r6.<java.util.ArrayList: void clear()>();
+
+        goto label08;
+
+     label21:
+        if $r0 == null goto label40;
+
+     label22:
+        $r12 = virtualinvoke $r0.<java.io.File: java.io.File[] listFiles()>();
+
+        $i0 = lengthof $r12;
+
+     label23:
+        if $i0 <= 150 goto label40;
+
+     label24:
+        $r12 = virtualinvoke $r0.<java.io.File: java.io.File[] listFiles()>();
+
+        $i0 = lengthof $r12;
+
+     label25:
+        $r13 = <com.igaworks.adpopcorn.cores.common.APDownloader: android.content.Context context>;
+
+        $r7 = new java.lang.StringBuilder;
+
+     label26:
+        varReplacer7038 = "Delete local image file : ";
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer7038);
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r9 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer7034 = "APDownloader";
+
+        varReplacer7035 = 3;
+
+        staticinvoke <com.igaworks.adpopcorn.cores.common.APLogger: void Logging(android.content.Context,java.lang.String,java.lang.String,int)>($r13, varReplacer7034, $r9, varReplacer7035);
+
+        $r12 = virtualinvoke $r0.<java.io.File: java.io.File[] listFiles()>();
+
+     label27:
+        $r1 = new com.igaworks.adpopcorn.cores.common.APDownloader$1;
+
+     label28:
+        specialinvoke $r1.<com.igaworks.adpopcorn.cores.common.APDownloader$1: void <init>()>();
+
+        staticinvoke <java.util.Arrays: void sort(java.lang.Object[],java.util.Comparator)>($r12, $r1);
+
+        $i1 = lengthof $r12;
+
+     label29:
+        $i2 = 0;
+
+     label30:
+        if $i2 < $i1 goto label35;
+
+     label31:
+        $r13 = <com.igaworks.adpopcorn.cores.common.APDownloader: android.content.Context context>;
+
+        $r7 = new java.lang.StringBuilder;
+
+     label32:
+        varReplacer7032 = "Delete local image file : ";
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer7032);
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r9 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer7036 = "APDownloader";
+
+        varReplacer7037 = 3;
+
+        staticinvoke <com.igaworks.adpopcorn.cores.common.APLogger: void Logging(android.content.Context,java.lang.String,java.lang.String,int)>($r13, varReplacer7036, $r9, varReplacer7037);
+
+     label33:
+        return;
+
+     label34:
+        $r14 := @caughtexception;
+
+        return;
+
+     label35:
+        $r0 = $r12[$i2];
+
+        $z0 = virtualinvoke $r0.<java.io.File: boolean isFile()>();
+
+     label36:
+        if $z0 == 0 goto label39;
+
+     label37:
+        $r15 = staticinvoke <java.util.Calendar: java.util.Calendar getInstance()>();
+
+        $l3 = virtualinvoke $r0.<java.io.File: long lastModified()>();
+
+        virtualinvoke $r15.<java.util.Calendar: void setTimeInMillis(long)>($l3);
+
+        virtualinvoke $r0.<java.io.File: boolean delete()>();
+
+     label38:
+        $i0 = $i0 + -1;
+
+        if $i0 <= 140 goto label31;
+
+     label39:
+        $i2 = $i2 + 1;
+
+        goto label30;
+
+     label40:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label19;
+        catch java.lang.Exception from label03 to label04 with label19;
+        catch java.lang.Exception from label05 to label06 with label19;
+        catch java.lang.Exception from label07 to label08 with label19;
+        catch java.lang.Exception from label09 to label10 with label34;
+        catch java.lang.Exception from label11 to label12 with label34;
+        catch java.lang.Exception from label13 to label14 with label19;
+        catch java.lang.Exception from label15 to label16 with label19;
+        catch java.lang.Exception from label17 to label18 with label19;
+        catch java.lang.Exception from label22 to label23 with label34;
+        catch java.lang.Exception from label24 to label25 with label34;
+        catch java.lang.Exception from label26 to label27 with label34;
+        catch java.lang.Exception from label28 to label29 with label34;
+        catch java.lang.Exception from label32 to label33 with label34;
+        catch java.lang.Exception from label35 to label36 with label34;
+        catch java.lang.Exception from label37 to label38 with label34;
+    }
+
+    public static java.lang.String computeHashedName(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer4034, varReplacer4036;
+        java.lang.Exception $r1;
+        java.security.MessageDigest $r2;
+        byte[] $r3;
+        java.lang.Object[] $r4;
+        byte $b0;
+        java.lang.Byte $r5;
+        null_type varReplacer4035;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer4036 = "MD5";
+
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4036);
+
+        $r3 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte[])>($r3);
+
+        $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>();
+
+        $r4 = newarray (java.lang.Object)[16];
+
+        $b0 = $r3[0];
+
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b0);
+
+        $r4[0] = $r5;
+
+        $b0 = $r3[1];
+
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b0);
+
+        $r4[1] = $r5;
+
+        $b0 = $r3[2];
+
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b0);
+
+        $r4[2] = $r5;
+
+        $b0 = $r3[3];
+
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b0);
+
+        $r4[3] = $r5;
+
+        $b0 = $r3[4];
+
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b0);
+
+        $r4[4] = $r5;
+
+        $b0 = $r3[5];
+
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b0);
+
+        $r4[5] = $r5;
+
+        $b0 = $r3[6];
+
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b0);
+
+        $r4[6] = $r5;
+
+        $b0 = $r3[7];
+
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b0);
+
+        $r4[7] = $r5;
+
+        $b0 = $r3[8];
+
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b0);
+
+        $r4[8] = $r5;
+
+        $b0 = $r3[9];
+
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b0);
+
+        $r4[9] = $r5;
+
+        $b0 = $r3[10];
+
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b0);
+
+        $r4[10] = $r5;
+
+        $b0 = $r3[11];
+
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b0);
+
+        $r4[11] = $r5;
+
+        $b0 = $r3[12];
+
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b0);
+
+        $r4[12] = $r5;
+
+        $b0 = $r3[13];
+
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b0);
+
+        $r4[13] = $r5;
+
+        $b0 = $r3[14];
+
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b0);
+
+        $r4[14] = $r5;
+
+        $b0 = $r3[15];
+
+        $r5 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b0);
+
+        $r4[15] = $r5;
+
+        varReplacer4034 = "%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X";
+
+        $r0 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer4034, $r4);
+
+     label2:
+        return $r0;
+
+     label3:
+        $r1 := @caughtexception;
+
+        varReplacer4035 = null;
+
+        return varReplacer4035;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public static void deleteVideoCache()
+    {
+        java.io.File $r0, $r3;
+        com.igaworks.adpopcorn.cores.common.APDownloader$2 $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r4;
+        boolean $z0;
+        java.io.File[] $r5;
+        int $i0, $i1, $i2;
+        android.content.Context $r6;
+        java.util.Calendar $r7;
+        long $l3;
+        java.lang.Exception $r8;
+
+        $r0 = new java.io.File;
+
+        $r2 = new java.lang.StringBuilder;
+
+     label01:
+        $r3 = staticinvoke <android.os.Environment: java.io.File getExternalStorageDirectory()>();
+
+        $r4 = virtualinvoke $r3.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $r4 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r4);
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>($r4);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("/igaw/cache/video");
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r0.<java.io.File: void <init>(java.lang.String)>($r4);
+
+     label02:
+        if $r0 == null goto label21;
+
+     label03:
+        $z0 = virtualinvoke $r0.<java.io.File: boolean exists()>();
+
+     label04:
+        if $z0 != 0 goto label05;
+
+        return;
+
+     label05:
+        if $r0 == null goto label21;
+
+     label06:
+        $r5 = virtualinvoke $r0.<java.io.File: java.io.File[] listFiles()>();
+
+        $i0 = lengthof $r5;
+
+     label07:
+        if $i0 <= 10 goto label21;
+
+     label08:
+        $r5 = virtualinvoke $r0.<java.io.File: java.io.File[] listFiles()>();
+
+        $i0 = lengthof $r5;
+
+     label09:
+        $r6 = <com.igaworks.adpopcorn.cores.common.APDownloader: android.content.Context context>;
+
+        $r2 = new java.lang.StringBuilder;
+
+     label10:
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>("Delete local video file : ");
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.igaworks.adpopcorn.cores.common.APLogger: void Logging(android.content.Context,java.lang.String,java.lang.String,int)>($r6, "APDownloader", $r4, 3);
+
+        $r5 = virtualinvoke $r0.<java.io.File: java.io.File[] listFiles()>();
+
+     label11:
+        $r1 = new com.igaworks.adpopcorn.cores.common.APDownloader$2;
+
+     label12:
+        specialinvoke $r1.<com.igaworks.adpopcorn.cores.common.APDownloader$2: void <init>()>();
+
+        staticinvoke <java.util.Arrays: void sort(java.lang.Object[],java.util.Comparator)>($r5, $r1);
+
+        $i1 = lengthof $r5;
+
+     label13:
+        $i2 = 0;
+
+     label14:
+        if $i2 >= $i1 goto label21;
+
+     label15:
+        $r0 = $r5[$i2];
+
+        $z0 = virtualinvoke $r0.<java.io.File: boolean isFile()>();
+
+     label16:
+        if $z0 == 0 goto label19;
+
+     label17:
+        $r7 = staticinvoke <java.util.Calendar: java.util.Calendar getInstance()>();
+
+        $l3 = virtualinvoke $r0.<java.io.File: long lastModified()>();
+
+        virtualinvoke $r7.<java.util.Calendar: void setTimeInMillis(long)>($l3);
+
+        virtualinvoke $r0.<java.io.File: boolean delete()>();
+
+     label18:
+        $i0 = $i0 + -1;
+
+        if $i0 <= 10 goto label21;
+
+     label19:
+        $i2 = $i2 + 1;
+
+        goto label14;
+
+     label20:
+        $r8 := @caughtexception;
+
+     label21:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label20;
+        catch java.lang.Exception from label03 to label04 with label20;
+        catch java.lang.Exception from label06 to label07 with label20;
+        catch java.lang.Exception from label08 to label09 with label20;
+        catch java.lang.Exception from label10 to label11 with label20;
+        catch java.lang.Exception from label12 to label13 with label20;
+        catch java.lang.Exception from label15 to label16 with label20;
+        catch java.lang.Exception from label17 to label18 with label20;
+    }
+
+    public static void download(java.lang.String, android.widget.ImageView, int, int)
+    {
+        java.lang.String $r0;
+        android.widget.ImageView $r1;
+        int $i0, $i1, varReplacer9828, varReplacer9829;
+        com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable $r2;
+        java.lang.Exception $r3, $r12;
+        com.igaworks.adpopcorn.cores.common.APDownloaderThread $r4;
+        java.util.WeakHashMap $r5;
+        java.lang.Object $r6;
+        android.graphics.Bitmap $r7, $r8;
+        android.widget.ImageView$ScaleType $r9;
+        java.util.Set $r10;
+        java.util.Iterator $r11;
+        boolean $z0;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: android.widget.ImageView;
+
+        $i0 := @parameter2: int;
+
+        $i1 := @parameter3: int;
+
+        $r5 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+        if $r5 != null goto label03;
+
+        $r5 = new java.util.WeakHashMap;
+
+     label01:
+        specialinvoke $r5.<java.util.WeakHashMap: void <init>()>();
+
+     label02:
+        <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache> = $r5;
+
+     label03:
+        $r5 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label04:
+        $r6 = virtualinvoke $r5.<java.util.WeakHashMap: java.lang.Object get(java.lang.Object)>($r0);
+
+        $r7 = (android.graphics.Bitmap) $r6;
+
+     label05:
+        if $r7 != null goto label09;
+
+     label06:
+        varReplacer9828 = 0;
+
+        varReplacer9829 = 1;
+
+        $r8 = staticinvoke <com.igaworks.adpopcorn.cores.common.APDownloader: android.graphics.Bitmap getBitmap(java.lang.String,int,int,boolean,boolean)>($r0, $i0, $i1, varReplacer9828, varReplacer9829);
+
+     label07:
+        $r7 = $r8;
+
+        if $r8 == null goto label09;
+
+        $r5 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label08:
+        virtualinvoke $r5.<java.util.WeakHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r0, $r8);
+
+     label09:
+        if $r7 == null goto label24;
+
+        $r9 = <android.widget.ImageView$ScaleType: android.widget.ImageView$ScaleType FIT_XY>;
+
+     label10:
+        virtualinvoke $r1.<android.widget.ImageView: void setScaleType(android.widget.ImageView$ScaleType)>($r9);
+
+        virtualinvoke $r1.<android.widget.ImageView: void setImageBitmap(android.graphics.Bitmap)>($r7);
+
+     label11:
+        $r5 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label12:
+        $i0 = virtualinvoke $r5.<java.util.WeakHashMap: int size()>();
+
+     label13:
+        if $i0 <= 70 goto label34;
+
+        $r5 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label14:
+        $r10 = virtualinvoke $r5.<java.util.WeakHashMap: java.util.Set keySet()>();
+
+        $r11 = interfaceinvoke $r10.<java.util.Set: java.util.Iterator iterator()>();
+
+     label15:
+        if $r11 == null goto label34;
+
+     label16:
+        $z0 = interfaceinvoke $r11.<java.util.Iterator: boolean hasNext()>();
+
+     label17:
+        if $z0 == 0 goto label34;
+
+     label18:
+        $r6 = interfaceinvoke $r11.<java.util.Iterator: java.lang.Object next()>();
+
+        $r0 = (java.lang.String) $r6;
+
+     label19:
+        $r5 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label20:
+        $r6 = virtualinvoke $r5.<java.util.WeakHashMap: java.lang.Object get(java.lang.Object)>($r0);
+
+        $r7 = (android.graphics.Bitmap) $r6;
+
+     label21:
+        if $r7 == null goto label34;
+
+        $r5 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label22:
+        virtualinvoke $r5.<java.util.WeakHashMap: java.lang.Object remove(java.lang.Object)>($r0);
+
+     label23:
+        return;
+
+     label24:
+        $z0 = staticinvoke <com.igaworks.adpopcorn.cores.common.APDownloader: boolean cancelPotentialDownload(java.lang.String,android.widget.ImageView)>($r0, $r1);
+
+     label25:
+        if $z0 == 0 goto label11;
+
+        $r9 = <android.widget.ImageView$ScaleType: android.widget.ImageView$ScaleType FIT_XY>;
+
+     label26:
+        virtualinvoke $r1.<android.widget.ImageView: void setScaleType(android.widget.ImageView$ScaleType)>($r9);
+
+     label27:
+        $r4 = new com.igaworks.adpopcorn.cores.common.APDownloaderThread;
+
+     label28:
+        specialinvoke $r4.<com.igaworks.adpopcorn.cores.common.APDownloaderThread: void <init>(java.lang.String,android.widget.ImageView,int,int)>($r0, $r1, $i0, $i1);
+
+     label29:
+        $r2 = new com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable;
+
+     label30:
+        specialinvoke $r2.<com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable: void <init>(com.igaworks.adpopcorn.cores.common.APDownloaderThread)>($r4);
+
+        virtualinvoke $r4.<com.igaworks.adpopcorn.cores.common.APDownloaderThread: void setDonwloadedDrawable(com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable)>($r2);
+
+        virtualinvoke $r4.<com.igaworks.adpopcorn.cores.common.APDownloaderThread: void start()>();
+
+     label31:
+        goto label11;
+
+     label32:
+        $r3 := @caughtexception;
+
+        virtualinvoke $r3.<java.lang.Exception: void printStackTrace()>();
+
+        return;
+
+     label33:
+        $r12 := @caughtexception;
+
+     label34:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label32;
+        catch java.lang.Exception from label04 to label05 with label32;
+        catch java.lang.Exception from label06 to label07 with label32;
+        catch java.lang.Exception from label08 to label09 with label32;
+        catch java.lang.Exception from label10 to label11 with label32;
+        catch java.lang.Exception from label12 to label13 with label32;
+        catch java.lang.Exception from label14 to label15 with label33;
+        catch java.lang.Exception from label16 to label17 with label33;
+        catch java.lang.Exception from label18 to label19 with label33;
+        catch java.lang.Exception from label20 to label21 with label33;
+        catch java.lang.Exception from label22 to label23 with label33;
+        catch java.lang.Exception from label24 to label25 with label32;
+        catch java.lang.Exception from label26 to label27 with label32;
+        catch java.lang.Exception from label28 to label29 with label32;
+        catch java.lang.Exception from label30 to label31 with label32;
+    }
+
+    public static void downloadCallback(java.lang.String, android.widget.ImageView, int, int, com.igaworks.adpopcorn.cores.common.APDownloadCallback)
+    {
+        java.lang.String $r0;
+        android.widget.ImageView $r1;
+        int $i0, $i1, $i2, varReplacer4010, varReplacer4011, varReplacer4012, varReplacer4013, varReplacer4014, varReplacer4015;
+        com.igaworks.adpopcorn.cores.common.APDownloadCallback $r2;
+        com.igaworks.adpopcorn.cores.common.APDownloaderThread $r3;
+        com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable $r4;
+        java.lang.Exception $r5, $r6, $r12;
+        boolean $z0, $z1;
+        java.util.WeakHashMap $r7;
+        java.util.ArrayList $r8;
+        java.lang.Object $r9;
+        android.graphics.Bitmap $r10, $r11;
+        android.widget.ImageView$ScaleType $r13;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: android.widget.ImageView;
+
+        $i0 := @parameter2: int;
+
+        $i1 := @parameter3: int;
+
+        $r2 := @parameter4: com.igaworks.adpopcorn.cores.common.APDownloadCallback;
+
+        $z0 = 1;
+
+        $r7 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+        if $r7 != null goto label03;
+
+        $r7 = new java.util.WeakHashMap;
+
+     label01:
+        specialinvoke $r7.<java.util.WeakHashMap: void <init>()>();
+
+     label02:
+        <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache> = $r7;
+
+     label03:
+        $r8 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+        if $r8 != null goto label06;
+
+        $r8 = new java.util.ArrayList;
+
+     label04:
+        specialinvoke $r8.<java.util.ArrayList: void <init>()>();
+
+     label05:
+        <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList> = $r8;
+
+     label06:
+        $r8 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+     label07:
+        $i2 = virtualinvoke $r8.<java.util.ArrayList: int indexOf(java.lang.Object)>($r0);
+
+     label08:
+        if $i2 < 0 goto label31;
+
+        $r8 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+     label09:
+        virtualinvoke $r8.<java.util.ArrayList: java.lang.Object remove(int)>($i2);
+
+     label10:
+        $r8 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+     label11:
+        varReplacer4013 = 0;
+
+        virtualinvoke $r8.<java.util.ArrayList: void add(int,java.lang.Object)>(varReplacer4013, $r0);
+
+     label12:
+        $r7 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label13:
+        $r9 = virtualinvoke $r7.<java.util.WeakHashMap: java.lang.Object get(java.lang.Object)>($r0);
+
+        $r10 = (android.graphics.Bitmap) $r9;
+
+     label14:
+        if $r10 != null goto label35;
+
+     label15:
+        varReplacer4014 = 0;
+
+        varReplacer4015 = 1;
+
+        $r11 = staticinvoke <com.igaworks.adpopcorn.cores.common.APDownloader: android.graphics.Bitmap getBitmap(java.lang.String,int,int,boolean,boolean)>($r0, $i0, $i1, varReplacer4014, varReplacer4015);
+
+     label16:
+        $r10 = $r11;
+
+        if $r11 == null goto label18;
+
+        $r7 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label17:
+        virtualinvoke $r7.<java.util.WeakHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r0, $r11);
+
+     label18:
+        if $r10 == null goto label36;
+
+        if $r2 == null goto label20;
+
+     label19:
+        interfaceinvoke $r2.<com.igaworks.adpopcorn.cores.common.APDownloadCallback: void onBitmapCallback(android.graphics.Bitmap)>($r10);
+
+     label20:
+        if $z0 == 0 goto label51;
+
+        $r7 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label21:
+        $i0 = virtualinvoke $r7.<java.util.WeakHashMap: int size()>();
+
+     label22:
+        if $i0 <= 70 goto label51;
+
+        $r8 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+     label23:
+        $i0 = virtualinvoke $r8.<java.util.ArrayList: int size()>();
+
+     label24:
+        $i0 = $i0 + -1;
+
+        $r7 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+        $r8 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+     label25:
+        $r9 = virtualinvoke $r8.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r9 = virtualinvoke $r7.<java.util.WeakHashMap: java.lang.Object get(java.lang.Object)>($r9);
+
+        $r10 = (android.graphics.Bitmap) $r9;
+
+     label26:
+        if $r10 == null goto label28;
+
+        $r7 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+        $r8 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+     label27:
+        $r9 = virtualinvoke $r8.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        virtualinvoke $r7.<java.util.WeakHashMap: java.lang.Object remove(java.lang.Object)>($r9);
+
+     label28:
+        $r8 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+     label29:
+        virtualinvoke $r8.<java.util.ArrayList: java.lang.Object remove(int)>($i0);
+
+     label30:
+        return;
+
+     label31:
+        $r8 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+     label32:
+        varReplacer4010 = 0;
+
+        virtualinvoke $r8.<java.util.ArrayList: void add(int,java.lang.Object)>(varReplacer4010, $r0);
+
+     label33:
+        goto label12;
+
+     label34:
+        $r12 := @caughtexception;
+
+        goto label12;
+
+     label35:
+        $z0 = 0;
+
+        goto label18;
+
+     label36:
+        $z1 = staticinvoke <com.igaworks.adpopcorn.cores.common.APDownloader: boolean cancelPotentialDownload(java.lang.String,android.widget.ImageView)>($r0, $r1);
+
+     label37:
+        if $z1 == 0 goto label20;
+
+        $r7 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label38:
+        $i2 = virtualinvoke $r7.<java.util.WeakHashMap: int size()>();
+
+     label39:
+        if $i2 <= 70 goto label41;
+
+        $r7 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label40:
+        virtualinvoke $r7.<java.util.WeakHashMap: void clear()>();
+
+     label41:
+        if $r1 == null goto label43;
+
+        $r13 = <android.widget.ImageView$ScaleType: android.widget.ImageView$ScaleType FIT_XY>;
+
+     label42:
+        virtualinvoke $r1.<android.widget.ImageView: void setScaleType(android.widget.ImageView$ScaleType)>($r13);
+
+     label43:
+        $r3 = new com.igaworks.adpopcorn.cores.common.APDownloaderThread;
+
+     label44:
+        varReplacer4012 = 1;
+
+        specialinvoke $r3.<com.igaworks.adpopcorn.cores.common.APDownloaderThread: void <init>(java.lang.String,android.widget.ImageView,int,int,com.igaworks.adpopcorn.cores.common.APDownloadCallback,boolean)>($r0, $r1, $i0, $i1, $r2, varReplacer4012);
+
+     label45:
+        $r4 = new com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable;
+
+     label46:
+        specialinvoke $r4.<com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable: void <init>(com.igaworks.adpopcorn.cores.common.APDownloaderThread)>($r3);
+
+        varReplacer4011 = 0;
+
+        virtualinvoke $r1.<android.widget.ImageView: void setBackgroundColor(int)>(varReplacer4011);
+
+        virtualinvoke $r3.<com.igaworks.adpopcorn.cores.common.APDownloaderThread: void setDonwloadedDrawable(com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable)>($r4);
+
+        virtualinvoke $r3.<com.igaworks.adpopcorn.cores.common.APDownloaderThread: void start()>();
+
+     label47:
+        goto label20;
+
+     label48:
+        $r5 := @caughtexception;
+
+        virtualinvoke $r5.<java.lang.Exception: void printStackTrace()>();
+
+        return;
+
+     label49:
+        $r6 := @caughtexception;
+
+     label50:
+        virtualinvoke $r6.<java.lang.Exception: void printStackTrace()>();
+
+     label51:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label48;
+        catch java.lang.Exception from label04 to label05 with label34;
+        catch java.lang.Exception from label07 to label08 with label34;
+        catch java.lang.Exception from label09 to label10 with label34;
+        catch java.lang.Exception from label11 to label12 with label34;
+        catch java.lang.Exception from label13 to label14 with label48;
+        catch java.lang.Exception from label15 to label16 with label48;
+        catch java.lang.Exception from label17 to label18 with label48;
+        catch java.lang.Exception from label19 to label20 with label48;
+        catch java.lang.Exception from label21 to label22 with label48;
+        catch java.lang.Exception from label23 to label24 with label49;
+        catch java.lang.Exception from label25 to label26 with label49;
+        catch java.lang.Exception from label27 to label28 with label49;
+        catch java.lang.Exception from label29 to label30 with label49;
+        catch java.lang.Exception from label32 to label33 with label34;
+        catch java.lang.Exception from label36 to label37 with label48;
+        catch java.lang.Exception from label38 to label39 with label48;
+        catch java.lang.Exception from label40 to label41 with label48;
+        catch java.lang.Exception from label42 to label43 with label48;
+        catch java.lang.Exception from label44 to label45 with label48;
+        catch java.lang.Exception from label46 to label47 with label48;
+        catch java.lang.Exception from label50 to label51 with label48;
+    }
+
+    public static void downloadWithoutBG(java.lang.String, android.widget.ImageView, int, int)
+    {
+        java.lang.String $r0;
+        android.widget.ImageView $r1;
+        int $i0, $i1, $i2;
+        com.igaworks.adpopcorn.cores.common.APDownloaderThread $r2;
+        com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable $r3;
+        java.lang.Exception $r4, $r11, $r12;
+        boolean $z0, $z1;
+        java.util.WeakHashMap $r5;
+        java.util.ArrayList $r6;
+        java.lang.Object $r7;
+        android.graphics.Bitmap $r8, $r9;
+        android.widget.ImageView$ScaleType $r10;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: android.widget.ImageView;
+
+        $i0 := @parameter2: int;
+
+        $i1 := @parameter3: int;
+
+        $z0 = 1;
+
+        $r5 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+        if $r5 != null goto label03;
+
+        $r5 = new java.util.WeakHashMap;
+
+     label01:
+        specialinvoke $r5.<java.util.WeakHashMap: void <init>()>();
+
+     label02:
+        <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache> = $r5;
+
+     label03:
+        $r6 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+        if $r6 != null goto label06;
+
+        $r6 = new java.util.ArrayList;
+
+     label04:
+        specialinvoke $r6.<java.util.ArrayList: void <init>()>();
+
+     label05:
+        <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList> = $r6;
+
+     label06:
+        $r6 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+     label07:
+        $i2 = virtualinvoke $r6.<java.util.ArrayList: int indexOf(java.lang.Object)>($r0);
+
+     label08:
+        if $i2 < 0 goto label31;
+
+        $r6 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+     label09:
+        virtualinvoke $r6.<java.util.ArrayList: java.lang.Object remove(int)>($i2);
+
+     label10:
+        $r6 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+     label11:
+        virtualinvoke $r6.<java.util.ArrayList: void add(int,java.lang.Object)>(0, $r0);
+
+     label12:
+        $r5 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label13:
+        $r7 = virtualinvoke $r5.<java.util.WeakHashMap: java.lang.Object get(java.lang.Object)>($r0);
+
+        $r8 = (android.graphics.Bitmap) $r7;
+
+     label14:
+        if $r8 != null goto label35;
+
+     label15:
+        $r9 = staticinvoke <com.igaworks.adpopcorn.cores.common.APDownloader: android.graphics.Bitmap getBitmap(java.lang.String,int,int,boolean,boolean)>($r0, $i0, $i1, 0, 1);
+
+     label16:
+        $r8 = $r9;
+
+        if $r9 == null goto label18;
+
+        $r5 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label17:
+        virtualinvoke $r5.<java.util.WeakHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r0, $r9);
+
+     label18:
+        if $r8 == null goto label36;
+
+        $r10 = <android.widget.ImageView$ScaleType: android.widget.ImageView$ScaleType FIT_XY>;
+
+     label19:
+        virtualinvoke $r1.<android.widget.ImageView: void setScaleType(android.widget.ImageView$ScaleType)>($r10);
+
+        virtualinvoke $r1.<android.widget.ImageView: void setImageBitmap(android.graphics.Bitmap)>($r8);
+
+     label20:
+        if $z0 == 0 goto label51;
+
+        $r5 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label21:
+        $i0 = virtualinvoke $r5.<java.util.WeakHashMap: int size()>();
+
+     label22:
+        if $i0 <= 70 goto label51;
+
+        $r6 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+     label23:
+        $i0 = virtualinvoke $r6.<java.util.ArrayList: int size()>();
+
+     label24:
+        $i0 = $i0 + -1;
+
+        $r5 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+        $r6 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+     label25:
+        $r7 = virtualinvoke $r6.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r7 = virtualinvoke $r5.<java.util.WeakHashMap: java.lang.Object get(java.lang.Object)>($r7);
+
+        $r8 = (android.graphics.Bitmap) $r7;
+
+     label26:
+        if $r8 == null goto label28;
+
+        $r5 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+        $r6 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+     label27:
+        $r7 = virtualinvoke $r6.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        virtualinvoke $r5.<java.util.WeakHashMap: java.lang.Object remove(java.lang.Object)>($r7);
+
+     label28:
+        $r6 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+     label29:
+        virtualinvoke $r6.<java.util.ArrayList: java.lang.Object remove(int)>($i0);
+
+     label30:
+        return;
+
+     label31:
+        $r6 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+     label32:
+        virtualinvoke $r6.<java.util.ArrayList: void add(int,java.lang.Object)>(0, $r0);
+
+     label33:
+        goto label12;
+
+     label34:
+        $r11 := @caughtexception;
+
+        goto label12;
+
+     label35:
+        $z0 = 0;
+
+        goto label18;
+
+     label36:
+        $z1 = staticinvoke <com.igaworks.adpopcorn.cores.common.APDownloader: boolean cancelPotentialDownload(java.lang.String,android.widget.ImageView)>($r0, $r1);
+
+     label37:
+        if $z1 == 0 goto label20;
+
+        $r5 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label38:
+        $i2 = virtualinvoke $r5.<java.util.WeakHashMap: int size()>();
+
+     label39:
+        if $i2 <= 70 goto label41;
+
+        $r5 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label40:
+        virtualinvoke $r5.<java.util.WeakHashMap: void clear()>();
+
+     label41:
+        $r10 = <android.widget.ImageView$ScaleType: android.widget.ImageView$ScaleType FIT_XY>;
+
+     label42:
+        virtualinvoke $r1.<android.widget.ImageView: void setScaleType(android.widget.ImageView$ScaleType)>($r10);
+
+     label43:
+        $r2 = new com.igaworks.adpopcorn.cores.common.APDownloaderThread;
+
+     label44:
+        specialinvoke $r2.<com.igaworks.adpopcorn.cores.common.APDownloaderThread: void <init>(java.lang.String,android.widget.ImageView,int,int,boolean)>($r0, $r1, $i0, $i1, 0);
+
+     label45:
+        $r3 = new com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable;
+
+     label46:
+        specialinvoke $r3.<com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable: void <init>(com.igaworks.adpopcorn.cores.common.APDownloaderThread)>($r2);
+
+        virtualinvoke $r1.<android.widget.ImageView: void setBackgroundColor(int)>(0);
+
+        virtualinvoke $r2.<com.igaworks.adpopcorn.cores.common.APDownloaderThread: void setDonwloadedDrawable(com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable)>($r3);
+
+        virtualinvoke $r2.<com.igaworks.adpopcorn.cores.common.APDownloaderThread: void start()>();
+
+     label47:
+        goto label20;
+
+     label48:
+        $r12 := @caughtexception;
+
+        return;
+
+     label49:
+        $r4 := @caughtexception;
+
+     label50:
+        virtualinvoke $r4.<java.lang.Exception: void printStackTrace()>();
+
+     label51:
+        return;
+
+        catch java.lang.Exception from label01 to label02 with label48;
+        catch java.lang.Exception from label04 to label05 with label34;
+        catch java.lang.Exception from label07 to label08 with label34;
+        catch java.lang.Exception from label09 to label10 with label34;
+        catch java.lang.Exception from label11 to label12 with label34;
+        catch java.lang.Exception from label13 to label14 with label48;
+        catch java.lang.Exception from label15 to label16 with label48;
+        catch java.lang.Exception from label17 to label18 with label48;
+        catch java.lang.Exception from label19 to label20 with label48;
+        catch java.lang.Exception from label21 to label22 with label48;
+        catch java.lang.Exception from label23 to label24 with label49;
+        catch java.lang.Exception from label25 to label26 with label49;
+        catch java.lang.Exception from label27 to label28 with label49;
+        catch java.lang.Exception from label29 to label30 with label49;
+        catch java.lang.Exception from label32 to label33 with label34;
+        catch java.lang.Exception from label36 to label37 with label48;
+        catch java.lang.Exception from label38 to label39 with label48;
+        catch java.lang.Exception from label40 to label41 with label48;
+        catch java.lang.Exception from label42 to label43 with label48;
+        catch java.lang.Exception from label44 to label45 with label48;
+        catch java.lang.Exception from label46 to label47 with label48;
+        catch java.lang.Exception from label50 to label51 with label48;
+    }
+
+    private static android.graphics.Bitmap getBitmap(java.lang.String, int, int, boolean, boolean)
+    {
+        java.lang.String $r0, $r5;
+        int $i0, $i1, $i2, varReplacer4022, varReplacer4024, varReplacer4025, varReplacer4028;
+        boolean $z0, $z1, $z2;
+        java.lang.Exception $r1, $r2;
+        android.graphics.BitmapFactory$Options $r3;
+        java.lang.OutOfMemoryError $r4;
+        android.graphics.Bitmap$Config $r6;
+        android.graphics.Bitmap $r7;
+        java.util.WeakHashMap $r8;
+        java.util.Set $r9;
+        java.util.Iterator $r10;
+        java.lang.Object $r11;
+        null_type varReplacer4023, varReplacer4026, varReplacer4027;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $z0 := @parameter3: boolean;
+
+        $z1 := @parameter4: boolean;
+
+     label01:
+        varReplacer4028 = 0;
+
+        $r5 = staticinvoke <com.igaworks.adpopcorn.cores.common.APDownloader: java.lang.String isLocalFileExist(java.lang.String,boolean)>($r0, varReplacer4028);
+
+     label02:
+        if $r5 != null goto label03;
+
+        varReplacer4027 = null;
+
+        return varReplacer4027;
+
+     label03:
+        $r3 = new android.graphics.BitmapFactory$Options;
+
+     label04:
+        specialinvoke $r3.<android.graphics.BitmapFactory$Options: void <init>()>();
+
+     label05:
+        $r6 = <android.graphics.Bitmap$Config: android.graphics.Bitmap$Config RGB_565>;
+
+     label06:
+        $r3.<android.graphics.BitmapFactory$Options: android.graphics.Bitmap$Config inPreferredConfig> = $r6;
+
+     label07:
+        if $i0 == 0 goto label08;
+
+        if $i1 != 0 goto label13;
+
+     label08:
+        $i2 = <com.igaworks.adpopcorn.cores.common.APDownloader: int DEFAULT_SAMPLE_SIZE>;
+
+     label09:
+        $r3.<android.graphics.BitmapFactory$Options: int inSampleSize> = $i2;
+
+     label10:
+        if $z1 == 0 goto label35;
+
+     label11:
+        $r7 = staticinvoke <android.graphics.BitmapFactory: android.graphics.Bitmap decodeFile(java.lang.String,android.graphics.BitmapFactory$Options)>($r5, $r3);
+
+     label12:
+        return $r7;
+
+     label13:
+        varReplacer4025 = 1;
+
+        $r3.<android.graphics.BitmapFactory$Options: boolean inJustDecodeBounds> = varReplacer4025;
+
+     label14:
+        staticinvoke <android.graphics.BitmapFactory: android.graphics.Bitmap decodeFile(java.lang.String,android.graphics.BitmapFactory$Options)>($r5, $r3);
+
+     label15:
+        varReplacer4022 = 0;
+
+        $r3.<android.graphics.BitmapFactory$Options: boolean inJustDecodeBounds> = varReplacer4022;
+
+     label16:
+        $i2 = staticinvoke <com.igaworks.adpopcorn.cores.common.APDownloader: int calculateInSampleSize(android.graphics.BitmapFactory$Options,int,int)>($r3, $i0, $i1);
+
+     label17:
+        $r3.<android.graphics.BitmapFactory$Options: int inSampleSize> = $i2;
+
+     label18:
+        goto label10;
+
+     label19:
+        $r4 := @caughtexception;
+
+        virtualinvoke $r4.<java.lang.OutOfMemoryError: void printStackTrace()>();
+
+        $r8 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label20:
+        $r9 = virtualinvoke $r8.<java.util.WeakHashMap: java.util.Set keySet()>();
+
+        $r10 = interfaceinvoke $r9.<java.util.Set: java.util.Iterator iterator()>();
+
+     label21:
+        if $r10 == null goto label31;
+
+     label22:
+        $z2 = interfaceinvoke $r10.<java.util.Iterator: boolean hasNext()>();
+
+     label23:
+        if $z2 == 0 goto label31;
+
+     label24:
+        $r11 = interfaceinvoke $r10.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (java.lang.String) $r11;
+
+     label25:
+        $r8 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label26:
+        $r11 = virtualinvoke $r8.<java.util.WeakHashMap: java.lang.Object get(java.lang.Object)>($r5);
+
+        $r7 = (android.graphics.Bitmap) $r11;
+
+     label27:
+        if $r7 == null goto label31;
+
+     label28:
+        virtualinvoke $r7.<android.graphics.Bitmap: void recycle()>();
+
+     label29:
+        $r8 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+     label30:
+        virtualinvoke $r8.<java.util.WeakHashMap: java.lang.Object remove(java.lang.Object)>($r5);
+
+     label31:
+        staticinvoke <java.lang.System: void gc()>();
+
+     label32:
+        if $z0 != 0 goto label39;
+
+     label33:
+        varReplacer4024 = 1;
+
+        $r7 = staticinvoke <com.igaworks.adpopcorn.cores.common.APDownloader: android.graphics.Bitmap getBitmap(java.lang.String,int,int,boolean,boolean)>($r0, $i0, $i1, varReplacer4024, $z1);
+
+     label34:
+        return $r7;
+
+     label35:
+        $r7 = staticinvoke <android.graphics.BitmapFactory: android.graphics.Bitmap decodeFile(java.lang.String)>($r5);
+
+     label36:
+        return $r7;
+
+     label37:
+        $r2 := @caughtexception;
+
+        staticinvoke <java.lang.System: void gc()>();
+
+        varReplacer4023 = null;
+
+        return varReplacer4023;
+
+     label38:
+        $r1 := @caughtexception;
+
+     label39:
+        varReplacer4026 = null;
+
+        return varReplacer4026;
+
+        catch java.lang.OutOfMemoryError from label01 to label02 with label19;
+        catch java.lang.OutOfMemoryError from label03 to label06 with label19;
+        catch java.lang.OutOfMemoryError from label08 to label09 with label19;
+        catch java.lang.OutOfMemoryError from label11 to label12 with label19;
+        catch java.lang.OutOfMemoryError from label14 to label15 with label19;
+        catch java.lang.OutOfMemoryError from label16 to label17 with label19;
+        catch java.lang.Exception from label01 to label02 with label38;
+        catch java.lang.Exception from label04 to label05 with label38;
+        catch java.lang.Exception from label06 to label07 with label38;
+        catch java.lang.Exception from label09 to label10 with label38;
+        catch java.lang.Exception from label11 to label12 with label38;
+        catch java.lang.Exception from label13 to label18 with label38;
+        catch java.lang.Exception from label20 to label21 with label37;
+        catch java.lang.Exception from label22 to label23 with label37;
+        catch java.lang.Exception from label24 to label25 with label37;
+        catch java.lang.Exception from label26 to label27 with label37;
+        catch java.lang.Exception from label28 to label29 with label37;
+        catch java.lang.Exception from label30 to label32 with label37;
+        catch java.lang.Exception from label33 to label34 with label37;
+        catch java.lang.OutOfMemoryError from label35 to label36 with label19;
+        catch java.lang.Exception from label35 to label36 with label38;
+    }
+
+    private static com.igaworks.adpopcorn.cores.common.APDownloaderThread getBitmapDownloaderTask(android.widget.ImageView)
+    {
+        android.widget.ImageView $r0;
+        android.graphics.drawable.Drawable $r1;
+        boolean $z0;
+        com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable $r2;
+        com.igaworks.adpopcorn.cores.common.APDownloaderThread $r3;
+        null_type varReplacer4029;
+
+        nop;
+
+        $r0 := @parameter0: android.widget.ImageView;
+
+        if $r0 == null goto label1;
+
+        $r1 = virtualinvoke $r0.<android.widget.ImageView: android.graphics.drawable.Drawable getDrawable()>();
+
+        $z0 = $r1 instanceof com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable;
+
+        if $z0 == 0 goto label1;
+
+        $r2 = (com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable) $r1;
+
+        $r3 = virtualinvoke $r2.<com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable: com.igaworks.adpopcorn.cores.common.APDownloaderThread getBitmapDownloaderTask()>();
+
+        return $r3;
+
+     label1:
+        varReplacer4029 = null;
+
+        return varReplacer4029;
+    }
+
+    public static java.lang.String isLocalFileExist(java.lang.String, boolean)
+    {
+        java.lang.String $r0, $r5, varReplacer4030, varReplacer4033;
+        boolean $z0;
+        java.lang.Exception $r1, $r6;
+        java.io.File $r2, $r3;
+        java.lang.StringBuilder $r4;
+        int $i0;
+        null_type varReplacer4031, varReplacer4032;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $z0 := @parameter1: boolean;
+
+        goto label16;
+
+     label01:
+        $z0 = virtualinvoke $r3.<java.io.File: boolean exists()>();
+
+     label02:
+        if $z0 != 0 goto label04;
+
+     label03:
+        virtualinvoke $r3.<java.io.File: boolean mkdirs()>();
+
+     label04:
+        $r2 = new java.io.File;
+
+     label05:
+        varReplacer4030 = ".nomedia";
+
+        specialinvoke $r2.<java.io.File: void <init>(java.io.File,java.lang.String)>($r3, varReplacer4030);
+
+        $z0 = virtualinvoke $r2.<java.io.File: boolean exists()>();
+
+     label06:
+        if $z0 != 0 goto label08;
+
+     label07:
+        virtualinvoke $r2.<java.io.File: boolean createNewFile()>();
+
+     label08:
+        $r0 = staticinvoke <com.igaworks.adpopcorn.cores.common.APDownloader: java.lang.String computeHashedName(java.lang.String)>($r0);
+
+     label09:
+        if $r0 == null goto label21;
+
+     label10:
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+     label11:
+        if $i0 <= 0 goto label21;
+
+        $r2 = new java.io.File;
+
+     label12:
+        specialinvoke $r2.<java.io.File: void <init>(java.io.File,java.lang.String)>($r3, $r0);
+
+        $z0 = virtualinvoke $r2.<java.io.File: boolean exists()>();
+
+     label13:
+        if $z0 == 0 goto label21;
+
+     label14:
+        $r0 = virtualinvoke $r2.<java.io.File: java.lang.String getAbsolutePath()>();
+
+     label15:
+        return $r0;
+
+     label16:
+        $r3 = new java.io.File;
+
+        $r4 = new java.lang.StringBuilder;
+
+     label17:
+        $r2 = staticinvoke <android.os.Environment: java.io.File getExternalStorageDirectory()>();
+
+        $r5 = virtualinvoke $r2.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r5);
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>($r5);
+
+        varReplacer4033 = "/igaw/cache";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer4033);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.io.File: void <init>(java.lang.String)>($r5);
+
+     label18:
+        goto label01;
+
+     label19:
+        $r1 := @caughtexception;
+
+        varReplacer4032 = null;
+
+        return varReplacer4032;
+
+     label20:
+        $r6 := @caughtexception;
+
+        goto label08;
+
+     label21:
+        varReplacer4031 = null;
+
+        return varReplacer4031;
+
+        catch java.lang.Exception from label01 to label01 with label19;
+        catch java.lang.Exception from label01 to label02 with label19;
+        catch java.lang.Exception from label03 to label04 with label19;
+        catch java.lang.Exception from label05 to label06 with label20;
+        catch java.lang.Exception from label07 to label08 with label20;
+        catch java.lang.Exception from label08 to label09 with label19;
+        catch java.lang.Exception from label10 to label11 with label19;
+        catch java.lang.Exception from label12 to label13 with label19;
+        catch java.lang.Exception from label14 to label15 with label19;
+        catch java.lang.Exception from label17 to label18 with label19;
+    }
+
+    public static void preImageDownload(java.lang.String, int, int)
+    {
+        java.lang.String $r0, $r3;
+        int $i0, $i1;
+        com.igaworks.adpopcorn.cores.common.APDownloaderThread $r1;
+        com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable $r2;
+        android.content.Context $r4;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $r3 = staticinvoke <com.igaworks.adpopcorn.cores.common.APDownloader: java.lang.String isLocalFileExist(java.lang.String,boolean)>($r0, 0);
+
+        if $r3 == null goto label1;
+
+        return;
+
+     label1:
+        $r4 = <com.igaworks.adpopcorn.cores.common.APDownloader: android.content.Context context>;
+
+        staticinvoke <com.igaworks.adpopcorn.cores.common.APLogger: void Logging(android.content.Context,java.lang.String,java.lang.String,int)>($r4, "APDownloader", "Image downloading...", 3);
+
+        $r1 = new com.igaworks.adpopcorn.cores.common.APDownloaderThread;
+
+        specialinvoke $r1.<com.igaworks.adpopcorn.cores.common.APDownloaderThread: void <init>(java.lang.String,android.widget.ImageView,int,int,boolean)>($r0, null, $i0, $i1, 1);
+
+        $r2 = new com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable;
+
+        specialinvoke $r2.<com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable: void <init>(com.igaworks.adpopcorn.cores.common.APDownloaderThread)>($r1);
+
+        virtualinvoke $r1.<com.igaworks.adpopcorn.cores.common.APDownloaderThread: void setDonwloadedDrawable(com.igaworks.adpopcorn.cores.common.APDownloader$DownloadedDrawable)>($r2);
+
+        virtualinvoke $r1.<com.igaworks.adpopcorn.cores.common.APDownloaderThread: void start()>();
+
+        return;
+    }
+
+    public static void preVideoDownload(java.lang.String)
+    {
+        java.lang.String $r0, $r2;
+        com.igaworks.adpopcorn.cores.common.APDownloaderThread $r1;
+        android.content.Context $r3;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r2 = staticinvoke <com.igaworks.adpopcorn.cores.common.APDownloader: java.lang.String isLocalFileExist(java.lang.String,boolean)>($r0, 1);
+
+        if $r2 == null goto label1;
+
+        return;
+
+     label1:
+        $r3 = <com.igaworks.adpopcorn.cores.common.APDownloader: android.content.Context context>;
+
+        staticinvoke <com.igaworks.adpopcorn.cores.common.APLogger: void Logging(android.content.Context,java.lang.String,java.lang.String,int)>($r3, "APDownloader", "Video downloading...", 3);
+
+        $r1 = new com.igaworks.adpopcorn.cores.common.APDownloaderThread;
+
+        specialinvoke $r1.<com.igaworks.adpopcorn.cores.common.APDownloaderThread: void <init>(java.lang.String)>($r0);
+
+        virtualinvoke $r1.<com.igaworks.adpopcorn.cores.common.APDownloaderThread: void start()>();
+
+        return;
+    }
+
+    public static void setContext(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.util.WeakHashMap $r1;
+        java.util.ArrayList $r2;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        <com.igaworks.adpopcorn.cores.common.APDownloader: android.content.Context context> = $r0;
+
+        $r1 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache>;
+
+        if $r1 != null goto label1;
+
+        $r1 = new java.util.WeakHashMap;
+
+        specialinvoke $r1.<java.util.WeakHashMap: void <init>()>();
+
+        <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.WeakHashMap mImageCache> = $r1;
+
+     label1:
+        $r2 = <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList>;
+
+        if $r2 != null goto label2;
+
+        $r2 = new java.util.ArrayList;
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>()>();
+
+        <com.igaworks.adpopcorn.cores.common.APDownloader: java.util.ArrayList cacheKeyList> = $r2;
+
+     label2:
+        return;
+    }
+}

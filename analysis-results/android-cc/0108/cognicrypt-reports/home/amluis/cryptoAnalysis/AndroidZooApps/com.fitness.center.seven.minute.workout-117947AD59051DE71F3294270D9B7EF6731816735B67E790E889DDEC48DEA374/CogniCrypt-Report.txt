@@ -1,0 +1,136 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4859)
+		Method: <com.google.android.gms.ads.internal.util.client.a: java.lang.String a(java.lang.String)>
+		SHA-256: f54a565d2da4a49119dfd6631a286ba1318e5650d70b3b4f5ca1333cafac4a1c
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5357)
+		Method: <com.facebook.ads.internal.j.a.p: java.lang.String a(byte[],java.lang.String)>
+		SHA-256: 94796f4df48d59fddeb1c4d641616c5cd834917c4c1545e936955886c771a9da
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r0)
+		Method: <com.facebook.ads.internal.j.a.p: java.lang.String a(byte[],java.lang.String)>
+		SHA-256: 29cab5494deb92aa1fbf6c79e70c5591359caaa205fd13bfeed4f79761f5a56c
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4)
+		Method: <com.fitness.center.seven.minute.workout.e.n: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 66e7b77a2d2168e2ae5f296a2bda27a6595a8d4b131b8ede069a1b2f3d919de8
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
+		Method: <com.facebook.ads.internal.m.bc: java.lang.String a(java.lang.String)>
+		SHA-256: 2008bee22c423f1bee665661990bc46f4e0f1d999e316f3563a42833ac7f2495
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer890)
+		Method: <com.facebook.ads.internal.m.bc: java.lang.String a(java.lang.String)>
+		SHA-256: a4e675f3acd4e230d3d4177da41ee7c20e495cedcf9429d16c27d320290a4215
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.ads.internal.util.client.a: java.lang.String a(java.lang.String)>
+		SHA-256: c9324f008248c2c970dbb485d485919e922bd7f99c929b778d6182bd5a8c3023
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.Signature
+		Statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer4364)
+		Method: <com.fitness.center.seven.minute.workout.e.n: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: d36063a55bafc375c9a64c5ff5949940bb2de4a5f703a3e0fff4912995e7f295
+		Secure: false
+
+Findings in Java Class: com.facebook.ads.internal.m.bc
+
+	 in Method: java.lang.String a(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #a4e675f3acd4e230d3d4177da41ee7c20e495cedcf9429d16c27d320290a4215)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer890)
+
+
+Findings in Java Class: com.fitness.center.seven.minute.workout.e.n
+
+	 in Method: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
+
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #d36063a55bafc375c9a64c5ff5949940bb2de4a5f703a3e0fff4912995e7f295)
+			First parameter (with value "SHA1withRSA") should be any of {SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA}
+			at statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer4364)
+
+
+Findings in Java Class: com.google.android.gms.ads.internal.util.client.a
+
+	 in Method: java.lang.String a(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #f54a565d2da4a49119dfd6631a286ba1318e5650d70b3b4f5ca1333cafac4a1c)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4859)
+
+
+Findings in Java Class: com.facebook.ads.internal.j.a.p
+
+	 in Method: java.lang.String a(byte[],java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #94796f4df48d59fddeb1c4d641616c5cd834917c4c1545e936955886c771a9da)
+			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5357)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 8
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 4
+	RequiredPredicateError: 1
+=====================================================================

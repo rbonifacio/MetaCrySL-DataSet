@@ -1,0 +1,493 @@
+public class com.epson.iprojection.ui.activities.pjselect.control.HttpDigestAuth extends java.lang.Object
+{
+    private static final java.lang.String HEX_LOOKUP;
+
+    public void <init>()
+    {
+        com.epson.iprojection.ui.activities.pjselect.control.HttpDigestAuth $r0;
+
+        nop;
+
+        $r0 := @this: com.epson.iprojection.ui.activities.pjselect.control.HttpDigestAuth;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static java.lang.String bytesToHexString(byte[])
+    {
+        byte[] $r0;
+        java.lang.StringBuilder $r1;
+        int $i0, $i1;
+        java.lang.String $r2;
+        byte $b2;
+        short $s3;
+        char $c4;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 = new java.lang.StringBuilder;
+
+        $i0 = lengthof $r0;
+
+        $i0 = $i0 * 2;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(int)>($i0);
+
+        $i0 = 0;
+
+     label1:
+        $i1 = lengthof $r0;
+
+        if $i0 < $i1 goto label2;
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r2;
+
+     label2:
+        $r2 = "0123456789abcdef";
+
+        $b2 = $r0[$i0];
+
+        $s3 = $b2 & 240;
+
+        $s3 = $s3 >> 4;
+
+        $c4 = virtualinvoke $r2.<java.lang.String: char charAt(int)>($s3);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>($c4);
+
+        $r2 = "0123456789abcdef";
+
+        $b2 = $r0[$i0];
+
+        $b2 = $b2 & 15;
+
+        $b2 = $b2 >> 0;
+
+        $c4 = virtualinvoke $r2.<java.lang.String: char charAt(int)>($b2);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>($c4);
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+    }
+
+    private static java.util.HashMap splitAuthFields(java.lang.String)
+    {
+        java.lang.String $r0, $r10, varReplacer7924;
+        java.util.HashMap $r1;
+        com.google.common.base.CharMatcher $r2;
+        com.google.common.base.Splitter $r3, $r4;
+        java.lang.Iterable $r5;
+        java.util.Iterator $r6;
+        boolean $z0;
+        java.lang.Object $r7;
+        java.lang.Object[] $r8;
+        java.lang.String[] $r9;
+        int varReplacer7922, varReplacer7923, varReplacer7925;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <com.google.common.collect.Maps: java.util.HashMap newHashMap()>();
+
+        varReplacer7924 = "\"\t ";
+
+        $r2 = staticinvoke <com.google.common.base.CharMatcher: com.google.common.base.CharMatcher anyOf(java.lang.CharSequence)>(varReplacer7924);
+
+        varReplacer7923 = 44;
+
+        $r3 = staticinvoke <com.google.common.base.Splitter: com.google.common.base.Splitter on(char)>(varReplacer7923);
+
+        $r3 = virtualinvoke $r3.<com.google.common.base.Splitter: com.google.common.base.Splitter trimResults()>();
+
+        $r3 = virtualinvoke $r3.<com.google.common.base.Splitter: com.google.common.base.Splitter omitEmptyStrings()>();
+
+        varReplacer7922 = 61;
+
+        $r4 = staticinvoke <com.google.common.base.Splitter: com.google.common.base.Splitter on(char)>(varReplacer7922);
+
+        $r4 = virtualinvoke $r4.<com.google.common.base.Splitter: com.google.common.base.Splitter trimResults(com.google.common.base.CharMatcher)>($r2);
+
+        varReplacer7925 = 2;
+
+        $r4 = virtualinvoke $r4.<com.google.common.base.Splitter: com.google.common.base.Splitter limit(int)>(varReplacer7925);
+
+        $r5 = virtualinvoke $r3.<com.google.common.base.Splitter: java.lang.Iterable split(java.lang.CharSequence)>($r0);
+
+        $r6 = interfaceinvoke $r5.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 != 0 goto label2;
+
+        return $r1;
+
+     label2:
+        $r7 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r0 = (java.lang.String) $r7;
+
+        $r5 = virtualinvoke $r4.<com.google.common.base.Splitter: java.lang.Iterable split(java.lang.CharSequence)>($r0);
+
+        $r8 = staticinvoke <com.google.common.collect.Iterables: java.lang.Object[] toArray(java.lang.Iterable,java.lang.Class)>($r5, class "Ljava/lang/String;");
+
+        $r9 = (java.lang.String[]) $r8;
+
+        $r0 = $r9[0];
+
+        $r10 = $r9[1];
+
+        virtualinvoke $r1.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r0, $r10);
+
+        goto label1;
+    }
+
+    public static java.net.HttpURLConnection tryDigestAuthentication(java.net.HttpURLConnection, java.lang.String, java.lang.String)
+    {
+        java.net.HttpURLConnection $r0;
+        java.lang.String $r1, $r2, $r4, $r12, varReplacer7884, varReplacer7885, varReplacer7888, varReplacer7890, varReplacer7892, varReplacer7893, varReplacer7894, varReplacer7895, varReplacer7896, varReplacer7898, varReplacer7899, varReplacer7901, varReplacer7902, varReplacer7904, varReplacer7905, varReplacer7906, varReplacer7907, varReplacer7908, varReplacer7909, varReplacer7910, varReplacer7911, varReplacer7912, varReplacer7913, varReplacer7914, varReplacer7917, varReplacer7918, varReplacer7919, varReplacer7920, varReplacer7921;
+        java.lang.StringBuilder $r3, $r13;
+        boolean $z0;
+        java.util.HashMap $r5;
+        java.security.MessageDigest $r6;
+        com.google.common.base.Joiner $r7;
+        java.lang.Object $r8;
+        java.lang.Object[] $r9;
+        byte[] $r10;
+        java.net.URL $r11;
+        java.net.URLConnection $r14;
+        java.lang.Throwable $r15, $r16, $r17, $r18, $r19;
+        null_type varReplacer7886, varReplacer7891, varReplacer7897, varReplacer7900, varReplacer7903, varReplacer7916;
+        int varReplacer7887, varReplacer7889, varReplacer7915;
+
+        nop;
+
+        $r0 := @parameter0: java.net.HttpURLConnection;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        varReplacer7894 = "WWW-Authenticate";
+
+        $r4 = virtualinvoke $r0.<java.net.HttpURLConnection: java.lang.String getHeaderField(java.lang.String)>(varReplacer7894);
+
+        if $r4 == null goto label01;
+
+        varReplacer7911 = "Digest ";
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean startsWith(java.lang.String)>(varReplacer7911);
+
+        if $z0 != 0 goto label02;
+
+     label01:
+        varReplacer7891 = null;
+
+        return varReplacer7891;
+
+     label02:
+        varReplacer7887 = 7;
+
+        $r4 = virtualinvoke $r4.<java.lang.String: java.lang.String substring(int)>(varReplacer7887);
+
+        $r5 = staticinvoke <com.epson.iprojection.ui.activities.pjselect.control.HttpDigestAuth: java.util.HashMap splitAuthFields(java.lang.String)>($r4);
+
+     label03:
+        varReplacer7909 = "MD5";
+
+        $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7909);
+
+     label04:
+        varReplacer7889 = 58;
+
+        $r7 = staticinvoke <com.google.common.base.Joiner: com.google.common.base.Joiner on(char)>(varReplacer7889);
+
+     label05:
+        virtualinvoke $r6.<java.security.MessageDigest: void reset()>();
+
+        varReplacer7899 = "realm";
+
+        $r8 = virtualinvoke $r5.<java.util.HashMap: java.lang.Object get(java.lang.Object)>(varReplacer7899);
+
+     label06:
+        $r9 = newarray (java.lang.Object)[1];
+
+        $r9[0] = "guest";
+
+     label07:
+        varReplacer7901 = "EPSONREMOTE";
+
+        $r2 = virtualinvoke $r7.<com.google.common.base.Joiner: java.lang.String join(java.lang.Object,java.lang.Object,java.lang.Object[])>(varReplacer7901, $r8, $r9);
+
+        varReplacer7905 = "ISO-8859-1";
+
+        $r10 = virtualinvoke $r2.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer7905);
+
+        virtualinvoke $r6.<java.security.MessageDigest: void update(byte[])>($r10);
+
+        $r10 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>();
+
+        $r2 = staticinvoke <com.epson.iprojection.ui.activities.pjselect.control.HttpDigestAuth: java.lang.String bytesToHexString(byte[])>($r10);
+
+     label08:
+        virtualinvoke $r6.<java.security.MessageDigest: void reset()>();
+
+        $r4 = virtualinvoke $r0.<java.net.HttpURLConnection: java.lang.String getRequestMethod()>();
+
+        $r11 = virtualinvoke $r0.<java.net.HttpURLConnection: java.net.URL getURL()>();
+
+        $r12 = virtualinvoke $r11.<java.net.URL: java.lang.String getPath()>();
+
+     label09:
+        $r9 = newarray (java.lang.Object)[0];
+
+     label10:
+        $r4 = virtualinvoke $r7.<com.google.common.base.Joiner: java.lang.String join(java.lang.Object,java.lang.Object,java.lang.Object[])>($r4, $r12, $r9);
+
+        varReplacer7902 = "ISO-8859-1";
+
+        $r10 = virtualinvoke $r4.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer7902);
+
+        virtualinvoke $r6.<java.security.MessageDigest: void update(byte[])>($r10);
+
+        $r10 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>();
+
+        $r4 = staticinvoke <com.epson.iprojection.ui.activities.pjselect.control.HttpDigestAuth: java.lang.String bytesToHexString(byte[])>($r10);
+
+     label11:
+        virtualinvoke $r6.<java.security.MessageDigest: void reset()>();
+
+        varReplacer7906 = "nonce";
+
+        $r8 = virtualinvoke $r5.<java.util.HashMap: java.lang.Object get(java.lang.Object)>(varReplacer7906);
+
+     label12:
+        $r9 = newarray (java.lang.Object)[1];
+
+        $r9[0] = $r4;
+
+     label13:
+        $r2 = virtualinvoke $r7.<com.google.common.base.Joiner: java.lang.String join(java.lang.Object,java.lang.Object,java.lang.Object[])>($r2, $r8, $r9);
+
+        varReplacer7892 = "ISO-8859-1";
+
+        $r10 = virtualinvoke $r2.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer7892);
+
+        virtualinvoke $r6.<java.security.MessageDigest: void update(byte[])>($r10);
+
+        $r10 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>();
+
+        $r2 = staticinvoke <com.epson.iprojection.ui.activities.pjselect.control.HttpDigestAuth: java.lang.String bytesToHexString(byte[])>($r10);
+
+     label14:
+        $r3 = new java.lang.StringBuilder;
+
+        varReplacer7915 = 128;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(int)>(varReplacer7915);
+
+        varReplacer7885 = "Digest ";
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7885);
+
+        varReplacer7920 = "username";
+
+        $r13 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7920);
+
+        varReplacer7907 = "=\"";
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7907);
+
+        varReplacer7904 = "EPSONREMOTE";
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7904);
+
+        varReplacer7895 = "\",";
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7895);
+
+        varReplacer7908 = "realm";
+
+        $r13 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7908);
+
+        varReplacer7890 = "=\"";
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7890);
+
+        varReplacer7910 = "realm";
+
+        $r8 = virtualinvoke $r5.<java.util.HashMap: java.lang.Object get(java.lang.Object)>(varReplacer7910);
+
+        $r1 = (java.lang.String) $r8;
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer7921 = "\",";
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7921);
+
+        varReplacer7896 = "nonce";
+
+        $r13 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7896);
+
+        varReplacer7888 = "=\"";
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7888);
+
+        varReplacer7913 = "nonce";
+
+        $r8 = virtualinvoke $r5.<java.util.HashMap: java.lang.Object get(java.lang.Object)>(varReplacer7913);
+
+        $r1 = (java.lang.String) $r8;
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer7918 = "\",";
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7918);
+
+        varReplacer7898 = "uri";
+
+        $r13 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7898);
+
+        varReplacer7919 = "=\"";
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7919);
+
+        $r11 = virtualinvoke $r0.<java.net.HttpURLConnection: java.net.URL getURL()>();
+
+        $r1 = virtualinvoke $r11.<java.net.URL: java.lang.String getPath()>();
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer7914 = "\",";
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7914);
+
+        varReplacer7912 = "response";
+
+        $r13 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7912);
+
+        varReplacer7884 = "=\"";
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7884);
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        varReplacer7893 = "\"";
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7893);
+
+     label15:
+        $r11 = virtualinvoke $r0.<java.net.HttpURLConnection: java.net.URL getURL()>();
+
+        $r14 = virtualinvoke $r11.<java.net.URL: java.net.URLConnection openConnection()>();
+
+     label16:
+        $r0 = (java.net.HttpURLConnection) $r14;
+
+     label17:
+        $r1 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer7917 = "Authorization";
+
+        virtualinvoke $r0.<java.net.HttpURLConnection: void addRequestProperty(java.lang.String,java.lang.String)>(varReplacer7917, $r1);
+
+     label18:
+        return $r0;
+
+     label19:
+        $r15 := @caughtexception;
+
+        varReplacer7903 = null;
+
+        return varReplacer7903;
+
+     label20:
+        $r16 := @caughtexception;
+
+        varReplacer7897 = null;
+
+        return varReplacer7897;
+
+     label21:
+        $r17 := @caughtexception;
+
+        varReplacer7900 = null;
+
+        return varReplacer7900;
+
+     label22:
+        $r18 := @caughtexception;
+
+        varReplacer7886 = null;
+
+        return varReplacer7886;
+
+     label23:
+        $r19 := @caughtexception;
+
+        varReplacer7916 = null;
+
+        return varReplacer7916;
+
+        catch java.security.NoSuchAlgorithmException from label03 to label04 with label20;
+        catch java.io.UnsupportedEncodingException from label05 to label06 with label21;
+        catch java.io.UnsupportedEncodingException from label07 to label08 with label21;
+        catch java.io.UnsupportedEncodingException from label08 to label09 with label22;
+        catch java.io.UnsupportedEncodingException from label10 to label11 with label22;
+        catch java.io.UnsupportedEncodingException from label11 to label12 with label23;
+        catch java.io.UnsupportedEncodingException from label13 to label14 with label23;
+        catch java.io.IOException from label15 to label16 with label19;
+        catch java.io.IOException from label17 to label18 with label19;
+    }
+
+    public java.net.HttpURLConnection tryAuth(java.net.HttpURLConnection, java.lang.String, java.lang.String) throws java.io.IOException
+    {
+        com.epson.iprojection.ui.activities.pjselect.control.HttpDigestAuth $r0;
+        java.lang.String $r1, $r2, varReplacer7882, varReplacer7883;
+        java.net.HttpURLConnection $r3;
+        int $i0;
+        com.epson.iprojection.ui.activities.pjselect.control.HttpDigestAuth$AuthenticationException $r4;
+
+        nop;
+
+        $r0 := @this: com.epson.iprojection.ui.activities.pjselect.control.HttpDigestAuth;
+
+        $r3 := @parameter0: java.net.HttpURLConnection;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $i0 = virtualinvoke $r3.<java.net.HttpURLConnection: int getResponseCode()>();
+
+        if $i0 != 401 goto label1;
+
+        varReplacer7882 = "EPSONREMOTE";
+
+        varReplacer7883 = "guest";
+
+        $r3 = staticinvoke <com.epson.iprojection.ui.activities.pjselect.control.HttpDigestAuth: java.net.HttpURLConnection tryDigestAuthentication(java.net.HttpURLConnection,java.lang.String,java.lang.String)>($r3, varReplacer7882, varReplacer7883);
+
+        if $r3 != null goto label1;
+
+        $r4 = new com.epson.iprojection.ui.activities.pjselect.control.HttpDigestAuth$AuthenticationException;
+
+        specialinvoke $r4.<com.epson.iprojection.ui.activities.pjselect.control.HttpDigestAuth$AuthenticationException: void <init>()>();
+
+        throw $r4;
+
+     label1:
+        return $r3;
+    }
+}

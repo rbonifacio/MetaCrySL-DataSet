@@ -1,0 +1,133 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r11
+		Type: javax.crypto.CipherInputStream
+		Statement: specialinvoke $r11.<javax.crypto.CipherInputStream: void <init>(java.io.InputStream,javax.crypto.Cipher)>($r4, $r9)
+		Method: <uyg.islamiuygulamalar.data.DatabaseHelper_Asset: void c()>
+		SHA-256: 64bada8864a4ce0faa7f2bc28c98ad82a0dea16d9431e6542de4c0a5ce06a030
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3398)
+		Method: <com.facebook.ads.internal.i.a.o: java.lang.String a(byte[],java.lang.String)>
+		SHA-256: 3e526f1d122d44ad227c42ac6a9286228dbd657b44accfe593328a34b07ceb48
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
+		Method: <com.facebook.ads.internal.util.u: java.lang.String a(java.lang.String)>
+		SHA-256: df022d5a6be65eeb52814bda079672071012010f8212bd47d4c605dbc6673e1
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r0)
+		Method: <com.facebook.ads.internal.i.a.o: java.lang.String a(byte[],java.lang.String)>
+		SHA-256: f9acee63bcc9ed9ad5559c89a5a0991b40aa80ee5d6a97962f90d68b2bbbd13b
+		Secure: false
+	Object:
+		Variable: $r7
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r8, varReplacer2680)
+		Method: <uyg.islamiuygulamalar.data.DatabaseHelper_Asset: void c()>
+		SHA-256: 3745d937df8d4e1b19e4d284f39e8e4b06e2cd227d3d143188ac73301c482079
+		Secure: false
+	Object:
+		Variable: varReplacer2680
+		Type: java.lang.String
+		Statement: specialinvoke $r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r8, varReplacer2680)
+		Method: <uyg.islamiuygulamalar.data.DatabaseHelper_Asset: void c()>
+		SHA-256: 68b01d2d4240e1bcfcbed9f8b9d7b73a70d740b03bbe2c8567b91c83df41feb6
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer981)
+		Method: <com.facebook.ads.internal.util.u: java.lang.String a(java.lang.String)>
+		SHA-256: 427081b8b2078042a2a826cc5dfe5c8219641b631b96bc8862149e608caa0d4c
+		Secure: false
+	Object:
+		Variable: $r10
+		Type: javax.crypto.Cipher
+		Statement: $r10 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2677)
+		Method: <uyg.islamiuygulamalar.data.DatabaseHelper_Asset: void c()>
+		SHA-256: 48697540af4e11ee280cf5160959c6096e5db2281a269cc3b7bdc8d29a6cb616
+		Secure: false
+
+Findings in Java Class: com.facebook.ads.internal.util.u
+
+	 in Method: java.lang.String a(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #427081b8b2078042a2a826cc5dfe5c8219641b631b96bc8862149e608caa0d4c)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer981)
+
+
+Findings in Java Class: uyg.islamiuygulamalar.data.DatabaseHelper_Asset
+
+	 in Method: void c()
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r8, varReplacer2680)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #48697540af4e11ee280cf5160959c6096e5db2281a269cc3b7bdc8d29a6cb616)
+			First parameter (with value "AES") should be any of AES/{OFB, CBC, CTS, CTR, CFB}
+			at statement: $r10 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2677)
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #48697540af4e11ee280cf5160959c6096e5db2281a269cc3b7bdc8d29a6cb616)
+			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init, update, wrap, doFinal
+			at statement: specialinvoke $r11.<javax.crypto.CipherInputStream: void <init>(java.io.InputStream,javax.crypto.Cipher)>($r4, $r9)
+
+
+Findings in Java Class: com.facebook.ads.internal.i.a.o
+
+	 in Method: java.lang.String a(byte[],java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #3e526f1d122d44ad227c42ac6a9286228dbd657b44accfe593328a34b07ceb48)
+			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3398)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 8
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 1
+	RequiredPredicateError: 1
+	ConstraintError: 3
+=====================================================================

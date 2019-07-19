@@ -1,0 +1,133 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r7
+		Type: java.security.MessageDigest
+		Statement: $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1348)
+		Method: <com.google.android.gms.GameHelper: java.lang.String getSHA1CertFingerprint()>
+		SHA-256: 4e863caf122e2954452f68878aeea1b9ba9613ee4b9ffda4d7d9584e947cf091
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1044)
+		Method: <com.unity3d.ads.misc.Utilities: java.lang.String Sha256(byte[])>
+		SHA-256: a145edf5785d8e42bee548bbe3d71676aca311ae51b155dd2bfea5b05fa518b
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r16.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.crescentmoongames.redline_rush.ExpansionDownloaderActivity$1: java.lang.Boolean doInBackground(java.lang.Object[])>
+		SHA-256: 2e16d6a9c815de14e2b0439481d3a0cf5c106b323c926ea94f97d9762c31914d
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r4.<java.security.Signature: boolean verify(byte[])>($r5)
+		Method: <com.utils.InappPurchase: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 148ed40b023a7cf403bfcedb76d42fb2961df2c3a09b717a38db713a5c75c5fa
+		Secure: false
+	Object:
+		Variable: $r9
+		Type: byte[]
+		Statement: $r9 = virtualinvoke $r7.<java.security.MessageDigest: byte[] digest(byte[])>($r9)
+		Method: <com.google.android.gms.GameHelper: java.lang.String getSHA1CertFingerprint()>
+		SHA-256: b48ebc2517caf5e76a29367d47a1532224bece324cef1b8dfe8210853a6daccd
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.unity3d.ads.misc.Utilities: java.lang.String Sha256(byte[])>
+		SHA-256: 894949698e08806f3b9765c53d5ee1aaffe6f06b50da016fb7a4fbcc872cc19f
+		Secure: true
+	Object:
+		Variable: $r16
+		Type: java.security.MessageDigest
+		Statement: $r16 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer139)
+		Method: <com.crescentmoongames.redline_rush.ExpansionDownloaderActivity$1: java.lang.Boolean doInBackground(java.lang.Object[])>
+		SHA-256: f4a64f46ebee8ffcfe1b99d7118c66324a9780a0abe0501810385a9401beed00
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: java.security.Signature
+		Statement: $r4 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer270)
+		Method: <com.utils.InappPurchase: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 9898ea00bd61a1ccb84712bfe30318261dde6d36427235496f594b051f1ba635
+		Secure: false
+
+Findings in Java Class: com.crescentmoongames.redline_rush.ExpansionDownloaderActivity$1
+
+	 in Method: java.lang.Boolean doInBackground(java.lang.Object[])
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #f4a64f46ebee8ffcfe1b99d7118c66324a9780a0abe0501810385a9401beed00)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to java.security.MessageDigest: void update(byte[],int,int), digest, java.security.MessageDigest: void update(java.nio.ByteBuffer), java.security.MessageDigest: void update(byte), java.security.MessageDigest: void update(byte[])
+			at statement: virtualinvoke $r16.<java.security.MessageDigest: void update(byte[],int,int)>($r2, varReplacer150, $i4)
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #f4a64f46ebee8ffcfe1b99d7118c66324a9780a0abe0501810385a9401beed00)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r16 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer139)
+
+
+Findings in Java Class: com.utils.InappPurchase
+
+	 in Method: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #9898ea00bd61a1ccb84712bfe30318261dde6d36427235496f594b051f1ba635)
+			First parameter (with value "SHA1withRSA") should be any of {SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA}
+			at statement: $r4 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer270)
+
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r4.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
+
+
+Findings in Java Class: com.google.android.gms.GameHelper
+
+	 in Method: java.lang.String getSHA1CertFingerprint()
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #4e863caf122e2954452f68878aeea1b9ba9613ee4b9ffda4d7d9584e947cf091)
+			First parameter (with value "SHA1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1348)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 8
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 3
+	IncompleteOperationError: 1
+	RequiredPredicateError: 1
+=====================================================================

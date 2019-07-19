@@ -1,0 +1,111 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1795)
+		Method: <org.xutils.http.app.DefaultParamsBuilder: javax.net.ssl.SSLSocketFactory getTrustAllSSLSocketFactory()>
+		SHA-256: 2f9035cf1f25db0de7dc3eb2bad24a7e2df5e3b7174a023ddc61852d6538fb7d
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1901)
+		Method: <org.xutils.common.util.MD5: java.lang.String md5(java.lang.String)>
+		SHA-256: 5fc87ac366dfc98b0c6a19037aabdd8d4d5baeeac4186d7438bb8b17dc543fc4
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: byte[]
+		Statement: $r5 = virtualinvoke $r7.<java.security.MessageDigest: byte[] digest()>()
+		Method: <cn.sharesdk.wechat.utils.h: byte[] a(java.lang.String,java.lang.String,int)>
+		SHA-256: b5e7d318b8bf3ca192f902bc45e98e938d5ec70eed02dff7ca280ed73845ec6f
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
+		Method: <org.xutils.common.util.MD5: java.lang.String md5(java.lang.String)>
+		SHA-256: cb2c16c76c072bc25ae1de63776851f0670645cce9402aa702cd80896691ee32
+		Secure: false
+	Object:
+		Variable: $r7
+		Type: java.security.MessageDigest
+		Statement: $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2075)
+		Method: <cn.sharesdk.wechat.utils.h: byte[] a(java.lang.String,java.lang.String,int)>
+		SHA-256: 33035118802073ad42b4cba549f52cc599c8a3216fdc9a8c91006a6e083adfad
+		Secure: false
+
+Findings in Java Class: org.xutils.http.app.DefaultParamsBuilder
+
+	 in Method: javax.net.ssl.SSLSocketFactory getTrustAllSSLSocketFactory()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1796, r7, varReplacer1796)
+
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #2f9035cf1f25db0de7dc3eb2bad24a7e2df5e3b7174a023ddc61852d6538fb7d)
+			First parameter (with value "TLS") should be any of {Insecure}
+			at statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1795)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1796, r7, varReplacer1796)
+
+
+Findings in Java Class: org.xutils.common.util.MD5
+
+	 in Method: java.lang.String md5(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #5fc87ac366dfc98b0c6a19037aabdd8d4d5baeeac4186d7438bb8b17dc543fc4)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1901)
+
+
+Findings in Java Class: cn.sharesdk.wechat.utils.h
+
+	 in Method: byte[] a(java.lang.String,java.lang.String,int)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #33035118802073ad42b4cba549f52cc599c8a3216fdc9a8c91006a6e083adfad)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2075)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 5
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 3
+	RequiredPredicateError: 2
+=====================================================================

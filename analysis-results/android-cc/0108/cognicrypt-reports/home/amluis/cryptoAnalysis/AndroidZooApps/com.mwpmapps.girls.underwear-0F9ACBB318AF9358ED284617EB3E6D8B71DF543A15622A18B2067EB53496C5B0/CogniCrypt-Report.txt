@@ -1,0 +1,124 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: r12
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer1908)
+		Method: <com.parse.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(com.parse.signpost.http.HttpRequest,com.parse.signpost.http.HttpParameters)>
+		SHA-256: 98495ff6e44439db050a85463d6a6182126e2d5ab09d5dbf191727828cecad8c
+		Secure: false
+	Object:
+		Variable: varReplacer1908
+		Type: java.lang.String
+		Statement: specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer1908)
+		Method: <com.parse.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(com.parse.signpost.http.HttpRequest,com.parse.signpost.http.HttpParameters)>
+		SHA-256: c4e6fd0b84e1923a8e35aca99a9998883a13e612d6ca3c32dde23a0d54c10aed
+		Secure: false
+	Object:
+		Variable: $r7
+		Type: javax.crypto.Mac
+		Statement: $r7 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer1912)
+		Method: <com.parse.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(com.parse.signpost.http.HttpRequest,com.parse.signpost.http.HttpParameters)>
+		SHA-256: 41fbab6bf55d06a80f4b1b8c6a68e8ab32cb4468d0726a13fc135d48720e1f30
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer509)
+		Method: <com.parse.codec.digest.DigestUtils: java.security.MessageDigest getDigest(java.lang.String)>
+		SHA-256: e7d653430150df32408705ef825b1f64853604d7790381b93743aa39925e8973
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1390)
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzaH(java.lang.String)>
+		SHA-256: b81e72740c9672841c09068449b5b3ad15f23c3f36178ce3b79195e128338de0
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: byte[]
+		Statement: $r6 = virtualinvoke $r7.<javax.crypto.Mac: byte[] doFinal(byte[])>($r6)
+		Method: <com.parse.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(com.parse.signpost.http.HttpRequest,com.parse.signpost.http.HttpParameters)>
+		SHA-256: 60029a1b2e5ee22a3931915434a5fa44cf27db5eb408040851f105ce7e16415b
+		Secure: true
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r0)
+		Method: <com.parse.codec.digest.DigestUtils: byte[] md5(byte[])>
+		SHA-256: d2ba38deb0d2f449dfb6fcbb092e9f603e49b4b43cd2b43b5848853db2e618d6
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzaH(java.lang.String)>
+		SHA-256: 550b2765d9e9428e8a020375877dcf930c7849e0f6bb937b691b5d60187d87e2
+		Secure: false
+
+Findings in Java Class: com.parse.codec.digest.DigestUtils
+
+	 in Method: java.security.MessageDigest getDigest(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #e7d653430150df32408705ef825b1f64853604d7790381b93743aa39925e8973)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer509)
+
+
+Findings in Java Class: com.google.android.gms.ads.internal.util.client.zza
+
+	 in Method: java.lang.String zzaH(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #b81e72740c9672841c09068449b5b3ad15f23c3f36178ce3b79195e128338de0)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1390)
+
+
+Findings in Java Class: com.parse.signpost.signature.HmacSha1MessageSigner
+
+	 in Method: java.lang.String sign(com.parse.signpost.http.HttpRequest,com.parse.signpost.http.HttpParameters)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer1908)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 8
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
+	RequiredPredicateError: 1
+=====================================================================
