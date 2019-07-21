@@ -1,0 +1,267 @@
+class hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper extends javax.net.ssl.SSLSocketFactory
+{
+    private java.lang.String[] enabledProtocols;
+    private javax.net.ssl.SSLSocketFactory wrappedSSLSocketFactory;
+
+    public void <init>(java.io.InputStream, hk.gov.ogcio.httputils.HttpUtils$ConnectionParams) throws java.security.KeyManagementException, java.security.KeyStoreException, java.security.cert.CertificateException, java.security.NoSuchAlgorithmException, java.io.IOException
+    {
+        hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper $r0;
+        java.io.InputStream $r1;
+        hk.gov.ogcio.httputils.HttpUtils$ConnectionParams $r2;
+        java.lang.String $r3, varReplacer2302;
+        java.security.KeyStore $r4;
+        char[] $r5;
+        javax.net.ssl.TrustManagerFactory $r6;
+        javax.net.ssl.SSLContext $r7;
+        javax.net.ssl.TrustManager[] $r8;
+        javax.net.ssl.SSLSocketFactory $r9;
+        java.lang.String[] $r10;
+        null_type varReplacer2303, varReplacer2304;
+
+        nop;
+
+        $r0 := @this: hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper;
+
+        $r1 := @parameter0: java.io.InputStream;
+
+        $r2 := @parameter1: hk.gov.ogcio.httputils.HttpUtils$ConnectionParams;
+
+        specialinvoke $r0.<javax.net.ssl.SSLSocketFactory: void <init>()>();
+
+        $r3 = $r2.<hk.gov.ogcio.httputils.HttpUtils$ConnectionParams: java.lang.String keystoreType>;
+
+        $r4 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r3);
+
+        $r3 = $r2.<hk.gov.ogcio.httputils.HttpUtils$ConnectionParams: java.lang.String keystorePassword>;
+
+        $r5 = virtualinvoke $r3.<java.lang.String: char[] toCharArray()>();
+
+        virtualinvoke $r4.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r1, $r5);
+
+        $r3 = staticinvoke <javax.net.ssl.TrustManagerFactory: java.lang.String getDefaultAlgorithm()>();
+
+        $r6 = staticinvoke <javax.net.ssl.TrustManagerFactory: javax.net.ssl.TrustManagerFactory getInstance(java.lang.String)>($r3);
+
+        virtualinvoke $r6.<javax.net.ssl.TrustManagerFactory: void init(java.security.KeyStore)>($r4);
+
+        varReplacer2302 = "TLS";
+
+        $r7 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer2302);
+
+        $r8 = virtualinvoke $r6.<javax.net.ssl.TrustManagerFactory: javax.net.ssl.TrustManager[] getTrustManagers()>();
+
+        varReplacer2303 = null;
+
+        varReplacer2304 = null;
+
+        virtualinvoke $r7.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2303, $r8, varReplacer2303);
+
+        $r9 = virtualinvoke $r7.<javax.net.ssl.SSLContext: javax.net.ssl.SSLSocketFactory getSocketFactory()>();
+
+        $r0.<hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper: javax.net.ssl.SSLSocketFactory wrappedSSLSocketFactory> = $r9;
+
+        $r10 = $r2.<hk.gov.ogcio.httputils.HttpUtils$ConnectionParams: java.lang.String[] supportedSSLProtocols>;
+
+        $r0.<hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper: java.lang.String[] enabledProtocols> = $r10;
+
+        return;
+    }
+
+    private java.net.Socket initSocketProtocol(java.net.Socket)
+    {
+        hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper $r0;
+        java.net.Socket $r1;
+        java.lang.String[] $r2;
+        int $i0;
+        boolean $z0;
+        javax.net.ssl.SSLSocket $r3;
+
+        $r0 := @this: hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper;
+
+        $r1 := @parameter0: java.net.Socket;
+
+        if $r1 == null goto label1;
+
+        $r2 = $r0.<hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper: java.lang.String[] enabledProtocols>;
+
+        if $r2 == null goto label1;
+
+        $r2 = $r0.<hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper: java.lang.String[] enabledProtocols>;
+
+        $i0 = lengthof $r2;
+
+        if $i0 <= 0 goto label1;
+
+        $z0 = $r1 instanceof javax.net.ssl.SSLSocket;
+
+        if $z0 == 0 goto label1;
+
+        $r3 = (javax.net.ssl.SSLSocket) $r1;
+
+        $r2 = $r0.<hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper: java.lang.String[] enabledProtocols>;
+
+        virtualinvoke $r3.<javax.net.ssl.SSLSocket: void setEnabledProtocols(java.lang.String[])>($r2);
+
+     label1:
+        return $r1;
+    }
+
+    public java.net.Socket createSocket(java.lang.String, int) throws java.io.IOException
+    {
+        hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper $r0;
+        java.lang.String $r1;
+        int $i0;
+        javax.net.ssl.SSLSocketFactory $r2;
+        java.net.Socket $r3;
+
+        $r0 := @this: hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        $r2 = $r0.<hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper: javax.net.ssl.SSLSocketFactory wrappedSSLSocketFactory>;
+
+        $r3 = virtualinvoke $r2.<javax.net.ssl.SSLSocketFactory: java.net.Socket createSocket(java.lang.String,int)>($r1, $i0);
+
+        $r3 = specialinvoke $r0.<hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper: java.net.Socket initSocketProtocol(java.net.Socket)>($r3);
+
+        return $r3;
+    }
+
+    public java.net.Socket createSocket(java.lang.String, int, java.net.InetAddress, int) throws java.io.IOException
+    {
+        hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper $r0;
+        java.lang.String $r1;
+        int $i0, $i1;
+        java.net.InetAddress $r2;
+        javax.net.ssl.SSLSocketFactory $r3;
+        java.net.Socket $r4;
+
+        $r0 := @this: hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $i0 := @parameter1: int;
+
+        $r2 := @parameter2: java.net.InetAddress;
+
+        $i1 := @parameter3: int;
+
+        $r3 = $r0.<hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper: javax.net.ssl.SSLSocketFactory wrappedSSLSocketFactory>;
+
+        $r4 = virtualinvoke $r3.<javax.net.ssl.SSLSocketFactory: java.net.Socket createSocket(java.lang.String,int,java.net.InetAddress,int)>($r1, $i0, $r2, $i1);
+
+        $r4 = specialinvoke $r0.<hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper: java.net.Socket initSocketProtocol(java.net.Socket)>($r4);
+
+        return $r4;
+    }
+
+    public java.net.Socket createSocket(java.net.InetAddress, int) throws java.io.IOException
+    {
+        hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper $r0;
+        java.net.InetAddress $r1;
+        int $i0;
+        javax.net.ssl.SSLSocketFactory $r2;
+        java.net.Socket $r3;
+
+        $r0 := @this: hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper;
+
+        $r1 := @parameter0: java.net.InetAddress;
+
+        $i0 := @parameter1: int;
+
+        $r2 = $r0.<hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper: javax.net.ssl.SSLSocketFactory wrappedSSLSocketFactory>;
+
+        $r3 = virtualinvoke $r2.<javax.net.ssl.SSLSocketFactory: java.net.Socket createSocket(java.net.InetAddress,int)>($r1, $i0);
+
+        $r3 = specialinvoke $r0.<hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper: java.net.Socket initSocketProtocol(java.net.Socket)>($r3);
+
+        return $r3;
+    }
+
+    public java.net.Socket createSocket(java.net.InetAddress, int, java.net.InetAddress, int) throws java.io.IOException
+    {
+        hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper $r0;
+        java.net.InetAddress $r1, $r2;
+        int $i0, $i1;
+        javax.net.ssl.SSLSocketFactory $r3;
+        java.net.Socket $r4;
+
+        $r0 := @this: hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper;
+
+        $r1 := @parameter0: java.net.InetAddress;
+
+        $i0 := @parameter1: int;
+
+        $r2 := @parameter2: java.net.InetAddress;
+
+        $i1 := @parameter3: int;
+
+        $r3 = $r0.<hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper: javax.net.ssl.SSLSocketFactory wrappedSSLSocketFactory>;
+
+        $r4 = virtualinvoke $r3.<javax.net.ssl.SSLSocketFactory: java.net.Socket createSocket(java.net.InetAddress,int,java.net.InetAddress,int)>($r1, $i0, $r2, $i1);
+
+        $r4 = specialinvoke $r0.<hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper: java.net.Socket initSocketProtocol(java.net.Socket)>($r4);
+
+        return $r4;
+    }
+
+    public java.net.Socket createSocket(java.net.Socket, java.lang.String, int, boolean) throws java.io.IOException
+    {
+        hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper $r0;
+        java.net.Socket $r1;
+        java.lang.String $r2;
+        int $i0;
+        boolean $z0;
+        javax.net.ssl.SSLSocketFactory $r3;
+
+        $r0 := @this: hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper;
+
+        $r1 := @parameter0: java.net.Socket;
+
+        $r2 := @parameter1: java.lang.String;
+
+        $i0 := @parameter2: int;
+
+        $z0 := @parameter3: boolean;
+
+        $r3 = $r0.<hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper: javax.net.ssl.SSLSocketFactory wrappedSSLSocketFactory>;
+
+        $r1 = virtualinvoke $r3.<javax.net.ssl.SSLSocketFactory: java.net.Socket createSocket(java.net.Socket,java.lang.String,int,boolean)>($r1, $r2, $i0, $z0);
+
+        $r1 = specialinvoke $r0.<hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper: java.net.Socket initSocketProtocol(java.net.Socket)>($r1);
+
+        return $r1;
+    }
+
+    public java.lang.String[] getDefaultCipherSuites()
+    {
+        hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper $r0;
+        java.lang.String[] $r1;
+        javax.net.ssl.SSLSocketFactory $r2;
+
+        $r0 := @this: hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper;
+
+        $r2 = $r0.<hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper: javax.net.ssl.SSLSocketFactory wrappedSSLSocketFactory>;
+
+        $r1 = virtualinvoke $r2.<javax.net.ssl.SSLSocketFactory: java.lang.String[] getDefaultCipherSuites()>();
+
+        return $r1;
+    }
+
+    public java.lang.String[] getSupportedCipherSuites()
+    {
+        hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper $r0;
+        java.lang.String[] $r1;
+        javax.net.ssl.SSLSocketFactory $r2;
+
+        $r0 := @this: hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper;
+
+        $r2 = $r0.<hk.gov.ogcio.httputils.HttpUtils$TLSSocketFactoryWrapper: javax.net.ssl.SSLSocketFactory wrappedSSLSocketFactory>;
+
+        $r1 = virtualinvoke $r2.<javax.net.ssl.SSLSocketFactory: java.lang.String[] getSupportedCipherSuites()>();
+
+        return $r1;
+    }
+}

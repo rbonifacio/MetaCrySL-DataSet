@@ -1,0 +1,846 @@
+public final class com.rog.gcm.ServerUtilities extends java.lang.Object
+{
+    private static final int BACKOFF_MILLI_SECONDS;
+    private static final int MAX_ATTEMPTS;
+    static java.lang.String TAG;
+    private static final java.util.Random random;
+
+    static void <clinit>()
+    {
+        java.util.Random $r0;
+        java.lang.String varReplacer492;
+
+        nop;
+
+        varReplacer492 = "ROG";
+
+        <com.rog.gcm.ServerUtilities: java.lang.String TAG> = varReplacer492;
+
+        $r0 = new java.util.Random;
+
+        specialinvoke $r0.<java.util.Random: void <init>()>();
+
+        <com.rog.gcm.ServerUtilities: java.util.Random random> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.rog.gcm.ServerUtilities $r0;
+
+        $r0 := @this: com.rog.gcm.ServerUtilities;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void SetupHTTPSforHttpConnection()
+    {
+        java.lang.Exception $r0;
+        com.rog.gcm.ServerUtilities$1 $r1, r7;
+        javax.net.ssl.SSLContext $r2;
+        java.lang.Object[] $r3;
+        java.security.SecureRandom $r4, r8;
+        javax.net.ssl.SSLSocketFactory $r5;
+        com.rog.gcm.ServerUtilities$2 $r6, r9;
+        javax.net.ssl.TrustManager[] r10;
+        java.lang.String varReplacer1848;
+        null_type varReplacer1849;
+
+     label1:
+        nop;
+
+        varReplacer1848 = "TLS";
+
+        $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1848);
+
+        $r3 = newarray (javax.net.ssl.TrustManager)[1];
+
+     label2:
+        r7 = new com.rog.gcm.ServerUtilities$1;
+
+        $r1 = r7;
+
+     label3:
+        specialinvoke r7.<com.rog.gcm.ServerUtilities$1: void <init>()>();
+
+        $r3[0] = $r1;
+
+     label4:
+        r8 = new java.security.SecureRandom;
+
+        $r4 = r8;
+
+     label5:
+        specialinvoke r8.<java.security.SecureRandom: void <init>()>();
+
+        r10 = (javax.net.ssl.TrustManager[]) $r3;
+
+        varReplacer1849 = null;
+
+        virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1849, r10, $r4);
+
+        $r5 = virtualinvoke $r2.<javax.net.ssl.SSLContext: javax.net.ssl.SSLSocketFactory getSocketFactory()>();
+
+        staticinvoke <javax.net.ssl.HttpsURLConnection: void setDefaultSSLSocketFactory(javax.net.ssl.SSLSocketFactory)>($r5);
+
+     label6:
+        r9 = new com.rog.gcm.ServerUtilities$2;
+
+        $r6 = r9;
+
+     label7:
+        specialinvoke r9.<com.rog.gcm.ServerUtilities$2: void <init>()>();
+
+        staticinvoke <javax.net.ssl.HttpsURLConnection: void setDefaultHostnameVerifier(javax.net.ssl.HostnameVerifier)>($r6);
+
+     label8:
+        return;
+
+     label9:
+        $r0 := @caughtexception;
+
+        virtualinvoke $r0.<java.lang.Exception: void printStackTrace()>();
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label9;
+        catch java.lang.Exception from label3 to label4 with label9;
+        catch java.lang.Exception from label5 to label6 with label9;
+        catch java.lang.Exception from label7 to label8 with label9;
+    }
+
+    public static java.lang.String getLocalMacAddress(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.Object $r1;
+        android.net.wifi.WifiManager $r2;
+        android.net.wifi.WifiInfo $r3;
+        java.lang.String $r4;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("wifi");
+
+        $r2 = (android.net.wifi.WifiManager) $r1;
+
+        $r3 = virtualinvoke $r2.<android.net.wifi.WifiManager: android.net.wifi.WifiInfo getConnectionInfo()>();
+
+        $r4 = virtualinvoke $r3.<android.net.wifi.WifiInfo: java.lang.String getMacAddress()>();
+
+        return $r4;
+    }
+
+    public static java.lang.String getUniquID(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.Object $r1;
+        android.telephony.TelephonyManager $r2;
+        java.lang.String $r3, varReplacer491;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        varReplacer491 = "phone";
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer491);
+
+        $r2 = (android.telephony.TelephonyManager) $r1;
+
+        $r3 = virtualinvoke $r2.<android.telephony.TelephonyManager: java.lang.String getDeviceId()>();
+
+        return $r3;
+    }
+
+    private static void post(java.lang.String, java.util.Map) throws java.io.IOException
+    {
+        java.lang.String $r0, $r7, $r8, $r9, varReplacer1831, varReplacer1832, varReplacer1833, varReplacer1834, varReplacer1836, varReplacer1837, varReplacer1839, varReplacer1840, varReplacer1842, varReplacer1843, varReplacer1844;
+        java.util.Map $r1;
+        java.lang.StringBuilder $r2, $r20;
+        java.lang.Throwable $r3, $r16;
+        java.net.URL $r4;
+        java.util.Set $r5;
+        java.util.Iterator $r6;
+        boolean $z0;
+        byte[] $r10;
+        java.net.HttpURLConnection $r11, $r13;
+        java.net.URLConnection $r12;
+        int $i0, varReplacer1835, varReplacer1838, varReplacer1841, varReplacer1845;
+        java.io.OutputStream $r14;
+        java.io.IOException $r15;
+        java.lang.IllegalArgumentException $r17;
+        java.lang.Object $r18;
+        java.util.Map$Entry $r19;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.util.Map;
+
+        $r4 = new java.net.URL;
+
+     label01:
+        specialinvoke $r4.<java.net.URL: void <init>(java.lang.String)>($r0);
+
+     label02:
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = interfaceinvoke $r1.<java.util.Map: java.util.Set entrySet()>();
+
+        $r6 = interfaceinvoke $r5.<java.util.Set: java.util.Iterator iterator()>();
+
+     label03:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 != 0 goto label16;
+
+        $r7 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r8 = <com.rog.gcm.ServerUtilities: java.lang.String TAG>;
+
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer1840 = "Posting \'";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1840);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        varReplacer1839 = "\' to ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1839);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        $r9 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int v(java.lang.String,java.lang.String)>($r8, $r9);
+
+        $r10 = virtualinvoke $r7.<java.lang.String: byte[] getBytes()>();
+
+        $r11 = null;
+
+     label04:
+        staticinvoke <com.rog.gcm.ServerUtilities: void SetupHTTPSforHttpConnection()>();
+
+        $r12 = virtualinvoke $r4.<java.net.URL: java.net.URLConnection openConnection()>();
+
+        $r13 = (java.net.HttpURLConnection) $r12;
+
+     label05:
+        $r11 = $r13;
+
+     label06:
+        varReplacer1835 = 1;
+
+        virtualinvoke $r13.<java.net.HttpURLConnection: void setDoOutput(boolean)>(varReplacer1835);
+
+        varReplacer1845 = 0;
+
+        virtualinvoke $r13.<java.net.HttpURLConnection: void setUseCaches(boolean)>(varReplacer1845);
+
+        $i0 = lengthof $r10;
+
+        virtualinvoke $r13.<java.net.HttpURLConnection: void setFixedLengthStreamingMode(int)>($i0);
+
+        varReplacer1832 = "POST";
+
+        virtualinvoke $r13.<java.net.HttpURLConnection: void setRequestMethod(java.lang.String)>(varReplacer1832);
+
+        varReplacer1843 = "Content-Type";
+
+        varReplacer1844 = "application/x-www-form-urlencoded;charset=UTF-8";
+
+        virtualinvoke $r13.<java.net.HttpURLConnection: void setRequestProperty(java.lang.String,java.lang.String)>(varReplacer1843, varReplacer1844);
+
+        $r14 = virtualinvoke $r13.<java.net.HttpURLConnection: java.io.OutputStream getOutputStream()>();
+
+        virtualinvoke $r14.<java.io.OutputStream: void write(byte[])>($r10);
+
+        virtualinvoke $r14.<java.io.OutputStream: void close()>();
+
+        $i0 = virtualinvoke $r13.<java.net.HttpURLConnection: int getResponseCode()>();
+
+     label07:
+        $r7 = "";
+
+     label08:
+        $r8 = virtualinvoke $r13.<java.net.HttpURLConnection: java.lang.String getResponseMessage()>();
+
+     label09:
+        if $r8 == null goto label11;
+
+     label10:
+        $r7 = virtualinvoke $r13.<java.net.HttpURLConnection: java.lang.String getResponseMessage()>();
+
+     label11:
+        if $i0 == 200 goto label17;
+
+     label12:
+        $r15 = new java.io.IOException;
+
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer1831 = "Post ";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1831);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        varReplacer1842 = " failed with error code ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1842);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1833 = " res:";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1833);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r0 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r15.<java.io.IOException: void <init>(java.lang.String)>($r0);
+
+        throw $r15;
+
+     label13:
+        $r16 := @caughtexception;
+
+        if $r11 == null goto label14;
+
+        virtualinvoke $r11.<java.net.HttpURLConnection: void disconnect()>();
+
+     label14:
+        $r0 = <com.rog.gcm.ServerUtilities: java.lang.String TAG>;
+
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer1836 = "Post finished ";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1836);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        $r7 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int v(java.lang.String,java.lang.String)>($r0, $r7);
+
+        throw $r16;
+
+     label15:
+        $r3 := @caughtexception;
+
+        $r17 = new java.lang.IllegalArgumentException;
+
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer1837 = "invalid url: ";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1837);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r17.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r0);
+
+        throw $r17;
+
+     label16:
+        $r18 = interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        $r19 = (java.util.Map$Entry) $r18;
+
+        $r18 = interfaceinvoke $r19.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r7 = (java.lang.String) $r18;
+
+        $r20 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        varReplacer1841 = 61;
+
+        $r20 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(varReplacer1841);
+
+        $r18 = interfaceinvoke $r19.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r7 = (java.lang.String) $r18;
+
+        virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label03;
+
+        varReplacer1838 = 38;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(varReplacer1838);
+
+        goto label03;
+
+     label17:
+        if $r13 == null goto label18;
+
+        virtualinvoke $r13.<java.net.HttpURLConnection: void disconnect()>();
+
+     label18:
+        $r0 = <com.rog.gcm.ServerUtilities: java.lang.String TAG>;
+
+        $r2 = new java.lang.StringBuilder;
+
+        varReplacer1834 = "Post finished ";
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1834);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        $r7 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int v(java.lang.String,java.lang.String)>($r0, $r7);
+
+        return;
+
+        catch java.net.MalformedURLException from label01 to label02 with label15;
+        catch java.lang.Throwable from label04 to label05 with label13;
+        catch java.lang.Throwable from label06 to label07 with label13;
+        catch java.lang.Throwable from label08 to label09 with label13;
+        catch java.lang.Throwable from label10 to label11 with label13;
+        catch java.lang.Throwable from label12 to label13 with label13;
+    }
+
+    public static void register(android.app.Activity, java.lang.String, hk.com.rog.www.MySetting, hk.com.rog.www.domain.ROGUser)
+    {
+        android.app.Activity $r0;
+        java.lang.String $r1, $r8, $r10, $r17, varReplacer1795, varReplacer1796, varReplacer1797, varReplacer1798, varReplacer1800, varReplacer1801, varReplacer1802, varReplacer1803, varReplacer1806, varReplacer1807, varReplacer1809, varReplacer1810, varReplacer1811, varReplacer1812, varReplacer1813, varReplacer1815, varReplacer1817, varReplacer1818, varReplacer1819, varReplacer1820, varReplacer1821, varReplacer1822, varReplacer1823, varReplacer1824, varReplacer1825;
+        hk.com.rog.www.MySetting $r2;
+        hk.com.rog.www.domain.ROGUser $r3;
+        java.lang.Throwable $r4, $r5;
+        com.rog.gcm.GcmMainboard $r6;
+        java.util.LinkedHashMap $r7;
+        java.lang.StringBuilder $r9;
+        java.lang.Integer $r11;
+        java.util.Locale $r12;
+        android.content.res.Resources $r13;
+        android.util.DisplayMetrics $r14;
+        int $i0, varReplacer1799, varReplacer1804, varReplacer1805, varReplacer1808, varReplacer1814, varReplacer1816;
+        java.util.Random $r15;
+        long $l1;
+        java.lang.Object[] $r16;
+        boolean $z0;
+        java.lang.Thread $r18;
+
+        nop;
+
+        $r0 := @parameter0: android.app.Activity;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: hk.com.rog.www.MySetting;
+
+        $r3 := @parameter3: hk.com.rog.www.domain.ROGUser;
+
+        $r8 = <com.rog.gcm.ServerUtilities: java.lang.String TAG>;
+
+        $r9 = new java.lang.StringBuilder;
+
+        varReplacer1800 = "registering device (regId = ";
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1800);
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer1797 = ")";
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1797);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>($r8, $r10);
+
+        $r9 = new java.lang.StringBuilder;
+
+        $r8 = <hk.com.rog.www.SystemParams: java.lang.String uatServer>;
+
+        $r8 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r8);
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>($r8);
+
+        varReplacer1809 = "/regMobile.php";
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1809);
+
+        $r8 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r7 = new java.util.LinkedHashMap;
+
+        specialinvoke $r7.<java.util.LinkedHashMap: void <init>()>();
+
+        goto label01;
+
+     label01:
+        $r10 = <android.os.Build: java.lang.String DEVICE>;
+
+        varReplacer1820 = "deviceName";
+
+        virtualinvoke $r7.<java.util.LinkedHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1820, $r10);
+
+        $r10 = virtualinvoke $r2.<hk.com.rog.www.MySetting: java.lang.String GetUserName()>();
+
+        varReplacer1818 = "tel";
+
+        virtualinvoke $r7.<java.util.LinkedHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1818, $r10);
+
+        $r10 = virtualinvoke $r2.<hk.com.rog.www.MySetting: java.lang.String GetAreaCode()>();
+
+        varReplacer1803 = "area";
+
+        virtualinvoke $r7.<java.util.LinkedHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1803, $r10);
+
+        $r10 = <android.os.Build: java.lang.String BRAND>;
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r10);
+
+        varReplacer1802 = "brand";
+
+        virtualinvoke $r7.<java.util.LinkedHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1802, $r10);
+
+        $r10 = <android.os.Build: java.lang.String MODEL>;
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r10);
+
+        varReplacer1824 = "model";
+
+        virtualinvoke $r7.<java.util.LinkedHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1824, $r10);
+
+        $r10 = staticinvoke <com.rog.gcm.ServerUtilities: java.lang.String getUniquID(android.content.Context)>($r0);
+
+        varReplacer1821 = "UUID";
+
+        virtualinvoke $r7.<java.util.LinkedHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1821, $r10);
+
+        $r10 = staticinvoke <com.rog.gcm.ServerUtilities: java.lang.String getUniquID(android.content.Context)>($r0);
+
+        varReplacer1795 = "udid";
+
+        virtualinvoke $r7.<java.util.LinkedHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1795, $r10);
+
+        $r10 = virtualinvoke $r2.<hk.com.rog.www.MySetting: java.lang.String GetLanguageStr()>();
+
+        varReplacer1815 = "appLanguage";
+
+        virtualinvoke $r7.<java.util.LinkedHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1815, $r10);
+
+        $r12 = staticinvoke <java.util.Locale: java.util.Locale getDefault()>();
+
+        $r10 = virtualinvoke $r12.<java.util.Locale: java.lang.String toString()>();
+
+        varReplacer1822 = "deviceLanguage";
+
+        virtualinvoke $r7.<java.util.LinkedHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1822, $r10);
+
+        varReplacer1801 = "token";
+
+        virtualinvoke $r7.<java.util.LinkedHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1801, $r1);
+
+        $r13 = virtualinvoke $r0.<android.app.Activity: android.content.res.Resources getResources()>();
+
+        $r14 = virtualinvoke $r13.<android.content.res.Resources: android.util.DisplayMetrics getDisplayMetrics()>();
+
+        $i0 = $r14.<android.util.DisplayMetrics: int widthPixels>;
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+        varReplacer1812 = "widthPixels";
+
+        virtualinvoke $r7.<java.util.LinkedHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1812, $r10);
+
+        $i0 = $r14.<android.util.DisplayMetrics: int heightPixels>;
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+        varReplacer1823 = "heightPixels";
+
+        virtualinvoke $r7.<java.util.LinkedHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1823, $r10);
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+        varReplacer1807 = "SDK";
+
+        virtualinvoke $r7.<java.util.LinkedHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1807, $r10);
+
+        $r10 = staticinvoke <com.rog.gcm.GcmMainboard: java.lang.String getAppVersion(android.content.Context)>($r0);
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r10);
+
+        varReplacer1810 = "version";
+
+        virtualinvoke $r7.<java.util.LinkedHashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1810, $r10);
+
+        $r15 = <com.rog.gcm.ServerUtilities: java.util.Random random>;
+
+        varReplacer1816 = 1000;
+
+        $i0 = virtualinvoke $r15.<java.util.Random: int nextInt(int)>(varReplacer1816);
+
+        $i0 = $i0 + 2000;
+
+        $l1 = (long) $i0;
+
+        $i0 = 1;
+
+     label02:
+        if $i0 <= 5 goto label04;
+
+     label03:
+        $r16 = newarray (java.lang.Object)[1];
+
+        varReplacer1805 = 5;
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(varReplacer1805);
+
+        $r16[0] = $r11;
+
+        varReplacer1814 = 2131165355;
+
+        $r1 = virtualinvoke $r0.<android.app.Activity: java.lang.String getString(int,java.lang.Object[])>(varReplacer1814, $r16);
+
+        staticinvoke <com.rog.gcm.CommonUtilities: void displayMessage(android.content.Context,java.lang.String)>($r0, $r1);
+
+        return;
+
+     label04:
+        $r10 = <com.rog.gcm.ServerUtilities: java.lang.String TAG>;
+
+        $r9 = new java.lang.StringBuilder;
+
+        varReplacer1811 = "Attempt #";
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1811);
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1813 = " to register";
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1813);
+
+        $r17 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r10, $r17);
+
+        $r16 = newarray (java.lang.Object)[2];
+
+     label05:
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+     label06:
+        $r16[0] = $r11;
+
+     label07:
+        varReplacer1804 = 5;
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(varReplacer1804);
+
+     label08:
+        $r16[1] = $r11;
+
+     label09:
+        varReplacer1799 = 2131165352;
+
+        $r10 = virtualinvoke $r0.<android.app.Activity: java.lang.String getString(int,java.lang.Object[])>(varReplacer1799, $r16);
+
+        staticinvoke <com.rog.gcm.CommonUtilities: void displayMessage(android.content.Context,java.lang.String)>($r0, $r10);
+
+        staticinvoke <com.rog.gcm.ServerUtilities: void post(java.lang.String,java.util.Map)>($r8, $r7);
+
+        varReplacer1808 = 2131165353;
+
+        $r10 = virtualinvoke $r0.<android.app.Activity: java.lang.String getString(int)>(varReplacer1808);
+
+        staticinvoke <com.rog.gcm.CommonUtilities: void displayMessage(android.content.Context,java.lang.String)>($r0, $r10);
+
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r1);
+
+     label10:
+        if $z0 != 0 goto label17;
+
+        $r6 = new com.rog.gcm.GcmMainboard;
+
+     label11:
+        specialinvoke $r6.<com.rog.gcm.GcmMainboard: void <init>(android.app.Activity)>($r0);
+
+        virtualinvoke $r6.<com.rog.gcm.GcmMainboard: void storeRegistrationId(android.content.Context,java.lang.String)>($r0, $r1);
+
+     label12:
+        return;
+
+     label13:
+        $r4 := @caughtexception;
+
+        $r10 = <com.rog.gcm.ServerUtilities: java.lang.String TAG>;
+
+        $r9 = new java.lang.StringBuilder;
+
+        varReplacer1825 = "Failed to register on attempt ";
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1825);
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1819 = ":";
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1819);
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        varReplacer1817 = " ";
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1817);
+
+        $r17 = staticinvoke <com.rog.gcm.CommonUtilities: java.lang.String GetKeyMapStr(java.util.Map)>($r7);
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r17);
+
+        $r17 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r10, $r17);
+
+        if $i0 == 5 goto label03;
+
+        $r10 = <com.rog.gcm.ServerUtilities: java.lang.String TAG>;
+
+        $r9 = new java.lang.StringBuilder;
+
+     label14:
+        varReplacer1806 = "Sleeping for ";
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer1806);
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        varReplacer1798 = " ms before retry";
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1798);
+
+        $r17 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r10, $r17);
+
+        staticinvoke <java.lang.Thread: void sleep(long)>($l1);
+
+     label15:
+        $l1 = $l1 * 2L;
+
+        $i0 = $i0 + 1;
+
+        goto label02;
+
+     label16:
+        $r5 := @caughtexception;
+
+        $r1 = <com.rog.gcm.ServerUtilities: java.lang.String TAG>;
+
+        varReplacer1796 = "Thread interrupted: abort remaining retries!";
+
+        staticinvoke <android.util.Log: int d(java.lang.String,java.lang.String)>($r1, varReplacer1796);
+
+        $r18 = staticinvoke <java.lang.Thread: java.lang.Thread currentThread()>();
+
+        virtualinvoke $r18.<java.lang.Thread: void interrupt()>();
+
+     label17:
+        return;
+
+        catch java.io.IOException from label05 to label06 with label13;
+        catch java.io.IOException from label07 to label08 with label13;
+        catch java.io.IOException from label09 to label10 with label13;
+        catch java.io.IOException from label11 to label12 with label13;
+        catch java.lang.InterruptedException from label14 to label15 with label16;
+    }
+
+    static void unregister(android.content.Context, java.lang.String)
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, $r4, $r6;
+        java.lang.Throwable $r2;
+        java.util.HashMap $r3, r9;
+        java.lang.StringBuilder $r5, r8;
+        java.lang.Object[] $r7;
+        java.io.IOException r10;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r4 = <com.rog.gcm.ServerUtilities: java.lang.String TAG>;
+
+        r8 = new java.lang.StringBuilder;
+
+        specialinvoke r8.<java.lang.StringBuilder: void <init>(java.lang.String)>("unregistering device (regId = ");
+
+        $r5 = virtualinvoke r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <android.util.Log: int i(java.lang.String,java.lang.String)>($r4, $r6);
+
+        r8 = new java.lang.StringBuilder;
+
+        $r4 = <hk.com.rog.www.SystemParams: java.lang.String uatServer>;
+
+        $r4 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r4);
+
+        specialinvoke r8.<java.lang.StringBuilder: void <init>(java.lang.String)>($r4);
+
+        $r5 = virtualinvoke r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("/register.php/unregistmobile");
+
+        $r4 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        r9 = new java.util.HashMap;
+
+        $r3 = r9;
+
+        specialinvoke r9.<java.util.HashMap: void <init>()>();
+
+        interfaceinvoke $r3.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("regId", $r1);
+
+     label1:
+        staticinvoke <com.rog.gcm.ServerUtilities: void post(java.lang.String,java.util.Map)>($r4, $r3);
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.String getString(int)>(2131165354);
+
+        staticinvoke <com.rog.gcm.CommonUtilities: void displayMessage(android.content.Context,java.lang.String)>($r0, $r1);
+
+     label2:
+        return;
+
+     label3:
+        $r2 := @caughtexception;
+
+        $r7 = newarray (java.lang.Object)[1];
+
+        r10 = (java.io.IOException) $r2;
+
+        $r1 = virtualinvoke r10.<java.io.IOException: java.lang.String getMessage()>();
+
+        $r7[0] = $r1;
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.String getString(int,java.lang.Object[])>(2131165356, $r7);
+
+        staticinvoke <com.rog.gcm.CommonUtilities: void displayMessage(android.content.Context,java.lang.String)>($r0, $r1);
+
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+}

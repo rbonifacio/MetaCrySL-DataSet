@@ -1,0 +1,123 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	java.security.spec.DSAParameterSpec
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	javax.net.ssl.SSLParameters
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.spec.DHParameterSpec
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.net.ssl.TrustManagerFactory
+	javax.crypto.spec.PBEKeySpec
+	java.security.cert.TrustAnchor
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	javax.net.ssl.SSLEngine
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: javax.crypto.spec.IvParameterSpec
+		Statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
+		Method: <com.ushareit.lockit.aqm: java.lang.String b(java.lang.String,java.lang.String)>
+		SHA-256: 290946aca1cd74e9fb0987b3bd679778a16f33da56f3f082920238577c0a6000
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
+		Method: <com.facebook.ads.internal.util.s: java.lang.String a(java.lang.String)>
+		SHA-256: 5a58416d1a9068e8adc9791ca5ff18d0a284cda03b2d6fec148fdd3e77eb7f4e
+		Secure: false
+	Object:
+		Variable: varReplacer1166
+		Type: java.lang.String
+		Statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1166)
+		Method: <com.ushareit.lockit.aqm: java.lang.String b(java.lang.String,java.lang.String)>
+		SHA-256: 9b5cdf8ca2f2d4e452ad550b70a6f38570a2624bb631139de70eef64b1fb9008
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1166)
+		Method: <com.ushareit.lockit.aqm: java.lang.String b(java.lang.String,java.lang.String)>
+		SHA-256: 306a5c32d9fa0895064d9684d3c1718f7d0a3b8acaa81c25d6bed21af3ff707b
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: javax.crypto.Cipher
+		Statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1167)
+		Method: <com.ushareit.lockit.aqm: java.lang.String b(java.lang.String,java.lang.String)>
+		SHA-256: e204bc6a1aa5529767aa23382cf7ed1e6740387618ebeff7e8cd67a2d049f1d2
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r3)
+		Method: <com.ushareit.lockit.aqm: java.lang.String b(java.lang.String,java.lang.String)>
+		SHA-256: a9101d7acb6323e03b5847b8016269db9ea522fd1ee5d93f271074f816219a93
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5488)
+		Method: <com.facebook.ads.internal.util.s: java.lang.String a(java.lang.String)>
+		SHA-256: 51e5e9c999ca4d46f0668aee3910d6a51207c4b7d16da194a9c516030176eddf
+		Secure: false
+
+Findings in Java Class: com.facebook.ads.internal.util.s
+
+	 in Method: java.lang.String a(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #51e5e9c999ca4d46f0668aee3910d6a51207c4b7d16da194a9c516030176eddf)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5488)
+
+
+Findings in Java Class: com.ushareit.lockit.aqm
+
+	 in Method: java.lang.String b(java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1166)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1164, $r5, $r2)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 38
+	Number of Objects Analyzed: 7
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 1
+	RequiredPredicateError: 3
+=====================================================================

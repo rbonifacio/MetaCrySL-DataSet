@@ -1,0 +1,128 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.cds.andoridzombietrophyfree-109FDEF75B0A6406D64C5FEB8E6DCCA6D460CCC8890CBBAB98E79F31DC3189CF.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	java.security.spec.DSAParameterSpec
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	javax.net.ssl.SSLParameters
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.spec.DHParameterSpec
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.net.ssl.TrustManagerFactory
+	javax.crypto.spec.PBEKeySpec
+	java.security.cert.TrustAnchor
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	javax.net.ssl.SSLEngine
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: 5a54f705314d6605f4cf61ba388d3b495336c885c3ea98cfb7cec081c65981da
+		Secure: false
+	Object:
+		Variable: $r8
+		Type: javax.crypto.Cipher
+		Statement: $r8 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer146)
+		Method: <com.amazon.device.ads.DebugProperties: byte[] decrypt(byte[])>
+		SHA-256: d584e01950c938ab38087610bde937bc4d974349615e29befe54d8189d3bc23
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1882)
+		Method: <com.immersion.hapticmediasdk.utils.FileManager: java.lang.String getUniqueFileName(java.lang.String)>
+		SHA-256: 4fa6f689571bf2c3b687f43dde49effeea8444d8a4147065dba0aac59ce22013
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.immersion.hapticmediasdk.utils.FileManager: java.lang.String getUniqueFileName(java.lang.String)>
+		SHA-256: 7e2b12c52d2ea7ae9c17e2f88be59798674194d32ff123a04b4dd3c84d604eb2
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer604)
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: 9e033df5713cfd855f0a95a05f2b7ce513b2ae02117b1bbee33cbc6a11fc7790
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r8.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1)
+		Method: <com.amazon.device.ads.DebugProperties: byte[] decrypt(byte[])>
+		SHA-256: 78aa0526a800bf71c5e314ba5fcd40400c911438f10b199aac7ad9c52d88a29b
+		Secure: false
+
+Findings in Java Class: com.unity3d.player.UnityPlayer
+
+	 in Method: java.lang.String a(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #9e033df5713cfd855f0a95a05f2b7ce513b2ae02117b1bbee33cbc6a11fc7790)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer604)
+
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #9e033df5713cfd855f0a95a05f2b7ce513b2ae02117b1bbee33cbc6a11fc7790)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte[]),java.security.MessageDigest: void update(byte)
+			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #9e033df5713cfd855f0a95a05f2b7ce513b2ae02117b1bbee33cbc6a11fc7790)
+			Third parameter (with value 0)Variable pre_lenmust be  greater than pre_off
+			at statement: virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r1, varReplacer601, $i3)
+
+
+Findings in Java Class: com.immersion.hapticmediasdk.utils.FileManager
+
+	 in Method: java.lang.String getUniqueFileName(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #4fa6f689571bf2c3b687f43dde49effeea8444d8a4147065dba0aac59ce22013)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1882)
+
+
+Findings in Java Class: com.amazon.device.ads.DebugProperties
+
+	 in Method: byte[] decrypt(byte[])
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer147, $r7)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 38
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	TypestateError: 1
+	RequiredPredicateError: 1
+	ConstraintError: 3
+=====================================================================

@@ -1,0 +1,82 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.transylgamia.extremeatv3doffroadrace-13874CAEE613B04CCE718EFA4C254F249CF264A59D8A3106E9239D58AC82413C.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	java.security.spec.DSAParameterSpec
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	javax.net.ssl.SSLParameters
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.spec.DHParameterSpec
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.net.ssl.TrustManagerFactory
+	javax.crypto.spec.PBEKeySpec
+	java.security.cert.TrustAnchor
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	javax.net.ssl.SSLEngine
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer193)
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: 713833361141863b1e33f3717044d407027fd8e50395bc5923b6d320d9c3bcc8
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: 5a54f705314d6605f4cf61ba388d3b495336c885c3ea98cfb7cec081c65981da
+		Secure: false
+
+Findings in Java Class: com.unity3d.player.UnityPlayer
+
+	 in Method: java.lang.String a(java.lang.String)
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #713833361141863b1e33f3717044d407027fd8e50395bc5923b6d320d9c3bcc8)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte[]),java.security.MessageDigest: void update(byte)
+			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #713833361141863b1e33f3717044d407027fd8e50395bc5923b6d320d9c3bcc8)
+			Third parameter (with value 0)Variable pre_lenmust be  greater than pre_off
+			at statement: virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r1, varReplacer194, $i3)
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #713833361141863b1e33f3717044d407027fd8e50395bc5923b6d320d9c3bcc8)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer193)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 38
+	Number of Objects Analyzed: 2
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
+	TypestateError: 1
+=====================================================================

@@ -1,0 +1,109 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.hangklebang.brexitinfonews-05A133D472BD8B7C6F63E2E7CA32BE81EC988EFC3DBBA8B00663D50FF2E03038.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.spec.PBEParameterSpec.PBEParameterSpec( salt iterationCount paramSpec);
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	java.security.spec.DSAParameterSpec
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	javax.net.ssl.SSLParameters
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.spec.DHParameterSpec
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.net.ssl.TrustManagerFactory
+	javax.crypto.spec.PBEKeySpec
+	java.security.cert.TrustAnchor
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	javax.net.ssl.SSLEngine
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4)
+		Method: <com.android.vending.billing.util.q: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: fe647732e846642aa9fdd507e54c1cc7f2a1aebfb067e46afc0476511f1d46d
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1836)
+		Method: <com.seattleclouds.util.au: java.lang.String e(java.lang.String)>
+		SHA-256: 1712e8625e4c1eccf6c1519b2d51e50649e852572bd74f28902e556f0ae65d61
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.seattleclouds.util.au: java.lang.String e(java.lang.String)>
+		SHA-256: 8e7614b5ec2780006c9998ec0d4716b12af08b1f4d0bec511d483f505f5d71ec
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.Signature
+		Statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer5023)
+		Method: <com.android.vending.billing.util.q: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: cb133effa641c3005852cbc0a87f6210da531a72430de1f74dc4365fb56494c
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: java.security.SecureRandom
+		Statement: specialinvoke $r4.<java.security.SecureRandom: void <init>()>()
+		Method: <com.seattleclouds.util.bs: java.lang.String a(android.content.Context)>
+		SHA-256: f3263d97bb74769521efc1393c4bfc7fe6b8614f4ad9a4fa8846529b38f25722
+		Secure: true
+
+Findings in Java Class: com.seattleclouds.util.au
+
+	 in Method: java.lang.String e(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #1712e8625e4c1eccf6c1519b2d51e50649e852572bd74f28902e556f0ae65d61)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1836)
+
+
+Findings in Java Class: com.android.vending.billing.util.q
+
+	 in Method: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #cb133effa641c3005852cbc0a87f6210da531a72430de1f74dc4365fb56494c)
+			First parameter (with value "SHA1withRSA") should be any of {NONEwithDSA, SHA1withDSA, SHA224withDSA, SHA256withDSA, SHA256withRSA, SHA256withECDSA}
+			at statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer5023)
+
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 38
+	Number of Objects Analyzed: 5
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 1
+	ConstraintError: 2
+=====================================================================

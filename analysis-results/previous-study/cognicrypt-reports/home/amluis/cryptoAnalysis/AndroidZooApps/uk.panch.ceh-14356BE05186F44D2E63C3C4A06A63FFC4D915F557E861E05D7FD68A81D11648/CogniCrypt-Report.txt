@@ -1,0 +1,98 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	java.security.spec.DSAParameterSpec
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	javax.net.ssl.SSLParameters
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.spec.DHParameterSpec
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.net.ssl.TrustManagerFactory
+	javax.crypto.spec.PBEKeySpec
+	java.security.cert.TrustAnchor
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	javax.net.ssl.SSLEngine
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1065)
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzaH(java.lang.String)>
+		SHA-256: 453ffd254f18b95263a7cb4b5976c1b15bee91d3682e19b758b78d758dabd18c
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4)
+		Method: <uk.panch.ceh.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 50d20e0d863bf9aaaccbe6d5f71c736bbbd4ab16c1ca9b261b70d21b96f5b665
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzaH(java.lang.String)>
+		SHA-256: 550b2765d9e9428e8a020375877dcf930c7849e0f6bb937b691b5d60187d87e2
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.Signature
+		Statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer926)
+		Method: <uk.panch.ceh.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 76bbd5f1b821d4f242abde317ba5680fc229374c585151b87f3b1e5c9ae54b0f
+		Secure: false
+
+Findings in Java Class: uk.panch.ceh.util.Security
+
+	 in Method: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #76bbd5f1b821d4f242abde317ba5680fc229374c585151b87f3b1e5c9ae54b0f)
+			First parameter (with value "SHA1withRSA") should be any of {NONEwithDSA, SHA1withDSA, SHA224withDSA, SHA256withDSA, SHA256withRSA, SHA256withECDSA}
+			at statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer926)
+
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
+
+
+Findings in Java Class: com.google.android.gms.ads.internal.util.client.zza
+
+	 in Method: java.lang.String zzaH(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #453ffd254f18b95263a7cb4b5976c1b15bee91d3682e19b758b78d758dabd18c)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1065)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 38
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
+	RequiredPredicateError: 1
+=====================================================================

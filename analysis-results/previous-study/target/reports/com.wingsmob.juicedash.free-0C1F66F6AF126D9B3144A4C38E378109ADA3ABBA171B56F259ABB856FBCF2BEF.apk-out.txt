@@ -1,0 +1,125 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.wingsmob.juicedash.free-0C1F66F6AF126D9B3144A4C38E378109ADA3ABBA171B56F259ABB856FBCF2BEF.apk
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	java.security.spec.DSAParameterSpec
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	javax.net.ssl.SSLParameters
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.spec.DHParameterSpec
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.net.ssl.TrustManagerFactory
+	javax.crypto.spec.PBEKeySpec
+	java.security.cert.TrustAnchor
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	javax.net.ssl.SSLEngine
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r7
+		Type: byte[]
+		Statement: $r7 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.facebook.unity.FB: java.lang.String getKeyHash()>
+		SHA-256: fbe47ce343b5df21a88c6af9649c2f8d6f5b813e936d699f053ff2a390f19c03
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.facebook.appevents.AppEvent: java.lang.String md5Checksum(java.lang.String)>
+		SHA-256: eb5aa20233d0a39f9efa2c49b15b711fba57bf442f97f41aee15900a081180c4
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: java.security.MessageDigest
+		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer984)
+		Method: <com.facebook.unity.FB: java.lang.String getKeyHash()>
+		SHA-256: 883273286b6cbee3d1d107bf8506e8aa657566fcd03c26e2e836de8b6179354a
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: 5a54f705314d6605f4cf61ba388d3b495336c885c3ea98cfb7cec081c65981da
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1342)
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: fce167dce2496e3931ee57763ed01bdaa4b6d6334a9087df360760b3302ed27c
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1141)
+		Method: <com.facebook.appevents.AppEvent: java.lang.String md5Checksum(java.lang.String)>
+		SHA-256: 43c14ccaad0f3960370c4a96679588c47e55055d646e1f58c3b5187088604d99
+		Secure: false
+
+Findings in Java Class: com.facebook.unity.FB
+
+	 in Method: java.lang.String getKeyHash()
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #883273286b6cbee3d1d107bf8506e8aa657566fcd03c26e2e836de8b6179354a)
+			First parameter (with value "SHA") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer984)
+
+
+Findings in Java Class: com.facebook.appevents.AppEvent
+
+	 in Method: java.lang.String md5Checksum(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #43c14ccaad0f3960370c4a96679588c47e55055d646e1f58c3b5187088604d99)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1141)
+
+
+Findings in Java Class: com.unity3d.player.UnityPlayer
+
+	 in Method: java.lang.String a(java.lang.String)
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #fce167dce2496e3931ee57763ed01bdaa4b6d6334a9087df360760b3302ed27c)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte),java.security.MessageDigest: void update(byte[])
+			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #fce167dce2496e3931ee57763ed01bdaa4b6d6334a9087df360760b3302ed27c)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1342)
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #fce167dce2496e3931ee57763ed01bdaa4b6d6334a9087df360760b3302ed27c)
+			Third parameter (with value 0)Variable pre_lenmust be  greater than pre_off
+			at statement: virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r1, varReplacer1346, $i3)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 38
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	TypestateError: 1
+	ConstraintError: 4
+=====================================================================

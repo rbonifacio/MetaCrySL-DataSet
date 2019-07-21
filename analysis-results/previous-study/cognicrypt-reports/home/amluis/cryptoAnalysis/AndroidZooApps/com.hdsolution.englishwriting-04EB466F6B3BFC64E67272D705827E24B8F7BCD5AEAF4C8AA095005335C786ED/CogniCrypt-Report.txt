@@ -1,0 +1,123 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	java.security.spec.DSAParameterSpec
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	javax.net.ssl.SSLParameters
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.spec.DHParameterSpec
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.net.ssl.TrustManagerFactory
+	javax.crypto.spec.PBEKeySpec
+	java.security.cert.TrustAnchor
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	javax.net.ssl.SSLEngine
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer23)
+		Method: <com.hdsolution.englishwriting.Utils: byte[] decrypt(byte[])>
+		SHA-256: 7cc48352baf13ebc920d9d5f6de5e3ec26f78e72f28d044e53a53abc79476f6c
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r4)
+		Method: <com.hdsolution.englishwriting.Utils: byte[] decrypt(byte[])>
+		SHA-256: c59bddaf176e53813018436bc0f4da18963d44e0c8ba0442db00e2a1e37698a6
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer26)
+		Method: <com.hdsolution.englishwriting.Utils: byte[] decrypt(byte[])>
+		SHA-256: efd1258d8f213c8f660e72a8aaac6acdfd011d7cbca6ec017db88777e89f09be
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: javax.crypto.spec.IvParameterSpec
+		Statement: specialinvoke $r1.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
+		Method: <com.hdsolution.englishwriting.Utils: byte[] decrypt(byte[])>
+		SHA-256: b0d247033271708d19fc9dc60ec14dba77440d5726143667e3ced95b3d4c6f02
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: javax.crypto.Cipher
+		Statement: $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer24)
+		Method: <com.hdsolution.englishwriting.Utils: byte[] decrypt(byte[])>
+		SHA-256: 9968af2f8110835e2f10e21062e5446481c8c6e0e6cc61a5d61cec8cd7a10159
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r5.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r0)
+		Method: <com.hdsolution.englishwriting.Utils: byte[] decrypt(byte[])>
+		SHA-256: 616586a01789538626788a7fd4ba92738813834a9849ca3d8f7b14537dc9a842
+		Secure: false
+	Object:
+		Variable: varReplacer23
+		Type: java.lang.String
+		Statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer23)
+		Method: <com.hdsolution.englishwriting.Utils: byte[] decrypt(byte[])>
+		SHA-256: 5d5a6f3150ed541213e40f3e3c8ece26cf643f6b710bddbe3781006fd9286f18
+		Secure: false
+
+Findings in Java Class: com.hdsolution.englishwriting.Utils
+
+	 in Method: byte[] decrypt(byte[])
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer25, $r2, $r1)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r1.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #efd1258d8f213c8f660e72a8aaac6acdfd011d7cbca6ec017db88777e89f09be)
+			First parameter (with value "md5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer26)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #9968af2f8110835e2f10e21062e5446481c8c6e0e6cc61a5d61cec8cd7a10159)
+			First parameter (with value "DESede/CBC/PKCS5Padding") should be any of {AES, PBEWithHmacSHA224AndAES_128, PBEWithHmacSHA256AndAES_128, PBEWithHmacSHA384AndAES_128, PBEWithHmacSHA512AndAES_128, PBEWithHmacSHA224AndAES_256, PBEWithHmacSHA256AndAES_256, PBEWithHmacSHA384AndAES_256, PBEWithHmacSHA512AndAES_256, RSA}
+			at statement: $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer24)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer23)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 38
+	Number of Objects Analyzed: 7
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
+	RequiredPredicateError: 3
+=====================================================================

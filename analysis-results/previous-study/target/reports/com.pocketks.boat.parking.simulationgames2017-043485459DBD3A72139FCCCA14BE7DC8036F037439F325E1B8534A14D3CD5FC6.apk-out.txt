@@ -1,0 +1,167 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.pocketks.boat.parking.simulationgames2017-043485459DBD3A72139FCCCA14BE7DC8036F037439F325E1B8534A14D3CD5FC6.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	java.security.spec.DSAParameterSpec
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	javax.net.ssl.SSLParameters
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.spec.DHParameterSpec
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.net.ssl.TrustManagerFactory
+	javax.crypto.spec.PBEKeySpec
+	java.security.cert.TrustAnchor
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	javax.net.ssl.SSLEngine
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1618)
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: fb51196db4ade6ed549c3ad77406de84c4b48d903f3bc713e8c6f251a6b5e685
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2493)
+		Method: <com.unity3d.ads.android.UnityAdsUtils: java.lang.String Md5(java.lang.String)>
+		SHA-256: 156e1414efb804019f86e1688d7c1bdc16ff336521f8dad8b70d5773065b8ced
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: 5a54f705314d6605f4cf61ba388d3b495336c885c3ea98cfb7cec081c65981da
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer364)
+		Method: <com.heyzap.http.MySSLSocketFactory: void <init>(java.security.KeyStore)>
+		SHA-256: 6ab2ac807de03946c99d0930588e18f887c648164214afa3bc99f203a10b2ed1
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer464)
+		Method: <com.heyzap.common.net.APIClient: byte[] a(byte[])>
+		SHA-256: e665bc7cc69543f38a33111b865ca55a2e7cf12f440d641336ff76da3284deff
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.KeyStore
+		Statement: $r3 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r2)
+		Method: <com.heyzap.http.MySSLSocketFactory: java.security.KeyStore getKeystore()>
+		SHA-256: d011df71b400b4926b84dec0cad6ffb90a5bd3d26c43a5974bec9e614ef5edf5
+		Secure: true
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.heyzap.common.net.APIClient: byte[] a(byte[])>
+		SHA-256: 84f9569499b4c885be7da40dcaf0e93b1660ebc8153c7ed786f511546ad69104
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.unity3d.ads.android.UnityAdsUtils: java.lang.String Md5(java.lang.String)>
+		SHA-256: 1582f684d0ab57006b7efbbdf1e19a4fbba44da2e47013880b645acefce04ca8
+		Secure: false
+
+Findings in Java Class: com.heyzap.http.MySSLSocketFactory
+
+	 in Method: void <init>(java.security.KeyStore)
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #6ab2ac807de03946c99d0930588e18f887c648164214afa3bc99f203a10b2ed1)
+			First parameter (with value "TLS") should be any of {TLSv1.1, TLSv1.2}
+			at statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer364)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer365, r5, varReplacer365)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer365, r5, varReplacer365)
+
+
+Findings in Java Class: com.heyzap.common.net.APIClient
+
+	 in Method: byte[] a(byte[])
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #e665bc7cc69543f38a33111b865ca55a2e7cf12f440d641336ff76da3284deff)
+			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer464)
+
+
+Findings in Java Class: com.unity3d.player.UnityPlayer
+
+	 in Method: java.lang.String a(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #fb51196db4ade6ed549c3ad77406de84c4b48d903f3bc713e8c6f251a6b5e685)
+			Third parameter (with value 0)Variable pre_lenmust be  greater than pre_off
+			at statement: virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r1, varReplacer1623, $i3)
+
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #fb51196db4ade6ed549c3ad77406de84c4b48d903f3bc713e8c6f251a6b5e685)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte),java.security.MessageDigest: void update(byte[])
+			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #fb51196db4ade6ed549c3ad77406de84c4b48d903f3bc713e8c6f251a6b5e685)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1618)
+
+
+Findings in Java Class: com.unity3d.ads.android.UnityAdsUtils
+
+	 in Method: java.lang.String Md5(java.lang.String)
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #156e1414efb804019f86e1688d7c1bdc16ff336521f8dad8b70d5773065b8ced)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r1 = null
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #156e1414efb804019f86e1688d7c1bdc16ff336521f8dad8b70d5773065b8ced)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2493)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #156e1414efb804019f86e1688d7c1bdc16ff336521f8dad8b70d5773065b8ced)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2493)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 38
+	Number of Objects Analyzed: 8
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 2
+	ConstraintError: 5
+	RequiredPredicateError: 2
+	TypestateError: 1
+=====================================================================

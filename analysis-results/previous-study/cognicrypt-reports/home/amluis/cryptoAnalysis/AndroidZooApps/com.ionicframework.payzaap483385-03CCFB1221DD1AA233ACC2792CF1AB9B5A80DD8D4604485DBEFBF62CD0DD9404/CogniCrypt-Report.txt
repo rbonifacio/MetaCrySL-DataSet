@@ -1,0 +1,116 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	java.security.spec.DSAParameterSpec
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	javax.net.ssl.SSLParameters
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.spec.DHParameterSpec
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.net.ssl.TrustManagerFactory
+	javax.crypto.spec.PBEKeySpec
+	java.security.cert.TrustAnchor
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	javax.net.ssl.SSLEngine
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r10
+		Type: java.security.KeyStore
+		Statement: $r10 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r8)
+		Method: <d: void <init>()>
+		SHA-256: 1f7c2a2b875a56108a75f020511b75cb04140af54e0b39af9c4e7d70aa646514
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: javax.net.ssl.SSLContext
+		Statement: $r1 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer35)
+		Method: <d: void <init>()>
+		SHA-256: ef7d75c7dcd7e2cd13b5523a8d3b61aac375aef1282a889e0c4bf6a4288a2c8d
+		Secure: false
+	Object:
+		Variable: $r12
+		Type: javax.net.ssl.TrustManager[]
+		Statement: $r12 = virtualinvoke $r11.<javax.net.ssl.TrustManagerFactory: javax.net.ssl.TrustManager[] getTrustManagers()>()
+		Method: <d: void <init>()>
+		SHA-256: 67b89178a7ba4d78c85aea7af034d287581b110dadeaab41c391405f0f847730
+		Secure: true
+	Object:
+		Variable: $r11
+		Type: javax.net.ssl.TrustManagerFactory
+		Statement: $r11 = staticinvoke <javax.net.ssl.TrustManagerFactory: javax.net.ssl.TrustManagerFactory getInstance(java.lang.String)>($r8)
+		Method: <d: void <init>()>
+		SHA-256: f9e23bb82821447380bdf405f5e9f6e1e4280ab47053891fac9afd6bf0a953ac
+		Secure: true
+
+Findings in Java Class: d
+
+	 in Method: void <init>()
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #ef7d75c7dcd7e2cd13b5523a8d3b61aac375aef1282a889e0c4bf6a4288a2c8d)
+			First parameter (with value "TLS") should be any of {TLSv1.1, TLSv1.2}
+			at statement: $r1 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer35)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer36, $r12, varReplacer36)
+
+		TypestateError violating CrySL rule for javax.net.ssl.SSLContext (on Object #ef7d75c7dcd7e2cd13b5523a8d3b61aac375aef1282a889e0c4bf6a4288a2c8d)
+			Unexpected call to method init on object of type javax.net.ssl.SSLContext. Expect a call to one of the following methods createSSLEngine
+			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer36, $r12, varReplacer36)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer36, $r12, varReplacer36)
+
+
+Findings in Java Class: dummyMainClass
+
+	 in Method: void dummyMainMethod(java.lang.String[])
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #ef7d75c7dcd7e2cd13b5523a8d3b61aac375aef1282a889e0c4bf6a4288a2c8d)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to init, getInstance
+			at statement: return
+
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #ef7d75c7dcd7e2cd13b5523a8d3b61aac375aef1282a889e0c4bf6a4288a2c8d)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to init, getInstance
+			at statement: return
+
+		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #ef7d75c7dcd7e2cd13b5523a8d3b61aac375aef1282a889e0c4bf6a4288a2c8d)
+			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to init, getInstance
+			at statement: return
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 38
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 3
+	TypestateError: 1
+	ConstraintError: 1
+	RequiredPredicateError: 2
+=====================================================================

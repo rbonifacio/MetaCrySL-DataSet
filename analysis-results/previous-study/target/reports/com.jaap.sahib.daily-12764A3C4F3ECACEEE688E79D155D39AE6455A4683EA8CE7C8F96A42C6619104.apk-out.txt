@@ -1,0 +1,101 @@
+Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.jaap.sahib.daily-12764A3C4F3ECACEEE688E79D155D39AE6455A4683EA8CE7C8F96A42C6619104.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	java.security.spec.DSAParameterSpec
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	javax.net.ssl.SSLParameters
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.spec.DHParameterSpec
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.net.ssl.TrustManagerFactory
+	javax.crypto.spec.PBEKeySpec
+	java.security.cert.TrustAnchor
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	javax.net.ssl.SSLEngine
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1064)
+		Method: <com.facebook.internal.Utility: java.lang.String md5hash(java.lang.String)>
+		SHA-256: 8023ab15f97f709e68fcaf910294e801e8ecbda632cae4d304e50c47ec10eec
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.Signature
+		Statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer1351)
+		Method: <com.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 3c95d81c6e1d19c1203c378235c1cec296862e9178f11dbd08e34483d7721ff
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4)
+		Method: <com.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 50d20e0d863bf9aaaccbe6d5f71c736bbbd4ab16c1ca9b261b70d21b96f5b665
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.facebook.internal.Utility: java.lang.String md5hash(java.lang.String)>
+		SHA-256: a1c52ee0141a291e49d55149b1b46b02367091bac3fa2d0baedf5190c42597d2
+		Secure: false
+
+Findings in Java Class: com.facebook.internal.Utility
+
+	 in Method: java.lang.String md5hash(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #8023ab15f97f709e68fcaf910294e801e8ecbda632cae4d304e50c47ec10eec)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1064)
+
+
+Findings in Java Class: com.util.Security
+
+	 in Method: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #3c95d81c6e1d19c1203c378235c1cec296862e9178f11dbd08e34483d7721ff)
+			First parameter (with value "SHA1withRSA") should be any of {NONEwithDSA, SHA1withDSA, SHA224withDSA, SHA256withDSA, SHA256withRSA, SHA256withECDSA}
+			at statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer1351)
+
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 38
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
+	RequiredPredicateError: 1
+=====================================================================

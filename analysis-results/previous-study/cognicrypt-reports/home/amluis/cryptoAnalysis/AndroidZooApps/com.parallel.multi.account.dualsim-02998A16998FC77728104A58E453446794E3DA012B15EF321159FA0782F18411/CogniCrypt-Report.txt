@@ -1,0 +1,98 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	java.security.spec.DSAParameterSpec
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	javax.net.ssl.SSLParameters
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.spec.DHParameterSpec
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.net.ssl.TrustManagerFactory
+	javax.crypto.spec.PBEKeySpec
+	java.security.cert.TrustAnchor
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	javax.net.ssl.SSLEngine
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2751)
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzcu(java.lang.String)>
+		SHA-256: 96918e4187ec8b0d76c76d2476cb21709ac320437bf5d256724a2c859fb2d7d7
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <org.piwik.sdk.tools.Checksum: java.lang.String getMD5Checksum(java.io.File)>
+		SHA-256: b55766df9c89bb2c18374731483678b05cdd2eadbd1dba3dc30e848b39b49a56
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzcu(java.lang.String)>
+		SHA-256: a8de7f4161f33e15339b4db966009de5efe1ebbfcd72ee5c244fa3f985a063ed
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3207)
+		Method: <org.piwik.sdk.tools.Checksum: java.lang.String getMD5Checksum(java.io.File)>
+		SHA-256: 4e54617d863e3b1da21fe4a2d274a70ff4ef4e1e86806b3fa7f8a2a34e7ffb2c
+		Secure: false
+
+Findings in Java Class: com.google.android.gms.ads.internal.util.client.zza
+
+	 in Method: java.lang.String zzcu(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #96918e4187ec8b0d76c76d2476cb21709ac320437bf5d256724a2c859fb2d7d7)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2751)
+
+
+Findings in Java Class: org.piwik.sdk.tools.Checksum
+
+	 in Method: java.lang.String getMD5Checksum(java.io.File)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #4e54617d863e3b1da21fe4a2d274a70ff4ef4e1e86806b3fa7f8a2a34e7ffb2c)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3207)
+
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #4e54617d863e3b1da21fe4a2d274a70ff4ef4e1e86806b3fa7f8a2a34e7ffb2c)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte),java.security.MessageDigest: void update(byte[])
+			at statement: $r1 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 38
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	TypestateError: 1
+	ConstraintError: 2
+=====================================================================

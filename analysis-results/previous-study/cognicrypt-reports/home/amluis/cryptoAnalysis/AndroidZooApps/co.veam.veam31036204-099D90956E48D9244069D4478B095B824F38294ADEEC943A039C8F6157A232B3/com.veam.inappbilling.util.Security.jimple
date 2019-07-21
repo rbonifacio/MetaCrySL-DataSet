@@ -1,0 +1,268 @@
+public class com.veam.inappbilling.util.Security extends java.lang.Object
+{
+    private static final java.lang.String KEY_FACTORY_ALGORITHM;
+    private static final java.lang.String SIGNATURE_ALGORITHM;
+    private static final java.lang.String TAG;
+
+    public void <init>()
+    {
+        com.veam.inappbilling.util.Security $r0;
+
+        $r0 := @this: com.veam.inappbilling.util.Security;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.security.PublicKey generatePublicKey(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer8416, varReplacer8417, varReplacer8418, varReplacer8419, varReplacer8420;
+        byte[] $r1;
+        java.security.KeyFactory $r2;
+        java.security.spec.X509EncodedKeySpec $r3;
+        java.security.PublicKey $r4;
+        java.lang.Throwable $r5, $r7;
+        java.lang.RuntimeException $r6;
+        java.lang.IllegalArgumentException $r8;
+        com.veam.inappbilling.util.Base64DecoderException $r9;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        $r1 = staticinvoke <com.veam.inappbilling.util.Base64: byte[] decode(java.lang.String)>($r0);
+
+        varReplacer8418 = "RSA";
+
+        $r2 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer8418);
+
+     label2:
+        $r3 = new java.security.spec.X509EncodedKeySpec;
+
+     label3:
+        specialinvoke $r3.<java.security.spec.X509EncodedKeySpec: void <init>(byte[])>($r1);
+
+        $r4 = virtualinvoke $r2.<java.security.KeyFactory: java.security.PublicKey generatePublic(java.security.spec.KeySpec)>($r3);
+
+     label4:
+        return $r4;
+
+     label5:
+        $r5 := @caughtexception;
+
+        $r6 = new java.lang.RuntimeException;
+
+        specialinvoke $r6.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r5);
+
+        throw $r6;
+
+     label6:
+        $r7 := @caughtexception;
+
+        varReplacer8416 = "IABUtil/Security";
+
+        varReplacer8417 = "Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer8416, varReplacer8417);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r7);
+
+        throw $r8;
+
+     label7:
+        $r9 := @caughtexception;
+
+        varReplacer8419 = "IABUtil/Security";
+
+        varReplacer8420 = "Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer8419, varReplacer8420);
+
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.Throwable)>($r9);
+
+        throw $r8;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label5;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label5;
+        catch java.security.spec.InvalidKeySpecException from label1 to label2 with label6;
+        catch java.security.spec.InvalidKeySpecException from label3 to label4 with label6;
+        catch com.veam.inappbilling.util.Base64DecoderException from label1 to label2 with label7;
+        catch com.veam.inappbilling.util.Base64DecoderException from label3 to label4 with label7;
+    }
+
+    public static boolean verify(java.security.PublicKey, java.lang.String, java.lang.String)
+    {
+        java.security.PublicKey $r0;
+        java.lang.String $r1, $r2, varReplacer8399, varReplacer8400, varReplacer8402, varReplacer8403, varReplacer8406, varReplacer8407, varReplacer8408, varReplacer8409, varReplacer8411, varReplacer8412, varReplacer8414;
+        java.security.Signature $r3;
+        byte[] $r4;
+        boolean $z0;
+        java.lang.Throwable $r5, $r6, $r7;
+        com.veam.inappbilling.util.Base64DecoderException $r8;
+        int varReplacer8401, varReplacer8404, varReplacer8405, varReplacer8410, varReplacer8413, varReplacer8415;
+
+        nop;
+
+        $r0 := @parameter0: java.security.PublicKey;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+     label1:
+        varReplacer8414 = "SHA1withRSA";
+
+        $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer8414);
+
+        virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0);
+
+        $r4 = virtualinvoke $r1.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r3.<java.security.Signature: void update(byte[])>($r4);
+
+        $r4 = staticinvoke <com.veam.inappbilling.util.Base64: byte[] decode(java.lang.String)>($r2);
+
+        $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4);
+
+     label2:
+        if $z0 != 0 goto label5;
+
+     label3:
+        varReplacer8399 = "IABUtil/Security";
+
+        varReplacer8400 = "Signature verification failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer8399, varReplacer8400);
+
+     label4:
+        varReplacer8405 = 0;
+
+        return varReplacer8405;
+
+     label5:
+        varReplacer8404 = 1;
+
+        return varReplacer8404;
+
+     label6:
+        $r5 := @caughtexception;
+
+        varReplacer8408 = "IABUtil/Security";
+
+        varReplacer8409 = "NoSuchAlgorithmException.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer8408, varReplacer8409);
+
+        varReplacer8401 = 0;
+
+        return varReplacer8401;
+
+     label7:
+        $r6 := @caughtexception;
+
+        varReplacer8411 = "IABUtil/Security";
+
+        varReplacer8412 = "Invalid key specification.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer8411, varReplacer8412);
+
+        varReplacer8413 = 0;
+
+        return varReplacer8413;
+
+     label8:
+        $r7 := @caughtexception;
+
+        varReplacer8406 = "IABUtil/Security";
+
+        varReplacer8407 = "Signature exception.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer8406, varReplacer8407);
+
+        varReplacer8415 = 0;
+
+        return varReplacer8415;
+
+     label9:
+        $r8 := @caughtexception;
+
+        varReplacer8402 = "IABUtil/Security";
+
+        varReplacer8403 = "Base64 decoding failed.";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer8402, varReplacer8403);
+
+        varReplacer8410 = 0;
+
+        return varReplacer8410;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label6;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label6;
+        catch java.security.InvalidKeyException from label1 to label2 with label7;
+        catch java.security.InvalidKeyException from label3 to label4 with label7;
+        catch java.security.SignatureException from label1 to label2 with label8;
+        catch java.security.SignatureException from label3 to label4 with label8;
+        catch com.veam.inappbilling.util.Base64DecoderException from label1 to label2 with label9;
+        catch com.veam.inappbilling.util.Base64DecoderException from label3 to label4 with label9;
+    }
+
+    public static boolean verifyPurchase(java.lang.String, java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r1, $r2, varReplacer8393, varReplacer8394, varReplacer8396, varReplacer8397;
+        boolean $z0;
+        java.security.PublicKey $r3;
+        int varReplacer8392, varReplacer8395, varReplacer8398;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        if $r1 != null goto label1;
+
+        varReplacer8393 = "IABUtil/Security";
+
+        varReplacer8394 = "data is null";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>(varReplacer8393, varReplacer8394);
+
+        varReplacer8395 = 0;
+
+        return varReplacer8395;
+
+     label1:
+        $z0 = staticinvoke <android.text.TextUtils: boolean isEmpty(java.lang.CharSequence)>($r2);
+
+        if $z0 != 0 goto label2;
+
+        $r3 = staticinvoke <com.veam.inappbilling.util.Security: java.security.PublicKey generatePublicKey(java.lang.String)>($r0);
+
+        $z0 = staticinvoke <com.veam.inappbilling.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>($r3, $r1, $r2);
+
+        if $z0 != 0 goto label2;
+
+        varReplacer8396 = "IABUtil/Security";
+
+        varReplacer8397 = "signature does not match data.";
+
+        staticinvoke <android.util.Log: int w(java.lang.String,java.lang.String)>(varReplacer8396, varReplacer8397);
+
+        varReplacer8398 = 0;
+
+        return varReplacer8398;
+
+     label2:
+        varReplacer8392 = 1;
+
+        return varReplacer8392;
+    }
+}

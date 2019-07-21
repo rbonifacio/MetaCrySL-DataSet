@@ -1,0 +1,117 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	java.security.spec.DSAParameterSpec
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	javax.net.ssl.SSLParameters
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.spec.DHParameterSpec
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.net.ssl.TrustManagerFactory
+	javax.crypto.spec.PBEKeySpec
+	java.security.cert.TrustAnchor
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	javax.net.ssl.SSLEngine
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2055)
+		Method: <io.branch.indexing.ContentDiscoverer$HashHelper: void <init>(io.branch.indexing.ContentDiscoverer)>
+		SHA-256: a9b57e29223d1e276e3d84cb4a58057f66188e0b7b27d948678464e536a71bbe
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.net.ssl.TrustManagerFactory
+		Statement: $r3 = staticinvoke <javax.net.ssl.TrustManagerFactory: javax.net.ssl.TrustManagerFactory getInstance(java.lang.String)>($r2)
+		Method: <okhttp3.OkHttpClient: javax.net.ssl.X509TrustManager systemDefaultTrustManager()>
+		SHA-256: 131be75562789377964b01a1048670ba51f7fa7f9f94e1fbf399e843541d1155
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.net.ssl.SSLContext
+		Statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1969)
+		Method: <okhttp3.OkHttpClient: javax.net.ssl.SSLSocketFactory systemDefaultSslSocketFactory(javax.net.ssl.X509TrustManager)>
+		SHA-256: d2e253e6055a74d5744645c364b190bee46171382c6a6fe4cdcf4ed53e2a9af0
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: javax.net.ssl.TrustManager[]
+		Statement: $r4 = virtualinvoke $r3.<javax.net.ssl.TrustManagerFactory: javax.net.ssl.TrustManager[] getTrustManagers()>()
+		Method: <okhttp3.OkHttpClient: javax.net.ssl.X509TrustManager systemDefaultTrustManager()>
+		SHA-256: 1a27914d4fa0cccd4258c31d2327789a4c4f86227090a14ea854b6b35086568
+		Secure: false
+
+Findings in Java Class: okhttp3.OkHttpClient
+
+	 in Method: javax.net.ssl.SSLSocketFactory systemDefaultSslSocketFactory(javax.net.ssl.X509TrustManager)
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #d2e253e6055a74d5744645c364b190bee46171382c6a6fe4cdcf4ed53e2a9af0)
+			First parameter (with value "TLS") should be any of {TLSv1.1, TLSv1.2}
+			at statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1969)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1970, r7, varReplacer1970)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1970, r7, varReplacer1970)
+
+
+	 in Method: javax.net.ssl.X509TrustManager systemDefaultTrustManager()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.TrustManagerFactory
+			First parameter was not properly generated as generated Key Store
+			at statement: virtualinvoke $r3.<javax.net.ssl.TrustManagerFactory: void init(java.security.KeyStore)>(varReplacer1968)
+
+
+Findings in Java Class: io.branch.indexing.ContentDiscoverer$HashHelper
+
+	 in Method: void <init>(io.branch.indexing.ContentDiscoverer)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #a9b57e29223d1e276e3d84cb4a58057f66188e0b7b27d948678464e536a71bbe)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2055)
+
+
+Findings in Java Class: io.branch.referral.ServerRequestRegisterClose
+
+	 in Method: void <init>(android.content.Context)
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #a9b57e29223d1e276e3d84cb4a58057f66188e0b7b27d948678464e536a71bbe)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update, getInstance
+			at statement: $r10 = virtualinvoke $r9.<io.branch.indexing.ContentDiscoverer: org.json.JSONObject getContentDiscoverDataForCloseRequest(android.content.Context)>($r1)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 38
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 3
+	ConstraintError: 2
+	IncompleteOperationError: 1
+=====================================================================

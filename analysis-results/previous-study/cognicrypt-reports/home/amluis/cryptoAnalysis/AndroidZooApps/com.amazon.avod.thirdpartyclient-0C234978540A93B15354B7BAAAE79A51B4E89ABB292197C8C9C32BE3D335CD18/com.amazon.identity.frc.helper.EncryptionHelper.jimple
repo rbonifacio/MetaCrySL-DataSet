@@ -1,0 +1,255 @@
+public final class com.amazon.identity.frc.helper.EncryptionHelper extends java.lang.Object
+{
+    private static final java.lang.String TAG;
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+        java.lang.Class $r1;
+
+        nop;
+
+        $r1 = class "Lcom/amazon/identity/frc/helper/EncryptionHelper;";
+
+        $r0 = virtualinvoke $r1.<java.lang.Class: java.lang.String getName()>();
+
+        <com.amazon.identity.frc.helper.EncryptionHelper: java.lang.String TAG> = $r0;
+
+        return;
+    }
+
+    private void <init>()
+    {
+        com.amazon.identity.frc.helper.EncryptionHelper $r0;
+
+        $r0 := @this: com.amazon.identity.frc.helper.EncryptionHelper;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String encrypt(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r5, varReplacer15773, varReplacer15777, varReplacer15783, varReplacer15784, varReplacer15785, varReplacer15786, varReplacer15787, varReplacer15788;
+        java.io.ByteArrayOutputStream $r1;
+        java.lang.Exception $r2;
+        java.util.zip.GZIPOutputStream $r3;
+        byte[] $r4, $r11, $r12, $r14;
+        java.util.Locale $r6;
+        java.lang.Object[] $r7;
+        java.lang.Class $r8;
+        javax.crypto.Cipher $r9;
+        java.security.Key $r10;
+        javax.crypto.Mac $r13;
+        int $i0, varReplacer15774, varReplacer15775, varReplacer15776, varReplacer15778, varReplacer15779, varReplacer15781, varReplacer15782, varReplacer15790, varReplacer15791, varReplacer15792;
+        null_type varReplacer15780, varReplacer15789;
+
+        nop;
+
+        $r5 := @parameter0: java.lang.String;
+
+        $r0 := @parameter1: java.lang.String;
+
+        if $r5 != null goto label03;
+
+        $r5 = <com.amazon.identity.frc.helper.EncryptionHelper: java.lang.String TAG>;
+
+     label01:
+        varReplacer15786 = "The input string should not be null!";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r5, varReplacer15786);
+
+     label02:
+        varReplacer15780 = null;
+
+        return varReplacer15780;
+
+     label03:
+        if $r0 != null goto label07;
+
+        $r0 = <com.amazon.identity.frc.helper.EncryptionHelper: java.lang.String TAG>;
+
+     label04:
+        varReplacer15787 = "Seed is null, cannot encrypt the input string! Just return the original string";
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r0, varReplacer15787);
+
+     label05:
+        return $r5;
+
+     label06:
+        $r2 := @caughtexception;
+
+        $r5 = <com.amazon.identity.frc.helper.EncryptionHelper: java.lang.String TAG>;
+
+        $r6 = staticinvoke <java.util.Locale: java.util.Locale getDefault()>();
+
+        $r7 = newarray (java.lang.Object)[1];
+
+        $r8 = virtualinvoke $r2.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r0 = virtualinvoke $r8.<java.lang.Class: java.lang.String getName()>();
+
+        $r7[0] = $r0;
+
+        varReplacer15784 = "Exception happened when encrypting the string:%s";
+
+        $r0 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r6, varReplacer15784, $r7);
+
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String,java.lang.Throwable)>($r5, $r0, $r2);
+
+        varReplacer15789 = null;
+
+        return varReplacer15789;
+
+     label07:
+        $r1 = new java.io.ByteArrayOutputStream;
+
+     label08:
+        specialinvoke $r1.<java.io.ByteArrayOutputStream: void <init>()>();
+
+     label09:
+        $r3 = new java.util.zip.GZIPOutputStream;
+
+     label10:
+        specialinvoke $r3.<java.util.zip.GZIPOutputStream: void <init>(java.io.OutputStream)>($r1);
+
+        varReplacer15785 = "UTF-8";
+
+        $r4 = virtualinvoke $r5.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer15785);
+
+        virtualinvoke $r3.<java.util.zip.GZIPOutputStream: void write(byte[])>($r4);
+
+        virtualinvoke $r3.<java.util.zip.GZIPOutputStream: void close()>();
+
+        $r4 = virtualinvoke $r1.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        varReplacer15777 = "AES/CBC/PKCS5Padding";
+
+        $r9 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer15777);
+
+        varReplacer15773 = "AES/CBC/PKCS7Padding";
+
+        $r10 = staticinvoke <com.amazon.identity.frc.helper.EncryptionHelper: java.security.Key generateKey(java.lang.String,java.lang.String)>($r0, varReplacer15773);
+
+        varReplacer15782 = 1;
+
+        virtualinvoke $r9.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer15782, $r10);
+
+        $r11 = virtualinvoke $r9.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r4);
+
+        $r12 = virtualinvoke $r9.<javax.crypto.Cipher: byte[] getIV()>();
+
+        varReplacer15783 = "HmacSHA256";
+
+        $r13 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer15783);
+
+        varReplacer15788 = "HmacSHA256";
+
+        $r10 = staticinvoke <com.amazon.identity.frc.helper.EncryptionHelper: java.security.Key generateKey(java.lang.String,java.lang.String)>($r0, varReplacer15788);
+
+        virtualinvoke $r13.<javax.crypto.Mac: void init(java.security.Key)>($r10);
+
+        virtualinvoke $r13.<javax.crypto.Mac: void update(byte[])>($r12);
+
+        virtualinvoke $r13.<javax.crypto.Mac: void update(byte[])>($r11);
+
+        $r14 = virtualinvoke $r13.<javax.crypto.Mac: byte[] doFinal()>();
+
+        $i0 = lengthof $r11;
+
+     label11:
+        $i0 = $i0 + 25;
+
+     label12:
+        $r4 = newarray (byte)[$i0];
+
+        $r4[0] = 0;
+
+        varReplacer15790 = 0;
+
+        varReplacer15791 = 1;
+
+        varReplacer15792 = 8;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r14, varReplacer15790, $r4, varReplacer15791, varReplacer15792);
+
+        varReplacer15774 = 0;
+
+        varReplacer15775 = 9;
+
+        varReplacer15776 = 16;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r12, varReplacer15774, $r4, varReplacer15775, varReplacer15776);
+
+        $i0 = lengthof $r11;
+
+        varReplacer15778 = 0;
+
+        varReplacer15779 = 25;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r11, varReplacer15778, $r4, varReplacer15779, $i0);
+
+        varReplacer15781 = 2;
+
+        $r5 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r4, varReplacer15781);
+
+     label13:
+        return $r5;
+
+        catch java.lang.Exception from label01 to label02 with label06;
+        catch java.lang.Exception from label04 to label05 with label06;
+        catch java.lang.Exception from label08 to label09 with label06;
+        catch java.lang.Exception from label10 to label11 with label06;
+        catch java.lang.Exception from label12 to label13 with label06;
+    }
+
+    private static java.security.Key generateKey(java.lang.String, java.lang.String) throws java.security.NoSuchAlgorithmException, java.io.UnsupportedEncodingException, java.security.spec.InvalidKeySpecException
+    {
+        java.lang.String $r0, $r1, varReplacer15826, varReplacer15827, varReplacer15828;
+        javax.crypto.spec.PBEKeySpec $r2;
+        javax.crypto.SecretKeyFactory $r3;
+        char[] $r4;
+        byte[] $r5;
+        javax.crypto.SecretKey $r6;
+        javax.crypto.spec.SecretKeySpec $r7;
+        int varReplacer15824, varReplacer15825;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        varReplacer15827 = "PBKDF2WithHmacSHA1";
+
+        $r3 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer15827);
+
+        $r2 = new javax.crypto.spec.PBEKeySpec;
+
+        $r4 = virtualinvoke $r0.<java.lang.String: char[] toCharArray()>();
+
+        varReplacer15826 = "UTF-8";
+
+        $r5 = virtualinvoke $r1.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer15826);
+
+        varReplacer15824 = 1000;
+
+        varReplacer15825 = 128;
+
+        specialinvoke $r2.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r4, $r5, varReplacer15824, varReplacer15825);
+
+        $r6 = virtualinvoke $r3.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2);
+
+        $r7 = new javax.crypto.spec.SecretKeySpec;
+
+        $r5 = interfaceinvoke $r6.<javax.crypto.SecretKey: byte[] getEncoded()>();
+
+        varReplacer15828 = "AES";
+
+        specialinvoke $r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer15828);
+
+        return $r7;
+    }
+}

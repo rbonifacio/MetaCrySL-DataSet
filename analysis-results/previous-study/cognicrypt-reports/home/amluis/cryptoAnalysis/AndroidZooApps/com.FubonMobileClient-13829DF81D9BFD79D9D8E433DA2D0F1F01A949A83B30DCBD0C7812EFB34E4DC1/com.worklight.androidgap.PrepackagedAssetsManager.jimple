@@ -1,0 +1,1284 @@
+public class com.worklight.androidgap.PrepackagedAssetsManager extends java.lang.Object
+{
+    private static final int LOLLIPOP_MR1;
+    private static final java.lang.String RESOURCES_ZIP;
+    android.content.pm.ApplicationInfo appInfo;
+    private long appInstallTime;
+    android.content.res.AssetManager assetManager;
+    private com.worklight.common.Logger logger;
+
+    public void <init>(android.content.Context)
+    {
+        com.worklight.androidgap.PrepackagedAssetsManager $r0;
+        android.content.Context $r1;
+        java.lang.Throwable $r2;
+        com.worklight.common.Logger $r3;
+        android.content.res.AssetManager $r4;
+        android.content.pm.PackageManager $r5;
+        java.lang.String $r6, varReplacer850, varReplacer852;
+        android.content.pm.ApplicationInfo $r7;
+        com.worklight.androidgap.WLInitError $r8;
+        int $i0, varReplacer851;
+        long varReplacer849;
+
+        nop;
+
+        $r0 := @this: com.worklight.androidgap.PrepackagedAssetsManager;
+
+        $r1 := @parameter0: android.content.Context;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer849 = -1L;
+
+        $r0.<com.worklight.androidgap.PrepackagedAssetsManager: long appInstallTime> = varReplacer849;
+
+        varReplacer850 = "prepackagedAssetManager";
+
+        $r3 = staticinvoke <com.worklight.common.Logger: com.worklight.common.Logger getInstance(java.lang.String)>(varReplacer850);
+
+        $r0.<com.worklight.androidgap.PrepackagedAssetsManager: com.worklight.common.Logger logger> = $r3;
+
+     label1:
+        $r4 = virtualinvoke $r1.<android.content.Context: android.content.res.AssetManager getAssets()>();
+
+     label2:
+        $r0.<com.worklight.androidgap.PrepackagedAssetsManager: android.content.res.AssetManager assetManager> = $r4;
+
+     label3:
+        $r5 = virtualinvoke $r1.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r6 = virtualinvoke $r1.<android.content.Context: java.lang.String getPackageName()>();
+
+        varReplacer851 = 0;
+
+        $r7 = virtualinvoke $r5.<android.content.pm.PackageManager: android.content.pm.ApplicationInfo getApplicationInfo(java.lang.String,int)>($r6, varReplacer851);
+
+     label4:
+        $r0.<com.worklight.androidgap.PrepackagedAssetsManager: android.content.pm.ApplicationInfo appInfo> = $r7;
+
+        return;
+
+     label5:
+        $r2 := @caughtexception;
+
+        $r8 = new com.worklight.androidgap.WLInitError;
+
+        $i0 = <com.worklight.androidgap.api.WLInitWebFrameworkResult: int FAILURE_INTERNAL>;
+
+        varReplacer852 = "PrepackagedAssetsManager Failure. Can\'t retrieve ApplicationInfo - something fundumental went wrong here.";
+
+        specialinvoke $r8.<com.worklight.androidgap.WLInitError: void <init>(int,java.lang.String,java.lang.Throwable)>($i0, varReplacer852, $r2);
+
+        throw $r8;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label1 to label2 with label5;
+        catch android.content.pm.PackageManager$NameNotFoundException from label3 to label4 with label5;
+    }
+
+    private java.lang.String calculateChecksum()
+    {
+        com.worklight.androidgap.PrepackagedAssetsManager $r0;
+        com.worklight.common.WLConfig $r1;
+        java.lang.String $r2, varReplacer877;
+        java.io.File $r3;
+        boolean $z0;
+        long $l0;
+
+        nop;
+
+        $r0 := @this: com.worklight.androidgap.PrepackagedAssetsManager;
+
+        $r1 = staticinvoke <com.worklight.common.WLConfig: com.worklight.common.WLConfig getInstance()>();
+
+        $r2 = virtualinvoke $r1.<com.worklight.common.WLConfig: java.lang.String getApplicationAbsolutePathToExternalWWWFiles()>();
+
+        $r3 = new java.io.File;
+
+        specialinvoke $r3.<java.io.File: void <init>(java.lang.String)>($r2);
+
+        $z0 = virtualinvoke $r3.<java.io.File: boolean isDirectory()>();
+
+        if $z0 == 0 goto label2;
+
+        $r1 = staticinvoke <com.worklight.common.WLConfig: com.worklight.common.WLConfig getInstance()>();
+
+        $z0 = virtualinvoke $r1.<com.worklight.common.WLConfig: boolean isExternalWebResources()>();
+
+        if $z0 == 0 goto label2;
+
+        $l0 = staticinvoke <com.worklight.nativeandroid.common.WLUtils: long computeChecksumOnExternal(java.lang.String)>($r2);
+
+        $r2 = staticinvoke <java.lang.Long: java.lang.String toString(long)>($l0);
+
+     label1:
+        varReplacer877 = "SHA-1";
+
+        $r2 = staticinvoke <com.worklight.utils.SecurityUtils: java.lang.String hashData(java.lang.String,java.lang.String)>($r2, varReplacer877);
+
+        return $r2;
+
+     label2:
+        $l0 = specialinvoke $r0.<com.worklight.androidgap.PrepackagedAssetsManager: long computeChecksumOnBundle()>();
+
+        $r2 = staticinvoke <java.lang.Long: java.lang.String toString(long)>($l0);
+
+        goto label1;
+    }
+
+    private void checkFreeSpaceOnDevice()
+    {
+        com.worklight.androidgap.PrepackagedAssetsManager $r0;
+        java.util.HashMap $r1;
+        java.text.DecimalFormat $r2;
+        long $l0, $l1;
+        com.worklight.common.WLConfig $r3;
+        java.lang.String $r4, $r6, varReplacer960, varReplacer961, varReplacer962;
+        byte $b2;
+        java.lang.StringBuilder $r5;
+        double $d0;
+        java.lang.Long $r7;
+        com.worklight.androidgap.WLInitError $r8;
+        int $i3;
+
+        nop;
+
+        $r0 := @this: com.worklight.androidgap.PrepackagedAssetsManager;
+
+        $r3 = staticinvoke <com.worklight.common.WLConfig: com.worklight.common.WLConfig getInstance()>();
+
+        $r4 = virtualinvoke $r3.<com.worklight.common.WLConfig: java.lang.String getWebResourcesUnpackedSize()>();
+
+        $l0 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r4);
+
+        $l0 = $l0 + 1048576L;
+
+        $l1 = staticinvoke <com.worklight.nativeandroid.common.WLUtils: long getFreeSpaceOnDevice()>();
+
+        $b2 = $l0 cmp $l1;
+
+        if $b2 <= 0 goto label1;
+
+        $r2 = new java.text.DecimalFormat;
+
+        varReplacer960 = "#.##";
+
+        specialinvoke $r2.<java.text.DecimalFormat: void <init>(java.lang.String)>(varReplacer960);
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer961 = "Application installation has failed because there is no sufficient storage space available. Free ";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer961);
+
+        $d0 = (double) $l0;
+
+        $d0 = $d0 / 1048576.0;
+
+        $r4 = virtualinvoke $r2.<java.text.DecimalFormat: java.lang.String format(double)>($d0);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        varReplacer962 = " MB and relaunch the application";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer962);
+
+        $r4 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r1 = new java.util.HashMap;
+
+        specialinvoke $r1.<java.util.HashMap: void <init>()>();
+
+        $r6 = <com.worklight.androidgap.api.WLInitWebFrameworkResult: java.lang.String DATA_SPACE_REQUIRED>;
+
+        $r7 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        interfaceinvoke $r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r6, $r7);
+
+        $r8 = new com.worklight.androidgap.WLInitError;
+
+        $i3 = <com.worklight.androidgap.api.WLInitWebFrameworkResult: int FAILURE_NOT_ENOUGH_SPACE>;
+
+        specialinvoke $r8.<com.worklight.androidgap.WLInitError: void <init>(int,java.lang.String,java.util.Map)>($i3, $r4, $r1);
+
+        throw $r8;
+
+     label1:
+        return;
+    }
+
+    private long computeChecksumOnBundle()
+    {
+        com.worklight.androidgap.PrepackagedAssetsManager $r0;
+        java.util.zip.CRC32 $r1;
+        java.lang.String[] $r2, $r6;
+        android.content.res.AssetManager $r3;
+        java.io.InputStream $r4;
+        java.lang.String $r5, $r12, varReplacer898, varReplacer900, varReplacer901, varReplacer902, varReplacer903, varReplacer904, varReplacer905, varReplacer906, varReplacer907;
+        java.util.ArrayList $r7;
+        java.util.List $r8;
+        java.util.Iterator $r9;
+        boolean $z0;
+        java.lang.Object $r10;
+        java.lang.StringBuilder $r11;
+        java.lang.Throwable $r13, $r15;
+        com.worklight.common.Logger $r14;
+        long $l0;
+        int varReplacer899;
+
+        nop;
+
+        $r0 := @this: com.worklight.androidgap.PrepackagedAssetsManager;
+
+        $r2 = null;
+
+        $r3 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: android.content.res.AssetManager assetManager>;
+
+     label01:
+        varReplacer900 = "assets.zip";
+
+        $r4 = virtualinvoke $r3.<android.content.res.AssetManager: java.io.InputStream open(java.lang.String)>(varReplacer900);
+
+        $r5 = specialinvoke $r0.<com.worklight.androidgap.PrepackagedAssetsManager: java.lang.String readZipToString(java.io.InputStream)>($r4);
+
+        varReplacer901 = "\n";
+
+        varReplacer902 = "";
+
+        $r5 = virtualinvoke $r5.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer901, varReplacer902);
+
+        varReplacer903 = ";";
+
+        $r6 = virtualinvoke $r5.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer903);
+
+     label02:
+        $r2 = $r6;
+
+     label03:
+        if $r2 != null goto label15;
+
+        $r3 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: android.content.res.AssetManager assetManager>;
+
+        $r7 = new java.util.ArrayList;
+
+        specialinvoke $r7.<java.util.ArrayList: void <init>()>();
+
+        varReplacer898 = "www";
+
+        $r8 = specialinvoke $r0.<com.worklight.androidgap.PrepackagedAssetsManager: java.util.List getBundleTree(java.lang.String,android.content.res.AssetManager,java.util.List)>(varReplacer898, $r3, $r7);
+
+     label04:
+        staticinvoke <java.util.Collections: void sort(java.util.List)>($r8);
+
+        $r1 = new java.util.zip.CRC32;
+
+        specialinvoke $r1.<java.util.zip.CRC32: void <init>()>();
+
+        $r9 = interfaceinvoke $r8.<java.util.List: java.util.Iterator iterator()>();
+
+     label05:
+        $z0 = interfaceinvoke $r9.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label16;
+
+        $r10 = interfaceinvoke $r9.<java.util.Iterator: java.lang.Object next()>();
+
+        $r5 = (java.lang.String) $r10;
+
+     label06:
+        varReplacer904 = "www";
+
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean startsWith(java.lang.String)>(varReplacer904);
+
+     label07:
+        if $z0 != 0 goto label10;
+
+        $r11 = new java.lang.StringBuilder;
+
+     label08:
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer907 = "www/";
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer907);
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label09:
+        $r5 = $r12;
+
+     label10:
+        $r3 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: android.content.res.AssetManager assetManager>;
+
+     label11:
+        varReplacer899 = 3;
+
+        $r4 = virtualinvoke $r3.<android.content.res.AssetManager: java.io.InputStream open(java.lang.String,int)>($r5, varReplacer899);
+
+        staticinvoke <com.worklight.nativeandroid.common.WLUtils: void calculateCheckSum(java.io.InputStream,java.util.zip.Checksum)>($r4, $r1);
+
+     label12:
+        goto label05;
+
+     label13:
+        $r13 := @caughtexception;
+
+        $r14 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: com.worklight.common.Logger logger>;
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer906 = "Failed to find file ";
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer906);
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r14.<com.worklight.common.Logger: void debug(java.lang.String,java.lang.Throwable)>($r5, $r13);
+
+        goto label05;
+
+     label14:
+        $r15 := @caughtexception;
+
+        $r14 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: com.worklight.common.Logger logger>;
+
+        varReplacer905 = "Failed to read assets list from assets.txt, this may cause poor permormance at application startup.";
+
+        virtualinvoke $r14.<com.worklight.common.Logger: void debug(java.lang.String,java.lang.Throwable)>(varReplacer905, $r15);
+
+        goto label03;
+
+     label15:
+        $r8 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>($r2);
+
+        goto label04;
+
+     label16:
+        $l0 = interfaceinvoke $r1.<java.util.zip.Checksum: long getValue()>();
+
+        return $l0;
+
+        catch java.io.IOException from label01 to label02 with label14;
+        catch java.io.IOException from label06 to label07 with label13;
+        catch java.io.IOException from label08 to label09 with label13;
+        catch java.io.IOException from label11 to label12 with label13;
+    }
+
+    private void deleteOldAssets()
+    {
+        com.worklight.androidgap.PrepackagedAssetsManager $r0;
+        java.lang.Exception $r1;
+        int $i0;
+        java.io.File $r2;
+        com.worklight.common.WLConfig $r3;
+        java.lang.String $r4, varReplacer925;
+        java.lang.Object[] $r5;
+        com.worklight.androidgap.WLInitError $r6;
+
+        nop;
+
+        $r0 := @this: com.worklight.androidgap.PrepackagedAssetsManager;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 22 goto label2;
+
+        $r2 = new java.io.File;
+
+     label1:
+        $r3 = staticinvoke <com.worklight.common.WLConfig: com.worklight.common.WLConfig getInstance()>();
+
+        $r4 = virtualinvoke $r3.<com.worklight.common.WLConfig: java.lang.String getApplicationOldAbsolutePathToExternalWWWFiles()>();
+
+        specialinvoke $r2.<java.io.File: void <init>(java.lang.String)>($r4);
+
+        staticinvoke <com.worklight.nativeandroid.common.WLUtils: boolean deleteDirectory(java.io.File)>($r2);
+
+     label2:
+        $r2 = new java.io.File;
+
+     label3:
+        $r3 = staticinvoke <com.worklight.common.WLConfig: com.worklight.common.WLConfig getInstance()>();
+
+        $r4 = virtualinvoke $r3.<com.worklight.common.WLConfig: java.lang.String getApplicationAbsolutePathToExternalWWWFiles()>();
+
+        specialinvoke $r2.<java.io.File: void <init>(java.lang.String)>($r4);
+
+        staticinvoke <com.worklight.nativeandroid.common.WLUtils: boolean deleteDirectory(java.io.File)>($r2);
+
+     label4:
+        return;
+
+     label5:
+        $r1 := @caughtexception;
+
+        $r5 = newarray (java.lang.Object)[1];
+
+        $r3 = staticinvoke <com.worklight.common.WLConfig: com.worklight.common.WLConfig getInstance()>();
+
+        $r4 = virtualinvoke $r3.<com.worklight.common.WLConfig: java.lang.String getWebResourcesUrl()>();
+
+        $r5[0] = $r4;
+
+        varReplacer925 = "Failed deleting directory %s. This might happen if the application was installed, then the shareduserID  in AndroidManifest.xml was changed, and the application was redeployed.";
+
+        $r4 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer925, $r5);
+
+        $r6 = new com.worklight.androidgap.WLInitError;
+
+        $i0 = <com.worklight.androidgap.api.WLInitWebFrameworkResult: int FAILURE_INTERNAL>;
+
+        specialinvoke $r6.<com.worklight.androidgap.WLInitError: void <init>(int,java.lang.String,java.lang.Throwable)>($i0, $r4, $r1);
+
+        throw $r6;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    private java.util.List getBundleTree(java.lang.String, android.content.res.AssetManager, java.util.List)
+    {
+        com.worklight.androidgap.PrepackagedAssetsManager $r0;
+        java.lang.String $r1, $r6, varReplacer910, varReplacer911, varReplacer912, varReplacer913;
+        android.content.res.AssetManager $r2;
+        java.util.List $r3;
+        java.lang.Throwable $r4;
+        java.lang.String[] $r5;
+        int $i0, $i1;
+        boolean $z0;
+        java.lang.StringBuilder $r7;
+        com.worklight.common.Logger $r8;
+
+        nop;
+
+        $r0 := @this: com.worklight.androidgap.PrepackagedAssetsManager;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 := @parameter1: android.content.res.AssetManager;
+
+        $r3 := @parameter2: java.util.List;
+
+     label01:
+        $r5 = virtualinvoke $r2.<android.content.res.AssetManager: java.lang.String[] list(java.lang.String)>($r1);
+
+     label02:
+        if $r5 == null goto label17;
+
+        $i0 = 0;
+
+     label03:
+        $i1 = lengthof $r5;
+
+        if $i0 >= $i1 goto label17;
+
+        $r6 = $r5[$i0];
+
+     label04:
+        varReplacer911 = ".";
+
+        $z0 = virtualinvoke $r6.<java.lang.String: boolean contains(java.lang.CharSequence)>(varReplacer911);
+
+     label05:
+        if $z0 != 0 goto label10;
+
+        $r7 = new java.lang.StringBuilder;
+
+     label06:
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer912 = "/";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer912);
+
+     label07:
+        $r6 = $r5[$i0];
+
+     label08:
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r0.<com.worklight.androidgap.PrepackagedAssetsManager: java.util.List getBundleTree(java.lang.String,android.content.res.AssetManager,java.util.List)>($r6, $r2, $r3);
+
+     label09:
+        $i0 = $i0 + 1;
+
+        goto label03;
+
+     label10:
+        $z0 = specialinvoke $r0.<com.worklight.androidgap.PrepackagedAssetsManager: boolean isMediaFile(java.lang.String)>($r1);
+
+     label11:
+        if $z0 != 0 goto label09;
+
+        $r7 = new java.lang.StringBuilder;
+
+     label12:
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer913 = "/";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer913);
+
+     label13:
+        $r6 = $r5[$i0];
+
+     label14:
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        interfaceinvoke $r3.<java.util.List: boolean add(java.lang.Object)>($r6);
+
+     label15:
+        goto label09;
+
+     label16:
+        $r4 := @caughtexception;
+
+        $r8 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: com.worklight.common.Logger logger>;
+
+        varReplacer910 = "An error occured while proccessing the bundle tree";
+
+        virtualinvoke $r8.<com.worklight.common.Logger: void debug(java.lang.String,java.lang.Throwable)>(varReplacer910, $r4);
+
+     label17:
+        return $r3;
+
+        catch java.io.IOException from label01 to label02 with label16;
+        catch java.io.IOException from label04 to label05 with label16;
+        catch java.io.IOException from label06 to label07 with label16;
+        catch java.io.IOException from label08 to label09 with label16;
+        catch java.io.IOException from label10 to label11 with label16;
+        catch java.io.IOException from label12 to label13 with label16;
+        catch java.io.IOException from label14 to label15 with label16;
+    }
+
+    private boolean isMediaFile(java.lang.String)
+    {
+        com.worklight.androidgap.PrepackagedAssetsManager $r0;
+        java.lang.String $r1, $r4, varReplacer916;
+        int $i0, $i1, varReplacer914, varReplacer915;
+        com.worklight.common.WLConfig $r2;
+        java.lang.String[] $r3;
+        boolean $z0;
+
+        nop;
+
+        $r0 := @this: com.worklight.androidgap.PrepackagedAssetsManager;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = staticinvoke <com.worklight.common.WLConfig: com.worklight.common.WLConfig getInstance()>();
+
+        $r3 = virtualinvoke $r2.<com.worklight.common.WLConfig: java.lang.String[] getMediaExtensions()>();
+
+        if $r3 == null goto label3;
+
+        varReplacer916 = ".";
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int lastIndexOf(java.lang.String)>(varReplacer916);
+
+        $i0 = $i0 + 1;
+
+        $i1 = virtualinvoke $r1.<java.lang.String: int length()>();
+
+        $r4 = virtualinvoke $r1.<java.lang.String: java.lang.String substring(int,int)>($i0, $i1);
+
+        $i0 = lengthof $r3;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label3;
+
+        $r1 = $r3[$i1];
+
+        $z0 = virtualinvoke $r1.<java.lang.String: boolean equals(java.lang.Object)>($r4);
+
+        if $z0 == 0 goto label2;
+
+        varReplacer914 = 1;
+
+        return varReplacer914;
+
+     label2:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label3:
+        varReplacer915 = 0;
+
+        return varReplacer915;
+    }
+
+    private boolean isResourcesZippedInApk()
+    {
+        com.worklight.androidgap.PrepackagedAssetsManager $r0;
+        java.lang.Throwable $r1;
+        int $i0, $i1, varReplacer928, varReplacer929;
+        java.lang.String $r2, varReplacer926, varReplacer927, varReplacer930;
+        android.content.res.AssetManager $r3;
+        java.lang.String[] $r4;
+        boolean $z0;
+        com.worklight.androidgap.WLInitError $r5;
+
+        nop;
+
+        $r0 := @this: com.worklight.androidgap.PrepackagedAssetsManager;
+
+        $r3 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: android.content.res.AssetManager assetManager>;
+
+     label1:
+        varReplacer927 = "www";
+
+        $r4 = virtualinvoke $r3.<android.content.res.AssetManager: java.lang.String[] list(java.lang.String)>(varReplacer927);
+
+     label2:
+        if $r4 == null goto label7;
+
+        $i0 = lengthof $r4;
+
+        if $i0 <= 0 goto label7;
+
+        $i0 = lengthof $r4;
+
+        $i1 = 0;
+
+     label3:
+        if $i1 >= $i0 goto label7;
+
+        $r2 = $r4[$i1];
+
+     label4:
+        varReplacer930 = "resources.zip";
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean contains(java.lang.CharSequence)>(varReplacer930);
+
+     label5:
+        if $z0 == 0 goto label6;
+
+        varReplacer929 = 1;
+
+        return varReplacer929;
+
+     label6:
+        $i1 = $i1 + 1;
+
+        goto label3;
+
+     label7:
+        varReplacer928 = 0;
+
+        return varReplacer928;
+
+     label8:
+        $r1 := @caughtexception;
+
+        $r5 = new com.worklight.androidgap.WLInitError;
+
+        $i0 = <com.worklight.androidgap.api.WLInitWebFrameworkResult: int FAILURE_INTERNAL>;
+
+        varReplacer926 = "Cannot retrive www list under assets";
+
+        specialinvoke $r5.<com.worklight.androidgap.WLInitError: void <init>(int,java.lang.String,java.lang.Throwable)>($i0, varReplacer926, $r1);
+
+        throw $r5;
+
+        catch java.io.IOException from label1 to label2 with label8;
+        catch java.io.IOException from label4 to label5 with label8;
+    }
+
+    private java.lang.String readZipToString(java.io.InputStream) throws java.io.IOException
+    {
+        com.worklight.androidgap.PrepackagedAssetsManager $r0;
+        java.io.InputStream $r1;
+        java.io.ByteArrayOutputStream $r2;
+        byte[] $r3;
+        java.util.zip.ZipInputStream $r4, $r5;
+        java.io.BufferedInputStream $r6;
+        java.util.zip.ZipEntry $r7;
+        int $i0, varReplacer908;
+        java.lang.Throwable $r8;
+        java.lang.String $r9, varReplacer909;
+
+        nop;
+
+        $r0 := @this: com.worklight.androidgap.PrepackagedAssetsManager;
+
+        $r1 := @parameter0: java.io.InputStream;
+
+        $r5 = null;
+
+     label01:
+        $r4 = new java.util.zip.ZipInputStream;
+
+        $r6 = new java.io.BufferedInputStream;
+
+        specialinvoke $r6.<java.io.BufferedInputStream: void <init>(java.io.InputStream)>($r1);
+
+        specialinvoke $r4.<java.util.zip.ZipInputStream: void <init>(java.io.InputStream)>($r6);
+
+     label02:
+        $r7 = virtualinvoke $r4.<java.util.zip.ZipInputStream: java.util.zip.ZipEntry getNextEntry()>();
+
+     label03:
+        if $r7 == null goto label13;
+
+     label04:
+        $r2 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r2.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        $r3 = newarray (byte)[1024];
+
+     label05:
+        $i0 = virtualinvoke $r4.<java.util.zip.ZipInputStream: int read(byte[])>($r3);
+
+     label06:
+        if $i0 == -1 goto label11;
+
+     label07:
+        varReplacer908 = 0;
+
+        virtualinvoke $r2.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>($r3, varReplacer908, $i0);
+
+     label08:
+        goto label05;
+
+     label09:
+        $r8 := @caughtexception;
+
+        $r5 = $r4;
+
+     label10:
+        virtualinvoke $r5.<java.util.zip.ZipInputStream: void close()>();
+
+        throw $r8;
+
+     label11:
+        $r3 = virtualinvoke $r2.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        $r9 = new java.lang.String;
+
+        specialinvoke $r9.<java.lang.String: void <init>(byte[])>($r3);
+
+     label12:
+        virtualinvoke $r4.<java.util.zip.ZipInputStream: void close()>();
+
+        return $r9;
+
+     label13:
+        virtualinvoke $r4.<java.util.zip.ZipInputStream: void close()>();
+
+        varReplacer909 = "";
+
+        return varReplacer909;
+
+     label14:
+        $r8 := @caughtexception;
+
+        goto label10;
+
+        catch java.lang.Throwable from label01 to label02 with label14;
+        catch java.lang.Throwable from label02 to label03 with label09;
+        catch java.lang.Throwable from label04 to label06 with label09;
+        catch java.lang.Throwable from label07 to label08 with label09;
+        catch java.lang.Throwable from label11 to label12 with label09;
+    }
+
+    private boolean unzipAssetsToLocalCopy()
+    {
+        com.worklight.androidgap.PrepackagedAssetsManager $r0;
+        java.lang.Exception $r1;
+        java.lang.Throwable $r2, $r13, $r15, $r16, $r17;
+        java.lang.String $r3, varReplacer931, varReplacer932, varReplacer933, varReplacer934, varReplacer935, varReplacer936, varReplacer937, varReplacer939;
+        com.worklight.common.Logger $r4;
+        com.worklight.utils.MultifileAssetStream $r5, $r6, r18;
+        long $l0;
+        boolean $z0;
+        android.content.res.AssetManager $r7;
+        int $i1, varReplacer938;
+        byte $b2;
+        byte[] $r8;
+        java.io.InputStream $r9;
+        java.lang.Object $r10;
+        java.io.File $r11, r19;
+        com.worklight.common.WLConfig $r12;
+        java.lang.StringBuilder $r14, r20;
+        com.worklight.androidgap.WLInitError r21;
+        java.io.IOException r22;
+
+        nop;
+
+        $r0 := @this: com.worklight.androidgap.PrepackagedAssetsManager;
+
+        specialinvoke $r0.<com.worklight.androidgap.PrepackagedAssetsManager: void checkFreeSpaceOnDevice()>();
+
+        $r4 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: com.worklight.common.Logger logger>;
+
+        varReplacer931 = "Started copying files to local storage...";
+
+        virtualinvoke $r4.<com.worklight.common.Logger: void debug(java.lang.String)>(varReplacer931);
+
+        $r5 = null;
+
+        $l0 = 0L;
+
+        $z0 = 0;
+
+        r18 = new com.worklight.utils.MultifileAssetStream;
+
+        $r6 = r18;
+
+        $r7 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: android.content.res.AssetManager assetManager>;
+
+     label01:
+        varReplacer933 = "www/resources.zip";
+
+        specialinvoke r18.<com.worklight.utils.MultifileAssetStream: void <init>(java.lang.String,android.content.res.AssetManager)>(varReplacer933, $r7);
+
+     label02:
+        $i1 = virtualinvoke $r6.<java.io.InputStream: int available()>();
+
+     label03:
+        $l0 = (long) $i1;
+
+        $z0 = 1;
+
+     label04:
+        $b2 = $l0 cmp 0L;
+
+        if $b2 > 0 goto label26;
+
+        r18 = new com.worklight.utils.MultifileAssetStream;
+
+        $r5 = r18;
+
+        $r7 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: android.content.res.AssetManager assetManager>;
+
+     label05:
+        varReplacer939 = "www/resources.zip.unencrypted";
+
+        specialinvoke r18.<com.worklight.utils.MultifileAssetStream: void <init>(java.lang.String,android.content.res.AssetManager)>(varReplacer939, $r7);
+
+     label06:
+        $i1 = virtualinvoke $r5.<java.io.InputStream: int available()>();
+
+     label07:
+        $l0 = (long) $i1;
+
+        $z0 = 0;
+
+     label08:
+        if $r5 == null goto label17;
+
+        $r4 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: com.worklight.common.Logger logger>;
+
+        varReplacer936 = "Found resources zip stream. Starting decryption and unzipping process.";
+
+        virtualinvoke $r4.<com.worklight.common.Logger: void debug(java.lang.String)>(varReplacer936);
+
+        $r3 = "JfnnlDI7RTiF9RgfG2JNCw==";
+
+        $r8 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        $r8 = staticinvoke <com.worklight.utils.Base64: byte[] decode(byte[])>($r8);
+
+        if $z0 == 0 goto label20;
+
+     label09:
+        $r9 = staticinvoke <com.worklight.utils.SecurityUtils: java.io.InputStream decryptData(java.io.InputStream,byte[])>($r5, $r8);
+
+     label10:
+        $r10 = $r9;
+
+     label11:
+        r19 = new java.io.File;
+
+        $r11 = r19;
+
+     label12:
+        $r12 = staticinvoke <com.worklight.common.WLConfig: com.worklight.common.WLConfig getInstance()>();
+
+        $r3 = virtualinvoke $r12.<com.worklight.common.WLConfig: java.lang.String getApplicationAbsolutePathToExternalWWWFiles()>();
+
+        specialinvoke r19.<java.io.File: void <init>(java.lang.String)>($r3);
+
+     label13:
+        $r9 = (java.io.InputStream) $r10;
+
+     label14:
+        staticinvoke <com.worklight.nativeandroid.common.WLUtils: void unpack(java.io.InputStream,java.io.File)>($r9, $r11);
+
+     label15:
+        $r4 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: com.worklight.common.Logger logger>;
+
+     label16:
+        varReplacer937 = "Resources.zip unzipped";
+
+        virtualinvoke $r4.<com.worklight.common.Logger: void debug(java.lang.String)>(varReplacer937);
+
+     label17:
+        $r4 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: com.worklight.common.Logger logger>;
+
+        varReplacer934 = "Finished copying files to local storage...";
+
+        virtualinvoke $r4.<com.worklight.common.Logger: void debug(java.lang.String)>(varReplacer934);
+
+        varReplacer938 = 1;
+
+        return varReplacer938;
+
+     label18:
+        $r13 := @caughtexception;
+
+     label19:
+        $r6 = $r5;
+
+        goto label04;
+
+     label20:
+        $r10 = $r5;
+
+        goto label11;
+
+     label21:
+        $r2 := @caughtexception;
+
+        r20 = new java.lang.StringBuilder;
+
+        specialinvoke r20.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer932 = "Cannot install or update the application, because failed to extract the application\'s web resources with ";
+
+        $r14 = virtualinvoke r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer932);
+
+        r22 = (java.io.IOException) $r2;
+
+        $r3 = virtualinvoke r22.<java.io.IOException: java.lang.String getMessage()>();
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        r21 = new com.worklight.androidgap.WLInitError;
+
+        $i1 = <com.worklight.androidgap.api.WLInitWebFrameworkResult: int FAILURE_UNZIP>;
+
+        specialinvoke r21.<com.worklight.androidgap.WLInitError: void <init>(int,java.lang.String,java.lang.Throwable)>($i1, $r3, $r2);
+
+        throw r21;
+
+     label22:
+        $r1 := @caughtexception;
+
+        r20 = new java.lang.StringBuilder;
+
+        specialinvoke r20.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer935 = "Cannot install or update the application, because failed to decrypt the application\'s web resources with ";
+
+        $r14 = virtualinvoke r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer935);
+
+        $r3 = virtualinvoke $r1.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        r21 = new com.worklight.androidgap.WLInitError;
+
+        $i1 = <com.worklight.androidgap.api.WLInitWebFrameworkResult: int FAILURE_UNZIP>;
+
+        specialinvoke r21.<com.worklight.androidgap.WLInitError: void <init>(int,java.lang.String,java.lang.Throwable)>($i1, $r3, $r1);
+
+        throw r21;
+
+     label23:
+        $r15 := @caughtexception;
+
+        $r5 = $r6;
+
+        goto label08;
+
+     label24:
+        $r16 := @caughtexception;
+
+        goto label08;
+
+     label25:
+        $r17 := @caughtexception;
+
+        $r5 = $r6;
+
+        goto label19;
+
+     label26:
+        $r5 = $r6;
+
+        goto label08;
+
+        catch java.io.IOException from label01 to label02 with label18;
+        catch java.io.IOException from label02 to label03 with label25;
+        catch java.io.IOException from label05 to label06 with label23;
+        catch java.io.IOException from label06 to label07 with label24;
+        catch java.io.IOException from label09 to label10 with label21;
+        catch java.io.IOException from label12 to label13 with label21;
+        catch java.io.IOException from label14 to label15 with label21;
+        catch java.io.IOException from label16 to label17 with label21;
+        catch java.lang.Exception from label09 to label10 with label22;
+        catch java.lang.Exception from label12 to label17 with label22;
+    }
+
+    public void copyPrepackagedAssetsToLocalStorage()
+    {
+        com.worklight.androidgap.PrepackagedAssetsManager $r0;
+        com.worklight.common.Logger $r1;
+        com.worklight.common.WLConfig $r2;
+        boolean $z0;
+        long $l0;
+        java.lang.String varReplacer856;
+        int varReplacer857, varReplacer858, varReplacer859;
+
+        nop;
+
+        $r0 := @this: com.worklight.androidgap.PrepackagedAssetsManager;
+
+        $r1 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: com.worklight.common.Logger logger>;
+
+        varReplacer856 = "New installation/upgrade detected, copying resources and saving new checksum";
+
+        virtualinvoke $r1.<com.worklight.common.Logger: void debug(java.lang.String)>(varReplacer856);
+
+        $r2 = staticinvoke <com.worklight.common.WLConfig: com.worklight.common.WLConfig getInstance()>();
+
+        virtualinvoke $r2.<com.worklight.common.WLConfig: void clearWLPref()>();
+
+        specialinvoke $r0.<com.worklight.androidgap.PrepackagedAssetsManager: void deleteOldAssets()>();
+
+        $z0 = specialinvoke $r0.<com.worklight.androidgap.PrepackagedAssetsManager: boolean isResourcesZippedInApk()>();
+
+        if $z0 == 0 goto label2;
+
+        $z0 = specialinvoke $r0.<com.worklight.androidgap.PrepackagedAssetsManager: boolean unzipAssetsToLocalCopy()>();
+
+        if $z0 == 0 goto label1;
+
+        $r2 = staticinvoke <com.worklight.common.WLConfig: com.worklight.common.WLConfig getInstance()>();
+
+        varReplacer858 = 1;
+
+        virtualinvoke $r2.<com.worklight.common.WLConfig: void setExternalWebResourcesPref(boolean)>(varReplacer858);
+
+        $r2 = staticinvoke <com.worklight.common.WLConfig: com.worklight.common.WLConfig getInstance()>();
+
+        $l0 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: long appInstallTime>;
+
+        virtualinvoke $r2.<com.worklight.common.WLConfig: void setApplicationInstallTime(long)>($l0);
+
+        return;
+
+     label1:
+        $r2 = staticinvoke <com.worklight.common.WLConfig: com.worklight.common.WLConfig getInstance()>();
+
+        varReplacer859 = 0;
+
+        virtualinvoke $r2.<com.worklight.common.WLConfig: void setExternalWebResourcesPref(boolean)>(varReplacer859);
+
+        return;
+
+     label2:
+        $r2 = staticinvoke <com.worklight.common.WLConfig: com.worklight.common.WLConfig getInstance()>();
+
+        varReplacer857 = 0;
+
+        virtualinvoke $r2.<com.worklight.common.WLConfig: void setExternalWebResourcesPref(boolean)>(varReplacer857);
+
+        $r2 = staticinvoke <com.worklight.common.WLConfig: com.worklight.common.WLConfig getInstance()>();
+
+        $l0 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: long appInstallTime>;
+
+        virtualinvoke $r2.<com.worklight.common.WLConfig: void setApplicationInstallTime(long)>($l0);
+
+        return;
+    }
+
+    public boolean isNewInstallOrUpgrade()
+    {
+        com.worklight.androidgap.PrepackagedAssetsManager $r0;
+        java.lang.String $r1, varReplacer854;
+        java.lang.Exception $r2;
+        android.content.pm.ApplicationInfo $r3;
+        java.io.File $r4;
+        long $l0, $l1;
+        com.worklight.common.WLConfig $r5;
+        byte $b2;
+        com.worklight.androidgap.WLInitError $r6;
+        int $i3, varReplacer853, varReplacer855;
+
+        nop;
+
+        $r0 := @this: com.worklight.androidgap.PrepackagedAssetsManager;
+
+     label1:
+        $r3 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: android.content.pm.ApplicationInfo appInfo>;
+
+        $r1 = $r3.<android.content.pm.ApplicationInfo: java.lang.String sourceDir>;
+
+     label2:
+        $r4 = new java.io.File;
+
+     label3:
+        specialinvoke $r4.<java.io.File: void <init>(java.lang.String)>($r1);
+
+        $l0 = virtualinvoke $r4.<java.io.File: long lastModified()>();
+
+        $r0.<com.worklight.androidgap.PrepackagedAssetsManager: long appInstallTime> = $l0;
+
+        $r5 = staticinvoke <com.worklight.common.WLConfig: com.worklight.common.WLConfig getInstance()>();
+
+        $l0 = virtualinvoke $r5.<com.worklight.common.WLConfig: long getApplicationInstallTime()>();
+
+        $l1 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: long appInstallTime>;
+
+     label4:
+        $b2 = $l1 cmp $l0;
+
+        if $b2 == 0 goto label6;
+
+        varReplacer855 = 1;
+
+        return varReplacer855;
+
+     label5:
+        $r2 := @caughtexception;
+
+        $r6 = new com.worklight.androidgap.WLInitError;
+
+        $i3 = <com.worklight.androidgap.api.WLInitWebFrameworkResult: int FAILURE_INTERNAL>;
+
+        varReplacer854 = "PrepackagedAssetsManager Failure. Can\'t retrieve ApplicationInfo - something fundumental went wrong here.";
+
+        specialinvoke $r6.<com.worklight.androidgap.WLInitError: void <init>(int,java.lang.String,java.lang.Throwable)>($i3, varReplacer854, $r2);
+
+        throw $r6;
+
+     label6:
+        varReplacer853 = 0;
+
+        return varReplacer853;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    public void testResourcesChecksum()
+    {
+        com.worklight.androidgap.PrepackagedAssetsManager $r0;
+        com.worklight.common.Logger $r1;
+        java.lang.String $r2, $r4, $r6, varReplacer860, varReplacer861, varReplacer862, varReplacer863, varReplacer864, varReplacer865;
+        com.worklight.common.WLConfig $r3;
+        boolean $z0;
+        java.lang.Object[] $r5;
+        java.lang.StringBuilder $r7;
+        com.worklight.androidgap.WLInitError $r8;
+        int $i0;
+
+        nop;
+
+        $r0 := @this: com.worklight.androidgap.PrepackagedAssetsManager;
+
+        $r1 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: com.worklight.common.Logger logger>;
+
+        varReplacer864 = "start web resource integrity test";
+
+        virtualinvoke $r1.<com.worklight.common.Logger: void debug(java.lang.String)>(varReplacer864);
+
+        $r2 = specialinvoke $r0.<com.worklight.androidgap.PrepackagedAssetsManager: java.lang.String calculateChecksum()>();
+
+        $r3 = staticinvoke <com.worklight.common.WLConfig: com.worklight.common.WLConfig getInstance()>();
+
+        $r4 = virtualinvoke $r3.<com.worklight.common.WLConfig: java.lang.String getResourceChecksumPref()>();
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean equals(java.lang.Object)>($r4);
+
+        if $z0 != 0 goto label2;
+
+        $r1 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: com.worklight.common.Logger logger>;
+
+        $r5 = newarray (java.lang.Object)[2];
+
+        $r5[0] = $r2;
+
+        $r5[1] = $r4;
+
+        varReplacer862 = "Checksomes are different, current checksum is %s, last checksum was %s";
+
+        $r6 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer862, $r5);
+
+        virtualinvoke $r1.<com.worklight.common.Logger: void debug(java.lang.String)>($r6);
+
+        if $r4 != null goto label1;
+
+        $r1 = $r0.<com.worklight.androidgap.PrepackagedAssetsManager: com.worklight.common.Logger logger>;
+
+        varReplacer865 = "Save web resources checksum on device";
+
+        virtualinvoke $r1.<com.worklight.common.Logger: void debug(java.lang.String)>(varReplacer865);
+
+        $r3 = staticinvoke <com.worklight.common.WLConfig: com.worklight.common.WLConfig getInstance()>();
+
+        virtualinvoke $r3.<com.worklight.common.WLConfig: void setResourceChecksumPref(java.lang.String)>($r2);
+
+        return;
+
+     label1:
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer861 = "Application failed to load, because its checksum ";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer861);
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        varReplacer860 = " does not match ";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer860);
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        varReplacer863 = ". This may indicate unintended change to the application.";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer863);
+
+        $r2 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r8 = new com.worklight.androidgap.WLInitError;
+
+        $i0 = <com.worklight.androidgap.api.WLInitWebFrameworkResult: int FAILURE_CHECKSUM>;
+
+        specialinvoke $r8.<com.worklight.androidgap.WLInitError: void <init>(int,java.lang.String)>($i0, $r2);
+
+        throw $r8;
+
+     label2:
+        return;
+    }
+}

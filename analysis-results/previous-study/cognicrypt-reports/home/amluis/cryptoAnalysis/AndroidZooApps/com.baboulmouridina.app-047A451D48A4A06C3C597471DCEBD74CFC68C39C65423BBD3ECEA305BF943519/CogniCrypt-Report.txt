@@ -1,0 +1,93 @@
+Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	java.security.spec.DSAParameterSpec
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	javax.net.ssl.SSLParameters
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.spec.DHParameterSpec
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.net.ssl.TrustManagerFactory
+	javax.crypto.spec.PBEKeySpec
+	java.security.cert.TrustAnchor
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	javax.net.ssl.SSLEngine
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
+
+Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer382)
+		Method: <com.google.android.gms.ads.internal.util.client.a: java.lang.String a(java.lang.String)>
+		SHA-256: 8265582fe0d0588c45724efe6a798f30117c451b808d521442828343fa6b8870
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.ads.internal.util.client.a: java.lang.String a(java.lang.String)>
+		SHA-256: c9324f008248c2c970dbb485d485919e922bd7f99c929b778d6182bd5a8c3023
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer56)
+		Method: <com.baboulmouridina.app.MyFirebaseMessagingService: java.lang.String b(java.lang.String)>
+		SHA-256: 8ae09082949096ccec884ce86a85cc54861567edc76ad00057e76686abbeb765
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.baboulmouridina.app.MyFirebaseMessagingService: java.lang.String b(java.lang.String)>
+		SHA-256: 86b9db915e06b643136f5cadd3d4afa2d25b6e7ee436445358122e47deca7622
+		Secure: false
+
+Findings in Java Class: com.baboulmouridina.app.MyFirebaseMessagingService
+
+	 in Method: java.lang.String b(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #8ae09082949096ccec884ce86a85cc54861567edc76ad00057e76686abbeb765)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer56)
+
+
+Findings in Java Class: com.google.android.gms.ads.internal.util.client.a
+
+	 in Method: java.lang.String a(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #8265582fe0d0588c45724efe6a798f30117c451b808d521442828343fa6b8870)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer382)
+
+
+======================= CogniCrypt Summary ==========================
+	Number of CrySL rules: 38
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
+=====================================================================
