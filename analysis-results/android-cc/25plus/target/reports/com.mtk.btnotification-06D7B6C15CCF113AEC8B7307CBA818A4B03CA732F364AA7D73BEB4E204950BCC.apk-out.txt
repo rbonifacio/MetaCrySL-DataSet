@@ -1,9 +1,82 @@
 Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.mtk.btnotification-06D7B6C15CCF113AEC8B7307CBA818A4B03CA732F364AA7D73BEB4E204950BCC.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: varReplacer2816
+		Type: java.lang.String
+		Statement: specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer2816)
+		Method: <oauth.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(oauth.signpost.http.HttpRequest,oauth.signpost.http.HttpParameters)>
+		SHA-256: b849efaf0bb548d43a0b6d4adaf10ef8011e92233765fc2378cc09b7c44eae31
+		Secure: false
+	Object:
+		Variable: r12
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer2816)
+		Method: <oauth.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(oauth.signpost.http.HttpRequest,oauth.signpost.http.HttpParameters)>
+		SHA-256: 7bb64a2b974018794a9e16ceb42f857b02cf4f4158247c212cf14c44e378595f
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: byte[]
+		Statement: $r6 = virtualinvoke $r7.<javax.crypto.Mac: byte[] doFinal(byte[])>($r6)
+		Method: <oauth.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(oauth.signpost.http.HttpRequest,oauth.signpost.http.HttpParameters)>
+		SHA-256: 60029a1b2e5ee22a3931915434a5fa44cf27db5eb408040851f105ce7e16415b
+		Secure: true
+	Object:
+		Variable: $r7
+		Type: javax.crypto.Mac
+		Statement: $r7 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer2817)
+		Method: <oauth.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(oauth.signpost.http.HttpRequest,oauth.signpost.http.HttpParameters)>
+		SHA-256: 61a7992fef8637eb38654304cd34bf14a72c1a29edf610c12c4c16e44fec0c08
+		Secure: true
+
+Findings in Java Class: oauth.signpost.signature.HmacSha1MessageSigner
+
+	 in Method: java.lang.String sign(oauth.signpost.http.HttpRequest,oauth.signpost.http.HttpParameters)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer2816)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 1
+=====================================================================

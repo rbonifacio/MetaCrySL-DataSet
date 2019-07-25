@@ -1,8 +1,103 @@
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
+		Method: <c.a.l: d.f a(d.f)>
+		SHA-256: a08259691f2b9e0680f110f500a245c774ac3c9ea261da934d053fe8ad965551
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3651)
+		Method: <c.a.l: d.f a(d.f)>
+		SHA-256: 8d124159eafb77b8e579e47ec935f585c34585e78a87489c1986fbbbbfb79097
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2678)
+		Method: <c.a.l: d.f b(d.f)>
+		SHA-256: 958855b31a622093eee213b5c2f9206863f940186c165328a5da0fe2f8af70e
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1463)
+		Method: <c.t: javax.net.ssl.SSLSocketFactory a(javax.net.ssl.X509TrustManager)>
+		SHA-256: a2789bd7f9a13b3ac1cbce7b8bc29a017be41fdebfa080c781ce42facb2a65a3
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
+		Method: <c.a.l: d.f b(d.f)>
+		SHA-256: c31e5b17c4eb8a014300949fd659b3402098d58a5a8f3ef4b6999c107648d652
+		Secure: true
+
+Findings in Java Class: c.t
+
+	 in Method: javax.net.ssl.SSLSocketFactory a(javax.net.ssl.X509TrustManager)
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #a2789bd7f9a13b3ac1cbce7b8bc29a017be41fdebfa080c781ce42facb2a65a3)
+			First parameter (with value "TLS") should be any of {TLSv1.2, TLSv1.1, TLSv1, Insecure}
+			at statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1463)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1464, r7, varReplacer1464)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1464, r7, varReplacer1464)
+
+
+Findings in Java Class: c.a.l
+
+	 in Method: d.f a(d.f)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #8d124159eafb77b8e579e47ec935f585c34585e78a87489c1986fbbbbfb79097)
+			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3651)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 5
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 2
+	ConstraintError: 2
+=====================================================================

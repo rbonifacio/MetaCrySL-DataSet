@@ -1,8 +1,92 @@
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: java.security.Signature
+		Statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer468)
+		Method: <uk.co.shingler.kenbats.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 7828d11627a6b9f201a5cd3acdf73d0aa72018b9a3990fe7ffdb1d89a266dcb4
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzaH(java.lang.String)>
+		SHA-256: 550b2765d9e9428e8a020375877dcf930c7849e0f6bb937b691b5d60187d87e2
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer521)
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzaH(java.lang.String)>
+		SHA-256: dc210fa8f27b0832e8c8ce4d583c5bb504c7c7f06b539aa6cc01f4c734923738
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4)
+		Method: <uk.co.shingler.kenbats.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 50d20e0d863bf9aaaccbe6d5f71c736bbbd4ab16c1ca9b261b70d21b96f5b665
+		Secure: false
+
+Findings in Java Class: uk.co.shingler.kenbats.util.Security
+
+	 in Method: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
+
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #7828d11627a6b9f201a5cd3acdf73d0aa72018b9a3990fe7ffdb1d89a266dcb4)
+			First parameter (with value "SHA1withRSA") should be any of {SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA}
+			at statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer468)
+
+
+Findings in Java Class: com.google.android.gms.ads.internal.util.client.zza
+
+	 in Method: java.lang.String zzaH(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #dc210fa8f27b0832e8c8ce4d583c5bb504c7c7f06b539aa6cc01f4c734923738)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer521)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 1
+	ConstraintError: 2
+=====================================================================

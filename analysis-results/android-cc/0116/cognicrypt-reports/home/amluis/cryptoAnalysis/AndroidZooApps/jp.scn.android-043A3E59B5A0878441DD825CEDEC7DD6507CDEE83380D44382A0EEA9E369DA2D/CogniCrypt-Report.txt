@@ -1,8 +1,70 @@
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r5
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r14.<java.security.Signature: boolean verify(byte[])>($r5)
+		Method: <jp.scn.android.AlbumContentProvider: boolean a(java.lang.String,java.lang.String)>
+		SHA-256: 763bd6d22d76d56f1b66142d05bf461248ce69f1c21d1e596e36ebffb0f542e4
+		Secure: false
+	Object:
+		Variable: $r14
+		Type: java.security.Signature
+		Statement: $r14 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer535)
+		Method: <jp.scn.android.AlbumContentProvider: boolean a(java.lang.String,java.lang.String)>
+		SHA-256: 85645e41b965730f7703615019ad11ec6e9fc2731500fae44c71a5825f8de1ce
+		Secure: false
+
+Findings in Java Class: jp.scn.android.AlbumContentProvider
+
+	 in Method: boolean a(java.lang.String,java.lang.String)
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #85645e41b965730f7703615019ad11ec6e9fc2731500fae44c71a5825f8de1ce)
+			First parameter (with value "SHA1withRSA") should be any of {SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA}
+			at statement: $r14 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer535)
+
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r14.<java.security.Signature: void initVerify(java.security.PublicKey)>($r6)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 2
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 1
+	ConstraintError: 1
+=====================================================================

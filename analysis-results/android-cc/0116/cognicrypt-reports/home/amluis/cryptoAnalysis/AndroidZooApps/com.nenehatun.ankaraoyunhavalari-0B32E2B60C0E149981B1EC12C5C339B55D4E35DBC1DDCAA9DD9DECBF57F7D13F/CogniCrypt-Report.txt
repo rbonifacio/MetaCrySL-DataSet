@@ -1,8 +1,114 @@
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5129)
+		Method: <com.google.android.gms.internal.zzhw: java.lang.String zzX(java.lang.String)>
+		SHA-256: 137bc425a04135e4d9049696d768c9c4280c00136e6f4b9704a5b820f9d1860e
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.internal.zzhw: java.lang.String zzX(java.lang.String)>
+		SHA-256: 2d007dd340d4b50ed8ca2c2bdf00f095832cdb8d7bcc6867ed8d5074818e7460
+		Secure: false
+	Object:
+		Variable: $r13
+		Type: java.security.MessageDigest
+		Statement: $r13 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5237)
+		Method: <com.onesignal.OneSignal$5: void run()>
+		SHA-256: 61d7c33fa0e0bab3473a4893a925dd386c013763f18f1db8b15f8f68a8d5b5db
+		Secure: false
+	Object:
+		Variable: $r16
+		Type: byte[]
+		Statement: $r16 = virtualinvoke $r13.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.onesignal.OneSignal$5: void run()>
+		SHA-256: 8fb85e479fa082bf97e64e44f97daeb175d743c1d1cb1b15b0fd115cff135ec3
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.firebase.client.utilities.Utilities: java.lang.String sha1HexDigest(java.lang.String)>
+		SHA-256: b7d94b38282e83df47b3afc7212ec2f3db8081394d556c7430ae65a5b8df5783
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6933)
+		Method: <com.firebase.client.utilities.Utilities: java.lang.String sha1HexDigest(java.lang.String)>
+		SHA-256: 841fec1e11a3e9367df72bfe7e0254c769f370635c62189cd87a8e869b2b84a2
+		Secure: false
+
+Findings in Java Class: com.google.android.gms.internal.zzhw
+
+	 in Method: java.lang.String zzX(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #137bc425a04135e4d9049696d768c9c4280c00136e6f4b9704a5b820f9d1860e)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5129)
+
+
+Findings in Java Class: com.onesignal.OneSignal$5
+
+	 in Method: void run()
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #61d7c33fa0e0bab3473a4893a925dd386c013763f18f1db8b15f8f68a8d5b5db)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r13 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5237)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #61d7c33fa0e0bab3473a4893a925dd386c013763f18f1db8b15f8f68a8d5b5db)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to update, java.security.MessageDigest: byte[] digest(byte[])
+			at statement: $r16 = virtualinvoke $r13.<java.security.MessageDigest: byte[] digest()>()
+
+
+Findings in Java Class: com.firebase.client.utilities.Utilities
+
+	 in Method: java.lang.String sha1HexDigest(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #841fec1e11a3e9367df72bfe7e0254c769f370635c62189cd87a8e869b2b84a2)
+			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6933)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 2
+	ConstraintError: 2
+=====================================================================

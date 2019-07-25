@@ -1,8 +1,122 @@
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r4.<java.security.MessageDigest: byte[] digest(byte[])>($r1)
+		Method: <com.red.wotalk.app.DatingAPI: java.lang.String MD5(java.lang.String)>
+		SHA-256: fd4fc14f5d23f299134db402faff06f7a8c97cc9c0b494bcb1f9ce2d6bdc1388
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: javax.net.ssl.SSLContext
+		Statement: $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer6074)
+		Method: <io.rong.imlib.statistics.ConnectionQueue: void setServerURL(java.lang.String)>
+		SHA-256: b459f225a06d5031c4397aaba50d68bf84002864664b7db6b5de238ec8bae4b4
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: java.security.Signature
+		Statement: $r4 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer6297)
+		Method: <com.red.wotalk.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 6db876998c4a8884c3f163e4ce40645f0d8d706b2412c2b8079e0ef5c98f02d1
+		Secure: false
+	Object:
+		Variable: r10
+		Type: java.security.SecureRandom
+		Statement: specialinvoke r10.<java.security.SecureRandom: void <init>()>()
+		Method: <io.rong.common.DeviceUtils: java.lang.String getDeviceId(android.content.Context)>
+		SHA-256: 611bcd3c976d7a4596584661eced2222606f81adbe66ae8a51f18b68c37ea3e6
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: java.security.MessageDigest
+		Statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer397)
+		Method: <com.red.wotalk.app.DatingAPI: java.lang.String MD5(java.lang.String)>
+		SHA-256: a66d50db461b86e171ba447cf9d728670c260f5600048abb74e73f61359b5963
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r4.<java.security.Signature: boolean verify(byte[])>($r3)
+		Method: <com.red.wotalk.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: c678472b4c19c53650e756c77dab364889209724da847a2f30c698a83517174f
+		Secure: false
+
+Findings in Java Class: com.red.wotalk.app.DatingAPI
+
+	 in Method: java.lang.String MD5(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #a66d50db461b86e171ba447cf9d728670c260f5600048abb74e73f61359b5963)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer397)
+
+
+Findings in Java Class: io.rong.imlib.statistics.ConnectionQueue
+
+	 in Method: void setServerURL(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6076, r9, varReplacer6076)
+
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #b459f225a06d5031c4397aaba50d68bf84002864664b7db6b5de238ec8bae4b4)
+			First parameter (with value "TLS") should be any of {TLSv1.2, TLSv1.1, TLSv1, Insecure}
+			at statement: $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer6074)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6076, r9, varReplacer6076)
+
+
+Findings in Java Class: com.red.wotalk.util.Security
+
+	 in Method: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #6db876998c4a8884c3f163e4ce40645f0d8d706b2412c2b8079e0ef5c98f02d1)
+			First parameter (with value "SHA1withRSA") should be any of {SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA, SHA224withDSA}
+			at statement: $r4 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer6297)
+
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r4.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 3
+	RequiredPredicateError: 3
+=====================================================================

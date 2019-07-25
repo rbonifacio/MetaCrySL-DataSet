@@ -1,8 +1,128 @@
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer805)
+		Method: <com.facebook.internal.Utility: java.lang.String hashWithAlgorithm(java.lang.String,byte[])>
+		SHA-256: cb1ae87100bd04aad3a8bd7885249445f801c1ce2dbf52255c63c2cacabd696b
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: java.security.Signature
+		Statement: $r4 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer2038)
+		Method: <com.joylol.joylolSDK.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 42ca6d0caa984c6781d8b735a487b9ff53e0d511f5607c1e79d643d504958627
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2637)
+		Method: <com.tapjoy.TapjoyUtil: java.lang.String a(java.lang.String,java.lang.String)>
+		SHA-256: 9295b25c08e27d73250d3441ddf47db0d140c9c6e0ba25662ff497483b72e691
+		Secure: true
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r0)
+		Method: <com.tapjoy.internal.cm: byte[] a(byte[])>
+		SHA-256: 80ff0bad4f710fa4d69f15ae9f16e0cc47071b5cdbbb75713049721abeeb86b1
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r4.<java.security.Signature: boolean verify(byte[])>($r3)
+		Method: <com.joylol.joylolSDK.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: c678472b4c19c53650e756c77dab364889209724da847a2f30c698a83517174f
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2717)
+		Method: <com.tapjoy.internal.cm: byte[] a(byte[])>
+		SHA-256: d87907bac5aacc2ac21f2c3863a034ba9993c42e323f279b517fbff78f274572
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.tapjoy.TapjoyUtil: java.lang.String a(java.lang.String,java.lang.String)>
+		SHA-256: 8cb0e883032585b32965763a80dc6b74a618534bc10c1a39d16b02d90fcb5f04
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r0.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.facebook.internal.Utility: java.lang.String hashBytes(java.security.MessageDigest,byte[])>
+		SHA-256: 1bd65c7e3ef7c5880ee054dd01ba963cb9b0d277e32cad1c7526c867dab34e4b
+		Secure: false
+
+Findings in Java Class: com.facebook.internal.Utility
+
+	 in Method: java.lang.String hashWithAlgorithm(java.lang.String,byte[])
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #cb1ae87100bd04aad3a8bd7885249445f801c1ce2dbf52255c63c2cacabd696b)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer805)
+
+
+Findings in Java Class: com.joylol.joylolSDK.util.Security
+
+	 in Method: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #42ca6d0caa984c6781d8b735a487b9ff53e0d511f5607c1e79d643d504958627)
+			First parameter (with value "SHA1withRSA") should be any of {SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA, SHA224withDSA}
+			at statement: $r4 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer2038)
+
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r4.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
+
+
+Findings in Java Class: com.tapjoy.internal.cm
+
+	 in Method: byte[] a(byte[])
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #d87907bac5aacc2ac21f2c3863a034ba9993c42e323f279b517fbff78f274572)
+			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2717)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 8
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 1
+	ConstraintError: 3
+=====================================================================

@@ -1,0 +1,3695 @@
+public class com.defconsolutions.mobappcreator.Utils extends java.lang.Object
+{
+    private static final int BUFFER_SIZE;
+    private static final int RETRIES;
+
+    public void <init>()
+    {
+        com.defconsolutions.mobappcreator.Utils $r0;
+
+        $r0 := @this: com.defconsolutions.mobappcreator.Utils;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void deleteRecursive(java.io.File)
+    {
+        java.io.File $r0, $r1;
+        int $i0, $i1;
+        boolean $z0;
+        java.io.File[] $r2;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $z0 = virtualinvoke $r0.<java.io.File: boolean isDirectory()>();
+
+        if $z0 == 0 goto label2;
+
+        $r2 = virtualinvoke $r0.<java.io.File: java.io.File[] listFiles()>();
+
+        $i0 = lengthof $r2;
+
+        $i1 = 0;
+
+     label1:
+        if $i1 >= $i0 goto label2;
+
+        $r1 = $r2[$i1];
+
+        staticinvoke <com.defconsolutions.mobappcreator.Utils: void deleteRecursive(java.io.File)>($r1);
+
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label2:
+        virtualinvoke $r0.<java.io.File: boolean delete()>();
+
+        return;
+    }
+
+    public static boolean downloadAppFiles(android.content.Context, com.defconsolutions.mobappcreator.MainConfig, com.defconsolutions.mobappcreator.WSResponse)
+    {
+        android.content.Context $r0;
+        com.defconsolutions.mobappcreator.MainConfig $r1;
+        com.defconsolutions.mobappcreator.WSResponse $r2;
+        java.io.File $r3, $r21, r32;
+        java.util.HashMap $r4, r29;
+        org.json.simple.parser.JSONParser $r5, r30;
+        com.defconsolutions.mobappcreator.HelperClasses.Unpacker $r6, r33;
+        boolean $z0, $z1;
+        com.defconsolutions.mobappcreator.JSONConfig $r7;
+        java.util.ArrayList $r8;
+        java.lang.String $r9, $r10, $r11, varReplacer1264, varReplacer1265, varReplacer1266, varReplacer1269, varReplacer1272, varReplacer1273, varReplacer1274, varReplacer1275, varReplacer1276, varReplacer1277, varReplacer1281, varReplacer1282, varReplacer1283, varReplacer1284, varReplacer1285, varReplacer1286, varReplacer1287, varReplacer1288, varReplacer1289, varReplacer1291, varReplacer1292, varReplacer1296, varReplacer1297, varReplacer1298, varReplacer1299, varReplacer1300, varReplacer1301, varReplacer1302, varReplacer1303, varReplacer1304, varReplacer1305, varReplacer1306, varReplacer1307, varReplacer1312, varReplacer1315, varReplacer1317, varReplacer1318, varReplacer1319, varReplacer1321, varReplacer1322, varReplacer1326;
+        int $i0, $i1, varReplacer1267, varReplacer1268, varReplacer1270, varReplacer1271, varReplacer1278, varReplacer1279, varReplacer1280, varReplacer1290, varReplacer1293, varReplacer1294, varReplacer1295, varReplacer1308, varReplacer1309, varReplacer1310, varReplacer1311, varReplacer1313, varReplacer1314, varReplacer1316, varReplacer1320, varReplacer1323, varReplacer1324, varReplacer1325;
+        java.lang.Object $r12;
+        com.defconsolutions.mobappcreator.JSONSections $r13;
+        java.lang.StringBuilder $r14, r27;
+        org.json.simple.JSONObject $r15, $r16;
+        android.content.SharedPreferences $r17;
+        android.content.SharedPreferences$Editor $r18;
+        org.json.simple.JSONArray $r19;
+        java.util.Iterator $r20;
+        java.net.URL $r22, r31;
+        java.io.FileInputStream $r23, r34;
+        java.lang.Throwable $r24, $r25;
+        java.lang.Exception $r26;
+        com.defconsolutions.mobappcreator.HelperClasses.WebService r28;
+        java.net.MalformedURLException r35;
+        java.io.FileNotFoundException r36;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: com.defconsolutions.mobappcreator.MainConfig;
+
+        $r2 := @parameter2: com.defconsolutions.mobappcreator.WSResponse;
+
+        $z0 = 1;
+
+        $r7 = virtualinvoke $r2.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONConfig getConfig()>();
+
+        $r8 = virtualinvoke $r2.<com.defconsolutions.mobappcreator.WSResponse: java.util.ArrayList getFilteredSections()>();
+
+        $r9 = virtualinvoke $r7.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getBackground()>();
+
+        $r10 = virtualinvoke $r7.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuBackground()>();
+
+        $z1 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: boolean getIsBigScreen()>();
+
+        if $z1 == 0 goto label01;
+
+        $r9 = virtualinvoke $r7.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getBackground2()>();
+
+        $r10 = virtualinvoke $r7.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuBackground2()>();
+
+     label01:
+        $r11 = virtualinvoke $r7.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getIcon()>();
+
+        varReplacer1267 = 0;
+
+        varReplacer1268 = -1;
+
+        $r11 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int)>($r1, $r2, $r11, varReplacer1267, varReplacer1268);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean downloadFile(android.content.Context,com.defconsolutions.mobappcreator.JSONConfig,java.lang.String)>($r0, $r7, $r11);
+
+        if $z1 != 0 goto label02;
+
+        $z0 = 0;
+
+     label02:
+        $i0 = 0;
+
+     label03:
+        $i1 = virtualinvoke $r8.<java.util.ArrayList: int size()>();
+
+        if $i0 >= $i1 goto label05;
+
+        $r12 = virtualinvoke $r8.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r13 = (com.defconsolutions.mobappcreator.JSONSections) $r12;
+
+        $r11 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getIcon()>();
+
+        varReplacer1308 = 0;
+
+        $r11 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int)>($r1, $r2, $r11, varReplacer1308, $i0);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean downloadFile(android.content.Context,com.defconsolutions.mobappcreator.JSONConfig,java.lang.String)>($r0, $r7, $r11);
+
+        if $z1 != 0 goto label04;
+
+        $z0 = 0;
+
+     label04:
+        $i0 = $i0 + 1;
+
+        goto label03;
+
+     label05:
+        varReplacer1312 = "";
+
+        $z1 = virtualinvoke $r10.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1312);
+
+        if $z1 != 0 goto label06;
+
+        varReplacer1278 = 1;
+
+        varReplacer1279 = -1;
+
+        $r10 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int)>($r1, $r2, $r10, varReplacer1278, varReplacer1279);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean downloadFile(android.content.Context,com.defconsolutions.mobappcreator.JSONConfig,java.lang.String)>($r0, $r7, $r10);
+
+        if $z1 != 0 goto label06;
+
+        $z0 = 0;
+
+     label06:
+        varReplacer1305 = "";
+
+        $z1 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1305);
+
+        if $z1 != 0 goto label07;
+
+        varReplacer1294 = 1;
+
+        varReplacer1295 = -1;
+
+        $r9 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int)>($r1, $r2, $r9, varReplacer1294, varReplacer1295);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean downloadFile(android.content.Context,com.defconsolutions.mobappcreator.JSONConfig,java.lang.String)>($r0, $r7, $r9);
+
+        if $z1 != 0 goto label07;
+
+        $z0 = 0;
+
+     label07:
+        $r9 = virtualinvoke $r7.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getAppNavBarAndroidImage()>();
+
+        varReplacer1306 = "";
+
+        $z1 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1306);
+
+        if $z1 != 0 goto label08;
+
+        $r9 = virtualinvoke $r7.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getAppNavBarAndroidImage()>();
+
+        varReplacer1313 = 1;
+
+        varReplacer1314 = -1;
+
+        $r9 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int)>($r1, $r2, $r9, varReplacer1313, varReplacer1314);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean downloadFile(android.content.Context,com.defconsolutions.mobappcreator.JSONConfig,java.lang.String)>($r0, $r7, $r9);
+
+        if $z1 != 0 goto label08;
+
+        $z0 = 0;
+
+     label08:
+        $i0 = 0;
+
+     label09:
+        $i1 = virtualinvoke $r8.<java.util.ArrayList: int size()>();
+
+        if $i0 >= $i1 goto label31;
+
+        $r12 = virtualinvoke $r8.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r13 = (com.defconsolutions.mobappcreator.JSONSections) $r12;
+
+        $r9 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getBackgroundImage()>();
+
+        if $r9 == null goto label10;
+
+        $r12 = virtualinvoke $r8.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r13 = (com.defconsolutions.mobappcreator.JSONSections) $r12;
+
+        $r9 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getBackgroundImage()>();
+
+        varReplacer1321 = "";
+
+        $z1 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1321);
+
+        if $z1 != 0 goto label10;
+
+        $r12 = virtualinvoke $r8.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r13 = (com.defconsolutions.mobappcreator.JSONSections) $r12;
+
+        $r9 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getBackgroundImage()>();
+
+        varReplacer1290 = 1;
+
+        $r9 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int)>($r1, $r2, $r9, varReplacer1290, $i0);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean downloadFile(android.content.Context,com.defconsolutions.mobappcreator.JSONConfig,java.lang.String)>($r0, $r7, $r9);
+
+        if $z1 != 0 goto label10;
+
+        $z0 = 0;
+
+     label10:
+        $r12 = virtualinvoke $r8.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r13 = (com.defconsolutions.mobappcreator.JSONSections) $r12;
+
+        $r9 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getCategoryBackground()>();
+
+        if $r9 == null goto label11;
+
+        $r12 = virtualinvoke $r8.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r13 = (com.defconsolutions.mobappcreator.JSONSections) $r12;
+
+        $r9 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getCategoryBackground()>();
+
+        varReplacer1277 = "";
+
+        $z1 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1277);
+
+        if $z1 != 0 goto label11;
+
+        $r12 = virtualinvoke $r8.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r13 = (com.defconsolutions.mobappcreator.JSONSections) $r12;
+
+        $r9 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getCategoryBackground()>();
+
+        varReplacer1325 = 1;
+
+        $r9 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int)>($r1, $r2, $r9, varReplacer1325, $i0);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean downloadFile(android.content.Context,com.defconsolutions.mobappcreator.JSONConfig,java.lang.String)>($r0, $r7, $r9);
+
+        if $z1 != 0 goto label11;
+
+        $z0 = 0;
+
+     label11:
+        $r12 = virtualinvoke $r8.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r13 = (com.defconsolutions.mobappcreator.JSONSections) $r12;
+
+        $r9 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getType()>();
+
+        varReplacer1300 = "PluginVC";
+
+        $z1 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1300);
+
+        if $z1 == 0 goto label12;
+
+        $r12 = virtualinvoke $r8.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r13 = (com.defconsolutions.mobappcreator.JSONSections) $r12;
+
+        $r9 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getWebsiteZipFile()>();
+
+        varReplacer1291 = "";
+
+        $z1 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1291);
+
+        if $z1 != 0 goto label12;
+
+        r27 = new java.lang.StringBuilder;
+
+        specialinvoke r27.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1322 = "http://admin.mobappcreator.com/api/v3/?m=getFile&user=";
+
+        $r14 = virtualinvoke r27.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1322);
+
+        $r9 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: java.lang.String getUser()>();
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        varReplacer1317 = "&hash=";
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1317);
+
+        $r9 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: java.lang.String getHash()>();
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        varReplacer1301 = "&file=";
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1301);
+
+        $r12 = virtualinvoke $r8.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r13 = (com.defconsolutions.mobappcreator.JSONSections) $r12;
+
+        $r9 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getWebsiteZipFile()>();
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $r10 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $z1 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: boolean getForceAppFilesDownload()>();
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean downloadFile(android.content.Context,com.defconsolutions.mobappcreator.JSONConfig,java.lang.String,boolean)>($r0, $r7, $r10, $z1);
+
+        if $z1 != 0 goto label19;
+
+        $z0 = 0;
+
+     label12:
+        $r12 = virtualinvoke $r8.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r13 = (com.defconsolutions.mobappcreator.JSONSections) $r12;
+
+        $r9 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getType()>();
+
+        varReplacer1326 = "PhotoComposerVC";
+
+        $z1 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1326);
+
+        if $z1 == 0 goto label30;
+
+        r28 = new com.defconsolutions.mobappcreator.HelperClasses.WebService;
+
+        varReplacer1282 = "http://admin.mobappcreator.com/api/v3/";
+
+        specialinvoke r28.<com.defconsolutions.mobappcreator.HelperClasses.WebService: void <init>(java.lang.String)>(varReplacer1282);
+
+        r29 = new java.util.HashMap;
+
+        $r4 = r29;
+
+        specialinvoke r29.<java.util.HashMap: void <init>()>();
+
+        varReplacer1283 = "m";
+
+        varReplacer1284 = "getPhotos";
+
+        interfaceinvoke $r4.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1283, varReplacer1284);
+
+        $r12 = virtualinvoke $r8.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r13 = (com.defconsolutions.mobappcreator.JSONSections) $r12;
+
+        $r9 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getSectionID()>();
+
+        varReplacer1266 = "secID";
+
+        interfaceinvoke $r4.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1266, $r9);
+
+        $r9 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: java.lang.String getUser()>();
+
+        varReplacer1281 = "user";
+
+        interfaceinvoke $r4.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1281, $r9);
+
+        $r9 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: java.lang.String getHash()>();
+
+        varReplacer1302 = "hash";
+
+        interfaceinvoke $r4.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer1302, $r9);
+
+        varReplacer1272 = "";
+
+        $r9 = virtualinvoke r28.<com.defconsolutions.mobappcreator.HelperClasses.WebService: java.lang.String webGet(java.lang.String,java.util.Map)>(varReplacer1272, $r4);
+
+        if $r9 == null goto label29;
+
+        r30 = new org.json.simple.parser.JSONParser;
+
+        $r5 = r30;
+
+        specialinvoke r30.<org.json.simple.parser.JSONParser: void <init>()>();
+
+        $r15 = null;
+
+        $r10 = "";
+
+     label13:
+        $r12 = virtualinvoke $r5.<org.json.simple.parser.JSONParser: java.lang.Object parse(java.lang.String)>($r9);
+
+        $r16 = (org.json.simple.JSONObject) $r12;
+
+     label14:
+        $r15 = $r16;
+
+     label15:
+        varReplacer1296 = "config";
+
+        $r12 = virtualinvoke $r16.<org.json.simple.JSONObject: java.lang.Object get(java.lang.Object)>(varReplacer1296);
+
+        $r11 = virtualinvoke $r12.<java.lang.Object: java.lang.String toString()>();
+
+     label16:
+        $r10 = $r11;
+
+     label17:
+        if $r15 == null goto label29;
+
+        varReplacer1303 = "";
+
+        $z1 = virtualinvoke $r10.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1303);
+
+        if $z1 == 0 goto label29;
+
+        varReplacer1315 = "mobappcreator_store";
+
+        varReplacer1316 = 0;
+
+        $r17 = virtualinvoke $r0.<android.content.Context: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>(varReplacer1315, varReplacer1316);
+
+        $r18 = interfaceinvoke $r17.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        varReplacer1276 = "photocomposerJSON";
+
+        $r18 = interfaceinvoke $r18.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putString(java.lang.String,java.lang.String)>(varReplacer1276, $r9);
+
+        interfaceinvoke $r18.<android.content.SharedPreferences$Editor: boolean commit()>();
+
+        varReplacer1318 = "items";
+
+        $r12 = virtualinvoke $r15.<org.json.simple.JSONObject: java.lang.Object get(java.lang.Object)>(varReplacer1318);
+
+        $r19 = (org.json.simple.JSONArray) $r12;
+
+        $r20 = virtualinvoke $r19.<org.json.simple.JSONArray: java.util.Iterator iterator()>();
+
+     label18:
+        $z1 = interfaceinvoke $r20.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label29;
+
+        $r12 = interfaceinvoke $r20.<java.util.Iterator: java.lang.Object next()>();
+
+        $r15 = (org.json.simple.JSONObject) $r12;
+
+        varReplacer1288 = "image";
+
+        $r12 = virtualinvoke $r15.<org.json.simple.JSONObject: java.lang.Object get(java.lang.Object)>(varReplacer1288);
+
+        $r9 = virtualinvoke $r12.<java.lang.Object: java.lang.String toString()>();
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean downloadFile(android.content.Context,com.defconsolutions.mobappcreator.JSONConfig,java.lang.String)>($r0, $r7, $r9);
+
+        if $z1 != 0 goto label18;
+
+        $z0 = 0;
+
+        goto label18;
+
+     label19:
+        r27 = new java.lang.StringBuilder;
+
+        specialinvoke r27.<java.lang.StringBuilder: void <init>()>();
+
+        $r12 = virtualinvoke $r8.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r13 = (com.defconsolutions.mobappcreator.JSONSections) $r12;
+
+        $r9 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getSectionID()>();
+
+        $r14 = virtualinvoke r27.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        varReplacer1289 = "_pluginvc";
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1289);
+
+        $r9 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer1292 = "mobappcreator_store";
+
+        varReplacer1293 = 0;
+
+        $r21 = virtualinvoke $r0.<android.content.Context: java.io.File getDir(java.lang.String,int)>(varReplacer1292, varReplacer1293);
+
+        $r22 = null;
+
+        r31 = new java.net.URL;
+
+     label20:
+        specialinvoke r31.<java.net.URL: void <init>(java.lang.String)>($r10);
+
+     label21:
+        $r22 = r31;
+
+     label22:
+        r27 = new java.lang.StringBuilder;
+
+        specialinvoke r27.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r7.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getAppID()>();
+
+        $r14 = virtualinvoke r27.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        varReplacer1269 = ".";
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1269);
+
+        $r10 = virtualinvoke $r22.<java.net.URL: java.lang.String getFile()>();
+
+        varReplacer1273 = "/";
+
+        varReplacer1274 = "_";
+
+        $r10 = virtualinvoke $r10.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1273, varReplacer1274);
+
+        varReplacer1297 = ".";
+
+        varReplacer1298 = "_";
+
+        $r10 = virtualinvoke $r10.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1297, varReplacer1298);
+
+        varReplacer1285 = "=";
+
+        varReplacer1286 = "_";
+
+        $r10 = virtualinvoke $r10.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1285, varReplacer1286);
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        $r10 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        r32 = new java.io.File;
+
+        r27 = new java.lang.StringBuilder;
+
+        specialinvoke r27.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke r27.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r21);
+
+        varReplacer1304 = "/";
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1304);
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        $r11 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r32.<java.io.File: void <init>(java.lang.String)>($r11);
+
+        $z1 = virtualinvoke r32.<java.io.File: boolean exists()>();
+
+        if $z1 == 0 goto label12;
+
+        r33 = new com.defconsolutions.mobappcreator.HelperClasses.Unpacker;
+
+        $r6 = r33;
+
+        specialinvoke r33.<com.defconsolutions.mobappcreator.HelperClasses.Unpacker: void <init>()>();
+
+        $r23 = null;
+
+        r34 = new java.io.FileInputStream;
+
+        r27 = new java.lang.StringBuilder;
+
+        $r14 = r27;
+
+     label23:
+        specialinvoke r27.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r21);
+
+        varReplacer1264 = "/";
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1264);
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r10);
+
+        $r10 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r34.<java.io.FileInputStream: void <init>(java.lang.String)>($r10);
+
+     label24:
+        $r23 = r34;
+
+     label25:
+        r32 = new java.io.File;
+
+        $r3 = r32;
+
+        r27 = new java.lang.StringBuilder;
+
+        specialinvoke r27.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke r27.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r21);
+
+        varReplacer1275 = "/";
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1275);
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $r10 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r32.<java.io.File: void <init>(java.lang.String)>($r10);
+
+        $z1 = virtualinvoke $r3.<java.io.File: boolean exists()>();
+
+        if $z1 == 0 goto label26;
+
+        staticinvoke <com.defconsolutions.mobappcreator.Utils: void deleteRecursive(java.io.File)>($r3);
+
+     label26:
+        r27 = new java.lang.StringBuilder;
+
+        specialinvoke r27.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke r27.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r21);
+
+        varReplacer1307 = "/";
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1307);
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        varReplacer1265 = "/";
+
+        $r14 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1265);
+
+        $r9 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $z1 = virtualinvoke $r6.<com.defconsolutions.mobappcreator.HelperClasses.Unpacker: boolean unzipPack(java.lang.String,java.io.InputStream)>($r9, $r23);
+
+        if $z1 != 0 goto label12;
+
+        $z0 = 0;
+
+        goto label12;
+
+     label27:
+        $r24 := @caughtexception;
+
+        r35 = (java.net.MalformedURLException) $r24;
+
+        virtualinvoke r35.<java.net.MalformedURLException: void printStackTrace()>();
+
+        goto label22;
+
+     label28:
+        $r25 := @caughtexception;
+
+        r36 = (java.io.FileNotFoundException) $r25;
+
+        virtualinvoke r36.<java.io.FileNotFoundException: void printStackTrace()>();
+
+        goto label25;
+
+     label29:
+        $r12 = virtualinvoke $r8.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r13 = (com.defconsolutions.mobappcreator.JSONSections) $r12;
+
+        $r9 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getWatermarkImage()>();
+
+        varReplacer1319 = "";
+
+        $z1 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1319);
+
+        if $z1 != 0 goto label30;
+
+        $r12 = virtualinvoke $r8.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r13 = (com.defconsolutions.mobappcreator.JSONSections) $r12;
+
+        $r9 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getWatermarkImage()>();
+
+        varReplacer1323 = 40;
+
+        varReplacer1324 = 1;
+
+        $i1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: int getRelativeWidth(com.defconsolutions.mobappcreator.MainConfig,int,int)>($r1, varReplacer1323, varReplacer1324);
+
+        varReplacer1280 = 1;
+
+        $r9 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int,int)>($r1, $r2, $r9, varReplacer1280, $i0, $i1);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean downloadFile(android.content.Context,com.defconsolutions.mobappcreator.JSONConfig,java.lang.String)>($r0, $r7, $r9);
+
+        if $z1 != 0 goto label30;
+
+        $z0 = 0;
+
+     label30:
+        $i0 = $i0 + 1;
+
+        goto label09;
+
+     label31:
+        $z1 = virtualinvoke $r2.<com.defconsolutions.mobappcreator.WSResponse: boolean hasLoginModule()>();
+
+        if $z1 == 0 goto label32;
+
+        $r13 = virtualinvoke $r2.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONSections getLoginVCSection()>();
+
+        $r9 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getBackgroundImage()>();
+
+        if $r9 == null goto label32;
+
+        $r13 = virtualinvoke $r2.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONSections getLoginVCSection()>();
+
+        $r9 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getBackgroundImage()>();
+
+        varReplacer1287 = "";
+
+        $z1 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1287);
+
+        if $z1 != 0 goto label32;
+
+        $r13 = virtualinvoke $r2.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONSections getLoginVCSection()>();
+
+        $r9 = virtualinvoke $r13.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getBackgroundImage()>();
+
+        varReplacer1270 = 1;
+
+        varReplacer1271 = 1000;
+
+        $r9 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int)>($r1, $r2, $r9, varReplacer1270, varReplacer1271);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean downloadFile(android.content.Context,com.defconsolutions.mobappcreator.JSONConfig,java.lang.String)>($r0, $r7, $r9);
+
+        if $z1 != 0 goto label32;
+
+        $z0 = 0;
+
+     label32:
+        $r9 = virtualinvoke $r7.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuFooterImage()>();
+
+        if $r9 == null goto label33;
+
+        $r9 = virtualinvoke $r7.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuFooterImage()>();
+
+        varReplacer1299 = "";
+
+        $z1 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1299);
+
+        if $z1 != 0 goto label33;
+
+        $r9 = virtualinvoke $r7.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuFooterImage()>();
+
+        varReplacer1309 = 1;
+
+        varReplacer1310 = -1;
+
+        varReplacer1311 = 5000;
+
+        $r9 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int,int)>($r1, $r2, $r9, varReplacer1309, varReplacer1310, varReplacer1311);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean downloadFile(android.content.Context,com.defconsolutions.mobappcreator.JSONConfig,java.lang.String)>($r0, $r7, $r9);
+
+        if $z1 != 0 goto label33;
+
+        $z0 = 0;
+
+     label33:
+        $z1 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: boolean getForceAppFilesDownload()>();
+
+        if $z1 == 0 goto label35;
+
+        varReplacer1320 = 0;
+
+        virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: void setForceAppFilesDownload(boolean)>(varReplacer1320);
+
+        return $z0;
+
+     label34:
+        $r26 := @caughtexception;
+
+        goto label17;
+
+     label35:
+        return $z0;
+
+        catch java.lang.Exception from label13 to label14 with label34;
+        catch java.lang.Exception from label15 to label16 with label34;
+        catch java.net.MalformedURLException from label20 to label21 with label27;
+        catch java.io.FileNotFoundException from label23 to label24 with label28;
+    }
+
+    public static boolean downloadFile(android.content.Context, com.defconsolutions.mobappcreator.JSONConfig, java.lang.String)
+    {
+        android.content.Context $r0;
+        com.defconsolutions.mobappcreator.JSONConfig $r1;
+        java.lang.String $r2;
+        boolean $z0;
+        int varReplacer1343;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: com.defconsolutions.mobappcreator.JSONConfig;
+
+        $r2 := @parameter2: java.lang.String;
+
+        varReplacer1343 = 0;
+
+        $z0 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean downloadFile(android.content.Context,com.defconsolutions.mobappcreator.JSONConfig,java.lang.String,boolean)>($r0, $r1, $r2, varReplacer1343);
+
+        return $z0;
+    }
+
+    public static boolean downloadFile(android.content.Context, com.defconsolutions.mobappcreator.JSONConfig, java.lang.String, boolean)
+    {
+        android.content.Context $r0;
+        com.defconsolutions.mobappcreator.JSONConfig $r1;
+        java.lang.String $r2, $r11, $r12, varReplacer1344, varReplacer1345, varReplacer1346, varReplacer1348, varReplacer1349, varReplacer1351, varReplacer1355, varReplacer1356, varReplacer1357, varReplacer1358, varReplacer1359, varReplacer1360, varReplacer1362, varReplacer1363, varReplacer1365, varReplacer1366, varReplacer1367;
+        boolean $z0, $z1, $z2;
+        byte[] $r3;
+        java.lang.Exception $r4;
+        java.io.File $r5, $r6, $r13;
+        java.io.BufferedInputStream $r7;
+        java.io.FileOutputStream $r8;
+        java.net.URL $r9;
+        int $i0, $i1, $i2, varReplacer1347, varReplacer1350, varReplacer1352, varReplacer1353, varReplacer1354, varReplacer1361, varReplacer1364;
+        java.lang.StringBuilder $r10;
+        java.net.URLConnection $r14;
+        java.io.InputStream $r15;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: com.defconsolutions.mobappcreator.JSONConfig;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $z0 := @parameter3: boolean;
+
+        $z1 = 0;
+
+        $i0 = 0;
+
+     label01:
+        $i1 = $i0 + 1;
+
+        if $i0 >= 3 goto label30;
+
+        if $z1 != 0 goto label30;
+
+        $r9 = new java.net.URL;
+
+     label02:
+        specialinvoke $r9.<java.net.URL: void <init>(java.lang.String)>($r2);
+
+     label03:
+        $r10 = new java.lang.StringBuilder;
+
+     label04:
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getAppID()>();
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        varReplacer1351 = ".";
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1351);
+
+        $r11 = virtualinvoke $r9.<java.net.URL: java.lang.String getFile()>();
+
+        varReplacer1355 = "/";
+
+        varReplacer1356 = "_";
+
+        $r11 = virtualinvoke $r11.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1355, varReplacer1356);
+
+        varReplacer1366 = ".";
+
+        varReplacer1367 = "_";
+
+        $r11 = virtualinvoke $r11.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1366, varReplacer1367);
+
+        varReplacer1362 = "=";
+
+        varReplacer1363 = "_";
+
+        $r11 = virtualinvoke $r11.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1362, varReplacer1363);
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r12 = virtualinvoke $r9.<java.net.URL: java.lang.String getFile()>();
+
+        varReplacer1359 = "/";
+
+        varReplacer1360 = "_";
+
+        $r12 = virtualinvoke $r12.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1359, varReplacer1360);
+
+        varReplacer1344 = ".";
+
+        varReplacer1345 = "_";
+
+        $r12 = virtualinvoke $r12.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1344, varReplacer1345);
+
+        varReplacer1357 = "=";
+
+        varReplacer1358 = "_";
+
+        $r12 = virtualinvoke $r12.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1357, varReplacer1358);
+
+     label05:
+        $r5 = new java.io.File;
+
+        $r10 = new java.lang.StringBuilder;
+
+     label06:
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1346 = "mobappcreator_store";
+
+        varReplacer1347 = 0;
+
+        $r6 = virtualinvoke $r0.<android.content.Context: java.io.File getDir(java.lang.String,int)>(varReplacer1346, varReplacer1347);
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r6);
+
+        varReplacer1365 = "/";
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1365);
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.io.File: void <init>(java.lang.String)>($r11);
+
+     label07:
+        $r6 = new java.io.File;
+
+        $r10 = new java.lang.StringBuilder;
+
+     label08:
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1349 = "mobappcreator_store";
+
+        varReplacer1350 = 0;
+
+        $r13 = virtualinvoke $r0.<android.content.Context: java.io.File getDir(java.lang.String,int)>(varReplacer1349, varReplacer1350);
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r13);
+
+        varReplacer1348 = "/";
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1348);
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r12);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r6.<java.io.File: void <init>(java.lang.String)>($r11);
+
+        $z2 = virtualinvoke $r6.<java.io.File: boolean exists()>();
+
+     label09:
+        if $z2 == 0 goto label11;
+
+        if $z0 != 0 goto label11;
+
+        $z1 = 1;
+
+     label10:
+        $i0 = $i1;
+
+        goto label01;
+
+     label11:
+        $z2 = virtualinvoke $r5.<java.io.File: boolean exists()>();
+
+     label12:
+        if $z2 == 0 goto label14;
+
+     label13:
+        virtualinvoke $r5.<java.io.File: boolean delete()>();
+
+     label14:
+        if $z0 == 0 goto label18;
+
+     label15:
+        $z2 = virtualinvoke $r6.<java.io.File: boolean exists()>();
+
+     label16:
+        if $z2 == 0 goto label18;
+
+     label17:
+        virtualinvoke $r6.<java.io.File: boolean delete()>();
+
+     label18:
+        virtualinvoke $r5.<java.io.File: boolean createNewFile()>();
+
+        $r14 = virtualinvoke $r9.<java.net.URL: java.net.URLConnection openConnection()>();
+
+        varReplacer1361 = 3000;
+
+        virtualinvoke $r14.<java.net.URLConnection: void setReadTimeout(int)>(varReplacer1361);
+
+        varReplacer1364 = 5000;
+
+        virtualinvoke $r14.<java.net.URLConnection: void setConnectTimeout(int)>(varReplacer1364);
+
+        varReplacer1353 = 0;
+
+        virtualinvoke $r14.<java.net.URLConnection: void setUseCaches(boolean)>(varReplacer1353);
+
+        $r15 = virtualinvoke $r14.<java.net.URLConnection: java.io.InputStream getInputStream()>();
+
+     label19:
+        $r8 = new java.io.FileOutputStream;
+
+     label20:
+        specialinvoke $r8.<java.io.FileOutputStream: void <init>(java.io.File)>($r5);
+
+        $r3 = newarray (byte)[5120];
+
+     label21:
+        $i0 = 0;
+
+        $r7 = new java.io.BufferedInputStream;
+
+     label22:
+        varReplacer1352 = 5120;
+
+        specialinvoke $r7.<java.io.BufferedInputStream: void <init>(java.io.InputStream,int)>($r15, varReplacer1352);
+
+     label23:
+        $i2 = virtualinvoke $r7.<java.io.BufferedInputStream: int read(byte[])>($r3);
+
+     label24:
+        if $i2 == -1 goto label27;
+
+     label25:
+        varReplacer1354 = 0;
+
+        virtualinvoke $r8.<java.io.FileOutputStream: void write(byte[],int,int)>($r3, varReplacer1354, $i2);
+
+     label26:
+        $i0 = $i0 + $i2;
+
+        goto label23;
+
+     label27:
+        virtualinvoke $r8.<java.io.FileOutputStream: void flush()>();
+
+        virtualinvoke $r8.<java.io.FileOutputStream: void close()>();
+
+        virtualinvoke $r7.<java.io.BufferedInputStream: void close()>();
+
+     label28:
+        if $i0 <= 0 goto label10;
+
+        $z1 = 1;
+
+        goto label10;
+
+     label29:
+        $r4 := @caughtexception;
+
+        virtualinvoke $r4.<java.lang.Exception: void printStackTrace()>();
+
+        $z1 = 0;
+
+        $i0 = $i1;
+
+        goto label01;
+
+     label30:
+        return $z1;
+
+        catch java.lang.Exception from label02 to label03 with label29;
+        catch java.lang.Exception from label04 to label05 with label29;
+        catch java.lang.Exception from label06 to label07 with label29;
+        catch java.lang.Exception from label08 to label09 with label29;
+        catch java.lang.Exception from label11 to label12 with label29;
+        catch java.lang.Exception from label13 to label14 with label29;
+        catch java.lang.Exception from label15 to label16 with label29;
+        catch java.lang.Exception from label17 to label19 with label29;
+        catch java.lang.Exception from label20 to label21 with label29;
+        catch java.lang.Exception from label22 to label24 with label29;
+        catch java.lang.Exception from label25 to label26 with label29;
+        catch java.lang.Exception from label27 to label28 with label29;
+    }
+
+    public static com.defconsolutions.mobappcreator.MainConfig getAppConfig(android.content.Context)
+    {
+        android.content.Context $r0;
+        com.defconsolutions.mobappcreator.MainConfig $r1;
+        int varReplacer924;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        varReplacer924 = 0;
+
+        $r1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: com.defconsolutions.mobappcreator.MainConfig getAppConfig(android.content.Context,boolean)>($r0, varReplacer924);
+
+        return $r1;
+    }
+
+    public static com.defconsolutions.mobappcreator.MainConfig getAppConfig(android.content.Context, boolean)
+    {
+        android.content.Context $r0, $r2;
+        boolean $z0;
+        com.defconsolutions.mobappcreator.HelperClasses.DeviceIdentify $r1;
+        com.defconsolutions.mobappcreator.MainConfig $r3;
+        com.defconsolutions.mobappcreator.WSResponse $r4;
+        com.defconsolutions.mobappcreator.JSONConfig $r5;
+        java.util.ArrayList $r6;
+        android.content.SharedPreferences $r7;
+        java.lang.String $r8, varReplacer925, varReplacer926, varReplacer927, varReplacer928, varReplacer930, varReplacer932, varReplacer933, varReplacer935;
+        com.google.gson.Gson $r9;
+        java.lang.Object $r10;
+        int $i0, varReplacer929, varReplacer931, varReplacer934;
+        java.lang.StringBuilder $r11;
+        java.util.UUID $r12;
+        java.lang.Exception $r13;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $z0 := @parameter1: boolean;
+
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        $r3 = (com.defconsolutions.mobappcreator.MainConfig) $r2;
+
+        if $r3 != null goto label1;
+
+        return $r3;
+
+     label1:
+        if $z0 != 0 goto label6;
+
+        $r4 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        if $r4 == null goto label2;
+
+        $r4 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r5 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONConfig getConfig()>();
+
+        if $r5 == null goto label2;
+
+        $r4 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r6 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.WSResponse: java.util.ArrayList getSections()>();
+
+        if $r6 != null goto label6;
+
+     label2:
+        varReplacer933 = "mobappcreator_store";
+
+        varReplacer934 = 0;
+
+        $r7 = virtualinvoke $r0.<android.content.Context: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>(varReplacer933, varReplacer934);
+
+        varReplacer925 = "appConfig";
+
+        varReplacer926 = "";
+
+        $r8 = interfaceinvoke $r7.<android.content.SharedPreferences: java.lang.String getString(java.lang.String,java.lang.String)>(varReplacer925, varReplacer926);
+
+        varReplacer932 = "";
+
+        $z0 = virtualinvoke $r8.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer932);
+
+        if $z0 != 0 goto label6;
+
+        $r9 = new com.google.gson.Gson;
+
+     label3:
+        specialinvoke $r9.<com.google.gson.Gson: void <init>()>();
+
+        $r10 = virtualinvoke $r9.<com.google.gson.Gson: java.lang.Object fromJson(java.lang.String,java.lang.Class)>($r8, class "Lcom/defconsolutions/mobappcreator/WSResponse;");
+
+        $r4 = (com.defconsolutions.mobappcreator.WSResponse) $r10;
+
+        $r6 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.WSResponse: java.util.ArrayList getSections()>();
+
+        virtualinvoke $r4.<com.defconsolutions.mobappcreator.WSResponse: void setSections(java.util.ArrayList)>($r6);
+
+        virtualinvoke $r3.<com.defconsolutions.mobappcreator.MainConfig: void setWs(com.defconsolutions.mobappcreator.WSResponse)>($r4);
+
+     label4:
+        varReplacer928 = "displayHeight";
+
+        varReplacer929 = 0;
+
+        $i0 = interfaceinvoke $r7.<android.content.SharedPreferences: int getInt(java.lang.String,int)>(varReplacer928, varReplacer929);
+
+        virtualinvoke $r3.<com.defconsolutions.mobappcreator.MainConfig: void setDisplayHeight(int)>($i0);
+
+        varReplacer930 = "displayWidth";
+
+        varReplacer931 = 0;
+
+        $i0 = interfaceinvoke $r7.<android.content.SharedPreferences: int getInt(java.lang.String,int)>(varReplacer930, varReplacer931);
+
+        virtualinvoke $r3.<com.defconsolutions.mobappcreator.MainConfig: void setDisplayWidth(int)>($i0);
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = <android.os.Build: java.lang.String MANUFACTURER>;
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        varReplacer927 = ".";
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer927);
+
+        $r8 = <android.os.Build: java.lang.String MODEL>;
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r3.<com.defconsolutions.mobappcreator.MainConfig: void setDeviceInfo(java.lang.String)>($r8);
+
+        $r8 = <android.os.Build$VERSION: java.lang.String RELEASE>;
+
+        virtualinvoke $r3.<com.defconsolutions.mobappcreator.MainConfig: void setOsVersion(java.lang.String)>($r8);
+
+        $r1 = new com.defconsolutions.mobappcreator.HelperClasses.DeviceIdentify;
+
+        specialinvoke $r1.<com.defconsolutions.mobappcreator.HelperClasses.DeviceIdentify: void <init>(android.content.Context)>($r0);
+
+        $r12 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.HelperClasses.DeviceIdentify: java.util.UUID getDeviceUuid()>();
+
+        $r8 = virtualinvoke $r12.<java.util.UUID: java.lang.String toString()>();
+
+        virtualinvoke $r3.<com.defconsolutions.mobappcreator.MainConfig: void setUser(java.lang.String)>($r8);
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer935 = "HASH ";
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer935);
+
+        $r12 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.HelperClasses.DeviceIdentify: java.util.UUID getDeviceUuid()>();
+
+        $r8 = virtualinvoke $r12.<java.util.UUID: java.lang.String toString()>();
+
+        $r11 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r8 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String md5(java.lang.String)>($r8);
+
+        virtualinvoke $r3.<com.defconsolutions.mobappcreator.MainConfig: void setHash(java.lang.String)>($r8);
+
+        return $r3;
+
+     label5:
+        $r13 := @caughtexception;
+
+        goto label4;
+
+     label6:
+        return $r3;
+
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    public static java.util.ArrayList getMenuItems(com.defconsolutions.mobappcreator.MainConfig)
+    {
+        com.defconsolutions.mobappcreator.MainConfig $r0;
+        java.lang.String[] $r1;
+        java.util.ArrayList $r2, $r4;
+        int $i0, $i1;
+        com.defconsolutions.mobappcreator.WSResponse $r3;
+        java.util.Iterator $r5;
+        boolean $z0;
+        java.lang.Object $r6;
+        com.defconsolutions.mobappcreator.JSONSections $r7;
+        java.lang.String $r8, $r9, $r11, varReplacer1835, varReplacer1836;
+        com.defconsolutions.mobappcreator.JSONConfig $r10;
+
+        nop;
+
+        $r0 := @parameter0: com.defconsolutions.mobappcreator.MainConfig;
+
+        $r2 = new java.util.ArrayList;
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>()>();
+
+        $i0 = 0;
+
+        $r3 = virtualinvoke $r0.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r4 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: java.util.ArrayList getSections()>();
+
+        $r5 = virtualinvoke $r4.<java.util.ArrayList: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke $r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (com.defconsolutions.mobappcreator.JSONSections) $r6;
+
+        $r3 = virtualinvoke $r0.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $i1 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: int getMenuSectionsSize()>();
+
+        if $i0 < $i1 goto label2;
+
+        return $r2;
+
+     label2:
+        $r8 = virtualinvoke $r7.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getName()>();
+
+        $r9 = virtualinvoke $r7.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getIcon()>();
+
+        $r3 = virtualinvoke $r0.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r10 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONConfig getConfig()>();
+
+        $r11 = virtualinvoke $r10.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getShowMenuLabel()>();
+
+        varReplacer1836 = "0";
+
+        $z0 = virtualinvoke $r11.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1836);
+
+        if $z0 == 0 goto label3;
+
+        $r8 = "";
+
+     label3:
+        $r3 = virtualinvoke $r0.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r10 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONConfig getConfig()>();
+
+        $r11 = virtualinvoke $r10.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getShowMenuIcon()>();
+
+        varReplacer1835 = "0";
+
+        $z0 = virtualinvoke $r11.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1835);
+
+        if $z0 == 0 goto label4;
+
+        $r9 = "";
+
+     label4:
+        $r1 = newarray (java.lang.String)[2];
+
+        $r1[0] = $r8;
+
+        $r1[1] = $r9;
+
+        virtualinvoke $r2.<java.util.ArrayList: boolean add(java.lang.Object)>($r1);
+
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label5:
+        return $r2;
+    }
+
+    public static int getNavBarHeight(android.content.Context)
+    {
+        android.content.Context $r0;
+        int $i0, varReplacer2139;
+        android.content.res.Resources $r1, $r2;
+        android.content.res.Configuration $r3;
+        boolean $z0;
+        java.lang.String $r4, varReplacer2140, varReplacer2141, varReplacer2142, varReplacer2143;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r3 = virtualinvoke $r2.<android.content.res.Resources: android.content.res.Configuration getConfiguration()>();
+
+        $i0 = $r3.<android.content.res.Configuration: int orientation>;
+
+        $z0 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean isTablet(android.content.Context)>($r0);
+
+        if $z0 == 0 goto label4;
+
+        if $i0 != 1 goto label3;
+
+        $r4 = "navigation_bar_height";
+
+     label1:
+        varReplacer2140 = "dimen";
+
+        varReplacer2141 = "android";
+
+        $i0 = virtualinvoke $r1.<android.content.res.Resources: int getIdentifier(java.lang.String,java.lang.String,java.lang.String)>($r4, varReplacer2140, varReplacer2141);
+
+     label2:
+        if $i0 <= 0 goto label7;
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $i0 = virtualinvoke $r1.<android.content.res.Resources: int getDimensionPixelSize(int)>($i0);
+
+        return $i0;
+
+     label3:
+        $r4 = "navigation_bar_height_landscape";
+
+        goto label1;
+
+     label4:
+        if $i0 != 1 goto label6;
+
+        $r4 = "navigation_bar_height";
+
+     label5:
+        varReplacer2142 = "dimen";
+
+        varReplacer2143 = "android";
+
+        $i0 = virtualinvoke $r1.<android.content.res.Resources: int getIdentifier(java.lang.String,java.lang.String,java.lang.String)>($r4, varReplacer2142, varReplacer2143);
+
+        goto label2;
+
+     label6:
+        $r4 = "navigation_bar_width";
+
+        goto label5;
+
+     label7:
+        varReplacer2139 = 0;
+
+        return varReplacer2139;
+    }
+
+    public static int getRelativeHeight(com.defconsolutions.mobappcreator.MainConfig, int)
+    {
+        com.defconsolutions.mobappcreator.MainConfig $r0;
+        int $i0, varReplacer1967;
+
+        nop;
+
+        $r0 := @parameter0: com.defconsolutions.mobappcreator.MainConfig;
+
+        $i0 := @parameter1: int;
+
+        varReplacer1967 = 2;
+
+        $i0 = staticinvoke <com.defconsolutions.mobappcreator.Utils: int getRelativeHeight(com.defconsolutions.mobappcreator.MainConfig,int,int)>($r0, $i0, varReplacer1967);
+
+        return $i0;
+    }
+
+    public static int getRelativeHeight(com.defconsolutions.mobappcreator.MainConfig, int, int)
+    {
+        com.defconsolutions.mobappcreator.MainConfig $r0;
+        int $i0, $i1, $i2;
+        float $f0, $f1;
+
+        nop;
+
+        $r0 := @parameter0: com.defconsolutions.mobappcreator.MainConfig;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 = virtualinvoke $r0.<com.defconsolutions.mobappcreator.MainConfig: int getDisplayWidth()>();
+
+        $f0 = (float) $i2;
+
+        $f0 = $f0 / 320.0F;
+
+        $f1 = (float) $i0;
+
+        $f0 = $f1 * $f0;
+
+        $f1 = (float) $i1;
+
+        $f0 = $f0 / $f1;
+
+        $i0 = (int) $f0;
+
+        return $i0;
+    }
+
+    public static int getRelativeWidth(com.defconsolutions.mobappcreator.MainConfig, int)
+    {
+        com.defconsolutions.mobappcreator.MainConfig $r0;
+        int $i0, varReplacer1968;
+
+        nop;
+
+        $r0 := @parameter0: com.defconsolutions.mobappcreator.MainConfig;
+
+        $i0 := @parameter1: int;
+
+        varReplacer1968 = 2;
+
+        $i0 = staticinvoke <com.defconsolutions.mobappcreator.Utils: int getRelativeWidth(com.defconsolutions.mobappcreator.MainConfig,int,int)>($r0, $i0, varReplacer1968);
+
+        return $i0;
+    }
+
+    public static int getRelativeWidth(com.defconsolutions.mobappcreator.MainConfig, int, int)
+    {
+        com.defconsolutions.mobappcreator.MainConfig $r0;
+        int $i0, $i1, $i2;
+        float $f0, $f1;
+
+        nop;
+
+        $r0 := @parameter0: com.defconsolutions.mobappcreator.MainConfig;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+        $i2 = virtualinvoke $r0.<com.defconsolutions.mobappcreator.MainConfig: int getDisplayWidth()>();
+
+        $f0 = (float) $i2;
+
+        $f0 = $f0 / 320.0F;
+
+        $f1 = (float) $i0;
+
+        $f0 = $f1 * $f0;
+
+        $f1 = (float) $i1;
+
+        $f0 = $f0 / $f1;
+
+        $i0 = (int) $f0;
+
+        return $i0;
+    }
+
+    public static int getRelativeXPosition(com.defconsolutions.mobappcreator.MainConfig, java.lang.String)
+    {
+        com.defconsolutions.mobappcreator.MainConfig $r0;
+        java.lang.String $r1;
+        float $f0, $f1;
+        int $i0, $i1;
+
+        nop;
+
+        $r0 := @parameter0: com.defconsolutions.mobappcreator.MainConfig;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r1);
+
+        $i1 = virtualinvoke $r0.<com.defconsolutions.mobappcreator.MainConfig: int getDisplayWidth()>();
+
+        $f0 = (float) $i1;
+
+        $f0 = $f0 / 320.0F;
+
+        $f1 = (float) $i0;
+
+        $f0 = $f1 * $f0;
+
+        $i0 = (int) $f0;
+
+        return $i0;
+    }
+
+    public static int getRelativeYPosition(com.defconsolutions.mobappcreator.MainConfig, java.lang.String)
+    {
+        com.defconsolutions.mobappcreator.MainConfig $r0;
+        java.lang.String $r1;
+        float $f0, $f1;
+        int $i0, $i1;
+
+        nop;
+
+        $r0 := @parameter0: com.defconsolutions.mobappcreator.MainConfig;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r1);
+
+        $i1 = virtualinvoke $r0.<com.defconsolutions.mobappcreator.MainConfig: int getDisplayWidth()>();
+
+        $f0 = (float) $i1;
+
+        $f0 = $f0 / 320.0F;
+
+        $f1 = (float) $i0;
+
+        $f0 = $f1 * $f0;
+
+        $i0 = (int) $f0;
+
+        return $i0;
+    }
+
+    public static int getStatusBarHeight(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.content.res.Resources $r1;
+        int $i0, varReplacer2017;
+        java.lang.String varReplacer2018, varReplacer2019, varReplacer2020;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        varReplacer2018 = "status_bar_height";
+
+        varReplacer2019 = "dimen";
+
+        varReplacer2020 = "android";
+
+        $i0 = virtualinvoke $r1.<android.content.res.Resources: int getIdentifier(java.lang.String,java.lang.String,java.lang.String)>(varReplacer2018, varReplacer2019, varReplacer2020);
+
+        if $i0 <= 0 goto label1;
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $i0 = virtualinvoke $r1.<android.content.res.Resources: int getDimensionPixelSize(int)>($i0);
+
+        return $i0;
+
+     label1:
+        varReplacer2017 = 0;
+
+        return varReplacer2017;
+    }
+
+    public static java.lang.String getTimeAsString(android.content.Context, int, java.lang.Boolean)
+    {
+        android.content.Context $r0;
+        int $i0, varReplacer6664, varReplacer6667, varReplacer6668, varReplacer6669, varReplacer6671, varReplacer6672, varReplacer6673, varReplacer6675;
+        java.lang.Boolean $r1;
+        android.content.res.Resources $r2;
+        java.lang.String $r3, varReplacer6665, varReplacer6666, varReplacer6670, varReplacer6674;
+        boolean $z0;
+        java.lang.Object[] $r4;
+        java.lang.Integer $r5;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $i0 := @parameter1: int;
+
+        $r1 := @parameter2: java.lang.Boolean;
+
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        if $i0 >= 10 goto label01;
+
+        varReplacer6673 = 2131296419;
+
+        $r3 = virtualinvoke $r2.<android.content.res.Resources: java.lang.String getString(int)>(varReplacer6673);
+
+        return $r3;
+
+     label01:
+        if $i0 >= 60 goto label03;
+
+        $z0 = virtualinvoke $r1.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z0 == 0 goto label02;
+
+        varReplacer6668 = 2131296420;
+
+        $r3 = virtualinvoke $r2.<android.content.res.Resources: java.lang.String getString(int)>(varReplacer6668);
+
+        $r4 = newarray (java.lang.Object)[1];
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r4[0] = $r5;
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>($r3, $r4);
+
+        return $r3;
+
+     label02:
+        $r4 = newarray (java.lang.Object)[1];
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r4[0] = $r5;
+
+        varReplacer6666 = "%ss";
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer6666, $r4);
+
+        return $r3;
+
+     label03:
+        if $i0 >= 3600 goto label06;
+
+        $i0 = $i0 / 60;
+
+        $z0 = virtualinvoke $r1.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z0 == 0 goto label05;
+
+        if $i0 != 1 goto label04;
+
+        varReplacer6672 = 2131296421;
+
+        $r3 = virtualinvoke $r2.<android.content.res.Resources: java.lang.String getString(int)>(varReplacer6672);
+
+        $r4 = newarray (java.lang.Object)[2];
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r4[0] = $r5;
+
+        $r4[1] = "";
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>($r3, $r4);
+
+        return $r3;
+
+     label04:
+        varReplacer6675 = 2131296421;
+
+        $r3 = virtualinvoke $r2.<android.content.res.Resources: java.lang.String getString(int)>(varReplacer6675);
+
+        $r4 = newarray (java.lang.Object)[2];
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r4[0] = $r5;
+
+        $r4[1] = "s";
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>($r3, $r4);
+
+        return $r3;
+
+     label05:
+        $r4 = newarray (java.lang.Object)[1];
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r4[0] = $r5;
+
+        varReplacer6665 = "%sm";
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer6665, $r4);
+
+        return $r3;
+
+     label06:
+        if $i0 >= 86400 goto label09;
+
+        $i0 = $i0 / 60;
+
+        $i0 = $i0 / 60;
+
+        $z0 = virtualinvoke $r1.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z0 == 0 goto label08;
+
+        if $i0 != 1 goto label07;
+
+        varReplacer6667 = 2131296422;
+
+        $r3 = virtualinvoke $r2.<android.content.res.Resources: java.lang.String getString(int)>(varReplacer6667);
+
+        $r4 = newarray (java.lang.Object)[2];
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r4[0] = $r5;
+
+        $r4[1] = "";
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>($r3, $r4);
+
+        return $r3;
+
+     label07:
+        varReplacer6664 = 2131296422;
+
+        $r3 = virtualinvoke $r2.<android.content.res.Resources: java.lang.String getString(int)>(varReplacer6664);
+
+        $r4 = newarray (java.lang.Object)[2];
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r4[0] = $r5;
+
+        $r4[1] = "s";
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>($r3, $r4);
+
+        return $r3;
+
+     label08:
+        $r4 = newarray (java.lang.Object)[1];
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r4[0] = $r5;
+
+        varReplacer6670 = "%sh";
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer6670, $r4);
+
+        return $r3;
+
+     label09:
+        $i0 = $i0 / 60;
+
+        $i0 = $i0 / 60;
+
+        $i0 = $i0 / 24;
+
+        $z0 = virtualinvoke $r1.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z0 == 0 goto label11;
+
+        if $i0 != 1 goto label10;
+
+        varReplacer6669 = 2131296423;
+
+        $r3 = virtualinvoke $r2.<android.content.res.Resources: java.lang.String getString(int)>(varReplacer6669);
+
+        $r4 = newarray (java.lang.Object)[2];
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r4[0] = $r5;
+
+        $r4[1] = "";
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>($r3, $r4);
+
+        return $r3;
+
+     label10:
+        varReplacer6671 = 2131296423;
+
+        $r3 = virtualinvoke $r2.<android.content.res.Resources: java.lang.String getString(int)>(varReplacer6671);
+
+        $r4 = newarray (java.lang.Object)[2];
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r4[0] = $r5;
+
+        $r4[1] = "s";
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>($r3, $r4);
+
+        return $r3;
+
+     label11:
+        $r4 = newarray (java.lang.Object)[1];
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r4[0] = $r5;
+
+        varReplacer6674 = "%sd";
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer6674, $r4);
+
+        return $r3;
+    }
+
+    public static boolean hasNavBar(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.content.res.Resources $r1;
+        int $i0, varReplacer2144, varReplacer2145, varReplacer2149;
+        boolean $z0, $z1;
+        android.view.ViewConfiguration $r2;
+        java.lang.String varReplacer2146, varReplacer2147, varReplacer2148;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        varReplacer2146 = "config_showNavigationBar";
+
+        varReplacer2147 = "bool";
+
+        varReplacer2148 = "android";
+
+        $i0 = virtualinvoke $r1.<android.content.res.Resources: int getIdentifier(java.lang.String,java.lang.String,java.lang.String)>(varReplacer2146, varReplacer2147, varReplacer2148);
+
+        if $i0 <= 0 goto label1;
+
+        $z0 = virtualinvoke $r1.<android.content.res.Resources: boolean getBoolean(int)>($i0);
+
+        return $z0;
+
+     label1:
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 >= 14 goto label4;
+
+        $z0 = 1;
+
+     label2:
+        varReplacer2149 = 4;
+
+        $z1 = staticinvoke <android.view.KeyCharacterMap: boolean deviceHasKey(int)>(varReplacer2149);
+
+        if $z0 != 0 goto label3;
+
+        if $z1 == 0 goto label5;
+
+     label3:
+        varReplacer2145 = 0;
+
+        return varReplacer2145;
+
+     label4:
+        $r2 = staticinvoke <android.view.ViewConfiguration: android.view.ViewConfiguration get(android.content.Context)>($r0);
+
+        $z0 = virtualinvoke $r2.<android.view.ViewConfiguration: boolean hasPermanentMenuKey()>();
+
+        goto label2;
+
+     label5:
+        varReplacer2144 = 1;
+
+        return varReplacer2144;
+    }
+
+    public static void installDefaultCacheMethod(android.content.Context)
+    {
+        android.content.Context $r0;
+        com.defconsolutions.mobappcreator.Utils$1 $r1;
+        java.io.File $r2;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r2 = virtualinvoke $r0.<android.content.Context: java.io.File getCacheDir()>();
+
+        $r1 = new com.defconsolutions.mobappcreator.Utils$1;
+
+        specialinvoke $r1.<com.defconsolutions.mobappcreator.Utils$1: void <init>(java.io.File)>($r2);
+
+        staticinvoke <java.net.ResponseCache: void setDefault(java.net.ResponseCache)>($r1);
+
+        return;
+    }
+
+    public static boolean isTablet(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.content.res.Resources $r1;
+        android.content.res.Configuration $r2;
+        int $i0, varReplacer2150, varReplacer2151;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r2 = virtualinvoke $r1.<android.content.res.Resources: android.content.res.Configuration getConfiguration()>();
+
+        $i0 = $r2.<android.content.res.Configuration: int screenLayout>;
+
+        $i0 = $i0 & 15;
+
+        if $i0 < 3 goto label1;
+
+        varReplacer2150 = 1;
+
+        return varReplacer2150;
+
+     label1:
+        varReplacer2151 = 0;
+
+        return varReplacer2151;
+    }
+
+    public static android.graphics.drawable.Drawable loadBackgroundFromFile(android.content.Context, com.defconsolutions.mobappcreator.MainConfig, int)
+    {
+        android.content.Context $r0;
+        com.defconsolutions.mobappcreator.MainConfig $r1;
+        int $i0, varReplacer1518;
+        android.graphics.drawable.Drawable $r2;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: com.defconsolutions.mobappcreator.MainConfig;
+
+        $i0 := @parameter2: int;
+
+        varReplacer1518 = 0;
+
+        $r2 = staticinvoke <com.defconsolutions.mobappcreator.Utils: android.graphics.drawable.Drawable loadBackgroundFromFile(android.content.Context,com.defconsolutions.mobappcreator.MainConfig,int,int)>($r0, $r1, $i0, varReplacer1518);
+
+        return $r2;
+    }
+
+    public static android.graphics.drawable.Drawable loadBackgroundFromFile(android.content.Context, com.defconsolutions.mobappcreator.MainConfig, int, int)
+    {
+        android.content.Context $r0;
+        com.defconsolutions.mobappcreator.MainConfig $r1;
+        int $i0, $i1, varReplacer1519, varReplacer1520, varReplacer1521, varReplacer1522, varReplacer1525, varReplacer1526, varReplacer1527, varReplacer1528, varReplacer1531, varReplacer1532, varReplacer1533;
+        android.graphics.drawable.Drawable $r2;
+        com.defconsolutions.mobappcreator.WSResponse $r3;
+        com.defconsolutions.mobappcreator.JSONConfig $r4;
+        java.lang.String $r5, $r6, $r7, varReplacer1523, varReplacer1524, varReplacer1529, varReplacer1530, varReplacer1534;
+        java.lang.StringBuilder $r8, r12;
+        boolean $z0;
+        com.defconsolutions.mobappcreator.JSONSections $r9;
+        java.lang.Object $r10;
+        java.util.ArrayList $r11;
+        android.graphics.drawable.ColorDrawable r13;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: com.defconsolutions.mobappcreator.MainConfig;
+
+        $i0 := @parameter2: int;
+
+        $i1 := @parameter3: int;
+
+        varReplacer1533 = 2130837725;
+
+        $r2 = staticinvoke <android.support.v4.content.ContextCompat: android.graphics.drawable.Drawable getDrawable(android.content.Context,int)>($r0, varReplacer1533);
+
+        if $r1 != null goto label01;
+
+        return $r2;
+
+     label01:
+        $r3 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        if $r3 != null goto label02;
+
+        return $r2;
+
+     label02:
+        $r3 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r4 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONConfig getConfig()>();
+
+        if $r4 != null goto label03;
+
+        return $r2;
+
+     label03:
+        $r3 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r4 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONConfig getConfig()>();
+
+        $r5 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getBackground()>();
+
+        if $r5 != null goto label04;
+
+        return $r2;
+
+     label04:
+        $r3 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r4 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONConfig getConfig()>();
+
+        $r5 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getBackground()>();
+
+        $r3 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r4 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONConfig getConfig()>();
+
+        $r7 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuBackground()>();
+
+        r12 = new java.lang.StringBuilder;
+
+        specialinvoke r12.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1523 = "#";
+
+        $r8 = virtualinvoke r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1523);
+
+        $r3 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r4 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONConfig getConfig()>();
+
+        $r6 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getBackgroundColor()>();
+
+        $r8 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r6 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $z0 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: boolean getIsBigScreen()>();
+
+        if $z0 == 0 goto label05;
+
+        $r3 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r4 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONConfig getConfig()>();
+
+        $r5 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getBackground2()>();
+
+        $r3 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r4 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONConfig getConfig()>();
+
+        $r7 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuBackground2()>();
+
+     label05:
+        if $i0 < 0 goto label11;
+
+        if $i0 != 1000 goto label07;
+
+        $r3 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r9 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONSections getLoginVCSection()>();
+
+        $r7 = virtualinvoke $r9.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getBackgroundImage()>();
+
+        if $r7 == null goto label07;
+
+        $r3 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r9 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONSections getLoginVCSection()>();
+
+        $r5 = virtualinvoke $r9.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getBackgroundImage()>();
+
+        varReplacer1519 = 1;
+
+        varReplacer1520 = 1000;
+
+        $r5 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,java.lang.String,int,int)>($r1, $r5, varReplacer1519, varReplacer1520);
+
+        $r10 = staticinvoke <com.defconsolutions.mobappcreator.Utils: android.graphics.drawable.Drawable loadImageFromFile(android.content.Context,com.defconsolutions.mobappcreator.MainConfig,java.lang.String)>($r0, $r1, $r5);
+
+     label06:
+        $r2 = (android.graphics.drawable.Drawable) $r10;
+
+        return $r2;
+
+     label07:
+        if $i0 == 1000 goto label08;
+
+        if $i1 != 1 goto label08;
+
+        $r3 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r11 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: java.util.ArrayList getSections()>();
+
+        $r10 = virtualinvoke $r11.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r9 = (com.defconsolutions.mobappcreator.JSONSections) $r10;
+
+        $r7 = virtualinvoke $r9.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getCategoryBackground()>();
+
+        if $r7 == null goto label08;
+
+        $r3 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r11 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: java.util.ArrayList getSections()>();
+
+        $r10 = virtualinvoke $r11.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r9 = (com.defconsolutions.mobappcreator.JSONSections) $r10;
+
+        $r7 = virtualinvoke $r9.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getCategoryBackground()>();
+
+        varReplacer1530 = "";
+
+        $z0 = virtualinvoke $r7.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1530);
+
+        if $z0 != 0 goto label08;
+
+        $r3 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r11 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: java.util.ArrayList getSections()>();
+
+        $r10 = virtualinvoke $r11.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r9 = (com.defconsolutions.mobappcreator.JSONSections) $r10;
+
+        $r5 = virtualinvoke $r9.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getCategoryBackground()>();
+
+        varReplacer1525 = 1;
+
+        $r5 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,java.lang.String,int,int)>($r1, $r5, varReplacer1525, $i0);
+
+        $r10 = staticinvoke <com.defconsolutions.mobappcreator.Utils: android.graphics.drawable.Drawable loadImageFromFile(android.content.Context,com.defconsolutions.mobappcreator.MainConfig,java.lang.String)>($r0, $r1, $r5);
+
+        goto label06;
+
+     label08:
+        if $i0 == 1000 goto label09;
+
+        $r3 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r11 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: java.util.ArrayList getSections()>();
+
+        $r10 = virtualinvoke $r11.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r9 = (com.defconsolutions.mobappcreator.JSONSections) $r10;
+
+        $r7 = virtualinvoke $r9.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getBackgroundImage()>();
+
+        if $r7 == null goto label09;
+
+        $r3 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r11 = virtualinvoke $r3.<com.defconsolutions.mobappcreator.WSResponse: java.util.ArrayList getSections()>();
+
+        $r10 = virtualinvoke $r11.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r9 = (com.defconsolutions.mobappcreator.JSONSections) $r10;
+
+        $r5 = virtualinvoke $r9.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getBackgroundImage()>();
+
+        varReplacer1528 = 1;
+
+        $r5 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,java.lang.String,int,int)>($r1, $r5, varReplacer1528, $i0);
+
+        $r10 = staticinvoke <com.defconsolutions.mobappcreator.Utils: android.graphics.drawable.Drawable loadImageFromFile(android.content.Context,com.defconsolutions.mobappcreator.MainConfig,java.lang.String)>($r0, $r1, $r5);
+
+        goto label06;
+
+     label09:
+        varReplacer1534 = "";
+
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1534);
+
+        if $z0 == 0 goto label10;
+
+        r13 = new android.graphics.drawable.ColorDrawable;
+
+        $r10 = r13;
+
+        $i0 = staticinvoke <android.graphics.Color: int parseColor(java.lang.String)>($r6);
+
+        specialinvoke r13.<android.graphics.drawable.ColorDrawable: void <init>(int)>($i0);
+
+        goto label06;
+
+     label10:
+        varReplacer1521 = 1;
+
+        varReplacer1522 = -1;
+
+        $r5 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,java.lang.String,int,int)>($r1, $r5, varReplacer1521, varReplacer1522);
+
+        $r10 = staticinvoke <com.defconsolutions.mobappcreator.Utils: android.graphics.drawable.Drawable loadImageFromFile(android.content.Context,com.defconsolutions.mobappcreator.MainConfig,java.lang.String)>($r0, $r1, $r5);
+
+        goto label06;
+
+     label11:
+        varReplacer1529 = "";
+
+        $z0 = virtualinvoke $r7.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1529);
+
+        if $z0 != 0 goto label12;
+
+        varReplacer1526 = 1;
+
+        varReplacer1527 = -1;
+
+        $r5 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,java.lang.String,int,int)>($r1, $r7, varReplacer1526, varReplacer1527);
+
+        $r10 = staticinvoke <com.defconsolutions.mobappcreator.Utils: android.graphics.drawable.Drawable loadImageFromFile(android.content.Context,com.defconsolutions.mobappcreator.MainConfig,java.lang.String)>($r0, $r1, $r5);
+
+        goto label06;
+
+     label12:
+        varReplacer1524 = "";
+
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1524);
+
+        if $z0 == 0 goto label13;
+
+        r13 = new android.graphics.drawable.ColorDrawable;
+
+        $r10 = r13;
+
+        $i0 = staticinvoke <android.graphics.Color: int parseColor(java.lang.String)>($r6);
+
+        specialinvoke r13.<android.graphics.drawable.ColorDrawable: void <init>(int)>($i0);
+
+        goto label06;
+
+     label13:
+        varReplacer1531 = 1;
+
+        varReplacer1532 = -1;
+
+        $r5 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,java.lang.String,int,int)>($r1, $r5, varReplacer1531, varReplacer1532);
+
+        $r10 = staticinvoke <com.defconsolutions.mobappcreator.Utils: android.graphics.drawable.Drawable loadImageFromFile(android.content.Context,com.defconsolutions.mobappcreator.MainConfig,java.lang.String)>($r0, $r1, $r5);
+
+        goto label06;
+    }
+
+    public static android.graphics.drawable.Drawable loadDrawableFromFile(android.content.Context, com.defconsolutions.mobappcreator.MainConfig, java.lang.String)
+    {
+        android.content.Context $r0;
+        com.defconsolutions.mobappcreator.MainConfig $r1;
+        java.lang.String $r2, varReplacer1160, varReplacer1161, varReplacer1162, varReplacer1163, varReplacer1165, varReplacer1166, varReplacer1167, varReplacer1168;
+        android.graphics.drawable.BitmapDrawable $r3;
+        android.graphics.BitmapFactory$Options $r4;
+        java.net.URL $r5;
+        android.graphics.drawable.Drawable $r6;
+        android.content.res.Resources $r7;
+        android.util.DisplayMetrics $r8;
+        int $i0, varReplacer1164, varReplacer1169;
+        android.graphics.Bitmap$Config $r9;
+        java.lang.StringBuilder $r10;
+        java.io.File $r11;
+        android.graphics.Bitmap $r12;
+        java.lang.Throwable $r13;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: com.defconsolutions.mobappcreator.MainConfig;
+
+        $r2 := @parameter2: java.lang.String;
+
+        varReplacer1164 = 2130837725;
+
+        $r6 = staticinvoke <android.support.v4.content.ContextCompat: android.graphics.drawable.Drawable getDrawable(android.content.Context,int)>($r0, varReplacer1164);
+
+        $r7 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r8 = virtualinvoke $r7.<android.content.res.Resources: android.util.DisplayMetrics getDisplayMetrics()>();
+
+        $r5 = new java.net.URL;
+
+     label1:
+        specialinvoke $r5.<java.net.URL: void <init>(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r5.<java.net.URL: java.lang.String getFile()>();
+
+        varReplacer1160 = "/";
+
+        varReplacer1161 = "_";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1160, varReplacer1161);
+
+        varReplacer1166 = ".";
+
+        varReplacer1167 = "_";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1166, varReplacer1167);
+
+        varReplacer1162 = "=";
+
+        varReplacer1163 = "_";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1162, varReplacer1163);
+
+     label2:
+        $r4 = new android.graphics.BitmapFactory$Options;
+
+     label3:
+        specialinvoke $r4.<android.graphics.BitmapFactory$Options: void <init>()>();
+
+     label4:
+        $i0 = $r8.<android.util.DisplayMetrics: int densityDpi>;
+
+        $r4.<android.graphics.BitmapFactory$Options: int inDensity> = $i0;
+
+        $i0 = $r8.<android.util.DisplayMetrics: int densityDpi>;
+
+        $r4.<android.graphics.BitmapFactory$Options: int inScreenDensity> = $i0;
+
+        $i0 = $r8.<android.util.DisplayMetrics: int densityDpi>;
+
+        $r4.<android.graphics.BitmapFactory$Options: int inTargetDensity> = $i0;
+
+        $r9 = <android.graphics.Bitmap$Config: android.graphics.Bitmap$Config RGB_565>;
+
+        $r4.<android.graphics.BitmapFactory$Options: android.graphics.Bitmap$Config inPreferredConfig> = $r9;
+
+        $r10 = new java.lang.StringBuilder;
+
+     label5:
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1168 = "mobappcreator_store";
+
+        varReplacer1169 = 0;
+
+        $r11 = virtualinvoke $r0.<android.content.Context: java.io.File getDir(java.lang.String,int)>(varReplacer1168, varReplacer1169);
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r11);
+
+        varReplacer1165 = "/";
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1165);
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r12 = staticinvoke <android.graphics.BitmapFactory: android.graphics.Bitmap decodeFile(java.lang.String,android.graphics.BitmapFactory$Options)>($r2, $r4);
+
+     label6:
+        $r3 = new android.graphics.drawable.BitmapDrawable;
+
+     label7:
+        $r7 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        specialinvoke $r3.<android.graphics.drawable.BitmapDrawable: void <init>(android.content.res.Resources,android.graphics.Bitmap)>($r7, $r12);
+
+     label8:
+        return $r3;
+
+     label9:
+        $r13 := @caughtexception;
+
+        return $r6;
+
+        catch java.net.MalformedURLException from label1 to label2 with label9;
+        catch java.net.MalformedURLException from label3 to label4 with label9;
+        catch java.net.MalformedURLException from label5 to label6 with label9;
+        catch java.net.MalformedURLException from label7 to label8 with label9;
+    }
+
+    public static java.util.List loadFeed(java.lang.String)
+    {
+        java.lang.String $r0;
+        org.developerworks.android.DomFeedParser $r1;
+        java.lang.Throwable $r2;
+        java.util.List $r3;
+        null_type varReplacer2512;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        $r1 = new org.developerworks.android.DomFeedParser;
+
+        specialinvoke $r1.<org.developerworks.android.DomFeedParser: void <init>(java.lang.String)>($r0);
+
+        $r3 = interfaceinvoke $r1.<org.developerworks.android.FeedParser: java.util.List parse()>();
+
+     label2:
+        return $r3;
+
+     label3:
+        $r2 := @caughtexception;
+
+        varReplacer2512 = null;
+
+        return varReplacer2512;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+    }
+
+    public static android.graphics.drawable.Drawable loadImageFromFile(android.content.Context, com.defconsolutions.mobappcreator.MainConfig, java.lang.String)
+    {
+        android.content.Context $r0;
+        com.defconsolutions.mobappcreator.MainConfig $r1;
+        java.lang.String $r2, varReplacer1535, varReplacer1536, varReplacer1537, varReplacer1538, varReplacer1540, varReplacer1542, varReplacer1543, varReplacer1544;
+        java.net.URL $r3;
+        android.graphics.drawable.Drawable $r4, $r7;
+        java.lang.StringBuilder $r5;
+        java.io.File $r6;
+        java.lang.Throwable $r8;
+        int varReplacer1539, varReplacer1541;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: com.defconsolutions.mobappcreator.MainConfig;
+
+        $r2 := @parameter2: java.lang.String;
+
+        varReplacer1539 = 2130837725;
+
+        $r4 = staticinvoke <android.support.v4.content.ContextCompat: android.graphics.drawable.Drawable getDrawable(android.content.Context,int)>($r0, varReplacer1539);
+
+        $r3 = new java.net.URL;
+
+     label1:
+        specialinvoke $r3.<java.net.URL: void <init>(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r3.<java.net.URL: java.lang.String getFile()>();
+
+        varReplacer1535 = "/";
+
+        varReplacer1536 = "_";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1535, varReplacer1536);
+
+        varReplacer1542 = ".";
+
+        varReplacer1543 = "_";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1542, varReplacer1543);
+
+        varReplacer1537 = "=";
+
+        varReplacer1538 = "_";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1537, varReplacer1538);
+
+     label2:
+        $r5 = new java.lang.StringBuilder;
+
+     label3:
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1540 = "mobappcreator_store";
+
+        varReplacer1541 = 0;
+
+        $r6 = virtualinvoke $r0.<android.content.Context: java.io.File getDir(java.lang.String,int)>(varReplacer1540, varReplacer1541);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r6);
+
+        varReplacer1544 = "/";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1544);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r7 = staticinvoke <android.graphics.drawable.Drawable: android.graphics.drawable.Drawable createFromPath(java.lang.String)>($r2);
+
+     label4:
+        return $r7;
+
+     label5:
+        $r8 := @caughtexception;
+
+        return $r4;
+
+        catch java.net.MalformedURLException from label1 to label2 with label5;
+        catch java.net.MalformedURLException from label3 to label4 with label5;
+    }
+
+    public static java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig, com.defconsolutions.mobappcreator.WSResponse, java.lang.String, int, int)
+    {
+        com.defconsolutions.mobappcreator.MainConfig $r0;
+        com.defconsolutions.mobappcreator.WSResponse $r1;
+        java.lang.String $r2;
+        int $i0, $i1, varReplacer1329;
+
+        nop;
+
+        $r0 := @parameter0: com.defconsolutions.mobappcreator.MainConfig;
+
+        $r1 := @parameter1: com.defconsolutions.mobappcreator.WSResponse;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $i0 := @parameter3: int;
+
+        $i1 := @parameter4: int;
+
+        varReplacer1329 = -1;
+
+        $r2 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int,int)>($r0, $r1, $r2, $i0, $i1, varReplacer1329);
+
+        return $r2;
+    }
+
+    public static java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig, com.defconsolutions.mobappcreator.WSResponse, java.lang.String, int, int, int)
+    {
+        com.defconsolutions.mobappcreator.MainConfig $r0;
+        com.defconsolutions.mobappcreator.WSResponse $r1;
+        java.lang.String $r2, $r3, $r9, varReplacer1171, varReplacer1172, varReplacer1173, varReplacer1174, varReplacer1175, varReplacer1176, varReplacer1177, varReplacer1178, varReplacer1179, varReplacer1181, varReplacer1182, varReplacer1183, varReplacer1184, varReplacer1185, varReplacer1186;
+        int $i0, $i1, $i2, varReplacer1180;
+        com.defconsolutions.mobappcreator.JSONConfig $r4;
+        java.util.ArrayList $r5;
+        java.lang.StringBuilder $r6;
+        java.lang.Object $r7;
+        com.defconsolutions.mobappcreator.JSONSections $r8;
+        boolean $z0;
+        byte $b3;
+        float $f0;
+
+        nop;
+
+        $r0 := @parameter0: com.defconsolutions.mobappcreator.MainConfig;
+
+        $r1 := @parameter1: com.defconsolutions.mobappcreator.WSResponse;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $i0 := @parameter3: int;
+
+        $i1 := @parameter4: int;
+
+        $i2 := @parameter5: int;
+
+        $r3 = "";
+
+        $r4 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONConfig getConfig()>();
+
+        $r5 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.WSResponse: java.util.ArrayList getFilteredSections()>();
+
+        if $i1 < 0 goto label01;
+
+        if $i1 == 1000 goto label01;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1179 = "/";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1179);
+
+        $r7 = virtualinvoke $r5.<java.util.ArrayList: java.lang.Object get(int)>($i1);
+
+        $r8 = (com.defconsolutions.mobappcreator.JSONSections) $r7;
+
+        $r3 = virtualinvoke $r8.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getSectionID()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label01:
+        if $i1 != 1000 goto label02;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1182 = "/";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1182);
+
+        $r8 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONSections getLoginVCSection()>();
+
+        $r3 = virtualinvoke $r8.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getSectionID()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label02:
+        if $i0 != 0 goto label12;
+
+        $r9 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuType()>();
+
+        varReplacer1178 = "0";
+
+        $z0 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1178);
+
+        if $z0 == 0 goto label05;
+
+        $b3 = 40;
+
+     label03:
+        varReplacer1180 = 1;
+
+        $i0 = staticinvoke <com.defconsolutions.mobappcreator.Utils: int getRelativeWidth(com.defconsolutions.mobappcreator.MainConfig,int,int)>($r0, $b3, varReplacer1180);
+
+        $f0 = (float) $i0;
+
+     label04:
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getImageRender()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        varReplacer1176 = "w";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1176);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(float)>($f0);
+
+        varReplacer1177 = "/";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1177);
+
+        $r9 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getUserID()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        varReplacer1185 = "/";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1185);
+
+        $r9 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getAppID()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer1181 = "/";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1181);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r2;
+
+     label05:
+        $r9 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuType()>();
+
+        varReplacer1184 = "4";
+
+        $z0 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1184);
+
+        if $z0 != 0 goto label06;
+
+        $r9 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuType()>();
+
+        varReplacer1172 = "24";
+
+        $z0 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1172);
+
+        if $z0 == 0 goto label07;
+
+     label06:
+        $b3 = 50;
+
+        goto label03;
+
+     label07:
+        $r9 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuType()>();
+
+        varReplacer1186 = "6";
+
+        $z0 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1186);
+
+        if $z0 == 0 goto label08;
+
+        $b3 = 50;
+
+        goto label03;
+
+     label08:
+        $r9 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuType()>();
+
+        varReplacer1171 = "7";
+
+        $z0 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1171);
+
+        if $z0 == 0 goto label09;
+
+        $b3 = 40;
+
+        goto label03;
+
+     label09:
+        $r9 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuType()>();
+
+        varReplacer1175 = "16";
+
+        $z0 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1175);
+
+        if $z0 != 0 goto label10;
+
+        $r9 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuType()>();
+
+        varReplacer1183 = "17";
+
+        $z0 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1183);
+
+        if $z0 != 0 goto label10;
+
+        $r9 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuType()>();
+
+        varReplacer1173 = "18";
+
+        $z0 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1173);
+
+        if $z0 != 0 goto label10;
+
+        $r9 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuType()>();
+
+        varReplacer1174 = "19";
+
+        $z0 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1174);
+
+        if $z0 == 0 goto label11;
+
+     label10:
+        $b3 = 45;
+
+        goto label03;
+
+     label11:
+        $b3 = 45;
+
+        goto label03;
+
+     label12:
+        if $i2 != -1 goto label13;
+
+        $i0 = virtualinvoke $r0.<com.defconsolutions.mobappcreator.MainConfig: int getDisplayWidth()>();
+
+        $f0 = (float) $i0;
+
+        goto label04;
+
+     label13:
+        $f0 = (float) $i2;
+
+        goto label04;
+    }
+
+    public static java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig, java.lang.String, int, int)
+    {
+        com.defconsolutions.mobappcreator.MainConfig $r0;
+        java.lang.String $r1;
+        int $i0, $i1, varReplacer1170;
+
+        nop;
+
+        $r0 := @parameter0: com.defconsolutions.mobappcreator.MainConfig;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $i0 := @parameter2: int;
+
+        $i1 := @parameter3: int;
+
+        varReplacer1170 = -1;
+
+        $r1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,java.lang.String,int,int,int)>($r0, $r1, $i0, $i1, varReplacer1170);
+
+        return $r1;
+    }
+
+    public static java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig, java.lang.String, int, int, int)
+    {
+        com.defconsolutions.mobappcreator.MainConfig $r0;
+        java.lang.String $r1;
+        int $i0, $i1, $i2;
+        com.defconsolutions.mobappcreator.WSResponse $r2;
+
+        nop;
+
+        $r0 := @parameter0: com.defconsolutions.mobappcreator.MainConfig;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $i0 := @parameter2: int;
+
+        $i1 := @parameter3: int;
+
+        $i2 := @parameter4: int;
+
+        $r2 = virtualinvoke $r0.<com.defconsolutions.mobappcreator.MainConfig: com.defconsolutions.mobappcreator.WSResponse getWs()>();
+
+        $r1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int,int)>($r0, $r2, $r1, $i0, $i1, $i2);
+
+        return $r1;
+    }
+
+    public static final java.lang.String md5(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer936, varReplacer937, varReplacer938;
+        java.lang.Throwable $r1;
+        java.lang.StringBuffer $r2, r6;
+        java.security.MessageDigest $r3;
+        byte[] $r4;
+        int $i0, $i1;
+        byte $b2;
+        short $s3;
+        java.lang.StringBuilder $r5, r7;
+        java.security.NoSuchAlgorithmException r8;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label01:
+        varReplacer938 = "MD5";
+
+        $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer938);
+
+        $r4 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r3.<java.security.MessageDigest: void update(byte[])>($r4);
+
+        $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>();
+
+     label02:
+        r6 = new java.lang.StringBuffer;
+
+        $r2 = r6;
+
+     label03:
+        specialinvoke r6.<java.lang.StringBuffer: void <init>()>();
+
+     label04:
+        $i0 = 0;
+
+     label05:
+        $i1 = lengthof $r4;
+
+        if $i0 >= $i1 goto label13;
+
+        $b2 = $r4[$i0];
+
+        $s3 = $b2 & 255;
+
+     label06:
+        $r0 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s3);
+
+     label07:
+        $i1 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+     label08:
+        if $i1 >= 2 goto label11;
+
+        r7 = new java.lang.StringBuilder;
+
+        $r5 = r7;
+
+     label09:
+        specialinvoke r7.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer937 = "0";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer937);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label10:
+        goto label07;
+
+     label11:
+        virtualinvoke $r2.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.String)>($r0);
+
+     label12:
+        $i0 = $i0 + 1;
+
+        goto label05;
+
+     label13:
+        $r0 = virtualinvoke $r2.<java.lang.StringBuffer: java.lang.String toString()>();
+
+     label14:
+        return $r0;
+
+     label15:
+        $r1 := @caughtexception;
+
+        r8 = (java.security.NoSuchAlgorithmException) $r1;
+
+        virtualinvoke r8.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        varReplacer936 = "";
+
+        return varReplacer936;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label15;
+        catch java.security.NoSuchAlgorithmException from label03 to label04 with label15;
+        catch java.security.NoSuchAlgorithmException from label06 to label07 with label15;
+        catch java.security.NoSuchAlgorithmException from label07 to label08 with label15;
+        catch java.security.NoSuchAlgorithmException from label09 to label10 with label15;
+        catch java.security.NoSuchAlgorithmException from label11 to label12 with label15;
+        catch java.security.NoSuchAlgorithmException from label13 to label14 with label15;
+    }
+
+    public static boolean renameDownloadedFile(java.io.File, java.lang.String, java.lang.String)
+    {
+        java.io.File $r0;
+        java.lang.String $r1, $r2, varReplacer1330, varReplacer1331, varReplacer1332, varReplacer1333, varReplacer1334, varReplacer1335, varReplacer1336, varReplacer1337, varReplacer1338, varReplacer1339, varReplacer1340, varReplacer1341, varReplacer1342;
+        java.lang.Throwable $r3;
+        java.net.URL $r4, r6;
+        java.lang.StringBuilder $r5, r7;
+        boolean $z0;
+        java.net.MalformedURLException r8;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r4 = null;
+
+        r6 = new java.net.URL;
+
+     label1:
+        specialinvoke r6.<java.net.URL: void <init>(java.lang.String)>($r2);
+
+     label2:
+        $r4 = r6;
+
+     label3:
+        r7 = new java.lang.StringBuilder;
+
+        specialinvoke r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        varReplacer1340 = ".";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1340);
+
+        $r1 = virtualinvoke $r4.<java.net.URL: java.lang.String getFile()>();
+
+        varReplacer1330 = "/";
+
+        varReplacer1331 = "_";
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1330, varReplacer1331);
+
+        varReplacer1338 = ".";
+
+        varReplacer1339 = "_";
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1338, varReplacer1339);
+
+        varReplacer1334 = "=";
+
+        varReplacer1335 = "_";
+
+        $r1 = virtualinvoke $r1.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1334, varReplacer1335);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r1);
+
+        $r1 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r2 = virtualinvoke $r4.<java.net.URL: java.lang.String getFile()>();
+
+        varReplacer1336 = "/";
+
+        varReplacer1337 = "_";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1336, varReplacer1337);
+
+        varReplacer1341 = ".";
+
+        varReplacer1342 = "_";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1341, varReplacer1342);
+
+        varReplacer1332 = "=";
+
+        varReplacer1333 = "_";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>(varReplacer1332, varReplacer1333);
+
+        $z0 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean renameFile(java.io.File,java.lang.String,java.lang.String)>($r0, $r1, $r2);
+
+        return $z0;
+
+     label4:
+        $r3 := @caughtexception;
+
+        r8 = (java.net.MalformedURLException) $r3;
+
+        virtualinvoke r8.<java.net.MalformedURLException: void printStackTrace()>();
+
+        goto label3;
+
+        catch java.net.MalformedURLException from label1 to label2 with label4;
+    }
+
+    public static boolean renameDownloadedFiles(android.content.Context, com.defconsolutions.mobappcreator.MainConfig, com.defconsolutions.mobappcreator.WSResponse)
+    {
+        android.content.Context $r0;
+        com.defconsolutions.mobappcreator.MainConfig $r1;
+        com.defconsolutions.mobappcreator.WSResponse $r2;
+        org.json.simple.parser.JSONParser $r3;
+        com.defconsolutions.mobappcreator.JSONConfig $r4;
+        java.util.ArrayList $r5;
+        java.io.File $r6;
+        java.lang.String $r7, $r8, $r9, $r10, varReplacer1224, varReplacer1226, varReplacer1227, varReplacer1228, varReplacer1231, varReplacer1234, varReplacer1235, varReplacer1239, varReplacer1240, varReplacer1241, varReplacer1243, varReplacer1244, varReplacer1245, varReplacer1248, varReplacer1250, varReplacer1251, varReplacer1253, varReplacer1254, varReplacer1256, varReplacer1257, varReplacer1263;
+        boolean $z0, $z1;
+        int $i0, $i1, varReplacer1221, varReplacer1222, varReplacer1223, varReplacer1225, varReplacer1229, varReplacer1230, varReplacer1232, varReplacer1233, varReplacer1236, varReplacer1237, varReplacer1238, varReplacer1242, varReplacer1246, varReplacer1247, varReplacer1249, varReplacer1252, varReplacer1255, varReplacer1258, varReplacer1259, varReplacer1260, varReplacer1261, varReplacer1262;
+        java.lang.Object $r11;
+        com.defconsolutions.mobappcreator.JSONSections $r12;
+        java.lang.StringBuilder $r13;
+        android.content.SharedPreferences $r14;
+        org.json.simple.JSONObject $r15, $r16;
+        org.json.simple.JSONArray $r17;
+        java.util.Iterator $r18;
+        java.lang.Exception $r19;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: com.defconsolutions.mobappcreator.MainConfig;
+
+        $r2 := @parameter2: com.defconsolutions.mobappcreator.WSResponse;
+
+        $r4 = virtualinvoke $r2.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONConfig getConfig()>();
+
+        $r5 = virtualinvoke $r2.<com.defconsolutions.mobappcreator.WSResponse: java.util.ArrayList getFilteredSections()>();
+
+        varReplacer1254 = "mobappcreator_store";
+
+        varReplacer1255 = 0;
+
+        $r6 = virtualinvoke $r0.<android.content.Context: java.io.File getDir(java.lang.String,int)>(varReplacer1254, varReplacer1255);
+
+        $r7 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getAppID()>();
+
+        $z0 = 1;
+
+        $r8 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getBackground()>();
+
+        $r9 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuBackground()>();
+
+        $z1 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: boolean getIsBigScreen()>();
+
+        if $z1 == 0 goto label01;
+
+        $r8 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getBackground2()>();
+
+        $r9 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuBackground2()>();
+
+     label01:
+        $r10 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getIcon()>();
+
+        varReplacer1246 = 0;
+
+        varReplacer1247 = -1;
+
+        $r10 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int)>($r1, $r2, $r10, varReplacer1246, varReplacer1247);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean renameDownloadedFile(java.io.File,java.lang.String,java.lang.String)>($r6, $r7, $r10);
+
+        if $z1 != 0 goto label02;
+
+        $z0 = 0;
+
+     label02:
+        $i0 = 0;
+
+     label03:
+        $i1 = virtualinvoke $r5.<java.util.ArrayList: int size()>();
+
+        if $i0 >= $i1 goto label05;
+
+        $r11 = virtualinvoke $r5.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r12 = (com.defconsolutions.mobappcreator.JSONSections) $r11;
+
+        $r10 = virtualinvoke $r12.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getIcon()>();
+
+        varReplacer1242 = 0;
+
+        $r10 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int)>($r1, $r2, $r10, varReplacer1242, $i0);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean renameDownloadedFile(java.io.File,java.lang.String,java.lang.String)>($r6, $r7, $r10);
+
+        if $z1 != 0 goto label04;
+
+        $z0 = 0;
+
+     label04:
+        $i0 = $i0 + 1;
+
+        goto label03;
+
+     label05:
+        varReplacer1231 = "";
+
+        $z1 = virtualinvoke $r9.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1231);
+
+        if $z1 != 0 goto label06;
+
+        varReplacer1229 = 1;
+
+        varReplacer1230 = -1;
+
+        $r9 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int)>($r1, $r2, $r9, varReplacer1229, varReplacer1230);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean renameDownloadedFile(java.io.File,java.lang.String,java.lang.String)>($r6, $r7, $r9);
+
+        if $z1 != 0 goto label06;
+
+        $z0 = 0;
+
+     label06:
+        varReplacer1228 = "";
+
+        $z1 = virtualinvoke $r8.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1228);
+
+        if $z1 != 0 goto label07;
+
+        varReplacer1221 = 1;
+
+        varReplacer1222 = -1;
+
+        $r8 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int)>($r1, $r2, $r8, varReplacer1221, varReplacer1222);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean renameDownloadedFile(java.io.File,java.lang.String,java.lang.String)>($r6, $r7, $r8);
+
+        if $z1 != 0 goto label07;
+
+        $z0 = 0;
+
+     label07:
+        $r8 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getAppNavBarAndroidImage()>();
+
+        varReplacer1239 = "";
+
+        $z1 = virtualinvoke $r8.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1239);
+
+        if $z1 != 0 goto label08;
+
+        $r8 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getAppNavBarAndroidImage()>();
+
+        varReplacer1261 = 1;
+
+        varReplacer1262 = -1;
+
+        $r8 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int)>($r1, $r2, $r8, varReplacer1261, varReplacer1262);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean renameDownloadedFile(java.io.File,java.lang.String,java.lang.String)>($r6, $r7, $r8);
+
+        if $z1 != 0 goto label08;
+
+        $z0 = 0;
+
+     label08:
+        $i0 = 0;
+
+     label09:
+        $i1 = virtualinvoke $r5.<java.util.ArrayList: int size()>();
+
+        if $i0 >= $i1 goto label19;
+
+        $r11 = virtualinvoke $r5.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r12 = (com.defconsolutions.mobappcreator.JSONSections) $r11;
+
+        $r8 = virtualinvoke $r12.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getBackgroundImage()>();
+
+        if $r8 == null goto label10;
+
+        $r11 = virtualinvoke $r5.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r12 = (com.defconsolutions.mobappcreator.JSONSections) $r11;
+
+        $r8 = virtualinvoke $r12.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getBackgroundImage()>();
+
+        varReplacer1234 = "";
+
+        $z1 = virtualinvoke $r8.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1234);
+
+        if $z1 != 0 goto label10;
+
+        $r11 = virtualinvoke $r5.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r12 = (com.defconsolutions.mobappcreator.JSONSections) $r11;
+
+        $r8 = virtualinvoke $r12.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getBackgroundImage()>();
+
+        varReplacer1252 = 1;
+
+        $r8 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int)>($r1, $r2, $r8, varReplacer1252, $i0);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean renameDownloadedFile(java.io.File,java.lang.String,java.lang.String)>($r6, $r7, $r8);
+
+        if $z1 != 0 goto label10;
+
+        $z0 = 0;
+
+     label10:
+        $r11 = virtualinvoke $r5.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r12 = (com.defconsolutions.mobappcreator.JSONSections) $r11;
+
+        $r8 = virtualinvoke $r12.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getCategoryBackground()>();
+
+        if $r8 == null goto label11;
+
+        $r11 = virtualinvoke $r5.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r12 = (com.defconsolutions.mobappcreator.JSONSections) $r11;
+
+        $r8 = virtualinvoke $r12.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getCategoryBackground()>();
+
+        varReplacer1257 = "";
+
+        $z1 = virtualinvoke $r8.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1257);
+
+        if $z1 != 0 goto label11;
+
+        $r11 = virtualinvoke $r5.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r12 = (com.defconsolutions.mobappcreator.JSONSections) $r11;
+
+        $r8 = virtualinvoke $r12.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getCategoryBackground()>();
+
+        varReplacer1225 = 1;
+
+        $r8 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int)>($r1, $r2, $r8, varReplacer1225, $i0);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean renameDownloadedFile(java.io.File,java.lang.String,java.lang.String)>($r6, $r7, $r8);
+
+        if $z1 != 0 goto label11;
+
+        $z0 = 0;
+
+     label11:
+        $r11 = virtualinvoke $r5.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r12 = (com.defconsolutions.mobappcreator.JSONSections) $r11;
+
+        $r8 = virtualinvoke $r12.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getType()>();
+
+        varReplacer1256 = "PluginVC";
+
+        $z1 = virtualinvoke $r8.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1256);
+
+        if $z1 == 0 goto label12;
+
+        $r11 = virtualinvoke $r5.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r12 = (com.defconsolutions.mobappcreator.JSONSections) $r11;
+
+        $r8 = virtualinvoke $r12.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getWebsiteZipFile()>();
+
+        varReplacer1224 = "";
+
+        $z1 = virtualinvoke $r8.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1224);
+
+        if $z1 != 0 goto label12;
+
+        $r13 = new java.lang.StringBuilder;
+
+        specialinvoke $r13.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1227 = "http://admin.mobappcreator.com/api/v3/?m=getFile&user=";
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1227);
+
+        $r8 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: java.lang.String getUser()>();
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        varReplacer1245 = "&hash=";
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1245);
+
+        $r8 = virtualinvoke $r1.<com.defconsolutions.mobappcreator.MainConfig: java.lang.String getHash()>();
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        varReplacer1226 = "&file=";
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1226);
+
+        $r11 = virtualinvoke $r5.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r12 = (com.defconsolutions.mobappcreator.JSONSections) $r11;
+
+        $r8 = virtualinvoke $r12.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getWebsiteZipFile()>();
+
+        $r13 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r8 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean renameDownloadedFile(java.io.File,java.lang.String,java.lang.String)>($r6, $r7, $r8);
+
+        if $z1 != 0 goto label12;
+
+        $z0 = 0;
+
+     label12:
+        $r11 = virtualinvoke $r5.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r12 = (com.defconsolutions.mobappcreator.JSONSections) $r11;
+
+        $r8 = virtualinvoke $r12.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getType()>();
+
+        varReplacer1263 = "PhotoComposerVC";
+
+        $z1 = virtualinvoke $r8.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1263);
+
+        if $z1 == 0 goto label18;
+
+        varReplacer1248 = "mobappcreator_store";
+
+        varReplacer1249 = 0;
+
+        $r14 = virtualinvoke $r0.<android.content.Context: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>(varReplacer1248, varReplacer1249);
+
+        varReplacer1250 = "photocomposerJSON";
+
+        varReplacer1251 = "";
+
+        $r8 = interfaceinvoke $r14.<android.content.SharedPreferences: java.lang.String getString(java.lang.String,java.lang.String)>(varReplacer1250, varReplacer1251);
+
+        if $r8 == null goto label17;
+
+        varReplacer1253 = "";
+
+        $z1 = virtualinvoke $r8.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1253);
+
+        if $z1 != 0 goto label17;
+
+        $r3 = new org.json.simple.parser.JSONParser;
+
+        specialinvoke $r3.<org.json.simple.parser.JSONParser: void <init>()>();
+
+        $r15 = null;
+
+     label13:
+        $r11 = virtualinvoke $r3.<org.json.simple.parser.JSONParser: java.lang.Object parse(java.lang.String)>($r8);
+
+        $r16 = (org.json.simple.JSONObject) $r11;
+
+     label14:
+        $r15 = $r16;
+
+     label15:
+        if $r15 == null goto label17;
+
+        varReplacer1241 = "items";
+
+        $r11 = virtualinvoke $r15.<org.json.simple.JSONObject: java.lang.Object get(java.lang.Object)>(varReplacer1241);
+
+        $r17 = (org.json.simple.JSONArray) $r11;
+
+        $r18 = virtualinvoke $r17.<org.json.simple.JSONArray: java.util.Iterator iterator()>();
+
+     label16:
+        $z1 = interfaceinvoke $r18.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label17;
+
+        $r11 = interfaceinvoke $r18.<java.util.Iterator: java.lang.Object next()>();
+
+        $r15 = (org.json.simple.JSONObject) $r11;
+
+        varReplacer1235 = "image";
+
+        $r11 = virtualinvoke $r15.<org.json.simple.JSONObject: java.lang.Object get(java.lang.Object)>(varReplacer1235);
+
+        $r8 = virtualinvoke $r11.<java.lang.Object: java.lang.String toString()>();
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean renameDownloadedFile(java.io.File,java.lang.String,java.lang.String)>($r6, $r7, $r8);
+
+        if $z1 != 0 goto label16;
+
+        $z0 = 0;
+
+        goto label16;
+
+     label17:
+        $r11 = virtualinvoke $r5.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r12 = (com.defconsolutions.mobappcreator.JSONSections) $r11;
+
+        $r8 = virtualinvoke $r12.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getWatermarkImage()>();
+
+        varReplacer1240 = "";
+
+        $z1 = virtualinvoke $r8.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1240);
+
+        if $z1 != 0 goto label18;
+
+        $r11 = virtualinvoke $r5.<java.util.ArrayList: java.lang.Object get(int)>($i0);
+
+        $r12 = (com.defconsolutions.mobappcreator.JSONSections) $r11;
+
+        $r8 = virtualinvoke $r12.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getWatermarkImage()>();
+
+        varReplacer1232 = 40;
+
+        varReplacer1233 = 1;
+
+        $i1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: int getRelativeWidth(com.defconsolutions.mobappcreator.MainConfig,int,int)>($r1, varReplacer1232, varReplacer1233);
+
+        varReplacer1238 = 1;
+
+        $r8 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int,int)>($r1, $r2, $r8, varReplacer1238, $i0, $i1);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean renameDownloadedFile(java.io.File,java.lang.String,java.lang.String)>($r6, $r7, $r8);
+
+        if $z1 != 0 goto label18;
+
+        $z0 = 0;
+
+     label18:
+        $i0 = $i0 + 1;
+
+        goto label09;
+
+     label19:
+        $z1 = virtualinvoke $r2.<com.defconsolutions.mobappcreator.WSResponse: boolean hasLoginModule()>();
+
+        if $z1 == 0 goto label20;
+
+        $r12 = virtualinvoke $r2.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONSections getLoginVCSection()>();
+
+        $r8 = virtualinvoke $r12.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getBackgroundImage()>();
+
+        if $r8 == null goto label20;
+
+        $r12 = virtualinvoke $r2.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONSections getLoginVCSection()>();
+
+        $r8 = virtualinvoke $r12.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getBackgroundImage()>();
+
+        varReplacer1244 = "";
+
+        $z1 = virtualinvoke $r8.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1244);
+
+        if $z1 != 0 goto label20;
+
+        $r12 = virtualinvoke $r2.<com.defconsolutions.mobappcreator.WSResponse: com.defconsolutions.mobappcreator.JSONSections getLoginVCSection()>();
+
+        $r8 = virtualinvoke $r12.<com.defconsolutions.mobappcreator.JSONSections: java.lang.String getBackgroundImage()>();
+
+        varReplacer1236 = 1;
+
+        varReplacer1237 = 1000;
+
+        $r8 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int)>($r1, $r2, $r8, varReplacer1236, varReplacer1237);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean renameDownloadedFile(java.io.File,java.lang.String,java.lang.String)>($r6, $r7, $r8);
+
+        if $z1 != 0 goto label20;
+
+        $z0 = 0;
+
+     label20:
+        $r8 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuFooterImage()>();
+
+        if $r8 == null goto label22;
+
+        $r8 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuFooterImage()>();
+
+        varReplacer1243 = "";
+
+        $z1 = virtualinvoke $r8.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer1243);
+
+        if $z1 != 0 goto label22;
+
+        $r8 = virtualinvoke $r4.<com.defconsolutions.mobappcreator.JSONConfig: java.lang.String getMenuFooterImage()>();
+
+        varReplacer1258 = 1;
+
+        varReplacer1259 = -1;
+
+        varReplacer1260 = 5000;
+
+        $r8 = staticinvoke <com.defconsolutions.mobappcreator.Utils: java.lang.String makeImageURL(com.defconsolutions.mobappcreator.MainConfig,com.defconsolutions.mobappcreator.WSResponse,java.lang.String,int,int,int)>($r1, $r2, $r8, varReplacer1258, varReplacer1259, varReplacer1260);
+
+        $z1 = staticinvoke <com.defconsolutions.mobappcreator.Utils: boolean renameDownloadedFile(java.io.File,java.lang.String,java.lang.String)>($r6, $r7, $r8);
+
+        if $z1 != 0 goto label22;
+
+        varReplacer1223 = 0;
+
+        return varReplacer1223;
+
+     label21:
+        $r19 := @caughtexception;
+
+        goto label15;
+
+     label22:
+        return $z0;
+
+        catch java.lang.Exception from label13 to label14 with label21;
+    }
+
+    public static boolean renameFile(java.io.File, java.lang.String, java.lang.String)
+    {
+        java.io.File $r0, $r3, $r4;
+        java.lang.String $r1, $r2;
+        boolean $z0;
+        int varReplacer1368, varReplacer1369, varReplacer1370;
+
+        nop;
+
+        $r0 := @parameter0: java.io.File;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r2 := @parameter2: java.lang.String;
+
+        $r3 = new java.io.File;
+
+        specialinvoke $r3.<java.io.File: void <init>(java.io.File,java.lang.String)>($r0, $r1);
+
+        $r4 = new java.io.File;
+
+        specialinvoke $r4.<java.io.File: void <init>(java.io.File,java.lang.String)>($r0, $r2);
+
+        $z0 = virtualinvoke $r4.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label1;
+
+        varReplacer1368 = 1;
+
+        return varReplacer1368;
+
+     label1:
+        $z0 = virtualinvoke $r3.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label2;
+
+        $z0 = virtualinvoke $r3.<java.io.File: boolean renameTo(java.io.File)>($r4);
+
+        if $z0 == 0 goto label2;
+
+        varReplacer1370 = 1;
+
+        return varReplacer1370;
+
+     label2:
+        varReplacer1369 = 0;
+
+        return varReplacer1369;
+    }
+}

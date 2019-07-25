@@ -1,8 +1,96 @@
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r6
+		Type: byte[]
+		Statement: $r6 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.yandex.metrica.impl.c: byte[] b(byte[])>
+		SHA-256: e0b636cb3ab2be22098df0e7be84b932752e1d3179386d1659d4422532b1447d
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.SecureRandom
+		Statement: specialinvoke $r1.<java.security.SecureRandom: void <init>()>()
+		Method: <o.dj: void ﾞ()>
+		SHA-256: f53fdd7b957b3662335e0903e98376149e9dd509d91c387fa679df4ae9d1fd0
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: javax.net.ssl.SSLContext
+		Statement: $r1 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1576)
+		Method: <com.yandex.metrica.impl.ob.eo: javax.net.ssl.SSLContext a()>
+		SHA-256: eddc885752b39725fa0e2fc870969c6650df0353274fb85c0faf446c28bf2bce
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6540)
+		Method: <com.yandex.metrica.impl.c: byte[] b(byte[])>
+		SHA-256: 8fd854d8a351d57398b264895200dfbb0994396e596f72672017f57702615b8a
+		Secure: false
+
+Findings in Java Class: com.yandex.metrica.impl.ob.eo
+
+	 in Method: javax.net.ssl.SSLContext a()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1577, r4, varReplacer1577)
+
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #eddc885752b39725fa0e2fc870969c6650df0353274fb85c0faf446c28bf2bce)
+			First parameter (with value "TLS") should be any of {TLSv1.2, TLSv1.1, TLSv1, Insecure}
+			at statement: $r1 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1576)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1577, r4, varReplacer1577)
+
+
+Findings in Java Class: com.yandex.metrica.impl.c
+
+	 in Method: byte[] b(byte[])
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #8fd854d8a351d57398b264895200dfbb0994396e596f72672017f57702615b8a)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6540)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
+	RequiredPredicateError: 2
+=====================================================================

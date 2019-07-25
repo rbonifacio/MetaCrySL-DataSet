@@ -1,0 +1,820 @@
+public class com.dailypedia.DownloadAppsInfo extends android.app.Service
+{
+    private final java.lang.String TAG;
+    private java.lang.String URL_APPS;
+    private boolean isDownloading;
+    private com.db.DBDailyCardsInfo mDBDailyCardsInfo;
+    private com.dailypedia.MyApplication myApplication;
+    private java.lang.Thread thread;
+    public android.content.Intent ipcIntent;
+    public android.os.IBinder ipcBinder_0;
+
+    public void <init>()
+    {
+        com.dailypedia.DownloadAppsInfo $r0;
+        java.lang.Class $r1;
+        java.lang.String $r2, varReplacer243;
+        int varReplacer244;
+
+        nop;
+
+        $r0 := @this: com.dailypedia.DownloadAppsInfo;
+
+        specialinvoke $r0.<android.app.Service: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.Class: java.lang.String getName()>();
+
+        $r0.<com.dailypedia.DownloadAppsInfo: java.lang.String TAG> = $r2;
+
+        varReplacer243 = "https://s3-us-west-2.amazonaws.com/moreappsdaily/";
+
+        $r0.<com.dailypedia.DownloadAppsInfo: java.lang.String URL_APPS> = varReplacer243;
+
+        varReplacer244 = 1;
+
+        $r0.<com.dailypedia.DownloadAppsInfo: boolean isDownloading> = varReplacer244;
+
+        return;
+    }
+
+    private void HpptConnection(android.graphics.Bitmap, int)
+    {
+        com.dailypedia.DownloadAppsInfo $r0;
+        android.graphics.Bitmap $r1;
+        int $i0, varReplacer1510, varReplacer1512, varReplacer1515, varReplacer1519, varReplacer1521;
+        java.lang.StringBuilder $r2, r23;
+        javax.net.ssl.SSLContext $r3, $r4;
+        java.lang.Object[] $r5;
+        java.net.URL $r6, r24;
+        java.lang.String $r7, $r15, varReplacer1511, varReplacer1516, varReplacer1517, varReplacer1518, varReplacer1520;
+        java.net.URLConnection $r8;
+        javax.net.ssl.HttpsURLConnection $r9;
+        javax.net.ssl.SSLSocketFactory $r10;
+        com.dailypedia.DownloadAppsInfo$5 $r11, r25;
+        java.io.InputStream $r12;
+        android.content.Context $r13;
+        com.db.DBDailyCardsInfo $r14;
+        com.dailypedia.MyApplication $r16;
+        java.util.ArrayList $r17;
+        java.lang.Throwable $r18, $r19, $r20, $r21;
+        char $c1;
+        com.dailypedia.DownloadAppsInfo$4 r22;
+        javax.net.ssl.TrustManager[] r26;
+        java.security.NoSuchAlgorithmException r27;
+        java.security.KeyManagementException r28;
+        java.net.MalformedURLException r29;
+        java.io.IOException r30;
+        null_type varReplacer1513, varReplacer1514;
+
+        nop;
+
+        $r0 := @this: com.dailypedia.DownloadAppsInfo;
+
+        $r1 := @parameter0: android.graphics.Bitmap;
+
+        $i0 := @parameter1: int;
+
+        $r3 = null;
+
+        r22 = new com.dailypedia.DownloadAppsInfo$4;
+
+        specialinvoke r22.<com.dailypedia.DownloadAppsInfo$4: void <init>(com.dailypedia.DownloadAppsInfo)>($r0);
+
+     label01:
+        varReplacer1511 = "TLS";
+
+        $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1511);
+
+     label02:
+        $r3 = $r4;
+
+        $r5 = newarray (javax.net.ssl.TrustManager)[1];
+
+        $r5[0] = r22;
+
+        r26 = (javax.net.ssl.TrustManager[]) $r5;
+
+     label03:
+        varReplacer1513 = null;
+
+        varReplacer1514 = null;
+
+        virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1513, r26, varReplacer1513);
+
+     label04:
+        r24 = new java.net.URL;
+
+        $r6 = r24;
+
+        r23 = new java.lang.StringBuilder;
+
+        $r2 = r23;
+
+        $r7 = $r0.<com.dailypedia.DownloadAppsInfo: java.lang.String URL_APPS>;
+
+     label05:
+        $r7 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r7);
+
+        specialinvoke r23.<java.lang.StringBuilder: void <init>(java.lang.String)>($r7);
+
+        varReplacer1520 = "txt";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1520);
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1516 = ".txt";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1516);
+
+        $r7 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r24.<java.net.URL: void <init>(java.lang.String)>($r7);
+
+        $r8 = virtualinvoke $r6.<java.net.URL: java.net.URLConnection openConnection()>();
+
+     label06:
+        $r9 = (javax.net.ssl.HttpsURLConnection) $r8;
+
+     label07:
+        $r10 = virtualinvoke $r3.<javax.net.ssl.SSLContext: javax.net.ssl.SSLSocketFactory getSocketFactory()>();
+
+        virtualinvoke $r9.<javax.net.ssl.HttpsURLConnection: void setSSLSocketFactory(javax.net.ssl.SSLSocketFactory)>($r10);
+
+     label08:
+        r25 = new com.dailypedia.DownloadAppsInfo$5;
+
+        $r11 = r25;
+
+     label09:
+        specialinvoke r25.<com.dailypedia.DownloadAppsInfo$5: void <init>(com.dailypedia.DownloadAppsInfo)>($r0);
+
+        virtualinvoke $r9.<javax.net.ssl.HttpsURLConnection: void setHostnameVerifier(javax.net.ssl.HostnameVerifier)>($r11);
+
+        virtualinvoke $r9.<javax.net.ssl.HttpsURLConnection: void connect()>();
+
+        $r12 = virtualinvoke $r9.<javax.net.ssl.HttpsURLConnection: java.io.InputStream getInputStream()>();
+
+     label10:
+        r23 = new java.lang.StringBuilder;
+
+        $r2 = r23;
+
+     label11:
+        specialinvoke r23.<java.lang.StringBuilder: void <init>()>();
+
+     label12:
+        $i0 = virtualinvoke $r12.<java.io.InputStream: int read()>();
+
+     label13:
+        if $i0 != -1 goto label26;
+
+     label14:
+        $r7 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r13 = virtualinvoke $r0.<com.dailypedia.DownloadAppsInfo: android.content.Context getApplicationContext()>();
+
+        $r14 = staticinvoke <com.db.DBDailyCardsInfo: com.db.DBDailyCardsInfo getInstance(android.content.Context)>($r13);
+
+        virtualinvoke $r14.<com.db.DBDailyCardsInfo: void addEntry(java.lang.String,android.graphics.Bitmap)>($r7, $r1);
+
+        $r15 = virtualinvoke $r0.<com.dailypedia.DownloadAppsInfo: java.lang.String getPackageName()>();
+
+        $i0 = virtualinvoke $r7.<java.lang.String: int indexOf(java.lang.String)>($r15);
+
+     label15:
+        if $i0 != -1 goto label21;
+
+        $r16 = $r0.<com.dailypedia.DownloadAppsInfo: com.dailypedia.MyApplication myApplication>;
+
+        $r17 = $r16.<com.dailypedia.MyApplication: java.util.ArrayList mCardsAppsName>;
+
+     label16:
+        varReplacer1517 = "|";
+
+        $i0 = virtualinvoke $r7.<java.lang.String: int indexOf(java.lang.String)>(varReplacer1517);
+
+        varReplacer1512 = 0;
+
+        $r15 = virtualinvoke $r7.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1512, $i0);
+
+        $r15 = virtualinvoke $r15.<java.lang.String: java.lang.String trim()>();
+
+        virtualinvoke $r17.<java.util.ArrayList: boolean add(java.lang.Object)>($r15);
+
+     label17:
+        $r16 = $r0.<com.dailypedia.DownloadAppsInfo: com.dailypedia.MyApplication myApplication>;
+
+        $r17 = $r16.<com.dailypedia.MyApplication: java.util.ArrayList mCardsPackageName>;
+
+     label18:
+        varReplacer1518 = "|";
+
+        $i0 = virtualinvoke $r7.<java.lang.String: int indexOf(java.lang.String)>(varReplacer1518);
+
+     label19:
+        $i0 = $i0 + 1;
+
+     label20:
+        $r15 = virtualinvoke $r7.<java.lang.String: java.lang.String substring(int)>($i0);
+
+        $r15 = virtualinvoke $r15.<java.lang.String: java.lang.String trim()>();
+
+        virtualinvoke $r17.<java.util.ArrayList: boolean add(java.lang.Object)>($r15);
+
+     label21:
+        $r15 = $r0.<com.dailypedia.DownloadAppsInfo: java.lang.String TAG>;
+
+     label22:
+        staticinvoke <android.util.Log: int e(java.lang.String,java.lang.String)>($r15, $r7);
+
+     label23:
+        return;
+
+     label24:
+        $r18 := @caughtexception;
+
+        varReplacer1521 = 0;
+
+        $r0.<com.dailypedia.DownloadAppsInfo: boolean isDownloading> = varReplacer1521;
+
+        r27 = (java.security.NoSuchAlgorithmException) $r18;
+
+        virtualinvoke r27.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        goto label04;
+
+     label25:
+        $r19 := @caughtexception;
+
+        varReplacer1515 = 0;
+
+        $r0.<com.dailypedia.DownloadAppsInfo: boolean isDownloading> = varReplacer1515;
+
+        r28 = (java.security.KeyManagementException) $r19;
+
+        virtualinvoke r28.<java.security.KeyManagementException: void printStackTrace()>();
+
+        goto label04;
+
+     label26:
+        $c1 = (char) $i0;
+
+     label27:
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>($c1);
+
+     label28:
+        goto label12;
+
+     label29:
+        $r20 := @caughtexception;
+
+        varReplacer1519 = 0;
+
+        $r0.<com.dailypedia.DownloadAppsInfo: boolean isDownloading> = varReplacer1519;
+
+        r29 = (java.net.MalformedURLException) $r20;
+
+        virtualinvoke r29.<java.net.MalformedURLException: void printStackTrace()>();
+
+        return;
+
+     label30:
+        $r21 := @caughtexception;
+
+        varReplacer1510 = 0;
+
+        $r0.<com.dailypedia.DownloadAppsInfo: boolean isDownloading> = varReplacer1510;
+
+        r30 = (java.io.IOException) $r21;
+
+        virtualinvoke r30.<java.io.IOException: void printStackTrace()>();
+
+        return;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label24;
+        catch java.security.NoSuchAlgorithmException from label03 to label04 with label24;
+        catch java.security.KeyManagementException from label01 to label02 with label25;
+        catch java.security.KeyManagementException from label03 to label04 with label25;
+        catch java.net.MalformedURLException from label05 to label06 with label29;
+        catch java.net.MalformedURLException from label07 to label08 with label29;
+        catch java.net.MalformedURLException from label09 to label10 with label29;
+        catch java.net.MalformedURLException from label11 to label13 with label29;
+        catch java.net.MalformedURLException from label14 to label15 with label29;
+        catch java.net.MalformedURLException from label16 to label17 with label29;
+        catch java.net.MalformedURLException from label18 to label19 with label29;
+        catch java.net.MalformedURLException from label20 to label21 with label29;
+        catch java.net.MalformedURLException from label22 to label23 with label29;
+        catch java.io.IOException from label05 to label06 with label30;
+        catch java.io.IOException from label07 to label08 with label30;
+        catch java.io.IOException from label09 to label10 with label30;
+        catch java.io.IOException from label11 to label13 with label30;
+        catch java.io.IOException from label14 to label15 with label30;
+        catch java.io.IOException from label16 to label17 with label30;
+        catch java.io.IOException from label18 to label19 with label30;
+        catch java.io.IOException from label20 to label21 with label30;
+        catch java.io.IOException from label22 to label23 with label30;
+        catch java.net.MalformedURLException from label27 to label28 with label29;
+        catch java.io.IOException from label27 to label28 with label30;
+    }
+
+    static void access$0(com.dailypedia.DownloadAppsInfo, com.db.DBDailyCardsInfo)
+    {
+        com.dailypedia.DownloadAppsInfo $r0;
+        com.db.DBDailyCardsInfo $r1;
+
+        nop;
+
+        $r0 := @parameter0: com.dailypedia.DownloadAppsInfo;
+
+        $r1 := @parameter1: com.db.DBDailyCardsInfo;
+
+        $r0.<com.dailypedia.DownloadAppsInfo: com.db.DBDailyCardsInfo mDBDailyCardsInfo> = $r1;
+
+        return;
+    }
+
+    static com.db.DBDailyCardsInfo access$1(com.dailypedia.DownloadAppsInfo)
+    {
+        com.dailypedia.DownloadAppsInfo $r0;
+        com.db.DBDailyCardsInfo r1;
+
+        nop;
+
+        $r0 := @parameter0: com.dailypedia.DownloadAppsInfo;
+
+        r1 = $r0.<com.dailypedia.DownloadAppsInfo: com.db.DBDailyCardsInfo mDBDailyCardsInfo>;
+
+        return r1;
+    }
+
+    static boolean access$2(com.dailypedia.DownloadAppsInfo)
+    {
+        com.dailypedia.DownloadAppsInfo $r0;
+        boolean z0;
+
+        nop;
+
+        $r0 := @parameter0: com.dailypedia.DownloadAppsInfo;
+
+        z0 = $r0.<com.dailypedia.DownloadAppsInfo: boolean isDownloading>;
+
+        return z0;
+    }
+
+    static android.graphics.Bitmap access$3(com.dailypedia.DownloadAppsInfo, int)
+    {
+        com.dailypedia.DownloadAppsInfo $r0;
+        int $i0;
+        android.graphics.Bitmap $r1;
+
+        nop;
+
+        $r0 := @parameter0: com.dailypedia.DownloadAppsInfo;
+
+        $i0 := @parameter1: int;
+
+        $r1 = specialinvoke $r0.<com.dailypedia.DownloadAppsInfo: android.graphics.Bitmap downloadImage(int)>($i0);
+
+        return $r1;
+    }
+
+    static void access$4(com.dailypedia.DownloadAppsInfo, android.graphics.Bitmap, int)
+    {
+        com.dailypedia.DownloadAppsInfo $r0;
+        android.graphics.Bitmap $r1;
+        int $i0;
+
+        nop;
+
+        $r0 := @parameter0: com.dailypedia.DownloadAppsInfo;
+
+        $r1 := @parameter1: android.graphics.Bitmap;
+
+        $i0 := @parameter2: int;
+
+        specialinvoke $r0.<com.dailypedia.DownloadAppsInfo: void HpptConnection(android.graphics.Bitmap,int)>($r1, $i0);
+
+        return;
+    }
+
+    static void access$5(com.dailypedia.DownloadAppsInfo, boolean)
+    {
+        com.dailypedia.DownloadAppsInfo $r0;
+        boolean $z0;
+        int varReplacer1423;
+
+        nop;
+
+        $r0 := @parameter0: com.dailypedia.DownloadAppsInfo;
+
+        $z0 := @parameter1: boolean;
+
+        varReplacer1423 = 0;
+
+        $r0.<com.dailypedia.DownloadAppsInfo: boolean isDownloading> = varReplacer1423;
+
+        return;
+    }
+
+    private android.graphics.Bitmap downloadImage(int)
+    {
+        com.dailypedia.DownloadAppsInfo $r0;
+        int $i0, varReplacer1499, varReplacer1502, varReplacer1503, varReplacer1505, varReplacer1506;
+        com.dailypedia.DownloadAppsInfo$2 $r1, r21;
+        java.net.URL $r2, r23;
+        javax.net.ssl.SSLContext $r3, $r4;
+        java.lang.Object[] $r5;
+        java.lang.StringBuilder $r6, r22;
+        java.lang.String $r7, varReplacer1504, varReplacer1508, varReplacer1509;
+        java.net.URLConnection $r8;
+        javax.net.ssl.HttpsURLConnection $r9;
+        javax.net.ssl.SSLSocketFactory $r10;
+        com.dailypedia.DownloadAppsInfo$3 $r11, r24;
+        java.io.InputStream $r12;
+        android.graphics.Bitmap $r13;
+        com.dailypedia.MyApplication $r14;
+        java.util.ArrayList $r15;
+        java.lang.Throwable $r16, $r17, $r18, $r19;
+        java.lang.Exception $r20;
+        javax.net.ssl.TrustManager[] r25;
+        java.security.NoSuchAlgorithmException r26;
+        java.net.MalformedURLException r27;
+        java.security.KeyManagementException r28;
+        java.io.IOException r29;
+        null_type varReplacer1500, varReplacer1501, varReplacer1507;
+
+        nop;
+
+        $r0 := @this: com.dailypedia.DownloadAppsInfo;
+
+        $i0 := @parameter0: int;
+
+        $r3 = null;
+
+        r21 = new com.dailypedia.DownloadAppsInfo$2;
+
+        $r1 = r21;
+
+     label01:
+        specialinvoke r21.<com.dailypedia.DownloadAppsInfo$2: void <init>(com.dailypedia.DownloadAppsInfo)>($r0);
+
+     label02:
+        varReplacer1508 = "TLS";
+
+        $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1508);
+
+     label03:
+        $r3 = $r4;
+
+     label04:
+        $r5 = newarray (javax.net.ssl.TrustManager)[1];
+
+        $r5[0] = $r1;
+
+        r25 = (javax.net.ssl.TrustManager[]) $r5;
+
+     label05:
+        varReplacer1500 = null;
+
+        varReplacer1501 = null;
+
+        virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1500, r25, varReplacer1500);
+
+     label06:
+        r22 = new java.lang.StringBuilder;
+
+        $r6 = r22;
+
+     label07:
+        $r7 = $r0.<com.dailypedia.DownloadAppsInfo: java.lang.String URL_APPS>;
+
+     label08:
+        $r7 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r7);
+
+        specialinvoke r22.<java.lang.StringBuilder: void <init>(java.lang.String)>($r7);
+
+        varReplacer1504 = "img";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1504);
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer1509 = ".png";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1509);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label09:
+        r23 = new java.net.URL;
+
+        $r2 = r23;
+
+     label10:
+        specialinvoke r23.<java.net.URL: void <init>(java.lang.String)>($r7);
+
+        $r8 = virtualinvoke $r2.<java.net.URL: java.net.URLConnection openConnection()>();
+
+     label11:
+        $r9 = (javax.net.ssl.HttpsURLConnection) $r8;
+
+     label12:
+        $r10 = virtualinvoke $r3.<javax.net.ssl.SSLContext: javax.net.ssl.SSLSocketFactory getSocketFactory()>();
+
+        virtualinvoke $r9.<javax.net.ssl.HttpsURLConnection: void setSSLSocketFactory(javax.net.ssl.SSLSocketFactory)>($r10);
+
+     label13:
+        r24 = new com.dailypedia.DownloadAppsInfo$3;
+
+        $r11 = r24;
+
+     label14:
+        specialinvoke r24.<com.dailypedia.DownloadAppsInfo$3: void <init>(com.dailypedia.DownloadAppsInfo)>($r0);
+
+        virtualinvoke $r9.<javax.net.ssl.HttpsURLConnection: void setHostnameVerifier(javax.net.ssl.HostnameVerifier)>($r11);
+
+        virtualinvoke $r9.<javax.net.ssl.HttpsURLConnection: void connect()>();
+
+        $r12 = virtualinvoke $r9.<javax.net.ssl.HttpsURLConnection: java.io.InputStream getInputStream()>();
+
+        $r13 = staticinvoke <android.graphics.BitmapFactory: android.graphics.Bitmap decodeStream(java.io.InputStream)>($r12);
+
+     label15:
+        $r14 = $r0.<com.dailypedia.DownloadAppsInfo: com.dailypedia.MyApplication myApplication>;
+
+        $r15 = $r14.<com.dailypedia.MyApplication: java.util.ArrayList mCardsAppsIcon>;
+
+     label16:
+        virtualinvoke $r15.<java.util.ArrayList: boolean add(java.lang.Object)>($r13);
+
+     label17:
+        return $r13;
+
+     label18:
+        $r16 := @caughtexception;
+
+     label19:
+        varReplacer1506 = 0;
+
+        $r0.<com.dailypedia.DownloadAppsInfo: boolean isDownloading> = varReplacer1506;
+
+        r26 = (java.security.NoSuchAlgorithmException) $r16;
+
+     label20:
+        virtualinvoke r26.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+     label21:
+        goto label06;
+
+     label22:
+        $r17 := @caughtexception;
+
+        varReplacer1505 = 0;
+
+        $r0.<com.dailypedia.DownloadAppsInfo: boolean isDownloading> = varReplacer1505;
+
+        r27 = (java.net.MalformedURLException) $r17;
+
+        virtualinvoke r27.<java.net.MalformedURLException: void printStackTrace()>();
+
+     label23:
+        varReplacer1507 = null;
+
+        return varReplacer1507;
+
+     label24:
+        $r18 := @caughtexception;
+
+     label25:
+        varReplacer1503 = 0;
+
+        $r0.<com.dailypedia.DownloadAppsInfo: boolean isDownloading> = varReplacer1503;
+
+        r28 = (java.security.KeyManagementException) $r18;
+
+     label26:
+        virtualinvoke r28.<java.security.KeyManagementException: void printStackTrace()>();
+
+     label27:
+        goto label06;
+
+     label28:
+        $r19 := @caughtexception;
+
+        varReplacer1502 = 0;
+
+        $r0.<com.dailypedia.DownloadAppsInfo: boolean isDownloading> = varReplacer1502;
+
+        r29 = (java.io.IOException) $r19;
+
+        virtualinvoke r29.<java.io.IOException: void printStackTrace()>();
+
+        goto label23;
+
+     label29:
+        $r20 := @caughtexception;
+
+        varReplacer1499 = 0;
+
+        $r0.<com.dailypedia.DownloadAppsInfo: boolean isDownloading> = varReplacer1499;
+
+        virtualinvoke $r20.<java.lang.Exception: void printStackTrace()>();
+
+        goto label23;
+
+        catch java.net.MalformedURLException from label01 to label02 with label22;
+        catch java.io.IOException from label01 to label02 with label28;
+        catch java.lang.Exception from label01 to label02 with label29;
+        catch java.security.NoSuchAlgorithmException from label02 to label03 with label18;
+        catch java.security.NoSuchAlgorithmException from label05 to label06 with label18;
+        catch java.security.KeyManagementException from label02 to label03 with label24;
+        catch java.security.KeyManagementException from label05 to label06 with label24;
+        catch java.net.MalformedURLException from label02 to label03 with label22;
+        catch java.net.MalformedURLException from label05 to label06 with label22;
+        catch java.io.IOException from label02 to label03 with label28;
+        catch java.io.IOException from label05 to label06 with label28;
+        catch java.lang.Exception from label02 to label03 with label29;
+        catch java.lang.Exception from label04 to label06 with label29;
+        catch java.net.MalformedURLException from label08 to label09 with label22;
+        catch java.net.MalformedURLException from label10 to label11 with label22;
+        catch java.net.MalformedURLException from label12 to label13 with label22;
+        catch java.net.MalformedURLException from label14 to label15 with label22;
+        catch java.net.MalformedURLException from label16 to label17 with label22;
+        catch java.net.MalformedURLException from label20 to label21 with label22;
+        catch java.io.IOException from label08 to label09 with label28;
+        catch java.io.IOException from label10 to label11 with label28;
+        catch java.io.IOException from label12 to label13 with label28;
+        catch java.io.IOException from label14 to label15 with label28;
+        catch java.io.IOException from label16 to label17 with label28;
+        catch java.io.IOException from label20 to label21 with label28;
+        catch java.lang.Exception from label07 to label09 with label29;
+        catch java.lang.Exception from label10 to label13 with label29;
+        catch java.lang.Exception from label14 to label17 with label29;
+        catch java.lang.Exception from label19 to label21 with label29;
+        catch java.net.MalformedURLException from label26 to label27 with label22;
+        catch java.io.IOException from label26 to label27 with label28;
+        catch java.lang.Exception from label25 to label27 with label29;
+    }
+
+    private void startDownLoadThread()
+    {
+        com.dailypedia.DownloadAppsInfo $r0;
+        java.lang.Thread $r1;
+        com.dailypedia.DownloadAppsInfo$1 $r2;
+
+        nop;
+
+        $r0 := @this: com.dailypedia.DownloadAppsInfo;
+
+        $r1 = new java.lang.Thread;
+
+        $r2 = new com.dailypedia.DownloadAppsInfo$1;
+
+        specialinvoke $r2.<com.dailypedia.DownloadAppsInfo$1: void <init>(com.dailypedia.DownloadAppsInfo)>($r0);
+
+        specialinvoke $r1.<java.lang.Thread: void <init>(java.lang.Runnable)>($r2);
+
+        $r0.<com.dailypedia.DownloadAppsInfo: java.lang.Thread thread> = $r1;
+
+        return;
+    }
+
+    public android.os.IBinder onBind(android.content.Intent)
+    {
+        com.dailypedia.DownloadAppsInfo this;
+        android.content.Intent parameter0;
+
+        nop;
+
+        this := @this: com.dailypedia.DownloadAppsInfo;
+
+        parameter0 := @parameter0: android.content.Intent;
+
+        this.<com.dailypedia.DownloadAppsInfo: android.os.IBinder ipcBinder_0> = parameter0;
+
+        this.<com.dailypedia.DownloadAppsInfo: android.os.IBinder ipcBinder_0> = parameter0;
+
+        return parameter0;
+    }
+
+    public void onCreate()
+    {
+        com.dailypedia.DownloadAppsInfo $r0;
+        java.lang.Exception $r1;
+        com.dailypedia.MyApplication $r2;
+
+        nop;
+
+        $r0 := @this: com.dailypedia.DownloadAppsInfo;
+
+        specialinvoke $r0.<android.app.Service: void onCreate()>();
+
+     label1:
+        $r2 = staticinvoke <com.dailypedia.MyApplication: com.dailypedia.MyApplication getInstance()>();
+
+        $r0.<com.dailypedia.DownloadAppsInfo: com.dailypedia.MyApplication myApplication> = $r2;
+
+        specialinvoke $r0.<com.dailypedia.DownloadAppsInfo: void startDownLoadThread()>();
+
+     label2:
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        virtualinvoke $r1.<java.lang.Exception: void printStackTrace()>();
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public void onDestroy()
+    {
+        com.dailypedia.DownloadAppsInfo $r0;
+        java.lang.Throwable $r1;
+        java.lang.Thread $r2;
+        java.lang.InterruptedException r3;
+        null_type varReplacer246;
+
+        nop;
+
+        $r0 := @this: com.dailypedia.DownloadAppsInfo;
+
+        $r2 = $r0.<com.dailypedia.DownloadAppsInfo: java.lang.Thread thread>;
+
+     label1:
+        virtualinvoke $r2.<java.lang.Thread: void join()>();
+
+     label2:
+        varReplacer246 = null;
+
+        $r0.<com.dailypedia.DownloadAppsInfo: java.lang.Thread thread> = varReplacer246;
+
+        specialinvoke $r0.<android.app.Service: void onDestroy()>();
+
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        r3 = (java.lang.InterruptedException) $r1;
+
+        virtualinvoke r3.<java.lang.InterruptedException: void printStackTrace()>();
+
+        goto label2;
+
+        catch java.lang.InterruptedException from label1 to label2 with label3;
+    }
+
+    public int onStartCommand(android.content.Intent, int, int)
+    {
+        com.dailypedia.DownloadAppsInfo $r0;
+        android.content.Intent $r1;
+        int $i0, $i1, varReplacer245;
+        java.lang.Exception $r2;
+        boolean $z0;
+        java.lang.Thread $r3;
+
+        nop;
+
+        $r0 := @this: com.dailypedia.DownloadAppsInfo;
+
+        $r1 := @parameter0: android.content.Intent;
+
+        $i0 := @parameter1: int;
+
+        $i1 := @parameter2: int;
+
+     label1:
+        $r3 = $r0.<com.dailypedia.DownloadAppsInfo: java.lang.Thread thread>;
+
+        $z0 = virtualinvoke $r3.<java.lang.Thread: boolean isAlive()>();
+
+     label2:
+        if $z0 != 0 goto label4;
+
+     label3:
+        $r3 = $r0.<com.dailypedia.DownloadAppsInfo: java.lang.Thread thread>;
+
+        virtualinvoke $r3.<java.lang.Thread: void start()>();
+
+     label4:
+        varReplacer245 = 1;
+
+        return varReplacer245;
+
+     label5:
+        $r2 := @caughtexception;
+
+        virtualinvoke $r2.<java.lang.Exception: void printStackTrace()>();
+
+        goto label4;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+}

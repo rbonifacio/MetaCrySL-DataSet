@@ -1,9 +1,104 @@
 Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.bg.riseofthedough-0B0F7E5D687CBA7211ABA6E2A346AB1CE59C1C1872F26809D8DBE86046CD5D38.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: 5a54f705314d6605f4cf61ba388d3b495336c885c3ea98cfb7cec081c65981da
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer450)
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: d097f7dbcbd79cb3d636501edc7c3c46f5bd41678294a627bc8a434edac82b57
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer751)
+		Method: <com.unity3d.ads.android.UnityAdsUtils: java.lang.String Md5(java.lang.String)>
+		SHA-256: ff40ef24649c85c3d753a8c9c89b849e99bd23b3d1fdecafe43838cc10473a6b
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.unity3d.ads.android.UnityAdsUtils: java.lang.String Md5(java.lang.String)>
+		SHA-256: 530345c693e166b8bbdd8d3e249ec9bad7f6a43c03748cf8dd18adf5f5d343f2
+		Secure: false
+
+Findings in Java Class: com.unity3d.player.UnityPlayer
+
+	 in Method: java.lang.String a(java.lang.String)
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #d097f7dbcbd79cb3d636501edc7c3c46f5bd41678294a627bc8a434edac82b57)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte[]),java.security.MessageDigest: void update(byte)
+			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #d097f7dbcbd79cb3d636501edc7c3c46f5bd41678294a627bc8a434edac82b57)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer450)
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #d097f7dbcbd79cb3d636501edc7c3c46f5bd41678294a627bc8a434edac82b57)
+			Third parameter (with value 0)Variable pre_lenmust be  greater than pre_off
+			at statement: virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r1, varReplacer447, $i3)
+
+
+Findings in Java Class: com.unity3d.ads.android.UnityAdsUtils
+
+	 in Method: java.lang.String Md5(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #ff40ef24649c85c3d753a8c9c89b849e99bd23b3d1fdecafe43838cc10473a6b)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer751)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #ff40ef24649c85c3d753a8c9c89b849e99bd23b3d1fdecafe43838cc10473a6b)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r2 = $r3
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	TypestateError: 1
+	IncompleteOperationError: 1
+	ConstraintError: 3
+=====================================================================

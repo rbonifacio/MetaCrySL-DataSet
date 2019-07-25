@@ -1,0 +1,2060 @@
+class com.glog.a.Util extends java.lang.Object
+{
+    private static final java.lang.String TAG;
+    private static boolean adOpt;
+    private static java.lang.String adv_id;
+    private static java.lang.String apiKey;
+    private static java.lang.String appID;
+    private static java.lang.String deviceUniqueness;
+    private static java.lang.String imei;
+    private static java.lang.String imei_sha;
+    private static long lastLocationTime;
+    private static java.lang.String latitude;
+    private static float locAccuracy;
+    private static java.lang.String locProvider;
+    private static java.lang.String locType;
+    private static java.lang.String longitude;
+    private static java.lang.String orientation;
+    private static java.lang.String sessionId;
+    public static boolean useConfig;
+    private static java.lang.String user_agent;
+
+    static void <clinit>()
+    {
+        java.lang.String varReplacer2024, varReplacer2025, varReplacer2026, varReplacer2029, varReplacer2030;
+        int varReplacer2027;
+        long varReplacer2028;
+
+        nop;
+
+        varReplacer2024 = "airplay";
+
+        <com.glog.a.Util: java.lang.String apiKey> = varReplacer2024;
+
+        varReplacer2025 = "0";
+
+        <com.glog.a.Util: java.lang.String longitude> = varReplacer2025;
+
+        varReplacer2026 = "0";
+
+        <com.glog.a.Util: java.lang.String latitude> = varReplacer2026;
+
+        varReplacer2028 = 0L;
+
+        <com.glog.a.Util: long lastLocationTime> = varReplacer2028;
+
+        varReplacer2029 = "1";
+
+        <com.glog.a.Util: java.lang.String orientation> = varReplacer2029;
+
+        varReplacer2030 = "0";
+
+        <com.glog.a.Util: java.lang.String sessionId> = varReplacer2030;
+
+        varReplacer2027 = 0;
+
+        <com.glog.a.Util: boolean useConfig> = varReplacer2027;
+
+        return;
+    }
+
+    void <init>()
+    {
+        com.glog.a.Util $r0;
+
+        $r0 := @this: com.glog.a.Util;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static java.lang.String canInstallNonMarket(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.Exception $r1;
+        int $i0;
+        android.content.ContentResolver $r2;
+        java.lang.String $r3, varReplacer3203, varReplacer3204, varReplacer3205;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 17 goto label3;
+
+     label1:
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        varReplacer3205 = "install_non_market_apps";
+
+        $r3 = staticinvoke <android.provider.Settings$Global: java.lang.String getString(android.content.ContentResolver,java.lang.String)>($r2, varReplacer3205);
+
+     label2:
+        return $r3;
+
+     label3:
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        varReplacer3204 = "install_non_market_apps";
+
+        $r3 = staticinvoke <android.provider.Settings$Secure: java.lang.String getString(android.content.ContentResolver,java.lang.String)>($r2, varReplacer3204);
+
+     label4:
+        return $r3;
+
+     label5:
+        $r1 := @caughtexception;
+
+        $r3 = virtualinvoke $r1.<java.lang.Exception: java.lang.String getMessage()>();
+
+        staticinvoke <com.glog.a.Util: void printError(java.lang.String,java.lang.Throwable)>($r3, $r1);
+
+        varReplacer3203 = "0";
+
+        return varReplacer3203;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    static boolean checkInternetConnection(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.Exception $r1;
+        java.lang.Object $r2;
+        android.net.ConnectivityManager $r3;
+        android.net.NetworkInfo $r4;
+        boolean $z0;
+        java.lang.String $r5, varReplacer3098, varReplacer3099, varReplacer3102;
+        int varReplacer3097, varReplacer3100, varReplacer3101;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+     label1:
+        varReplacer3102 = "connectivity";
+
+        $r2 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer3102);
+
+        $r3 = (android.net.ConnectivityManager) $r2;
+
+        $r4 = virtualinvoke $r3.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+     label2:
+        if $r4 == null goto label5;
+
+     label3:
+        $z0 = virtualinvoke $r4.<android.net.NetworkInfo: boolean isConnected()>();
+
+     label4:
+        if $z0 == 0 goto label5;
+
+        varReplacer3097 = 1;
+
+        return varReplacer3097;
+
+     label5:
+        varReplacer3098 = "PandaSDK";
+
+        varReplacer3099 = "Internet connection not found.";
+
+        staticinvoke <com.glog.a.Log: void e(java.lang.String,java.lang.String)>(varReplacer3098, varReplacer3099);
+
+     label6:
+        varReplacer3100 = 0;
+
+        return varReplacer3100;
+
+     label7:
+        $r1 := @caughtexception;
+
+        $r5 = virtualinvoke $r1.<java.lang.Exception: java.lang.String getMessage()>();
+
+        staticinvoke <com.glog.a.Util: void printError(java.lang.String,java.lang.Throwable)>($r5, $r1);
+
+        varReplacer3101 = 0;
+
+        return varReplacer3101;
+
+        catch java.lang.Exception from label1 to label2 with label7;
+        catch java.lang.Exception from label3 to label4 with label7;
+        catch java.lang.Exception from label5 to label6 with label7;
+    }
+
+    static final java.lang.String convertToMD5(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer2946, varReplacer2947, varReplacer2948, varReplacer2949;
+        java.lang.Exception $r1;
+        java.math.BigInteger $r2;
+        java.security.MessageDigest $r3;
+        byte[] $r4;
+        int $i0, varReplacer2945, varReplacer2950;
+        java.lang.Object[] $r5;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer2948 = "MD5";
+
+        $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2948);
+
+        $r4 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        varReplacer2950 = 0;
+
+        virtualinvoke $r3.<java.security.MessageDigest: void update(byte[],int,int)>($r4, varReplacer2950, $i0);
+
+        $r5 = newarray (java.lang.Object)[1];
+
+     label2:
+        $r2 = new java.math.BigInteger;
+
+     label3:
+        $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>();
+
+        varReplacer2945 = 1;
+
+        specialinvoke $r2.<java.math.BigInteger: void <init>(int,byte[])>(varReplacer2945, $r4);
+
+        $r5[0] = $r2;
+
+        varReplacer2949 = "%032x";
+
+        $r0 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer2949, $r5);
+
+     label4:
+        return $r0;
+
+     label5:
+        $r1 := @caughtexception;
+
+        varReplacer2946 = "Error converting to MD5";
+
+        staticinvoke <com.glog.a.Util: void printError(java.lang.String,java.lang.Throwable)>(varReplacer2946, $r1);
+
+        varReplacer2947 = "";
+
+        return varReplacer2947;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    static final java.lang.String convertToSHA(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer3249, varReplacer3252, varReplacer3254;
+        java.lang.Exception $r1;
+        java.security.MessageDigest $r2;
+        byte[] $r3;
+        int $i0, varReplacer3250, varReplacer3251, varReplacer3253;
+        java.math.BigInteger $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer3249 = "SHA-1";
+
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3249);
+
+        $r3 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        varReplacer3250 = 0;
+
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r3, varReplacer3250, $i0);
+
+     label2:
+        $r4 = new java.math.BigInteger;
+
+     label3:
+        $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>();
+
+        varReplacer3253 = 1;
+
+        specialinvoke $r4.<java.math.BigInteger: void <init>(int,byte[])>(varReplacer3253, $r3);
+
+        varReplacer3251 = 16;
+
+        $r0 = virtualinvoke $r4.<java.math.BigInteger: java.lang.String toString(int)>(varReplacer3251);
+
+     label4:
+        return $r0;
+
+     label5:
+        $r1 := @caughtexception;
+
+        varReplacer3254 = "Error converting to SHA";
+
+        staticinvoke <com.glog.a.Util: void printError(java.lang.String,java.lang.Throwable)>(varReplacer3254, $r1);
+
+        varReplacer3252 = "";
+
+        return varReplacer3252;
+
+        catch java.lang.Exception from label1 to label2 with label5;
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    static boolean getAdOpt()
+    {
+        boolean z0;
+
+        nop;
+
+        z0 = <com.glog.a.Util: boolean adOpt>;
+
+        return z0;
+    }
+
+    static java.lang.String getAdvID()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.glog.a.Util: java.lang.String adv_id>;
+
+        return r0;
+    }
+
+    static java.lang.String getAndroidId(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.math.BigInteger $r1;
+        android.content.ContentResolver $r2;
+        java.lang.String $r3, $r5;
+        java.lang.StringBuilder $r4;
+        java.security.MessageDigest $r6;
+        byte[] $r7;
+        int $i0;
+        java.lang.Object[] $r8;
+        java.lang.NullPointerException $r9;
+        java.lang.Exception $r10;
+
+        $r0 := @parameter0: android.content.Context;
+
+        if $r0 != null goto label01;
+
+        return "";
+
+     label01:
+        $r0 = virtualinvoke $r0.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $r3 = staticinvoke <android.provider.Settings$Secure: java.lang.String getString(android.content.ContentResolver,java.lang.String)>($r2, "android_id");
+
+     label02:
+        $r4 = new java.lang.StringBuilder;
+
+     label03:
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(java.lang.String)>("Android ID: ");
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.glog.a.Util: void printDebugLog(java.lang.String)>($r5);
+
+        $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("MD5");
+
+        $r7 = virtualinvoke $r3.<java.lang.String: byte[] getBytes()>();
+
+        $i0 = virtualinvoke $r3.<java.lang.String: int length()>();
+
+        virtualinvoke $r6.<java.security.MessageDigest: void update(byte[],int,int)>($r7, 0, $i0);
+
+     label04:
+        $r8 = newarray (java.lang.Object)[1];
+
+     label05:
+        $r1 = new java.math.BigInteger;
+
+     label06:
+        $r7 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>();
+
+        specialinvoke $r1.<java.math.BigInteger: void <init>(int,byte[])>(1, $r7);
+
+        $r8[0] = $r1;
+
+        $r3 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("%032x", $r8);
+
+     label07:
+        return $r3;
+
+     label08:
+        $r9 := @caughtexception;
+
+        staticinvoke <com.glog.a.Log: void e(java.lang.String,java.lang.String)>("PandaSDK", "Android Id not found.");
+
+     label09:
+        return "NOT FOUND";
+
+     label10:
+        $r10 := @caughtexception;
+
+        $r3 = virtualinvoke $r10.<java.lang.Exception: java.lang.String getMessage()>();
+
+        staticinvoke <com.glog.a.Log: void e(java.lang.String,java.lang.String,java.lang.Throwable)>("PandaSDK", $r3, $r10);
+
+        goto label09;
+
+        catch java.lang.NullPointerException from label01 to label02 with label08;
+        catch java.lang.NullPointerException from label03 to label04 with label08;
+        catch java.lang.NullPointerException from label06 to label07 with label08;
+        catch java.lang.Exception from label01 to label02 with label10;
+        catch java.lang.Exception from label03 to label05 with label10;
+        catch java.lang.Exception from label06 to label07 with label10;
+    }
+
+    static java.lang.String getAndroidIdSHA(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.content.ContentResolver $r1;
+        java.lang.String $r2;
+        java.security.MessageDigest $r3;
+        byte[] $r4;
+        int $i0;
+        java.math.BigInteger $r5;
+        java.lang.NullPointerException $r6;
+        java.lang.Exception $r7;
+
+        $r0 := @parameter0: android.content.Context;
+
+        if $r0 != null goto label1;
+
+        return "";
+
+     label1:
+        $r0 = virtualinvoke $r0.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.ContentResolver getContentResolver()>();
+
+        $r2 = staticinvoke <android.provider.Settings$Secure: java.lang.String getString(android.content.ContentResolver,java.lang.String)>($r1, "android_id");
+
+        $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("SHA-1");
+
+        $r4 = virtualinvoke $r2.<java.lang.String: byte[] getBytes()>();
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        virtualinvoke $r3.<java.security.MessageDigest: void update(byte[],int,int)>($r4, 0, $i0);
+
+     label2:
+        $r5 = new java.math.BigInteger;
+
+     label3:
+        $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>();
+
+        specialinvoke $r5.<java.math.BigInteger: void <init>(int,byte[])>(1, $r4);
+
+        $r2 = virtualinvoke $r5.<java.math.BigInteger: java.lang.String toString(int)>(16);
+
+     label4:
+        return $r2;
+
+     label5:
+        $r6 := @caughtexception;
+
+        staticinvoke <com.glog.a.Log: void e(java.lang.String,java.lang.String)>("PandaSDK", "Android Id not found.");
+
+     label6:
+        return "NOT FOUND";
+
+     label7:
+        $r7 := @caughtexception;
+
+        $r2 = virtualinvoke $r7.<java.lang.Exception: java.lang.String getMessage()>();
+
+        staticinvoke <com.glog.a.Log: void e(java.lang.String,java.lang.String,java.lang.Throwable)>("PandaSDK", $r2, $r7);
+
+        goto label6;
+
+        catch java.lang.NullPointerException from label1 to label2 with label5;
+        catch java.lang.NullPointerException from label3 to label4 with label5;
+        catch java.lang.Exception from label1 to label2 with label7;
+        catch java.lang.Exception from label3 to label4 with label7;
+    }
+
+    static java.lang.String getAndroidVersion()
+    {
+        int $i0;
+        java.lang.StringBuilder $r0;
+        java.lang.String $r1;
+
+        nop;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        $r0 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r1;
+    }
+
+    static java.lang.String getApiKey()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.glog.a.Util: java.lang.String apiKey>;
+
+        return r0;
+    }
+
+    static java.lang.String getAppId()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.glog.a.Util: java.lang.String appID>;
+
+        return r0;
+    }
+
+    static java.lang.String getAppName(android.content.Context)
+    {
+        android.content.Context $r0;
+        boolean $z0;
+        android.content.pm.PackageManager $r1;
+        java.lang.String $r2, varReplacer3206, varReplacer3207, varReplacer3208, varReplacer3212, varReplacer3213;
+        android.content.pm.ApplicationInfo $r3;
+        java.lang.CharSequence $r4;
+        java.lang.Object $r5;
+        java.lang.Exception $r6, $r8;
+        android.content.SharedPreferences $r7;
+        int varReplacer3209, varReplacer3210;
+        null_type varReplacer3211, varReplacer3214;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $z0 = <com.glog.a.Util: boolean useConfig>;
+
+        if $z0 == 0 goto label10;
+
+     label01:
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+     label02:
+        $r2 = staticinvoke <com.glog.a.Util: java.lang.String getPackageName(android.content.Context)>($r0);
+
+        varReplacer3210 = 0;
+
+        $r3 = virtualinvoke $r1.<android.content.pm.PackageManager: android.content.pm.ApplicationInfo getApplicationInfo(java.lang.String,int)>($r2, varReplacer3210);
+
+     label03:
+        if $r3 == null goto label09;
+
+     label04:
+        $r4 = virtualinvoke $r1.<android.content.pm.PackageManager: java.lang.CharSequence getApplicationLabel(android.content.pm.ApplicationInfo)>($r3);
+
+     label05:
+        $r5 = $r4;
+
+     label06:
+        $r2 = (java.lang.String) $r5;
+
+     label07:
+        return $r2;
+
+     label08:
+        $r6 := @caughtexception;
+
+        $r3 = null;
+
+        goto label03;
+
+     label09:
+        $r5 = "(unknown)";
+
+        goto label06;
+
+     label10:
+        varReplacer3208 = "panda";
+
+        varReplacer3209 = 0;
+
+        $r7 = virtualinvoke $r0.<android.content.Context: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>(varReplacer3208, varReplacer3209);
+
+     label11:
+        if $r7 == null goto label18;
+
+     label12:
+        varReplacer3211 = null;
+
+        $z0 = virtualinvoke $r7.<java.lang.Object: boolean equals(java.lang.Object)>(varReplacer3211);
+
+     label13:
+        if $z0 != 0 goto label18;
+
+     label14:
+        varReplacer3212 = "appname";
+
+        $z0 = interfaceinvoke $r7.<android.content.SharedPreferences: boolean contains(java.lang.String)>(varReplacer3212);
+
+     label15:
+        if $z0 == 0 goto label18;
+
+     label16:
+        varReplacer3213 = "appname";
+
+        varReplacer3214 = null;
+
+        $r2 = interfaceinvoke $r7.<android.content.SharedPreferences: java.lang.String getString(java.lang.String,java.lang.String)>(varReplacer3213, varReplacer3214);
+
+     label17:
+        return $r2;
+
+     label18:
+        varReplacer3207 = "(unknown)";
+
+        return varReplacer3207;
+
+     label19:
+        $r8 := @caughtexception;
+
+        $r2 = virtualinvoke $r8.<java.lang.Exception: java.lang.String getMessage()>();
+
+        staticinvoke <com.glog.a.Util: void printError(java.lang.String,java.lang.Throwable)>($r2, $r8);
+
+        varReplacer3206 = "";
+
+        return varReplacer3206;
+
+        catch java.lang.Exception from label01 to label02 with label19;
+        catch java.lang.Exception from label02 to label03 with label08;
+        catch java.lang.Exception from label04 to label05 with label19;
+        catch java.lang.Exception from label06 to label07 with label19;
+        catch java.lang.Exception from label10 to label11 with label19;
+        catch java.lang.Exception from label12 to label13 with label19;
+        catch java.lang.Exception from label14 to label15 with label19;
+        catch java.lang.Exception from label16 to label17 with label19;
+    }
+
+    static java.lang.String getCarrier(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.String varReplacer3247, varReplacer3248;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        if $r0 != null goto label1;
+
+        varReplacer3248 = "";
+
+        return varReplacer3248;
+
+     label1:
+        varReplacer3247 = "";
+
+        return varReplacer3247;
+    }
+
+    static java.lang.String[] getCountry(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.location.Geocoder $r1;
+        java.lang.String[] $r2;
+        java.lang.String $r3, varReplacer3195, varReplacer3196, varReplacer3198, varReplacer3201;
+        boolean $z0;
+        double $d0, $d1;
+        java.util.List $r4;
+        java.lang.Object $r5;
+        android.location.Address $r6;
+        java.lang.StringBuilder $r7;
+        java.lang.Exception $r8;
+        int varReplacer3197, varReplacer3199, varReplacer3200, varReplacer3202;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r2 = newarray (java.lang.String)[2];
+
+        $r1 = new android.location.Geocoder;
+
+     label01:
+        specialinvoke $r1.<android.location.Geocoder: void <init>(android.content.Context)>($r0);
+
+     label02:
+        $r3 = <com.glog.a.Util: java.lang.String latitude>;
+
+        if $r3 == null goto label17;
+
+        $r3 = <com.glog.a.Util: java.lang.String latitude>;
+
+     label03:
+        varReplacer3201 = "invalid";
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer3201);
+
+     label04:
+        if $z0 != 0 goto label17;
+
+        $r3 = <com.glog.a.Util: java.lang.String longitude>;
+
+        if $r3 == null goto label17;
+
+        $r3 = <com.glog.a.Util: java.lang.String longitude>;
+
+     label05:
+        varReplacer3195 = "invalid";
+
+        $z0 = virtualinvoke $r3.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer3195);
+
+     label06:
+        if $z0 == 0 goto label07;
+
+        return $r2;
+
+     label07:
+        $r3 = <com.glog.a.Util: java.lang.String latitude>;
+
+     label08:
+        $d0 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r3);
+
+     label09:
+        $r3 = <com.glog.a.Util: java.lang.String longitude>;
+
+     label10:
+        $d1 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r3);
+
+        varReplacer3199 = 1;
+
+        $r4 = virtualinvoke $r1.<android.location.Geocoder: java.util.List getFromLocation(double,double,int)>($d0, $d1, varReplacer3199);
+
+        $z0 = interfaceinvoke $r4.<java.util.List: boolean isEmpty()>();
+
+     label11:
+        if $z0 != 0 goto label17;
+
+     label12:
+        varReplacer3202 = 0;
+
+        $r5 = interfaceinvoke $r4.<java.util.List: java.lang.Object get(int)>(varReplacer3202);
+
+        $r6 = (android.location.Address) $r5;
+
+        $r3 = virtualinvoke $r6.<android.location.Address: java.lang.String getCountryName()>();
+
+        $r2[0] = $r3;
+
+        varReplacer3200 = 0;
+
+        $r5 = interfaceinvoke $r4.<java.util.List: java.lang.Object get(int)>(varReplacer3200);
+
+        $r6 = (android.location.Address) $r5;
+
+        $r3 = virtualinvoke $r6.<android.location.Address: java.lang.String getPostalCode()>();
+
+        $r2[1] = $r3;
+
+     label13:
+        $r7 = new java.lang.StringBuilder;
+
+     label14:
+        varReplacer3198 = "Postal Code: ";
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>(java.lang.String)>(varReplacer3198);
+
+        $r3 = $r2[1];
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer3196 = " Country Code: ";
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3196);
+
+        varReplacer3197 = 0;
+
+        $r5 = interfaceinvoke $r4.<java.util.List: java.lang.Object get(int)>(varReplacer3197);
+
+        $r6 = (android.location.Address) $r5;
+
+        $r3 = virtualinvoke $r6.<android.location.Address: java.lang.String getCountryCode()>();
+
+        $r7 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.glog.a.Util: void printDebugLog(java.lang.String)>($r3);
+
+     label15:
+        return $r2;
+
+     label16:
+        $r8 := @caughtexception;
+
+     label17:
+        return $r2;
+
+        catch java.lang.Exception from label01 to label02 with label16;
+        catch java.lang.Exception from label03 to label04 with label16;
+        catch java.lang.Exception from label05 to label06 with label16;
+        catch java.lang.Exception from label08 to label09 with label16;
+        catch java.lang.Exception from label10 to label11 with label16;
+        catch java.lang.Exception from label12 to label13 with label16;
+        catch java.lang.Exception from label14 to label15 with label16;
+    }
+
+    static java.lang.String getDPI(android.content.Context)
+    {
+        android.content.Context $r0;
+        int $i0;
+        android.content.res.Resources $r1;
+        android.util.DisplayMetrics $r2;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r4;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r2 = virtualinvoke $r1.<android.content.res.Resources: android.util.DisplayMetrics getDisplayMetrics()>();
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $i0 = $r2.<android.util.DisplayMetrics: int densityDpi>;
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r4;
+    }
+
+    static java.lang.String getDate()
+    {
+        java.text.SimpleDateFormat $r0;
+        java.lang.StringBuilder $r1;
+        java.util.Date $r2;
+        java.lang.String $r3, varReplacer2951, varReplacer2952, varReplacer2955, varReplacer2956, varReplacer2957;
+        java.util.TimeZone $r4;
+        java.lang.Exception $r5;
+        int varReplacer2953, varReplacer2954;
+
+        nop;
+
+        $r0 = new java.text.SimpleDateFormat;
+
+     label1:
+        varReplacer2955 = "yyyy-MM-dd HH:mm:ss";
+
+        specialinvoke $r0.<java.text.SimpleDateFormat: void <init>(java.lang.String)>(varReplacer2955);
+
+     label2:
+        $r1 = new java.lang.StringBuilder;
+
+     label3:
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+     label4:
+        $r2 = new java.util.Date;
+
+     label5:
+        specialinvoke $r2.<java.util.Date: void <init>()>();
+
+        $r3 = virtualinvoke $r0.<java.text.SimpleDateFormat: java.lang.String format(java.util.Date)>($r2);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer2952 = "_";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer2952);
+
+        $r4 = virtualinvoke $r0.<java.text.SimpleDateFormat: java.util.TimeZone getTimeZone()>();
+
+        $r3 = virtualinvoke $r4.<java.util.TimeZone: java.lang.String getDisplayName()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer2951 = "_";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer2951);
+
+        $r4 = virtualinvoke $r0.<java.text.SimpleDateFormat: java.util.TimeZone getTimeZone()>();
+
+        $r3 = virtualinvoke $r4.<java.util.TimeZone: java.lang.String getID()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        varReplacer2956 = "_";
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer2956);
+
+        $r4 = virtualinvoke $r0.<java.text.SimpleDateFormat: java.util.TimeZone getTimeZone()>();
+
+        varReplacer2953 = 0;
+
+        varReplacer2954 = 0;
+
+        $r3 = virtualinvoke $r4.<java.util.TimeZone: java.lang.String getDisplayName(boolean,int)>(varReplacer2953, varReplacer2953);
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r3);
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label6:
+        return $r3;
+
+     label7:
+        $r5 := @caughtexception;
+
+        varReplacer2957 = "00";
+
+        return varReplacer2957;
+
+        catch java.lang.Exception from label1 to label2 with label7;
+        catch java.lang.Exception from label3 to label4 with label7;
+        catch java.lang.Exception from label5 to label6 with label7;
+    }
+
+    static java.lang.String getDeviceUniqueness()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.glog.a.Util: java.lang.String deviceUniqueness>;
+
+        return r0;
+    }
+
+    protected static int getDisplayHeight(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.graphics.Point $r1;
+        java.lang.Object $r2;
+        android.view.WindowManager $r3;
+        android.view.Display $r4;
+        int $i0;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r2 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("window");
+
+        $r3 = (android.view.WindowManager) $r2;
+
+        $r4 = interfaceinvoke $r3.<android.view.WindowManager: android.view.Display getDefaultDisplay()>();
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 13 goto label1;
+
+        $r1 = new android.graphics.Point;
+
+        specialinvoke $r1.<android.graphics.Point: void <init>()>();
+
+        virtualinvoke $r4.<android.view.Display: void getSize(android.graphics.Point)>($r1);
+
+        $i0 = $r1.<android.graphics.Point: int y>;
+
+        return $i0;
+
+     label1:
+        $i0 = virtualinvoke $r4.<android.view.Display: int getHeight()>();
+
+        return $i0;
+    }
+
+    protected static int getDisplayWidth(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.graphics.Point $r1;
+        java.lang.Object $r2;
+        android.view.WindowManager $r3;
+        android.view.Display $r4;
+        int $i0;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r2 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>("window");
+
+        $r3 = (android.view.WindowManager) $r2;
+
+        $r4 = interfaceinvoke $r3.<android.view.WindowManager: android.view.Display getDefaultDisplay()>();
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 13 goto label1;
+
+        $r1 = new android.graphics.Point;
+
+        specialinvoke $r1.<android.graphics.Point: void <init>()>();
+
+        virtualinvoke $r4.<android.view.Display: void getSize(android.graphics.Point)>($r1);
+
+        $i0 = $r1.<android.graphics.Point: int x>;
+
+        return $i0;
+
+     label1:
+        $i0 = virtualinvoke $r4.<android.view.Display: int getWidth()>();
+
+        return $i0;
+    }
+
+    static java.lang.String getImei()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.glog.a.Util: java.lang.String imei>;
+
+        return r0;
+    }
+
+    public static java.lang.String getImeiSHA()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.glog.a.Util: java.lang.String imei_sha>;
+
+        return r0;
+    }
+
+    static java.lang.String getLanguage()
+    {
+        java.util.Locale $r0;
+        java.lang.String $r1;
+
+        nop;
+
+        $r0 = staticinvoke <java.util.Locale: java.util.Locale getDefault()>();
+
+        $r1 = virtualinvoke $r0.<java.util.Locale: java.lang.String getDisplayLanguage()>();
+
+        return $r1;
+    }
+
+    static long getLastLocationTime()
+    {
+        long l0;
+
+        nop;
+
+        l0 = <com.glog.a.Util: long lastLocationTime>;
+
+        return l0;
+    }
+
+    static java.lang.String getLatitude()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.glog.a.Util: java.lang.String latitude>;
+
+        return r0;
+    }
+
+    public static float getLocAccuracy()
+    {
+        float f0;
+
+        nop;
+
+        f0 = <com.glog.a.Util: float locAccuracy>;
+
+        return f0;
+    }
+
+    public static java.lang.String getLocProvider()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.glog.a.Util: java.lang.String locProvider>;
+
+        return r0;
+    }
+
+    public static java.lang.String getLocType()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.glog.a.Util: java.lang.String locType>;
+
+        return r0;
+    }
+
+    static java.lang.String getLongitude()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.glog.a.Util: java.lang.String longitude>;
+
+        return r0;
+    }
+
+    static java.lang.String getManufacturer()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <android.os.Build: java.lang.String MANUFACTURER>;
+
+        return r0;
+    }
+
+    static java.lang.String getNetworkOperator(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.String varReplacer3235, varReplacer3236;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        if $r0 != null goto label1;
+
+        varReplacer3235 = "";
+
+        return varReplacer3235;
+
+     label1:
+        varReplacer3236 = "";
+
+        return varReplacer3236;
+    }
+
+    static java.lang.String getNetworkSubType(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.Object $r1;
+        android.net.ConnectivityManager $r2;
+        android.net.NetworkInfo $r3;
+        boolean $z0;
+        java.lang.String $r4, varReplacer3220, varReplacer3221, varReplacer3222;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        if $r0 == null goto label1;
+
+        varReplacer3220 = "connectivity";
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer3220);
+
+        $r2 = (android.net.ConnectivityManager) $r1;
+
+        $r3 = virtualinvoke $r2.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+        if $r3 == null goto label1;
+
+        $z0 = virtualinvoke $r3.<android.net.NetworkInfo: boolean isConnected()>();
+
+        if $z0 == 0 goto label1;
+
+        $r4 = virtualinvoke $r3.<android.net.NetworkInfo: java.lang.String getTypeName()>();
+
+        varReplacer3221 = "WIFI";
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer3221);
+
+        if $z0 != 0 goto label1;
+
+        $r4 = virtualinvoke $r3.<android.net.NetworkInfo: java.lang.String getSubtypeName()>();
+
+        return $r4;
+
+     label1:
+        varReplacer3222 = "";
+
+        return varReplacer3222;
+    }
+
+    static java.lang.String getOrientation()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.glog.a.Util: java.lang.String orientation>;
+
+        return r0;
+    }
+
+    static java.lang.String getPackageName(android.content.Context)
+    {
+        android.content.Context $r0;
+        boolean $z0;
+        java.lang.String $r1, varReplacer3078, varReplacer3079, varReplacer3081, varReplacer3084;
+        android.content.SharedPreferences $r2;
+        java.lang.Exception $r3;
+        null_type varReplacer3080, varReplacer3083;
+        int varReplacer3082;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $z0 = <com.glog.a.Util: boolean useConfig>;
+
+        if $z0 == 0 goto label03;
+
+     label01:
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.String getPackageName()>();
+
+     label02:
+        return $r1;
+
+     label03:
+        varReplacer3081 = "panda";
+
+        varReplacer3082 = 0;
+
+        $r2 = virtualinvoke $r0.<android.content.Context: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>(varReplacer3081, varReplacer3082);
+
+     label04:
+        if $r2 == null goto label12;
+
+     label05:
+        varReplacer3083 = null;
+
+        $z0 = virtualinvoke $r2.<java.lang.Object: boolean equals(java.lang.Object)>(varReplacer3083);
+
+     label06:
+        if $z0 != 0 goto label12;
+
+     label07:
+        varReplacer3078 = "pkname";
+
+        $z0 = interfaceinvoke $r2.<android.content.SharedPreferences: boolean contains(java.lang.String)>(varReplacer3078);
+
+     label08:
+        if $z0 == 0 goto label12;
+
+     label09:
+        varReplacer3079 = "pkname";
+
+        varReplacer3080 = null;
+
+        $r1 = interfaceinvoke $r2.<android.content.SharedPreferences: java.lang.String getString(java.lang.String,java.lang.String)>(varReplacer3079, varReplacer3080);
+
+     label10:
+        return $r1;
+
+     label11:
+        $r3 := @caughtexception;
+
+     label12:
+        varReplacer3084 = "";
+
+        return varReplacer3084;
+
+        catch java.lang.Exception from label01 to label02 with label11;
+        catch java.lang.Exception from label03 to label04 with label11;
+        catch java.lang.Exception from label05 to label06 with label11;
+        catch java.lang.Exception from label07 to label08 with label11;
+        catch java.lang.Exception from label09 to label10 with label11;
+    }
+
+    static java.lang.String getPhoneModel()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <android.os.Build: java.lang.String MODEL>;
+
+        return r0;
+    }
+
+    static java.lang.String getSDKVersion()
+    {
+        java.lang.String varReplacer3194;
+
+        nop;
+
+        varReplacer3194 = "9.01";
+
+        return varReplacer3194;
+    }
+
+    static java.lang.String getScreenDensity(android.content.Context)
+    {
+        android.content.Context $r0;
+        float $f0;
+        android.content.res.Resources $r1;
+        android.util.DisplayMetrics $r2;
+        java.lang.StringBuilder $r3;
+        java.lang.String $r4;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r2 = virtualinvoke $r1.<android.content.res.Resources: android.util.DisplayMetrics getDisplayMetrics()>();
+
+        $f0 = $r2.<android.util.DisplayMetrics: float density>;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(float)>($f0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r4;
+    }
+
+    static java.lang.String getScreenSize(android.content.Context)
+    {
+        android.content.Context $r0;
+        android.graphics.Point $r1;
+        java.lang.Object $r2;
+        android.view.WindowManager $r3;
+        android.view.Display $r4;
+        int $i0, $i1;
+        java.lang.StringBuilder $r5;
+        java.lang.String $r6, varReplacer3230, varReplacer3231, varReplacer3232, varReplacer3233, varReplacer3234;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        if $r0 == null goto label4;
+
+        varReplacer3232 = "window";
+
+        $r2 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer3232);
+
+        $r3 = (android.view.WindowManager) $r2;
+
+        $r4 = interfaceinvoke $r3.<android.view.WindowManager: android.view.Display getDefaultDisplay()>();
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 < 13 goto label2;
+
+        $r1 = new android.graphics.Point;
+
+        specialinvoke $r1.<android.graphics.Point: void <init>()>();
+
+        virtualinvoke $r4.<android.view.Display: void getSize(android.graphics.Point)>($r1);
+
+        $i0 = $r1.<android.graphics.Point: int x>;
+
+        $i1 = $r1.<android.graphics.Point: int y>;
+
+     label1:
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        varReplacer3233 = "_";
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer3233);
+
+        $r5 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        if $i0 <= $i1 goto label3;
+
+        varReplacer3231 = "2";
+
+        <com.glog.a.Util: java.lang.String orientation> = varReplacer3231;
+
+        return $r6;
+
+     label2:
+        $i0 = virtualinvoke $r4.<android.view.Display: int getWidth()>();
+
+        $i1 = virtualinvoke $r4.<android.view.Display: int getHeight()>();
+
+        goto label1;
+
+     label3:
+        varReplacer3234 = "1";
+
+        <com.glog.a.Util: java.lang.String orientation> = varReplacer3234;
+
+        return $r6;
+
+     label4:
+        varReplacer3230 = "";
+
+        return varReplacer3230;
+    }
+
+    static java.lang.String getSessionId()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.glog.a.Util: java.lang.String sessionId>;
+
+        return r0;
+    }
+
+    public static org.json.JSONObject getSupports(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.Exception $r1;
+        boolean $z0, $z1;
+        int $i0, varReplacer3239, varReplacer3242, varReplacer3244;
+        org.json.JSONObject $r2;
+        java.lang.String $r3, varReplacer3237, varReplacer3238, varReplacer3241, varReplacer3243, varReplacer3245, varReplacer3246;
+        null_type varReplacer3240;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $z0 = 0;
+
+        $z1 = 0;
+
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 <= 7 goto label2;
+
+     label1:
+        varReplacer3245 = "android.intent.action.EDIT";
+
+        $z0 = staticinvoke <com.glog.a.Util: boolean isIntentAvailable(android.content.Context,java.lang.String)>($r0, varReplacer3245);
+
+     label2:
+        $i0 = <android.os.Build$VERSION: int SDK_INT>;
+
+        if $i0 <= 10 goto label3;
+
+        $z1 = 1;
+
+     label3:
+        $r2 = new org.json.JSONObject;
+
+     label4:
+        specialinvoke $r2.<org.json.JSONObject: void <init>()>();
+
+        varReplacer3241 = "sms";
+
+        varReplacer3242 = 0;
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,boolean)>(varReplacer3241, varReplacer3242);
+
+        varReplacer3243 = "tel";
+
+        varReplacer3244 = 0;
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,boolean)>(varReplacer3243, varReplacer3244);
+
+        varReplacer3237 = "calendar";
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,boolean)>(varReplacer3237, $z0);
+
+        varReplacer3238 = "storePictures";
+
+        varReplacer3239 = 1;
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,boolean)>(varReplacer3238, varReplacer3239);
+
+        varReplacer3246 = "inlineVideo";
+
+        virtualinvoke $r2.<org.json.JSONObject: org.json.JSONObject put(java.lang.String,boolean)>(varReplacer3246, $z1);
+
+     label5:
+        return $r2;
+
+     label6:
+        $r1 := @caughtexception;
+
+        $r3 = virtualinvoke $r1.<java.lang.Exception: java.lang.String getMessage()>();
+
+        staticinvoke <com.glog.a.Util: void printError(java.lang.String,java.lang.Throwable)>($r3, $r1);
+
+        varReplacer3240 = null;
+
+        return varReplacer3240;
+
+        catch java.lang.Exception from label1 to label2 with label6;
+        catch java.lang.Exception from label4 to label5 with label6;
+    }
+
+    static java.lang.String getUserAgent()
+    {
+        java.lang.String r0;
+
+        nop;
+
+        r0 = <com.glog.a.Util: java.lang.String user_agent>;
+
+        return r0;
+    }
+
+    static boolean isConnectionFast(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.Exception $r1;
+        java.lang.Object $r2;
+        android.net.ConnectivityManager $r3;
+        android.net.NetworkInfo $r4;
+        boolean $z0;
+        int $i0, varReplacer3223, varReplacer3224, varReplacer3225, varReplacer3226, varReplacer3228;
+        java.lang.String $r5, varReplacer3227, varReplacer3229;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        if $r0 != null goto label02;
+
+     label01:
+        varReplacer3225 = 0;
+
+        return varReplacer3225;
+
+     label02:
+        varReplacer3227 = "connectivity";
+
+        $r2 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer3227);
+
+        $r3 = (android.net.ConnectivityManager) $r2;
+
+        $r4 = virtualinvoke $r3.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+     label03:
+        if $r4 == null goto label16;
+
+     label04:
+        $z0 = virtualinvoke $r4.<android.net.NetworkInfo: boolean isConnected()>();
+
+     label05:
+        if $z0 == 0 goto label16;
+
+     label06:
+        $i0 = virtualinvoke $r4.<android.net.NetworkInfo: int getType()>();
+
+     label07:
+        if $i0 != 1 goto label10;
+
+     label08:
+        varReplacer3229 = "CONNECTED VIA WIFI";
+
+        staticinvoke <com.glog.a.Util: void printDebugLog(java.lang.String)>(varReplacer3229);
+
+     label09:
+        varReplacer3226 = 1;
+
+        return varReplacer3226;
+
+     label10:
+        if $i0 != 0 goto label16;
+
+     label11:
+        $i0 = virtualinvoke $r4.<android.net.NetworkInfo: int getSubtype()>();
+
+     label12:
+        lookupswitch($i0)
+        {
+            case 0: goto label01;
+            case 1: goto label01;
+            case 2: goto label01;
+            case 3: goto label14;
+            case 4: goto label01;
+            case 5: goto label14;
+            case 6: goto label14;
+            case 7: goto label01;
+            case 8: goto label14;
+            case 9: goto label14;
+            case 10: goto label14;
+            case 11: goto label01;
+            case 12: goto label14;
+            case 13: goto label14;
+            case 14: goto label14;
+            case 15: goto label14;
+            default: goto label13;
+        };
+
+     label13:
+        varReplacer3223 = 0;
+
+        return varReplacer3223;
+
+     label14:
+        varReplacer3224 = 1;
+
+        return varReplacer3224;
+
+     label15:
+        $r1 := @caughtexception;
+
+        $r5 = virtualinvoke $r1.<java.lang.Exception: java.lang.String getMessage()>();
+
+        staticinvoke <com.glog.a.Util: void printError(java.lang.String,java.lang.Throwable)>($r5, $r1);
+
+     label16:
+        varReplacer3228 = 0;
+
+        return varReplacer3228;
+
+        catch java.lang.Exception from label02 to label03 with label15;
+        catch java.lang.Exception from label04 to label05 with label15;
+        catch java.lang.Exception from label06 to label07 with label15;
+        catch java.lang.Exception from label08 to label09 with label15;
+        catch java.lang.Exception from label11 to label12 with label15;
+    }
+
+    static boolean isIntentAvailable(android.content.Context, java.lang.String) throws java.lang.NullPointerException, java.lang.Exception
+    {
+        android.content.Context $r0;
+        java.lang.String $r1, varReplacer3258;
+        android.content.Intent $r2;
+        android.content.pm.PackageManager $r3;
+        java.util.List $r4;
+        int $i0, varReplacer3255, varReplacer3256, varReplacer3257;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 := @parameter1: java.lang.String;
+
+        $r3 = virtualinvoke $r0.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $r2 = new android.content.Intent;
+
+        varReplacer3258 = "android.intent.action.EDIT";
+
+        specialinvoke $r2.<android.content.Intent: void <init>(java.lang.String)>(varReplacer3258);
+
+        varReplacer3256 = 65536;
+
+        $r4 = virtualinvoke $r3.<android.content.pm.PackageManager: java.util.List queryIntentActivities(android.content.Intent,int)>($r2, varReplacer3256);
+
+        $i0 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        if $i0 <= 0 goto label1;
+
+        varReplacer3257 = 1;
+
+        return varReplacer3257;
+
+     label1:
+        varReplacer3255 = 0;
+
+        return varReplacer3255;
+    }
+
+    static boolean isTablet(android.content.Context)
+    {
+        android.content.Context $r0, $r1;
+        float $f0, $f1;
+        android.content.res.Resources $r2;
+        android.util.DisplayMetrics $r3;
+        java.lang.Object $r4;
+        android.view.WindowManager $r5;
+        android.view.Display $r6;
+        int $i0, $i1, varReplacer3191, varReplacer3192;
+        byte $b2;
+        java.lang.String varReplacer3193;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        $r1 = virtualinvoke $r0.<android.content.Context: android.content.Context getApplicationContext()>();
+
+        $r2 = virtualinvoke $r1.<android.content.Context: android.content.res.Resources getResources()>();
+
+        $r3 = virtualinvoke $r2.<android.content.res.Resources: android.util.DisplayMetrics getDisplayMetrics()>();
+
+        varReplacer3193 = "window";
+
+        $r4 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer3193);
+
+        $r5 = (android.view.WindowManager) $r4;
+
+        $r6 = interfaceinvoke $r5.<android.view.WindowManager: android.view.Display getDefaultDisplay()>();
+
+        $i0 = virtualinvoke $r6.<android.view.Display: int getWidth()>();
+
+        $i1 = virtualinvoke $r6.<android.view.Display: int getHeight()>();
+
+        $f0 = $r3.<android.util.DisplayMetrics: float density>;
+
+        $f1 = (float) $i0;
+
+        $f1 = $f1 / $f0;
+
+        $b2 = $f1 cmpl 600.0F;
+
+        if $b2 < 0 goto label1;
+
+        $f1 = (float) $i1;
+
+        $f0 = $f1 / $f0;
+
+        $b2 = $f0 cmpl 600.0F;
+
+        if $b2 < 0 goto label1;
+
+        varReplacer3191 = 1;
+
+        return varReplacer3191;
+
+     label1:
+        varReplacer3192 = 0;
+
+        return varReplacer3192;
+    }
+
+    static int isWIFI(android.content.Context)
+    {
+        android.content.Context $r0;
+        java.lang.Object $r1;
+        android.net.ConnectivityManager $r2;
+        android.net.NetworkInfo $r3;
+        boolean $z0;
+        java.lang.String $r4, varReplacer3218, varReplacer3219;
+        int varReplacer3215, varReplacer3216, varReplacer3217;
+
+        nop;
+
+        $r0 := @parameter0: android.content.Context;
+
+        if $r0 != null goto label1;
+
+        varReplacer3215 = 0;
+
+        return varReplacer3215;
+
+     label1:
+        varReplacer3219 = "connectivity";
+
+        $r1 = virtualinvoke $r0.<android.content.Context: java.lang.Object getSystemService(java.lang.String)>(varReplacer3219);
+
+        $r2 = (android.net.ConnectivityManager) $r1;
+
+        $r3 = virtualinvoke $r2.<android.net.ConnectivityManager: android.net.NetworkInfo getActiveNetworkInfo()>();
+
+        if $r3 == null goto label2;
+
+        $z0 = virtualinvoke $r3.<android.net.NetworkInfo: boolean isConnected()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = virtualinvoke $r3.<android.net.NetworkInfo: java.lang.String getTypeName()>();
+
+        varReplacer3218 = "WIFI";
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>(varReplacer3218);
+
+        if $z0 == 0 goto label2;
+
+        varReplacer3216 = 1;
+
+        return varReplacer3216;
+
+     label2:
+        varReplacer3217 = 0;
+
+        return varReplacer3217;
+    }
+
+    static void printDebugLog(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer3005;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        varReplacer3005 = "PandaSDK";
+
+        staticinvoke <com.glog.a.Log: void d(java.lang.String,java.lang.String)>(varReplacer3005, $r0);
+
+        return;
+    }
+
+    static void printError(java.lang.String, java.lang.Throwable)
+    {
+        java.lang.String $r0, varReplacer3004;
+        java.lang.Throwable $r1;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.Throwable;
+
+        varReplacer3004 = "PandaSDK";
+
+        staticinvoke <com.glog.a.Log: void e(java.lang.String,java.lang.String,java.lang.Throwable)>(varReplacer3004, $r0, $r1);
+
+        return;
+    }
+
+    static void setAdOpt(boolean)
+    {
+        boolean $z0;
+
+        nop;
+
+        $z0 := @parameter0: boolean;
+
+        <com.glog.a.Util: boolean adOpt> = $z0;
+
+        return;
+    }
+
+    static void setAdvID(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        <com.glog.a.Util: java.lang.String adv_id> = $r0;
+
+        return;
+    }
+
+    static void setApiKey(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        <com.glog.a.Util: java.lang.String apiKey> = $r0;
+
+        return;
+    }
+
+    static void setAppId(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        <com.glog.a.Util: java.lang.String appID> = $r0;
+
+        return;
+    }
+
+    static void setDeviceUniqueness(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        <com.glog.a.Util: java.lang.String deviceUniqueness> = $r0;
+
+        return;
+    }
+
+    static void setImei(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        <com.glog.a.Util: java.lang.String imei> = $r0;
+
+        return;
+    }
+
+    public static void setImeiSHA(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        <com.glog.a.Util: java.lang.String imei_sha> = $r0;
+
+        return;
+    }
+
+    static void setLastLocationTime(long)
+    {
+        long $l0;
+
+        nop;
+
+        $l0 := @parameter0: long;
+
+        <com.glog.a.Util: long lastLocationTime> = $l0;
+
+        return;
+    }
+
+    static void setLatitude(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        <com.glog.a.Util: java.lang.String latitude> = $r0;
+
+        return;
+    }
+
+    public static void setLocAccuracy(float)
+    {
+        float $f0;
+
+        nop;
+
+        $f0 := @parameter0: float;
+
+        <com.glog.a.Util: float locAccuracy> = $f0;
+
+        return;
+    }
+
+    public static void setLocProvider(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        <com.glog.a.Util: java.lang.String locProvider> = $r0;
+
+        return;
+    }
+
+    public static void setLocType(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer3036;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        varReplacer3036 = "1";
+
+        <com.glog.a.Util: java.lang.String locType> = varReplacer3036;
+
+        return;
+    }
+
+    static void setLongitude(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        <com.glog.a.Util: java.lang.String longitude> = $r0;
+
+        return;
+    }
+
+    static void setSessionID()
+    {
+        java.lang.Exception $r0;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2, varReplacer2938, varReplacer2939;
+
+        nop;
+
+        $r1 = new java.lang.StringBuilder;
+
+        $r2 = <com.glog.a.Util: java.lang.String appID>;
+
+     label1:
+        $r2 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r2);
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>(java.lang.String)>($r2);
+
+        $r2 = staticinvoke <com.glog.a.Util: java.lang.String getDate()>();
+
+        $r1 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r2 = staticinvoke <com.glog.a.Util: java.lang.String convertToMD5(java.lang.String)>($r2);
+
+     label2:
+        <com.glog.a.Util: java.lang.String sessionId> = $r2;
+
+        return;
+
+     label3:
+        $r0 := @caughtexception;
+
+        varReplacer2938 = "PandaSDK";
+
+        varReplacer2939 = "Error occured while generating session id.";
+
+        staticinvoke <com.glog.a.Log: void e(java.lang.String,java.lang.String)>(varReplacer2938, varReplacer2939);
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    static void setUserAgent(java.lang.String)
+    {
+        java.lang.String $r0;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        <com.glog.a.Util: java.lang.String user_agent> = $r0;
+
+        return;
+    }
+}

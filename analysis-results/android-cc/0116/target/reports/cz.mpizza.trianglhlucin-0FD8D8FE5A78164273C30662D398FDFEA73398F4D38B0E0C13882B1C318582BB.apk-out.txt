@@ -1,9 +1,117 @@
 Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/cz.mpizza.trianglhlucin-0FD8D8FE5A78164273C30662D398FDFEA73398F4D38B0E0C13882B1C318582BB.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Alive 142111  5000
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r6
+		Type: java.security.MessageDigest
+		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer890)
+		Method: <com.mixpanel.android.b.d: void <init>(android.content.Context,java.lang.String,com.mixpanel.android.b.g)>
+		SHA-256: a2ba78a747d350a2d630869302b40ad60fe08b9b58e87d01983fa6663e6df289
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: javax.net.ssl.SSLContext
+		Statement: $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer811)
+		Method: <com.mixpanel.android.mpmetrics.ag: void <init>(android.os.Bundle,android.content.Context)>
+		SHA-256: 953bc9d62cce7a7d19252fb17ce05f7420b3656bfe018a6731341a5d6a0d60a3
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1248)
+		Method: <com.a.a.k: java.lang.String a(java.lang.String)>
+		SHA-256: 4b18de46ab411673112a5c5dda369e8e42570cf62d36f2323ff558f0c88ca4ad
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.a.a.k: java.lang.String a(java.lang.String)>
+		SHA-256: ee44a3e63f01034d36b2a0dbf5d6c256fd33f8975a625f507fdffb027f5edcbb
+		Secure: false
+
+Findings in Java Class: com.mixpanel.android.mpmetrics.ag
+
+	 in Method: void <init>(android.os.Bundle,android.content.Context)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer865, varReplacer865, varReplacer865)
+
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #953bc9d62cce7a7d19252fb17ce05f7420b3656bfe018a6731341a5d6a0d60a3)
+			First parameter (with value "TLS") should be any of {TLSv1.2, TLSv1.1, TLSv1, Insecure}
+			at statement: $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer811)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer865, varReplacer865, varReplacer865)
+
+
+Findings in Java Class: com.mixpanel.android.b.d
+
+	 in Method: void <init>(android.content.Context,java.lang.String,com.mixpanel.android.b.g)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #a2ba78a747d350a2d630869302b40ad60fe08b9b58e87d01983fa6663e6df289)
+			First parameter (with value "SHA1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer890)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #a2ba78a747d350a2d630869302b40ad60fe08b9b58e87d01983fa6663e6df289)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r6 = null
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #a2ba78a747d350a2d630869302b40ad60fe08b9b58e87d01983fa6663e6df289)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer890)
+
+
+Findings in Java Class: com.a.a.k
+
+	 in Method: java.lang.String a(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #4b18de46ab411673112a5c5dda369e8e42570cf62d36f2323ff558f0c88ca4ad)
+			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1248)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 2
+	RequiredPredicateError: 2
+	ConstraintError: 3
+=====================================================================

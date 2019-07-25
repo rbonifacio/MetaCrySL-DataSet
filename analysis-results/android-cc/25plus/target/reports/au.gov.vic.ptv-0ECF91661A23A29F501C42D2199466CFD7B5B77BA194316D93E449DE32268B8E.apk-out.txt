@@ -1,9 +1,105 @@
 Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/au.gov.vic.ptv-0ECF91661A23A29F501C42D2199466CFD7B5B77BA194316D93E449DE32268B8E.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer877)
+		Method: <com.android.volley.InternalUtils: java.lang.String sha1Hash(java.lang.String)>
+		SHA-256: e7d30ec1946e7150f60b3f5757dfea2f9967cbbae3d55f0abb92dcd7a03b5baf
+		Secure: false
+	Object:
+		Variable: varReplacer265
+		Type: java.lang.String
+		Statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer265)
+		Method: <au.gov.vic.ptv.api.EncryptionUtil: java.lang.String hmacSha1(java.lang.String,java.lang.String)>
+		SHA-256: e2fb33c44513c968554f9977143026c80e498e9777466f745af252288a6b4f4f
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer265)
+		Method: <au.gov.vic.ptv.api.EncryptionUtil: java.lang.String hmacSha1(java.lang.String,java.lang.String)>
+		SHA-256: 46e8336d279ce79aa6214e36c53ab99221d907c7613217b320abdad26916b33c
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.android.volley.InternalUtils: java.lang.String sha1Hash(java.lang.String)>
+		SHA-256: 9a19a49c55901b0c39c97709d7d8f5821b2dd27fc9657b9d21f54aba78321c4c
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: javax.crypto.Mac
+		Statement: $r5 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer267)
+		Method: <au.gov.vic.ptv.api.EncryptionUtil: java.lang.String hmacSha1(java.lang.String,java.lang.String)>
+		SHA-256: 56059ab9fea2da6bc87fead9381a59973d985d2b83f4143db3edcbc749c866df
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r5.<javax.crypto.Mac: byte[] doFinal(byte[])>($r4)
+		Method: <au.gov.vic.ptv.api.EncryptionUtil: java.lang.String hmacSha1(java.lang.String,java.lang.String)>
+		SHA-256: 7bdbf7226286d2f6fbe6f537852870225c5bb543165be062170ad57f4b683795
+		Secure: true
+
+Findings in Java Class: com.android.volley.InternalUtils
+
+	 in Method: java.lang.String sha1Hash(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #e7d30ec1946e7150f60b3f5757dfea2f9967cbbae3d55f0abb92dcd7a03b5baf)
+			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer877)
+
+
+Findings in Java Class: au.gov.vic.ptv.api.EncryptionUtil
+
+	 in Method: java.lang.String hmacSha1(java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer265)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 1
+	RequiredPredicateError: 1
+=====================================================================

@@ -1,8 +1,122 @@
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: javax.net.ssl.SSLContext
+		Statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1436)
+		Method: <okhttp3.OkHttpClient: javax.net.ssl.SSLSocketFactory systemDefaultSslSocketFactory(javax.net.ssl.X509TrustManager)>
+		SHA-256: cfbeb340c270fca9bfe4bd55cf1d2f000e306efb22d48aa80d91951c76a18f91
+		Secure: false
+	Object:
+		Variable: varReplacer50
+		Type: java.lang.String
+		Statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer50)
+		Method: <com.yougotag.pharmacist.utility.SecurityHelper: byte[] encrypt(java.lang.String,java.lang.String)>
+		SHA-256: 267d5f0023b3a2afe0af6e9a6daded2f683bcb9c62465e38b6babba23257857b
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: javax.crypto.spec.IvParameterSpec
+		Statement: specialinvoke $r6.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r5)
+		Method: <com.yougotag.pharmacist.utility.SecurityHelper: byte[] encrypt(java.lang.String,java.lang.String)>
+		SHA-256: e33c83e8522a5ddf0fa5b0724ca73db9342164eeb675d784d7be7dd4a443ba86
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: byte[]
+		Statement: $r5 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r5)
+		Method: <com.yougotag.pharmacist.utility.SecurityHelper: byte[] encrypt(java.lang.String,java.lang.String)>
+		SHA-256: a1d4a4148ef6bec69f3db6d2349bb239af1f6cf00a5b8897a85b58f09cc00ae4
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: javax.crypto.Cipher
+		Statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer49)
+		Method: <com.yougotag.pharmacist.utility.SecurityHelper: byte[] encrypt(java.lang.String,java.lang.String)>
+		SHA-256: 63ae4226c62208d419e6d638eec6f5bafc8d90b404b9ee4988d0191acade0958
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer50)
+		Method: <com.yougotag.pharmacist.utility.SecurityHelper: byte[] encrypt(java.lang.String,java.lang.String)>
+		SHA-256: 1cc3f1616aeb8217a0d94518241fadba9cb156317b1b989a850d00022355b926
+		Secure: false
+
+Findings in Java Class: okhttp3.OkHttpClient
+
+	 in Method: javax.net.ssl.SSLSocketFactory systemDefaultSslSocketFactory(javax.net.ssl.X509TrustManager)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1434, r7, varReplacer1434)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1434, r7, varReplacer1434)
+
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #cfbeb340c270fca9bfe4bd55cf1d2f000e306efb22d48aa80d91951c76a18f91)
+			First parameter (with value "TLS") should be any of {TLSv1.2, TLSv1.1, TLSv1, Insecure}
+			at statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1436)
+
+
+Findings in Java Class: com.yougotag.pharmacist.utility.SecurityHelper
+
+	 in Method: byte[] encrypt(java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer48, $r3, $r6)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer50)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r6.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r5)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared I V
+			at statement: virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer48, $r3, $r6)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 1
+	RequiredPredicateError: 6
+=====================================================================

@@ -1,0 +1,592 @@
+class com.splunk.mint.StacktraceHash extends java.lang.Object
+{
+    private static java.lang.String guidRegex;
+    private static java.lang.String hexRegex;
+
+    static void <clinit>()
+    {
+        java.lang.String varReplacer7171, varReplacer7172;
+
+        nop;
+
+        varReplacer7171 = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[34][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}";
+
+        <com.splunk.mint.StacktraceHash: java.lang.String guidRegex> = varReplacer7171;
+
+        varReplacer7172 = "0[xX][0-9a-fA-F]+";
+
+        <com.splunk.mint.StacktraceHash: java.lang.String hexRegex> = varReplacer7172;
+
+        return;
+    }
+
+    void <init>()
+    {
+        com.splunk.mint.StacktraceHash $r0;
+
+        $r0 := @this: com.splunk.mint.StacktraceHash;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String getMD5ForJavascriptError(java.lang.String)
+    {
+        java.lang.String $r0, $r1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r0 = virtualinvoke $r0.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>("@\\w+", "");
+
+        $r1 = <com.splunk.mint.StacktraceHash: java.lang.String hexRegex>;
+
+        $r0 = virtualinvoke $r0.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>($r1, "");
+
+        $r1 = <com.splunk.mint.StacktraceHash: java.lang.String guidRegex>;
+
+        $r0 = virtualinvoke $r0.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>($r1, "");
+
+        $r0 = virtualinvoke $r0.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>("$\\w+", "");
+
+        $r0 = staticinvoke <com.splunk.mint.StacktraceHash: java.lang.String md5(java.lang.String)>($r0);
+
+        return $r0;
+    }
+
+    public static final java.util.HashMap manipulateStacktrace(java.lang.String, java.lang.String)
+    {
+        java.lang.String $r0, $r2, $r5, varReplacer7124, varReplacer7125, varReplacer7127, varReplacer7128, varReplacer7129, varReplacer7130, varReplacer7131, varReplacer7132, varReplacer7133, varReplacer7134, varReplacer7135, varReplacer7136, varReplacer7137, varReplacer7138, varReplacer7139, varReplacer7140, varReplacer7141, varReplacer7144, varReplacer7145, varReplacer7146, varReplacer7147, varReplacer7148, varReplacer7149, varReplacer7150, varReplacer7152, varReplacer7153, varReplacer7154, varReplacer7155, varReplacer7156, varReplacer7157, varReplacer7158, varReplacer7159, varReplacer7160, varReplacer7161, varReplacer7162, varReplacer7163, varReplacer7165, varReplacer7166, varReplacer7167, varReplacer7168, varReplacer7169, varReplacer7170;
+        java.util.HashMap $r1;
+        java.lang.String[] $r3, $r4;
+        int $i0, $i1, $i2, varReplacer7142, varReplacer7143, varReplacer7151;
+        boolean $z0;
+        java.lang.StringBuilder $r6;
+        java.lang.Exception $r7;
+        null_type varReplacer7126, varReplacer7164;
+
+        nop;
+
+        $r2 := @parameter0: java.lang.String;
+
+        $r0 := @parameter1: java.lang.String;
+
+        if $r2 == null goto label23;
+
+        if $r0 != null goto label01;
+
+        varReplacer7164 = null;
+
+        return varReplacer7164;
+
+     label01:
+        $r1 = new java.util.HashMap;
+
+        specialinvoke $r1.<java.util.HashMap: void <init>()>();
+
+        varReplacer7161 = "\n\t";
+
+        $r3 = virtualinvoke $r0.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer7161);
+
+        $r4 = $r3;
+
+        $i0 = lengthof $r3;
+
+        if $i0 != 1 goto label02;
+
+        varReplacer7148 = "\n";
+
+        $r4 = virtualinvoke $r0.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer7148);
+
+     label02:
+        $r0 = $r4[0];
+
+        $r5 = staticinvoke <com.splunk.mint.StacktraceHash: java.lang.String removeFirstDate(java.lang.String)>($r0);
+
+     label03:
+        varReplacer7132 = ":";
+
+        $i0 = virtualinvoke $r5.<java.lang.String: int indexOf(java.lang.String)>(varReplacer7132);
+
+        varReplacer7151 = 0;
+
+        $r0 = virtualinvoke $r5.<java.lang.String: java.lang.String substring(int,int)>(varReplacer7151, $i0);
+
+     label04:
+        varReplacer7133 = "\n";
+
+        varReplacer7134 = " ";
+
+        $r5 = virtualinvoke $r5.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>(varReplacer7133, varReplacer7134);
+
+        varReplacer7165 = "Caused by:";
+
+        varReplacer7166 = "";
+
+        $r5 = virtualinvoke $r5.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>(varReplacer7165, varReplacer7166);
+
+        varReplacer7144 = "message";
+
+        virtualinvoke $r1.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer7144, $r5);
+
+        varReplacer7130 = "klass";
+
+        virtualinvoke $r1.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer7130, $r0);
+
+        varReplacer7135 = ".";
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean contains(java.lang.CharSequence)>(varReplacer7135);
+
+        if $z0 == 0 goto label05;
+
+        varReplacer7152 = "\\.";
+
+        $r3 = virtualinvoke $r2.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer7152);
+
+        $r2 = $r3[0];
+
+        $i0 = virtualinvoke $r2.<java.lang.String: int length()>();
+
+        if $i0 <= 3 goto label09;
+
+        $r2 = $r3[0];
+
+     label05:
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $i0 = lengthof $r4;
+
+        $i1 = 0;
+
+     label06:
+        if $i1 >= $i0 goto label10;
+
+        $r0 = $r4[$i1];
+
+        $i2 = virtualinvoke $r0.<java.lang.String: int indexOf(java.lang.String)>($r2);
+
+        if $i2 == -1 goto label07;
+
+        $i2 = virtualinvoke $r0.<java.lang.String: int indexOf(java.lang.String)>($r2);
+
+        if $i2 > 20 goto label07;
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        varReplacer7162 = "\n";
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7162);
+
+     label07:
+        $i1 = $i1 + 1;
+
+        goto label06;
+
+     label08:
+        $r7 := @caughtexception;
+
+        $r0 = $r5;
+
+        goto label04;
+
+     label09:
+        $r2 = $r3[1];
+
+        goto label05;
+
+     label10:
+        $i0 = virtualinvoke $r6.<java.lang.StringBuilder: int length()>();
+
+        if $i0 != 0 goto label13;
+
+        $i0 = lengthof $r4;
+
+        $i1 = 0;
+
+     label11:
+        if $i1 >= $i0 goto label13;
+
+        $r0 = $r4[$i1];
+
+        $i2 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i2 <= 10 goto label12;
+
+        $r5 = virtualinvoke $r0.<java.lang.String: java.lang.String trim()>();
+
+        varReplacer7167 = "at ";
+
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean startsWith(java.lang.String)>(varReplacer7167);
+
+        if $z0 == 0 goto label12;
+
+        varReplacer7137 = "...";
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean contains(java.lang.CharSequence)>(varReplacer7137);
+
+        if $z0 != 0 goto label12;
+
+        varReplacer7150 = ".java.";
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean contains(java.lang.CharSequence)>(varReplacer7150);
+
+        if $z0 != 0 goto label12;
+
+        varReplacer7142 = 0;
+
+        varReplacer7143 = 10;
+
+        $r5 = virtualinvoke $r0.<java.lang.String: java.lang.String substring(int,int)>(varReplacer7142, varReplacer7143);
+
+        varReplacer7136 = "android";
+
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean contains(java.lang.CharSequence)>(varReplacer7136);
+
+        if $z0 != 0 goto label12;
+
+        varReplacer7168 = "org.apache";
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean contains(java.lang.CharSequence)>(varReplacer7168);
+
+        if $z0 != 0 goto label12;
+
+        varReplacer7169 = "org.acra";
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean contains(java.lang.CharSequence)>(varReplacer7169);
+
+        if $z0 != 0 goto label12;
+
+        varReplacer7163 = "dalvik";
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean contains(java.lang.CharSequence)>(varReplacer7163);
+
+        if $z0 != 0 goto label12;
+
+        varReplacer7125 = ".acra.";
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean contains(java.lang.CharSequence)>(varReplacer7125);
+
+        if $z0 != 0 goto label12;
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        varReplacer7145 = "\n";
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7145);
+
+     label12:
+        $i1 = $i1 + 1;
+
+        goto label11;
+
+     label13:
+        $i0 = virtualinvoke $r6.<java.lang.StringBuilder: int length()>();
+
+        if $i0 != 0 goto label17;
+
+        $i0 = lengthof $r4;
+
+        $i1 = 0;
+
+     label14:
+        if $i1 >= $i0 goto label17;
+
+        $r0 = $r4[$i1];
+
+        $i2 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+        if $i2 <= 10 goto label16;
+
+        $r5 = virtualinvoke $r0.<java.lang.String: java.lang.String trim()>();
+
+        varReplacer7138 = "at ";
+
+        $z0 = virtualinvoke $r5.<java.lang.String: boolean startsWith(java.lang.String)>(varReplacer7138);
+
+        if $z0 == 0 goto label16;
+
+        varReplacer7146 = ".java";
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean contains(java.lang.CharSequence)>(varReplacer7146);
+
+        if $z0 != 0 goto label15;
+
+        varReplacer7131 = "Unknown";
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean contains(java.lang.CharSequence)>(varReplacer7131);
+
+        if $z0 == 0 goto label16;
+
+     label15:
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        varReplacer7139 = "\n";
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7139);
+
+     label16:
+        $i1 = $i1 + 1;
+
+        goto label14;
+
+     label17:
+        $r0 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer7158 = "\n";
+
+        $r4 = virtualinvoke $r0.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer7158);
+
+        $r0 = $r4[0];
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean contains(java.lang.CharSequence)>($r2);
+
+        if $z0 != 0 goto label22;
+
+        varReplacer7153 = "\\.";
+
+        $r4 = virtualinvoke $r0.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer7153);
+
+        $r2 = $r4[1];
+
+     label18:
+        varReplacer7170 = "library";
+
+        virtualinvoke $r1.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer7170, $r2);
+
+        varReplacer7129 = "(";
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean contains(java.lang.CharSequence)>(varReplacer7129);
+
+        if $z0 == 0 goto label21;
+
+        varReplacer7140 = "(";
+
+        $i0 = virtualinvoke $r0.<java.lang.String: int indexOf(java.lang.String)>(varReplacer7140);
+
+        $i0 = $i0 + 1;
+
+        varReplacer7149 = ")";
+
+        $i1 = virtualinvoke $r0.<java.lang.String: int indexOf(java.lang.String)>(varReplacer7149);
+
+        $r2 = virtualinvoke $r0.<java.lang.String: java.lang.String substring(int,int)>($i0, $i1);
+
+     label19:
+        varReplacer7154 = "where";
+
+        virtualinvoke $r1.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer7154, $r2);
+
+        $r2 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        varReplacer7127 = "@\\w+";
+
+        varReplacer7128 = "";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>(varReplacer7127, varReplacer7128);
+
+        $r5 = <com.splunk.mint.StacktraceHash: java.lang.String hexRegex>;
+
+        varReplacer7141 = "";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>($r5, varReplacer7141);
+
+        $r5 = <com.splunk.mint.StacktraceHash: java.lang.String guidRegex>;
+
+        varReplacer7157 = "";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>($r5, varReplacer7157);
+
+        varReplacer7159 = "$\\w+";
+
+        varReplacer7160 = "";
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>(varReplacer7159, varReplacer7160);
+
+        $r5 = $r2;
+
+        varReplacer7147 = ".java:";
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean contains(java.lang.CharSequence)>(varReplacer7147);
+
+        if $z0 != 0 goto label20;
+
+        varReplacer7155 = "\\d+";
+
+        varReplacer7156 = "";
+
+        $r5 = virtualinvoke $r0.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>(varReplacer7155, varReplacer7156);
+
+        $r5 = virtualinvoke $r2.<java.lang.String: java.lang.String replace(java.lang.CharSequence,java.lang.CharSequence)>($r0, $r5);
+
+     label20:
+        $r2 = staticinvoke <com.splunk.mint.StacktraceHash: java.lang.String md5(java.lang.String)>($r5);
+
+        varReplacer7124 = "errorHash";
+
+        virtualinvoke $r1.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(varReplacer7124, $r2);
+
+        return $r1;
+
+     label21:
+        $r2 = "Unknown";
+
+        goto label19;
+
+     label22:
+        $r2 = null;
+
+        goto label18;
+
+     label23:
+        varReplacer7126 = null;
+
+        return varReplacer7126;
+
+        catch java.lang.Exception from label03 to label04 with label08;
+    }
+
+    private static java.lang.String md5(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer7174, varReplacer7175, varReplacer7176, varReplacer7178;
+        java.security.MessageDigest $r1;
+        byte[] $r2;
+        java.math.BigInteger $r3;
+        int $i0, varReplacer7177, varReplacer7179;
+        java.lang.StringBuilder $r4;
+        java.lang.Throwable $r5, $r6;
+        java.lang.Exception $r7;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label01:
+        varReplacer7175 = "MD5";
+
+        $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7175);
+
+     label02:
+        if $r1 == null goto label15;
+
+     label03:
+        virtualinvoke $r1.<java.security.MessageDigest: void reset()>();
+
+        $r2 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        virtualinvoke $r1.<java.security.MessageDigest: void update(byte[])>($r2);
+
+        $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>();
+
+     label04:
+        $r3 = new java.math.BigInteger;
+
+     label05:
+        varReplacer7177 = 1;
+
+        specialinvoke $r3.<java.math.BigInteger: void <init>(int,byte[])>(varReplacer7177, $r2);
+
+        varReplacer7179 = 16;
+
+        $r0 = virtualinvoke $r3.<java.math.BigInteger: java.lang.String toString(int)>(varReplacer7179);
+
+     label06:
+        $i0 = virtualinvoke $r0.<java.lang.String: int length()>();
+
+     label07:
+        if $i0 >= 32 goto label16;
+
+        $r4 = new java.lang.StringBuilder;
+
+     label08:
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer7174 = "0";
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer7174);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r0);
+
+        $r0 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label09:
+        goto label06;
+
+     label10:
+        $r5 := @caughtexception;
+
+     label11:
+        varReplacer7176 = "SHA-1";
+
+        $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7176);
+
+     label12:
+        goto label02;
+
+     label13:
+        $r6 := @caughtexception;
+
+        $r1 = null;
+
+        goto label02;
+
+     label14:
+        $r7 := @caughtexception;
+
+        virtualinvoke $r7.<java.lang.Exception: void printStackTrace()>();
+
+     label15:
+        varReplacer7178 = "";
+
+        return varReplacer7178;
+
+     label16:
+        return $r0;
+
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label10;
+        catch java.lang.Exception from label03 to label04 with label14;
+        catch java.lang.Exception from label05 to label06 with label14;
+        catch java.lang.Exception from label06 to label07 with label14;
+        catch java.lang.Exception from label08 to label09 with label14;
+        catch java.security.NoSuchAlgorithmException from label11 to label12 with label13;
+    }
+
+    private static java.lang.String removeFirstDate(java.lang.String)
+    {
+        java.lang.String $r0, varReplacer7180, varReplacer7181, varReplacer7182;
+        boolean $z0;
+        java.lang.String[] $r1;
+        java.util.regex.Pattern $r2;
+        java.util.regex.Matcher $r3;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        varReplacer7180 = "\n";
+
+        $z0 = virtualinvoke $r0.<java.lang.String: boolean contains(java.lang.CharSequence)>(varReplacer7180);
+
+        if $z0 == 0 goto label1;
+
+        varReplacer7181 = "\\n";
+
+        $r1 = virtualinvoke $r0.<java.lang.String: java.lang.String[] split(java.lang.String)>(varReplacer7181);
+
+        varReplacer7182 = "[\\d]{2}:[\\d]{2}:[\\d]{2}";
+
+        $r2 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>(varReplacer7182);
+
+        $r3 = virtualinvoke $r2.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>($r0);
+
+        $z0 = virtualinvoke $r3.<java.util.regex.Matcher: boolean find()>();
+
+        if $z0 == 0 goto label1;
+
+        $r0 = $r1[1];
+
+     label1:
+        return $r0;
+    }
+}

@@ -1,8 +1,87 @@
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3658)
+		Method: <com.vk.sdk.util.VKUtil: java.lang.String md5(java.lang.String)>
+		SHA-256: 95283f31a405bcada9795a70fe82d68e440270bd09dc419308162b680b409ec3
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.immersion.hapticmediasdk.utils.FileManager: java.lang.String getUniqueFileName(java.lang.String)>
+		SHA-256: 7e2b12c52d2ea7ae9c17e2f88be59798674194d32ff123a04b4dd3c84d604eb2
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3795)
+		Method: <com.immersion.hapticmediasdk.utils.FileManager: java.lang.String getUniqueFileName(java.lang.String)>
+		SHA-256: 6c79972e4736f84bfeecfec929ee50d0879f2c47f8e4a883c3ef3fd762772d60
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.vk.sdk.util.VKUtil: java.lang.String md5(java.lang.String)>
+		SHA-256: 5288164ed2a038ac2a92bae7bf56b324e7701f290bc9d522b2c2fc491c16aad0
+		Secure: false
+
+Findings in Java Class: com.vk.sdk.util.VKUtil
+
+	 in Method: java.lang.String md5(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #95283f31a405bcada9795a70fe82d68e440270bd09dc419308162b680b409ec3)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3658)
+
+
+Findings in Java Class: com.immersion.hapticmediasdk.utils.FileManager
+
+	 in Method: java.lang.String getUniqueFileName(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #6c79972e4736f84bfeecfec929ee50d0879f2c47f8e4a883c3ef3fd762772d60)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3795)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
+=====================================================================

@@ -1,8 +1,118 @@
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.immersion.hapticmediasdk.utils.FileManager: java.lang.String getUniqueFileName(java.lang.String)>
+		SHA-256: 7e2b12c52d2ea7ae9c17e2f88be59798674194d32ff123a04b4dd3c84d604eb2
+		Secure: false
+	Object:
+		Variable: $r7
+		Type: byte[]
+		Statement: $r7 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.facebook.unity.FB: java.lang.String getKeyHash()>
+		SHA-256: fbe47ce343b5df21a88c6af9649c2f8d6f5b813e936d699f053ff2a390f19c03
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: java.security.MessageDigest
+		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2450)
+		Method: <com.facebook.unity.FB: java.lang.String getKeyHash()>
+		SHA-256: 8298661a15ca800895d9a18bb544a9f8444cc50469a74dbc0b9e75f3fd607068
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2400)
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: 99ddb7bf7ee7c244a3428682a7b15639e1ebf795f08b432f4e52f64f7b241a03
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3821)
+		Method: <com.immersion.hapticmediasdk.utils.FileManager: java.lang.String getUniqueFileName(java.lang.String)>
+		SHA-256: c90ba37ccd929293fa606c71ea223da32b0bda4b5e21376eff2382606249fb08
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: 5a54f705314d6605f4cf61ba388d3b495336c885c3ea98cfb7cec081c65981da
+		Secure: false
+
+Findings in Java Class: com.unity3d.player.UnityPlayer
+
+	 in Method: java.lang.String a(java.lang.String)
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #99ddb7bf7ee7c244a3428682a7b15639e1ebf795f08b432f4e52f64f7b241a03)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte[]),java.security.MessageDigest: void update(byte)
+			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #99ddb7bf7ee7c244a3428682a7b15639e1ebf795f08b432f4e52f64f7b241a03)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2400)
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #99ddb7bf7ee7c244a3428682a7b15639e1ebf795f08b432f4e52f64f7b241a03)
+			Third parameter (with value 0)Variable pre_lenmust be  greater than pre_off
+			at statement: virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r1, varReplacer2398, $i3)
+
+
+Findings in Java Class: com.facebook.unity.FB
+
+	 in Method: java.lang.String getKeyHash()
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #8298661a15ca800895d9a18bb544a9f8444cc50469a74dbc0b9e75f3fd607068)
+			First parameter (with value "SHA") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2450)
+
+
+Findings in Java Class: com.immersion.hapticmediasdk.utils.FileManager
+
+	 in Method: java.lang.String getUniqueFileName(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #c90ba37ccd929293fa606c71ea223da32b0bda4b5e21376eff2382606249fb08)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3821)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	TypestateError: 1
+	ConstraintError: 4
+=====================================================================

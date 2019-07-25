@@ -1,0 +1,1443 @@
+public class com.bucketball.game.android.AndroidLauncher extends android.support.v4.app.FragmentActivity implements com.bucketball.game.AdsController, com.badlogic.gdx.backends.android.AndroidFragmentApplication$Callbacks, com.google.android.gms.common.api.GoogleApiClient$ConnectionCallbacks, com.google.android.gms.common.api.GoogleApiClient$OnConnectionFailedListener, com.bucketball.game.android.GameHelper$GameHelperListener, com.bucketball.game.android.ActionResolver, com.bucketball.game.GameController
+{
+    private static final java.lang.String DIALOG_ERROR;
+    private static final int REQUEST_CODE_RESOLVE_ERR;
+    private static final int REQUEST_RESOLVE_ERROR;
+    private static final java.lang.String TAG;
+    com.google.android.gms.ads.AdView adView;
+    private int cntSignInFailed;
+    private com.bucketball.game.android.GameHelper gameHelper;
+    com.google.android.gms.ads.InterstitialAd interstitialAd;
+    private boolean mAutoStartSignIn;
+    private com.google.android.gms.common.api.GoogleApiClient mGoogleApiClient;
+    private boolean mIsResolving;
+    private android.app.ProgressDialog mProgressDialog;
+    private boolean mResolvingError;
+    private boolean mSignInClicked;
+    public android.content.Intent ipcIntent;
+    public android.content.Intent ipcResultIntent;
+
+    public void <init>()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        int varReplacer1404, varReplacer1405, varReplacer1406, varReplacer1407, varReplacer1408;
+
+        nop;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        specialinvoke $r0.<android.support.v4.app.FragmentActivity: void <init>()>();
+
+        varReplacer1405 = 0;
+
+        $r0.<com.bucketball.game.android.AndroidLauncher: boolean mResolvingError> = varReplacer1405;
+
+        varReplacer1408 = 0;
+
+        $r0.<com.bucketball.game.android.AndroidLauncher: boolean mIsResolving> = varReplacer1408;
+
+        varReplacer1406 = 0;
+
+        $r0.<com.bucketball.game.android.AndroidLauncher: boolean mSignInClicked> = varReplacer1406;
+
+        varReplacer1404 = 1;
+
+        $r0.<com.bucketball.game.android.AndroidLauncher: boolean mAutoStartSignIn> = varReplacer1404;
+
+        varReplacer1407 = 0;
+
+        $r0.<com.bucketball.game.android.AndroidLauncher: int cntSignInFailed> = varReplacer1407;
+
+        return;
+    }
+
+    static com.bucketball.game.android.GameHelper access$000(com.bucketball.game.android.AndroidLauncher)
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        com.bucketball.game.android.GameHelper r1;
+
+        $r0 := @parameter0: com.bucketball.game.android.AndroidLauncher;
+
+        r1 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        return r1;
+    }
+
+    private void setBunnerAd()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        java.lang.Throwable $r1;
+        android.view.View $r2;
+        com.google.android.gms.ads.AdView $r3;
+        android.view.ViewGroup$LayoutParams $r4;
+        android.content.ContentResolver $r5;
+        java.lang.String $r6, varReplacer1552, varReplacer1555, varReplacer1558;
+        java.security.MessageDigest $r7, $r8;
+        byte[] $r9;
+        int $i0, varReplacer1551, varReplacer1553, varReplacer1554, varReplacer1556, varReplacer1557, varReplacer1559, varReplacer1560;
+        java.lang.Object[] $r10;
+        java.math.BigInteger $r11;
+        com.google.android.gms.ads.AdRequest$Builder $r12;
+        com.google.android.gms.ads.AdRequest $r13;
+
+        nop;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        varReplacer1551 = 2131492930;
+
+        $r2 = virtualinvoke $r0.<com.bucketball.game.android.AndroidLauncher: android.view.View findViewById(int)>(varReplacer1551);
+
+        $r3 = (com.google.android.gms.ads.AdView) $r2;
+
+        $r0.<com.bucketball.game.android.AndroidLauncher: com.google.android.gms.ads.AdView adView> = $r3;
+
+        $r3 = $r0.<com.bucketball.game.android.AndroidLauncher: com.google.android.gms.ads.AdView adView>;
+
+        $r4 = virtualinvoke $r3.<com.google.android.gms.ads.AdView: android.view.ViewGroup$LayoutParams getLayoutParams()>();
+
+        varReplacer1556 = -2;
+
+        $r4.<android.view.ViewGroup$LayoutParams: int height> = varReplacer1556;
+
+        $r3 = $r0.<com.bucketball.game.android.AndroidLauncher: com.google.android.gms.ads.AdView adView>;
+
+        virtualinvoke $r3.<com.google.android.gms.ads.AdView: void setLayoutParams(android.view.ViewGroup$LayoutParams)>($r4);
+
+        $r5 = virtualinvoke $r0.<com.bucketball.game.android.AndroidLauncher: android.content.ContentResolver getContentResolver()>();
+
+        varReplacer1558 = "android_id";
+
+        $r6 = staticinvoke <android.provider.Settings$Secure: java.lang.String getString(android.content.ContentResolver,java.lang.String)>($r5, varReplacer1558);
+
+     label1:
+        varReplacer1552 = "MD5";
+
+        $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1552);
+
+     label2:
+        $r8 = $r7;
+
+     label3:
+        $r9 = virtualinvoke $r6.<java.lang.String: byte[] getBytes()>();
+
+        $i0 = virtualinvoke $r6.<java.lang.String: int length()>();
+
+        varReplacer1554 = 0;
+
+        virtualinvoke $r8.<java.security.MessageDigest: void update(byte[],int,int)>($r9, varReplacer1554, $i0);
+
+     label4:
+        $r10 = newarray (java.lang.Object)[1];
+
+        $r11 = new java.math.BigInteger;
+
+     label5:
+        $r9 = virtualinvoke $r7.<java.security.MessageDigest: byte[] digest()>();
+
+        varReplacer1557 = 1;
+
+        specialinvoke $r11.<java.math.BigInteger: void <init>(int,byte[])>(varReplacer1557, $r9);
+
+     label6:
+        $r10[0] = $r11;
+
+     label7:
+        varReplacer1555 = "%032X";
+
+        staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>(varReplacer1555, $r10);
+
+     label8:
+        $r12 = new com.google.android.gms.ads.AdRequest$Builder;
+
+        specialinvoke $r12.<com.google.android.gms.ads.AdRequest$Builder: void <init>()>();
+
+        varReplacer1553 = 1;
+
+        $r12 = virtualinvoke $r12.<com.google.android.gms.ads.AdRequest$Builder: com.google.android.gms.ads.AdRequest$Builder tagForChildDirectedTreatment(boolean)>(varReplacer1553);
+
+        $r13 = virtualinvoke $r12.<com.google.android.gms.ads.AdRequest$Builder: com.google.android.gms.ads.AdRequest build()>();
+
+        $r3 = $r0.<com.bucketball.game.android.AndroidLauncher: com.google.android.gms.ads.AdView adView>;
+
+        virtualinvoke $r3.<com.google.android.gms.ads.AdView: void loadAd(com.google.android.gms.ads.AdRequest)>($r13);
+
+        return;
+
+     label9:
+        $r1 := @caughtexception;
+
+        varReplacer1559 = 0;
+
+        varReplacer1560 = 32;
+
+        virtualinvoke $r6.<java.lang.String: java.lang.String substring(int,int)>(varReplacer1559, varReplacer1560);
+
+        goto label8;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label9;
+        catch java.security.NoSuchAlgorithmException from label3 to label4 with label9;
+        catch java.security.NoSuchAlgorithmException from label5 to label6 with label9;
+        catch java.security.NoSuchAlgorithmException from label7 to label8 with label9;
+    }
+
+    private void showErrorDialog(int)
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        int $i0;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $i0 := @parameter0: int;
+
+        return;
+    }
+
+    public void addMobInterstitialAdInit()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        com.google.android.gms.ads.AdRequest $r1;
+        com.google.android.gms.ads.InterstitialAd $r2;
+        com.google.android.gms.ads.AdRequest$Builder $r3;
+        com.bucketball.game.android.AndroidLauncher$1 $r4;
+        java.lang.String varReplacer1561;
+
+        nop;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r2 = new com.google.android.gms.ads.InterstitialAd;
+
+        specialinvoke $r2.<com.google.android.gms.ads.InterstitialAd: void <init>(android.content.Context)>($r0);
+
+        $r0.<com.bucketball.game.android.AndroidLauncher: com.google.android.gms.ads.InterstitialAd interstitialAd> = $r2;
+
+        $r2 = $r0.<com.bucketball.game.android.AndroidLauncher: com.google.android.gms.ads.InterstitialAd interstitialAd>;
+
+        varReplacer1561 = "ca-app-pub-6236758242894989/9945957355";
+
+        virtualinvoke $r2.<com.google.android.gms.ads.InterstitialAd: void setAdUnitId(java.lang.String)>(varReplacer1561);
+
+        $r3 = new com.google.android.gms.ads.AdRequest$Builder;
+
+        specialinvoke $r3.<com.google.android.gms.ads.AdRequest$Builder: void <init>()>();
+
+        $r1 = virtualinvoke $r3.<com.google.android.gms.ads.AdRequest$Builder: com.google.android.gms.ads.AdRequest build()>();
+
+        $r2 = $r0.<com.bucketball.game.android.AndroidLauncher: com.google.android.gms.ads.InterstitialAd interstitialAd>;
+
+        virtualinvoke $r2.<com.google.android.gms.ads.InterstitialAd: void loadAd(com.google.android.gms.ads.AdRequest)>($r1);
+
+        $r2 = $r0.<com.bucketball.game.android.AndroidLauncher: com.google.android.gms.ads.InterstitialAd interstitialAd>;
+
+        $r4 = new com.bucketball.game.android.AndroidLauncher$1;
+
+        specialinvoke $r4.<com.bucketball.game.android.AndroidLauncher$1: void <init>(com.bucketball.game.android.AndroidLauncher)>($r0);
+
+        virtualinvoke $r2.<com.google.android.gms.ads.InterstitialAd: void setAdListener(com.google.android.gms.ads.AdListener)>($r4);
+
+        return;
+    }
+
+    public void exit()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        java.io.PrintStream $r1;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 = <java.lang.System: java.io.PrintStream out>;
+
+        virtualinvoke $r1.<java.io.PrintStream: void println(java.lang.String)>("AndroidLauncher - exit");
+
+        return;
+    }
+
+    public void exitGame()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        java.io.PrintStream $r1;
+        com.badlogic.gdx.Application $r2;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 = <java.lang.System: java.io.PrintStream out>;
+
+        virtualinvoke $r1.<java.io.PrintStream: void println(java.lang.String)>("AndroidLauncher-exitGame");
+
+        virtualinvoke $r0.<com.bucketball.game.android.AndroidLauncher: void onDestroy()>();
+
+        $r2 = <com.badlogic.gdx.Gdx: com.badlogic.gdx.Application app>;
+
+        interfaceinvoke $r2.<com.badlogic.gdx.Application: void exit()>();
+
+        return;
+    }
+
+    public void getAchievementsGPGS()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        com.google.android.gms.games.achievement.Achievements $r1;
+        com.bucketball.game.android.GameHelper $r2;
+        com.google.android.gms.common.api.GoogleApiClient $r3;
+        android.content.Intent $r4;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 = <com.google.android.gms.games.Games: com.google.android.gms.games.achievement.Achievements Achievements>;
+
+        $r2 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        $r3 = virtualinvoke $r2.<com.bucketball.game.android.GameHelper: com.google.android.gms.common.api.GoogleApiClient getApiClient()>();
+
+        $r4 = interfaceinvoke $r1.<com.google.android.gms.games.achievement.Achievements: android.content.Intent getAchievementsIntent(com.google.android.gms.common.api.GoogleApiClient)>($r3);
+
+        virtualinvoke $r0.<com.bucketball.game.android.AndroidLauncher: void startActivityForResult(android.content.Intent,int)>($r4, 101);
+
+        return;
+    }
+
+    public boolean getAlikSignedIn()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        boolean $z0;
+        com.bucketball.game.android.GameHelper $r1;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        $z0 = virtualinvoke $r1.<com.bucketball.game.android.GameHelper: boolean isAlikSignedIn()>();
+
+        return $z0;
+    }
+
+    public void getLeaderboardGPGS()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        com.google.android.gms.games.leaderboard.Leaderboards $r1;
+        com.bucketball.game.android.GameHelper $r2;
+        com.google.android.gms.common.api.GoogleApiClient $r3;
+        android.content.Intent $r4;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 = <com.google.android.gms.games.Games: com.google.android.gms.games.leaderboard.Leaderboards Leaderboards>;
+
+        $r2 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        $r3 = virtualinvoke $r2.<com.bucketball.game.android.GameHelper: com.google.android.gms.common.api.GoogleApiClient getApiClient()>();
+
+        $r4 = interfaceinvoke $r1.<com.google.android.gms.games.leaderboard.Leaderboards: android.content.Intent getAllLeaderboardsIntent(com.google.android.gms.common.api.GoogleApiClient)>($r3);
+
+        virtualinvoke $r0.<com.bucketball.game.android.AndroidLauncher: void startActivityForResult(android.content.Intent,int)>($r4, 100);
+
+        return;
+    }
+
+    public boolean getSignedInGPGS()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        boolean $z0;
+        com.bucketball.game.android.GameHelper $r1;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        $z0 = virtualinvoke $r1.<com.bucketball.game.android.GameHelper: boolean isSignedIn()>();
+
+        return $z0;
+    }
+
+    public void loginGPGS()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        java.lang.Exception $r1;
+        com.bucketball.game.android.AndroidLauncher$3 $r2;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r2 = new com.bucketball.game.android.AndroidLauncher$3;
+
+     label1:
+        specialinvoke $r2.<com.bucketball.game.android.AndroidLauncher$3: void <init>(com.bucketball.game.android.AndroidLauncher)>($r0);
+
+        virtualinvoke $r0.<com.bucketball.game.android.AndroidLauncher: void runOnUiThread(java.lang.Runnable)>($r2);
+
+     label2:
+        return;
+
+     label3:
+        $r1 := @caughtexception;
+
+        virtualinvoke $r1.<java.lang.Exception: void printStackTrace()>();
+
+        return;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    protected void onActivityResult(int, int, android.content.Intent)
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        int $i0, $i1;
+        android.content.Intent $r1;
+        java.io.PrintStream $r2;
+        com.bucketball.game.android.GameHelper $r3;
+        java.lang.String varReplacer1427, varReplacer1428;
+
+        nop;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $i0 := @parameter0: int;
+
+        $i1 := @parameter1: int;
+
+        $r1 := @parameter2: android.content.Intent;
+
+        specialinvoke $r0.<android.support.v4.app.FragmentActivity: void onActivityResult(int,int,android.content.Intent)>($i0, $i1, $r1);
+
+        $r2 = <java.lang.System: java.io.PrintStream out>;
+
+        varReplacer1427 = "AndroidLauncher - onActivityResult...";
+
+        virtualinvoke $r2.<java.io.PrintStream: void println(java.lang.String)>(varReplacer1427);
+
+        $r3 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        virtualinvoke $r3.<com.bucketball.game.android.GameHelper: void onActivityResult(int,int,android.content.Intent)>($i0, $i1, $r1);
+
+        $i0 = $r0.<com.bucketball.game.android.AndroidLauncher: int cntSignInFailed>;
+
+        if $i0 >= 3 goto label1;
+
+        $r3 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        virtualinvoke $r3.<com.bucketball.game.android.GameHelper: void beginUserInitiatedSignIn()>();
+
+        return;
+
+     label1:
+        $r2 = <java.lang.System: java.io.PrintStream out>;
+
+        varReplacer1428 = " *** AndroidLauncher - Can not connect to Google services, work without !!! ***";
+
+        virtualinvoke $r2.<java.io.PrintStream: void println(java.lang.String)>(varReplacer1428);
+
+        return;
+    }
+
+    public void onBackPressed()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        java.io.PrintStream $r1;
+        java.lang.StringBuilder $r2;
+        int $i0;
+        java.lang.String $r3, varReplacer1429;
+        com.bucketball.game.BucketBall $r4;
+
+        nop;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 = <java.lang.System: java.io.PrintStream out>;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1429 = "onBackPressed! GameInfo.gameScreen: ";
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1429);
+
+        $i0 = <com.bucketball.game.GameInfo: int gameScreen>;
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r1.<java.io.PrintStream: void println(java.lang.String)>($r3);
+
+        $i0 = <com.bucketball.game.GameInfo: int gameScreen>;
+
+        lookupswitch($i0)
+        {
+            case 0: goto label2;
+            case 1: goto label3;
+            case 2: goto label6;
+            case 3: goto label4;
+            case 4: goto label5;
+            default: goto label1;
+        };
+
+     label1:
+        return;
+
+     label2:
+        $r4 = staticinvoke <com.bucketball.game.BucketBall: com.bucketball.game.BucketBall getInstance()>();
+
+        virtualinvoke $r4.<com.bucketball.game.BucketBall: void menuExitGame()>();
+
+        return;
+
+     label3:
+        $r4 = staticinvoke <com.bucketball.game.BucketBall: com.bucketball.game.BucketBall getInstance()>();
+
+        virtualinvoke $r4.<com.bucketball.game.BucketBall: void BackBtnStopGame()>();
+
+        return;
+
+     label4:
+        $r4 = staticinvoke <com.bucketball.game.BucketBall: com.bucketball.game.BucketBall getInstance()>();
+
+        virtualinvoke $r4.<com.bucketball.game.BucketBall: void showMenu()>();
+
+        return;
+
+     label5:
+        $r4 = staticinvoke <com.bucketball.game.BucketBall: com.bucketball.game.BucketBall getInstance()>();
+
+        virtualinvoke $r4.<com.bucketball.game.BucketBall: void showMenu()>();
+
+        return;
+
+     label6:
+        $r4 = staticinvoke <com.bucketball.game.BucketBall: com.bucketball.game.BucketBall getInstance()>();
+
+        virtualinvoke $r4.<com.bucketball.game.BucketBall: void showMenu()>();
+
+        return;
+    }
+
+    public void onConnected(android.os.Bundle)
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        android.os.Bundle $r1;
+        java.io.PrintStream $r2;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 := @parameter0: android.os.Bundle;
+
+        $r2 = <java.lang.System: java.io.PrintStream out>;
+
+        virtualinvoke $r2.<java.io.PrintStream: void println(java.lang.String)>("GPGS onConnected: +++++++++++++++ URA ++++++++++++++++++++ ");
+
+        return;
+    }
+
+    public void onConnectionFailed(com.google.android.gms.common.ConnectionResult)
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        com.google.android.gms.common.ConnectionResult $r1;
+        java.lang.Throwable $r2;
+        java.io.PrintStream $r3;
+        java.lang.StringBuilder $r4;
+        int $i0;
+        java.lang.String $r5;
+        boolean $z0;
+        com.google.android.gms.common.api.GoogleApiClient $r6;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 := @parameter0: com.google.android.gms.common.ConnectionResult;
+
+        $r3 = <java.lang.System: java.io.PrintStream out>;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("GPGS onConnectionFailed : errCode:");
+
+        $i0 = virtualinvoke $r1.<com.google.android.gms.common.ConnectionResult: int getErrorCode()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r5 = virtualinvoke $r1.<com.google.android.gms.common.ConnectionResult: java.lang.String toString()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r3.<java.io.PrintStream: void println(java.lang.String)>($r5);
+
+        $z0 = $r0.<com.bucketball.game.android.AndroidLauncher: boolean mResolvingError>;
+
+        if $z0 == 0 goto label1;
+
+        $r3 = <java.lang.System: java.io.PrintStream out>;
+
+        virtualinvoke $r3.<java.io.PrintStream: void println(java.lang.String)>("GPGS Already attempting to resolve an error");
+
+        return;
+
+     label1:
+        $z0 = virtualinvoke $r1.<com.google.android.gms.common.ConnectionResult: boolean hasResolution()>();
+
+        if $z0 == 0 goto label5;
+
+        $r0.<com.bucketball.game.android.AndroidLauncher: boolean mResolvingError> = 1;
+
+        $r3 = <java.lang.System: java.io.PrintStream out>;
+
+     label2:
+        virtualinvoke $r3.<java.io.PrintStream: void println(java.lang.String)>("GPGS There was an error with the resolution intent. Try again");
+
+        virtualinvoke $r1.<com.google.android.gms.common.ConnectionResult: void startResolutionForResult(android.app.Activity,int)>($r0, 1001);
+
+     label3:
+        return;
+
+     label4:
+        $r2 := @caughtexception;
+
+        $r3 = <java.lang.System: java.io.PrintStream out>;
+
+        virtualinvoke $r3.<java.io.PrintStream: void println(java.lang.String)>("GPGS There was an error with the resolution intent. Try again");
+
+        $r6 = $r0.<com.bucketball.game.android.AndroidLauncher: com.google.android.gms.common.api.GoogleApiClient mGoogleApiClient>;
+
+        interfaceinvoke $r6.<com.google.android.gms.common.api.GoogleApiClient: void connect()>();
+
+        return;
+
+     label5:
+        $i0 = virtualinvoke $r1.<com.google.android.gms.common.ConnectionResult: int getErrorCode()>();
+
+        specialinvoke $r0.<com.bucketball.game.android.AndroidLauncher: void showErrorDialog(int)>($i0);
+
+        $r0.<com.bucketball.game.android.AndroidLauncher: boolean mResolvingError> = 1;
+
+        return;
+
+        catch android.content.IntentSender$SendIntentException from label2 to label3 with label4;
+    }
+
+    public void onConnectionSuspended(int)
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        int $i0;
+        java.io.PrintStream $r1;
+        java.lang.StringBuilder $r2;
+        java.lang.String $r3;
+        com.google.android.gms.common.api.GoogleApiClient $r4;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $i0 := @parameter0: int;
+
+        $r1 = <java.lang.System: java.io.PrintStream out>;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("GPGS onConnectionSuspended : ");
+
+        $r2 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r1.<java.io.PrintStream: void println(java.lang.String)>($r3);
+
+        $r4 = $r0.<com.bucketball.game.android.AndroidLauncher: com.google.android.gms.common.api.GoogleApiClient mGoogleApiClient>;
+
+        interfaceinvoke $r4.<com.google.android.gms.common.api.GoogleApiClient: void connect()>();
+
+        return;
+    }
+
+    protected void onCreate(android.os.Bundle)
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        android.os.Bundle $r1;
+        android.content.pm.Signature $r2;
+        android.view.Window $r3;
+        java.io.PrintStream $r4;
+        android.content.pm.PackageManager $r5;
+        android.content.pm.PackageInfo $r6;
+        android.content.pm.Signature[] $r7;
+        int $i0, $i1, varReplacer1409, varReplacer1413, varReplacer1414, varReplacer1416, varReplacer1417, varReplacer1418, varReplacer1420, varReplacer1424, varReplacer1425, varReplacer1426;
+        java.security.MessageDigest $r8;
+        byte[] $r9;
+        java.lang.StringBuilder $r10, r20;
+        java.lang.String $r11, varReplacer1410, varReplacer1411, varReplacer1412, varReplacer1415, varReplacer1419, varReplacer1421, varReplacer1422, varReplacer1423;
+        java.lang.Throwable $r12, $r19;
+        com.bucketball.game.android.GameHelper $r13, r21;
+        java.lang.Object $r14;
+        com.bucketball.game.BucketBall $r15;
+        android.support.v4.app.FragmentManager $r16;
+        android.support.v4.app.FragmentTransaction $r17;
+        com.appbrain.InterstitialBuilder $r18;
+        com.bucketball.game.android.GameFragment r22;
+        android.content.pm.PackageManager$NameNotFoundException r23;
+        java.security.NoSuchAlgorithmException r24;
+
+        nop;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 := @parameter0: android.os.Bundle;
+
+        specialinvoke $r0.<android.support.v4.app.FragmentActivity: void onCreate(android.os.Bundle)>($r1);
+
+        $r3 = virtualinvoke $r0.<com.bucketball.game.android.AndroidLauncher: android.view.Window getWindow()>();
+
+        varReplacer1425 = 128;
+
+        virtualinvoke $r3.<android.view.Window: void addFlags(int)>(varReplacer1425);
+
+        staticinvoke <com.appbrain.AppBrain: void init(android.content.Context)>($r0);
+
+        $r4 = <java.lang.System: java.io.PrintStream out>;
+
+        varReplacer1422 = "Start OnCreate ... ";
+
+        virtualinvoke $r4.<java.io.PrintStream: void println(java.lang.String)>(varReplacer1422);
+
+     label01:
+        $r5 = virtualinvoke $r0.<com.bucketball.game.android.AndroidLauncher: android.content.pm.PackageManager getPackageManager()>();
+
+        varReplacer1415 = "com.bucketball.game.android";
+
+        varReplacer1416 = 64;
+
+        $r6 = virtualinvoke $r5.<android.content.pm.PackageManager: android.content.pm.PackageInfo getPackageInfo(java.lang.String,int)>(varReplacer1415, varReplacer1416);
+
+     label02:
+        $r7 = $r6.<android.content.pm.PackageInfo: android.content.pm.Signature[] signatures>;
+
+        $i0 = lengthof $r7;
+
+        $i1 = 0;
+
+     label03:
+        if $i1 >= $i0 goto label09;
+
+        $r2 = $r7[$i1];
+
+     label04:
+        varReplacer1421 = "SHA";
+
+        $r8 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1421);
+
+        $r9 = virtualinvoke $r2.<android.content.pm.Signature: byte[] toByteArray()>();
+
+        virtualinvoke $r8.<java.security.MessageDigest: void update(byte[])>($r9);
+
+     label05:
+        $r4 = <java.lang.System: java.io.PrintStream out>;
+
+        r20 = new java.lang.StringBuilder;
+
+        $r10 = r20;
+
+     label06:
+        specialinvoke r20.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1410 = "KeyHash:";
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1410);
+
+        $r9 = virtualinvoke $r8.<java.security.MessageDigest: byte[] digest()>();
+
+        varReplacer1418 = 0;
+
+        $r11 = staticinvoke <android.util.Base64: java.lang.String encodeToString(byte[],int)>($r9, varReplacer1418);
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r4.<java.io.PrintStream: void println(java.lang.String)>($r11);
+
+     label07:
+        $i1 = $i1 + 1;
+
+        goto label03;
+
+     label08:
+        $r12 := @caughtexception;
+
+        $r4 = <java.lang.System: java.io.PrintStream out>;
+
+        r20 = new java.lang.StringBuilder;
+
+        specialinvoke r20.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1411 = "ALIK_DBG NameNotFoundException ";
+
+        $r10 = virtualinvoke r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1411);
+
+        r23 = (android.content.pm.PackageManager$NameNotFoundException) $r12;
+
+        $r11 = virtualinvoke r23.<android.content.pm.PackageManager$NameNotFoundException: java.lang.String toString()>();
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r4.<java.io.PrintStream: void println(java.lang.String)>($r11);
+
+     label09:
+        $r4 = <java.lang.System: java.io.PrintStream out>;
+
+        varReplacer1423 = "Start OnCreate gameHelper create ... ";
+
+        virtualinvoke $r4.<java.io.PrintStream: void println(java.lang.String)>(varReplacer1423);
+
+        r21 = new com.bucketball.game.android.GameHelper;
+
+        varReplacer1426 = 1;
+
+        specialinvoke r21.<com.bucketball.game.android.GameHelper: void <init>(android.app.Activity,int)>($r0, varReplacer1426);
+
+        $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper> = r21;
+
+        $r13 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        virtualinvoke $r13.<com.bucketball.game.android.GameHelper: void setup(com.bucketball.game.android.GameHelper$GameHelperListener)>($r0);
+
+        $r13 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        varReplacer1413 = 1;
+
+        virtualinvoke $r13.<com.bucketball.game.android.GameHelper: void setConnectOnStart(boolean)>(varReplacer1413);
+
+        $r13 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        varReplacer1414 = 1;
+
+        virtualinvoke $r13.<com.bucketball.game.android.GameHelper: void enableDebugLog(boolean)>(varReplacer1414);
+
+        $r13 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        virtualinvoke $r13.<com.bucketball.game.android.GameHelper: void beginUserInitiatedSignIn()>();
+
+        varReplacer1419 = "vibrator";
+
+        $r14 = virtualinvoke $r0.<com.bucketball.game.android.AndroidLauncher: java.lang.Object getSystemService(java.lang.String)>(varReplacer1419);
+
+        if $r14 == null goto label12;
+
+        $r15 = staticinvoke <com.bucketball.game.BucketBall: com.bucketball.game.BucketBall getInstance()>();
+
+        varReplacer1420 = 1;
+
+        virtualinvoke $r15.<com.bucketball.game.BucketBall: void setVibroExists(boolean)>(varReplacer1420);
+
+     label10:
+        $r15 = staticinvoke <com.bucketball.game.BucketBall: com.bucketball.game.BucketBall getInstance()>();
+
+        virtualinvoke $r15.<com.bucketball.game.BucketBall: void setAdsController(com.bucketball.game.AdsController)>($r0);
+
+        $r15 = staticinvoke <com.bucketball.game.BucketBall: com.bucketball.game.BucketBall getInstance()>();
+
+        virtualinvoke $r15.<com.bucketball.game.BucketBall: void setGameController(com.bucketball.game.GameController)>($r0);
+
+        varReplacer1424 = 2130903063;
+
+        virtualinvoke $r0.<com.bucketball.game.android.AndroidLauncher: void setContentView(int)>(varReplacer1424);
+
+        r22 = new com.bucketball.game.android.GameFragment;
+
+        specialinvoke r22.<com.bucketball.game.android.GameFragment: void <init>()>();
+
+        $r16 = virtualinvoke $r0.<com.bucketball.game.android.AndroidLauncher: android.support.v4.app.FragmentManager getSupportFragmentManager()>();
+
+        $r17 = virtualinvoke $r16.<android.support.v4.app.FragmentManager: android.support.v4.app.FragmentTransaction beginTransaction()>();
+
+        varReplacer1409 = 2131492929;
+
+        virtualinvoke $r17.<android.support.v4.app.FragmentTransaction: android.support.v4.app.FragmentTransaction replace(int,android.support.v4.app.Fragment)>(varReplacer1409, r22);
+
+        virtualinvoke $r17.<android.support.v4.app.FragmentTransaction: int commit()>();
+
+        specialinvoke $r0.<com.bucketball.game.android.AndroidLauncher: void setBunnerAd()>();
+
+        virtualinvoke $r0.<com.bucketball.game.android.AndroidLauncher: void addMobInterstitialAdInit()>();
+
+        if $r1 != null goto label13;
+
+        $r18 = staticinvoke <com.appbrain.InterstitialBuilder: com.appbrain.InterstitialBuilder create()>();
+
+        virtualinvoke $r18.<com.appbrain.InterstitialBuilder: boolean show(android.content.Context)>($r0);
+
+        return;
+
+     label11:
+        $r19 := @caughtexception;
+
+        $r4 = <java.lang.System: java.io.PrintStream out>;
+
+        r20 = new java.lang.StringBuilder;
+
+        specialinvoke r20.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer1412 = "ALIK_DBG NoSuchAlgorithmException ";
+
+        $r10 = virtualinvoke r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer1412);
+
+        r24 = (java.security.NoSuchAlgorithmException) $r19;
+
+        $r11 = virtualinvoke r24.<java.security.NoSuchAlgorithmException: java.lang.String toString()>();
+
+        $r10 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r4.<java.io.PrintStream: void println(java.lang.String)>($r11);
+
+        goto label09;
+
+     label12:
+        $r15 = staticinvoke <com.bucketball.game.BucketBall: com.bucketball.game.BucketBall getInstance()>();
+
+        varReplacer1417 = 0;
+
+        virtualinvoke $r15.<com.bucketball.game.BucketBall: void setVibroExists(boolean)>(varReplacer1417);
+
+        goto label10;
+
+     label13:
+        return;
+
+        catch android.content.pm.PackageManager$NameNotFoundException from label01 to label02 with label08;
+        catch android.content.pm.PackageManager$NameNotFoundException from label04 to label05 with label08;
+        catch android.content.pm.PackageManager$NameNotFoundException from label06 to label07 with label08;
+        catch java.security.NoSuchAlgorithmException from label01 to label02 with label11;
+        catch java.security.NoSuchAlgorithmException from label04 to label05 with label11;
+        catch java.security.NoSuchAlgorithmException from label06 to label07 with label11;
+    }
+
+    protected void onDestroy()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        java.io.PrintStream $r1;
+        java.lang.String varReplacer1432;
+        int varReplacer1433;
+
+        nop;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 = <java.lang.System: java.io.PrintStream out>;
+
+        varReplacer1432 = "AndroidLauncher - onDestroy";
+
+        virtualinvoke $r1.<java.io.PrintStream: void println(java.lang.String)>(varReplacer1432);
+
+        varReplacer1433 = 0;
+
+        staticinvoke <java.lang.System: void exit(int)>(varReplacer1433);
+
+        specialinvoke $r0.<android.support.v4.app.FragmentActivity: void onDestroy()>();
+
+        return;
+    }
+
+    public void onDialogDismissed()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r0.<com.bucketball.game.android.AndroidLauncher: boolean mResolvingError> = 0;
+
+        return;
+    }
+
+    public void onSignInFailed()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        java.io.PrintStream $r1;
+        int $i0;
+        java.lang.String varReplacer1810;
+
+        nop;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 = <java.lang.System: java.io.PrintStream out>;
+
+        varReplacer1810 = "sign in failed!";
+
+        virtualinvoke $r1.<java.io.PrintStream: void println(java.lang.String)>(varReplacer1810);
+
+        $i0 = $r0.<com.bucketball.game.android.AndroidLauncher: int cntSignInFailed>;
+
+        $i0 = $i0 + 1;
+
+        $r0.<com.bucketball.game.android.AndroidLauncher: int cntSignInFailed> = $i0;
+
+        return;
+    }
+
+    public void onSignInSucceeded()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        java.io.PrintStream $r1;
+        java.lang.String varReplacer1809;
+
+        nop;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 = <java.lang.System: java.io.PrintStream out>;
+
+        varReplacer1809 = "sign in succeeded!";
+
+        virtualinvoke $r1.<java.io.PrintStream: void println(java.lang.String)>(varReplacer1809);
+
+        return;
+    }
+
+    protected void onStart()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        com.bucketball.game.android.GameHelper $r1;
+
+        nop;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        specialinvoke $r0.<android.support.v4.app.FragmentActivity: void onStart()>();
+
+        $r1 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        virtualinvoke $r1.<com.bucketball.game.android.GameHelper: void onStart(android.app.Activity)>($r0);
+
+        return;
+    }
+
+    protected void onStop()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        boolean $z0;
+        java.io.PrintStream $r1;
+        com.google.android.gms.common.api.GoogleApiClient $r2;
+        com.bucketball.game.android.GameHelper $r3;
+        java.lang.String varReplacer1430, varReplacer1431;
+
+        nop;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 = <java.lang.System: java.io.PrintStream out>;
+
+        varReplacer1431 = "Alik:AndroidLauncher: onStop";
+
+        virtualinvoke $r1.<java.io.PrintStream: void println(java.lang.String)>(varReplacer1431);
+
+        specialinvoke $r0.<android.support.v4.app.FragmentActivity: void onStop()>();
+
+        $r2 = $r0.<com.bucketball.game.android.AndroidLauncher: com.google.android.gms.common.api.GoogleApiClient mGoogleApiClient>;
+
+        if $r2 == null goto label1;
+
+        $r2 = $r0.<com.bucketball.game.android.AndroidLauncher: com.google.android.gms.common.api.GoogleApiClient mGoogleApiClient>;
+
+        $z0 = interfaceinvoke $r2.<com.google.android.gms.common.api.GoogleApiClient: boolean isConnected()>();
+
+        if $z0 == 0 goto label1;
+
+        $r2 = $r0.<com.bucketball.game.android.AndroidLauncher: com.google.android.gms.common.api.GoogleApiClient mGoogleApiClient>;
+
+        interfaceinvoke $r2.<com.google.android.gms.common.api.GoogleApiClient: void disconnect()>();
+
+        $r1 = <java.lang.System: java.io.PrintStream out>;
+
+        varReplacer1430 = "GPGS onStop :";
+
+        virtualinvoke $r1.<java.io.PrintStream: void println(java.lang.String)>(varReplacer1430);
+
+        $r3 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        virtualinvoke $r3.<com.bucketball.game.android.GameHelper: void onStop()>();
+
+     label1:
+        return;
+    }
+
+    public void rateApp()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        java.io.PrintStream $r1;
+        com.badlogic.gdx.Net $r2;
+        android.content.res.Resources $r3;
+        java.lang.String $r4;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 = <java.lang.System: java.io.PrintStream out>;
+
+        virtualinvoke $r1.<java.io.PrintStream: void println(java.lang.String)>("RateApp...");
+
+        $r2 = <com.badlogic.gdx.Gdx: com.badlogic.gdx.Net net>;
+
+        $r3 = virtualinvoke $r0.<com.bucketball.game.android.AndroidLauncher: android.content.res.Resources getResources()>();
+
+        $r4 = virtualinvoke $r3.<android.content.res.Resources: java.lang.String getString(int)>(2131099696);
+
+        interfaceinvoke $r2.<com.badlogic.gdx.Net: void openURI(java.lang.String)>($r4);
+
+        return;
+    }
+
+    public void setGlobalScore(com.bucketball.game.BucketBall$GameMode, int)
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        com.bucketball.game.BucketBall$GameMode $r1;
+        int $i0, $i2;
+        java.lang.Throwable $r2;
+        long $l1;
+        java.io.PrintStream $r3;
+        java.lang.StringBuilder $r4;
+        java.lang.String $r5;
+        com.bucketball.game.android.GameHelper $r6;
+        com.google.android.gms.common.api.GoogleApiClient $r7;
+        java.lang.IllegalStateException $r8;
+        boolean $z0;
+        com.google.android.gms.games.leaderboard.Leaderboards $r9;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 := @parameter0: com.bucketball.game.BucketBall$GameMode;
+
+        $i0 := @parameter1: int;
+
+        $r3 = <java.lang.System: java.io.PrintStream out>;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" setGlobalScore: mode ");
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r1);
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" score: ");
+
+        $r4 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r3.<java.io.PrintStream: void println(java.lang.String)>($r5);
+
+        $r6 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        $r7 = virtualinvoke $r6.<com.bucketball.game.android.GameHelper: com.google.android.gms.common.api.GoogleApiClient getApiClient()>();
+
+        if $r7 != null goto label01;
+
+        $r8 = new java.lang.IllegalStateException;
+
+        specialinvoke $r8.<java.lang.IllegalStateException: void <init>(java.lang.String)>("ZHOPA  No GoogleApiClient. Did you call setup()?");
+
+        throw $r8;
+
+     label01:
+        $r6 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        $r7 = virtualinvoke $r6.<com.bucketball.game.android.GameHelper: com.google.android.gms.common.api.GoogleApiClient getApiClient()>();
+
+        if $r7 == null goto label09;
+
+        $r6 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        $r7 = virtualinvoke $r6.<com.bucketball.game.android.GameHelper: com.google.android.gms.common.api.GoogleApiClient getApiClient()>();
+
+        $z0 = interfaceinvoke $r7.<com.google.android.gms.common.api.GoogleApiClient: boolean isConnected()>();
+
+        if $z0 == 0 goto label10;
+
+        $r9 = <com.google.android.gms.games.Games: com.google.android.gms.games.leaderboard.Leaderboards Leaderboards>;
+
+        $r6 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+     label02:
+        $r7 = virtualinvoke $r6.<com.bucketball.game.android.GameHelper: com.google.android.gms.common.api.GoogleApiClient getApiClient()>();
+
+     label03:
+        $r6 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+     label04:
+        $i2 = staticinvoke <com.bucketball.game.BucketBall$GameMode: int toInt(com.bucketball.game.BucketBall$GameMode)>($r1);
+
+        $r5 = virtualinvoke $r6.<com.bucketball.game.android.GameHelper: java.lang.String GoogleApiLeaderBoardIdByGameMode(int)>($i2);
+
+     label05:
+        $l1 = (long) $i0;
+
+     label06:
+        interfaceinvoke $r9.<com.google.android.gms.games.leaderboard.Leaderboards: void submitScore(com.google.android.gms.common.api.GoogleApiClient,java.lang.String,long)>($r7, $r5, $l1);
+
+     label07:
+        return;
+
+     label08:
+        $r2 := @caughtexception;
+
+        $r3 = <java.lang.System: java.io.PrintStream out>;
+
+        virtualinvoke $r3.<java.io.PrintStream: void println(java.lang.String)>("ALIK: GoogleApiClient must be connected.");
+
+        return;
+
+     label09:
+        $r8 = new java.lang.IllegalStateException;
+
+        specialinvoke $r8.<java.lang.IllegalStateException: void <init>(java.lang.String)>("ALIK: No GoogleApiClient. Did you call setup()?");
+
+        throw $r8;
+
+     label10:
+        return;
+
+        catch java.lang.IllegalStateException from label02 to label03 with label08;
+        catch java.lang.IllegalStateException from label04 to label05 with label08;
+        catch java.lang.IllegalStateException from label06 to label07 with label08;
+    }
+
+    public void showAppBrainOnExitAdd()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        com.appbrain.AdId $r1;
+        com.appbrain.InterstitialBuilder $r2;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r2 = staticinvoke <com.appbrain.InterstitialBuilder: com.appbrain.InterstitialBuilder create()>();
+
+        $r1 = <com.appbrain.AdId: com.appbrain.AdId EXIT>;
+
+        $r2 = virtualinvoke $r2.<com.appbrain.InterstitialBuilder: com.appbrain.InterstitialBuilder setAdId(com.appbrain.AdId)>($r1);
+
+        $r2 = virtualinvoke $r2.<com.appbrain.InterstitialBuilder: com.appbrain.InterstitialBuilder setFinishOnExit(android.app.Activity)>($r0);
+
+        virtualinvoke $r2.<com.appbrain.InterstitialBuilder: boolean show(android.content.Context)>($r0);
+
+        return;
+    }
+
+    public void showGlobalScores(com.bucketball.game.BucketBall$GameMode)
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        com.bucketball.game.BucketBall$GameMode $r1;
+        java.lang.Throwable $r2;
+        java.io.PrintStream $r3;
+        com.bucketball.game.android.GameHelper $r4;
+        com.google.android.gms.common.api.GoogleApiClient $r5;
+        com.google.android.gms.games.leaderboard.Leaderboards $r6;
+        int $i0;
+        java.lang.String $r7;
+        android.content.Intent $r8;
+        java.lang.StringBuilder $r9, r10;
+        java.lang.IllegalStateException r11;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 := @parameter0: com.bucketball.game.BucketBall$GameMode;
+
+        $r3 = <java.lang.System: java.io.PrintStream out>;
+
+        virtualinvoke $r3.<java.io.PrintStream: void println(java.lang.String)>("showGlobalScores...GooglePlay: 1");
+
+        $r4 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+     label01:
+        $r5 = virtualinvoke $r4.<com.bucketball.game.android.GameHelper: com.google.android.gms.common.api.GoogleApiClient getApiClient()>();
+
+     label02:
+        if $r5 == null goto label07;
+
+        $r6 = <com.google.android.gms.games.Games: com.google.android.gms.games.leaderboard.Leaderboards Leaderboards>;
+
+        $r4 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+     label03:
+        $r5 = virtualinvoke $r4.<com.bucketball.game.android.GameHelper: com.google.android.gms.common.api.GoogleApiClient getApiClient()>();
+
+     label04:
+        $r4 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+     label05:
+        $i0 = staticinvoke <com.bucketball.game.BucketBall$GameMode: int toInt(com.bucketball.game.BucketBall$GameMode)>($r1);
+
+        $r7 = virtualinvoke $r4.<com.bucketball.game.android.GameHelper: java.lang.String GoogleApiLeaderBoardIdByGameMode(int)>($i0);
+
+        $r8 = interfaceinvoke $r6.<com.google.android.gms.games.leaderboard.Leaderboards: android.content.Intent getLeaderboardIntent(com.google.android.gms.common.api.GoogleApiClient,java.lang.String)>($r5, $r7);
+
+        virtualinvoke $r0.<com.bucketball.game.android.AndroidLauncher: void startActivityForResult(android.content.Intent,int)>($r8, 10);
+
+     label06:
+        return;
+
+     label07:
+        $r3 = <java.lang.System: java.io.PrintStream out>;
+
+     label08:
+        virtualinvoke $r3.<java.io.PrintStream: void println(java.lang.String)>("Google Client does not connected !!!! <<<<<<<<<<<<<<<<<<<");
+
+     label09:
+        return;
+
+     label10:
+        $r2 := @caughtexception;
+
+        $r3 = <java.lang.System: java.io.PrintStream out>;
+
+        r10 = new java.lang.StringBuilder;
+
+        specialinvoke r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("showGlobalScores not connected: ");
+
+        r11 = (java.lang.IllegalStateException) $r2;
+
+        $r7 = virtualinvoke r11.<java.lang.IllegalStateException: java.lang.String toString()>();
+
+        $r9 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r3.<java.io.PrintStream: void println(java.lang.String)>($r7);
+
+        return;
+
+        catch java.lang.IllegalStateException from label01 to label02 with label10;
+        catch java.lang.IllegalStateException from label03 to label04 with label10;
+        catch java.lang.IllegalStateException from label05 to label06 with label10;
+        catch java.lang.IllegalStateException from label08 to label09 with label10;
+    }
+
+    public void showInterstitialAd()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        java.io.PrintStream $r1;
+        com.bucketball.game.android.AndroidLauncher$2 $r2;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 = <java.lang.System: java.io.PrintStream out>;
+
+        virtualinvoke $r1.<java.io.PrintStream: void println(java.lang.String)>("AndroidLauncher-showInterstitialAd ");
+
+        $r2 = new com.bucketball.game.android.AndroidLauncher$2;
+
+        specialinvoke $r2.<com.bucketball.game.android.AndroidLauncher$2: void <init>(com.bucketball.game.android.AndroidLauncher)>($r0);
+
+        virtualinvoke $r0.<com.bucketball.game.android.AndroidLauncher: void runOnUiThread(java.lang.Runnable)>($r2);
+
+        return;
+    }
+
+    public void showMoreGames()
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        com.badlogic.gdx.Net $r1;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 = <com.badlogic.gdx.Gdx: com.badlogic.gdx.Net net>;
+
+        interfaceinvoke $r1.<com.badlogic.gdx.Net: void openURI(java.lang.String)>("https://play.google.com/store/apps/details?id=com.fstudio.catchballon.android");
+
+        return;
+    }
+
+    public void submitScoreGPGS(int)
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        int $i0;
+        com.google.android.gms.games.leaderboard.Leaderboards $r1;
+        long $l1;
+        com.google.android.gms.common.api.GoogleApiClient $r2;
+        com.bucketball.game.android.GameHelper $r3;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $i0 := @parameter0: int;
+
+        $r1 = <com.google.android.gms.games.Games: com.google.android.gms.games.leaderboard.Leaderboards Leaderboards>;
+
+        $r3 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        $r2 = virtualinvoke $r3.<com.bucketball.game.android.GameHelper: com.google.android.gms.common.api.GoogleApiClient getApiClient()>();
+
+        $l1 = (long) $i0;
+
+        interfaceinvoke $r1.<com.google.android.gms.games.leaderboard.Leaderboards: void submitScore(com.google.android.gms.common.api.GoogleApiClient,java.lang.String,long)>($r2, "HgkIr62KmoQJEAIQAQ", $l1);
+
+        return;
+    }
+
+    public void unlockAchievementGPGS(java.lang.String)
+    {
+        com.bucketball.game.android.AndroidLauncher $r0;
+        java.lang.String $r1;
+        com.google.android.gms.games.achievement.Achievements $r2;
+        com.google.android.gms.common.api.GoogleApiClient $r3;
+        com.bucketball.game.android.GameHelper $r4;
+
+        $r0 := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r1 := @parameter0: java.lang.String;
+
+        $r2 = <com.google.android.gms.games.Games: com.google.android.gms.games.achievement.Achievements Achievements>;
+
+        $r4 = $r0.<com.bucketball.game.android.AndroidLauncher: com.bucketball.game.android.GameHelper gameHelper>;
+
+        $r3 = virtualinvoke $r4.<com.bucketball.game.android.GameHelper: com.google.android.gms.common.api.GoogleApiClient getApiClient()>();
+
+        interfaceinvoke $r2.<com.google.android.gms.games.achievement.Achievements: void unlock(com.google.android.gms.common.api.GoogleApiClient,java.lang.String)>($r3, $r1);
+
+        return;
+    }
+
+    public android.content.Intent getIntent()
+    {
+        com.bucketball.game.android.AndroidLauncher this;
+        android.content.Intent $r0;
+
+        this := @this: com.bucketball.game.android.AndroidLauncher;
+
+        $r0 = this.<com.bucketball.game.android.AndroidLauncher: android.content.Intent ipcIntent>;
+
+        return $r0;
+    }
+
+    public void setIntent(android.content.Intent)
+    {
+        com.bucketball.game.android.AndroidLauncher this;
+        android.content.Intent parameter0;
+
+        this := @this: com.bucketball.game.android.AndroidLauncher;
+
+        parameter0 := @parameter0: android.content.Intent;
+
+        this.<com.bucketball.game.android.AndroidLauncher: android.content.Intent ipcIntent> = parameter0;
+
+        return;
+    }
+
+    public void setResult(int, android.content.Intent)
+    {
+        com.bucketball.game.android.AndroidLauncher this;
+        int parameter0;
+        android.content.Intent parameter1;
+
+        this := @this: com.bucketball.game.android.AndroidLauncher;
+
+        parameter0 := @parameter0: int;
+
+        parameter1 := @parameter1: android.content.Intent;
+
+        this.<com.bucketball.game.android.AndroidLauncher: android.content.Intent ipcResultIntent> = parameter1;
+
+        return;
+    }
+}

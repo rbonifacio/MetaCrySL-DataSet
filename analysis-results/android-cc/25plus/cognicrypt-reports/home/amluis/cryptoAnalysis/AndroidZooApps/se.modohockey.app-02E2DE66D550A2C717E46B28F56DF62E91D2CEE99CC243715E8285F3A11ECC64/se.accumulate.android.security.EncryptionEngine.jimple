@@ -1,0 +1,1151 @@
+public final class se.accumulate.android.security.EncryptionEngine extends java.lang.Object
+{
+    private javax.crypto.Cipher mDecryptEngine;
+    private javax.crypto.Cipher mEncryptEngine;
+    private byte[] mHmacSecret;
+    private int mRequestCount;
+
+    public void <init>()
+    {
+        se.accumulate.android.security.EncryptionEngine $r0;
+        int varReplacer202;
+
+        nop;
+
+        $r0 := @this: se.accumulate.android.security.EncryptionEngine;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        varReplacer202 = 0;
+
+        $r0.<se.accumulate.android.security.EncryptionEngine: int mRequestCount> = varReplacer202;
+
+        return;
+    }
+
+    private static final byte[] calculateRfc2104Hmac(byte[], byte[]) throws java.security.SignatureException
+    {
+        byte[] $r0, $r1;
+        java.lang.Exception $r2;
+        javax.crypto.spec.SecretKeySpec $r3;
+        javax.crypto.Mac $r4;
+        java.security.SignatureException $r5;
+        java.lang.StringBuilder $r6;
+        java.lang.String $r7, varReplacer356, varReplacer357, varReplacer358, varReplacer359;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: byte[];
+
+        $r3 = new javax.crypto.spec.SecretKeySpec;
+
+     label1:
+        varReplacer357 = "HmacSHA1";
+
+        specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer357);
+
+        varReplacer356 = "HmacSHA1";
+
+        $r4 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer356);
+
+        virtualinvoke $r4.<javax.crypto.Mac: void init(java.security.Key)>($r3);
+
+        $r0 = virtualinvoke $r4.<javax.crypto.Mac: byte[] doFinal(byte[])>($r0);
+
+     label2:
+        return $r0;
+
+     label3:
+        $r2 := @caughtexception;
+
+        varReplacer358 = "Exception";
+
+        staticinvoke <se.accumulate.android.log.DebugLogger: void printWarning(java.lang.String,java.lang.Exception)>(varReplacer358, $r2);
+
+        $r5 = new java.security.SignatureException;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        varReplacer359 = "Failed to generate HMAC : ";
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(varReplacer359);
+
+        $r7 = virtualinvoke $r2.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r6 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.security.SignatureException: void <init>(java.lang.String)>($r7);
+
+        throw $r5;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public static final void clearKey(java.lang.String, android.content.Context) throws java.lang.Exception
+    {
+        java.lang.String $r0, $r2;
+        android.content.Context $r1;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: android.content.Context;
+
+        $r2 = staticinvoke <se.accumulate.android.security.KeyStoreHandler: java.lang.String getStorePass(android.content.Context)>($r1);
+
+        staticinvoke <se.accumulate.android.security.KeyStoreHandler: void clearKey(java.lang.String,java.lang.String,android.content.Context)>($r2, $r0, $r1);
+
+        return;
+    }
+
+    public static final void clearKeyStore(android.content.Context) throws java.lang.Exception
+    {
+        android.content.Context $r0;
+
+        $r0 := @parameter0: android.content.Context;
+
+        staticinvoke <se.accumulate.android.security.KeyStoreHandler: void clearKeyStore(android.content.Context)>($r0);
+
+        return;
+    }
+
+    public static final java.security.PublicKey getPublicKey(java.lang.String, java.lang.String) throws java.lang.Exception
+    {
+        java.lang.String $r0, $r1, varReplacer410;
+        java.security.spec.RSAPublicKeySpec $r2;
+        java.math.BigInteger $r3, $r5;
+        java.security.KeyFactory $r4;
+        java.security.PublicKey $r6;
+        java.security.interfaces.RSAPublicKey $r7;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        varReplacer410 = "RSA";
+
+        $r4 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer410);
+
+        $r2 = new java.security.spec.RSAPublicKeySpec;
+
+        $r5 = new java.math.BigInteger;
+
+        specialinvoke $r5.<java.math.BigInteger: void <init>(java.lang.String)>($r0);
+
+        $r3 = new java.math.BigInteger;
+
+        specialinvoke $r3.<java.math.BigInteger: void <init>(java.lang.String)>($r1);
+
+        specialinvoke $r2.<java.security.spec.RSAPublicKeySpec: void <init>(java.math.BigInteger,java.math.BigInteger)>($r5, $r3);
+
+        $r6 = virtualinvoke $r4.<java.security.KeyFactory: java.security.PublicKey generatePublic(java.security.spec.KeySpec)>($r2);
+
+        $r7 = (java.security.interfaces.RSAPublicKey) $r6;
+
+        return $r7;
+    }
+
+    public static final boolean isSignatureValid(byte[], byte[], java.security.PublicKey)
+    {
+        byte[] $r0, $r1;
+        java.security.PublicKey $r2;
+        java.lang.Exception $r3;
+        java.security.Signature $r4;
+        boolean $z0;
+        java.lang.RuntimeException $r5;
+        java.lang.String varReplacer306, varReplacer307;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 := @parameter1: byte[];
+
+        $r2 := @parameter2: java.security.PublicKey;
+
+     label1:
+        varReplacer306 = "SHA1withRSA";
+
+        $r4 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer306);
+
+        virtualinvoke $r4.<java.security.Signature: void initVerify(java.security.PublicKey)>($r2);
+
+        virtualinvoke $r4.<java.security.Signature: void update(byte[])>($r0);
+
+        $z0 = virtualinvoke $r4.<java.security.Signature: boolean verify(byte[])>($r1);
+
+     label2:
+        return $z0;
+
+     label3:
+        $r3 := @caughtexception;
+
+        varReplacer307 = "Exception";
+
+        staticinvoke <se.accumulate.android.log.DebugLogger: void printWarning(java.lang.String,java.lang.Exception)>(varReplacer307, $r3);
+
+        $r5 = new java.lang.RuntimeException;
+
+        specialinvoke $r5.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r3);
+
+        throw $r5;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public final byte[] decrypt(byte[], android.content.Context) throws java.lang.Exception
+    {
+        se.accumulate.android.security.EncryptionEngine $r0;
+        byte[] $r1, $r9, $r10;
+        android.content.Context $r2;
+        java.lang.String $r3, $r5, varReplacer351;
+        android.content.pm.PackageManager $r4;
+        int $i0, $i1, varReplacer350, varReplacer352, varReplacer353;
+        java.lang.String[] $r6;
+        boolean $z0;
+        java.lang.IllegalAccessException $r7;
+        javax.crypto.Cipher $r8;
+        javax.crypto.BadPaddingException $r11;
+
+        nop;
+
+        $r0 := @this: se.accumulate.android.security.EncryptionEngine;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 := @parameter1: android.content.Context;
+
+        $r4 = virtualinvoke $r2.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $i0 = staticinvoke <android.os.Binder: int getCallingUid()>();
+
+        $r5 = virtualinvoke $r4.<android.content.pm.PackageManager: java.lang.String getNameForUid(int)>($i0);
+
+        $i0 = 0;
+
+     label1:
+        $r6 = <se.accumulate.android.IMeContext: java.lang.String[] ILLEGAL_PERMISSIONS>;
+
+        $i1 = lengthof $r6;
+
+        if $i0 >= $i1 goto label5;
+
+        $r6 = <se.accumulate.android.IMeContext: java.lang.String[] ILLEGAL_PERMISSIONS>;
+
+        $r3 = $r6[$i0];
+
+        $i1 = virtualinvoke $r4.<android.content.pm.PackageManager: int checkPermission(java.lang.String,java.lang.String)>($r3, $r5);
+
+        if $i1 != 0 goto label3;
+
+        $z0 = 1;
+
+     label2:
+        if $z0 == 0 goto label4;
+
+        $r7 = new java.lang.IllegalAccessException;
+
+        specialinvoke $r7.<java.lang.IllegalAccessException: void <init>()>();
+
+        throw $r7;
+
+     label3:
+        $z0 = 0;
+
+        goto label2;
+
+     label4:
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label5:
+        $r8 = $r0.<se.accumulate.android.security.EncryptionEngine: javax.crypto.Cipher mDecryptEngine>;
+
+        $r9 = virtualinvoke $r8.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1);
+
+        $r1 = $r0.<se.accumulate.android.security.EncryptionEngine: byte[] mHmacSecret>;
+
+        if $r1 == null goto label6;
+
+        varReplacer352 = 0;
+
+        varReplacer353 = 20;
+
+        $r1 = staticinvoke <se.accumulate.android.util.ArrayUtil: byte[] copyOfRange(byte[],int,int)>($r9, varReplacer352, varReplacer353);
+
+        $i0 = lengthof $r9;
+
+        varReplacer350 = 20;
+
+        $r9 = staticinvoke <se.accumulate.android.util.ArrayUtil: byte[] copyOfRange(byte[],int,int)>($r9, varReplacer350, $i0);
+
+        $r10 = $r0.<se.accumulate.android.security.EncryptionEngine: byte[] mHmacSecret>;
+
+        $z0 = virtualinvoke $r0.<se.accumulate.android.security.EncryptionEngine: boolean isValidHmac(byte[],byte[],byte[])>($r10, $r1, $r9);
+
+        if $z0 != 0 goto label6;
+
+        $r11 = new javax.crypto.BadPaddingException;
+
+        varReplacer351 = "! HMAC validation failed !";
+
+        specialinvoke $r11.<javax.crypto.BadPaddingException: void <init>(java.lang.String)>(varReplacer351);
+
+        throw $r11;
+
+     label6:
+        return $r9;
+    }
+
+    public final byte[] encrypt(byte[], android.content.Context) throws java.lang.Exception
+    {
+        se.accumulate.android.security.EncryptionEngine $r0;
+        byte[] $r1, $r3, $r5;
+        android.content.Context $r2;
+        java.lang.String $r4, $r7, varReplacer385;
+        android.content.pm.PackageManager $r6;
+        int $i0, $i1, varReplacer382, varReplacer383, varReplacer384, varReplacer386, varReplacer387, varReplacer388;
+        java.lang.String[] $r8;
+        boolean $z0;
+        java.lang.IllegalAccessException $r9;
+        byte $b2;
+        javax.crypto.Cipher $r10;
+
+        nop;
+
+        $r0 := @this: se.accumulate.android.security.EncryptionEngine;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 := @parameter1: android.content.Context;
+
+        $r6 = virtualinvoke $r2.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $i0 = staticinvoke <android.os.Binder: int getCallingUid()>();
+
+        $r7 = virtualinvoke $r6.<android.content.pm.PackageManager: java.lang.String getNameForUid(int)>($i0);
+
+        $i0 = 0;
+
+     label1:
+        $r8 = <se.accumulate.android.IMeContext: java.lang.String[] ILLEGAL_PERMISSIONS>;
+
+        $i1 = lengthof $r8;
+
+        if $i0 >= $i1 goto label5;
+
+        $r8 = <se.accumulate.android.IMeContext: java.lang.String[] ILLEGAL_PERMISSIONS>;
+
+        $r4 = $r8[$i0];
+
+        $i1 = virtualinvoke $r6.<android.content.pm.PackageManager: int checkPermission(java.lang.String,java.lang.String)>($r4, $r7);
+
+        if $i1 != 0 goto label3;
+
+        $z0 = 1;
+
+     label2:
+        if $z0 == 0 goto label4;
+
+        $r9 = new java.lang.IllegalAccessException;
+
+        specialinvoke $r9.<java.lang.IllegalAccessException: void <init>()>();
+
+        throw $r9;
+
+     label3:
+        $z0 = 0;
+
+        goto label2;
+
+     label4:
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label5:
+        $i0 = $r0.<se.accumulate.android.security.EncryptionEngine: int mRequestCount>;
+
+        $i0 = $i0 + 1;
+
+        $r0.<se.accumulate.android.security.EncryptionEngine: int mRequestCount> = $i0;
+
+        $r5 = newarray (byte)[4];
+
+        $i0 = $r0.<se.accumulate.android.security.EncryptionEngine: int mRequestCount>;
+
+        $i0 = $i0 >> 24;
+
+        $i0 = $i0 & 255;
+
+        $b2 = (byte) $i0;
+
+        $r5[0] = $b2;
+
+        $i0 = $r0.<se.accumulate.android.security.EncryptionEngine: int mRequestCount>;
+
+        $i0 = $i0 >> 16;
+
+        $i0 = $i0 & 255;
+
+        $b2 = (byte) $i0;
+
+        $r5[1] = $b2;
+
+        $i0 = $r0.<se.accumulate.android.security.EncryptionEngine: int mRequestCount>;
+
+        $i0 = $i0 >> 8;
+
+        $i0 = $i0 & 255;
+
+        $b2 = (byte) $i0;
+
+        $r5[2] = $b2;
+
+        $i0 = $r0.<se.accumulate.android.security.EncryptionEngine: int mRequestCount>;
+
+        $i0 = $i0 & 255;
+
+        $b2 = (byte) $i0;
+
+        $r5[3] = $b2;
+
+        $i0 = lengthof $r1;
+
+        $i1 = lengthof $r5;
+
+        $i0 = $i0 + $i1;
+
+        $r3 = newarray (byte)[$i0];
+
+        $i0 = lengthof $r5;
+
+        varReplacer382 = 0;
+
+        varReplacer383 = 0;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r5, varReplacer382, $r3, varReplacer382, $i0);
+
+        $i0 = lengthof $r5;
+
+        $i1 = lengthof $r1;
+
+        varReplacer384 = 0;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r1, varReplacer384, $r3, $i0, $i1);
+
+        $r5 = $r0.<se.accumulate.android.security.EncryptionEngine: byte[] mHmacSecret>;
+
+        if $r5 == null goto label6;
+
+        $r1 = $r0.<se.accumulate.android.security.EncryptionEngine: byte[] mHmacSecret>;
+
+        $r5 = staticinvoke <se.accumulate.android.security.EncryptionEngine: byte[] calculateRfc2104Hmac(byte[],byte[])>($r3, $r1);
+
+        $i0 = lengthof $r5;
+
+        $i1 = lengthof $r3;
+
+        $i0 = $i0 + $i1;
+
+        $r1 = newarray (byte)[$i0];
+
+        $i0 = lengthof $r5;
+
+        varReplacer386 = 0;
+
+        varReplacer387 = 0;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r5, varReplacer386, $r1, varReplacer386, $i0);
+
+        $i0 = lengthof $r5;
+
+        $i1 = lengthof $r3;
+
+        varReplacer388 = 0;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r3, varReplacer388, $r1, $i0, $i1);
+
+        $r10 = $r0.<se.accumulate.android.security.EncryptionEngine: javax.crypto.Cipher mEncryptEngine>;
+
+        $r1 = virtualinvoke $r10.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1);
+
+        return $r1;
+
+     label6:
+        varReplacer385 = "HMAC secret not set";
+
+        staticinvoke <se.accumulate.android.log.DebugLogger: void printWarning(java.lang.String)>(varReplacer385);
+
+        $r10 = $r0.<se.accumulate.android.security.EncryptionEngine: javax.crypto.Cipher mEncryptEngine>;
+
+        $r1 = virtualinvoke $r10.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1);
+
+        return $r1;
+    }
+
+    public int getHandshakeCount(android.content.Context) throws java.lang.IllegalAccessException
+    {
+        se.accumulate.android.security.EncryptionEngine $r0;
+        android.content.Context $r1;
+        java.lang.String $r2, $r4, varReplacer389, varReplacer391;
+        android.content.pm.PackageManager $r3;
+        int $i0, $i1, varReplacer390, varReplacer392;
+        java.lang.String[] $r5;
+        boolean $z0;
+        java.lang.IllegalAccessException $r6;
+        android.content.SharedPreferences $r7;
+
+        nop;
+
+        $r0 := @this: se.accumulate.android.security.EncryptionEngine;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r3 = virtualinvoke $r1.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $i0 = staticinvoke <android.os.Binder: int getCallingUid()>();
+
+        $r4 = virtualinvoke $r3.<android.content.pm.PackageManager: java.lang.String getNameForUid(int)>($i0);
+
+        $i0 = 0;
+
+     label1:
+        $r5 = <se.accumulate.android.IMeContext: java.lang.String[] ILLEGAL_PERMISSIONS>;
+
+        $i1 = lengthof $r5;
+
+        if $i0 >= $i1 goto label5;
+
+        $r5 = <se.accumulate.android.IMeContext: java.lang.String[] ILLEGAL_PERMISSIONS>;
+
+        $r2 = $r5[$i0];
+
+        $i1 = virtualinvoke $r3.<android.content.pm.PackageManager: int checkPermission(java.lang.String,java.lang.String)>($r2, $r4);
+
+        if $i1 != 0 goto label3;
+
+        $z0 = 1;
+
+     label2:
+        if $z0 == 0 goto label4;
+
+        $r6 = new java.lang.IllegalAccessException;
+
+        specialinvoke $r6.<java.lang.IllegalAccessException: void <init>()>();
+
+        throw $r6;
+
+     label3:
+        $z0 = 0;
+
+        goto label2;
+
+     label4:
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label5:
+        varReplacer389 = "HandshakeCounterPreferences";
+
+        varReplacer390 = 0;
+
+        $r7 = virtualinvoke $r1.<android.content.Context: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>(varReplacer389, varReplacer390);
+
+        varReplacer391 = "HandshakeCounter";
+
+        varReplacer392 = 0;
+
+        $i0 = interfaceinvoke $r7.<android.content.SharedPreferences: int getInt(java.lang.String,int)>(varReplacer391, varReplacer392);
+
+        return $i0;
+    }
+
+    public boolean isSignatureValid(byte[], byte[], java.lang.String, java.lang.String)
+    {
+        se.accumulate.android.security.EncryptionEngine $r0;
+        byte[] $r1, $r2;
+        java.lang.String $r3, $r4;
+        java.lang.Exception $r5;
+        java.security.spec.RSAPublicKeySpec $r6;
+        java.math.BigInteger $r7, $r9;
+        java.security.KeyFactory $r8;
+        java.security.PublicKey $r10;
+        java.security.interfaces.RSAPublicKey $r11;
+        java.security.Signature $r12;
+        boolean $z0;
+        java.lang.RuntimeException $r13;
+
+        $r0 := @this: se.accumulate.android.security.EncryptionEngine;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 := @parameter1: byte[];
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 := @parameter3: java.lang.String;
+
+     label1:
+        $r8 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>("RSA");
+
+     label2:
+        $r6 = new java.security.spec.RSAPublicKeySpec;
+
+        $r9 = new java.math.BigInteger;
+
+     label3:
+        specialinvoke $r9.<java.math.BigInteger: void <init>(java.lang.String)>($r3);
+
+     label4:
+        $r7 = new java.math.BigInteger;
+
+     label5:
+        specialinvoke $r7.<java.math.BigInteger: void <init>(java.lang.String)>($r4);
+
+        specialinvoke $r6.<java.security.spec.RSAPublicKeySpec: void <init>(java.math.BigInteger,java.math.BigInteger)>($r9, $r7);
+
+        $r10 = virtualinvoke $r8.<java.security.KeyFactory: java.security.PublicKey generatePublic(java.security.spec.KeySpec)>($r6);
+
+        $r11 = (java.security.interfaces.RSAPublicKey) $r10;
+
+        $r12 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>("SHA1withRSA");
+
+        virtualinvoke $r12.<java.security.Signature: void initVerify(java.security.PublicKey)>($r11);
+
+        virtualinvoke $r12.<java.security.Signature: void update(byte[])>($r1);
+
+        $z0 = virtualinvoke $r12.<java.security.Signature: boolean verify(byte[])>($r2);
+
+     label6:
+        return $z0;
+
+     label7:
+        $r5 := @caughtexception;
+
+        staticinvoke <se.accumulate.android.log.DebugLogger: void printWarning(java.lang.String,java.lang.Exception)>("Exception", $r5);
+
+        $r13 = new java.lang.RuntimeException;
+
+        specialinvoke $r13.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r5);
+
+        throw $r13;
+
+        catch java.lang.Exception from label1 to label2 with label7;
+        catch java.lang.Exception from label3 to label4 with label7;
+        catch java.lang.Exception from label5 to label6 with label7;
+    }
+
+    protected final boolean isValidHmac(byte[], byte[], byte[]) throws java.security.SignatureException
+    {
+        se.accumulate.android.security.EncryptionEngine $r0;
+        byte[] $r1, $r2, $r3;
+        java.lang.Exception $r4;
+        boolean $z0;
+        java.security.SignatureException $r5;
+        java.lang.String $r6, varReplacer355;
+
+        nop;
+
+        $r0 := @this: se.accumulate.android.security.EncryptionEngine;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 := @parameter1: byte[];
+
+        $r3 := @parameter2: byte[];
+
+     label1:
+        $r1 = staticinvoke <se.accumulate.android.security.EncryptionEngine: byte[] calculateRfc2104Hmac(byte[],byte[])>($r3, $r1);
+
+        $z0 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>($r1, $r2);
+
+     label2:
+        return $z0;
+
+     label3:
+        $r4 := @caughtexception;
+
+        varReplacer355 = "Exception";
+
+        staticinvoke <se.accumulate.android.log.DebugLogger: void printWarning(java.lang.String,java.lang.Exception)>(varReplacer355, $r4);
+
+        $r5 = new java.security.SignatureException;
+
+        $r6 = virtualinvoke $r4.<java.lang.Exception: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.security.SignatureException: void <init>(java.lang.String)>($r6);
+
+        throw $r5;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public void reset()
+    {
+        se.accumulate.android.security.EncryptionEngine $r0;
+        int varReplacer226;
+        null_type varReplacer227, varReplacer228, varReplacer229;
+
+        nop;
+
+        $r0 := @this: se.accumulate.android.security.EncryptionEngine;
+
+        varReplacer227 = null;
+
+        $r0.<se.accumulate.android.security.EncryptionEngine: javax.crypto.Cipher mDecryptEngine> = varReplacer227;
+
+        varReplacer228 = null;
+
+        $r0.<se.accumulate.android.security.EncryptionEngine: javax.crypto.Cipher mEncryptEngine> = varReplacer228;
+
+        varReplacer229 = null;
+
+        $r0.<se.accumulate.android.security.EncryptionEngine: byte[] mHmacSecret> = varReplacer229;
+
+        varReplacer226 = 0;
+
+        $r0.<se.accumulate.android.security.EncryptionEngine: int mRequestCount> = varReplacer226;
+
+        return;
+    }
+
+    public byte[] rsaEncrypt(byte[], java.lang.String, java.lang.String) throws java.lang.Exception
+    {
+        se.accumulate.android.security.EncryptionEngine $r0;
+        byte[] $r1;
+        java.lang.String $r2, $r3;
+        java.security.spec.RSAPublicKeySpec $r4;
+        java.math.BigInteger $r5, $r7;
+        java.security.KeyFactory $r6;
+        java.security.PublicKey $r8;
+        java.security.interfaces.RSAPublicKey $r9;
+
+        $r0 := @this: se.accumulate.android.security.EncryptionEngine;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 := @parameter1: java.lang.String;
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r6 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>("RSA");
+
+        $r4 = new java.security.spec.RSAPublicKeySpec;
+
+        $r7 = new java.math.BigInteger;
+
+        specialinvoke $r7.<java.math.BigInteger: void <init>(java.lang.String)>($r2);
+
+        $r5 = new java.math.BigInteger;
+
+        specialinvoke $r5.<java.math.BigInteger: void <init>(java.lang.String)>($r3);
+
+        specialinvoke $r4.<java.security.spec.RSAPublicKeySpec: void <init>(java.math.BigInteger,java.math.BigInteger)>($r7, $r5);
+
+        $r8 = virtualinvoke $r6.<java.security.KeyFactory: java.security.PublicKey generatePublic(java.security.spec.KeySpec)>($r4);
+
+        $r9 = (java.security.interfaces.RSAPublicKey) $r8;
+
+        $r1 = virtualinvoke $r0.<se.accumulate.android.security.EncryptionEngine: byte[] rsaEncrypt(byte[],java.security.PublicKey)>($r1, $r9);
+
+        return $r1;
+    }
+
+    public byte[] rsaEncrypt(byte[], java.security.PublicKey) throws java.lang.Exception
+    {
+        se.accumulate.android.security.EncryptionEngine $r0;
+        byte[] $r1;
+        java.security.PublicKey $r2;
+        javax.crypto.Cipher $r3;
+        int varReplacer370;
+        java.lang.String varReplacer371;
+
+        nop;
+
+        $r0 := @this: se.accumulate.android.security.EncryptionEngine;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 := @parameter1: java.security.PublicKey;
+
+        varReplacer371 = "RSA/ECB/PKCS1Padding";
+
+        $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer371);
+
+        varReplacer370 = 1;
+
+        virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer370, $r2);
+
+        $r1 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1);
+
+        return $r1;
+    }
+
+    public final void setAesKey(byte[], android.content.Context) throws java.lang.Exception
+    {
+        se.accumulate.android.security.EncryptionEngine $r0;
+        byte[] $r1;
+        android.content.Context $r2;
+        java.lang.String $r3, $r6, varReplacer360, varReplacer361, varReplacer362;
+        javax.crypto.spec.SecretKeySpec $r4;
+        android.content.pm.PackageManager $r5;
+        int $i0, $i1, varReplacer363, varReplacer364;
+        java.lang.String[] $r7;
+        boolean $z0;
+        java.lang.IllegalAccessException $r8;
+        javax.crypto.Cipher $r9;
+
+        nop;
+
+        $r0 := @this: se.accumulate.android.security.EncryptionEngine;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 := @parameter1: android.content.Context;
+
+        $r5 = virtualinvoke $r2.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $i0 = staticinvoke <android.os.Binder: int getCallingUid()>();
+
+        $r6 = virtualinvoke $r5.<android.content.pm.PackageManager: java.lang.String getNameForUid(int)>($i0);
+
+        $i0 = 0;
+
+     label1:
+        $r7 = <se.accumulate.android.IMeContext: java.lang.String[] ILLEGAL_PERMISSIONS>;
+
+        $i1 = lengthof $r7;
+
+        if $i0 >= $i1 goto label5;
+
+        $r7 = <se.accumulate.android.IMeContext: java.lang.String[] ILLEGAL_PERMISSIONS>;
+
+        $r3 = $r7[$i0];
+
+        $i1 = virtualinvoke $r5.<android.content.pm.PackageManager: int checkPermission(java.lang.String,java.lang.String)>($r3, $r6);
+
+        if $i1 != 0 goto label3;
+
+        $z0 = 1;
+
+     label2:
+        if $z0 == 0 goto label4;
+
+        $r8 = new java.lang.IllegalAccessException;
+
+        specialinvoke $r8.<java.lang.IllegalAccessException: void <init>()>();
+
+        throw $r8;
+
+     label3:
+        $z0 = 0;
+
+        goto label2;
+
+     label4:
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label5:
+        $r4 = new javax.crypto.spec.SecretKeySpec;
+
+        varReplacer362 = "AES";
+
+        specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer362);
+
+        varReplacer360 = "AES/ECB/PKCS5Padding";
+
+        $r9 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer360);
+
+        $r0.<se.accumulate.android.security.EncryptionEngine: javax.crypto.Cipher mEncryptEngine> = $r9;
+
+        $r9 = $r0.<se.accumulate.android.security.EncryptionEngine: javax.crypto.Cipher mEncryptEngine>;
+
+        varReplacer363 = 1;
+
+        virtualinvoke $r9.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer363, $r4);
+
+        varReplacer361 = "AES/ECB/PKCS5Padding";
+
+        $r9 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer361);
+
+        $r0.<se.accumulate.android.security.EncryptionEngine: javax.crypto.Cipher mDecryptEngine> = $r9;
+
+        $r9 = $r0.<se.accumulate.android.security.EncryptionEngine: javax.crypto.Cipher mDecryptEngine>;
+
+        varReplacer364 = 2;
+
+        virtualinvoke $r9.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer364, $r4);
+
+        return;
+    }
+
+    public final void setAesKey(byte[], byte[], java.lang.String, java.lang.String, byte[], int, android.content.Context) throws java.lang.Exception
+    {
+        se.accumulate.android.security.EncryptionEngine $r0;
+        byte[] $r1, $r2, $r5;
+        java.lang.String $r3, $r4, $r8, $r12, varReplacer372, varReplacer373, varReplacer375, varReplacer378, varReplacer379, varReplacer381;
+        int $i0, $i1, $i2, varReplacer374, varReplacer376, varReplacer377, varReplacer380;
+        android.content.Context $r6;
+        javax.crypto.spec.IvParameterSpec $r7;
+        java.security.spec.RSAPrivateKeySpec $r9;
+        javax.crypto.spec.SecretKeySpec $r10;
+        android.content.pm.PackageManager $r11;
+        java.lang.String[] $r13;
+        boolean $z0;
+        java.lang.IllegalAccessException $r14;
+        javax.crypto.Cipher $r15;
+        java.security.KeyFactory $r16;
+        java.math.BigInteger $r17, $r18;
+        java.security.PrivateKey $r19;
+        java.security.interfaces.RSAPrivateKey $r20;
+
+        nop;
+
+        $r0 := @this: se.accumulate.android.security.EncryptionEngine;
+
+        $r1 := @parameter0: byte[];
+
+        $r2 := @parameter1: byte[];
+
+        $r3 := @parameter2: java.lang.String;
+
+        $r4 := @parameter3: java.lang.String;
+
+        $r5 := @parameter4: byte[];
+
+        $i0 := @parameter5: int;
+
+        $r6 := @parameter6: android.content.Context;
+
+        $r11 = virtualinvoke $r6.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $i1 = staticinvoke <android.os.Binder: int getCallingUid()>();
+
+        $r12 = virtualinvoke $r11.<android.content.pm.PackageManager: java.lang.String getNameForUid(int)>($i1);
+
+        $i1 = 0;
+
+     label1:
+        $r13 = <se.accumulate.android.IMeContext: java.lang.String[] ILLEGAL_PERMISSIONS>;
+
+        $i2 = lengthof $r13;
+
+        if $i1 >= $i2 goto label5;
+
+        $r13 = <se.accumulate.android.IMeContext: java.lang.String[] ILLEGAL_PERMISSIONS>;
+
+        $r8 = $r13[$i1];
+
+        $i2 = virtualinvoke $r11.<android.content.pm.PackageManager: int checkPermission(java.lang.String,java.lang.String)>($r8, $r12);
+
+        if $i2 != 0 goto label3;
+
+        $z0 = 1;
+
+     label2:
+        if $z0 == 0 goto label4;
+
+        $r14 = new java.lang.IllegalAccessException;
+
+        specialinvoke $r14.<java.lang.IllegalAccessException: void <init>()>();
+
+        throw $r14;
+
+     label3:
+        $z0 = 0;
+
+        goto label2;
+
+     label4:
+        $i1 = $i1 + 1;
+
+        goto label1;
+
+     label5:
+        $r0.<se.accumulate.android.security.EncryptionEngine: int mRequestCount> = $i0;
+
+        varReplacer372 = "RSA/ECB/PKCS1Padding";
+
+        $r15 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer372);
+
+        varReplacer373 = "RSA";
+
+        $r16 = staticinvoke <java.security.KeyFactory: java.security.KeyFactory getInstance(java.lang.String)>(varReplacer373);
+
+        $r9 = new java.security.spec.RSAPrivateKeySpec;
+
+        $r17 = new java.math.BigInteger;
+
+        specialinvoke $r17.<java.math.BigInteger: void <init>(java.lang.String)>($r3);
+
+        $r18 = new java.math.BigInteger;
+
+        specialinvoke $r18.<java.math.BigInteger: void <init>(java.lang.String)>($r4);
+
+        specialinvoke $r9.<java.security.spec.RSAPrivateKeySpec: void <init>(java.math.BigInteger,java.math.BigInteger)>($r17, $r18);
+
+        $r19 = virtualinvoke $r16.<java.security.KeyFactory: java.security.PrivateKey generatePrivate(java.security.spec.KeySpec)>($r9);
+
+        $r20 = (java.security.interfaces.RSAPrivateKey) $r19;
+
+        varReplacer374 = 2;
+
+        virtualinvoke $r15.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer374, $r20);
+
+        $r1 = virtualinvoke $r15.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1);
+
+        $r10 = new javax.crypto.spec.SecretKeySpec;
+
+        varReplacer378 = "AES";
+
+        specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer378);
+
+        varReplacer375 = "AES/ECB/PKCS5Padding";
+
+        $r15 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer375);
+
+        varReplacer377 = 2;
+
+        virtualinvoke $r15.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer377, $r10);
+
+        $r7 = new javax.crypto.spec.IvParameterSpec;
+
+        $r1 = virtualinvoke $r15.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r2);
+
+        specialinvoke $r7.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r1);
+
+        if $r5 == null goto label6;
+
+        $r1 = virtualinvoke $r15.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r5);
+
+        $r0.<se.accumulate.android.security.EncryptionEngine: byte[] mHmacSecret> = $r1;
+
+     label6:
+        varReplacer379 = "AES/CBC/PKCS5Padding";
+
+        $r15 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer379);
+
+        $r0.<se.accumulate.android.security.EncryptionEngine: javax.crypto.Cipher mEncryptEngine> = $r15;
+
+        $r15 = $r0.<se.accumulate.android.security.EncryptionEngine: javax.crypto.Cipher mEncryptEngine>;
+
+        varReplacer380 = 1;
+
+        virtualinvoke $r15.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer380, $r10, $r7);
+
+        varReplacer381 = "AES/CBC/PKCS5Padding";
+
+        $r15 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer381);
+
+        $r0.<se.accumulate.android.security.EncryptionEngine: javax.crypto.Cipher mDecryptEngine> = $r15;
+
+        $r15 = $r0.<se.accumulate.android.security.EncryptionEngine: javax.crypto.Cipher mDecryptEngine>;
+
+        varReplacer376 = 2;
+
+        virtualinvoke $r15.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer376, $r10, $r7);
+
+        return;
+    }
+
+    public void updateHandshakeCount(android.content.Context) throws java.lang.IllegalAccessException
+    {
+        se.accumulate.android.security.EncryptionEngine $r0;
+        android.content.Context $r1;
+        java.lang.String $r2, $r4, varReplacer365, varReplacer367, varReplacer369;
+        android.content.pm.PackageManager $r3;
+        int $i0, $i1, varReplacer366, varReplacer368;
+        java.lang.String[] $r5;
+        boolean $z0;
+        java.lang.IllegalAccessException $r6;
+        android.content.SharedPreferences $r7;
+        android.content.SharedPreferences$Editor $r8;
+
+        nop;
+
+        $r0 := @this: se.accumulate.android.security.EncryptionEngine;
+
+        $r1 := @parameter0: android.content.Context;
+
+        $r3 = virtualinvoke $r1.<android.content.Context: android.content.pm.PackageManager getPackageManager()>();
+
+        $i0 = staticinvoke <android.os.Binder: int getCallingUid()>();
+
+        $r4 = virtualinvoke $r3.<android.content.pm.PackageManager: java.lang.String getNameForUid(int)>($i0);
+
+        $i0 = 0;
+
+     label1:
+        $r5 = <se.accumulate.android.IMeContext: java.lang.String[] ILLEGAL_PERMISSIONS>;
+
+        $i1 = lengthof $r5;
+
+        if $i0 >= $i1 goto label5;
+
+        $r5 = <se.accumulate.android.IMeContext: java.lang.String[] ILLEGAL_PERMISSIONS>;
+
+        $r2 = $r5[$i0];
+
+        $i1 = virtualinvoke $r3.<android.content.pm.PackageManager: int checkPermission(java.lang.String,java.lang.String)>($r2, $r4);
+
+        if $i1 != 0 goto label3;
+
+        $z0 = 1;
+
+     label2:
+        if $z0 == 0 goto label4;
+
+        $r6 = new java.lang.IllegalAccessException;
+
+        specialinvoke $r6.<java.lang.IllegalAccessException: void <init>()>();
+
+        throw $r6;
+
+     label3:
+        $z0 = 0;
+
+        goto label2;
+
+     label4:
+        $i0 = $i0 + 1;
+
+        goto label1;
+
+     label5:
+        varReplacer367 = "HandshakeCounterPreferences";
+
+        varReplacer368 = 0;
+
+        $r7 = virtualinvoke $r1.<android.content.Context: android.content.SharedPreferences getSharedPreferences(java.lang.String,int)>(varReplacer367, varReplacer368);
+
+        varReplacer365 = "HandshakeCounter";
+
+        varReplacer366 = 0;
+
+        $i0 = interfaceinvoke $r7.<android.content.SharedPreferences: int getInt(java.lang.String,int)>(varReplacer365, varReplacer366);
+
+        $i0 = $i0 + 1;
+
+        $r8 = interfaceinvoke $r7.<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>();
+
+        varReplacer369 = "HandshakeCounter";
+
+        $r8 = interfaceinvoke $r8.<android.content.SharedPreferences$Editor: android.content.SharedPreferences$Editor putInt(java.lang.String,int)>(varReplacer369, $i0);
+
+        interfaceinvoke $r8.<android.content.SharedPreferences$Editor: boolean commit()>();
+
+        return;
+    }
+}

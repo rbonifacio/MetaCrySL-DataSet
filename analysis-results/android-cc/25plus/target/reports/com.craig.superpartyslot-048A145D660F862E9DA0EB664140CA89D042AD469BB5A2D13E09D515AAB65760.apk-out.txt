@@ -1,9 +1,117 @@
 Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.craig.superpartyslot-048A145D660F862E9DA0EB664140CA89D042AD469BB5A2D13E09D515AAB65760.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r6
+		Type: java.security.MessageDigest
+		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4688)
+		Method: <com.awesomegames.bigcasinoslots.basegameutils.GameHelperUtils: java.lang.String getSHA1CertFingerprint(android.content.Context)>
+		SHA-256: 146909fef77a72d36686a859aae55f8a9715384d5c0e03c2d161c4219a59d31d
+		Secure: false
+	Object:
+		Variable: $r8
+		Type: byte[]
+		Statement: $r8 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest(byte[])>($r8)
+		Method: <com.awesomegames.bigcasinoslots.basegameutils.GameHelperUtils: java.lang.String getSHA1CertFingerprint(android.content.Context)>
+		SHA-256: b95cd9a42f4be3abf3fd2df0455645f6074fd03b611ae8a509eee3fa3cf10597
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.Signature
+		Statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer4978)
+		Method: <com.iap.billing.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 8d93548a094585c3acaff4905b0024f1cfa61ac32970fc757c11742f46a66704
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.chartboost.sdk.Libraries.b: byte[] a(byte[])>
+		SHA-256: b860f25bfb14d8cb18879e583d20b032a02644e4561a575b0a093489be882c14
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4356)
+		Method: <com.chartboost.sdk.Libraries.b: byte[] a(byte[])>
+		SHA-256: 297895c4fffdc1dd706b42afc07538ed3d6731ae308927bc9d3ff23a93033fd7
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4)
+		Method: <com.iap.billing.util.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 50d20e0d863bf9aaaccbe6d5f71c736bbbd4ab16c1ca9b261b70d21b96f5b665
+		Secure: false
+
+Findings in Java Class: com.chartboost.sdk.Libraries.b
+
+	 in Method: byte[] a(byte[])
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #297895c4fffdc1dd706b42afc07538ed3d6731ae308927bc9d3ff23a93033fd7)
+			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4356)
+
+
+Findings in Java Class: com.awesomegames.bigcasinoslots.basegameutils.GameHelperUtils
+
+	 in Method: java.lang.String getSHA1CertFingerprint(android.content.Context)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #146909fef77a72d36686a859aae55f8a9715384d5c0e03c2d161c4219a59d31d)
+			First parameter (with value "SHA1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4688)
+
+
+Findings in Java Class: com.iap.billing.util.Security
+
+	 in Method: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #8d93548a094585c3acaff4905b0024f1cfa61ac32970fc757c11742f46a66704)
+			First parameter (with value "SHA1withRSA") should be any of {SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA, SHA224withDSA}
+			at statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer4978)
+
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 3
+	RequiredPredicateError: 1
+=====================================================================

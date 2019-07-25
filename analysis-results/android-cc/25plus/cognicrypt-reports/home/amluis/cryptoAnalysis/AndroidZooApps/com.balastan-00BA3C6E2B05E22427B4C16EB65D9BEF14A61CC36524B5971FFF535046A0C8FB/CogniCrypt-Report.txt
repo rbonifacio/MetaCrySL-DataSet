@@ -1,8 +1,79 @@
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r6
+		Type: javax.crypto.Mac
+		Statement: $r6 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer1165)
+		Method: <com.quickblox.core.helper.SignHelper: java.lang.String calculateHMAC_SHA(java.lang.String,java.lang.String)>
+		SHA-256: 8b50e79f430c0900a3c4741217cad871177c9fce6205a590d70f48cf76bb2100
+		Secure: true
+	Object:
+		Variable: varReplacer1163
+		Type: java.lang.String
+		Statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer1163)
+		Method: <com.quickblox.core.helper.SignHelper: java.lang.String calculateHMAC_SHA(java.lang.String,java.lang.String)>
+		SHA-256: 3f00a0a0a3f3f18288fc2848beb6a39e034c8f04cec60b080fcdebba84235548
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: byte[]
+		Statement: $r5 = virtualinvoke $r6.<javax.crypto.Mac: byte[] doFinal(byte[])>($r5)
+		Method: <com.quickblox.core.helper.SignHelper: java.lang.String calculateHMAC_SHA(java.lang.String,java.lang.String)>
+		SHA-256: be8b779aaf5372f48426d5384cd6b86fc9e53b907bde686a940ff675e620e7f3
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer1163)
+		Method: <com.quickblox.core.helper.SignHelper: java.lang.String calculateHMAC_SHA(java.lang.String,java.lang.String)>
+		SHA-256: ed5089c80c399457b6e6575bcd3341e22f9385900c93282739b9ef73490d0632
+		Secure: false
+
+Findings in Java Class: com.quickblox.core.helper.SignHelper
+
+	 in Method: java.lang.String calculateHMAC_SHA(java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer1163)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 1
+=====================================================================

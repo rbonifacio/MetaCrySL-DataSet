@@ -1,8 +1,127 @@
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r1
+		Type: javax.net.ssl.SSLContext
+		Statement: $r1 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer4867)
+		Method: <com.codebutler.android_websockets.WebSocketClient: javax.net.ssl.SSLSocketFactory getSSLSocketFactory()>
+		SHA-256: bf9d9a9d7480fa18d1aed5f4d8fa520a4abe95189eabf3eb19ba82a67ad2bf89
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: javax.crypto.Cipher
+		Statement: $r1 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer9476)
+		Method: <com.google.ads.util.AdUtil: java.lang.String b(java.lang.String)>
+		SHA-256: 79be3cee752c9f8b2b21a12dc32d5fb80d388a5d89c2360efa481c9ad3a17c30
+		Secure: false
+	Object:
+		Variable: varReplacer9474
+		Type: java.lang.String
+		Statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer9474)
+		Method: <com.google.ads.util.AdUtil: java.lang.String b(java.lang.String)>
+		SHA-256: 93b5ce4a853a4e1586db4c885434ff842eedc055e31d4091707728a6378d358e
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1365)
+		Method: <com.google.ads.util.AdUtil: java.lang.String a(java.lang.String)>
+		SHA-256: f46feba9e0f88d15568e9d4b9680bf0545a25ff3ad34b7134c6140643e73810
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer9474)
+		Method: <com.google.ads.util.AdUtil: java.lang.String b(java.lang.String)>
+		SHA-256: 7e302fffb4ee258ed568bc14f12f7647d6b0d5387d1613faa7787768517a568f
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r1.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r4)
+		Method: <com.google.ads.util.AdUtil: java.lang.String b(java.lang.String)>
+		SHA-256: a15231244af41fbecd41ef72892f81a9afa941b7963ad989570c41f0d5017c4
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.ads.util.AdUtil: java.lang.String a(java.lang.String)>
+		SHA-256: 8d435effbaa1ef36aaa99822e951de654f122f00ea9593a22fbe1f75dfcad15c
+		Secure: false
+
+Findings in Java Class: com.google.ads.util.AdUtil
+
+	 in Method: java.lang.String a(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #f46feba9e0f88d15568e9d4b9680bf0545a25ff3ad34b7134c6140643e73810)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1365)
+
+
+	 in Method: java.lang.String b(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r1.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer9475, $r2)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer9474)
+
+
+Findings in Java Class: com.codebutler.android_websockets.WebSocketClient
+
+	 in Method: javax.net.ssl.SSLSocketFactory getSSLSocketFactory()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer4868, $r2, varReplacer4868)
+
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #bf9d9a9d7480fa18d1aed5f4d8fa520a4abe95189eabf3eb19ba82a67ad2bf89)
+			First parameter (with value "TLS") should be any of {TLSv1.2, TLSv1.1, TLSv1, Insecure}
+			at statement: $r1 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer4867)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer4868, $r2, varReplacer4868)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 7
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 4
+	ConstraintError: 2
+=====================================================================

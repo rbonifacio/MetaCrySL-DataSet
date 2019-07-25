@@ -1,8 +1,148 @@
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r4
+		Type: java.security.MessageDigest
+		Statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1753)
+		Method: <org.java_websocket.drafts.Draft_10: java.lang.String generateFinalKey(java.lang.String)>
+		SHA-256: fc3fafbd1e503cef7659e95194eb4209426aab654dc22c22daf507c82772a385
+		Secure: false
+	Object:
+		Variable: $r5
+		Type: byte[]
+		Statement: $r5 = virtualinvoke $r4.<java.security.MessageDigest: byte[] digest(byte[])>($r5)
+		Method: <org.java_websocket.drafts.Draft_10: java.lang.String generateFinalKey(java.lang.String)>
+		SHA-256: fdc8b77f69a9cd65c5249c3b92ccd4be5eacebbcf4181e473999d82c8abe8e8c
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer367)
+		Method: <com.loopj.android.http.MySSLSocketFactory: void <init>(java.security.KeyStore)>
+		SHA-256: 27695cbea85f130e894d044f8e701daa7a7ad92937cf86319ebfce2116ccdb8f
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: java.security.SecureRandom
+		Statement: specialinvoke $r6.<java.security.SecureRandom: void <init>()>()
+		Method: <de.appkind.a0000087.chat.SocketIoTalkifyController: void _connectToSocketIO(java.lang.String)>
+		SHA-256: c85ad4c2838764e69eba0292740001ce416d70df99eb2639e175cea245d2d9c7
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: javax.net.ssl.SSLContext
+		Statement: $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer988)
+		Method: <de.appkind.a0000087.chat.SocketIoTalkifyController: void _connectToSocketIO(java.lang.String)>
+		SHA-256: c52e27a40b250271c9e922c3eed4820938db8fbc548ad4f29cc1837d48a41139
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer977)
+		Method: <de.appkind.a0000087.helpers.CryptoHelper: java.lang.String md5(java.lang.String)>
+		SHA-256: 54b7fb253ade672abc6cc0c438c6f78b754a8e3398f51c2a765dee7e58641232
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <de.appkind.a0000087.helpers.CryptoHelper: java.lang.String md5(java.lang.String)>
+		SHA-256: 6b13f61b045c6eded1217c1b98384b11684996050105f1e71a6e0713189ca1db
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.KeyStore
+		Statement: $r3 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r2)
+		Method: <com.loopj.android.http.MySSLSocketFactory: java.security.KeyStore getKeystore()>
+		SHA-256: d011df71b400b4926b84dec0cad6ffb90a5bd3d26c43a5974bec9e614ef5edf5
+		Secure: true
+
+Findings in Java Class: com.loopj.android.http.MySSLSocketFactory
+
+	 in Method: void <init>(java.security.KeyStore)
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #27695cbea85f130e894d044f8e701daa7a7ad92937cf86319ebfce2116ccdb8f)
+			First parameter (with value "TLS") should be any of {TLSv1.2, TLSv1.1, TLSv1, Insecure}
+			at statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer367)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer368, r5, varReplacer368)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer368, r5, varReplacer368)
+
+
+Findings in Java Class: de.appkind.a0000087.helpers.CryptoHelper
+
+	 in Method: java.lang.String md5(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #54b7fb253ade672abc6cc0c438c6f78b754a8e3398f51c2a765dee7e58641232)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer977)
+
+
+Findings in Java Class: de.appkind.a0000087.chat.SocketIoTalkifyController
+
+	 in Method: void _connectToSocketIO(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer995, $r5, $r6)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer995, $r5, $r6)
+
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #c52e27a40b250271c9e922c3eed4820938db8fbc548ad4f29cc1837d48a41139)
+			First parameter (with value "TLS") should be any of {TLSv1.2, TLSv1.1, TLSv1, Insecure}
+			at statement: $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer988)
+
+
+Findings in Java Class: org.java_websocket.drafts.Draft_10
+
+	 in Method: java.lang.String generateFinalKey(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #fc3fafbd1e503cef7659e95194eb4209426aab654dc22c22daf507c82772a385)
+			First parameter (with value "SHA1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1753)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 8
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 4
+	RequiredPredicateError: 4
+=====================================================================

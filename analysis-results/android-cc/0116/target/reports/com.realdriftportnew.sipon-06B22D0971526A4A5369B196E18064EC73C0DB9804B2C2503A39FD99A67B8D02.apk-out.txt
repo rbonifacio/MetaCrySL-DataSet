@@ -1,9 +1,113 @@
 Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.realdriftportnew.sipon-06B22D0971526A4A5369B196E18064EC73C0DB9804B2C2503A39FD99A67B8D02.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r3
+		Type: java.security.Signature
+		Statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String,java.lang.String)>(varReplacer731, varReplacer732)
+		Method: <com.amazon.identity.auth.device.appid.APIKeyDecoder: boolean verifySignatureWithRsaSha256(byte[],byte[],java.security.cert.Certificate)>
+		SHA-256: 6b9352f43651e8bf6af8c1a66a9102a608bda097626db5a6c973d2103139a166
+		Secure: true
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r0)
+		Method: <com.amazon.identity.auth.device.appid.APIKeyDecoder: boolean verifySignatureWithRsaSha256(byte[],byte[],java.security.cert.Certificate)>
+		SHA-256: 3a783b6ef532d4f5abbebf84c1fd93c01e1b2106c4c7e74fedf80cca8fd4d107
+		Secure: true
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: 5a54f705314d6605f4cf61ba388d3b495336c885c3ea98cfb7cec081c65981da
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r1)
+		Method: <com.amazon.identity.auth.device.appid.APIKeyDecoder: byte[] getFingerprint(java.lang.String,byte[])>
+		SHA-256: d4e608833031efdaf36faa876a177496c1fc7ce4a754d20f331c66b3613f9f23
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer454)
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: 81754a054dc626241b5617f4fe07e7147b98596cb72c8b8c228282bf94f6cc52
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer739)
+		Method: <com.amazon.identity.auth.device.appid.APIKeyDecoder: byte[] getFingerprint(java.lang.String,byte[])>
+		SHA-256: e2875fe9c5c46c89680efefc6e50642104249217a90df843f3d0a73342c26919
+		Secure: false
+
+Findings in Java Class: com.unity3d.player.UnityPlayer
+
+	 in Method: java.lang.String a(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #81754a054dc626241b5617f4fe07e7147b98596cb72c8b8c228282bf94f6cc52)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer454)
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #81754a054dc626241b5617f4fe07e7147b98596cb72c8b8c228282bf94f6cc52)
+			Third parameter (with value 0)Variable pre_lenmust be  greater than pre_off
+			at statement: virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r1, varReplacer455, $i3)
+
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #81754a054dc626241b5617f4fe07e7147b98596cb72c8b8c228282bf94f6cc52)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte[]),java.security.MessageDigest: void update(byte)
+			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+
+
+Findings in Java Class: com.amazon.identity.auth.device.appid.APIKeyDecoder
+
+	 in Method: byte[] getFingerprint(java.lang.String,byte[])
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #e2875fe9c5c46c89680efefc6e50642104249217a90df843f3d0a73342c26919)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer739)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 3
+	TypestateError: 1
+=====================================================================

@@ -1,0 +1,148 @@
+public class com.litesuits.http.utils.MD5Util extends java.lang.Object
+{
+    private static final int STREAM_BUFFER_LENGTH;
+    private static final java.lang.String TAG;
+
+    static void <clinit>()
+    {
+        java.lang.String $r0;
+        java.lang.Class $r1;
+
+        nop;
+
+        $r1 = class "Lcom/litesuits/http/utils/MD5Util;";
+
+        $r0 = virtualinvoke $r1.<java.lang.Class: java.lang.String getSimpleName()>();
+
+        <com.litesuits.http.utils.MD5Util: java.lang.String TAG> = $r0;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        com.litesuits.http.utils.MD5Util $r0;
+
+        $r0 := @this: com.litesuits.http.utils.MD5Util;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.security.MessageDigest getDigest(java.lang.String) throws java.security.NoSuchAlgorithmException
+    {
+        java.lang.String $r0, varReplacer5260;
+        java.security.MessageDigest $r1;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        varReplacer5260 = "MD5";
+
+        $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5260);
+
+        return $r1;
+    }
+
+    public static byte[] md5(java.io.InputStream) throws java.security.NoSuchAlgorithmException, java.io.IOException
+    {
+        java.io.InputStream $r0;
+        java.security.MessageDigest $r1;
+        byte[] $r2;
+
+        $r0 := @parameter0: java.io.InputStream;
+
+        $r1 = staticinvoke <com.litesuits.http.utils.MD5Util: java.security.MessageDigest getDigest(java.lang.String)>("MD5");
+
+        $r1 = staticinvoke <com.litesuits.http.utils.MD5Util: java.security.MessageDigest updateDigest(java.security.MessageDigest,java.io.InputStream)>($r1, $r0);
+
+        $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>();
+
+        return $r2;
+    }
+
+    public static byte[] md5(java.lang.String)
+    {
+        java.lang.String $r0;
+        byte[] $r1;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 = virtualinvoke $r0.<java.lang.String: byte[] getBytes()>();
+
+        $r1 = staticinvoke <com.litesuits.http.utils.MD5Util: byte[] md5(byte[])>($r1);
+
+        return $r1;
+    }
+
+    public static byte[] md5(byte[])
+    {
+        byte[] $r0;
+        java.lang.Throwable $r1;
+        java.security.MessageDigest $r2;
+        java.security.NoSuchAlgorithmException r3;
+        java.lang.String varReplacer5258;
+        null_type varReplacer5259;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+     label1:
+        varReplacer5258 = "MD5";
+
+        $r2 = staticinvoke <com.litesuits.http.utils.MD5Util: java.security.MessageDigest getDigest(java.lang.String)>(varReplacer5258);
+
+        virtualinvoke $r2.<java.security.MessageDigest: void update(byte[])>($r0);
+
+        $r0 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>();
+
+     label2:
+        return $r0;
+
+     label3:
+        $r1 := @caughtexception;
+
+        r3 = (java.security.NoSuchAlgorithmException) $r1;
+
+        virtualinvoke r3.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        varReplacer5259 = null;
+
+        return varReplacer5259;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+    }
+
+    public static java.security.MessageDigest updateDigest(java.security.MessageDigest, java.io.InputStream) throws java.io.IOException
+    {
+        java.security.MessageDigest $r0;
+        java.io.InputStream $r1;
+        byte[] $r2;
+        int $i0;
+
+        $r0 := @parameter0: java.security.MessageDigest;
+
+        $r1 := @parameter1: java.io.InputStream;
+
+        $r2 = newarray (byte)[1024];
+
+        $i0 = virtualinvoke $r1.<java.io.InputStream: int read(byte[],int,int)>($r2, 0, 1024);
+
+     label1:
+        if $i0 <= -1 goto label2;
+
+        virtualinvoke $r0.<java.security.MessageDigest: void update(byte[],int,int)>($r2, 0, $i0);
+
+        $i0 = virtualinvoke $r1.<java.io.InputStream: int read(byte[],int,int)>($r2, 0, 1024);
+
+        goto label1;
+
+     label2:
+        return $r0;
+    }
+}

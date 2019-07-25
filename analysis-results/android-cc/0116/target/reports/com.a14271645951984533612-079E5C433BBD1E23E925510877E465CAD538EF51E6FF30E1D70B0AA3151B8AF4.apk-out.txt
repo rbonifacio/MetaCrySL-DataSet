@@ -1,9 +1,90 @@
 Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.a14271645951984533612-079E5C433BBD1E23E925510877E465CAD538EF51E6FF30E1D70B0AA3151B8AF4.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r13
+		Type: java.security.MessageDigest
+		Statement: $r13 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2916)
+		Method: <com.applacarte.util.ALCUtils: java.lang.String getDeviceID()>
+		SHA-256: 95ed27ab9875184d0c54cb870e0679fce2da3fa7e606e6ec06f141f5b9ff63da
+		Secure: false
+	Object:
+		Variable: $r14
+		Type: byte[]
+		Statement: $r14 = virtualinvoke $r12.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.applacarte.util.ALCUtils: java.lang.String getDeviceID()>
+		SHA-256: 6dc77e2df8bd1bdef6d540c62c81f67769df76bfdd19b32d90d151de7c8c0cc6
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r0.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.facebook.internal.Utility: java.lang.String hashBytes(java.security.MessageDigest,byte[])>
+		SHA-256: 1bd65c7e3ef7c5880ee054dd01ba963cb9b0d277e32cad1c7526c867dab34e4b
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3711)
+		Method: <com.facebook.internal.Utility: java.lang.String hashWithAlgorithm(java.lang.String,byte[])>
+		SHA-256: 913608a4edab92298e6e53d278e48e51436ec868c086eeac86a45dedd60241c2
+		Secure: false
+
+Findings in Java Class: com.applacarte.util.ALCUtils
+
+	 in Method: java.lang.String getDeviceID()
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #95ed27ab9875184d0c54cb870e0679fce2da3fa7e606e6ec06f141f5b9ff63da)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r13 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2916)
+
+
+Findings in Java Class: com.facebook.internal.Utility
+
+	 in Method: java.lang.String hashWithAlgorithm(java.lang.String,byte[])
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #913608a4edab92298e6e53d278e48e51436ec868c086eeac86a45dedd60241c2)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3711)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 4
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
+=====================================================================

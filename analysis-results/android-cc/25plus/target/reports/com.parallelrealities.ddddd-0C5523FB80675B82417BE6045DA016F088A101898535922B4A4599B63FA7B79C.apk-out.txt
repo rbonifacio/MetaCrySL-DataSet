@@ -1,9 +1,128 @@
 Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.parallelrealities.ddddd-0C5523FB80675B82417BE6045DA016F088A101898535922B4A4599B63FA7B79C.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: r8
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke r8.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer896)
+		Method: <com.parallelrealities.ddddd.j.d: void <init>(java.lang.String,java.lang.String)>
+		SHA-256: 435511e3aabf61fef50a79d93ee425515972247e1a45e7138b97ce5f75f435b5
+		Secure: false
+	Object:
+		Variable: varReplacer896
+		Type: java.lang.String
+		Statement: specialinvoke r8.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer896)
+		Method: <com.parallelrealities.ddddd.j.d: void <init>(java.lang.String,java.lang.String)>
+		SHA-256: 1fbc082d217fc36d10666ce356c8e6351b67e0d642253e8995f5cb61398002a2
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: javax.crypto.Cipher
+		Statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer897)
+		Method: <com.parallelrealities.ddddd.j.d: void <init>(java.lang.String,java.lang.String)>
+		SHA-256: eb3ebdae3c1e43962a760076f261c9e6558b7e642fca4054101bed2c9aa0efea
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.Signature
+		Statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer1056)
+		Method: <com.parallelrealities.ddddd.a.l: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: c88f053564c6ad48889f84dc81534103b0e2bc3254bfd1ff5637b2948f3f8873
+		Secure: false
+	Object:
+		Variable: r7
+		Type: javax.crypto.spec.IvParameterSpec
+		Statement: specialinvoke r7.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r3)
+		Method: <com.parallelrealities.ddddd.j.d: void <init>(java.lang.String,java.lang.String)>
+		SHA-256: 1668518b761cf13092e10b076cb03f78154a96a3bf4f5bcf2999d504e64cbbe0
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: byte[]
+		Statement: $r6 = virtualinvoke $r5.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6)
+		Method: <com.parallelrealities.ddddd.j.d: byte[] a(java.lang.String)>
+		SHA-256: d970d323c75fe5e2d7625257a55188dd45c9a5ac176c6111b5fb513d16a29157
+		Secure: false
+
+Findings in Java Class: com.parallelrealities.ddddd.j.d
+
+	 in Method: void <init>(java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke r8.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer896)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #eb3ebdae3c1e43962a760076f261c9e6558b7e642fca4054101bed2c9aa0efea)
+			First parameter (with value "AES/CBC/NoPadding") should be any of AES/CBC/{PKCS5Padding, PKCS7Padding, ISO10126Padding}
+			at statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer897)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke r7.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r3)
+
+
+	 in Method: byte[] a(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer898, $r2, $r3)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared I V
+			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer898, $r2, $r3)
+
+
+Findings in Java Class: com.parallelrealities.ddddd.a.l
+
+	 in Method: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)
+		IncompleteOperationError violating CrySL rule for java.security.Signature (on Object #c88f053564c6ad48889f84dc81534103b0e2bc3254bfd1ff5637b2948f3f8873)
+			Operation on object of type java.security.Signature object not completed. Expected call to update, verify
+			at statement: $z0 = staticinvoke <com.parallelrealities.ddddd.a.l: boolean a(java.security.Signature,java.lang.String)>($r3, $r2)
+
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #c88f053564c6ad48889f84dc81534103b0e2bc3254bfd1ff5637b2948f3f8873)
+			First parameter (with value "SHA1withRSA") should be any of {SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA, SHA224withDSA}
+			at statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer1056)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 6
+
+	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
+	RequiredPredicateError: 4
+	IncompleteOperationError: 1
+=====================================================================

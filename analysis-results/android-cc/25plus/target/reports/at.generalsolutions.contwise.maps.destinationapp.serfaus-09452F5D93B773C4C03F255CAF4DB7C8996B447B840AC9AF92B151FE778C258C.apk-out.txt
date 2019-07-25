@@ -1,9 +1,77 @@
 Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/at.generalsolutions.contwise.maps.destinationapp.serfaus-09452F5D93B773C4C03F255CAF4DB7C8996B447B840AC9AF92B151FE778C258C.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: r9
+		Type: java.security.SecureRandom
+		Statement: specialinvoke r9.<java.security.SecureRandom: void <init>()>()
+		Method: <at.generalsolutions.contwise.maps.service.ajax.AllCertificatesAndHostsTruster: void apply()>
+		SHA-256: e82629acbe57e9b6ec54687c69117261348778545e3ba5f5e46fccc82f44ce90
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer228)
+		Method: <at.generalsolutions.contwise.maps.service.ajax.AllCertificatesAndHostsTruster: void apply()>
+		SHA-256: 9cda9b3bddf79769bd1e8d2d3d9c1021f9c11e15e9a31ae88149a6ba8493ec0
+		Secure: false
+
+Findings in Java Class: at.generalsolutions.contwise.maps.service.ajax.AllCertificatesAndHostsTruster
+
+	 in Method: void apply()
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #9cda9b3bddf79769bd1e8d2d3d9c1021f9c11e15e9a31ae88149a6ba8493ec0)
+			First parameter (with value "SSL") should be any of {TLSv1.2, TLSv1.1, TLSv1, Insecure}
+			at statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer228)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer227, r11, $r3)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer227, r11, $r3)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 2
+
+	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 2
+	ConstraintError: 1
+=====================================================================

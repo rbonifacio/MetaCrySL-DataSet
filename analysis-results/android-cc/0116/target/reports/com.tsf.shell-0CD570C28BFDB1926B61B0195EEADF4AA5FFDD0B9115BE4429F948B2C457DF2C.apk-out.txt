@@ -1,9 +1,137 @@
 Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.tsf.shell-0CD570C28BFDB1926B61B0195EEADF4AA5FFDD0B9115BE4429F948B2C457DF2C.apk
+Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
+Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
 Ruleset: 
+	java.security.KeyStore
+	java.security.AlgorithmParameters
+	java.security.spec.RSAKeyGenParameterSpec
+	javax.crypto.Mac
+	java.security.DigestInputStream
+	java.security.SecureRandom
+	javax.crypto.Cipher
+	javax.crypto.spec.PBEParameterSpec
+	javax.net.ssl.SSLContext
+	java.security.KeyPairGenerator
+	javax.crypto.SecretKeyFactory
+	javax.crypto.spec.SecretKeySpec
+	javax.crypto.spec.GCMParameterSpec
+	java.security.Key
+	javax.crypto.spec.DHGenParameterSpec
+	java.security.cert.PKIXBuilderParameters
+	java.security.KeyPair
+	javax.crypto.CipherInputStream
+	javax.crypto.KeyGenerator
+	javax.crypto.SecretKey
+	java.security.DigestOutputStream
+	javax.crypto.CipherOutputStream
+	javax.xml.crypto.dsig.spec.HMACParameterSpec
+	javax.net.ssl.KeyManagerFactory
+	javax.net.ssl.CertPathTrustManagerParameters
+	javax.crypto.spec.PBEKeySpec
+	javax.net.ssl.KeyStoreBuilderParameters
+	java.security.spec.DSAGenParameterSpec
+	java.security.MessageDigest
+	javax.crypto.spec.IvParameterSpec
+	java.security.Signature
+	java.security.cert.PKIXParameters
 
 Analyzed Objects: 
+	Object:
+		Variable: $r9
+		Type: java.security.DigestOutputStream
+		Statement: specialinvoke $r9.<java.security.DigestOutputStream: void <init>(java.io.OutputStream,java.security.MessageDigest)>($r8, $r11)
+		Method: <com.flurry.sdk.dc: void <init>(java.lang.String,java.lang.String,boolean,boolean,long,long,java.util.List,java.util.Map,java.util.Map,java.util.Map,java.util.Map,long)>
+		SHA-256: 6c075c2f63b5447230f82ce64ca5a2041539209c020c4511bfd375099aac0628
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2715)
+		Method: <com.ksmobile.a.a.e: void <clinit>()>
+		SHA-256: 864d75879bbcf97ca66a688bb8f6dbf1e085132b72c1415b60c433b18e64344c
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2480)
+		Method: <com.flurry.sdk.fe: byte[] d(java.lang.String)>
+		SHA-256: 1c760b0813b06c724ad6500e54453e2a87a8cc0d1338bf378a6754ff91fec4c4
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2163)
+		Method: <com.tsf.shell.utils.v: java.lang.String a(byte[])>
+		SHA-256: 49644dbee815bcf5a003cd01d540b32a5f308de98d83371b1d3fdb9e509575da
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.tsf.shell.utils.v: java.lang.String a(byte[])>
+		SHA-256: 33cb7adca36300dd58c10e572a1a088ae2ff24894792ed053f3cf062b84bcbf0
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.flurry.sdk.fe: byte[] d(java.lang.String)>
+		SHA-256: 45d16ef8c808aec34387a2d57f22199caeb160399be3ceda67246a54da9d73b9
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2714)
+		Method: <com.ksmobile.a.a.e: void <clinit>()>
+		SHA-256: 4097390597932998fe7b746fd2d423997b9403fcc1e73cd81526eeacf7aadc1b
+		Secure: false
+
+Findings in Java Class: com.flurry.sdk.dc
+
+	 in Method: void <init>(java.lang.String,java.lang.String,boolean,boolean,long,long,java.util.List,java.util.Map,java.util.Map,java.util.Map,java.util.Map,long)
+		ForbiddenMethodError violating CrySL rule for java.security.DigestOutputStream
+			Detected call to forbidden method void on(boolean) of class java.security.DigestOutputStream
+			at statement: virtualinvoke $r9.<java.security.DigestOutputStream: void on(boolean)>(varReplacer7924)
+
+		IncompleteOperationError violating CrySL rule for java.security.DigestOutputStream (on Object #6c075c2f63b5447230f82ce64ca5a2041539209c020c4511bfd375099aac0628)
+			Operation on object of type java.security.DigestOutputStream object not completed. Expected call to write
+			at statement: virtualinvoke $r9.<java.security.DigestOutputStream: void on(boolean)>(varReplacer7924)
+
+
+Findings in Java Class: com.tsf.shell.utils.v
+
+	 in Method: java.lang.String a(byte[])
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #49644dbee815bcf5a003cd01d540b32a5f308de98d83371b1d3fdb9e509575da)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2163)
+
+
+Findings in Java Class: com.flurry.sdk.fe
+
+	 in Method: byte[] d(java.lang.String)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #1c760b0813b06c724ad6500e54453e2a87a8cc0d1338bf378a6754ff91fec4c4)
+			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2480)
+
+
+Findings in Java Class: com.ksmobile.a.a.e
+
+	 in Method: void <clinit>()
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #4097390597932998fe7b746fd2d423997b9403fcc1e73cd81526eeacf7aadc1b)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2714)
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #864d75879bbcf97ca66a688bb8f6dbf1e085132b72c1415b60c433b18e64344c)
+			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2715)
+
 
 ======================= CogniCrypt Summary ==========================
-	Number of CrySL rules: 0
-	Number of Objects Analyzed: 0
-No violation of any of the rules found.=====================================================================
+	Number of CrySL rules: 32
+	Number of Objects Analyzed: 7
+
+	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 1
+	ConstraintError: 4
+	ForbiddenMethodError: 1
+=====================================================================

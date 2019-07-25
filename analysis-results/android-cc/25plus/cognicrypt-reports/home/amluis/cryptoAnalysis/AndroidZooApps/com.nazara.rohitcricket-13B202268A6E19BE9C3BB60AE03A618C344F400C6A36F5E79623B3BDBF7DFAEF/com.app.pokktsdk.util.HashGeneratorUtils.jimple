@@ -1,0 +1,139 @@
+public class com.app.pokktsdk.util.HashGeneratorUtils extends java.lang.Object
+{
+
+    private static java.lang.String convertByteArrayToHexString(byte[])
+    {
+        byte[] $r0;
+        byte $b0;
+        java.lang.StringBuilder $r1;
+        int $i1, $i2, $i4, varReplacer8187, varReplacer8188;
+        short $s3;
+        java.lang.String $r2;
+
+        nop;
+
+        $r0 := @parameter0: byte[];
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $i1 = lengthof $r0;
+
+        $i2 = 0;
+
+     label1:
+        if $i2 >= $i1 goto label2;
+
+        $b0 = $r0[$i2];
+
+        $s3 = $b0 & 255;
+
+        $i4 = $s3 + 256;
+
+        varReplacer8187 = 16;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.String toString(int,int)>($i4, varReplacer8187);
+
+        varReplacer8188 = 1;
+
+        $r2 = virtualinvoke $r2.<java.lang.String: java.lang.String substring(int)>(varReplacer8188);
+
+        virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $i2 = $i2 + 1;
+
+        goto label1;
+
+     label2:
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r2;
+    }
+
+    public static java.lang.String generateMD5(java.lang.String) throws com.app.pokktsdk.exceptions.PokktException
+    {
+        java.lang.String $r0, varReplacer8181, varReplacer8182, varReplacer8183, varReplacer8184;
+        java.lang.Throwable $r1, $r3;
+        com.app.pokktsdk.exceptions.PokktException $r2;
+        java.lang.Exception $r4;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+     label1:
+        varReplacer8181 = "MD5";
+
+        $r0 = staticinvoke <com.app.pokktsdk.util.HashGeneratorUtils: java.lang.String hashString(java.lang.String,java.lang.String)>($r0, varReplacer8181);
+
+     label2:
+        return $r0;
+
+     label3:
+        $r1 := @caughtexception;
+
+        $r2 = new com.app.pokktsdk.exceptions.PokktException;
+
+        varReplacer8184 = "NO Such Algorithm MD5 !";
+
+        specialinvoke $r2.<com.app.pokktsdk.exceptions.PokktException: void <init>(java.lang.String)>(varReplacer8184);
+
+        throw $r2;
+
+     label4:
+        $r3 := @caughtexception;
+
+        $r2 = new com.app.pokktsdk.exceptions.PokktException;
+
+        varReplacer8182 = "Invalid Encoding !";
+
+        specialinvoke $r2.<com.app.pokktsdk.exceptions.PokktException: void <init>(java.lang.String)>(varReplacer8182);
+
+        throw $r2;
+
+     label5:
+        $r4 := @caughtexception;
+
+        staticinvoke <com.app.pokktsdk.util.Logger: void printStackTrace(java.lang.Throwable)>($r4);
+
+        $r2 = new com.app.pokktsdk.exceptions.PokktException;
+
+        varReplacer8183 = "Exception in generating MD5 Hash !";
+
+        specialinvoke $r2.<com.app.pokktsdk.exceptions.PokktException: void <init>(java.lang.String)>(varReplacer8183);
+
+        throw $r2;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+        catch java.io.UnsupportedEncodingException from label1 to label2 with label4;
+        catch java.lang.Exception from label1 to label2 with label5;
+    }
+
+    private static java.lang.String hashString(java.lang.String, java.lang.String) throws java.security.NoSuchAlgorithmException, java.io.UnsupportedEncodingException
+    {
+        java.lang.String $r0, $r1, varReplacer8185, varReplacer8186;
+        java.security.MessageDigest $r2;
+        byte[] $r3;
+
+        nop;
+
+        $r0 := @parameter0: java.lang.String;
+
+        $r1 := @parameter1: java.lang.String;
+
+        varReplacer8185 = "MD5";
+
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer8185);
+
+        varReplacer8186 = "UTF-8";
+
+        $r3 = virtualinvoke $r0.<java.lang.String: byte[] getBytes(java.lang.String)>(varReplacer8186);
+
+        $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r3);
+
+        $r0 = staticinvoke <com.app.pokktsdk.util.HashGeneratorUtils: java.lang.String convertByteArrayToHexString(byte[])>($r3);
+
+        return $r0;
+    }
+}
