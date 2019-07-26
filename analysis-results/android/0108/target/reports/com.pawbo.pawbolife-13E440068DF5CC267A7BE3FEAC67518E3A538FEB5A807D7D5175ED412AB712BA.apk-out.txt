@@ -38,10 +38,17 @@ Ruleset:
 Analyzed Objects: 
 	Object:
 		Variable: $r3
-		Type: java.security.MessageDigest
-		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer714)
-		Method: <com.baidu.android.silentupdate.SilentManager: java.lang.String b(java.io.File)>
-		SHA-256: 1c9f7243203ddfb3d8b9c94154ccc08cbfc648475fb071321fc4fd2e48342ffe
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r3)
+		Method: <com.baidu.android.silentupdate.SilentManager: java.lang.String decrypt(java.lang.String,java.lang.String)>
+		SHA-256: f0bf129b94221a55f798eab7325a382a053aa489abacf74ae0803a8e56d66b6a
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: javax.crypto.Cipher
+		Statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer285)
+		Method: <com.baidu.android.silentupdate.SilentManager: java.lang.String decrypt(java.lang.String,java.lang.String)>
+		SHA-256: 690a8f5698084944cbe487fd16a55f78d18f38dbada140401143a996fda02d1e
 		Secure: false
 	Object:
 		Variable: $r2
@@ -51,25 +58,11 @@ Analyzed Objects:
 		SHA-256: 3052a7fbe6fb7174453be1cdbad1ca142e9ebe6a4a48c7a2cd708e88480cd403
 		Secure: true
 	Object:
-		Variable: $r6
-		Type: javax.crypto.Cipher
-		Statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer722)
-		Method: <com.baidu.android.silentupdate.SilentManager: java.lang.String decrypt(java.lang.String,java.lang.String)>
-		SHA-256: e023c4d0bfba6a4289263bc2db5e28ec161c76d6ed18188374e8cf25c757c9c8
-		Secure: false
-	Object:
 		Variable: $r3
-		Type: byte[]
-		Statement: $r3 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r3)
-		Method: <com.baidu.android.silentupdate.SilentManager: java.lang.String decrypt(java.lang.String,java.lang.String)>
-		SHA-256: f0bf129b94221a55f798eab7325a382a053aa489abacf74ae0803a8e56d66b6a
-		Secure: false
-	Object:
-		Variable: $r2
-		Type: javax.net.ssl.SSLContext
-		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1423)
-		Method: <com.loopj.android.http.MySSLSocketFactory: void <init>(java.security.KeyStore)>
-		SHA-256: 52d0388826a324ecb84aca58dea2327e8602831e0c08e2b231bef8609b4698b5
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer278)
+		Method: <com.baidu.android.silentupdate.SilentManager: java.lang.String b(java.io.File)>
+		SHA-256: 51c7e74b0b9e8a50649c8077ee708bdbc5be67617b323be81e95ea4ea617f4cc
 		Secure: false
 	Object:
 		Variable: $r3
@@ -78,11 +71,18 @@ Analyzed Objects:
 		Method: <com.loopj.android.http.MySSLSocketFactory: java.security.KeyStore getKeystore()>
 		SHA-256: d011df71b400b4926b84dec0cad6ffb90a5bd3d26c43a5974bec9e614ef5edf5
 		Secure: true
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer981)
+		Method: <com.loopj.android.http.MySSLSocketFactory: void <init>(java.security.KeyStore)>
+		SHA-256: 8f08ffb3cad3ac5be396d7807c64c104b86d25dcbc4860fe9dce7074332ca594
+		Secure: false
 
 Findings in Java Class: com.baidu.android.silentupdate.SilentManager
 
 	 in Method: java.lang.String b(java.io.File)
-		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #1c9f7243203ddfb3d8b9c94154ccc08cbfc648475fb071321fc4fd2e48342ffe)
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #51c7e74b0b9e8a50649c8077ee708bdbc5be67617b323be81e95ea4ea617f4cc)
 			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte),java.security.MessageDigest: void update(byte[])
 			at statement: $r2 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
 
@@ -90,7 +90,7 @@ Findings in Java Class: com.baidu.android.silentupdate.SilentManager
 	 in Method: java.lang.String decrypt(java.lang.String,java.lang.String)
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer720, $r5)
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer288, $r5)
 
 
 Findings in Java Class: com.loopj.android.http.MySSLSocketFactory
@@ -98,11 +98,11 @@ Findings in Java Class: com.loopj.android.http.MySSLSocketFactory
 	 in Method: void <init>(java.security.KeyStore)
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			First parameter was not properly generated as generated Key Manager
-			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1421, r5, varReplacer1421)
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer982, r5, varReplacer982)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1421, r5, varReplacer1421)
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer982, r5, varReplacer982)
 
 
 ======================= CogniCrypt Summary ==========================
@@ -110,6 +110,6 @@ Findings in Java Class: com.loopj.android.http.MySSLSocketFactory
 	Number of Objects Analyzed: 6
 
 	CogniCrypt found the following violations. For details see description above.
-	TypestateError: 1
 	RequiredPredicateError: 3
+	TypestateError: 1
 =====================================================================
