@@ -118,7 +118,7 @@ ORDER
 
 CONSTRAINTS
    
-    part(0,"/",transformation) in {"AES_128", "ARC4", "AES", "BLOWFISH", "DESede", "AES_256", "ChaCha20", "RSA"}; 
+    part(0,"/",transformation) in {"AES_128", "ARC4", "TDEA", "AES", "BLOWFISH", "RSA", "ARCFOUR", "DESEDE", "AES_256", "RC4"}; 
    
     part(1,"/",transformation) in {"OFB", "PCBC", "CBC", "CTS", "CTR", "CFB"} && encmode != 1 => noCallTo[IWOIV]; 
    
@@ -136,7 +136,9 @@ CONSTRAINTS
    
     part(0,"/",transformation) in {"AES"} => part(1,"/",transformation) in {"OFB", "GCM", "CTS", "CTR", "CFB", "ECB", "CBC"}; 
    
-    part(0,"/",transformation) in {"DESede"} => part(1,"/",transformation) in {"OFB", "CTS", "CTR", "CFB", "ECB", "CBC"}; 
+    part(0,"/",transformation) in {"DESEDE"} => part(1,"/",transformation) in {"OFB", "CTS", "CTR", "CFB", "ECB", "CBC"}; 
+   
+    part(0,"/",transformation) in {"TDEA"} => part(1,"/",transformation) in {"OFB", "CTS", "CTR", "CFB", "ECB", "CBC"}; 
    
     part(0,"/",transformation) in {"AES", "DESede"} && part(1,"/",transformation) in {"CBC"} => part(2,"/",transformation) in {"PKCS5Padding", "PKCS7Padding", "ISO10126Padding"}; 
    
@@ -144,7 +146,8 @@ CONSTRAINTS
    
     part(0,"/",transformation) in {"RSA"} => part(1,"/",transformation) in {"ECB", ""}; 
    
-    part(0,"/",transformation) in {"RSA"} => part(2,"/",transformation) in {"OAEPwithSHA-512andMGF1Padding", "OAEPwithSHA-224andMGF1Padding", "OAEPPadding", "NoPadding", "PKCS1Padding", "OAEPwithSHA-256andMGF1Padding", "OAEPwithSHA-1andMGF1Padding", "OAEPwithSHA-384andMGF1Padding"}; 
+    part(0,"/",transformation) in {"RSA"} => part(2,"/",transformation) in {"OAEPPadding", "NoPadding", "PKCS1Padding", "OAEPwithSHA-256andMGF1Padding", "OAEPwithSHA-1andMGF1Padding"}; 
+   
    
     part(0,"/",transformation) in {"AES"} && part(1,"/",transformation) in {"GCM"} => part(2,"/",transformation) in {"NoPadding"}; 
    
@@ -158,39 +161,21 @@ CONSTRAINTS
    
     part(0,"/",transformation) in {"ARC4"} => part(2,"/",transformation) in {"NoPadding"}; 
    
-    part(0,"/",transformation) in {"AES"} => part(1,"/",transformation) in {"OFB", "GCM", "CTS", "CTR", "CFB", "ECB", "CBC"}; 
+    part(0,"/",transformation) in {"RC4"} => part(1,"/",transformation) in {"ECB"}; 
    
-    part(0,"/",transformation) in {"DESede"} => part(1,"/",transformation) in {"OFB", "CTS", "CTR", "CFB", "ECB", "CBC"}; 
+    part(0,"/",transformation) in {"RC4"} => part(2,"/",transformation) in {"NoPadding"}; 
    
-    part(0,"/",transformation) in {"AES", "DESede"} && part(1,"/",transformation) in {"CBC"} => part(2,"/",transformation) in {"PKCS5Padding", "PKCS7Padding", "ISO10126Padding"}; 
+    part(0,"/",transformation) in {"ARCFOUR"} => part(1,"/",transformation) in {"ECB"}; 
    
-    part(0,"/",transformation) in {"AES", "DESede"} && part(1,"/",transformation) in {"OFB", "CTR", "CFB"} => part(2,"/",transformation) in {"NoPadding"}; 
+    part(0,"/",transformation) in {"ARCFOUR"} => part(2,"/",transformation) in {"NoPadding"}; 
    
-    part(0,"/",transformation) in {"RSA"} => part(1,"/",transformation) in {"ECB", ""}; 
-   
-    part(0,"/",transformation) in {"RSA"} => part(2,"/",transformation) in {"OAEPwithSHA-512andMGF1Padding", "OAEPwithSHA-224andMGF1Padding", "OAEPPadding", "NoPadding", "PKCS1Padding", "OAEPwithSHA-256andMGF1Padding", "OAEPwithSHA-1andMGF1Padding", "OAEPwithSHA-384andMGF1Padding"}; 
-   
-    part(0,"/",transformation) in {"AES"} && part(1,"/",transformation) in {"GCM"} => part(2,"/",transformation) in {"NoPadding"}; 
-   
-    part(0,"/",transformation) in {"BLOWFISH"} => part(1,"/",transformation) in {"OFB", "CTS", "CTR", "CFB", "ECB", "CBC"}; 
-   
-    part(0,"/",transformation) in {"BLOWFISH"} && part(1,"/",transformation) in {"CBC"} => part(2,"/",transformation) in {"PKCS5Padding", "PKCS7Padding", "ISO10126Padding"}; 
-   
-    part(0,"/",transformation) in {"BLOWFISH"} && part(1,"/",transformation) in {"OFB", "CTR", "CFB"} => part(2,"/",transformation) in {"NoPadding"}; 
-   
-    part(0,"/",transformation) in {"ARC4"} => part(1,"/",transformation) in {"ECB"}; 
-   
-    part(0,"/",transformation) in {"ARC4"} => part(2,"/",transformation) in {"NoPadding"}; 
+    
    
     part(0,"/",transformation) in {"AES_128", "AES_256"} => part(1,"/",transformation) in {"GCM", "ECB", "CBC"}; 
    
     part(0,"/",transformation) in {"AES_128", "AES_256"} && part(1,"/",transformation) in {"ECB", "CBC"} => part(2,"/",transformation) in {"PKCS5Padding", "NoPadding"}; 
    
     part(0,"/",transformation) in {"AES_128", "AES_256"} && part(1,"/",transformation) in {"GCM"} => part(2,"/",transformation) in {"NoPadding"}; 
-   
-    part(0,"/",transformation) in {"ChaCha20"} => part(1,"/",transformation) in {"Poly1305", ""}; 
-   
-    part(0,"/",transformation) in {"ChaCha20"} => part(2,"/",transformation) in {"NoPadding"}; 
  
                                   
 REQUIRES
