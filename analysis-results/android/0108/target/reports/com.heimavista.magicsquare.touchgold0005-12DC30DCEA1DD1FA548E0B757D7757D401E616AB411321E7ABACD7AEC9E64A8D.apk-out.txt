@@ -38,31 +38,31 @@ Ruleset:
 Analyzed Objects: 
 	Object:
 		Variable: $r3
-		Type: javax.crypto.spec.SecretKeySpec
-		Statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, $r4)
-		Method: <net.lingala.zip4j.crypto.PBKDF2.MacBasedPRF: void init(byte[])>
-		SHA-256: 20adf8f7445b2e58588ae09ad14c54e9baba36cc7903aa139d083d41e553682a
-		Secure: false
-	Object:
-		Variable: $r3
 		Type: java.security.MessageDigest
-		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer278)
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer333)
 		Method: <com.heimavista.hvFrame.tools.PublicUtil: java.lang.String getMD5(byte[])>
-		SHA-256: e845054e30572d2e5f66da0bb3f7189d9533c59e362eeeabe8a0262c6a2e0243
+		SHA-256: e0bb3174e89067dc4f7661cc3823ea8e77f06fc2e5add5b3dd9978df090443ca
 		Secure: true
-	Object:
-		Variable: $r4
-		Type: java.lang.String
-		Statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, $r4)
-		Method: <net.lingala.zip4j.crypto.PBKDF2.MacBasedPRF: void init(byte[])>
-		SHA-256: 9d8f303d35862451801a979f09e96bf6a57e8a956291a5a414e742a12edd273e
-		Secure: false
 	Object:
 		Variable: $r3
 		Type: javax.crypto.Mac
 		Statement: $r3 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>($r1)
 		Method: <net.lingala.zip4j.crypto.PBKDF2.MacBasedPRF: void <init>(java.lang.String)>
 		SHA-256: 33bd2c09b445bdf85b08a817f13ef043a92db59355bc38ab86364a44c214d9f8
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, $r4)
+		Method: <net.lingala.zip4j.crypto.PBKDF2.MacBasedPRF: void init(byte[])>
+		SHA-256: 20adf8f7445b2e58588ae09ad14c54e9baba36cc7903aa139d083d41e553682a
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: java.lang.String
+		Statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, $r4)
+		Method: <net.lingala.zip4j.crypto.PBKDF2.MacBasedPRF: void init(byte[])>
+		SHA-256: 9d8f303d35862451801a979f09e96bf6a57e8a956291a5a414e742a12edd273e
 		Secure: false
 	Object:
 		Variable: $r0
@@ -74,6 +74,20 @@ Analyzed Objects:
 
 Findings in Java Class: net.lingala.zip4j.unzip.UnzipEngine
 
+	 in Method: net.lingala.zip4j.io.ZipInputStream getInputStream()
+		IncompleteOperationError violating CrySL rule for javax.crypto.Mac (on Object #33bd2c09b445bdf85b08a817f13ef043a92db59355bc38ab86364a44c214d9f8)
+			Operation on object of type javax.crypto.Mac object not completed. Expected call to update, doFinal
+			at statement: specialinvoke $r0.<net.lingala.zip4j.unzip.UnzipEngine: void init(java.io.RandomAccessFile)>($r4)
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.Mac (on Object #33bd2c09b445bdf85b08a817f13ef043a92db59355bc38ab86364a44c214d9f8)
+			Operation on object of type javax.crypto.Mac object not completed. Expected call to update, doFinal
+			at statement: $r7 = (net.lingala.zip4j.crypto.AESDecrypter) $r6
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.Mac (on Object #33bd2c09b445bdf85b08a817f13ef043a92db59355bc38ab86364a44c214d9f8)
+			Operation on object of type javax.crypto.Mac object not completed. Expected call to update, doFinal
+			at statement: $r6 = $r0.<net.lingala.zip4j.unzip.UnzipEngine: net.lingala.zip4j.crypto.IDecrypter decrypter>
+
+
 	 in Method: void unzipFile(net.lingala.zip4j.progress.ProgressMonitor,java.lang.String,java.lang.String,net.lingala.zip4j.model.UnzipParameters)
 		IncompleteOperationError violating CrySL rule for javax.crypto.Mac (on Object #33bd2c09b445bdf85b08a817f13ef043a92db59355bc38ab86364a44c214d9f8)
 			Operation on object of type javax.crypto.Mac object not completed. Expected call to update, doFinal
@@ -82,20 +96,6 @@ Findings in Java Class: net.lingala.zip4j.unzip.UnzipEngine
 		IncompleteOperationError violating CrySL rule for javax.crypto.Mac (on Object #33bd2c09b445bdf85b08a817f13ef043a92db59355bc38ab86364a44c214d9f8)
 			Operation on object of type javax.crypto.Mac object not completed. Expected call to update, doFinal
 			at statement: specialinvoke $r0.<net.lingala.zip4j.unzip.UnzipEngine: void closeStreams(java.io.InputStream,java.io.OutputStream)>($r11, $r12)
-
-
-	 in Method: net.lingala.zip4j.io.ZipInputStream getInputStream()
-		IncompleteOperationError violating CrySL rule for javax.crypto.Mac (on Object #33bd2c09b445bdf85b08a817f13ef043a92db59355bc38ab86364a44c214d9f8)
-			Operation on object of type javax.crypto.Mac object not completed. Expected call to update, doFinal
-			at statement: $r7 = (net.lingala.zip4j.crypto.AESDecrypter) $r6
-
-		IncompleteOperationError violating CrySL rule for javax.crypto.Mac (on Object #33bd2c09b445bdf85b08a817f13ef043a92db59355bc38ab86364a44c214d9f8)
-			Operation on object of type javax.crypto.Mac object not completed. Expected call to update, doFinal
-			at statement: specialinvoke $r0.<net.lingala.zip4j.unzip.UnzipEngine: void init(java.io.RandomAccessFile)>($r4)
-
-		IncompleteOperationError violating CrySL rule for javax.crypto.Mac (on Object #33bd2c09b445bdf85b08a817f13ef043a92db59355bc38ab86364a44c214d9f8)
-			Operation on object of type javax.crypto.Mac object not completed. Expected call to update, doFinal
-			at statement: $r6 = $r0.<net.lingala.zip4j.unzip.UnzipEngine: net.lingala.zip4j.crypto.IDecrypter decrypter>
 
 
 Findings in Java Class: net.lingala.zip4j.crypto.PBKDF2.MacBasedPRF

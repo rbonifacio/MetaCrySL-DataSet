@@ -37,19 +37,26 @@ Ruleset:
 
 Analyzed Objects: 
 	Object:
-		Variable: $r3
-		Type: javax.net.ssl.SSLContext
-		Statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1412)
-		Method: <org.jsoup.helper.HttpConnection$Response: void initUnSecureTSL()>
-		SHA-256: 4b26045d763f0390f2ed8a4766903f5e07da37c41bdea8d929c487f755d50ebf
-		Secure: false
-	Object:
 		Variable: $r1
 		Type: java.security.MessageDigest
-		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6604)
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7158)
 		Method: <com.systweak.duplicatefilescleaner.ScanningClass: void o()>
-		SHA-256: 54cb29d40e319673b356e03db627e0756eb70c936f5ae9a5cfa862e136e287b3
+		SHA-256: 93dc5435e9a866c35624196c4fb7c90bcb0561c880515ee2dd5058a50f92c6aa
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.android.systemoptimizer.b.a: java.lang.String a(java.io.InputStream,java.security.MessageDigest,int)>
+		SHA-256: 429798205c2c83583d727c70683157d1a7176cd097489fb4eae5c3e713da1e13
 		Secure: true
+	Object:
+		Variable: $r3
+		Type: javax.net.ssl.SSLContext
+		Statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer3486)
+		Method: <org.jsoup.helper.HttpConnection$Response: void initUnSecureTSL()>
+		SHA-256: 90394c02baceeb80152086b263919999150e995caee9fffafc41c67273d9e7a3
+		Secure: false
 	Object:
 		Variable: r8
 		Type: java.security.SecureRandom
@@ -61,24 +68,33 @@ Analyzed Objects:
 Findings in Java Class: org.jsoup.helper.HttpConnection$Response
 
 	 in Method: void initUnSecureTSL()
-		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #4b26045d763f0390f2ed8a4766903f5e07da37c41bdea8d929c487f755d50ebf)
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #90394c02baceeb80152086b263919999150e995caee9fffafc41c67273d9e7a3)
 			First parameter (with value "SSL") should be any of {TLS}
-			at statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1412)
+			at statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer3486)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1413, r10, $r0)
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer3487, r10, $r0)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			First parameter was not properly generated as generated Key Manager
-			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1413, r10, $r0)
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer3487, r10, $r0)
+
+
+Findings in Java Class: com.android.systemoptimizer.b.a
+
+	 in Method: java.lang.String a(java.io.InputStream,java.security.MessageDigest,int)
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #93dc5435e9a866c35624196c4fb7c90bcb0561c880515ee2dd5058a50f92c6aa)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte[]),java.security.MessageDigest: void update(byte)
+			at statement: $r3 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
 
 
 ======================= CogniCrypt Summary ==========================
 	Number of CrySL rules: 32
-	Number of Objects Analyzed: 3
+	Number of Objects Analyzed: 4
 
 	CogniCrypt found the following violations. For details see description above.
+	TypestateError: 1
 	ConstraintError: 1
 	RequiredPredicateError: 2
 =====================================================================
