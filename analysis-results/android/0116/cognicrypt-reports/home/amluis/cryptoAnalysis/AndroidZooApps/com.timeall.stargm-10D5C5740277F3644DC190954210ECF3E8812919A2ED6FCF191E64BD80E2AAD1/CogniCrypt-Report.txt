@@ -178,8 +178,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r7 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>()
 		Method: <com.facebook.unity.FB: java.lang.String getKeyHash()>
-		SHA-256: fbe47ce343b5df21a88c6af9649c2f8d6f5b813e936d699f053ff2a390f19c03
-		Secure: false
+		SHA-256: 5f44b68b1c54ba5e3be61e8e51514f475922ae93f5c1951cc7b1d61dea9b4e05
+		Secure: true
 	Object:
 		Variable: $r3
 		Type: java.security.Signature
@@ -221,7 +221,7 @@ Analyzed Objects:
 		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1742)
 		Method: <com.facebook.unity.FB: java.lang.String getKeyHash()>
 		SHA-256: d64b842787ed900d76dfeb9a1d624862aa62be695da5e7c825c401582333305e
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r4
 		Type: java.security.MessageDigest
@@ -244,24 +244,16 @@ Analyzed Objects:
 		SHA-256: 98215ece6f6a60ce0739e1b9a0ef278f9806b9bc5c5215dc8b7f4f137f5edc6e
 		Secure: true
 
-Findings in Java Class: com.facebook.unity.FB
-
-	 in Method: java.lang.String getKeyHash()
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #d64b842787ed900d76dfeb9a1d624862aa62be695da5e7c825c401582333305e)
-			First parameter (with value "SHA") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1742)
-
-
 Findings in Java Class: com.unity3d.player.UnityPlayer
 
 	 in Method: java.lang.String a(java.lang.String)
-		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #5d700d4362d5f80f8ee1f0a7f13f347e34d8d0c1e04107710aae08c98328a525)
-			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte),java.security.MessageDigest: void update(byte[])
-			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
-
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #5d700d4362d5f80f8ee1f0a7f13f347e34d8d0c1e04107710aae08c98328a525)
 			Third parameter (with value 0)Variable pre_lenmust be  greater than pre_off
 			at statement: virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r1, varReplacer3680, $i3)
+
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #5d700d4362d5f80f8ee1f0a7f13f347e34d8d0c1e04107710aae08c98328a525)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte),java.security.MessageDigest: void update(byte[])
+			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
 
 
 Findings in Java Class: cn.jpush.android.util.k
@@ -280,6 +272,10 @@ Findings in Java Class: cn.jpush.android.util.i
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1557, $r4, $r7)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1557, $r4, $r7)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Third parameter was not properly generated as prepared G C M
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1557, $r4, $r7)
 
@@ -290,10 +286,6 @@ Findings in Java Class: cn.jpush.android.util.i
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r7.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r3)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1557, $r4, $r7)
 
 
 Findings in Java Class: com.xytd.android.xqmx.util.Security
@@ -311,17 +303,17 @@ Findings in Java Class: cn.jpush.android.util.a
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1477, $r5, $r7)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, $r3)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared G C M
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1477, $r5, $r7)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r7.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared G C M
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1477, $r5, $r7)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, $r3)
 
 
 ======================= CogniCrypt Summary ==========================
@@ -329,7 +321,7 @@ Findings in Java Class: cn.jpush.android.util.a
 	Number of Objects Analyzed: 30
 
 	CogniCrypt found the following violations. For details see description above.
-	ConstraintError: 2
 	RequiredPredicateError: 10
+	ConstraintError: 1
 	TypestateError: 2
 =====================================================================

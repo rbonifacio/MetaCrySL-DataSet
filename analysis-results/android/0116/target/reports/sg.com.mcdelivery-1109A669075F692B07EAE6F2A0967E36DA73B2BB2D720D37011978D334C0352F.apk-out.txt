@@ -91,7 +91,7 @@ Analyzed Objects:
 		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6186)
 		Method: <com.google.android.gms.iid.a: java.lang.String a(java.security.KeyPair)>
 		SHA-256: bf7d0bc44f08d84a6f0e89b003107928b62609b37ca61a36fcf1b7b8bffb3c29
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r8
 		Type: javax.crypto.Cipher
@@ -167,8 +167,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r2 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
 		Method: <com.google.android.gms.iid.a: java.lang.String a(java.security.KeyPair)>
-		SHA-256: 667d1c74233dc4695844b2a369b7ca168b7b3f396ce37cb94fd304b9f22f5e14
-		Secure: false
+		SHA-256: 6eb9c4882a2bc73af9a673aebf6f5afae49ea2ada522213b217877fced577ed9
+		Secure: true
 	Object:
 		Variable: $r2
 		Type: java.security.KeyStore
@@ -201,14 +201,6 @@ Analyzed Objects:
 Findings in Java Class: sg.com.steria.mcdonalds.util.Encryption
 
 	 in Method: java.lang.String encrypt(java.lang.String,java.lang.String)
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #e2a0b9854fbf5b1cc14a31f7c73d07c1dae17422cb4863516197bd4775ac245e)
-			First parameter (with value "DES") should be any of {ARC4, AES, BLOWFISH, DESede, RSA}
-			at statement: $r8 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>($r1)
-
-		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #e5d84e5a70c065fe094514ca5ac2482f5e831d9c23f08e68e4a86f6c2f42cddd)
-			First parameter (with value "DES") should be any of {PBEwithSHA1ANDRC2, PBEwithHmacSHA1, PBEwithSHAANDTWOFISH-CBC	, PBEwithSHAAND192BITAES-CBC-BC, DESede, PBEwithMD5AND128BITAES-CBC-OPENSSL, PBEwithSHAAND40BITRC4, PBEwithMD5ANDDES, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithMD5AND192BITAES-CBC-OPENSSL, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC, PBEwithMD5AND256BITAES-CBC-OPENSSL, PBEwithMD5ANDRC2, PBKDF2withHmacSHA1, PBEwithSHAAND128BITRC4, PBEwithSHA1ANDDES, PBEwithSHA256AND128BITAES-CBC-BC, PBEwithSHAAND128BITRC2-CBC, PBEwithSHAAND128BITAES-CBC-BC}
-			at statement: $r6 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>($r1)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
 			First parameter was not properly generated as specced Key
 			at statement: $r7 = virtualinvoke $r6.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r3)
@@ -217,23 +209,31 @@ Findings in Java Class: sg.com.steria.mcdonalds.util.Encryption
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1071, $r7)
 
+		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #e5d84e5a70c065fe094514ca5ac2482f5e831d9c23f08e68e4a86f6c2f42cddd)
+			First parameter (with value "DES") should be any of {PBEwithSHA1ANDRC2, PBEwithHmacSHA1, PBEwithSHAANDTWOFISH-CBC	, PBEwithSHAAND192BITAES-CBC-BC, DESede, PBEwithMD5AND128BITAES-CBC-OPENSSL, PBEwithSHAAND40BITRC4, PBEwithMD5ANDDES, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithMD5AND192BITAES-CBC-OPENSSL, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC, PBEwithMD5AND256BITAES-CBC-OPENSSL, PBEwithMD5ANDRC2, PBKDF2withHmacSHA1, PBEwithSHAAND128BITRC4, PBEwithSHA1ANDDES, PBEwithSHA256AND128BITAES-CBC-BC, PBEwithSHAAND128BITRC2-CBC, PBEwithSHAAND128BITAES-CBC-BC}
+			at statement: $r6 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>($r1)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #e2a0b9854fbf5b1cc14a31f7c73d07c1dae17422cb4863516197bd4775ac245e)
+			First parameter (with value "DES") should be any of {ARC4, TDEA, AES, BLOWFISH, RC4, RSA, ARCFOUR, DESEDE}
+			at statement: $r8 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>($r1)
+
 
 	 in Method: java.lang.String decrypt(java.lang.String,java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1077, $r7)
+		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #579f3778efe41e6e28dcda7154a3675a123eccdeecd88fd144ca3a586425a5ed)
+			First parameter (with value "DES") should be any of {PBEwithSHA1ANDRC2, PBEwithHmacSHA1, PBEwithSHAANDTWOFISH-CBC	, PBEwithSHAAND192BITAES-CBC-BC, DESede, PBEwithMD5AND128BITAES-CBC-OPENSSL, PBEwithSHAAND40BITRC4, PBEwithMD5ANDDES, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithMD5AND192BITAES-CBC-OPENSSL, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC, PBEwithMD5AND256BITAES-CBC-OPENSSL, PBEwithMD5ANDRC2, PBKDF2withHmacSHA1, PBEwithSHAAND128BITRC4, PBEwithSHA1ANDDES, PBEwithSHA256AND128BITAES-CBC-BC, PBEwithSHAAND128BITRC2-CBC, PBEwithSHAAND128BITAES-CBC-BC}
+			at statement: $r6 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>($r1)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
 			First parameter was not properly generated as specced Key
 			at statement: $r7 = virtualinvoke $r6.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r4)
 
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #98fb1c7efdcb2bbd48f7323a225977ff812e9ae4cc3031c54970c127104f40b6)
-			First parameter (with value "DES") should be any of {ARC4, AES, BLOWFISH, DESede, RSA}
-			at statement: $r8 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>($r1)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1077, $r7)
 
-		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #579f3778efe41e6e28dcda7154a3675a123eccdeecd88fd144ca3a586425a5ed)
-			First parameter (with value "DES") should be any of {PBEwithSHA1ANDRC2, PBEwithHmacSHA1, PBEwithSHAANDTWOFISH-CBC	, PBEwithSHAAND192BITAES-CBC-BC, DESede, PBEwithMD5AND128BITAES-CBC-OPENSSL, PBEwithSHAAND40BITRC4, PBEwithMD5ANDDES, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithMD5AND192BITAES-CBC-OPENSSL, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC, PBEwithMD5AND256BITAES-CBC-OPENSSL, PBEwithMD5ANDRC2, PBKDF2withHmacSHA1, PBEwithSHAAND128BITRC4, PBEwithSHA1ANDDES, PBEwithSHA256AND128BITAES-CBC-BC, PBEwithSHAAND128BITRC2-CBC, PBEwithSHAAND128BITAES-CBC-BC}
-			at statement: $r6 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>($r1)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #98fb1c7efdcb2bbd48f7323a225977ff812e9ae4cc3031c54970c127104f40b6)
+			First parameter (with value "DES") should be any of {ARC4, TDEA, AES, BLOWFISH, RC4, RSA, ARCFOUR, DESEDE}
+			at statement: $r8 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>($r1)
 
 
 Findings in Java Class: sg.com.steria.mcdonalds.util.RSAHelper
@@ -247,25 +247,21 @@ Findings in Java Class: sg.com.steria.mcdonalds.util.RSAHelper
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1837, $r5)
 
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f2f801bf8fb7e6912189ce9a27e9a75c39ac9a5ff31235b8fa15de27950b1aba)
+			First parameter (with value "RSA/None/PKCS1Padding") should be any of RSA/{ECB, Empty String}
+			at statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>(varReplacer1842, varReplacer1843)
+
 
 Findings in Java Class: com.google.android.gms.iid.e
 
 	 in Method: java.lang.String a(java.security.KeyPair,java.lang.String[])
-		ConstraintError violating CrySL rule for java.security.Signature (on Object #11f1bcb7ae07944efc67e46877e2d7ceddc5e8edcbf8a0082e0feef337558e47)
-			First parameter (with value "SHA256withECDSA") should be any of {SHA1withRSA/ISO9796-2, RSASSA-PSS, SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA, DSA, SHA512withRSA, SHA384withRSA, MD5withRSA/ISO9796-2, SHA1withRSA, DSS, MD4withRSA, MD5withRSA, DSAwithSHA1}
-			at statement: $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r2)
-
 		RequiredPredicateError violating CrySL rule for java.security.Signature
 			First parameter was not properly generated as generated Privkey
 			at statement: virtualinvoke $r5.<java.security.Signature: void initSign(java.security.PrivateKey)>($r4)
 
-
-Findings in Java Class: com.google.android.gms.iid.a
-
-	 in Method: java.lang.String a(java.security.KeyPair)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #bf7d0bc44f08d84a6f0e89b003107928b62609b37ca61a36fcf1b7b8bffb3c29)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6186)
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #11f1bcb7ae07944efc67e46877e2d7ceddc5e8edcbf8a0082e0feef337558e47)
+			First parameter (with value "SHA256withECDSA") should be any of {SHA1withRSA/ISO9796-2, RSASSA-PSS, SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA, DSA, SHA512withRSA, SHA384withRSA, MD5withRSA/ISO9796-2, SHA1withRSA, DSS, MD4withRSA, MD5withRSA, DSAwithSHA1}
+			at statement: $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r2)
 
 
 Findings in Java Class: sg.com.steria.mcdonalds.backend.RestProxyHelper

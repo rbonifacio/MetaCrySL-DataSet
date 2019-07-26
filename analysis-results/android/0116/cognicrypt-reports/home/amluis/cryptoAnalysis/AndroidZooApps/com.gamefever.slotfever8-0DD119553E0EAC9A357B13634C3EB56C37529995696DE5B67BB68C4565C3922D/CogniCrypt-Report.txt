@@ -158,7 +158,7 @@ Analyzed Objects:
 		Statement: $r13 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2707)
 		Method: <com.gamefever.slotfever8.SlotFever: void onCreate(android.os.Bundle)>
 		SHA-256: 6f6e837c62b4fde3310253cc5fd34723715ca03edec87cac5caa5fc917713241
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r3
 		Type: java.security.MessageDigest
@@ -290,8 +290,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r7 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest(byte[])>($r7)
 		Method: <com.millennialmedia.android.MMSDK: java.lang.String getMMdid(android.content.Context)>
-		SHA-256: 555533d791b2c2735b6c08bbe3254d105f99550e9fabedc097cca1d3818b020d
-		Secure: false
+		SHA-256: 8ac503c14f1c54e3f933b0da2a587ad95b3b497eaf9d5d011d22d999765f43de
+		Secure: true
 	Object:
 		Variable: $r1
 		Type: byte[]
@@ -311,8 +311,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r14 = virtualinvoke $r13.<java.security.MessageDigest: byte[] digest()>()
 		Method: <com.gamefever.slotfever8.SlotFever: void onCreate(android.os.Bundle)>
-		SHA-256: 40e4f9e7331143e52cecdcf176c1dd7575ebf0ede24b9fe68a8d8f0b216ee4bc
-		Secure: false
+		SHA-256: 710109ad76e277716df5e3620531e76969598903d66898f334a6ffdcd0712e47
+		Secure: true
 	Object:
 		Variable: $r4
 		Type: byte[]
@@ -333,7 +333,7 @@ Analyzed Objects:
 		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2288)
 		Method: <com.millennialmedia.android.MMSDK: java.lang.String getMMdid(android.content.Context)>
 		SHA-256: c49f2cd07dcfc9ee5d08f3bb49bc73213496dc7514cf7cc4bdc595eeffaa77be
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r3
 		Type: javax.crypto.spec.IvParameterSpec
@@ -424,7 +424,7 @@ Analyzed Objects:
 		Statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer9476)
 		Method: <com.tapjoy.internal.il: void <clinit>()>
 		SHA-256: b34144157d086c8da3a577ad3b63cb7437a21d583fe4dfe69fb57fd6b240f367
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r6
 		Type: byte[]
@@ -461,32 +461,20 @@ Analyzed Objects:
 		SHA-256: 1b96c28afc534ac31c5a869e64845edcd1b8004c7b067bbee07871ebdbdf6565
 		Secure: false
 
-Findings in Java Class: com.millennialmedia.android.MMSDK
-
-	 in Method: java.lang.String getMMdid(android.content.Context)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #c49f2cd07dcfc9ee5d08f3bb49bc73213496dc7514cf7cc4bdc595eeffaa77be)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2288)
-
-
-Findings in Java Class: com.gamefever.slotfever8.SlotFever
-
-	 in Method: void onCreate(android.os.Bundle)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #6f6e837c62b4fde3310253cc5fd34723715ca03edec87cac5caa5fc917713241)
-			First parameter (with value "SHA") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r13 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2707)
-
-
 Findings in Java Class: com.appfireworks.android.util.AppEncryption
 
 	 in Method: byte[] encryptAES(byte[],byte[])
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3984, $r2)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #55ec262099b91ef4c5f15924f5d3e9e8ac59cee9cb9f21f7dbd664b68aeab4a0)
+			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer3986)
 
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #55ec262099b91ef4c5f15924f5d3e9e8ac59cee9cb9f21f7dbd664b68aeab4a0)
 			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
 			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer3986)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3984, $r2)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
@@ -494,6 +482,10 @@ Findings in Java Class: com.appfireworks.android.util.AppEncryption
 
 
 	 in Method: byte[] decryptAES(byte[],byte[])
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #998c7e2f80850413e88c4dee4faacb53911b405ed6dcef409f8185aa1a0b0d3c)
+			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer4027)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer4028, $r2)
@@ -508,13 +500,13 @@ Findings in Java Class: com.appfireworks.android.util.AppEncryption
 
 
 	 in Method: void <init>(java.lang.String)
-		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #57d7e10c7799f0d7e973bdd120debfa21eb198e5f3e75315e6167db780ed7b18)
-			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
-			at statement: $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer5354)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r6.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, varReplacer5353)
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #57d7e10c7799f0d7e973bdd120debfa21eb198e5f3e75315e6167db780ed7b18)
+			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
+			at statement: $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer5354)
 
 
 	 in Method: byte[] getRawKeyAES(byte[])
@@ -529,14 +521,6 @@ Findings in Java Class: com.appfireworks.android.util.AppEncryption
 			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r1)
 
 
-Findings in Java Class: com.tapjoy.internal.il
-
-	 in Method: void <clinit>()
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #b34144157d086c8da3a577ad3b63cb7437a21d583fe4dfe69fb57fd6b240f367)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer9476)
-
-
 Findings in Java Class: com.tapjoy.internal.hi
 
 	 in Method: java.lang.String a(java.lang.String)
@@ -548,17 +532,17 @@ Findings in Java Class: com.tapjoy.internal.hi
 Findings in Java Class: com.google.android.gms.internal.p
 
 	 in Method: byte[] c(byte[],java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer6793, $r10, $r3)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer6792)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer6793, $r10, $r3)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
 
 
 Findings in Java Class: com.tapjoy.internal.ex
@@ -578,8 +562,8 @@ Findings in Java Class: com.tapjoy.internal.ex
 	Number of Objects Analyzed: 61
 
 	CogniCrypt found the following violations. For details see description above.
-	IncompleteOperationError: 1
-	ConstraintError: 5
-	RequiredPredicateError: 12
 	TypestateError: 1
+	RequiredPredicateError: 12
+	IncompleteOperationError: 1
+	ConstraintError: 4
 =====================================================================

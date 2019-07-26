@@ -1,7 +1,7 @@
 Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.dip.baitoru-07A5608320077AF38778E4905F312EE3BEB35B3DE3DBB33C78656F7F4EAF2A22.apk
 Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
 Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
-20:01:11.908 [main] ERROR boomerang.callgraph.ObservableDynamicICFG - Did not find method <com.dip.baitoru.domain.ModelLocator: com.dip.baitoru.domain.models.JobModel getJobModel()> for class com.dip.baitoru.BaitoruApplication
+08:38:01.857 [main] ERROR boomerang.callgraph.ObservableDynamicICFG - Did not find method <com.dip.baitoru.domain.ModelLocator: com.dip.baitoru.domain.models.JobModel getJobModel()> for class com.dip.baitoru.BaitoruApplication
 Ruleset: 
 	java.security.KeyStore
 	java.security.AlgorithmParameters
@@ -122,6 +122,13 @@ Analyzed Objects:
 		SHA-256: d955690ff21ab360289177fe17e868d5f26d2f31f68b31956354315fb7ee2c98
 		Secure: false
 	Object:
+		Variable: r19
+		Type: java.security.SecureRandom
+		Statement: specialinvoke r19.<java.security.SecureRandom: void <init>()>()
+		Method: <com.adobe.mobile.StaticMethods: java.lang.String H()>
+		SHA-256: 2c28e8112beb89c3be9c051483566210fec76d1a6b4980c3c3aa023e009fee47
+		Secure: true
+	Object:
 		Variable: $r3
 		Type: byte[]
 		Statement: $r3 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r3)
@@ -143,13 +150,6 @@ Analyzed Objects:
 		SHA-256: 681d0892ac42212bcc811c46dac6b5275b2d86b3293f9dfad0ac103360345d2c
 		Secure: false
 	Object:
-		Variable: r19
-		Type: java.security.SecureRandom
-		Statement: specialinvoke r19.<java.security.SecureRandom: void <init>()>()
-		Method: <com.adobe.mobile.StaticMethods: java.lang.String H()>
-		SHA-256: 2c28e8112beb89c3be9c051483566210fec76d1a6b4980c3c3aa023e009fee47
-		Secure: true
-	Object:
 		Variable: $r4
 		Type: javax.crypto.Cipher
 		Statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2566)
@@ -160,13 +160,13 @@ Analyzed Objects:
 Findings in Java Class: com.dip.baitoru.utils.BlowfishUtils
 
 	 in Method: java.lang.String a(java.lang.String,java.lang.String)
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #e42d2653b21d2b6f542367053f4c991473808dbde067c7c2d0f027080d280e5a)
-			First parameter (with value "Blowfish") should be any of Blowfish/{OFB, CTS, CTR, CFB, ECB, CBC}
-			at statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2566)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer2567, $r2)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #e42d2653b21d2b6f542367053f4c991473808dbde067c7c2d0f027080d280e5a)
+			First parameter (with value "Blowfish") should be any of Blowfish/{OFB, CTS, CTR, CFB, ECB, CBC}
+			at statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2566)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
@@ -176,13 +176,17 @@ Findings in Java Class: com.dip.baitoru.utils.BlowfishUtils
 Findings in Java Class: com.dip.baitoru.utils.AesUtils
 
 	 in Method: java.lang.String b(java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r1.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer9519)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #d9402f41c32523ab90498670474c1c943c3cbd1c610e5a9db48d30d3b4b591f7)
+			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
+			at statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer9518)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer9522, $r1)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r1.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer9519)
 
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #d9402f41c32523ab90498670474c1c943c3cbd1c610e5a9db48d30d3b4b591f7)
 			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
@@ -193,11 +197,11 @@ Findings in Java Class: okhttp3.OkHttpClient
 
 	 in Method: javax.net.ssl.SSLSocketFactory a(javax.net.ssl.X509TrustManager)
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
+			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6544, r6, varReplacer6544)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
+			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6544, r6, varReplacer6544)
 
 
@@ -206,6 +210,6 @@ Findings in Java Class: okhttp3.OkHttpClient
 	Number of Objects Analyzed: 17
 
 	CogniCrypt found the following violations. For details see description above.
-	ConstraintError: 2
+	ConstraintError: 3
 	RequiredPredicateError: 6
 =====================================================================

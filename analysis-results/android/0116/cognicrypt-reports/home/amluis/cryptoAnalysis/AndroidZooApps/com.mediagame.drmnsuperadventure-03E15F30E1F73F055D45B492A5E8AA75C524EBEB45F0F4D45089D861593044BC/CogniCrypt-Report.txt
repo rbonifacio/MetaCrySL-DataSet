@@ -48,13 +48,6 @@ Analyzed Objects:
 		SHA-256: c912c10fbdf9c59ad4f89e99034f2098742bd04a6912e7829063391bc286c150
 		Secure: false
 	Object:
-		Variable: $r8
-		Type: byte[]
-		Statement: $r8 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>()
-		Method: <com.google.android.gms.internal.zzhu: java.lang.String zzgs()>
-		SHA-256: c06730696b9a1215b14a566be4308d6e767d3095eabf8f9c146a4df4b5ecbde9
-		Secure: true
-	Object:
 		Variable: r10
 		Type: java.security.SecureRandom
 		Statement: specialinvoke r10.<java.security.SecureRandom: void <init>()>()
@@ -70,6 +63,13 @@ Analyzed Objects:
 		Secure: false
 	Object:
 		Variable: $r6
+		Type: java.security.MessageDigest
+		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1867)
+		Method: <com.google.android.gms.internal.zzhu: java.lang.String zzgs()>
+		SHA-256: 5c0fd834a7f2429f824bd1a702e0ec8013dd8bbf5cbd9d8cfc98dfcff9c7f2d0
+		Secure: true
+	Object:
+		Variable: $r6
 		Type: byte[]
 		Statement: $r1 = virtualinvoke $r11.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6)
 		Method: <com.google.android.gms.internal.zzar: byte[] zzc(byte[],java.lang.String)>
@@ -83,11 +83,11 @@ Analyzed Objects:
 		SHA-256: 30d2ad4172f0affb37577ec5a5e8da9d39c57c6893d6ed128a45a702bab0ee8e
 		Secure: false
 	Object:
-		Variable: $r6
-		Type: java.security.MessageDigest
-		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1866)
+		Variable: $r8
+		Type: byte[]
+		Statement: $r8 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>()
 		Method: <com.google.android.gms.internal.zzhu: java.lang.String zzgs()>
-		SHA-256: 4ab41ef543744a95c8bef4262a4ad38171e99213ff3d048ba549797174112964
+		SHA-256: c06730696b9a1215b14a566be4308d6e767d3095eabf8f9c146a4df4b5ecbde9
 		Secure: true
 	Object:
 		Variable: $r14
@@ -95,7 +95,7 @@ Analyzed Objects:
 		Statement: $r14 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1248)
 		Method: <com.adventure.GameActivity: org.andengine.engine.options.EngineOptions onCreateEngineOptions()>
 		SHA-256: bcbf972099025cc2471918cb72f2125d1c7410ea7b78a2971a3131b5fdb05f0e
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r11
 		Type: javax.crypto.Cipher
@@ -150,8 +150,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r15 = virtualinvoke $r14.<java.security.MessageDigest: byte[] digest()>()
 		Method: <com.adventure.GameActivity: org.andengine.engine.options.EngineOptions onCreateEngineOptions()>
-		SHA-256: 5ae5174bde077bb3b23ddc5f255bc9dc76263d4dd8d8378475301fd00c9a666b
-		Secure: false
+		SHA-256: a317393cb55d005cb9f032180bddddbebde4158c4011cd22cbb7227c19424482
+		Secure: true
 	Object:
 		Variable: $r2
 		Type: java.security.MessageDigest
@@ -188,14 +188,6 @@ Analyzed Objects:
 		SHA-256: 72d405993b2ec9f367be82e36fa555ea3f36877995c426ab5e08c82e22b1eba8
 		Secure: true
 
-Findings in Java Class: com.adventure.GameActivity
-
-	 in Method: org.andengine.engine.options.EngineOptions onCreateEngineOptions()
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #bcbf972099025cc2471918cb72f2125d1c7410ea7b78a2971a3131b5fdb05f0e)
-			First parameter (with value "SHA") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r14 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1248)
-
-
 Findings in Java Class: com.google.android.gms.internal.zzbm
 
 	 in Method: java.lang.String zzB(java.lang.String)
@@ -213,10 +205,6 @@ Findings in Java Class: com.google.android.gms.internal.zzbm
 Findings in Java Class: com.google.android.gms.internal.zzar
 
 	 in Method: byte[] zzc(byte[],java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer1971)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1972, $r10, $r3)
@@ -225,16 +213,20 @@ Findings in Java Class: com.google.android.gms.internal.zzar
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer1971)
+
 
 Findings in Java Class: com.facebook.ads.internal.util.g
 
 	 in Method: void b()
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
+			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer213, r12, $r3)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
+			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer213, r12, $r3)
 
 
@@ -245,5 +237,4 @@ Findings in Java Class: com.facebook.ads.internal.util.g
 	CogniCrypt found the following violations. For details see description above.
 	IncompleteOperationError: 2
 	RequiredPredicateError: 5
-	ConstraintError: 1
 =====================================================================

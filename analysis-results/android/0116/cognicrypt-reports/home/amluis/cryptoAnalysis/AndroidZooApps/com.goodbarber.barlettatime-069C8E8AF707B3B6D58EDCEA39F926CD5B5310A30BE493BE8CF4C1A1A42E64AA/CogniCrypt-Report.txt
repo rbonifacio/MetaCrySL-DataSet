@@ -73,8 +73,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r2 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
 		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
-		SHA-256: d877fb4dd7f0d0a4e150d0fd992249ddc9a19f0582b52e1ac77d90be8042bdc0
-		Secure: false
+		SHA-256: 31abfb73041366b34cdfbf0c6ade0be99900bb972e595a5951c7d9b909b820c6
+		Secure: true
 	Object:
 		Variable: varReplacer14154
 		Type: java.lang.String
@@ -249,7 +249,7 @@ Analyzed Objects:
 		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer11364)
 		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
 		SHA-256: 6aef64d06e172f4247f414177019d5789bdb5e91e206a979b2a237efc2384ba6
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r3
 		Type: javax.crypto.spec.IvParameterSpec
@@ -289,12 +289,12 @@ Analyzed Objects:
 Findings in Java Class: com.flurry.sdk.dc
 
 	 in Method: void <init>(java.lang.String,java.lang.String,boolean,boolean,long,long,java.util.List,java.util.Map,java.util.Map,java.util.Map,java.util.Map,long)
-		ForbiddenMethodError violating CrySL rule for java.security.DigestOutputStream
-			Detected call to forbidden method void on(boolean) of class java.security.DigestOutputStream
-			at statement: virtualinvoke $r9.<java.security.DigestOutputStream: void on(boolean)>(varReplacer15052)
-
 		IncompleteOperationError violating CrySL rule for java.security.DigestOutputStream (on Object #6c075c2f63b5447230f82ce64ca5a2041539209c020c4511bfd375099aac0628)
 			Operation on object of type java.security.DigestOutputStream object not completed. Expected call to write
+			at statement: virtualinvoke $r9.<java.security.DigestOutputStream: void on(boolean)>(varReplacer15052)
+
+		ForbiddenMethodError violating CrySL rule for java.security.DigestOutputStream
+			Detected call to forbidden method void on(boolean) of class java.security.DigestOutputStream
 			at statement: virtualinvoke $r9.<java.security.DigestOutputStream: void on(boolean)>(varReplacer15052)
 
 
@@ -308,14 +308,6 @@ Findings in Java Class: com.google.android.gms.iid.zzc
 		RequiredPredicateError violating CrySL rule for java.security.Signature
 			First parameter was not properly generated as generated Privkey
 			at statement: virtualinvoke $r5.<java.security.Signature: void initSign(java.security.PrivateKey)>($r4)
-
-
-Findings in Java Class: com.google.android.gms.iid.InstanceID
-
-	 in Method: java.lang.String zza(java.security.KeyPair)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #6aef64d06e172f4247f414177019d5789bdb5e91e206a979b2a237efc2384ba6)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer11364)
 
 
 Findings in Java Class: com.google.android.gms.internal.zzbm
@@ -335,17 +327,17 @@ Findings in Java Class: com.google.android.gms.internal.zzbm
 Findings in Java Class: com.google.android.gms.internal.zzar
 
 	 in Method: byte[] zzc(byte[],java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer14154)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer14153, $r10, $r3)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer14154)
 
 
 Findings in Java Class: com.facebook.ads.internal.util.g
@@ -365,8 +357,8 @@ Findings in Java Class: com.facebook.ads.internal.util.g
 	Number of Objects Analyzed: 36
 
 	CogniCrypt found the following violations. For details see description above.
-	IncompleteOperationError: 3
 	ForbiddenMethodError: 1
-	ConstraintError: 2
+	ConstraintError: 1
 	RequiredPredicateError: 6
+	IncompleteOperationError: 3
 =====================================================================

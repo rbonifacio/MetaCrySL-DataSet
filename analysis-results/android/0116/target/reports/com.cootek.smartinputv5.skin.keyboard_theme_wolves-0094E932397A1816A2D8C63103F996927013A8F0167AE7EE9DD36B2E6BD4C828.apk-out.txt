@@ -65,13 +65,6 @@ Analyzed Objects:
 		SHA-256: 701b78fdc4e5847362da9365ee4bbb266174e6255eefeaa14855afcb1bcfc95c
 		Secure: false
 	Object:
-		Variable: $r22
-		Type: javax.net.ssl.SSLContext
-		Statement: $r22 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1821)
-		Method: <okhttp3.OkHttpClient: void <init>(okhttp3.OkHttpClient$Builder)>
-		SHA-256: 2720d8a26b44fe3e69914c9e828896f72e243942cc62fc631b09bc2b61f2bd97
-		Secure: false
-	Object:
 		Variable: $r13
 		Type: java.security.MessageDigest
 		Statement: $r13 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5955)
@@ -163,6 +156,13 @@ Analyzed Objects:
 		SHA-256: f485f6b7b1cd38cfd2fcccc3a1d7f9847e3d96cf904a2dc37b0db3e8f5abb33f
 		Secure: false
 	Object:
+		Variable: $r22
+		Type: javax.net.ssl.SSLContext
+		Statement: $r22 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1821)
+		Method: <okhttp3.OkHttpClient: void <init>(okhttp3.OkHttpClient$Builder)>
+		SHA-256: 2720d8a26b44fe3e69914c9e828896f72e243942cc62fc631b09bc2b61f2bd97
+		Secure: false
+	Object:
 		Variable: $r1
 		Type: byte[]
 		Statement: $r1 = virtualinvoke $r2.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1)
@@ -208,25 +208,25 @@ Analyzed Objects:
 Findings in Java Class: com.cootek.usage.v
 
 	 in Method: void a(com.cootek.usage.v,com.cootek.usage.UsageData)
-		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #49a8fc9244ee5a888b14457155fbb8d5b83148a665e5bf6d5dcd722ed02b9f7)
-			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init, update, wrap, doFinal
-			at statement: specialinvoke r36.<javax.crypto.CipherOutputStream: void <init>(java.io.OutputStream,javax.crypto.Cipher)>($r2, $r16)
-
 		IncompleteOperationError violating CrySL rule for javax.crypto.CipherOutputStream (on Object #6686e0c6d6397311c0eb730cae9d461054f5173a001789ef723e66ae7d47a3e5)
 			Operation on object of type javax.crypto.CipherOutputStream object not completed. Expected call to write
+			at statement: specialinvoke r36.<javax.crypto.CipherOutputStream: void <init>(java.io.OutputStream,javax.crypto.Cipher)>($r2, $r16)
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #49a8fc9244ee5a888b14457155fbb8d5b83148a665e5bf6d5dcd722ed02b9f7)
+			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init, update, wrap, doFinal
 			at statement: specialinvoke r36.<javax.crypto.CipherOutputStream: void <init>(java.io.OutputStream,javax.crypto.Cipher)>($r2, $r16)
 
 
 Findings in Java Class: com.cootek.usage.e
 
 	 in Method: java.lang.String a(java.lang.String,byte[])
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r2.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer5989, r8)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke r8.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer5988)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r2.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer5989, r8)
 
 
 	 in Method: javax.crypto.Cipher a(java.lang.String,int)
@@ -235,27 +235,15 @@ Findings in Java Class: com.cootek.usage.e
 			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, varReplacer5850)
 
 
-Findings in Java Class: okhttp3.OkHttpClient
-
-	 in Method: void <init>(okhttp3.OkHttpClient$Builder)
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r22.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1823, varReplacer1823, varReplacer1823)
-
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
-			at statement: virtualinvoke $r22.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1823, varReplacer1823, varReplacer1823)
-
-
 Findings in Java Class: com.facebook.ads.internal.util.g
 
 	 in Method: void b()
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
+			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1955, r12, $r3)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
+			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1955, r12, $r3)
 
 
@@ -267,11 +255,23 @@ Findings in Java Class: com.cootek.usage.p
 			at statement: virtualinvoke $r19.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer5948, $r18)
 
 
+Findings in Java Class: okhttp3.OkHttpClient
+
+	 in Method: void <init>(okhttp3.OkHttpClient$Builder)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r22.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1823, varReplacer1823, varReplacer1823)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r22.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1823, varReplacer1823, varReplacer1823)
+
+
 ======================= CogniCrypt Summary ==========================
 	Number of CrySL rules: 32
 	Number of Objects Analyzed: 24
 
 	CogniCrypt found the following violations. For details see description above.
-	RequiredPredicateError: 8
 	IncompleteOperationError: 2
+	RequiredPredicateError: 8
 =====================================================================

@@ -107,6 +107,13 @@ Analyzed Objects:
 		SHA-256: 7f990c11203663606005e2cb29a5767736467206be8a223e04aa1834dd4ee5fa
 		Secure: false
 	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1923)
+		Method: <com.mopub.common.util.Utils: java.lang.String sha1(java.lang.String)>
+		SHA-256: 8e04ba7660bb0b82bdf07f887f24ce8ba0c8f8365537b1e575e21aeaff9d7531
+		Secure: true
+	Object:
 		Variable: $r3
 		Type: byte[]
 		Statement: $r3 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r3)
@@ -127,13 +134,6 @@ Analyzed Objects:
 		Method: <com.babybus.helper.RSACodeHelper: void init()>
 		SHA-256: f47cf096070062f5dd0e23f796cf193e90d2501a2112f618398b06c8e165244f
 		Secure: false
-	Object:
-		Variable: $r3
-		Type: byte[]
-		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
-		Method: <com.mopub.common.util.Utils: java.lang.String sha1(java.lang.String)>
-		SHA-256: 7a74e8fbde4cb7f3c5f100dc4c6bc0d46ff7409fd74d931edb087eb017f74545
-		Secure: true
 	Object:
 		Variable: $r2
 		Type: javax.net.ssl.SSLContext
@@ -156,13 +156,6 @@ Analyzed Objects:
 		SHA-256: 51bdedbc876e167bd0aa8aac725308ce549a3231ecb5bdc5a020e6d3f31d16cb
 		Secure: false
 	Object:
-		Variable: $r2
-		Type: java.security.MessageDigest
-		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1921)
-		Method: <com.mopub.common.util.Utils: java.lang.String sha1(java.lang.String)>
-		SHA-256: b4e060ea7ccb5e823a653e04b199438de7c982932ef74f377193ab4adfef8724
-		Secure: true
-	Object:
 		Variable: $r4
 		Type: javax.crypto.Cipher
 		Statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer8137)
@@ -183,6 +176,13 @@ Analyzed Objects:
 		Method: <com.appodeal.ads.t: javax.net.ssl.SSLSocketFactory d()>
 		SHA-256: bb9b8004ab6aade05b37504bba9e68fc4947587a6259bab01b35aff836b3dbbe
 		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.mopub.common.util.Utils: java.lang.String sha1(java.lang.String)>
+		SHA-256: 7a74e8fbde4cb7f3c5f100dc4c6bc0d46ff7409fd74d931edb087eb017f74545
+		Secure: true
 
 Findings in Java Class: com.babybus.helper.RSACodeHelper
 
@@ -195,23 +195,23 @@ Findings in Java Class: com.babybus.helper.RSACodeHelper
 Findings in Java Class: com.babybus.aiolos.g
 
 	 in Method: java.lang.String a(byte[],javax.crypto.SecretKey)
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #36a8b4960a8ec185d12878f8fa69d1192c8dcfe4796f6b261d3b39f5bd3a6f07)
-			First parameter (with value "des") should be any of {ARC4, AES, BLOWFISH, DESede, RSA}
-			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer8166)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.SecureRandom)>(varReplacer8165, $r1, $r2)
 
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #36a8b4960a8ec185d12878f8fa69d1192c8dcfe4796f6b261d3b39f5bd3a6f07)
+			First parameter (with value "des") should be any of {ARC4, TDEA, AES, BLOWFISH, RC4, RSA, ARCFOUR, DESEDE}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer8166)
+
 
 	 in Method: javax.crypto.SecretKey a(java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
-			First parameter was not properly generated as specced Key
-			at statement: $r5 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
-
 		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #51bdedbc876e167bd0aa8aac725308ce549a3231ecb5bdc5a020e6d3f31d16cb)
 			First parameter (with value "des") should be any of {PBEwithSHA1ANDRC2, PBEwithHmacSHA1, PBEwithSHAANDTWOFISH-CBC	, PBEwithSHAAND192BITAES-CBC-BC, DESede, PBEwithMD5AND128BITAES-CBC-OPENSSL, PBEwithSHAAND40BITRC4, PBEwithMD5ANDDES, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithMD5AND192BITAES-CBC-OPENSSL, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC, PBEwithMD5AND256BITAES-CBC-OPENSSL, PBEwithMD5ANDRC2, PBKDF2withHmacSHA1, PBEwithSHAAND128BITRC4, PBEwithSHA1ANDDES, PBEwithSHA256AND128BITAES-CBC-BC, PBEwithSHAAND128BITRC2-CBC, PBEwithSHAAND128BITAES-CBC-BC}
 			at statement: $r4 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer8167)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
+			First parameter was not properly generated as specced Key
+			at statement: $r5 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
 
 
 Findings in Java Class: com.babybus.utils.RSAUtils
@@ -238,11 +238,11 @@ Findings in Java Class: com.iqiyi.sdk.android.vcop.net.NewSSLSocketFactory
 
 	 in Method: void <init>(java.security.KeyStore)
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
+			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer8855, r5, varReplacer8855)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
+			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer8855, r5, varReplacer8855)
 
 

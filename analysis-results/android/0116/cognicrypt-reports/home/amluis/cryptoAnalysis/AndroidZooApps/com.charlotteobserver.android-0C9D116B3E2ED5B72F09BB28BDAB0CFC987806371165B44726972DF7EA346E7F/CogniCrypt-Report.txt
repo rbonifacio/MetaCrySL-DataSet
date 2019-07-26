@@ -158,7 +158,7 @@ Analyzed Objects:
 		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4513)
 		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
 		SHA-256: 42e659798971eaeaf7d4853be207e3e0b0ad9faba5bd96eafccd3bf3fbf0342e
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r0
 		Type: java.security.KeyPairGenerator
@@ -255,8 +255,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r2 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
 		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
-		SHA-256: d877fb4dd7f0d0a4e150d0fd992249ddc9a19f0582b52e1ac77d90be8042bdc0
-		Secure: false
+		SHA-256: 31abfb73041366b34cdfbf0c6ade0be99900bb972e595a5951c7d9b909b820c6
+		Secure: true
 	Object:
 		Variable: $r3
 		Type: java.security.MessageDigest
@@ -296,6 +296,10 @@ Analyzed Objects:
 Findings in Java Class: com.mcclatchyinteractive.miapp.network.Volley
 
 	 in Method: javax.net.ssl.SSLSocketFactory getSslSocketFactory()
+		ConstraintError violating CrySL rule for javax.net.ssl.KeyManagerFactory (on Object #7f1e64bb68d17c4d3bcfa532ffedddaeca6a6a6955920f733052ad976b1abe4e)
+			First parameter (with value "X509") should be any of {PKIX}
+			at statement: $r7 = staticinvoke <javax.net.ssl.KeyManagerFactory: javax.net.ssl.KeyManagerFactory getInstance(java.lang.String)>(varReplacer2068)
+
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r9.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>($r8, varReplacer2069, varReplacer2069)
@@ -303,10 +307,6 @@ Findings in Java Class: com.mcclatchyinteractive.miapp.network.Volley
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r9.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>($r8, varReplacer2069, varReplacer2069)
-
-		ConstraintError violating CrySL rule for javax.net.ssl.KeyManagerFactory (on Object #7f1e64bb68d17c4d3bcfa532ffedddaeca6a6a6955920f733052ad976b1abe4e)
-			First parameter (with value "X509") should be any of {PKIX}
-			at statement: $r7 = staticinvoke <javax.net.ssl.KeyManagerFactory: javax.net.ssl.KeyManagerFactory getInstance(java.lang.String)>(varReplacer2068)
 
 
 Findings in Java Class: com.google.android.gms.iid.zzc
@@ -321,21 +321,9 @@ Findings in Java Class: com.google.android.gms.iid.zzc
 			at statement: $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r2)
 
 
-Findings in Java Class: com.google.android.gms.iid.InstanceID
-
-	 in Method: java.lang.String zza(java.security.KeyPair)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #42e659798971eaeaf7d4853be207e3e0b0ad9faba5bd96eafccd3bf3fbf0342e)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4513)
-
-
 Findings in Java Class: com.google.android.a.k
 
 	 in Method: byte[] a(byte[],java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer4384, $r10, $r3)
@@ -344,16 +332,20 @@ Findings in Java Class: com.google.android.a.k
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer4382)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
+
 
 Findings in Java Class: okhttp3.OkHttpClient
 
 	 in Method: void <init>(okhttp3.OkHttpClient$Builder)
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
+			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r22.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6856, varReplacer6856, varReplacer6856)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
+			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r22.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6856, varReplacer6856, varReplacer6856)
 
 
@@ -383,5 +375,5 @@ Findings in Java Class: com.pressplus.android.util.SignatureHelper
 
 	CogniCrypt found the following violations. For details see description above.
 	RequiredPredicateError: 11
-	ConstraintError: 3
+	ConstraintError: 2
 =====================================================================

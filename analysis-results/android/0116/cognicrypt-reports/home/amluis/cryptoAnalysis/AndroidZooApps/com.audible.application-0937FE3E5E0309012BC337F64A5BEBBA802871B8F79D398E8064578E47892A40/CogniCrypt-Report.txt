@@ -52,8 +52,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r2 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
 		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
-		SHA-256: d877fb4dd7f0d0a4e150d0fd992249ddc9a19f0582b52e1ac77d90be8042bdc0
-		Secure: false
+		SHA-256: 31abfb73041366b34cdfbf0c6ade0be99900bb972e595a5951c7d9b909b820c6
+		Secure: true
 	Object:
 		Variable: $r1
 		Type: byte[]
@@ -74,7 +74,7 @@ Analyzed Objects:
 		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6393)
 		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
 		SHA-256: 46fe64747bf820911219e77e46fce5c0a8c9078b498508dca7e73fd39d1bb292
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r3
 		Type: javax.crypto.Cipher
@@ -114,30 +114,16 @@ Analyzed Objects:
 Findings in Java Class: com.google.android.gms.iid.zzc
 
 	 in Method: java.lang.String zza(java.security.KeyPair,java.lang.String[])
-		ConstraintError violating CrySL rule for java.security.Signature (on Object #3d513363b6c375f87a40f665c5ec4fa58169cb093ce4df37102581b14944da3e)
-			First parameter (with value "SHA256withECDSA") should be any of {SHA1withRSA/ISO9796-2, RSASSA-PSS, SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA, DSA, SHA512withRSA, SHA384withRSA, MD5withRSA/ISO9796-2, SHA1withRSA, DSS, MD4withRSA, MD5withRSA, DSAwithSHA1}
-			at statement: $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r2)
-
 		RequiredPredicateError violating CrySL rule for java.security.Signature
 			First parameter was not properly generated as generated Privkey
 			at statement: virtualinvoke $r5.<java.security.Signature: void initSign(java.security.PrivateKey)>($r4)
 
-
-Findings in Java Class: com.google.android.gms.iid.InstanceID
-
-	 in Method: java.lang.String zza(java.security.KeyPair)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #46fe64747bf820911219e77e46fce5c0a8c9078b498508dca7e73fd39d1bb292)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6393)
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #3d513363b6c375f87a40f665c5ec4fa58169cb093ce4df37102581b14944da3e)
+			First parameter (with value "SHA256withECDSA") should be any of {SHA1withRSA/ISO9796-2, RSASSA-PSS, SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA, DSA, SHA512withRSA, SHA384withRSA, MD5withRSA/ISO9796-2, SHA1withRSA, DSS, MD4withRSA, MD5withRSA, DSAwithSHA1}
+			at statement: $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r2)
 
 
 Findings in Java Class: com.amazon.identity.auth.device.framework.AESCipher
-
-	 in Method: byte[] performCipherOperation(javax.crypto.Cipher,byte[],int,int)
-		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.Cipher
-			Constraint length(plainText) + 0 < plain_off - len could not be evaluted due to insufficient information.
-			at statement: $r1 = virtualinvoke $r0.<javax.crypto.Cipher: byte[] doFinal(byte[],int,int)>($r1, varReplacer7239, $i1)
-
 
 	 in Method: javax.crypto.Cipher createAESCipher(int,java.lang.String,java.security.spec.AlgorithmParameterSpec)
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #34785c74dfa66fee3a4900a0696900b7f425db995a44bd608aa2f50fc9e7e5fa)
@@ -147,6 +133,16 @@ Findings in Java Class: com.amazon.identity.auth.device.framework.AESCipher
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7247, $r5, varReplacer7248)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #34785c74dfa66fee3a4900a0696900b7f425db995a44bd608aa2f50fc9e7e5fa)
+			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7246)
+
+
+	 in Method: byte[] performCipherOperation(javax.crypto.Cipher,byte[],int,int)
+		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.Cipher
+			Constraint length(plainText) + 0 < plain_off - len could not be evaluted due to insufficient information.
+			at statement: $r1 = virtualinvoke $r0.<javax.crypto.Cipher: byte[] doFinal(byte[],int,int)>($r1, varReplacer7239, $i1)
 
 
 	 in Method: byte[] decryptECBMode(byte[])
@@ -166,8 +162,8 @@ Findings in Java Class: com.amazon.identity.auth.device.framework.AESCipher
 	Number of Objects Analyzed: 11
 
 	CogniCrypt found the following violations. For details see description above.
-	ImpreciseValueExtractionError: 1
 	RequiredPredicateError: 3
-	IncompleteOperationError: 1
 	ConstraintError: 3
+	IncompleteOperationError: 1
+	ImpreciseValueExtractionError: 1
 =====================================================================

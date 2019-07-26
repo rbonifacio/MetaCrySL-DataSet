@@ -1,8 +1,8 @@
 Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/hashengineering.myriadcoin.wallet-075FC25C6D226E9166AAC0A6BCE8E3F256C486A8786A67CFFD2F66B5C4298367.apk
 Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
 Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
-Alive 35259  5000
-Alive 68685  5000
+Alive 36401  5000
+Alive 55009  5000
 Ruleset: 
 	java.security.KeyStore
 	java.security.AlgorithmParameters
@@ -254,7 +254,7 @@ Findings in Java Class: com.google.bitcoin.protocols.payments.PaymentSession
 			at statement: virtualinvoke $r6.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r7, $r5)
 
 		ConstraintError violating CrySL rule for java.security.KeyStore (on Object #856b7c6854391f6517711a0f6c5420d2fb9ade455a3bf082236ccac311c83e1e)
-			First parameter (with value "JKS") should be any of {BKS, PKCS12, BouncyCastle, AndroidCAStore}
+			First parameter (with value "JKS") should be any of {BKS, PKCS12-DEF, BCPKCS12, PKCS12, BouncyCastle, AndroidCAStore}
 			at statement: $r6 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer3851)
 
 
@@ -267,10 +267,6 @@ Findings in Java Class: com.google.bitcoin.protocols.payments.PaymentSession
 Findings in Java Class: com.lambdaworks.crypto.PBKDF
 
 	 in Method: void pbkdf2(javax.crypto.Mac,byte[],int,byte[],int)
-		IncompleteOperationError violating CrySL rule for javax.crypto.Mac (on Object #c5d4d687adfe40e2536a8377a20113c3bc26c37e3628ad30c09e3bc290d256e3)
-			Operation on object of type javax.crypto.Mac object not completed. Expected call to update, doFinal
-			at statement: $i3 = virtualinvoke $r0.<javax.crypto.Mac: int getMacLength()>()
-
 		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.Mac
 			Constraint length(output1) + 0 > outOffset + 0 could not be evaluted due to insufficient information.
 			at statement: virtualinvoke $r0.<javax.crypto.Mac: void doFinal(byte[],int)>($r4, varReplacer6606)
@@ -282,6 +278,10 @@ Findings in Java Class: com.lambdaworks.crypto.PBKDF
 		TypestateError violating CrySL rule for javax.crypto.Mac (on Object #c5d4d687adfe40e2536a8377a20113c3bc26c37e3628ad30c09e3bc290d256e3)
 			Unexpected call to method update on object of type javax.crypto.Mac.
 			at statement: virtualinvoke $r0.<javax.crypto.Mac: void update(byte[])>($r5)
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.Mac (on Object #c5d4d687adfe40e2536a8377a20113c3bc26c37e3628ad30c09e3bc290d256e3)
+			Operation on object of type javax.crypto.Mac object not completed. Expected call to update, doFinal
+			at statement: $i3 = virtualinvoke $r0.<javax.crypto.Mac: int getMacLength()>()
 
 
 Findings in Java Class: com.lambdaworks.crypto.SCrypt

@@ -46,7 +46,7 @@ Analyzed Objects:
 		Statement: $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3726)
 		Method: <com.flymob.sdk.internal.a.b: java.util.List b(android.content.Context)>
 		SHA-256: 7da72595cf2470d00f310a9331a032175e78396e755d58566f9f48e93db6fd
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r0
 		Type: byte[]
@@ -75,13 +75,6 @@ Analyzed Objects:
 		Method: <com.flymob.sdk.internal.a.e: byte[] a(byte[],byte[])>
 		SHA-256: ebd58d200dfce74a1c789523efb5000c53553cd4ed457c9359bc23864d25dad2
 		Secure: false
-	Object:
-		Variable: $r3
-		Type: java.security.MessageDigest
-		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1410)
-		Method: <com.facebook.internal.Utility: java.lang.String hashWithAlgorithm(java.lang.String,byte[])>
-		SHA-256: 5dbdc3cd67e18e10be9654b4aef23d710c869da3aa4049ec458c6cdd34919575
-		Secure: true
 	Object:
 		Variable: $r7
 		Type: byte[]
@@ -125,6 +118,13 @@ Analyzed Objects:
 		SHA-256: ad19a603e89360657fd031ecd3a9b509e8b25fed8dc69952eef89a447965eed4
 		Secure: true
 	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1410)
+		Method: <com.facebook.internal.Utility: java.lang.String hashWithAlgorithm(java.lang.String,byte[])>
+		SHA-256: 5dbdc3cd67e18e10be9654b4aef23d710c869da3aa4049ec458c6cdd34919575
+		Secure: true
+	Object:
 		Variable: $r2
 		Type: javax.crypto.spec.IvParameterSpec
 		Statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r0)
@@ -136,8 +136,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r8 = virtualinvoke $r7.<java.security.MessageDigest: byte[] digest()>()
 		Method: <com.flymob.sdk.internal.a.b: java.util.List b(android.content.Context)>
-		SHA-256: 46118426a8611c16ebd921a52f04479a4d63e8f832f2d6767b78c14887f2a6a0
-		Secure: false
+		SHA-256: eb30704ae6e1befb41e42901c82f12836dce3d126f66e45c99557bf3a66ca497
+		Secure: true
 	Object:
 		Variable: $r3
 		Type: java.security.MessageDigest
@@ -258,41 +258,37 @@ Analyzed Objects:
 		SHA-256: 92e80b21fb1da215b4e67f276b460f47867b5c25bae2b69e05c97251a481fd27
 		Secure: true
 
-Findings in Java Class: com.flymob.sdk.internal.a.b
-
-	 in Method: java.util.List b(android.content.Context)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #7da72595cf2470d00f310a9331a032175e78396e755d58566f9f48e93db6fd)
-			First parameter (with value "SHA") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3726)
-
-
 Findings in Java Class: com.flymob.sdk.internal.a.e
 
 	 in Method: byte[] a(byte[])
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #64122d1aae7c528dd4e1bca846a79a3916f23ebd21dee7aaa4f9073403011acd)
-			First parameter (with value "RSA/NONE/PKCS1Padding") should be any of RSA/{ECB, Empty String}
-			at statement: $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer3756)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3759, $r4)
 
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #64122d1aae7c528dd4e1bca846a79a3916f23ebd21dee7aaa4f9073403011acd)
+			First parameter (with value "RSA/NONE/PKCS1Padding") should be any of RSA/{ECB, Empty String}
+			at statement: $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer3756)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #64122d1aae7c528dd4e1bca846a79a3916f23ebd21dee7aaa4f9073403011acd)
+			First parameter (with value "RSA/NONE/PKCS1Padding") should be any of RSA/{ECB, Empty String}
+			at statement: $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer3756)
+
 
 	 in Method: byte[] a(byte[],byte[])
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer3753)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r0)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared I V
+			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer3754, $r3, $r2)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer3753)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
+			Third parameter was not properly generated as prepared I V
 			at statement: virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer3754, $r3, $r2)
 
 
@@ -313,17 +309,17 @@ Findings in Java Class: com.google.android.gms.internal.zzbm
 Findings in Java Class: com.google.android.gms.internal.zzar
 
 	 in Method: byte[] zzc(byte[],java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer4870, $r10, $r3)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer4869)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer4869)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer4870, $r10, $r3)
 
 
 ======================= CogniCrypt Summary ==========================
@@ -331,7 +327,7 @@ Findings in Java Class: com.google.android.gms.internal.zzar
 	Number of Objects Analyzed: 32
 
 	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 2
 	ConstraintError: 2
 	RequiredPredicateError: 8
-	IncompleteOperationError: 2
 =====================================================================

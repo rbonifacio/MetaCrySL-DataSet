@@ -63,14 +63,14 @@ Analyzed Objects:
 		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7760)
 		Method: <com.google.example.games.basegameutils.GameHelperUtils: java.lang.String getSHA1CertFingerprint(android.content.Context)>
 		SHA-256: 738da14c8ddec244942f98ba82d69e668582d92e13d5c3b9d486a247903265d0
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r8
 		Type: byte[]
 		Statement: $r8 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest(byte[])>($r8)
 		Method: <com.google.example.games.basegameutils.GameHelperUtils: java.lang.String getSHA1CertFingerprint(android.content.Context)>
-		SHA-256: b95cd9a42f4be3abf3fd2df0455645f6074fd03b611ae8a509eee3fa3cf10597
-		Secure: false
+		SHA-256: e6a9ff6fbab1501d2457908d87fb4938b44e1f9ea4f534ac663fdf69e766f409
+		Secure: true
 	Object:
 		Variable: varReplacer599
 		Type: java.lang.String
@@ -224,7 +224,7 @@ Analyzed Objects:
 		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2153)
 		Method: <com.batch.android.d.b: java.lang.String d(java.lang.String)>
 		SHA-256: 176ae87d1ff6a2fe571511f11e9955f12f49e96273574cc0fc7dda020c724028
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r5
 		Type: byte[]
@@ -251,8 +251,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r3)
 		Method: <com.batch.android.d.b: java.lang.String d(java.lang.String)>
-		SHA-256: 145665e9f4abfa0b758e7b79a04a72b778f82708ef4c378b7c2aa094d2cf05bb
-		Secure: false
+		SHA-256: 58fb4b62a84cc72560f035a6be1cc08b0a7e259a8ad0b6a91b8cf8e243c08f7
+		Secure: true
 	Object:
 		Variable: $r3
 		Type: byte[]
@@ -327,6 +327,10 @@ Analyzed Objects:
 Findings in Java Class: mkisly.utility.Encryption
 
 	 in Method: java.lang.String decrypt(java.lang.String,java.lang.String)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #a360b5211bf78865367bcc344e953aeccd99cafdecc0ce7f53c048e57134fb7b)
+			First parameter (with value "DES") should be any of {ARC4, TDEA, AES, BLOWFISH, RC4, RSA, ARCFOUR, DESEDE}
+			at statement: $r9 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>($r1)
+
 		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #661e32cd295f4274a97a82d17d1e90e9036a95c02aa444ba91eb7099e83676e1)
 			First parameter (with value "DES") should be any of {PBEwithSHA1ANDRC2, PBEwithHmacSHA1, PBEwithSHAANDTWOFISH-CBC	, PBEwithSHAAND192BITAES-CBC-BC, DESede, PBEwithMD5AND128BITAES-CBC-OPENSSL, PBEwithSHAAND40BITRC4, PBEwithMD5ANDDES, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithMD5AND192BITAES-CBC-OPENSSL, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC, PBEwithMD5AND256BITAES-CBC-OPENSSL, PBEwithMD5ANDRC2, PBKDF2withHmacSHA1, PBEwithSHAAND128BITRC4, PBEwithSHA1ANDDES, PBEwithSHA256AND128BITAES-CBC-BC, PBEwithSHAAND128BITRC2-CBC, PBEwithSHAAND128BITAES-CBC-BC}
 			at statement: $r7 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>($r1)
@@ -334,10 +338,6 @@ Findings in Java Class: mkisly.utility.Encryption
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r9.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer339, $r8)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #a360b5211bf78865367bcc344e953aeccd99cafdecc0ce7f53c048e57134fb7b)
-			First parameter (with value "DES") should be any of {ARC4, AES, BLOWFISH, DESede, RSA}
-			at statement: $r9 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>($r1)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
 			First parameter was not properly generated as specced Key
@@ -349,33 +349,17 @@ Findings in Java Class: mkisly.utility.Encryption
 			First parameter (with value "DES") should be any of {PBEwithSHA1ANDRC2, PBEwithHmacSHA1, PBEwithSHAANDTWOFISH-CBC	, PBEwithSHAAND192BITAES-CBC-BC, DESede, PBEwithMD5AND128BITAES-CBC-OPENSSL, PBEwithSHAAND40BITRC4, PBEwithMD5ANDDES, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithMD5AND192BITAES-CBC-OPENSSL, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC, PBEwithMD5AND256BITAES-CBC-OPENSSL, PBEwithMD5ANDRC2, PBKDF2withHmacSHA1, PBEwithSHAAND128BITRC4, PBEwithSHA1ANDDES, PBEwithSHA256AND128BITAES-CBC-BC, PBEwithSHAAND128BITRC2-CBC, PBEwithSHAAND128BITAES-CBC-BC}
 			at statement: $r7 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>($r1)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
-			First parameter was not properly generated as specced Key
-			at statement: $r8 = virtualinvoke $r7.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r3)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #65248ad68e0da338be1d1770f5a3f22e68be37dc7191db524a9ce9dd765d07fd)
+			First parameter (with value "DES") should be any of {ARC4, TDEA, AES, BLOWFISH, RC4, RSA, ARCFOUR, DESEDE}
+			at statement: $r9 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>($r1)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r9.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer4655, $r8)
 
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #65248ad68e0da338be1d1770f5a3f22e68be37dc7191db524a9ce9dd765d07fd)
-			First parameter (with value "DES") should be any of {ARC4, AES, BLOWFISH, DESede, RSA}
-			at statement: $r9 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>($r1)
-
-
-Findings in Java Class: com.batch.android.d.b
-
-	 in Method: java.lang.String d(java.lang.String)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #176ae87d1ff6a2fe571511f11e9955f12f49e96273574cc0fc7dda020c724028)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2153)
-
-
-Findings in Java Class: com.google.example.games.basegameutils.GameHelperUtils
-
-	 in Method: java.lang.String getSHA1CertFingerprint(android.content.Context)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #738da14c8ddec244942f98ba82d69e668582d92e13d5c3b9d486a247903265d0)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7760)
+		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
+			First parameter was not properly generated as specced Key
+			at statement: $r8 = virtualinvoke $r7.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r3)
 
 
 Findings in Java Class: com.google.android.gms.internal.zzag
@@ -395,13 +379,13 @@ Findings in Java Class: com.google.android.gms.internal.zzag
 Findings in Java Class: com.google.android.gms.internal.zzo
 
 	 in Method: byte[] zzc(byte[],java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer4880, $r10, $r3)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer4877)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer4880, $r10, $r3)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
@@ -463,7 +447,7 @@ Findings in Java Class: mkisly.chess.billing.util.Security
 	Number of Objects Analyzed: 41
 
 	CogniCrypt found the following violations. For details see description above.
-	IncompleteOperationError: 2
-	ConstraintError: 6
 	RequiredPredicateError: 15
+	IncompleteOperationError: 2
+	ConstraintError: 4
 =====================================================================

@@ -314,7 +314,7 @@ Findings in Java Class: com.inditex.itxinwalletframework.activity.IWFingerprintA
 
 	 in Method: void generateKey()
 		ConstraintError violating CrySL rule for java.security.KeyStore (on Object #c37704d5d2163ea6a96237a5a89cefd7cc2e6c99b7d29f3029c67ad6ef7e37a5)
-			First parameter (with value "AndroidKeyStore") should be any of {BKS, PKCS12, BouncyCastle, AndroidCAStore}
+			First parameter (with value "AndroidKeyStore") should be any of {BKS, PKCS12-DEF, BCPKCS12, PKCS12, BouncyCastle, AndroidCAStore}
 			at statement: $r1 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer12891)
 
 
@@ -335,21 +335,21 @@ Findings in Java Class: com.inditex.itxinwalletframework.manager.impl.CryptoMana
 Findings in Java Class: com.tencent.mm.sdk.platformtools.LogHelper
 
 	 in Method: void writeToStream(java.io.PrintStream,byte[],java.lang.String,java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
-			First parameter was not properly generated as specced Key
-			at statement: $r9 = virtualinvoke $r8.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r7)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r10.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer16005, $r9)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #38c46e137d2b315404aaaacd159845a667be7f65eba921eaf326cd132848e7b1)
+			First parameter (with value "DES") should be any of {ARC4, TDEA, AES, BLOWFISH, RC4, RSA, ARCFOUR, DESEDE}
+			at statement: $r10 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer16007)
 
 		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #952dca0af89e86d080dec725ef17f89fa866a39b20c8f2f25eaf60850d242ab8)
 			First parameter (with value "DES") should be any of {PBEwithSHA1ANDRC2, PBEwithHmacSHA1, PBEwithSHAANDTWOFISH-CBC	, PBEwithSHAAND192BITAES-CBC-BC, DESede, PBEwithMD5AND128BITAES-CBC-OPENSSL, PBEwithSHAAND40BITRC4, PBEwithMD5ANDDES, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithMD5AND192BITAES-CBC-OPENSSL, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC, PBEwithMD5AND256BITAES-CBC-OPENSSL, PBEwithMD5ANDRC2, PBKDF2withHmacSHA1, PBEwithSHAAND128BITRC4, PBEwithSHA1ANDDES, PBEwithSHA256AND128BITAES-CBC-BC, PBEwithSHAAND128BITRC2-CBC, PBEwithSHAAND128BITAES-CBC-BC}
 			at statement: $r8 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer16006)
 
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #38c46e137d2b315404aaaacd159845a667be7f65eba921eaf326cd132848e7b1)
-			First parameter (with value "DES") should be any of {ARC4, AES, BLOWFISH, DESede, RSA}
-			at statement: $r10 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer16007)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r10.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer16005, $r9)
+		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
+			First parameter was not properly generated as specced Key
+			at statement: $r9 = virtualinvoke $r8.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r7)
 
 
 Findings in Java Class: com.inditex.rest.helpers.AesCbcWithIntegrity
@@ -381,24 +381,24 @@ Findings in Java Class: com.inditex.rest.helpers.AesCbcWithIntegrity
 
 
 	 in Method: byte[] decrypt(com.inditex.rest.helpers.AesCbcWithIntegrity$CipherTextIvMac,com.inditex.rest.helpers.AesCbcWithIntegrity$SecretKeys)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r3)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer17183, $r5, $r2)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r3)
 
 
 Findings in Java Class: com.inditex.rest.helpers.OkHTTPClientTrustSSL
 
 	 in Method: com.squareup.okhttp.OkHttpClient getUnsafeOkHttpClient()
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
+			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer3586, r13, $r5)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
+			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer3586, r13, $r5)
 
 
@@ -407,7 +407,7 @@ Findings in Java Class: com.inditex.rest.helpers.OkHTTPClientTrustSSL
 	Number of Objects Analyzed: 39
 
 	CogniCrypt found the following violations. For details see description above.
-	ConstraintError: 4
-	RequiredPredicateError: 11
 	ImpreciseValueExtractionError: 1
+	RequiredPredicateError: 11
+	ConstraintError: 4
 =====================================================================

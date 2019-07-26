@@ -43,23 +43,23 @@ Analyzed Objects:
 	Object:
 		Variable: $r9
 		Type: javax.crypto.Cipher
-		Statement: $r9 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2258)
-		Method: <com.clbee.authorviewer.aes256decoder.AES256Cipher: byte[] AES_Decode(java.lang.String)>
-		SHA-256: 63773206708cea782da38f0ea7657663b358697695c146c8316a276fb34d0824
-		Secure: false
-	Object:
-		Variable: $r9
-		Type: javax.crypto.Cipher
 		Statement: $r9 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2139)
 		Method: <com.clbee.authorviewer.aes256decoder.AES256Cipher: byte[] AES_Decode(java.lang.String,java.lang.String,int)>
 		SHA-256: b6fe4c5b833c3e47b1493314ffb53142988ed44ab8cb5e827846d09ed6577089
 		Secure: false
 	Object:
-		Variable: varReplacer2257
+		Variable: varReplacer2254
 		Type: java.lang.String
-		Statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r8, varReplacer2257)
+		Statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r8, varReplacer2254)
 		Method: <com.clbee.authorviewer.aes256decoder.AES256Cipher: byte[] AES_Decode(java.lang.String)>
-		SHA-256: 2def69447d8aaff3127f7c98f24a16846f85a9be419987eb2e355e4b0c75f426
+		SHA-256: 9ca5f381c9a7673fd4c47033602320ae6b5aa567c0d28ae934d6f20f523c8071
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: javax.crypto.spec.IvParameterSpec
+		Statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r7)
+		Method: <com.clbee.authorviewer.aes256decoder.AES256Cipher: byte[] AES_Decode(java.lang.String)>
+		SHA-256: a1672d523bdb1d62e6aa591eebae474c0d56146b23328619d7d686f732572bd0
 		Secure: false
 	Object:
 		Variable: $r4
@@ -76,13 +76,6 @@ Analyzed Objects:
 		SHA-256: 35b0119aad99960d8bec3a1c0a0d18ad4ede33706412ee7d9291554433d85f77
 		Secure: true
 	Object:
-		Variable: $r4
-		Type: javax.crypto.spec.SecretKeySpec
-		Statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r8, varReplacer2257)
-		Method: <com.clbee.authorviewer.aes256decoder.AES256Cipher: byte[] AES_Decode(java.lang.String)>
-		SHA-256: 9279c0da8cdaccbb92aa5d128ec0a3d7ee6b3e838f045cd31d26821a9fe7beaf
-		Secure: false
-	Object:
 		Variable: varReplacer2141
 		Type: java.lang.String
 		Statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r8, varReplacer2141)
@@ -97,11 +90,11 @@ Analyzed Objects:
 		SHA-256: 2bade1b72a6c0c29199b59bdea64216c089c769b0900c9dc8daa49c18fcc70a9
 		Secure: true
 	Object:
-		Variable: $r2
-		Type: javax.crypto.spec.IvParameterSpec
-		Statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r7)
+		Variable: $r9
+		Type: javax.crypto.Cipher
+		Statement: $r9 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2258)
 		Method: <com.clbee.authorviewer.aes256decoder.AES256Cipher: byte[] AES_Decode(java.lang.String)>
-		SHA-256: a1672d523bdb1d62e6aa591eebae474c0d56146b23328619d7d686f732572bd0
+		SHA-256: 63773206708cea782da38f0ea7657663b358697695c146c8316a276fb34d0824
 		Secure: false
 	Object:
 		Variable: $r6
@@ -118,12 +111,49 @@ Analyzed Objects:
 		SHA-256: e931bd46e7d9ddc749e37536babd18ef495da0cad79eb88630553a684700e180
 		Secure: false
 	Object:
+		Variable: $r4
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r8, varReplacer2254)
+		Method: <com.clbee.authorviewer.aes256decoder.AES256Cipher: byte[] AES_Decode(java.lang.String)>
+		SHA-256: 9644273c0a9675b3ef53510d4bcbb5d36020c8970bb3c1965dda17e3e3d54237
+		Secure: false
+	Object:
 		Variable: $r6
 		Type: byte[]
 		Statement: $r6 = virtualinvoke $r9.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6)
 		Method: <com.clbee.authorviewer.aes256decoder.AES256Cipher: byte[] AES_Decode(java.lang.String)>
 		SHA-256: 312bf13afc9aec2dfa0131117dc3e200a55ecd534a7fd640682c03f14a024398
 		Secure: false
+
+Findings in Java Class: com.clbee.authorviewer.aes256decoder.AES256Cipher
+
+	 in Method: byte[] AES_Decode(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r8, varReplacer2254)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r9.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer2260, $r4, $r2)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r7)
+
+
+	 in Method: byte[] AES_Decode(java.lang.String,java.lang.String,int)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r8, varReplacer2141)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r7)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r9.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer2142, $r4, $r3)
+
 
 Findings in Java Class: com.squareup.okhttp.OkHttpClient
 
@@ -135,36 +165,6 @@ Findings in Java Class: com.squareup.okhttp.OkHttpClient
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer942, varReplacer942, varReplacer942)
-
-
-Findings in Java Class: com.clbee.authorviewer.aes256decoder.AES256Cipher
-
-	 in Method: byte[] AES_Decode(java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r7)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r9.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer2254, $r4, $r2)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r8, varReplacer2257)
-
-
-	 in Method: byte[] AES_Decode(java.lang.String,java.lang.String,int)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r7)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r9.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer2142, $r4, $r3)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r8, varReplacer2141)
 
 
 ======================= CogniCrypt Summary ==========================

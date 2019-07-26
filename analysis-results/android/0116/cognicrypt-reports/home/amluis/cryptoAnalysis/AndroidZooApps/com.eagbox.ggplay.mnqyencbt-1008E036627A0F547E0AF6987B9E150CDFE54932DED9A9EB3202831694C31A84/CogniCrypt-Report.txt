@@ -122,8 +122,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r8 = virtualinvoke $r7.<java.security.MessageDigest: byte[] digest()>()
 		Method: <com.eagamebox.toolutils.ToolsFunctionForThisProgect: java.lang.String getHash(android.content.Context,java.lang.String)>
-		SHA-256: d857dba4c1eaaf5031441f7f17183dd63e774c42663c23c41feadfb47b4d8ada
-		Secure: false
+		SHA-256: f1e6e13c2bb51486ea1c3bef784971e47a1b5c0c6ef22a08a71bfa906e455a99
+		Secure: true
 	Object:
 		Variable: varReplacer19884
 		Type: java.lang.String
@@ -189,10 +189,6 @@ Findings in Java Class: com.unity3d.player.UnityPlayer
 Findings in Java Class: com.eagamebox.toolutils.ToolsFunctionForThisProgect
 
 	 in Method: java.lang.String getHash(android.content.Context,java.lang.String)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #6fcdcf709bcac87edb60fc2b199f6e882a0f5b9b5b9c99f0ea7a0898d34538da)
-			First parameter (with value "SHA") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer16487)
-
 		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #6fcdcf709bcac87edb60fc2b199f6e882a0f5b9b5b9c99f0ea7a0898d34538da)
 			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte[]),java.security.MessageDigest: void update(byte)
 			at statement: $r8 = virtualinvoke $r7.<java.security.MessageDigest: byte[] digest()>()
@@ -201,13 +197,17 @@ Findings in Java Class: com.eagamebox.toolutils.ToolsFunctionForThisProgect
 Findings in Java Class: com.mol.payment.e.a
 
 	 in Method: java.lang.String E(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r1.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer19884)
+
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #516768cc1e2e21f8034ae6e36319441791fccbfdb788e172202dea46c9e46ea4)
 			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
 			at statement: $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer19883)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r1.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer19884)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #516768cc1e2e21f8034ae6e36319441791fccbfdb788e172202dea46c9e46ea4)
+			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
+			at statement: $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer19883)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
@@ -218,11 +218,11 @@ Findings in Java Class: com.paypal.android.sdk.cg
 
 	 in Method: okhttp3.OkHttpClient$Builder a(int,boolean,boolean,java.lang.String,java.lang.String)
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
+			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r10.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer17413, r23, varReplacer17413)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
+			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r10.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer17413, r23, varReplacer17413)
 
 
@@ -238,11 +238,11 @@ Findings in Java Class: com.paypal.android.sdk.ck
 
 	 in Method: void <init>(java.io.InputStream)
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
+			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r15.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer18124, $r16, varReplacer18124)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
+			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r15.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer18124, $r16, varReplacer18124)
 
 
@@ -260,11 +260,11 @@ Findings in Java Class: okhttp3.OkHttpClient
 
 	 in Method: void <init>(okhttp3.OkHttpClient$Builder)
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
+			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r22.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer18178, varReplacer18178, varReplacer18178)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
+			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r22.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer18178, varReplacer18178, varReplacer18178)
 
 
@@ -273,7 +273,7 @@ Findings in Java Class: okhttp3.OkHttpClient
 	Number of Objects Analyzed: 20
 
 	CogniCrypt found the following violations. For details see description above.
-	RequiredPredicateError: 11
 	TypestateError: 2
+	RequiredPredicateError: 11
 	ConstraintError: 3
 =====================================================================

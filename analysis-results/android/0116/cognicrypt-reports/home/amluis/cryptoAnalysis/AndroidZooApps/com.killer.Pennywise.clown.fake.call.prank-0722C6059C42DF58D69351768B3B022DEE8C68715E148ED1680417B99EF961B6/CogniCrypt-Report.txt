@@ -49,17 +49,17 @@ Analyzed Objects:
 		Secure: true
 	Object:
 		Variable: $r3
-		Type: byte[]
-		Statement: $r3 = virtualinvoke $r4.<java.security.MessageDigest: byte[] digest()>()
-		Method: <com.google.android.gms.internal.zzar: byte[] zzl(java.lang.String)>
-		SHA-256: cd31c29a21d78b67006dbcabb57fa4046e07c4a11a8bfa4b32ae5ca8ef1f4fe3
-		Secure: true
-	Object:
-		Variable: $r3
 		Type: javax.crypto.spec.IvParameterSpec
 		Statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
 		Method: <com.google.android.gms.internal.zzo: byte[] zzc(byte[],java.lang.String)>
 		SHA-256: 196e703c69b82d759bde2f288a409abbe6c66f41818298a6ffe615234db719b4
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1364)
+		Method: <com.google.android.gms.internal.zzao: java.security.MessageDigest zzby()>
+		SHA-256: 546cd8a839a794ff119b396bbd5b30b44248b8e530db01d2bba37e1283271256
 		Secure: false
 	Object:
 		Variable: $r10
@@ -90,12 +90,12 @@ Analyzed Objects:
 		SHA-256: 1c0f489768ca14400ee7e90b9f6481010dea308921d254fd4fcfc39ad2682a
 		Secure: false
 	Object:
-		Variable: $r2
-		Type: java.security.MessageDigest
-		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1364)
-		Method: <com.google.android.gms.internal.zzao: java.security.MessageDigest zzby()>
-		SHA-256: 546cd8a839a794ff119b396bbd5b30b44248b8e530db01d2bba37e1283271256
-		Secure: false
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r4.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.internal.zzar: byte[] zzl(java.lang.String)>
+		SHA-256: cd31c29a21d78b67006dbcabb57fa4046e07c4a11a8bfa4b32ae5ca8ef1f4fe3
+		Secure: true
 	Object:
 		Variable: $r11
 		Type: javax.crypto.Cipher
@@ -135,6 +135,10 @@ Findings in Java Class: com.google.android.gms.internal.zzap
 Findings in Java Class: com.google.android.gms.internal.zzo
 
 	 in Method: byte[] zzc(byte[],java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer216, $r10, $r3)
@@ -142,10 +146,6 @@ Findings in Java Class: com.google.android.gms.internal.zzo
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer214)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
 
 
 ======================= CogniCrypt Summary ==========================

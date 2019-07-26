@@ -102,14 +102,14 @@ Analyzed Objects:
 		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4001)
 		Method: <com.facebook.unity.FB: java.lang.String getKeyHash()>
 		SHA-256: fedb215387187680019d962479451bf615c9997bb78cf5c9576c5a457939da53
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r7
 		Type: byte[]
 		Statement: $r7 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>()
 		Method: <com.facebook.unity.FB: java.lang.String getKeyHash()>
-		SHA-256: fbe47ce343b5df21a88c6af9649c2f8d6f5b813e936d699f053ff2a390f19c03
-		Secure: false
+		SHA-256: 5f44b68b1c54ba5e3be61e8e51514f475922ae93f5c1951cc7b1d61dea9b4e05
+		Secure: true
 	Object:
 		Variable: $r5
 		Type: javax.crypto.Cipher
@@ -130,17 +130,13 @@ Findings in Java Class: com.unity3d.player.UnityPlayer
 			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
 
 
-Findings in Java Class: com.facebook.unity.FB
-
-	 in Method: java.lang.String getKeyHash()
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #fedb215387187680019d962479451bf615c9997bb78cf5c9576c5a457939da53)
-			First parameter (with value "SHA") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4001)
-
-
 Findings in Java Class: com.adcolony.sdk.co
 
 	 in Method: void a(java.util.Map,java.lang.String,android.content.Context)
+		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #68796fa1973ec4e1f1b62cc632d581ebd758b6914091d626a7dd13e28bb46443)
+			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init, update, wrap, doFinal
+			at statement: specialinvoke r19.<javax.crypto.CipherOutputStream: void <init>(java.io.OutputStream,javax.crypto.Cipher)>($r6, $r9)
+
 		IncompleteOperationError violating CrySL rule for javax.crypto.CipherOutputStream (on Object #faff5d26987f0eabe6c99ded30fb91cc34387b517b0050bec75f4c8dc9a276f1)
 			Operation on object of type javax.crypto.CipherOutputStream object not completed. Expected call to write
 			at statement: specialinvoke r19.<javax.crypto.CipherOutputStream: void <init>(java.io.OutputStream,javax.crypto.Cipher)>($r6, $r9)
@@ -149,12 +145,16 @@ Findings in Java Class: com.adcolony.sdk.co
 			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
 			at statement: $r9 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7356)
 
-		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #68796fa1973ec4e1f1b62cc632d581ebd758b6914091d626a7dd13e28bb46443)
-			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init, update, wrap, doFinal
-			at statement: specialinvoke r19.<javax.crypto.CipherOutputStream: void <init>(java.io.OutputStream,javax.crypto.Cipher)>($r6, $r9)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #68796fa1973ec4e1f1b62cc632d581ebd758b6914091d626a7dd13e28bb46443)
+			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
+			at statement: $r9 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7356)
 
 
 	 in Method: java.util.Map b(java.lang.String,java.lang.String,android.content.Context)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #d0e577bd122971252bbb3f8e507ad8cedce1225b3262272bac7b9bd1ca66445b)
+			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
+			at statement: $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7360)
+
 		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #d0e577bd122971252bbb3f8e507ad8cedce1225b3262272bac7b9bd1ca66445b)
 			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init, update, wrap, doFinal
 			at statement: $r8 = virtualinvoke $r9.<javax.crypto.SealedObject: java.lang.Object getObject(javax.crypto.Cipher)>($r5)
@@ -169,6 +169,10 @@ Findings in Java Class: com.adcolony.sdk.co
 
 
 	 in Method: boolean a(java.lang.String,java.lang.String,android.content.Context)
+		IncompleteOperationError violating CrySL rule for javax.crypto.CipherInputStream (on Object #9003d973cb0fbf26594f1ff9fc4fe55424f750611853a9aac28979ad16157cf5)
+			Operation on object of type javax.crypto.CipherInputStream object not completed. Expected call to read
+			at statement: specialinvoke $r7.<java.io.ObjectInputStream: void <init>(java.io.InputStream)>($r6)
+
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #598a3c26955a54df6904e382c94d617ee5f0e21beddcfa100422e8998fc467c7)
 			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
 			at statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7364)
@@ -177,9 +181,9 @@ Findings in Java Class: com.adcolony.sdk.co
 			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init, update, wrap, doFinal
 			at statement: specialinvoke $r6.<javax.crypto.CipherInputStream: void <init>(java.io.InputStream,javax.crypto.Cipher)>($r5, $r4)
 
-		IncompleteOperationError violating CrySL rule for javax.crypto.CipherInputStream (on Object #9003d973cb0fbf26594f1ff9fc4fe55424f750611853a9aac28979ad16157cf5)
-			Operation on object of type javax.crypto.CipherInputStream object not completed. Expected call to read
-			at statement: specialinvoke $r7.<java.io.ObjectInputStream: void <init>(java.io.InputStream)>($r6)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #598a3c26955a54df6904e382c94d617ee5f0e21beddcfa100422e8998fc467c7)
+			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
+			at statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7364)
 
 
 	 in Method: javax.crypto.SecretKey j(java.lang.String)
@@ -193,8 +197,8 @@ Findings in Java Class: com.adcolony.sdk.co
 	Number of Objects Analyzed: 12
 
 	CogniCrypt found the following violations. For details see description above.
-	ConstraintError: 5
-	IncompleteOperationError: 6
 	RequiredPredicateError: 1
+	ConstraintError: 7
+	IncompleteOperationError: 6
 	TypestateError: 1
 =====================================================================

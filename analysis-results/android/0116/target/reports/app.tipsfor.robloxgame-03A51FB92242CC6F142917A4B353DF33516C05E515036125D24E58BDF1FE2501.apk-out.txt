@@ -37,13 +37,6 @@ Ruleset:
 
 Analyzed Objects: 
 	Object:
-		Variable: $r3
-		Type: javax.crypto.spec.IvParameterSpec
-		Statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
-		Method: <com.google.android.gms.internal.zzo: byte[] zzc(byte[],java.lang.String)>
-		SHA-256: 196e703c69b82d759bde2f288a409abbe6c66f41818298a6ffe615234db719b4
-		Secure: false
-	Object:
 		Variable: $r11
 		Type: javax.crypto.Cipher
 		Statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1057)
@@ -63,6 +56,13 @@ Analyzed Objects:
 		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer279)
 		Method: <org.jsoup.helper.HttpConnection$Response: void initUnSecureTSL()>
 		SHA-256: 5130539a6b7a9cdac054050dae39c5b20b85bed37643f6e5b8525bbde6ff488d
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r11.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6)
+		Method: <com.google.android.gms.internal.zzo: byte[] zzc(byte[],java.lang.String)>
+		SHA-256: 9786886ac2db0761c1d3e10a75b011a24d1f7cb01580ee49b66504310b00eae2
 		Secure: false
 	Object:
 		Variable: $r6
@@ -86,26 +86,12 @@ Analyzed Objects:
 		SHA-256: 13995045b6fe88ac1e570f57460505d4fec052026d8ba6f5f48c1982d4a554c7
 		Secure: true
 	Object:
-		Variable: $r10
-		Type: javax.crypto.spec.SecretKeySpec
-		Statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer1060)
-		Method: <com.google.android.gms.internal.zzo: byte[] zzc(byte[],java.lang.String)>
-		SHA-256: 6e4804bb422284c52af81810341ac97a1e72d2cbe9dee0a185b4c8ca44cfe861
-		Secure: false
-	Object:
 		Variable: $r4
 		Type: byte[]
 		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
 		Method: <com.google.android.gms.internal.zzhw: java.lang.String zzX(java.lang.String)>
 		SHA-256: adf3b41849ed569cefdd67b04bc9638d7502c65c7d2bcab0d7e2d1742b63895c
 		Secure: true
-	Object:
-		Variable: $r6
-		Type: byte[]
-		Statement: $r1 = virtualinvoke $r11.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6)
-		Method: <com.google.android.gms.internal.zzo: byte[] zzc(byte[],java.lang.String)>
-		SHA-256: 1c0f489768ca14400ee7e90b9f6481010dea308921d254fd4fcfc39ad2682a
-		Secure: false
 	Object:
 		Variable: $r8
 		Type: byte[]
@@ -121,11 +107,25 @@ Analyzed Objects:
 		SHA-256: ec3dc09ce660d91b40316e0833d9f9298ed23f8b052a9417f7c100ceea09dd93
 		Secure: false
 	Object:
-		Variable: $r1
+		Variable: $r3
+		Type: javax.crypto.spec.IvParameterSpec
+		Statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
+		Method: <com.google.android.gms.internal.zzo: byte[] zzc(byte[],java.lang.String)>
+		SHA-256: 196e703c69b82d759bde2f288a409abbe6c66f41818298a6ffe615234db719b4
+		Secure: false
+	Object:
+		Variable: $r10
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer1060)
+		Method: <com.google.android.gms.internal.zzo: byte[] zzc(byte[],java.lang.String)>
+		SHA-256: 6e4804bb422284c52af81810341ac97a1e72d2cbe9dee0a185b4c8ca44cfe861
+		Secure: false
+	Object:
+		Variable: $r6
 		Type: byte[]
 		Statement: $r1 = virtualinvoke $r11.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6)
 		Method: <com.google.android.gms.internal.zzo: byte[] zzc(byte[],java.lang.String)>
-		SHA-256: 9786886ac2db0761c1d3e10a75b011a24d1f7cb01580ee49b66504310b00eae2
+		SHA-256: 1c0f489768ca14400ee7e90b9f6481010dea308921d254fd4fcfc39ad2682a
 		Secure: false
 	Object:
 		Variable: $r2
@@ -152,10 +152,6 @@ Findings in Java Class: com.google.android.gms.internal.zzap
 Findings in Java Class: com.google.android.gms.internal.zzo
 
 	 in Method: byte[] zzc(byte[],java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer1060)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1058, $r10, $r3)
@@ -164,16 +160,20 @@ Findings in Java Class: com.google.android.gms.internal.zzo
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer1060)
+
 
 Findings in Java Class: org.jsoup.helper.HttpConnection$Response
 
 	 in Method: void initUnSecureTSL()
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
+			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer276, r10, $r3)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
+			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer276, r10, $r3)
 
 

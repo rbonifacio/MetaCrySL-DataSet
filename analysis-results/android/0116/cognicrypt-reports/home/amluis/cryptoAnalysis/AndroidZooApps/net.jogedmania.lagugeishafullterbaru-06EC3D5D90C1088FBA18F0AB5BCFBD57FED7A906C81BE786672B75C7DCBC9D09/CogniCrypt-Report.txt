@@ -115,8 +115,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r2 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
 		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
-		SHA-256: d877fb4dd7f0d0a4e150d0fd992249ddc9a19f0582b52e1ac77d90be8042bdc0
-		Secure: false
+		SHA-256: 31abfb73041366b34cdfbf0c6ade0be99900bb972e595a5951c7d9b909b820c6
+		Secure: true
 	Object:
 		Variable: $r3
 		Type: byte[]
@@ -186,7 +186,7 @@ Analyzed Objects:
 		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer713)
 		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
 		SHA-256: 79e3a2e39acb5da57ada02493be9b71ca8d7a65bb00a921efad69932c9dcc21b
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r3
 		Type: javax.crypto.spec.IvParameterSpec
@@ -198,21 +198,13 @@ Analyzed Objects:
 Findings in Java Class: com.google.android.gms.iid.zzc
 
 	 in Method: java.lang.String zza(java.security.KeyPair,java.lang.String[])
-		ConstraintError violating CrySL rule for java.security.Signature (on Object #3d513363b6c375f87a40f665c5ec4fa58169cb093ce4df37102581b14944da3e)
-			First parameter (with value "SHA256withECDSA") should be any of {SHA1withRSA/ISO9796-2, RSASSA-PSS, SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA, DSA, SHA512withRSA, SHA384withRSA, MD5withRSA/ISO9796-2, SHA1withRSA, DSS, MD4withRSA, MD5withRSA, DSAwithSHA1}
-			at statement: $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r2)
-
 		RequiredPredicateError violating CrySL rule for java.security.Signature
 			First parameter was not properly generated as generated Privkey
 			at statement: virtualinvoke $r5.<java.security.Signature: void initSign(java.security.PrivateKey)>($r4)
 
-
-Findings in Java Class: com.google.android.gms.iid.InstanceID
-
-	 in Method: java.lang.String zza(java.security.KeyPair)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #79e3a2e39acb5da57ada02493be9b71ca8d7a65bb00a921efad69932c9dcc21b)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer713)
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #3d513363b6c375f87a40f665c5ec4fa58169cb093ce4df37102581b14944da3e)
+			First parameter (with value "SHA256withECDSA") should be any of {SHA1withRSA/ISO9796-2, RSASSA-PSS, SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA, DSA, SHA512withRSA, SHA384withRSA, MD5withRSA/ISO9796-2, SHA1withRSA, DSS, MD4withRSA, MD5withRSA, DSAwithSHA1}
+			at statement: $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r2)
 
 
 Findings in Java Class: com.google.android.gms.internal.zzbm
@@ -232,17 +224,17 @@ Findings in Java Class: com.google.android.gms.internal.zzbm
 Findings in Java Class: com.google.android.gms.internal.zzar
 
 	 in Method: byte[] zzc(byte[],java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer3592, $r10, $r3)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer3593)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer3592, $r10, $r3)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
 
 
 ======================= CogniCrypt Summary ==========================
@@ -252,5 +244,5 @@ Findings in Java Class: com.google.android.gms.internal.zzar
 	CogniCrypt found the following violations. For details see description above.
 	IncompleteOperationError: 2
 	RequiredPredicateError: 4
-	ConstraintError: 2
+	ConstraintError: 1
 =====================================================================

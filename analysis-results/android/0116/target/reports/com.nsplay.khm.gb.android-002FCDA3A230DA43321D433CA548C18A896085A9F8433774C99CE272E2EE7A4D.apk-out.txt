@@ -97,8 +97,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r2 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
 		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
-		SHA-256: d877fb4dd7f0d0a4e150d0fd992249ddc9a19f0582b52e1ac77d90be8042bdc0
-		Secure: false
+		SHA-256: 31abfb73041366b34cdfbf0c6ade0be99900bb972e595a5951c7d9b909b820c6
+		Secure: true
 	Object:
 		Variable: $r5
 		Type: javax.crypto.Cipher
@@ -210,7 +210,7 @@ Analyzed Objects:
 		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1416)
 		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
 		SHA-256: 41afc44f7854730e205e9240329412f159ca8a19d8c03577c0fe9cadf564f4ea
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r4
 		Type: byte[]
@@ -343,24 +343,16 @@ Findings in Java Class: com.unity3d.player.UnityPlayer
 			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
 
 
-Findings in Java Class: com.google.android.gms.iid.InstanceID
-
-	 in Method: java.lang.String zza(java.security.KeyPair)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #41afc44f7854730e205e9240329412f159ca8a19d8c03577c0fe9cadf564f4ea)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1416)
-
-
 Findings in Java Class: com.google.android.gms.iid.zzc
 
 	 in Method: java.lang.String zza(java.security.KeyPair,java.lang.String[])
-		RequiredPredicateError violating CrySL rule for java.security.Signature
-			First parameter was not properly generated as generated Privkey
-			at statement: virtualinvoke $r5.<java.security.Signature: void initSign(java.security.PrivateKey)>($r4)
-
 		ConstraintError violating CrySL rule for java.security.Signature (on Object #3d513363b6c375f87a40f665c5ec4fa58169cb093ce4df37102581b14944da3e)
 			First parameter (with value "SHA256withECDSA") should be any of {SHA1withRSA/ISO9796-2, RSASSA-PSS, SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA, DSA, SHA512withRSA, SHA384withRSA, MD5withRSA/ISO9796-2, SHA1withRSA, DSS, MD4withRSA, MD5withRSA, DSAwithSHA1}
 			at statement: $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r2)
+
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Privkey
+			at statement: virtualinvoke $r5.<java.security.Signature: void initSign(java.security.PrivateKey)>($r4)
 
 
 Findings in Java Class: com.niceplay.niceplayevent.Saveaccountandpassword
@@ -382,14 +374,6 @@ Findings in Java Class: com.niceplay.niceplayevent.Saveaccountandpassword
 Findings in Java Class: com.niceplay.authclient_three.LocalData
 
 	 in Method: java.lang.String encrypt(java.lang.String,java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r5)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer3606, $r3, $r2)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Third parameter was not properly generated as prepared I V
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer3606, $r3, $r2)
@@ -398,15 +382,23 @@ Findings in Java Class: com.niceplay.authclient_three.LocalData
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer3607)
 
-
-	 in Method: java.lang.String decrypt(java.lang.String,java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer955)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer3606, $r3, $r2)
+
+
+	 in Method: java.lang.String decrypt(java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer954, $r3, $r2)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer955)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
@@ -420,13 +412,13 @@ Findings in Java Class: com.niceplay.niceplaygcm.Saveaccountandpassword
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer1281)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r1)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1279, $r3, $r2)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r1)
 
 
 ======================= CogniCrypt Summary ==========================
@@ -434,7 +426,7 @@ Findings in Java Class: com.niceplay.niceplaygcm.Saveaccountandpassword
 	Number of Objects Analyzed: 42
 
 	CogniCrypt found the following violations. For details see description above.
-	ConstraintError: 3
-	RequiredPredicateError: 14
+	ConstraintError: 2
 	TypestateError: 1
+	RequiredPredicateError: 14
 =====================================================================

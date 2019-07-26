@@ -41,6 +41,13 @@ Analyzed Objects:
 		SHA-256: 712110b6d50d4a42f86c9165e8b14514ae6cccf973f8d32cdf255cac7d8b2aad
 		Secure: true
 	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.internal.cz: java.lang.String r(java.lang.String)>
+		SHA-256: a3f01be0606678eca024644aedc1e466b3ff25ece4ca8d723dca6b985b76ac40
+		Secure: true
+	Object:
 		Variable: $r2
 		Type: javax.net.ssl.SSLContext
 		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer17050)
@@ -53,13 +60,6 @@ Analyzed Objects:
 		Statement: $r7 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer19801)
 		Method: <oauth.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(oauth.signpost.http.HttpRequest,oauth.signpost.http.HttpParameters)>
 		SHA-256: a6f3218c6680e3f963a44de23925ad6c4d2c0235da81db7e544e8fc555851eb0
-		Secure: true
-	Object:
-		Variable: $r3
-		Type: byte[]
-		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
-		Method: <com.google.android.gms.internal.cz: java.lang.String r(java.lang.String)>
-		SHA-256: a3f01be0606678eca024644aedc1e466b3ff25ece4ca8d723dca6b985b76ac40
 		Secure: true
 	Object:
 		Variable: $r11
@@ -95,13 +95,6 @@ Analyzed Objects:
 		Statement: $r6 = virtualinvoke $r7.<javax.crypto.Mac: byte[] doFinal(byte[])>($r6)
 		Method: <oauth.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(oauth.signpost.http.HttpRequest,oauth.signpost.http.HttpParameters)>
 		SHA-256: 60029a1b2e5ee22a3931915434a5fa44cf27db5eb408040851f105ce7e16415b
-		Secure: true
-	Object:
-		Variable: $r2
-		Type: java.security.MessageDigest
-		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1986)
-		Method: <com.google.android.gms.internal.cz: java.lang.String r(java.lang.String)>
-		SHA-256: 9577be48dd44115d463b44872938e348448e49415c613179df3018f8b44560aa
 		Secure: true
 	Object:
 		Variable: $r5
@@ -160,6 +153,13 @@ Analyzed Objects:
 		SHA-256: ae240c70a570333cb975aa1e194b5419d20b547db4bfdbbdb73c76389fb52e73
 		Secure: true
 	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1987)
+		Method: <com.google.android.gms.internal.cz: java.lang.String r(java.lang.String)>
+		SHA-256: dfca4138aa45cd6d176487ccefbab7d805ed47a88b09a5d8724d8be6e8a6883a
+		Secure: true
+	Object:
 		Variable: $r6
 		Type: javax.crypto.SecretKey
 		Statement: $r6 = virtualinvoke $r5.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
@@ -171,7 +171,7 @@ Findings in Java Class: com.paypal.android.sdk.ae
 
 	 in Method: java.security.KeyStore b()
 		ConstraintError violating CrySL rule for java.security.KeyStore (on Object #154e1dd9bb57cf6eaed6273b8770951aeacfbd4b6abc3c2196161efed4e2b296)
-			First parameter (with value "JKS") should be any of {BKS, PKCS12, BouncyCastle, AndroidCAStore}
+			First parameter (with value "JKS") should be any of {BKS, PKCS12-DEF, BCPKCS12, PKCS12, BouncyCastle, AndroidCAStore}
 			at statement: $r0 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer17054)
 
 		NeverTypeOfError violating CrySL rule for java.security.KeyStore (on Object #77d734e5e74ffa1d351c3f7206a412d341848f0796a93fe6e0f9738867a9a75d)
@@ -186,21 +186,21 @@ Findings in Java Class: com.paypal.android.sdk.ae
 Findings in Java Class: com.paypal.android.sdk.x
 
 	 in Method: java.lang.String b(java.lang.String)
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #818d2986416f68ef6fbcb987f54e3f544a055829d53c7525afeaecf29778e4a6)
-			First parameter (with value "DES") should be any of {ARC4, AES, BLOWFISH, DESede, RSA}
-			at statement: $r7 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer20113)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r7.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer20114, $r6)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
 			First parameter was not properly generated as specced Key
 			at statement: $r6 = virtualinvoke $r5.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r7.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer20114, $r6)
-
 		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #cd370c5a931c8bbd33bfcd91b61bafe1211b54f280e808c76ffa5c175dce88dc)
 			First parameter (with value "DES") should be any of {PBEwithSHA1ANDRC2, PBEwithHmacSHA1, PBEwithSHAANDTWOFISH-CBC	, PBEwithSHAAND192BITAES-CBC-BC, DESede, PBEwithMD5AND128BITAES-CBC-OPENSSL, PBEwithSHAAND40BITRC4, PBEwithMD5ANDDES, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithMD5AND192BITAES-CBC-OPENSSL, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC, PBEwithMD5AND256BITAES-CBC-OPENSSL, PBEwithMD5ANDRC2, PBKDF2withHmacSHA1, PBEwithSHAAND128BITRC4, PBEwithSHA1ANDDES, PBEwithSHA256AND128BITAES-CBC-BC, PBEwithSHAAND128BITRC2-CBC, PBEwithSHAAND128BITAES-CBC-BC}
 			at statement: $r5 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer20111)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #818d2986416f68ef6fbcb987f54e3f544a055829d53c7525afeaecf29778e4a6)
+			First parameter (with value "DES") should be any of {ARC4, TDEA, AES, BLOWFISH, RC4, RSA, ARCFOUR, DESEDE}
+			at statement: $r7 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer20113)
 
 
 Findings in Java Class: com.paypal.android.sdk.ag

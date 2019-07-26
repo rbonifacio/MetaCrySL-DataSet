@@ -245,7 +245,7 @@ Analyzed Objects:
 		Statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4748)
 		Method: <com.kakao.util.helper.Utility: java.lang.String getKeyHash(android.content.Context)>
 		SHA-256: d25914478e5dee530078d938233275eaac0c566910f732fffaed772aea3c3e68
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r2
 		Type: javax.crypto.spec.IvParameterSpec
@@ -258,8 +258,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r6 = virtualinvoke $r5.<java.security.MessageDigest: byte[] digest()>()
 		Method: <com.kakao.util.helper.Utility: java.lang.String getKeyHash(android.content.Context)>
-		SHA-256: 6ae91c214cea9d825613953c115f98d14b536cd697b64e217393f2a7fbd04310
-		Secure: false
+		SHA-256: 9564d9237f04778b4b7554c00d4a0e35cd78e4dc180a46d957ec026d7934ea1b
+		Secure: true
 	Object:
 		Variable: r12
 		Type: javax.crypto.spec.SecretKeySpec
@@ -282,6 +282,10 @@ Findings in Java Class: com.ha.looting.util.LtUtil
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer4296, $r2, $r1)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke r13.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer4298)
@@ -290,44 +294,32 @@ Findings in Java Class: com.ha.looting.util.LtUtil
 			First parameter (with value "AES/CFB8/NoPadding") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
 			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer4294)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke r13.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
-
-
-Findings in Java Class: com.kakao.util.helper.Utility
-
-	 in Method: java.lang.String getKeyHash(android.content.Context)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #d25914478e5dee530078d938233275eaac0c566910f732fffaed772aea3c3e68)
-			First parameter (with value "SHA") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4748)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #1785cc93ebe118024690462451a3a7cf29db31fe6cb6af486e1071fcd7bd81c4)
+			First parameter (with value "AES/CFB8/NoPadding") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer4294)
 
 
 Findings in Java Class: com.igaworks.core.AESGetTrackParam
 
 	 in Method: java.lang.String encrypt_hashkey(java.lang.String,java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r7, varReplacer6886)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared I V
+			at statement: virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer6890, $r4, $r2)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r7)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r7, varReplacer6886)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer6890, $r4, $r2)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared I V
-			at statement: virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer6890, $r4, $r2)
-
 
 	 in Method: java.lang.String encrypt(java.lang.String,java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r5)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer7517)
@@ -335,6 +327,10 @@ Findings in Java Class: com.igaworks.core.AESGetTrackParam
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7512, $r4, $r2)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Third parameter was not properly generated as prepared I V
@@ -344,6 +340,10 @@ Findings in Java Class: com.igaworks.core.AESGetTrackParam
 Findings in Java Class: com.igaworks.core.AESGetPuid
 
 	 in Method: java.lang.String encrypt(java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r1.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r5)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Third parameter was not properly generated as prepared I V
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7295, $r3, $r1)
@@ -351,10 +351,6 @@ Findings in Java Class: com.igaworks.core.AESGetPuid
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7295, $r3, $r1)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r1.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material

@@ -206,8 +206,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r2 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
 		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
-		SHA-256: d877fb4dd7f0d0a4e150d0fd992249ddc9a19f0582b52e1ac77d90be8042bdc0
-		Secure: false
+		SHA-256: 31abfb73041366b34cdfbf0c6ade0be99900bb972e595a5951c7d9b909b820c6
+		Secure: true
 	Object:
 		Variable: $r5
 		Type: java.security.SecureRandom
@@ -249,7 +249,7 @@ Analyzed Objects:
 		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer17093)
 		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
 		SHA-256: 7edc135f7a9b83bbc7956e0f85e17aac23cbac8bb373b4c7c25267f6a3e477da
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r1
 		Type: java.security.MessageDigest
@@ -289,16 +289,16 @@ Analyzed Objects:
 Findings in Java Class: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity
 
 	 in Method: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys generateKeyFromPassword(java.lang.String,byte[])
+		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
+			First parameter was not properly generated as specced Key
+			at statement: $r5 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer3020)
 
-		NeverTypeOfError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #269540beb20fa344bd441eca5456ed8138a2e6e7479385a49a6bdd1bac1790f2)
-			First parameter should never be of type java.lang.String.
-			at statement: specialinvoke $r2.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r3, $r1, varReplacer3023, varReplacer3024)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
-			First parameter was not properly generated as specced Key
+		IncompleteOperationError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #269540beb20fa344bd441eca5456ed8138a2e6e7479385a49a6bdd1bac1790f2)
+			Operation on object of type javax.crypto.spec.PBEKeySpec object not completed. Expected call to clearPassword
 			at statement: $r5 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEKeySpec
@@ -309,9 +309,9 @@ Findings in Java Class: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r8.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer3026)
 
-		IncompleteOperationError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #269540beb20fa344bd441eca5456ed8138a2e6e7479385a49a6bdd1bac1790f2)
-			Operation on object of type javax.crypto.spec.PBEKeySpec object not completed. Expected call to clearPassword
-			at statement: $r5 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
+		NeverTypeOfError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #269540beb20fa344bd441eca5456ed8138a2e6e7479385a49a6bdd1bac1790f2)
+			First parameter should never be of type java.lang.String.
+			at statement: specialinvoke $r2.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r3, $r1, varReplacer3023, varReplacer3024)
 
 
 	 in Method: com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$CipherTextIvMac encrypt(byte[],com.exacttarget.etpushsdk.util.AesCbcWithIntegrity$SecretKeys)
@@ -342,14 +342,6 @@ Findings in Java Class: com.google.android.gms.iid.zzc
 			at statement: virtualinvoke $r5.<java.security.Signature: void initSign(java.security.PrivateKey)>($r4)
 
 
-Findings in Java Class: com.google.android.gms.iid.InstanceID
-
-	 in Method: java.lang.String zza(java.security.KeyPair)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #7edc135f7a9b83bbc7956e0f85e17aac23cbac8bb373b4c7c25267f6a3e477da)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer17093)
-
-
 Findings in Java Class: com.squareup.okhttp.OkHttpClient
 
 	 in Method: javax.net.ssl.SSLSocketFactory getDefaultSSLSocketFactory()
@@ -367,8 +359,8 @@ Findings in Java Class: com.squareup.okhttp.OkHttpClient
 	Number of Objects Analyzed: 36
 
 	CogniCrypt found the following violations. For details see description above.
-	ConstraintError: 2
 	RequiredPredicateError: 10
-	IncompleteOperationError: 1
 	NeverTypeOfError: 1
+	ConstraintError: 1
+	IncompleteOperationError: 1
 =====================================================================

@@ -178,8 +178,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r7 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest(byte[])>($r7)
 		Method: <com.millennialmedia.android.MMSDK: java.lang.String getMMdid(android.content.Context)>
-		SHA-256: 555533d791b2c2735b6c08bbe3254d105f99550e9fabedc097cca1d3818b020d
-		Secure: false
+		SHA-256: 8ac503c14f1c54e3f933b0da2a587ad95b3b497eaf9d5d011d22d999765f43de
+		Secure: true
 	Object:
 		Variable: $r7
 		Type: byte[]
@@ -235,7 +235,7 @@ Analyzed Objects:
 		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer430)
 		Method: <com.millennialmedia.android.MMSDK: java.lang.String getMMdid(android.content.Context)>
 		SHA-256: 1879122f00b39d43232e7dfcb5326ebe66ba421ed9368d5ebb4a3d6ad272bb7a
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r0
 		Type: java.security.SecureRandom
@@ -363,24 +363,16 @@ Analyzed Objects:
 		SHA-256: 903099e8f47ba13ce06bcdfa34a8ecaa820a62ddce47cdcca339dfa375218975
 		Secure: true
 
-Findings in Java Class: com.millennialmedia.android.MMSDK
-
-	 in Method: java.lang.String getMMdid(android.content.Context)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #1879122f00b39d43232e7dfcb5326ebe66ba421ed9368d5ebb4a3d6ad272bb7a)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer430)
-
-
 Findings in Java Class: com.inmobi.commons.internal.InternalSDKUtil
 
 	 in Method: byte[] a(byte[],int,javax.crypto.Cipher)
 		TypestateError violating CrySL rule for javax.crypto.Cipher (on Object #39595b61a461cf4eb474af615f24a26a8460f0593a6a631914b57ee0066634b9)
 			Unexpected call to method doFinal on object of type javax.crypto.Cipher.
-			at statement: $r3 = virtualinvoke $r1.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r3)
+			at statement: $r0 = virtualinvoke $r1.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r3)
 
 		TypestateError violating CrySL rule for javax.crypto.Cipher (on Object #39595b61a461cf4eb474af615f24a26a8460f0593a6a631914b57ee0066634b9)
 			Unexpected call to method doFinal on object of type javax.crypto.Cipher.
-			at statement: $r0 = virtualinvoke $r1.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r3)
+			at statement: $r3 = virtualinvoke $r1.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r3)
 
 
 	 in Method: java.lang.String encryptRSA(java.lang.String)
@@ -392,12 +384,12 @@ Findings in Java Class: com.inmobi.commons.internal.InternalSDKUtil
 Findings in Java Class: com.inmobi.commons.internal.EncryptionUtils$c
 
 	 in Method: void <init>(byte[],int,int,java.lang.String)
-		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			Constraint length(keyMaterial) + 0 >= off - len could not be evaluted due to insufficient information.
-			at statement: specialinvoke $r0.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r1, varReplacer5284, $i1, $r2)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r0.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r1, varReplacer5284, $i1, $r2)
+
+		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			Constraint length(keyMaterial) + 0 >= off - len could not be evaluted due to insufficient information.
 			at statement: specialinvoke $r0.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r1, varReplacer5284, $i1, $r2)
 
 
@@ -417,31 +409,27 @@ Findings in Java Class: com.inmobi.commons.internal.EncryptionUtils
 
 	 in Method: byte[] b(byte[],byte[],byte[])
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared G C M
+			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer5173, $r4, $r3)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
+			Third parameter was not properly generated as prepared G C M
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer5173, $r4, $r3)
 
 
 	 in Method: byte[] a(byte[],byte[],byte[])
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared G C M
+			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer5276, $r3, $r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
+			Third parameter was not properly generated as prepared G C M
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer5276, $r3, $r5)
 
 
 Findings in Java Class: com.google.android.gms.internal.p
 
 	 in Method: byte[] c(byte[],java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer1199)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
@@ -449,6 +437,10 @@ Findings in Java Class: com.google.android.gms.internal.p
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1196, $r10, $r3)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer1199)
 
 
 ======================= CogniCrypt Summary ==========================
@@ -459,5 +451,4 @@ Findings in Java Class: com.google.android.gms.internal.p
 	RequiredPredicateError: 11
 	ImpreciseValueExtractionError: 1
 	TypestateError: 2
-	ConstraintError: 1
 =====================================================================

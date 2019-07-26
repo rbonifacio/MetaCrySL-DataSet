@@ -69,8 +69,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r2 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
 		Method: <com.google.android.gms.iid.InstanceID: java.lang.String a(java.security.KeyPair)>
-		SHA-256: 756b01b06feb63ec058f055931b7364dec725eddbf18032316df47bfbaf76753
-		Secure: false
+		SHA-256: 1ab51e777f7fc3ad84df3a7a8e5ecc5d9ddc1fce83d0545e6a8a4f931fc34159
+		Secure: true
 	Object:
 		Variable: $r3
 		Type: javax.crypto.Cipher
@@ -133,7 +133,7 @@ Analyzed Objects:
 		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer964)
 		Method: <com.google.android.gms.iid.InstanceID: java.lang.String a(java.security.KeyPair)>
 		SHA-256: a04a289a816cf25259161222e971cddde0d8a3c38a6637deb87f575c701cba21
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r16
 		Type: javax.net.ssl.SSLContext
@@ -160,8 +160,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r7 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>()
 		Method: <com.jodelapp.jodelandroidv3.api.HmacInterceptor: java.lang.String calculateSaltHash(android.content.Context)>
-		SHA-256: e28281151f7c5086567a908d51fac900f213780710bf7a793169e7e856546553
-		Secure: false
+		SHA-256: ebface1dae2c61b2cda3c3de6b38caa7736c6ad494414d424f5141748078e1b7
+		Secure: true
 	Object:
 		Variable: $r1
 		Type: java.security.MessageDigest
@@ -175,7 +175,7 @@ Analyzed Objects:
 		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer8118)
 		Method: <com.jodelapp.jodelandroidv3.api.HmacInterceptor: java.lang.String calculateSaltHash(android.content.Context)>
 		SHA-256: 535d817d02e343f76f24920fa7df3571825bb131ada8737b4ba12ed35421bdd4
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r0
 		Type: java.security.KeyPairGenerator
@@ -231,57 +231,49 @@ Findings in Java Class: com.google.android.gms.iid.zzc
 			at statement: virtualinvoke $r5.<java.security.Signature: void initSign(java.security.PrivateKey)>($r4)
 
 
-Findings in Java Class: com.google.android.gms.iid.InstanceID
-
-	 in Method: java.lang.String a(java.security.KeyPair)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #a04a289a816cf25259161222e971cddde0d8a3c38a6637deb87f575c701cba21)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer964)
-
-
 Findings in Java Class: com.jodelapp.jodelandroidv3.data.prefs.SecurePreferences
 
 	 in Method: byte[] ax(android.content.Context)
-		NeverTypeOfError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #f7b18ce09fb9d885fdb288372591c4bc497b918b0cf678c5e5799c79c16c4e91)
-			First parameter should never be of type java.lang.String.
-			at statement: specialinvoke $r7.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r4, $r6, varReplacer3375, varReplacer3376)
-
-		ConstraintError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #f7b18ce09fb9d885fdb288372591c4bc497b918b0cf678c5e5799c79c16c4e91)
-			Third parameter (with value 1000)Variable iterationCountmust be  at least 10000
-			at statement: specialinvoke $r7.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r4, $r6, varReplacer3375, varReplacer3376)
-
 		IncompleteOperationError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #f7b18ce09fb9d885fdb288372591c4bc497b918b0cf678c5e5799c79c16c4e91)
 			Operation on object of type javax.crypto.spec.PBEKeySpec object not completed. Expected call to clearPassword
 			at statement: $r9 = virtualinvoke $r8.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r7)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEKeySpec
-			Second parameter was not properly generated as randomized
+		ConstraintError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #f7b18ce09fb9d885fdb288372591c4bc497b918b0cf678c5e5799c79c16c4e91)
+			Third parameter (with value 1000)Variable iterationCountmust be  at least 10000
 			at statement: specialinvoke $r7.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r4, $r6, varReplacer3375, varReplacer3376)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
 			First parameter was not properly generated as specced Key
 			at statement: $r9 = virtualinvoke $r8.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r7)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEKeySpec
+			Second parameter was not properly generated as randomized
+			at statement: specialinvoke $r7.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r4, $r6, varReplacer3375, varReplacer3376)
+
+		NeverTypeOfError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #f7b18ce09fb9d885fdb288372591c4bc497b918b0cf678c5e5799c79c16c4e91)
+			First parameter should never be of type java.lang.String.
+			at statement: specialinvoke $r7.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r4, $r6, varReplacer3375, varReplacer3376)
+
 
 	 in Method: java.lang.String dt(java.lang.String)
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f5b238d43c94968bb9acfb93cb4f3e6b5b7c29cd90e21a674c4236b61582b26a)
-			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
-			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer3485)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3487, $r4)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer3488)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3487, $r4)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f5b238d43c94968bb9acfb93cb4f3e6b5b7c29cd90e21a674c4236b61582b26a)
+			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer3485)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f5b238d43c94968bb9acfb93cb4f3e6b5b7c29cd90e21a674c4236b61582b26a)
+			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer3485)
 
 
 	 in Method: java.lang.String du(java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer3497)
-
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #1a9d85a057fc56dcf9426b51cf98f32afb9c51838a292bfc8e95e4092bf2faaa)
 			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
 			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer3498)
@@ -290,13 +282,13 @@ Findings in Java Class: com.jodelapp.jodelandroidv3.data.prefs.SecurePreferences
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3494, $r4)
 
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #1a9d85a057fc56dcf9426b51cf98f32afb9c51838a292bfc8e95e4092bf2faaa)
+			First parameter (with value "AES") should be any of AES/{OFB, GCM, CTS, CTR, CFB, ECB, CBC}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer3498)
 
-Findings in Java Class: com.jodelapp.jodelandroidv3.api.HmacInterceptor
-
-	 in Method: java.lang.String calculateSaltHash(android.content.Context)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #535d817d02e343f76f24920fa7df3571825bb131ada8737b4ba12ed35421bdd4)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer8118)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer3497)
 
 
 Findings in Java Class: okhttp3.OkHttpClient
@@ -316,8 +308,8 @@ Findings in Java Class: okhttp3.OkHttpClient
 	Number of Objects Analyzed: 26
 
 	CogniCrypt found the following violations. For details see description above.
-	RequiredPredicateError: 9
 	NeverTypeOfError: 1
 	IncompleteOperationError: 1
 	ConstraintError: 6
+	RequiredPredicateError: 9
 =====================================================================

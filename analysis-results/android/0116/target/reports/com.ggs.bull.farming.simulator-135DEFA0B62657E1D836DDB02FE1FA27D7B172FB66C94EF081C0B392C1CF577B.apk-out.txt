@@ -51,6 +51,13 @@ Analyzed Objects:
 		SHA-256: 7d2fb198ebe37d2baed5dc7e3563a7e0a26327f98dba2325c016fb23f887bc83
 		Secure: false
 	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1585)
+		Method: <com.mopub.common.util.Utils: java.lang.String sha1(java.lang.String)>
+		SHA-256: 712c8e92c2dcccfbd663d5add3141323dc38ee70bd00c5dded4a2449731c5fdc
+		Secure: true
+	Object:
 		Variable: $r0
 		Type: byte[]
 		Statement: virtualinvoke $r1.<java.security.SecureRandom: void nextBytes(byte[])>($r0)
@@ -92,13 +99,6 @@ Analyzed Objects:
 		Method: <com.inmobi.commons.core.utilities.a.b: byte[] a(byte[],byte[],byte[])>
 		SHA-256: c839ee15b2adb8190a971e0a1cabd85296cd30e472214fc44926fb27926b62ff
 		Secure: false
-	Object:
-		Variable: $r3
-		Type: java.security.MessageDigest
-		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1584)
-		Method: <com.mopub.common.util.Utils: java.lang.String sha1(java.lang.String)>
-		SHA-256: 474e63189b2b2decf436ef8612f618cffef52d20e7989033251e11f4a25d5bdb
-		Secure: true
 	Object:
 		Variable: $r3
 		Type: java.security.KeyStore
@@ -198,13 +198,6 @@ Analyzed Objects:
 		SHA-256: 184a8fa54bdb1d52d47089a3d9471edfcfcd8ac1272178eb37a06490aea5dc57
 		Secure: true
 	Object:
-		Variable: $r4
-		Type: byte[]
-		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
-		Method: <com.mopub.common.util.Utils: java.lang.String sha1(java.lang.String)>
-		SHA-256: b1475ecb277cf44c18e504f1be84657ccb3a6b602605d56eb56e04862a5c2552
-		Secure: true
-	Object:
 		Variable: $r0
 		Type: byte[]
 		Statement: $r0 = virtualinvoke $r5.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r0)
@@ -259,6 +252,13 @@ Analyzed Objects:
 		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6138)
 		Method: <com.facebook.ads.internal.i.a.o: java.lang.String a(byte[],java.lang.String)>
 		SHA-256: e514092e570b0449bd4ffbd0eb7b6e733834f7a5fecdb8e2ba74357979ecef07
+		Secure: true
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.mopub.common.util.Utils: java.lang.String sha1(java.lang.String)>
+		SHA-256: b1475ecb277cf44c18e504f1be84657ccb3a6b602605d56eb56e04862a5c2552
 		Secure: true
 	Object:
 		Variable: r14
@@ -330,48 +330,56 @@ Findings in Java Class: com.unity3d.ads.android.UnityAdsUtils
 Findings in Java Class: com.inmobi.commons.core.utilities.a.b
 
 	 in Method: byte[] a(byte[],byte[])
-		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			Constraint length(keyMaterial) + 0 >= off - len could not be evaluted due to insufficient information.
-			at statement: specialinvoke r6.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r1, varReplacer8159, $i0, varReplacer8160)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke r6.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r1, varReplacer8159, $i0, varReplacer8160)
 
+		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			Constraint length(keyMaterial) + 0 >= off - len could not be evaluted due to insufficient information.
+			at statement: specialinvoke r6.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r1, varReplacer8159, $i0, varReplacer8160)
+
 
 	 in Method: byte[] a(byte[],byte[],byte[])
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, $r4)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8110, $r3, $r6)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared G C M
 			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8110, $r3, $r6)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r6.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r2)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared G C M
-			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8110, $r3, $r6)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, $r4)
-
 
 	 in Method: byte[] b(byte[],byte[],byte[])
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared G C M
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8163, $r3, $r5)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared G C M
+			Third parameter was not properly generated as prepared I V
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8165, $r3, $r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared I V
+			Third parameter was not properly generated as prepared G C M
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8168, $r3, $r5)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8168, $r3, $r5)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared G C M
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8163, $r3, $r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Third parameter was not properly generated as prepared I V
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8163, $r3, $r5)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared G C M
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8165, $r3, $r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
@@ -379,7 +387,7 @@ Findings in Java Class: com.inmobi.commons.core.utilities.a.b
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8165, $r3, $r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared G C M
+			Third parameter was not properly generated as prepared I V
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8168, $r3, $r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
@@ -389,14 +397,6 @@ Findings in Java Class: com.inmobi.commons.core.utilities.a.b
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8163, $r3, $r5)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared I V
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8168, $r3, $r5)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8168, $r3, $r5)
 
 
 	 in Method: byte[] a(byte[],java.lang.String,java.lang.String)
@@ -409,11 +409,11 @@ Findings in Java Class: com.heyzap.http.MySSLSocketFactory
 
 	 in Method: void <init>(java.security.KeyStore)
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
+			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1972, r5, varReplacer1972)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
+			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1972, r5, varReplacer1972)
 
 
@@ -423,8 +423,8 @@ Findings in Java Class: com.heyzap.http.MySSLSocketFactory
 
 	CogniCrypt found the following violations. For details see description above.
 	IncompleteOperationError: 2
-	ImpreciseValueExtractionError: 1
 	TypestateError: 1
-	ConstraintError: 1
 	RequiredPredicateError: 18
+	ConstraintError: 1
+	ImpreciseValueExtractionError: 1
 =====================================================================

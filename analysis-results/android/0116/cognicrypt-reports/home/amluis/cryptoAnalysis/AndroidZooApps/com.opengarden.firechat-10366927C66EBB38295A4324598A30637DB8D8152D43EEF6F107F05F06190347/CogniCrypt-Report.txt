@@ -101,8 +101,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r2 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
 		Method: <com.google.android.gms.iid.a: java.lang.String a(java.security.KeyPair)>
-		SHA-256: 667d1c74233dc4695844b2a369b7ca168b7b3f396ce37cb94fd304b9f22f5e14
-		Secure: false
+		SHA-256: 6eb9c4882a2bc73af9a673aebf6f5afae49ea2ada522213b217877fced577ed9
+		Secure: true
 	Object:
 		Variable: $r1
 		Type: java.security.MessageDigest
@@ -207,13 +207,13 @@ Analyzed Objects:
 		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3674)
 		Method: <com.google.android.gms.iid.a: java.lang.String a(java.security.KeyPair)>
 		SHA-256: 2ff9a1c6cddec8360c20b54281b8da6cd3b4aa6d82f6f20ae0dca71dd414e8c9
-		Secure: false
+		Secure: true
 
 Findings in Java Class: org.b.a.a.a.e
 
 	 in Method: void d(android.content.Context)
 		ConstraintError violating CrySL rule for java.security.KeyStore (on Object #afe7059f06ecec8af0e79addca6c4d5efd7dbffc9392d9b8c70c7feda0ec4900)
-			First parameter (with value "AndroidKeyStore") should be any of {BKS, PKCS12, BouncyCastle, AndroidCAStore}
+			First parameter (with value "AndroidKeyStore") should be any of {BKS, PKCS12-DEF, BCPKCS12, PKCS12, BouncyCastle, AndroidCAStore}
 			at statement: $r2 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer3477)
 
 		RequiredPredicateError violating CrySL rule for java.security.KeyPairGenerator
@@ -224,21 +224,13 @@ Findings in Java Class: org.b.a.a.a.e
 Findings in Java Class: com.google.android.gms.iid.f
 
 	 in Method: java.lang.String a(java.security.KeyPair,java.lang.String[])
-		RequiredPredicateError violating CrySL rule for java.security.Signature
-			First parameter was not properly generated as generated Privkey
-			at statement: virtualinvoke $r5.<java.security.Signature: void initSign(java.security.PrivateKey)>($r4)
-
 		ConstraintError violating CrySL rule for java.security.Signature (on Object #8f6be8718b6ce42eda38f8bc1516d42c504890382c6206269b5dfd8f0721fe14)
 			First parameter (with value "SHA256withECDSA") should be any of {SHA1withRSA/ISO9796-2, RSASSA-PSS, SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA, DSA, SHA512withRSA, SHA384withRSA, MD5withRSA/ISO9796-2, SHA1withRSA, DSS, MD4withRSA, MD5withRSA, DSAwithSHA1}
 			at statement: $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r2)
 
-
-Findings in Java Class: com.google.android.gms.iid.a
-
-	 in Method: java.lang.String a(java.security.KeyPair)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #2ff9a1c6cddec8360c20b54281b8da6cd3b4aa6d82f6f20ae0dca71dd414e8c9)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3674)
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Privkey
+			at statement: virtualinvoke $r5.<java.security.Signature: void initSign(java.security.PrivateKey)>($r4)
 
 
 Findings in Java Class: org.jsoup.helper.HttpConnection$Response
@@ -269,11 +261,11 @@ Findings in Java Class: com.amplitude.api.PinnedAmplitudeClient$SSLContextBuilde
 
 	 in Method: javax.net.ssl.SSLContext build()
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
+			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r13.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6711, $r14, varReplacer6711)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
+			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r13.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6711, $r14, varReplacer6711)
 
 
@@ -282,6 +274,6 @@ Findings in Java Class: com.amplitude.api.PinnedAmplitudeClient$SSLContextBuilde
 	Number of Objects Analyzed: 25
 
 	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 2
 	RequiredPredicateError: 8
-	ConstraintError: 3
 =====================================================================

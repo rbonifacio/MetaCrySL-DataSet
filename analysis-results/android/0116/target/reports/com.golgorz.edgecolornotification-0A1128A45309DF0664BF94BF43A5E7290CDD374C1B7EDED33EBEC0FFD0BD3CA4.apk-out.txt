@@ -37,13 +37,6 @@ Ruleset:
 
 Analyzed Objects: 
 	Object:
-		Variable: $r3
-		Type: java.security.Signature
-		Statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer1042)
-		Method: <inapp.utils.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
-		SHA-256: 618cbb9c9b144f4be3a1e752b308c0e8ba9e99afb00fdc956bf6d7a347d69d28
-		Secure: false
-	Object:
 		Variable: varReplacer2235
 		Type: java.lang.String
 		Statement: specialinvoke r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, varReplacer2235)
@@ -72,6 +65,13 @@ Analyzed Objects:
 		SHA-256: 8958c7a8d6630550f9f5602439a5ae65322657baaa2cae282ab4865fa7c317e0
 		Secure: false
 	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4)
+		Method: <inapp.utils.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
+		SHA-256: 50d20e0d863bf9aaaccbe6d5f71c736bbbd4ab16c1ca9b261b70d21b96f5b665
+		Secure: false
+	Object:
 		Variable: $r6
 		Type: byte[]
 		Statement: $r6 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6)
@@ -79,11 +79,11 @@ Analyzed Objects:
 		SHA-256: 7fd10edfff878a3c81c3922a3c4ffe9106f502b0cfe91eaf5fd53355b1e8927b
 		Secure: false
 	Object:
-		Variable: $r4
-		Type: byte[]
-		Statement: $z0 = virtualinvoke $r3.<java.security.Signature: boolean verify(byte[])>($r4)
+		Variable: $r3
+		Type: java.security.Signature
+		Statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer1039)
 		Method: <inapp.utils.Security: boolean verify(java.security.PublicKey,java.lang.String,java.lang.String)>
-		SHA-256: 50d20e0d863bf9aaaccbe6d5f71c736bbbd4ab16c1ca9b261b70d21b96f5b665
+		SHA-256: 4f7c9d9031e63898b4615c8b7339f44fdb5e8fe9c3a59517892cc755eba32efe
 		Secure: false
 
 Findings in Java Class: com.golgorz.edgecolornotification.MCrypt
@@ -100,6 +100,10 @@ Findings in Java Class: com.golgorz.edgecolornotification.MCrypt
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke r6.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r2)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #b6888f8b73d40728cb566579ab1305f4f2310b73a2503fb34386bb2b0d100e2b)
+			First parameter (with value "AES/CBC/NoPadding") should be any of AES/CBC/{PKCS5Padding, PKCS7Padding, ISO10126Padding}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2234)
 
 
 	 in Method: byte[] encrypt(java.lang.String)
@@ -125,6 +129,6 @@ Findings in Java Class: inapp.utils.Security
 	Number of Objects Analyzed: 7
 
 	CogniCrypt found the following violations. For details see description above.
-	ConstraintError: 1
+	ConstraintError: 2
 	RequiredPredicateError: 5
 =====================================================================

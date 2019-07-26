@@ -189,7 +189,7 @@ Analyzed Objects:
 		Statement: $r8 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2360)
 		Method: <com.amap.api.mapcore.util.aa: java.lang.String d(android.content.Context)>
 		SHA-256: f07d35bdbdeda93d6b9860b60736c6b873a1e194969fae5af4a88ab93cd84759
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r0
 		Type: byte[]
@@ -237,8 +237,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r7 = virtualinvoke $r8.<java.security.MessageDigest: byte[] digest(byte[])>($r7)
 		Method: <com.amap.api.mapcore.util.aa: java.lang.String d(android.content.Context)>
-		SHA-256: f56c0243c3796e54442631f6acf94acbd3f2395f621144e36b05234a4bcbdd81
-		Secure: false
+		SHA-256: c2dc3b755376c943b6f6ad74a0aebb51c7adb7be56922b9f704b66a7619fe7a7
+		Secure: true
 	Object:
 		Variable: $r8
 		Type: javax.crypto.spec.IvParameterSpec
@@ -514,36 +514,28 @@ Findings in Java Class: com.amap.api.mapcore.util.ac
 			at statement: $r2 = staticinvoke <javax.crypto.KeyGenerator: javax.crypto.KeyGenerator getInstance(java.lang.String)>(varReplacer2350)
 
 
-Findings in Java Class: com.amap.api.mapcore.util.aa
-
-	 in Method: java.lang.String d(android.content.Context)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #f07d35bdbdeda93d6b9860b60736c6b873a1e194969fae5af4a88ab93cd84759)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r8 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2360)
-
-
 Findings in Java Class: com.tencent.open.utils.HttpUtils$MyX509TrustManager
 
 	 in Method: void <init>()
-		NeverTypeOfError violating CrySL rule for java.security.KeyStore (on Object #40221308167378b29a98da29f2e257d8d3f1bf0ccb86f964a2681a48d3c48378)
-			Second parameter should never be of type java.lang.String.
-			at statement: virtualinvoke $r1.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r3, $r5)
-
-		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #40221308167378b29a98da29f2e257d8d3f1bf0ccb86f964a2681a48d3c48378)
-			Operation on object of type java.security.KeyStore object not completed. Expected call to load
-			at statement: $r1 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer2826)
-
-		ConstraintError violating CrySL rule for java.security.KeyStore (on Object #40221308167378b29a98da29f2e257d8d3f1bf0ccb86f964a2681a48d3c48378)
-			First parameter (with value "JKS") should be any of {BKS, PKCS12, BouncyCastle, AndroidCAStore}
-			at statement: $r1 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer2826)
-
 		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #40221308167378b29a98da29f2e257d8d3f1bf0ccb86f964a2681a48d3c48378)
 			Operation on object of type java.security.KeyStore object not completed. Expected call to load
 			at statement: $r1 = null
 
+		ConstraintError violating CrySL rule for java.security.KeyStore (on Object #40221308167378b29a98da29f2e257d8d3f1bf0ccb86f964a2681a48d3c48378)
+			First parameter (with value "JKS") should be any of {BKS, PKCS12-DEF, BCPKCS12, PKCS12, BouncyCastle, AndroidCAStore}
+			at statement: $r1 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer2826)
+
+		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #40221308167378b29a98da29f2e257d8d3f1bf0ccb86f964a2681a48d3c48378)
+			Operation on object of type java.security.KeyStore object not completed. Expected call to load
+			at statement: $r1 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer2826)
+
 		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #40221308167378b29a98da29f2e257d8d3f1bf0ccb86f964a2681a48d3c48378)
 			Operation on object of type java.security.KeyStore object not completed. Expected call to load
 			at statement: virtualinvoke $r6.<javax.net.ssl.TrustManagerFactory: void init(java.security.KeyStore)>($r1)
+
+		NeverTypeOfError violating CrySL rule for java.security.KeyStore (on Object #40221308167378b29a98da29f2e257d8d3f1bf0ccb86f964a2681a48d3c48378)
+			Second parameter should never be of type java.lang.String.
+			at statement: virtualinvoke $r1.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r3, $r5)
 
 
 Findings in Java Class: cn.jpush.android.util.g
@@ -557,22 +549,6 @@ Findings in Java Class: cn.jpush.android.util.g
 Findings in Java Class: com.tencent.bugly.proguard.H
 
 	 in Method: byte[] b(byte[])
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8157, $r7, $r8)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r8.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r5)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #3db69c5e4c2c0f1f5c18c13bd85136cb40872e78afab61fefe6525e81905432e)
-			First parameter (with value "DES/CBC/PKCS5Padding") should be any of {ARC4, AES, BLOWFISH, DESede, RSA}
-			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer8158)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared I V
-			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8157, $r7, $r8)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
 			First parameter was not properly generated as specced Key
 			at statement: $r7 = virtualinvoke $r6.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r4)
@@ -581,19 +557,27 @@ Findings in Java Class: com.tencent.bugly.proguard.H
 			First parameter (with value "DES") should be any of {PBEwithSHA1ANDRC2, PBEwithHmacSHA1, PBEwithSHAANDTWOFISH-CBC	, PBEwithSHAAND192BITAES-CBC-BC, DESede, PBEwithMD5AND128BITAES-CBC-OPENSSL, PBEwithSHAAND40BITRC4, PBEwithMD5ANDDES, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithMD5AND192BITAES-CBC-OPENSSL, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC, PBEwithMD5AND256BITAES-CBC-OPENSSL, PBEwithMD5ANDRC2, PBKDF2withHmacSHA1, PBEwithSHAAND128BITRC4, PBEwithSHA1ANDDES, PBEwithSHA256AND128BITAES-CBC-BC, PBEwithSHAAND128BITRC2-CBC, PBEwithSHAAND128BITAES-CBC-BC}
 			at statement: $r6 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer8156)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared I V
+			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8157, $r7, $r8)
 
-	 in Method: byte[] a(byte[])
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #78fd526366c48d61b6f2dbe09f6b4a9cd5b6a87ba22c26a2d526502284cfddcd)
-			First parameter (with value "DES/CBC/PKCS5Padding") should be any of {ARC4, AES, BLOWFISH, DESede, RSA}
-			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer8256)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
-			First parameter was not properly generated as specced Key
-			at statement: $r7 = virtualinvoke $r6.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r4)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #3db69c5e4c2c0f1f5c18c13bd85136cb40872e78afab61fefe6525e81905432e)
+			First parameter (with value "DES/CBC/PKCS5Padding") should be any of {ARC4, TDEA, AES, BLOWFISH, RC4, RSA, ARCFOUR, DESEDE}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer8158)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8254, $r7, $r8)
+			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8157, $r7, $r8)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r8.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r5)
+
+
+	 in Method: byte[] a(byte[])
+		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
+			First parameter was not properly generated as specced Key
+			at statement: $r7 = virtualinvoke $r6.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r4)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
@@ -603,21 +587,21 @@ Findings in Java Class: com.tencent.bugly.proguard.H
 			First parameter (with value "DES") should be any of {PBEwithSHA1ANDRC2, PBEwithHmacSHA1, PBEwithSHAANDTWOFISH-CBC	, PBEwithSHAAND192BITAES-CBC-BC, DESede, PBEwithMD5AND128BITAES-CBC-OPENSSL, PBEwithSHAAND40BITRC4, PBEwithMD5ANDDES, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithMD5AND192BITAES-CBC-OPENSSL, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC, PBEwithMD5AND256BITAES-CBC-OPENSSL, PBEwithMD5ANDRC2, PBKDF2withHmacSHA1, PBEwithSHAAND128BITRC4, PBEwithSHA1ANDDES, PBEwithSHA256AND128BITAES-CBC-BC, PBEwithSHAAND128BITRC2-CBC, PBEwithSHAAND128BITAES-CBC-BC}
 			at statement: $r6 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer8251)
 
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #78fd526366c48d61b6f2dbe09f6b4a9cd5b6a87ba22c26a2d526502284cfddcd)
+			First parameter (with value "DES/CBC/PKCS5Padding") should be any of {ARC4, TDEA, AES, BLOWFISH, RC4, RSA, ARCFOUR, DESEDE}
+			at statement: $r3 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer8256)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8254, $r7, $r8)
+
 
 Findings in Java Class: com.sina.weibo.sdk.utils.AidTask
 
 	 in Method: java.lang.String encryptRsa(java.lang.String,java.lang.String)
-		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.Cipher
-			Constraint length(plainText) + 0 < plain_off - len could not be evaluted due to insufficient information.
-			at statement: $r8 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[],int,int)>($r6, $i0, $i1)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer10376, $r4)
-
-		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #2d28ef7cc7b3e6711f3c56e99d85317292234258ae53e434df0b21bf6b2af9e4)
-			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init, javax.crypto.Cipher: byte[] doFinal(byte[]), javax.crypto.Cipher: int doFinal(java.nio.ByteBuffer,java.nio.ByteBuffer), javax.crypto.Cipher: byte[] doFinal(byte[],int,int), javax.crypto.Cipher: int doFinal(byte[],int,int,byte[]), javax.crypto.Cipher: int doFinal(byte[],int,int,byte[],int), update, wrap
-			at statement: $r8 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[],int,int)>($r6, $i0, $i1)
 
 		TypestateError violating CrySL rule for javax.crypto.Cipher (on Object #2d28ef7cc7b3e6711f3c56e99d85317292234258ae53e434df0b21bf6b2af9e4)
 			Unexpected call to method doFinal on object of type javax.crypto.Cipher.
@@ -626,6 +610,14 @@ Findings in Java Class: com.sina.weibo.sdk.utils.AidTask
 		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #2d28ef7cc7b3e6711f3c56e99d85317292234258ae53e434df0b21bf6b2af9e4)
 			Operation on object of type javax.crypto.Cipher object not completed. Expected call to javax.crypto.Cipher: void init(int,java.security.cert.Certificate,java.security.SecureRandom), javax.crypto.Cipher: void init(int,java.security.Key,java.security.AlgorithmParameters), javax.crypto.Cipher: void init(int,java.security.Key), javax.crypto.Cipher: void init(int,java.security.Key,java.security.SecureRandom), javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec), update, javax.crypto.Cipher: void init(int,java.security.cert.Certificate), javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec,java.security.SecureRandom), javax.crypto.Cipher: void init(int,java.security.Key,java.security.AlgorithmParameters,java.security.SecureRandom), wrap, doFinal
 			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer10376, $r4)
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #2d28ef7cc7b3e6711f3c56e99d85317292234258ae53e434df0b21bf6b2af9e4)
+			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init, javax.crypto.Cipher: byte[] doFinal(byte[]), javax.crypto.Cipher: int doFinal(java.nio.ByteBuffer,java.nio.ByteBuffer), javax.crypto.Cipher: byte[] doFinal(byte[],int,int), javax.crypto.Cipher: int doFinal(byte[],int,int,byte[]), javax.crypto.Cipher: int doFinal(byte[],int,int,byte[],int), update, wrap
+			at statement: $r8 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[],int,int)>($r6, $i0, $i1)
+
+		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.Cipher
+			Constraint length(plainText) + 0 < plain_off - len could not be evaluted due to insufficient information.
+			at statement: $r8 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[],int,int)>($r6, $i0, $i1)
 
 
 Findings in Java Class: com.amap.api.mapcore.util.ae
@@ -637,22 +629,26 @@ Findings in Java Class: com.amap.api.mapcore.util.ae
 
 
 	 in Method: byte[] b(byte[],byte[])
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke r12.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r5)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared I V
+			at statement: virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer2432, $r7, $r6)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer2432, $r7, $r6)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared I V
-			at statement: virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer2432, $r7, $r6)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke r12.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r5)
 
 
 Findings in Java Class: com.tencent.bugly.proguard.G
 
 	 in Method: byte[] a(byte[])
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r7.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8260, $r5, $r8)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r8.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r6)
@@ -660,10 +656,6 @@ Findings in Java Class: com.tencent.bugly.proguard.G
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer8258)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r7.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8260, $r5, $r8)
 
 
 	 in Method: byte[] b(byte[])
@@ -727,10 +719,10 @@ Findings in Java Class: com.tencent.open.utils.HttpUtils$CustomSSLSocketFactory
 	Number of Objects Analyzed: 67
 
 	CogniCrypt found the following violations. For details see description above.
-	IncompleteOperationError: 6
-	NeverTypeOfError: 1
 	RequiredPredicateError: 25
-	ConstraintError: 6
+	NeverTypeOfError: 1
 	TypestateError: 2
 	ImpreciseValueExtractionError: 1
+	ConstraintError: 5
+	IncompleteOperationError: 6
 =====================================================================

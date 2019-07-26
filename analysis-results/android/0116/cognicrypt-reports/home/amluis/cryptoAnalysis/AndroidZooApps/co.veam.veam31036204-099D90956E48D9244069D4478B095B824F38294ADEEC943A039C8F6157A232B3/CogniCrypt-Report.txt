@@ -102,7 +102,7 @@ Analyzed Objects:
 		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2692)
 		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
 		SHA-256: 46f56e7b8c621805cf78de782162b158ad35eb6f22f21cc58b2295c57e8b9b7c
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r5
 		Type: java.security.AlgorithmParameters
@@ -122,8 +122,8 @@ Analyzed Objects:
 		Type: byte[]
 		Statement: $r2 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
 		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
-		SHA-256: d877fb4dd7f0d0a4e150d0fd992249ddc9a19f0582b52e1ac77d90be8042bdc0
-		Secure: false
+		SHA-256: 31abfb73041366b34cdfbf0c6ade0be99900bb972e595a5951c7d9b909b820c6
+		Secure: true
 	Object:
 		Variable: varReplacer7920
 		Type: java.lang.String
@@ -235,20 +235,20 @@ Findings in Java Class: com.google.android.gms.iid.zzc
 			at statement: $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r2)
 
 
-Findings in Java Class: com.google.android.gms.iid.InstanceID
-
-	 in Method: java.lang.String zza(java.security.KeyPair)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #46f56e7b8c621805cf78de782162b158ad35eb6f22f21cc58b2295c57e8b9b7c)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-1, SHA-384, SHA-512, MD5}
-			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2692)
-
-
 Findings in Java Class: co.veam.veam31036204.SimpleCrypto
 
 	 in Method: byte[] decrypt(byte[],byte[],byte[])
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer7920)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #bb4919f12e680fd3c0a12ac1808223ef8c49f76f4679d9b4350785a504f3c5d5)
+			First parameter (with value "AES/CBC/NoPadding") should be any of AES/CBC/{PKCS5Padding, PKCS7Padding, ISO10126Padding}
+			at statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7913)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.AlgorithmParameters)>(varReplacer7919, $r3, $r5)
 
 		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.Cipher
 			Constraint length(plainText) + 0 < plain_off - len could not be evaluted due to insufficient information.
@@ -261,10 +261,6 @@ Findings in Java Class: co.veam.veam31036204.SimpleCrypto
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #bb4919f12e680fd3c0a12ac1808223ef8c49f76f4679d9b4350785a504f3c5d5)
 			First parameter (with value "AES/CBC/NoPadding") should be any of AES/CBC/{PKCS5Padding, PKCS7Padding, ISO10126Padding}
 			at statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7913)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.AlgorithmParameters)>(varReplacer7919, $r3, $r5)
 
 
 Findings in Java Class: com.veam.inappbilling.util.Security
@@ -281,6 +277,6 @@ Findings in Java Class: com.veam.inappbilling.util.Security
 
 	CogniCrypt found the following violations. For details see description above.
 	RequiredPredicateError: 5
-	ConstraintError: 3
 	ImpreciseValueExtractionError: 1
+	ConstraintError: 3
 =====================================================================
