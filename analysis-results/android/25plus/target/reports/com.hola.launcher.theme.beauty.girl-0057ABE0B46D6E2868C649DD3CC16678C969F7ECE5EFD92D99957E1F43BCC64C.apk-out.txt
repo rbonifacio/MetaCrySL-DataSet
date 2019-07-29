@@ -37,34 +37,6 @@ Ruleset:
 
 Analyzed Objects: 
 	Object:
-		Variable: r10
-		Type: java.security.SecureRandom
-		Statement: specialinvoke r10.<java.security.SecureRandom: void <init>()>()
-		Method: <com.facebook.ads.internal.util.g: void b()>
-		SHA-256: c49baf8b2831a2be9aa3b8b2b456003f3087b1f5f20fd8411803ca8aa53c7285
-		Secure: true
-	Object:
-		Variable: $r2
-		Type: byte[]
-		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
-		Method: <ox: java.lang.String a(java.lang.String)>
-		SHA-256: 792df87dd3b44c7bb0a72fb54c6ff60fb03e97e61e54d2dbbff709e884b57860
-		Secure: true
-	Object:
-		Variable: $r1
-		Type: java.security.MessageDigest
-		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer812)
-		Method: <ox: java.lang.String a(java.lang.String)>
-		SHA-256: 29e0f46516518d797db5f8889aefe15cab2f23541cef257d40f9b106ecaa1a8a
-		Secure: true
-	Object:
-		Variable: $r2
-		Type: java.security.MessageDigest
-		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer985)
-		Method: <jP: java.lang.String a(byte[])>
-		SHA-256: 2dfa33365fe246777d3bf8821345ad75abbe10ab942c21e741b2ac42dbe3a64e
-		Secure: true
-	Object:
 		Variable: $r3
 		Type: byte[]
 		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest(byte[])>($r3)
@@ -79,12 +51,56 @@ Analyzed Objects:
 		SHA-256: 388659990149c0658ea3fdce881b26ca4132907477519ccf0c42aaa9572a09ee
 		Secure: false
 	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer765)
+		Method: <ox: java.lang.String a(java.lang.String)>
+		SHA-256: 3ca071888ba72212dce7160d22877a8ad0c88b22b8a537831e143a9b8a8835e3
+		Secure: true
+	Object:
 		Variable: $r2
 		Type: java.security.MessageDigest
-		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2710)
-		Method: <com.facebook.ads.internal.util.r: java.lang.String b(java.lang.String)>
-		SHA-256: 4e0057fd5f58c501a837a6d4584892121b8ab345e5c436d16a049639230b2ddc
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1108)
+		Method: <jP: java.lang.String a(byte[])>
+		SHA-256: 666c481c839ff42c75c65baae56c9b0c73b878323ec59a550b062f075619e98e
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
+		Method: <ox: java.lang.String a(java.lang.String)>
+		SHA-256: 792df87dd3b44c7bb0a72fb54c6ff60fb03e97e61e54d2dbbff709e884b57860
 		Secure: true
+	Object:
+		Variable: r10
+		Type: java.security.SecureRandom
+		Statement: specialinvoke r10.<java.security.SecureRandom: void <init>()>()
+		Method: <com.facebook.ads.internal.util.g: void b()>
+		SHA-256: c49baf8b2831a2be9aa3b8b2b456003f3087b1f5f20fd8411803ca8aa53c7285
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2787)
+		Method: <com.facebook.ads.internal.util.r: java.lang.String b(java.lang.String)>
+		SHA-256: 869038f8b4021c3a3cd2d4507b4e2f7a3111a3de7c08419f50debdffe7316a45
+		Secure: true
+
+Findings in Java Class: jP
+
+	 in Method: java.lang.String a(byte[])
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #666c481c839ff42c75c65baae56c9b0c73b878323ec59a550b062f075619e98e)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte[]),java.security.MessageDigest: void update(byte)
+			at statement: $r0 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #666c481c839ff42c75c65baae56c9b0c73b878323ec59a550b062f075619e98e)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r2 = <jP: java.security.MessageDigest a>
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #666c481c839ff42c75c65baae56c9b0c73b878323ec59a550b062f075619e98e)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to update, java.security.MessageDigest: byte[] digest(byte[])
+			at statement: $r0 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+
 
 Findings in Java Class: com.facebook.ads.internal.util.g
 
@@ -103,5 +119,7 @@ Findings in Java Class: com.facebook.ads.internal.util.g
 	Number of Objects Analyzed: 7
 
 	CogniCrypt found the following violations. For details see description above.
+	IncompleteOperationError: 2
 	RequiredPredicateError: 2
+	TypestateError: 1
 =====================================================================

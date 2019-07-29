@@ -34,19 +34,26 @@ Ruleset:
 
 Analyzed Objects: 
 	Object:
-		Variable: $r3
-		Type: java.security.MessageDigest
-		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1175)
-		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzaH(java.lang.String)>
-		SHA-256: d1f505e2397404361edfc2cfd534be8a95473345856eaf70fbb492520ae05239
-		Secure: true
+		Variable: $r4
+		Type: java.security.DigestInputStream
+		Statement: specialinvoke $r4.<java.security.DigestInputStream: void <init>(java.io.InputStream,java.security.MessageDigest)>($r16, $r15)
+		Method: <io.mrarm.mcpelauncher.MainActivity: void onCreate(android.os.Bundle)>
+		SHA-256: 637348dc02d22a7bdb858a2f7df4ba3f7a1d05b8aece96bf5f921e85f6bda4eb
+		Secure: false
 	Object:
 		Variable: $r15
 		Type: java.security.MessageDigest
-		Statement: $r15 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer188)
+		Statement: $r15 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer745)
 		Method: <io.mrarm.mcpelauncher.MainActivity: void onCreate(android.os.Bundle)>
-		SHA-256: fa4db75b2c7f648ca753bedca5324d2102411fd802e263e96f0dff7e7c55e3c7
+		SHA-256: deddcb44cb744961a3dca46997e770b862b9bf99d8a26e1138f070d205c34840
 		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1238)
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzaH(java.lang.String)>
+		SHA-256: 6119f71c141ec5e837a8fed58b1bddf70e370e9d63c91ee427f20d9e6bfa44ec
+		Secure: true
 	Object:
 		Variable: $r4
 		Type: byte[]
@@ -54,24 +61,17 @@ Analyzed Objects:
 		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzaH(java.lang.String)>
 		SHA-256: b99893f35dd36825378e8706865a4357958a98bd12dbd264e8cce2e0999aa454
 		Secure: true
-	Object:
-		Variable: $r4
-		Type: java.security.DigestInputStream
-		Statement: specialinvoke $r4.<java.security.DigestInputStream: void <init>(java.io.InputStream,java.security.MessageDigest)>($r16, $r15)
-		Method: <io.mrarm.mcpelauncher.MainActivity: void onCreate(android.os.Bundle)>
-		SHA-256: 637348dc02d22a7bdb858a2f7df4ba3f7a1d05b8aece96bf5f921e85f6bda4eb
-		Secure: false
 
 Findings in Java Class: io.mrarm.mcpelauncher.MainActivity
 
 	 in Method: void onCreate(android.os.Bundle)
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #deddcb44cb744961a3dca46997e770b862b9bf99d8a26e1138f070d205c34840)
+			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte),java.security.MessageDigest: void update(byte[])
+			at statement: $r2 = virtualinvoke $r15.<java.security.MessageDigest: byte[] digest()>()
+
 		IncompleteOperationError violating CrySL rule for java.security.DigestInputStream (on Object #637348dc02d22a7bdb858a2f7df4ba3f7a1d05b8aece96bf5f921e85f6bda4eb)
 			Operation on object of type java.security.DigestInputStream object not completed. Expected call to java.security.DigestInputStream: int read(), java.io.InputStream: int read(byte[],int,int), java.security.DigestInputStream: int read(byte[],int,int), java.io.FilterInputStream: int read(byte[],int,int), java.io.InputStream: int read(), java.io.FilterInputStream: int read()
 			at statement: $i1 = virtualinvoke $r4.<java.security.DigestInputStream: int read(byte[])>($r2)
-
-		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #fa4db75b2c7f648ca753bedca5324d2102411fd802e263e96f0dff7e7c55e3c7)
-			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte[]),java.security.MessageDigest: void update(byte)
-			at statement: $r2 = virtualinvoke $r15.<java.security.MessageDigest: byte[] digest()>()
 
 
 ======================= CogniCrypt Summary ==========================
@@ -79,6 +79,6 @@ Findings in Java Class: io.mrarm.mcpelauncher.MainActivity
 	Number of Objects Analyzed: 4
 
 	CogniCrypt found the following violations. For details see description above.
-	IncompleteOperationError: 1
 	TypestateError: 1
+	IncompleteOperationError: 1
 =====================================================================

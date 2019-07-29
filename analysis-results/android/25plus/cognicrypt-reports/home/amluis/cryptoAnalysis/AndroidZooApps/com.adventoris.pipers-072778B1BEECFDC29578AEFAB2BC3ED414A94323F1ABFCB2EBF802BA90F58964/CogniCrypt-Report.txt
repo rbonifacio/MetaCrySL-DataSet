@@ -34,26 +34,19 @@ Ruleset:
 
 Analyzed Objects: 
 	Object:
-		Variable: $r2
-		Type: java.security.MessageDigest
-		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer9765)
-		Method: <bpu: byte[] a(byte[])>
-		SHA-256: e26429a9559265b11d5fa0ff4707ba076f9d7022ba8feb1fc1ef23f3fae3423a
-		Secure: true
-	Object:
-		Variable: $r7
-		Type: javax.net.ssl.KeyManagerFactory
-		Statement: $r7 = staticinvoke <javax.net.ssl.KeyManagerFactory: javax.net.ssl.KeyManagerFactory getInstance(java.lang.String)>($r6)
-		Method: <bxp: javax.net.ssl.SSLContext a(java.lang.String,java.security.KeyStore,java.lang.String,java.security.KeyStore,java.security.SecureRandom,bxs)>
-		SHA-256: 69c2a6838d5f1abfe3ad335b529305d438b268c2e4189f8b114162f9b5a2dde0
-		Secure: false
-	Object:
 		Variable: $r1
 		Type: byte[]
 		Statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
 		Method: <bpu: byte[] a(byte[])>
 		SHA-256: b356670e0b196113c6c450d4978a0f7be3463c5069bab896a126dc95ac21cdb6
 		Secure: true
+	Object:
+		Variable: $r14
+		Type: javax.net.ssl.SSLContext
+		Statement: $r14 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>($r5)
+		Method: <bxp: javax.net.ssl.SSLContext a(java.lang.String,java.security.KeyStore,java.lang.String,java.security.KeyStore,java.security.SecureRandom,bxs)>
+		SHA-256: 218c440953f9ae3ffa7c4e95e16800dd420e6bfd3a0ff57f3564e2e6c8be6278
+		Secure: false
 	Object:
 		Variable: $r9
 		Type: javax.net.ssl.KeyManager[]
@@ -62,27 +55,34 @@ Analyzed Objects:
 		SHA-256: 231ad7281a0df95af450e2bc672cc4781a53ac9d904ba18fcf86298da8bddd4f
 		Secure: false
 	Object:
-		Variable: $r14
-		Type: javax.net.ssl.SSLContext
-		Statement: $r14 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>($r5)
+		Variable: $r7
+		Type: javax.net.ssl.KeyManagerFactory
+		Statement: $r7 = staticinvoke <javax.net.ssl.KeyManagerFactory: javax.net.ssl.KeyManagerFactory getInstance(java.lang.String)>($r6)
 		Method: <bxp: javax.net.ssl.SSLContext a(java.lang.String,java.security.KeyStore,java.lang.String,java.security.KeyStore,java.security.SecureRandom,bxs)>
-		SHA-256: 218c440953f9ae3ffa7c4e95e16800dd420e6bfd3a0ff57f3564e2e6c8be6278
+		SHA-256: 69c2a6838d5f1abfe3ad335b529305d438b268c2e4189f8b114162f9b5a2dde0
 		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer9574)
+		Method: <bpu: byte[] a(byte[])>
+		SHA-256: c72941e7eed13538fe8e7170ec48a5baaae733d2ccbb21759e812ab13038b45a
+		Secure: true
 
 Findings in Java Class: bxp
 
 	 in Method: javax.net.ssl.SSLContext a(java.lang.String,java.security.KeyStore,java.lang.String,java.security.KeyStore,java.security.SecureRandom,bxs)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r14.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>($r9, r16, varReplacer1255)
+
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.KeyManagerFactory
 			First parameter was not properly generated as generated Key Store
-			at statement: virtualinvoke $r7.<javax.net.ssl.KeyManagerFactory: void init(java.security.KeyStore,char[])>(varReplacer1410, $r8)
+			at statement: virtualinvoke $r7.<javax.net.ssl.KeyManagerFactory: void init(java.security.KeyStore,char[])>(varReplacer1256, $r8)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			First parameter was not properly generated as generated Key Manager
-			at statement: virtualinvoke $r14.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>($r9, r16, varReplacer1408)
-
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r14.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>($r9, r16, varReplacer1408)
+			at statement: virtualinvoke $r14.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>($r9, r16, varReplacer1255)
 
 
 ======================= CogniCrypt Summary ==========================

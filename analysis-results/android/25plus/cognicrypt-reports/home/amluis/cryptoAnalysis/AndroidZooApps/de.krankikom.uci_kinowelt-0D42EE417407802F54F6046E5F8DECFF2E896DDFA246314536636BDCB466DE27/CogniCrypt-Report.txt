@@ -34,25 +34,11 @@ Ruleset:
 
 Analyzed Objects: 
 	Object:
-		Variable: $r3
-		Type: javax.crypto.spec.PBEParameterSpec
-		Statement: specialinvoke $r3.<javax.crypto.spec.PBEParameterSpec: void <init>(byte[],int)>($r4, varReplacer1103)
-		Method: <de.a.b.d: void <init>(char[])>
-		SHA-256: 9759b41f46701e32da21377b1ec224164bd61fd1d2dc9f4a961f1d619594550e
-		Secure: false
-	Object:
 		Variable: $r5
 		Type: javax.crypto.SecretKeyFactory
-		Statement: $r5 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer1102)
+		Statement: $r5 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer459)
 		Method: <de.a.b.d: void <init>(char[])>
-		SHA-256: c78f7d7fe617f1cbdec967726e5257a7436f5a96ec8300e23b9cd75b2e4f071c
-		Secure: false
-	Object:
-		Variable: $r6
-		Type: byte[]
-		Statement: $r6 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6)
-		Method: <de.a.b.d: java.lang.String a(java.lang.String)>
-		SHA-256: 5295d537f88151578c23f81edc73e6160e519abe5682068a363ca3d5e2d73699
+		SHA-256: cee9fe9bb91cffb2559148bcd38e0cf87ef92b0c4de45847fa143cb5d4f740eb
 		Secure: false
 	Object:
 		Variable: $r7
@@ -64,43 +50,57 @@ Analyzed Objects:
 	Object:
 		Variable: $r2
 		Type: javax.crypto.Cipher
-		Statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1101)
+		Statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer460)
 		Method: <de.a.b.d: void <init>(char[])>
-		SHA-256: d0bac79aa7321a32b32f3eee5dc3676cb2e7e30e140279f5d094e6ce5513a371
+		SHA-256: c02e6d5b17496e0d4798dc8d3dc2b73170e459be7ac626a501f4090bcf884bd6
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: byte[]
+		Statement: $r6 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6)
+		Method: <de.a.b.d: java.lang.String a(java.lang.String)>
+		SHA-256: 5295d537f88151578c23f81edc73e6160e519abe5682068a363ca3d5e2d73699
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.crypto.spec.PBEParameterSpec
+		Statement: specialinvoke $r3.<javax.crypto.spec.PBEParameterSpec: void <init>(byte[],int)>($r4, varReplacer458)
+		Method: <de.a.b.d: void <init>(char[])>
+		SHA-256: 3dd1ac215bcbfbe57f923b8284de15212e4e211fdfa8763e5a03339fb12b7661
 		Secure: false
 
 Findings in Java Class: de.a.b.d
 
 	 in Method: void <init>(char[])
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #d0bac79aa7321a32b32f3eee5dc3676cb2e7e30e140279f5d094e6ce5513a371)
-			First parameter (with value "PBEWithMD5AndDES") should be any of {AES_128, ARC4, AES, BLOWFISH, DESede, AES_256, ChaCha20, RSA}
-			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1101)
-
-		ConstraintError violating CrySL rule for javax.crypto.spec.PBEParameterSpec (on Object #9759b41f46701e32da21377b1ec224164bd61fd1d2dc9f4a961f1d619594550e)
-			Second parameter (with value 17)Variable iterationCountmust be  at least 10000
-			at statement: specialinvoke $r3.<javax.crypto.spec.PBEParameterSpec: void <init>(byte[],int)>($r4, varReplacer1103)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r3.<javax.crypto.spec.PBEParameterSpec: void <init>(byte[],int)>($r4, varReplacer1103)
-
 		ForbiddenMethodError violating CrySL rule for javax.crypto.spec.PBEKeySpec
 			Detected call to forbidden method void <init>(char[]) of class javax.crypto.spec.PBEKeySpec. Instead, call method <javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>.
 			at statement: specialinvoke $r6.<javax.crypto.spec.PBEKeySpec: void <init>(char[])>($r1)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #c02e6d5b17496e0d4798dc8d3dc2b73170e459be7ac626a501f4090bcf884bd6)
+			First parameter (with value "PBEWithMD5AndDES") should be any of {AES_128, ARC4, TDEA, AES, BLOWFISH, RSA, ARCFOUR, DESEDE, AES_256, RC4}
+			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer460)
+
+		ConstraintError violating CrySL rule for javax.crypto.spec.PBEParameterSpec (on Object #3dd1ac215bcbfbe57f923b8284de15212e4e211fdfa8763e5a03339fb12b7661)
+			Second parameter (with value 17)Variable iterationCountmust be  at least 10000
+			at statement: specialinvoke $r3.<javax.crypto.spec.PBEParameterSpec: void <init>(byte[],int)>($r4, varReplacer458)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
 			First parameter was not properly generated as specced Key
 			at statement: $r7 = virtualinvoke $r5.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r6)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r3.<javax.crypto.spec.PBEParameterSpec: void <init>(byte[],int)>($r4, varReplacer458)
+
 
 	 in Method: java.lang.String a(java.lang.String)
-		TypestateError violating CrySL rule for javax.crypto.Cipher (on Object #d0bac79aa7321a32b32f3eee5dc3676cb2e7e30e140279f5d094e6ce5513a371)
+		TypestateError violating CrySL rule for javax.crypto.Cipher (on Object #c02e6d5b17496e0d4798dc8d3dc2b73170e459be7ac626a501f4090bcf884bd6)
 			Unexpected call to method init on object of type javax.crypto.Cipher.
-			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1104, $r4, $r2)
+			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer461, $r4, $r2)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1104, $r4, $r2)
+			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer461, $r4, $r2)
 
 
 ======================= CogniCrypt Summary ==========================
@@ -108,8 +108,8 @@ Findings in Java Class: de.a.b.d
 	Number of Objects Analyzed: 5
 
 	CogniCrypt found the following violations. For details see description above.
-	ConstraintError: 2
-	TypestateError: 1
-	RequiredPredicateError: 3
 	ForbiddenMethodError: 1
+	RequiredPredicateError: 3
+	TypestateError: 1
+	ConstraintError: 2
 =====================================================================
