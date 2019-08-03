@@ -132,13 +132,6 @@ Analyzed Objects:
 		SHA-256: 579b4d5ce6ded84b76f326c3b86137652b38254219db5d4bd9fafbb5a3d84d88
 		Secure: false
 	Object:
-		Variable: $r2
-		Type: byte[]
-		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
-		Method: <com.metricell.mcc.api.o.m: byte[] c(java.lang.String)>
-		SHA-256: d6c5b7dc98b203d1cfbe91d28716c13ffe88d0c2033b34aa82731dbab0aba05c
-		Secure: true
-	Object:
 		Variable: $r3
 		Type: java.security.KeyPairGenerator
 		Statement: $r3 = staticinvoke <java.security.KeyPairGenerator: java.security.KeyPairGenerator getInstance(java.lang.String)>(varReplacer6004)
@@ -152,6 +145,13 @@ Analyzed Objects:
 		Method: <com.worklight.d.c: java.io.InputStream a(java.io.InputStream,byte[])>
 		SHA-256: 3f9b96a9ed8a9f71d8c2a7d1771403843dc8cb952dc5791f419a8dda3763baaf
 		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
+		Method: <com.metricell.mcc.api.o.m: byte[] c(java.lang.String)>
+		SHA-256: d6c5b7dc98b203d1cfbe91d28716c13ffe88d0c2033b34aa82731dbab0aba05c
+		Secure: true
 	Object:
 		Variable: $r5
 		Type: java.security.SecureRandom
@@ -249,7 +249,7 @@ Findings in Java Class: com.metricell.mcc.api.o.m
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #d6799ca9d2f35dfee6b8aca2a935ebacf971478dd7d4e0cf81199483b9a0db6b)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1642)
 
 
@@ -266,13 +266,13 @@ Findings in Java Class: com.worklight.common.security.b
 			Operation on object of type java.security.KeyStore object not completed. Expected call to getKey
 			at statement: $r8 = virtualinvoke $r5.<java.security.KeyStore: java.security.KeyStore$Entry getEntry(java.lang.String,java.security.KeyStore$ProtectionParameter)>(varReplacer5928, $r6)
 
-		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #16f58af3f1d4a096d5bacee90ecb7d901cfe94c53515476b7b8bf95e80152e47)
-			Operation on object of type java.security.KeyStore object not completed. Expected call to getKey
-			at statement: $r10 = virtualinvoke $r5.<java.security.KeyStore: java.security.cert.Certificate getCertificate(java.lang.String)>(varReplacer5932)
-
 		TypestateError violating CrySL rule for java.security.KeyStore (on Object #16f58af3f1d4a096d5bacee90ecb7d901cfe94c53515476b7b8bf95e80152e47)
 			Unexpected call to method getEntry on object of type java.security.KeyStore. Expect a call to one of the following methods load
 			at statement: $r8 = virtualinvoke $r5.<java.security.KeyStore: java.security.KeyStore$Entry getEntry(java.lang.String,java.security.KeyStore$ProtectionParameter)>(varReplacer5928, $r6)
+
+		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #16f58af3f1d4a096d5bacee90ecb7d901cfe94c53515476b7b8bf95e80152e47)
+			Operation on object of type java.security.KeyStore object not completed. Expected call to getKey
+			at statement: $r10 = virtualinvoke $r5.<java.security.KeyStore: java.security.cert.Certificate getCertificate(java.lang.String)>(varReplacer5932)
 
 
 	 in Method: java.security.KeyPair a(java.lang.String,int)
@@ -297,15 +297,11 @@ Findings in Java Class: com.worklight.d.c
 
 	 in Method: byte[] a(byte[],java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #6d4fff3cfb499cc086c65bb09a1994c7b7c7cb27882a0284e3d248f44334811)
-			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4893)
 
 
 	 in Method: java.io.InputStream a(java.io.InputStream,byte[])
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #3f9b96a9ed8a9f71d8c2a7d1771403843dc8cb952dc5791f419a8dda3763baaf)
-			First parameter (with value "AES") should be any of AES/{GCM, CBC, CTR}
-			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer4969)
-
 		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #3f9b96a9ed8a9f71d8c2a7d1771403843dc8cb952dc5791f419a8dda3763baaf)
 			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init, update, wrap, doFinal
 			at statement: specialinvoke $r4.<javax.crypto.CipherInputStream: void <init>(java.io.InputStream,javax.crypto.Cipher)>($r0, $r2)
@@ -314,37 +310,9 @@ Findings in Java Class: com.worklight.d.c
 			First parameter (with value "AES") should be any of AES/{GCM, CBC, CTR}
 			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer4969)
 
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #3f9b96a9ed8a9f71d8c2a7d1771403843dc8cb952dc5791f419a8dda3763baaf)
-			First parameter (with value "AES") should be any of AES/{GCM, CBC, CTR}
-			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer4969)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #3f9b96a9ed8a9f71d8c2a7d1771403843dc8cb952dc5791f419a8dda3763baaf)
-			First parameter (with value "AES") should be any of AES/{GCM, CBC, CTR}
-			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer4969)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #3f9b96a9ed8a9f71d8c2a7d1771403843dc8cb952dc5791f419a8dda3763baaf)
-			First parameter (with value "AES") should be any of AES/{GCM, CBC, CTR}
-			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer4969)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #3f9b96a9ed8a9f71d8c2a7d1771403843dc8cb952dc5791f419a8dda3763baaf)
-			First parameter (with value "AES") should be any of AES/{GCM, CBC, CTR}
-			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer4969)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer4970)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #3f9b96a9ed8a9f71d8c2a7d1771403843dc8cb952dc5791f419a8dda3763baaf)
-			First parameter (with value "AES") should be any of AES/{GCM, CBC, CTR}
-			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer4969)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #3f9b96a9ed8a9f71d8c2a7d1771403843dc8cb952dc5791f419a8dda3763baaf)
-			First parameter (with value "AES") should be any of AES/{GCM, CBC, CTR}
-			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer4969)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #3f9b96a9ed8a9f71d8c2a7d1771403843dc8cb952dc5791f419a8dda3763baaf)
-			First parameter (with value "AES") should be any of AES/{GCM, CBC, CTR}
-			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer4969)
 
 
 Findings in Java Class: com.worklight.androidgap.a
@@ -356,11 +324,11 @@ Findings in Java Class: com.worklight.androidgap.a
 
 		IncompleteOperationError violating CrySL rule for javax.crypto.CipherInputStream (on Object #c56fb841bf4f11330b293469a05cb66a15a7347dab7bc0579dccb6d30c0e82f4)
 			Operation on object of type javax.crypto.CipherInputStream object not completed. Expected call to read
-			at statement: virtualinvoke $r12.<java.io.InputStream: int available()>()
+			at statement: $r10 = $r9
 
 		IncompleteOperationError violating CrySL rule for javax.crypto.CipherInputStream (on Object #c56fb841bf4f11330b293469a05cb66a15a7347dab7bc0579dccb6d30c0e82f4)
 			Operation on object of type javax.crypto.CipherInputStream object not completed. Expected call to read
-			at statement: $r10 = $r9
+			at statement: virtualinvoke $r12.<java.io.InputStream: int available()>()
 
 		IncompleteOperationError violating CrySL rule for javax.crypto.CipherInputStream (on Object #c56fb841bf4f11330b293469a05cb66a15a7347dab7bc0579dccb6d30c0e82f4)
 			Operation on object of type javax.crypto.CipherInputStream object not completed. Expected call to read
@@ -374,9 +342,9 @@ Findings in Java Class: com.worklight.common.security.c
 			Unexpected call to method setEntry on object of type java.security.KeyStore. Expect a call to one of the following methods getKey
 			at statement: virtualinvoke $r4.<java.security.KeyStore: void setEntry(java.lang.String,java.security.KeyStore$Entry,java.security.KeyStore$ProtectionParameter)>($r1, $r11, $r10)
 
-		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #ded6644020bf289a7ac7d8a3ef72b925c22b2bfaa6f83beb8fc502573e5518e5)
-			Operation on object of type java.security.KeyStore object not completed. Expected call to getKey
-			at statement: virtualinvoke $r4.<java.security.KeyStore: void load(java.io.InputStream,char[])>(varReplacer5993, $r9)
+		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #2528a9339482f1337477539c3f1565a4ff0b0d7206a8d435b2164443e788efcc)
+			Operation on object of type java.security.KeyStore object not completed. Expected call to getKey, load
+			at statement: $r11 = virtualinvoke $r16.<java.security.KeyStore: java.security.KeyStore$Entry getEntry(java.lang.String,java.security.KeyStore$ProtectionParameter)>($r1, $r10)
 
 		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #2528a9339482f1337477539c3f1565a4ff0b0d7206a8d435b2164443e788efcc)
 			Operation on object of type java.security.KeyStore object not completed. Expected call to getKey, load
@@ -386,13 +354,13 @@ Findings in Java Class: com.worklight.common.security.c
 			Operation on object of type java.security.KeyStore object not completed. Expected call to getKey
 			at statement: $r11 = virtualinvoke $r4.<java.security.KeyStore: java.security.KeyStore$Entry getEntry(java.lang.String,java.security.KeyStore$ProtectionParameter)>($r1, $r10)
 
+		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #ded6644020bf289a7ac7d8a3ef72b925c22b2bfaa6f83beb8fc502573e5518e5)
+			Operation on object of type java.security.KeyStore object not completed. Expected call to getKey
+			at statement: virtualinvoke $r4.<java.security.KeyStore: void load(java.io.InputStream,char[])>(varReplacer5993, $r9)
+
 		TypestateError violating CrySL rule for java.security.KeyStore (on Object #2528a9339482f1337477539c3f1565a4ff0b0d7206a8d435b2164443e788efcc)
 			Unexpected call to method load on object of type java.security.KeyStore. Expect a call to one of the following methods getKey
 			at statement: virtualinvoke $r16.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r8, $r9)
-
-		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #2528a9339482f1337477539c3f1565a4ff0b0d7206a8d435b2164443e788efcc)
-			Operation on object of type java.security.KeyStore object not completed. Expected call to getKey, load
-			at statement: $r11 = virtualinvoke $r16.<java.security.KeyStore: java.security.KeyStore$Entry getEntry(java.lang.String,java.security.KeyStore$ProtectionParameter)>($r1, $r10)
 
 
 	 in Method: java.security.KeyStore$SecretKeyEntry b(java.lang.String,java.lang.String)
@@ -405,12 +373,12 @@ Findings in Java Class: com.worklight.common.security.d
 
 	 in Method: java.security.KeyStore$PrivateKeyEntry f(java.lang.String)
 		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #1d8cd7de15cf057196c1846d23a55e9180bb3692035c4477f6c40e677acad348)
-			Operation on object of type java.security.KeyStore object not completed. Expected call to getKey
-			at statement: $r10 = virtualinvoke $r2.<java.security.KeyStore: java.security.KeyStore$Entry getEntry(java.lang.String,java.security.KeyStore$ProtectionParameter)>(varReplacer6268, $r9)
-
-		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #1d8cd7de15cf057196c1846d23a55e9180bb3692035c4477f6c40e677acad348)
 			Operation on object of type java.security.KeyStore object not completed. Expected call to load
 			at statement: $r2 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r1)
+
+		IncompleteOperationError violating CrySL rule for java.security.KeyStore (on Object #1d8cd7de15cf057196c1846d23a55e9180bb3692035c4477f6c40e677acad348)
+			Operation on object of type java.security.KeyStore object not completed. Expected call to getKey
+			at statement: $r10 = virtualinvoke $r2.<java.security.KeyStore: java.security.KeyStore$Entry getEntry(java.lang.String,java.security.KeyStore$ProtectionParameter)>(varReplacer6268, $r9)
 
 
 ======================= CogniCrypt Summary ==========================
@@ -420,6 +388,6 @@ Findings in Java Class: com.worklight.common.security.d
 	CogniCrypt found the following violations. For details see description above.
 	TypestateError: 5
 	IncompleteOperationError: 14
-	ConstraintError: 12
+	ConstraintError: 4
 	RequiredPredicateError: 3
 =====================================================================

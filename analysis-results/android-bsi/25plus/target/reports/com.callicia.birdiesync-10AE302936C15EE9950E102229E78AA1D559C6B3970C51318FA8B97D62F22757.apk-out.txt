@@ -94,13 +94,6 @@ Analyzed Objects:
 		SHA-256: 58fc086a4f8f5de3917a7e611d0a397664fa694011cdcdf6a7382c9b52de3cea
 		Secure: false
 	Object:
-		Variable: $r3
-		Type: java.security.MessageDigest
-		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r2)
-		Method: <com.callicia.birdiesync.tool.g: byte[] a(java.lang.String,java.lang.String)>
-		SHA-256: 9eb2f36ffccff53eff3c44e7d9b35097cd505e3259d01987e046d2cdec45eab7
-		Secure: true
-	Object:
 		Variable: $r0
 		Type: byte[]
 		Statement: $r0 = virtualinvoke $r4.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r0)
@@ -114,13 +107,6 @@ Analyzed Objects:
 		Method: <com.callicia.birdiesync.synchronizer.ga: void e()>
 		SHA-256: 7a1971920e129069c86abf528f36df2c859f5da2999a78af8b49d2589d5fe14b
 		Secure: false
-	Object:
-		Variable: $r4
-		Type: byte[]
-		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
-		Method: <com.callicia.birdiesync.tool.g: byte[] a(java.lang.String,java.lang.String)>
-		SHA-256: 8f6c8c734e0216d4ed5cdb14501a36b180dbeee5788cecf221f53f3aaf0e8e44
-		Secure: true
 	Object:
 		Variable: $r12
 		Type: javax.net.ssl.KeyManagerFactory
@@ -192,6 +178,13 @@ Analyzed Objects:
 		SHA-256: d727e5f93fb61270390135dce22ae08ede719660370403d7fbd47f303b0f8f9d
 		Secure: false
 	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r2)
+		Method: <com.callicia.birdiesync.tool.g: byte[] a(java.lang.String,java.lang.String)>
+		SHA-256: 9eb2f36ffccff53eff3c44e7d9b35097cd505e3259d01987e046d2cdec45eab7
+		Secure: true
+	Object:
 		Variable: $r2
 		Type: javax.crypto.Cipher
 		Statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>($r1)
@@ -212,6 +205,13 @@ Analyzed Objects:
 		Method: <com.callicia.birdiesync.synchronizer.gc: java.security.PublicKey a(byte[],byte[])>
 		SHA-256: e3a386739f83484b0a9079fc47435e792f0cceef6217d24c030ce17dafbfc6d5
 		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.callicia.birdiesync.tool.g: byte[] a(java.lang.String,java.lang.String)>
+		SHA-256: 8f6c8c734e0216d4ed5cdb14501a36b180dbeee5788cecf221f53f3aaf0e8e44
+		Secure: true
 	Object:
 		Variable: $r5
 		Type: java.security.MessageDigest
@@ -251,10 +251,6 @@ Analyzed Objects:
 Findings in Java Class: com.callicia.birdiesync.tool.g
 
 	 in Method: byte[] a(byte[],java.lang.String)
-		ForbiddenMethodError violating CrySL rule for javax.crypto.Cipher
-			Detected call to forbidden method void init(int,java.security.Key) of class javax.crypto.Cipher. Instead, call method <javax.crypto.Cipher: void init(int,java.security.Key)>.
-			at statement: virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1596, $r2)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1596, $r2)
@@ -262,6 +258,10 @@ Findings in Java Class: com.callicia.birdiesync.tool.g
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, $r1)
+
+		ForbiddenMethodError violating CrySL rule for javax.crypto.Cipher
+			Detected call to forbidden method void init(int,java.security.Key) of class javax.crypto.Cipher. Instead, call method <javax.crypto.Cipher: void init(int,java.security.Key)>.
+			at statement: virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1596, $r2)
 
 
 Findings in Java Class: com.callicia.birdiesync.synchronizer.hg
@@ -275,21 +275,21 @@ Findings in Java Class: com.callicia.birdiesync.synchronizer.hg
 Findings in Java Class: com.callicia.birdiesync.a.v
 
 	 in Method: void g()
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r14.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>($r13, r22, r20)
+		ConstraintError violating CrySL rule for javax.net.ssl.KeyManagerFactory (on Object #2e93ceb0367d01815db14e4bb161dd76603dbdbb8b1d585aef0c5a7dea27f95a)
+			First parameter (with value "X509") should be any of {PKIX}
+			at statement: $r12 = staticinvoke <javax.net.ssl.KeyManagerFactory: javax.net.ssl.KeyManagerFactory getInstance(java.lang.String)>(varReplacer3558)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r14.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>($r13, r22, r20)
 
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r14.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>($r13, r22, r20)
+
 		NeverTypeOfError violating CrySL rule for javax.net.ssl.KeyManagerFactory (on Object #2e93ceb0367d01815db14e4bb161dd76603dbdbb8b1d585aef0c5a7dea27f95a)
 			Second parameter should never be of type java.lang.String.
 			at statement: virtualinvoke $r12.<javax.net.ssl.KeyManagerFactory: void init(java.security.KeyStore,char[])>($r2, $r10)
-
-		ConstraintError violating CrySL rule for javax.net.ssl.KeyManagerFactory (on Object #2e93ceb0367d01815db14e4bb161dd76603dbdbb8b1d585aef0c5a7dea27f95a)
-			First parameter (with value "X509") should be any of {PKIX}
-			at statement: $r12 = staticinvoke <javax.net.ssl.KeyManagerFactory: javax.net.ssl.KeyManagerFactory getInstance(java.lang.String)>(varReplacer3558)
 
 
 Findings in Java Class: com.callicia.birdiesync.synchronizer.ga
@@ -301,19 +301,19 @@ Findings in Java Class: com.callicia.birdiesync.synchronizer.ga
 
 		ForbiddenMethodError violating CrySL rule for javax.crypto.Cipher
 			Detected call to forbidden method void init(int,java.security.Key) of class javax.crypto.Cipher. Instead, call method <javax.crypto.Cipher: void init(int,java.security.Key)>.
-			at statement: virtualinvoke $r2.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3768, $r4)
-
-		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #7a1971920e129069c86abf528f36df2c859f5da2999a78af8b49d2589d5fe14b)
-			Operation on object of type javax.crypto.Cipher object not completed. Expected call to javax.crypto.Cipher: void init(int,java.security.cert.Certificate,java.security.SecureRandom), javax.crypto.Cipher: void init(int,java.security.Key,java.security.AlgorithmParameters), javax.crypto.Cipher: void init(int,java.security.Key), javax.crypto.Cipher: void init(int,java.security.Key,java.security.SecureRandom), javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec), update, javax.crypto.Cipher: void init(int,java.security.cert.Certificate), javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec,java.security.SecureRandom), javax.crypto.Cipher: void init(int,java.security.Key,java.security.AlgorithmParameters,java.security.SecureRandom), wrap, doFinal
-			at statement: virtualinvoke $r2.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3769, $r6)
-
-		ForbiddenMethodError violating CrySL rule for javax.crypto.Cipher
-			Detected call to forbidden method void init(int,java.security.Key) of class javax.crypto.Cipher. Instead, call method <javax.crypto.Cipher: void init(int,java.security.Key)>.
 			at statement: virtualinvoke $r2.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3769, $r6)
 
 		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #1afca297405675be89d67cb3eece0487689434d5ccc48d79759c32e0f9c044ff)
 			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
 			at statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r1)
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #7a1971920e129069c86abf528f36df2c859f5da2999a78af8b49d2589d5fe14b)
+			Operation on object of type javax.crypto.Cipher object not completed. Expected call to javax.crypto.Cipher: void init(int,java.security.cert.Certificate,java.security.SecureRandom), javax.crypto.Cipher: void init(int,java.security.Key), javax.crypto.Cipher: void init(int,java.security.Key,java.security.AlgorithmParameters), javax.crypto.Cipher: void init(int,java.security.Key,java.security.SecureRandom), javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec), update, javax.crypto.Cipher: void init(int,java.security.cert.Certificate), javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec,java.security.SecureRandom), javax.crypto.Cipher: void init(int,java.security.Key,java.security.AlgorithmParameters,java.security.SecureRandom), wrap, doFinal
+			at statement: virtualinvoke $r2.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3769, $r6)
+
+		ForbiddenMethodError violating CrySL rule for javax.crypto.Cipher
+			Detected call to forbidden method void init(int,java.security.Key) of class javax.crypto.Cipher. Instead, call method <javax.crypto.Cipher: void init(int,java.security.Key)>.
+			at statement: virtualinvoke $r2.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3768, $r4)
 
 
 	 in Method: byte[] a(byte[],java.lang.String)
@@ -339,6 +339,10 @@ Findings in Java Class: com.callicia.birdiesync.synchronizer.ga
 Findings in Java Class: com.callicia.birdiesync.synchronizer.gc
 
 	 in Method: java.security.PublicKey a(byte[],byte[])
+		ForbiddenMethodError violating CrySL rule for javax.crypto.Cipher
+			Detected call to forbidden method void init(int,java.security.Key) of class javax.crypto.Cipher. Instead, call method <javax.crypto.Cipher: void init(int,java.security.Key)>.
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3880, $r7)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3880, $r7)
@@ -346,10 +350,6 @@ Findings in Java Class: com.callicia.birdiesync.synchronizer.gc
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r8, $r4)
-
-		ForbiddenMethodError violating CrySL rule for javax.crypto.Cipher
-			Detected call to forbidden method void init(int,java.security.Key) of class javax.crypto.Cipher. Instead, call method <javax.crypto.Cipher: void init(int,java.security.Key)>.
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3880, $r7)
 
 
 Findings in Java Class: com.callicia.birdiesync.a.s
@@ -369,9 +369,9 @@ Findings in Java Class: com.callicia.birdiesync.a.s
 	Number of Objects Analyzed: 30
 
 	CogniCrypt found the following violations. For details see description above.
+	ForbiddenMethodError: 6
 	ConstraintError: 1
 	RequiredPredicateError: 11
-	NeverTypeOfError: 1
-	ForbiddenMethodError: 6
 	IncompleteOperationError: 3
+	NeverTypeOfError: 1
 =====================================================================

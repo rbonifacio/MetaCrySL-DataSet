@@ -199,7 +199,7 @@ Findings in Java Class: com.facebook.ads.internal.util.u
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #dfa0095852ae052a3b5c3822a4928ee67463f114529b6f793f83f1382bf93a96)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer500)
 
 
@@ -207,7 +207,7 @@ Findings in Java Class: com.mopub.common.util.Utils
 
 	 in Method: java.lang.String sha1(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #2e0d38116b5bc968514ad6fe03e95c14612170ef45f7c59845a28432dbbc3c87)
-			First parameter (with value "SHA-1") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2191)
 
 
@@ -219,7 +219,7 @@ Findings in Java Class: com.unity3d.player.UnityPlayer
 			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
 
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #1dc7776026684f0d7924a4e1748ac9ad2728c2ee6b00f7052a456b2fca00d932)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5056)
 
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #1dc7776026684f0d7924a4e1748ac9ad2728c2ee6b00f7052a456b2fca00d932)
@@ -230,13 +230,37 @@ Findings in Java Class: com.unity3d.player.UnityPlayer
 Findings in Java Class: com.leanplum.a.a
 
 	 in Method: byte[] a(int,java.lang.String,byte[])
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #ebe32c14887e9aca13db18349580997e4b47a923539c51cda1f5003c7305edf2)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r10 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer6236)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEKeySpec
+			Second parameter was not properly generated as randomized
+			at statement: specialinvoke $r5.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r6, $r3, varReplacer6233, varReplacer6234)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared I V
+			at statement: virtualinvoke $r10.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer6246, $r9, $r11)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r11.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r9.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer6238)
+
+		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #11ce8591c01bb526df2f0fb00da18f410392e616e9a649d74cedbbb2c3c6de71)
+			First parameter (with value "PBEWithMD5And128BitAES-CBC-OpenSSL") should be any of {PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithHmacSHA224AndAES_256, PBKDF2withHmacSHA224, HmacSHA384, PBEwithHmacSHA512AndAES_128, PBEwithSHA256AND128BITAES-CBC-BC, PBEwithHmacSHA224AndAES_128, PBEwithHmacSHA256AndAES_128, PBEwithHmacSHA512AndAES_256, HmacSHA512, PBEwithSHAAND128BITAES-CBC-BC, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBKDF2withHmacSHA384, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC, HmacSHA224, PBEwithHmacSHA384AndAES_128, PBEwithHmacSHA256AndAES_256, HmacSHA256, PBKDF2withHmacSHA512, PBEwithHmacSHA384AndAES_256, PBKDF2withHmacSHA256, AES, PBEwithSHAAND192BITAES-CBC-BC}
+			at statement: $r7 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer6239)
 
 		ConstraintError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #e2c414e21be787f7a70317c010d3dd7345fb4503b9bbd2b04b9a3db656eab17b)
 			Third parameter (with value 1000)Variable iterationCountmust be  at least 10000
 			at statement: specialinvoke $r5.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r6, $r3, varReplacer6233, varReplacer6234)
+
+		NeverTypeOfError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #e2c414e21be787f7a70317c010d3dd7345fb4503b9bbd2b04b9a3db656eab17b)
+			First parameter should never be of type java.lang.String.
+			at statement: specialinvoke $r5.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r6, $r3, varReplacer6233, varReplacer6234)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
+			First parameter was not properly generated as specced Key
+			at statement: $r8 = virtualinvoke $r7.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
@@ -246,45 +270,17 @@ Findings in Java Class: com.leanplum.a.a
 			Operation on object of type javax.crypto.spec.PBEKeySpec object not completed. Expected call to clearPassword
 			at statement: $r8 = virtualinvoke $r7.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r5)
 
-		NeverTypeOfError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #e2c414e21be787f7a70317c010d3dd7345fb4503b9bbd2b04b9a3db656eab17b)
-			First parameter should never be of type java.lang.String.
-			at statement: specialinvoke $r5.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r6, $r3, varReplacer6233, varReplacer6234)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r11.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
-
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #ebe32c14887e9aca13db18349580997e4b47a923539c51cda1f5003c7305edf2)
 			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
 			at statement: $r10 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer6236)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r9.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer6238)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
-			First parameter was not properly generated as specced Key
-			at statement: $r8 = virtualinvoke $r7.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r5)
-
-		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #11ce8591c01bb526df2f0fb00da18f410392e616e9a649d74cedbbb2c3c6de71)
-			First parameter (with value "PBEWithMD5And128BitAES-CBC-OpenSSL") should be any of {PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithHmacSHA224AndAES_256, PBKDF2withHmacSHA224, HmacSHA384, PBEwithHmacSHA512AndAES_128, PBEwithSHA256AND128BITAES-CBC-BC, PBEwithHmacSHA224AndAES_128, PBEwithHmacSHA256AndAES_128, PBEwithHmacSHA512AndAES_256, HmacSHA512, PBEwithSHAAND128BITAES-CBC-BC, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBKDF2withHmacSHA384, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC, HmacSHA224, PBEwithHmacSHA384AndAES_128, PBEwithHmacSHA256AndAES_256, HmacSHA256, PBKDF2withHmacSHA512, PBEwithHmacSHA384AndAES_256, PBKDF2withHmacSHA256, AES, PBEwithSHAAND192BITAES-CBC-BC}
-			at statement: $r7 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer6239)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEKeySpec
-			Second parameter was not properly generated as randomized
-			at statement: specialinvoke $r5.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r6, $r3, varReplacer6233, varReplacer6234)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared I V
-			at statement: virtualinvoke $r10.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer6246, $r9, $r11)
 
 
 Findings in Java Class: com.adcolony.sdk.co
 
 	 in Method: void a(java.util.Map,java.lang.String,android.content.Context)
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f673d826797a57b04b81edefca71e731f1b307698eb6313f756e987112007394)
-			First parameter (with value "AES") should be any of AES/{GCM, CBC, CTR}
-			at statement: $r9 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7099)
+		IncompleteOperationError violating CrySL rule for javax.crypto.CipherOutputStream (on Object #faff5d26987f0eabe6c99ded30fb91cc34387b517b0050bec75f4c8dc9a276f1)
+			Operation on object of type javax.crypto.CipherOutputStream object not completed. Expected call to write
+			at statement: specialinvoke r19.<javax.crypto.CipherOutputStream: void <init>(java.io.OutputStream,javax.crypto.Cipher)>($r6, $r9)
 
 		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #f673d826797a57b04b81edefca71e731f1b307698eb6313f756e987112007394)
 			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init, update, wrap, doFinal
@@ -294,19 +290,11 @@ Findings in Java Class: com.adcolony.sdk.co
 			First parameter (with value "AES") should be any of AES/{GCM, CBC, CTR}
 			at statement: $r9 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7099)
 
-		IncompleteOperationError violating CrySL rule for javax.crypto.CipherOutputStream (on Object #faff5d26987f0eabe6c99ded30fb91cc34387b517b0050bec75f4c8dc9a276f1)
-			Operation on object of type javax.crypto.CipherOutputStream object not completed. Expected call to write
-			at statement: specialinvoke r19.<javax.crypto.CipherOutputStream: void <init>(java.io.OutputStream,javax.crypto.Cipher)>($r6, $r9)
-
 
 	 in Method: java.util.Map b(java.lang.String,java.lang.String,android.content.Context)
 		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #a60600f8a5c84bf14e57f589642a3433e5b94c8b5e7c1be23c77b563720c41d5)
 			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init, update, wrap, doFinal
 			at statement: $r8 = virtualinvoke $r9.<javax.crypto.SealedObject: java.lang.Object getObject(javax.crypto.Cipher)>($r5)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #a60600f8a5c84bf14e57f589642a3433e5b94c8b5e7c1be23c77b563720c41d5)
-			First parameter (with value "AES") should be any of AES/{GCM, CBC, CTR}
-			at statement: $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7111)
 
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #a60600f8a5c84bf14e57f589642a3433e5b94c8b5e7c1be23c77b563720c41d5)
 			First parameter (with value "AES") should be any of AES/{GCM, CBC, CTR}
@@ -330,10 +318,6 @@ Findings in Java Class: com.adcolony.sdk.co
 			Operation on object of type javax.crypto.CipherInputStream object not completed. Expected call to read
 			at statement: specialinvoke $r7.<java.io.ObjectInputStream: void <init>(java.io.InputStream)>($r6)
 
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #483740d92ded14534e3f010fe54ef1cb68a6e0d426dd92ecfcd66905c3742cfa)
-			First parameter (with value "AES") should be any of AES/{GCM, CBC, CTR}
-			at statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer7112)
-
 
 	 in Method: javax.crypto.SecretKey j(java.lang.String)
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
@@ -346,9 +330,9 @@ Findings in Java Class: com.adcolony.sdk.co
 	Number of Objects Analyzed: 23
 
 	CogniCrypt found the following violations. For details see description above.
-	NeverTypeOfError: 1
-	ConstraintError: 14
-	TypestateError: 1
-	IncompleteOperationError: 7
+	ConstraintError: 10
 	RequiredPredicateError: 7
+	TypestateError: 1
+	NeverTypeOfError: 1
+	IncompleteOperationError: 7
 =====================================================================

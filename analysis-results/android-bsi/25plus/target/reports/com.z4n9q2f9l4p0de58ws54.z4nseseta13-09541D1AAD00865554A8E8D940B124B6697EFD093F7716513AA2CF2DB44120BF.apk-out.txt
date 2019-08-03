@@ -55,13 +55,6 @@ Analyzed Objects:
 		Variable: $r3
 		Type: byte[]
 		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
-		Method: <com.seattleclouds.util.au: java.lang.String e(java.lang.String)>
-		SHA-256: 8e7614b5ec2780006c9998ec0d4716b12af08b1f4d0bec511d483f505f5d71ec
-		Secure: false
-	Object:
-		Variable: $r3
-		Type: byte[]
-		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
 		Method: <com.revmob.a.a: java.lang.String a(java.lang.String)>
 		SHA-256: db9f7f42dedde1a63e21df7bd88a79daec3a3bfa7026563385d1ab196e7c58f8
 		Secure: false
@@ -94,13 +87,6 @@ Analyzed Objects:
 		SHA-256: f3263d97bb74769521efc1393c4bfc7fe6b8614f4ad9a4fa8846529b38f25722
 		Secure: true
 	Object:
-		Variable: $r2
-		Type: java.security.MessageDigest
-		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1588)
-		Method: <com.seattleclouds.util.au: java.lang.String e(java.lang.String)>
-		SHA-256: d4889e3794b651aa14d2f5ecbde638c5a631eb3579a7ea7afcd7bcd15d97a2e8
-		Secure: false
-	Object:
 		Variable: $r3
 		Type: byte[]
 		Statement: $r3 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r3)
@@ -122,11 +108,25 @@ Analyzed Objects:
 		SHA-256: 591e1800de8e88196fa4665d05bab9cd5f5a51b9f9b0e9afa833e077cdcaad55
 		Secure: false
 	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.seattleclouds.util.au: java.lang.String e(java.lang.String)>
+		SHA-256: 8e7614b5ec2780006c9998ec0d4716b12af08b1f4d0bec511d483f505f5d71ec
+		Secure: false
+	Object:
 		Variable: $r7
 		Type: javax.crypto.spec.IvParameterSpec
 		Statement: specialinvoke $r7.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
 		Method: <com.revmob.internal.m: java.lang.String a(java.lang.String)>
 		SHA-256: 34acddc2e819618fa0c1afcaffa1977992f2c6a1bae487dfb5a816d5e7a579ef
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1587)
+		Method: <com.seattleclouds.util.au: java.lang.String e(java.lang.String)>
+		SHA-256: 17ee3a03b311f86515c7472f2c4b1aad5b9ff957d8ca01731faffc75eaffc2ad
 		Secure: false
 	Object:
 		Variable: $r4
@@ -139,9 +139,9 @@ Analyzed Objects:
 Findings in Java Class: com.seattleclouds.util.au
 
 	 in Method: java.lang.String e(java.lang.String)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #d4889e3794b651aa14d2f5ecbde638c5a631eb3579a7ea7afcd7bcd15d97a2e8)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
-			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1588)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #17ee3a03b311f86515c7472f2c4b1aad5b9ff957d8ca01731faffc75eaffc2ad)
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1587)
 
 
 Findings in Java Class: com.revmob.internal.m
@@ -155,14 +155,6 @@ Findings in Java Class: com.revmob.internal.m
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r7.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer2628, $r5, $r7)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #264acc646639511f4bcfcb37dd853e162a093b12e7ab993170b66a00447a7d28)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2631)
-
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #264acc646639511f4bcfcb37dd853e162a093b12e7ab993170b66a00447a7d28)
 			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
 			at statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2631)
@@ -171,12 +163,16 @@ Findings in Java Class: com.revmob.internal.m
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r3, varReplacer2633)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer2628, $r5, $r7)
+
 
 Findings in Java Class: com.revmob.a.a
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #36e5d2cc2cb5174e42b36f0c2017825a9f3a37cb0220e7df9d6fc2b65a84f176)
-			First parameter (with value "SHA-1") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2779)
 
 
@@ -184,7 +180,7 @@ Findings in Java Class: com.facebook.appevents.AppEvent
 
 	 in Method: java.lang.String b(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #8e02644a025604d229054fb9b686a2f98085b54b0f158f3f30e86679d561b57)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5861)
 
 
@@ -196,7 +192,7 @@ Findings in Java Class: com.android.vending.billing.util.q
 			at statement: virtualinvoke $r3.<java.security.Signature: void initVerify(java.security.PublicKey)>($r0)
 
 		ConstraintError violating CrySL rule for java.security.Signature (on Object #13f9a6ac412eaa939029f2947b24e5a4dfbadc428052c4cea4394ca85b8dd0a0)
-			First parameter (with value "SHA1withRSA") should be any of {SHA224withECDSA, SHA256withDSA, SHA256withRSA/PSS, SHA512withRSA/PSS, SHA512withRSA, SHA384withRSA/PSS, SHA384withRSA, NONEwithRSA, SHA224withRSA/PSS, SHA256withRSA, SHA224withRSA, DSA, DSS, SHA224withDSA}
+			First parameter (with value "SHA1withRSA") should be any of {RSASSA-PSS, SHA224withECDSA, SHA256withDSA, SHA256withRSA/PSS, SHA512withRSA/PSS, SHA512withRSA, SHA384withRSA/PSS, SHA384withRSA, NONEwithRSA, SHA224withRSA/PSS, SHA256withRSA, SHA224withRSA, DSA, DSS, SHA224withDSA}
 			at statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer6238)
 
 
@@ -205,6 +201,6 @@ Findings in Java Class: com.android.vending.billing.util.q
 	Number of Objects Analyzed: 14
 
 	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 5
 	RequiredPredicateError: 5
-	ConstraintError: 6
 =====================================================================

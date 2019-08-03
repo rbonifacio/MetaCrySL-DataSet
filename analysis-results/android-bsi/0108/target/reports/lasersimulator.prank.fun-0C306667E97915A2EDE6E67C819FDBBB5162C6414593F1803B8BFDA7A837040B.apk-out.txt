@@ -1,7 +1,7 @@
 Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/lasersimulator.prank.fun-0C306667E97915A2EDE6E67C819FDBBB5162C6414593F1803B8BFDA7A837040B.apk
 Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
 Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
-Alive 47688  5000
+Alive 34485  5000
 Ruleset: 
 	java.security.KeyStore
 	java.security.AlgorithmParameters
@@ -199,13 +199,13 @@ Findings in Java Class: com.google.android.gms.d.jp
 			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
 			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer490)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer492)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer491, $r10, $r3)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer492)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
@@ -216,7 +216,7 @@ Findings in Java Class: com.google.android.gms.d.gs
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #ffca64fc54070872defc3600dd2fc49f2159d0e8bbd91bf652a0d69409d41d62)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer640)
 
 
@@ -224,24 +224,28 @@ Findings in Java Class: com.google.android.gms.d.gk
 
 	 in Method: java.lang.String d()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #9d3795fbf11be15f65695dcd51105356d030194020093ff8a25ba8631858a21e)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer679)
 
 
 Findings in Java Class: lasersimulator.prank.fun.a
 
 	 in Method: java.lang.String a(java.lang.String)
+		IncompleteOperationError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #e4a971e3451d1eac651344eaf5d4e76572b4ffe085da9b95a426266bc5b3f949)
+			Operation on object of type javax.crypto.spec.PBEKeySpec object not completed. Expected call to clearPassword
+			at statement: $r10 = virtualinvoke $r8.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r9)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r12.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec,java.security.SecureRandom)>(varReplacer1203, $r11, $r13, $r14)
+
 		NeverTypeOfError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #e4a971e3451d1eac651344eaf5d4e76572b4ffe085da9b95a426266bc5b3f949)
 			First parameter should never be of type java.lang.String.
 			at statement: specialinvoke $r9.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r7, $r6, $i0, $i1)
 
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #66569f1df5e58d8943a31559a1ac5e135002c4ecb0f614e1d0d85da886dfdf43)
-			First parameter (with value "SHA1") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA1") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r4)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
-			First parameter was not properly generated as specced Key
-			at statement: $r10 = virtualinvoke $r8.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r9)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Fourth parameter was not properly generated as randomized
@@ -251,25 +255,21 @@ Findings in Java Class: lasersimulator.prank.fun.a
 			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
 			at statement: $r12 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>($r1)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEKeySpec
+			Second parameter was not properly generated as randomized
+			at statement: specialinvoke $r9.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r7, $r6, $i0, $i1)
+
 		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #607666296f4d3a09def761dd3c2f489228da400cfda709662204c8ad29039feb)
 			First parameter (with value "PBKDF2WithHmacSHA1") should be any of {PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithSHAAND192BITAES-CBC-BC, PBEwithSHA256AND128BITAES-CBC-BC, PBEwithSHAAND128BITAES-CBC-BC, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC}
 			at statement: $r8 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>($r1)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r12.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec,java.security.SecureRandom)>(varReplacer1203, $r11, $r13, $r14)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r11.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, $r1)
 
-		IncompleteOperationError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #e4a971e3451d1eac651344eaf5d4e76572b4ffe085da9b95a426266bc5b3f949)
-			Operation on object of type javax.crypto.spec.PBEKeySpec object not completed. Expected call to clearPassword
+		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
+			First parameter was not properly generated as specced Key
 			at statement: $r10 = virtualinvoke $r8.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r9)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEKeySpec
-			Second parameter was not properly generated as randomized
-			at statement: specialinvoke $r9.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r7, $r6, $i0, $i1)
 
 
 ======================= CogniCrypt Summary ==========================
@@ -279,6 +279,6 @@ Findings in Java Class: lasersimulator.prank.fun.a
 	CogniCrypt found the following violations. For details see description above.
 	ConstraintError: 6
 	RequiredPredicateError: 8
-	NeverTypeOfError: 1
 	IncompleteOperationError: 1
+	NeverTypeOfError: 1
 =====================================================================

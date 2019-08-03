@@ -63,13 +63,6 @@ Analyzed Objects:
 		Secure: false
 	Object:
 		Variable: $r0
-		Type: byte[]
-		Statement: $r0 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
-		Method: <com.ut.mini.d.g: byte[] c(byte[])>
-		SHA-256: 910a757961425bd8f806989c996c4b93274b5c6a79a649165761076ae2d51d26
-		Secure: false
-	Object:
-		Variable: $r0
 		Type: java.security.MessageDigest
 		Statement: $r0 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2817)
 		Method: <com.enstage.wibmo.a.e: void <clinit>()>
@@ -102,13 +95,6 @@ Analyzed Objects:
 		Statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer2588)
 		Method: <ticketnew.android.user.c.a: byte[] a(byte[],byte[])>
 		SHA-256: 5c18ae5d996e2edf304fafb42ab1a85bc06c05bbbc8b4dea1624e620f9d6dbd6
-		Secure: false
-	Object:
-		Variable: $r1
-		Type: java.security.MessageDigest
-		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1416)
-		Method: <com.ut.mini.d.g: byte[] c(byte[])>
-		SHA-256: f6d637aef282849c2e82300e5ab25390c5e6bcaf98bfa7446858b20cd21ee950
 		Secure: false
 	Object:
 		Variable: $r3
@@ -186,6 +172,20 @@ Analyzed Objects:
 		Statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer8608)
 		Method: <com.ta.utdid2.android.utils.AESUtils: byte[] encrypt(byte[],byte[])>
 		SHA-256: f6c0e7c6292ba43e0fe4e5c223a3a8d36f668f222bfead6ed9daddcd8875df65
+		Secure: false
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.ut.mini.d.g: byte[] c(byte[])>
+		SHA-256: 910a757961425bd8f806989c996c4b93274b5c6a79a649165761076ae2d51d26
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1415)
+		Method: <com.ut.mini.d.g: byte[] c(byte[])>
+		SHA-256: 50136ccf9c34020ce901af48b44684610ce9484411792c5fadffd6e00d91f894
 		Secure: false
 	Object:
 		Variable: $r2
@@ -296,9 +296,9 @@ Analyzed Objects:
 Findings in Java Class: com.ut.mini.d.g
 
 	 in Method: byte[] c(byte[])
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #f6d637aef282849c2e82300e5ab25390c5e6bcaf98bfa7446858b20cd21ee950)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
-			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1416)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #50136ccf9c34020ce901af48b44684610ce9484411792c5fadffd6e00d91f894)
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1415)
 
 
 Findings in Java Class: com.ta.utdid2.android.utils.AESUtils
@@ -312,16 +312,24 @@ Findings in Java Class: com.ta.utdid2.android.utils.AESUtils
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r0)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer1566)
-
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #4bc9b701f431e54ea2c5c1525fa02890948cb74bdc60e23d6a49130fe57f940b)
 			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
 			at statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1567)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer1566)
+
 
 	 in Method: byte[] encrypt(byte[],byte[])
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer8609)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r0)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Third parameter was not properly generated as prepared I V
 			at statement: virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer8607, $r3, $r2)
@@ -329,14 +337,6 @@ Findings in Java Class: com.ta.utdid2.android.utils.AESUtils
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f6c0e7c6292ba43e0fe4e5c223a3a8d36f668f222bfead6ed9daddcd8875df65)
 			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
 			at statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer8608)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r0)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer8609)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
@@ -365,7 +365,7 @@ Findings in Java Class: ticketnew.android.utils.m
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #6cd919c8c5aa72de6f2569403e610a2f6e0c843edc90d65264b6d0c0263c8aa9)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2584)
 
 
@@ -393,7 +393,7 @@ Findings in Java Class: com.enstage.wibmo.a.e
 
 	 in Method: void <clinit>()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #9a183f765580637701dfd23cbf43364c0fc07be865baa48545a7ff13125ecf65)
-			First parameter (with value "SHA-1") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r0 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2817)
 
 
@@ -409,7 +409,7 @@ Findings in Java Class: com.facebook.appevents.AppEvent
 
 	 in Method: java.lang.String b(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #320a00508265a4ac519441537d50f6f5c95152534627c20699794c94f78bdf48)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7096)
 
 
@@ -417,11 +417,11 @@ Findings in Java Class: com.enstage.wibmo.a.b
 
 	 in Method: void b(android.content.Context)
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
+			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>($r7, $r1, $r2)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
+			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>($r7, $r1, $r2)
 
 

@@ -48,6 +48,13 @@ Analyzed Objects:
 		SHA-256: 35e36740e8743c652852933d40de11e63ce0a7daaa9e4b77d5444e527713a85d
 		Secure: false
 	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r2)
+		Method: <cn.jpush.android.util.a: java.lang.String a(java.lang.String)>
+		SHA-256: 67f8276464ff2b603934593edfd3991f3b602712d92e93712f83733b7783915
+		Secure: true
+	Object:
 		Variable: $r0
 		Type: java.security.KeyStore
 		Statement: $r0 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer15290)
@@ -125,6 +132,13 @@ Analyzed Objects:
 		SHA-256: 8e4d3ce3f6a3961627a164a718666216cbb71ad4d5d8d2a6bc5f52f33a56ba40
 		Secure: true
 	Object:
+		Variable: $r5
+		Type: byte[]
+		Statement: $r5 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r5)
+		Method: <cn.jpush.android.util.a: java.lang.String a(java.lang.String)>
+		SHA-256: bfdf7a7690f99313d7d90ffe799c08accc3face2ec5e8c2f9d6c2ccbb3a7f821
+		Secure: true
+	Object:
 		Variable: $r6
 		Type: javax.crypto.SecretKey
 		Statement: $r6 = virtualinvoke $r5.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
@@ -151,13 +165,6 @@ Analyzed Objects:
 		Statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r3)
 		Method: <cn.jpush.android.util.a: java.lang.String a(byte[])>
 		SHA-256: edf8d4512ea4d685450853f37af1c60bdb4661ea96e0a8476dfe9d41f4bd92a
-		Secure: true
-	Object:
-		Variable: $r3
-		Type: java.security.MessageDigest
-		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r2)
-		Method: <cn.jpush.android.util.a: java.lang.String a(java.lang.String)>
-		SHA-256: 67f8276464ff2b603934593edfd3991f3b602712d92e93712f83733b7783915
 		Secure: true
 	Object:
 		Variable: $r5
@@ -236,13 +243,6 @@ Analyzed Objects:
 		Method: <com.zzx.Purchase.IndexPage: java.lang.String a(java.lang.String)>
 		SHA-256: 941024a5b265d2e392853b8f83cfcec56ed1abbf19a365d17d6fe741df6ef5f
 		Secure: false
-	Object:
-		Variable: $r5
-		Type: byte[]
-		Statement: $r5 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r5)
-		Method: <cn.jpush.android.util.a: java.lang.String a(java.lang.String)>
-		SHA-256: bfdf7a7690f99313d7d90ffe799c08accc3face2ec5e8c2f9d6c2ccbb3a7f821
-		Secure: true
 
 Findings in Java Class: cn.jpush.android.util.h
 
@@ -256,13 +256,17 @@ Findings in Java Class: com.zzx.Purchase.AddColorSize
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #2c818e47d7adac3f3fd9cca66c6dad4101769eb50d22b75ca3cc37bec683363a)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer14997)
 
 
 Findings in Java Class: com.paypal.android.sdk.aj
 
 	 in Method: java.security.KeyStore b()
+		ConstraintError violating CrySL rule for java.security.KeyStore (on Object #35e36740e8743c652852933d40de11e63ce0a7daaa9e4b77d5444e527713a85d)
+			First parameter (with value "JKS") should be any of {BKS, PKCS12-DEF, BCPKCS12, PKCS12, BouncyCastle}
+			at statement: $r0 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer15293)
+
 		NeverTypeOfError violating CrySL rule for java.security.KeyStore (on Object #5191ca486acd0375d2b0e1fd5e705a121a0ca0c1f4020f2762aaf2adc6e7c15d)
 			Second parameter should never be of type java.lang.String.
 			at statement: virtualinvoke $r0.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r2, $r4)
@@ -271,28 +275,24 @@ Findings in Java Class: com.paypal.android.sdk.aj
 			Second parameter should never be of type java.lang.String.
 			at statement: virtualinvoke $r0.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r2, $r4)
 
-		ConstraintError violating CrySL rule for java.security.KeyStore (on Object #35e36740e8743c652852933d40de11e63ce0a7daaa9e4b77d5444e527713a85d)
-			First parameter (with value "JKS") should be any of {BKS, PKCS12-DEF, BCPKCS12, PKCS12, BouncyCastle}
-			at statement: $r0 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer15293)
-
 
 Findings in Java Class: com.paypal.android.sdk.D
 
 	 in Method: org.apache.http.Header a(java.lang.String,java.util.List,java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r11.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r12, varReplacer15365)
-
 		ConstraintError violating CrySL rule for javax.crypto.Mac (on Object #f5c4c15fc6190d9942dcc01cd201f84c836ddea199ebc4ec46bf7871a7e1c0ed)
 			First parameter (with value "HmacSHA1") should be any of {HmacSHA224, HmacSHA256, HmacSHA384, HmacSHA512}
 			at statement: $r10 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer15359)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r11.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r12, varReplacer15365)
 
 
 Findings in Java Class: com.zzx.Purchase.ex
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #9baa6baf54db6d59bd01d27041bb6f78eea8e71ed9eeb33b8d2c48de6f28347)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer16844)
 
 
@@ -300,7 +300,7 @@ Findings in Java Class: com.zzx.Purchase.UserSpace
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #f01008aabd7314b083c5b11b985a74b677ab0372df69f2790110d213d52f029a)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer17095)
 
 
@@ -308,24 +308,24 @@ Findings in Java Class: com.zzx.Purchase.IndexPage
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #941024a5b265d2e392853b8f83cfcec56ed1abbf19a365d17d6fe741df6ef5f)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer17777)
 
 
 Findings in Java Class: com.paypal.android.sdk.y
 
 	 in Method: java.lang.String b(java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
-			First parameter was not properly generated as specced Key
-			at statement: $r6 = virtualinvoke $r5.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
+		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #92d03168068314d60b44cd08e064fce2abf985d3faa1c1c2a3d96cffeb5f31e8)
+			First parameter (with value "DES") should be any of {PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithSHAAND192BITAES-CBC-BC, PBEwithSHA256AND128BITAES-CBC-BC, PBEwithSHAAND128BITAES-CBC-BC, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC}
+			at statement: $r5 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer19770)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r7.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer19768, $r6)
 
-		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #92d03168068314d60b44cd08e064fce2abf985d3faa1c1c2a3d96cffeb5f31e8)
-			First parameter (with value "DES") should be any of {PBEwithSHAAND3-KEYTRIPLEDES-CBC, PBEwithSHAAND192BITAES-CBC-BC, PBEwithSHA256AND128BITAES-CBC-BC, PBEwithSHAAND128BITAES-CBC-BC, PBEwithSHA256AND256BITAES-CBC-BC, PBEwithSHAAND2-KEYTRIPLEDES-CBC, PBEwithSHAAND40BITRC2-CBC, PBEwithSHAAND256BITAES-CBC-BC, PBEwithSHA256AND192BITAES-CBC-BC}
-			at statement: $r5 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer19770)
+		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
+			First parameter was not properly generated as specced Key
+			at statement: $r6 = virtualinvoke $r5.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
 
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #ac26c193a6fbf6a4d9e520049afee22bc3e03a55236619a332aba324fe279542)
 			First parameter (with value "DES") should be any of {AES, RSA}
@@ -336,11 +336,11 @@ Findings in Java Class: com.paypal.android.sdk.al
 
 	 in Method: void <init>()
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
+			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer15287, r6, varReplacer15287)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
+			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer15287, r6, varReplacer15287)
 
 
@@ -361,8 +361,8 @@ Findings in Java Class: com.paypal.android.sdk.P
 	Number of Objects Analyzed: 30
 
 	CogniCrypt found the following violations. For details see description above.
-	NeverTypeOfError: 2
 	ConstraintError: 8
-	RequiredPredicateError: 7
 	TypestateError: 1
+	RequiredPredicateError: 7
+	NeverTypeOfError: 2
 =====================================================================

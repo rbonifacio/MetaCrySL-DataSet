@@ -44,6 +44,27 @@ Analyzed Objects:
 		SHA-256: d011df71b400b4926b84dec0cad6ffb90a5bd3d26c43a5974bec9e614ef5edf5
 		Secure: true
 	Object:
+		Variable: $r7
+		Type: byte[]
+		Statement: $r7 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.facebook.unity.FB: java.lang.String getKeyHash()>
+		SHA-256: fbe47ce343b5df21a88c6af9649c2f8d6f5b813e936d699f053ff2a390f19c03
+		Secure: false
+	Object:
+		Variable: $r6
+		Type: java.security.MessageDigest
+		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1421)
+		Method: <com.facebook.unity.FB: java.lang.String getKeyHash()>
+		SHA-256: c1290f19801ac8020f4b1b3fd135691ba10f0176977a33cb9c8e6a94cb7064d1
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1149)
+		Method: <com.loopj.android.http.MySSLSocketFactory: void <init>(java.security.KeyStore)>
+		SHA-256: 7090e027153bdb8ab03cd78c462095fdc46b84499c158f19ad29876d1c5d2f77
+		Secure: false
+	Object:
 		Variable: $r1
 		Type: byte[]
 		Statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
@@ -57,34 +78,13 @@ Analyzed Objects:
 		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
 		SHA-256: bf9334e3ab1706ff068d68d99a9926061f091636c3fce2f73e8222ce4700b47e
 		Secure: false
-	Object:
-		Variable: $r7
-		Type: byte[]
-		Statement: $r7 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>()
-		Method: <com.facebook.unity.FB: java.lang.String getKeyHash()>
-		SHA-256: fbe47ce343b5df21a88c6af9649c2f8d6f5b813e936d699f053ff2a390f19c03
-		Secure: false
-	Object:
-		Variable: $r2
-		Type: javax.net.ssl.SSLContext
-		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1149)
-		Method: <com.loopj.android.http.MySSLSocketFactory: void <init>(java.security.KeyStore)>
-		SHA-256: 7090e027153bdb8ab03cd78c462095fdc46b84499c158f19ad29876d1c5d2f77
-		Secure: false
-	Object:
-		Variable: $r6
-		Type: java.security.MessageDigest
-		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1426)
-		Method: <com.facebook.unity.FB: java.lang.String getKeyHash()>
-		SHA-256: eca303a075e3b407575229aa3e1fcefc42d505a0823cde7928adf498c03fadd8
-		Secure: false
 
 Findings in Java Class: com.facebook.unity.FB
 
 	 in Method: java.lang.String getKeyHash()
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #eca303a075e3b407575229aa3e1fcefc42d505a0823cde7928adf498c03fadd8)
-			First parameter (with value "SHA") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
-			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1426)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #c1290f19801ac8020f4b1b3fd135691ba10f0176977a33cb9c8e6a94cb7064d1)
+			First parameter (with value "SHA") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
+			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1421)
 
 
 Findings in Java Class: com.unity3d.player.UnityPlayer
@@ -95,7 +95,7 @@ Findings in Java Class: com.unity3d.player.UnityPlayer
 			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
 
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #bf9334e3ab1706ff068d68d99a9926061f091636c3fce2f73e8222ce4700b47e)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1884)
 
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #bf9334e3ab1706ff068d68d99a9926061f091636c3fce2f73e8222ce4700b47e)
@@ -107,11 +107,11 @@ Findings in Java Class: com.loopj.android.http.MySSLSocketFactory
 
 	 in Method: void <init>(java.security.KeyStore)
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
+			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1150, r5, varReplacer1150)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
+			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1150, r5, varReplacer1150)
 
 

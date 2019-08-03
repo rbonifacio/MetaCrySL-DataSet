@@ -44,6 +44,13 @@ Analyzed Objects:
 		SHA-256: 9cdcd66666d05306999d7dab78c14b4a31493e941fb56b7504904b16b25d2a93
 		Secure: false
 	Object:
+		Variable: $r3
+		Type: javax.crypto.Mac
+		Statement: $r3 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>($r1)
+		Method: <a.a.a.b.a.a: void <init>(java.lang.String)>
+		SHA-256: bd9a56b3ceedce468a49b3ce28d8b62845f7f7c1a7b773f056e218fc73aaea2a
+		Secure: false
+	Object:
 		Variable: $r2
 		Type: java.lang.String
 		Statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, $r2)
@@ -142,13 +149,6 @@ Analyzed Objects:
 		SHA-256: 39d302eb6b938b114639c7ddc7d7edb88a4ba3b9819df437a35b104fed178224
 		Secure: false
 	Object:
-		Variable: $r3
-		Type: javax.crypto.Mac
-		Statement: $r3 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>($r1)
-		Method: <a.a.a.b.a.a: void <init>(java.lang.String)>
-		SHA-256: bd9a56b3ceedce468a49b3ce28d8b62845f7f7c1a7b773f056e218fc73aaea2a
-		Secure: false
-	Object:
 		Variable: varReplacer1591
 		Type: java.lang.String
 		Statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer1591)
@@ -160,7 +160,7 @@ Findings in Java Class: com.google.android.gms.internal.fi
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #738ccb8acd4640dbd83646daa75964c4abe2e86cf5fa20363036ba6fb50acabe)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer322)
 
 
@@ -168,7 +168,7 @@ Findings in Java Class: a.a.a.b.a.a
 
 	 in Method: void <init>(java.lang.String)
 		ConstraintError violating CrySL rule for javax.crypto.Mac (on Object #bd9a56b3ceedce468a49b3ce28d8b62845f7f7c1a7b773f056e218fc73aaea2a)
-			First parameter (with value "HmacSHA1") should be any of {HmacSHA256, HmacSHA384, HmacSHA512}
+			First parameter (with value "HmacSHA1") should be any of {HmacSHA224, HmacSHA256, HmacSHA384, HmacSHA512}
 			at statement: $r3 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>($r1)
 
 
@@ -183,11 +183,11 @@ Findings in Java Class: a.a.a.g.c
 	 in Method: a.a.a.d.d a()
 		IncompleteOperationError violating CrySL rule for javax.crypto.Mac (on Object #bd9a56b3ceedce468a49b3ce28d8b62845f7f7c1a7b773f056e218fc73aaea2a)
 			Operation on object of type javax.crypto.Mac object not completed. Expected call to update, doFinal
-			at statement: specialinvoke $r0.<a.a.a.g.c: void a(java.io.RandomAccessFile)>($r4)
+			at statement: $r6 = $r0.<a.a.a.g.c: a.a.a.b.b e>
 
 		IncompleteOperationError violating CrySL rule for javax.crypto.Mac (on Object #bd9a56b3ceedce468a49b3ce28d8b62845f7f7c1a7b773f056e218fc73aaea2a)
 			Operation on object of type javax.crypto.Mac object not completed. Expected call to update, doFinal
-			at statement: $r6 = $r0.<a.a.a.g.c: a.a.a.b.b e>
+			at statement: specialinvoke $r0.<a.a.a.g.c: void a(java.io.RandomAccessFile)>($r4)
 
 		IncompleteOperationError violating CrySL rule for javax.crypto.Mac (on Object #bd9a56b3ceedce468a49b3ce28d8b62845f7f7c1a7b773f056e218fc73aaea2a)
 			Operation on object of type javax.crypto.Mac object not completed. Expected call to update, doFinal
@@ -207,10 +207,6 @@ Findings in Java Class: a.a.a.g.c
 Findings in Java Class: com.google.android.gms.internal.kj
 
 	 in Method: byte[] a(byte[],java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1592, $r10, $r3)
@@ -219,48 +215,20 @@ Findings in Java Class: com.google.android.gms.internal.kj
 			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
 			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1589)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer1591)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #2ae4da593711b031c4e53650d2258bc02b7382e8242dba3c7783d9b01b6d89ec)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1589)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #2ae4da593711b031c4e53650d2258bc02b7382e8242dba3c7783d9b01b6d89ec)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1589)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #2ae4da593711b031c4e53650d2258bc02b7382e8242dba3c7783d9b01b6d89ec)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1589)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #2ae4da593711b031c4e53650d2258bc02b7382e8242dba3c7783d9b01b6d89ec)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1589)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #2ae4da593711b031c4e53650d2258bc02b7382e8242dba3c7783d9b01b6d89ec)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1589)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #2ae4da593711b031c4e53650d2258bc02b7382e8242dba3c7783d9b01b6d89ec)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1589)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #2ae4da593711b031c4e53650d2258bc02b7382e8242dba3c7783d9b01b6d89ec)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1589)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #2ae4da593711b031c4e53650d2258bc02b7382e8242dba3c7783d9b01b6d89ec)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1589)
 
 
 Findings in Java Class: com.google.android.gms.internal.et
 
 	 in Method: void <clinit>()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #9cdcd66666d05306999d7dab78c14b4a31493e941fb56b7504904b16b25d2a93)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1886)
 
 
@@ -268,7 +236,7 @@ Findings in Java Class: com.google.android.gms.internal.hh
 
 	 in Method: java.lang.String a(byte[],java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #39d302eb6b938b114639c7ddc7d7edb88a4ba3b9819df437a35b104fed178224)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2060)
 
 
@@ -277,7 +245,7 @@ Findings in Java Class: com.google.android.gms.internal.hh
 	Number of Objects Analyzed: 17
 
 	CogniCrypt found the following violations. For details see description above.
-	RequiredPredicateError: 4
-	ConstraintError: 13
 	IncompleteOperationError: 5
+	ConstraintError: 5
+	RequiredPredicateError: 4
 =====================================================================

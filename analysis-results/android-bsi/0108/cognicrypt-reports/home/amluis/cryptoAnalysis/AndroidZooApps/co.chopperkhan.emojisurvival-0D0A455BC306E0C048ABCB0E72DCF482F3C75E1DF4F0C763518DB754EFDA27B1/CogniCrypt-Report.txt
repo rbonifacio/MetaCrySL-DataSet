@@ -276,7 +276,7 @@ Findings in Java Class: com.amazon.ags.api.AmazonGamesClient
 
 	 in Method: byte[] generateSignature()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #b3f55bfc865dd2b7e3c2f99a5a01e1cc61c1c436169cd33f60b079f87177d87e)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer654)
 
 
@@ -287,16 +287,16 @@ Findings in Java Class: com.amazon.insights.validate.EncryptionValidator
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, $r3)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
+		ForbiddenMethodError violating CrySL rule for javax.crypto.Cipher
+			Detected call to forbidden method void init(int,java.security.Key) of class javax.crypto.Cipher. Instead, call method <javax.crypto.Cipher: void init(int,java.security.Key)>.
 			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer865, $r2)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer873, $r2)
 
-		ForbiddenMethodError violating CrySL rule for javax.crypto.Cipher
-			Detected call to forbidden method void init(int,java.security.Key) of class javax.crypto.Cipher. Instead, call method <javax.crypto.Cipher: void init(int,java.security.Key)>.
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer865, $r2)
 
 
@@ -309,13 +309,13 @@ Findings in Java Class: com.amazon.insights.core.io.EncryptedBufferedReader
 
 
 	 in Method: java.lang.String readLine()
-		TypestateError violating CrySL rule for javax.crypto.Cipher (on Object #c6425f2b3b21b851dbceb2b223986a687ab64cd7d27779b4b4112130538d70ef)
-			Unexpected call to method doFinal on object of type javax.crypto.Cipher. Expect a call to one of the following methods init
-			at statement: $r1 = virtualinvoke $r5.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1)
-
 		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #c6425f2b3b21b851dbceb2b223986a687ab64cd7d27779b4b4112130538d70ef)
 			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
 			at statement: $r5 = $r0.<com.amazon.insights.core.io.EncryptedBufferedReader: javax.crypto.Cipher cipher>
+
+		TypestateError violating CrySL rule for javax.crypto.Cipher (on Object #c6425f2b3b21b851dbceb2b223986a687ab64cd7d27779b4b4112130538d70ef)
+			Unexpected call to method doFinal on object of type javax.crypto.Cipher. Expect a call to one of the following methods init
+			at statement: $r1 = virtualinvoke $r5.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1)
 
 
 Findings in Java Class: com.amazon.insights.delivery.DefaultDeliveryClient$3
@@ -327,15 +327,15 @@ Findings in Java Class: com.amazon.insights.delivery.DefaultDeliveryClient$3
 
 		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #c6425f2b3b21b851dbceb2b223986a687ab64cd7d27779b4b4112130538d70ef)
 			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
+			at statement: $r17 = interfaceinvoke $r15.<com.amazon.insights.delivery.EventStore$EventIterator: java.lang.String peek()>()
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #c6425f2b3b21b851dbceb2b223986a687ab64cd7d27779b4b4112130538d70ef)
+			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
+			at statement: $r17 = interfaceinvoke $r15.<com.amazon.insights.delivery.EventStore$EventIterator: java.lang.String peek()>()
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #c6425f2b3b21b851dbceb2b223986a687ab64cd7d27779b4b4112130538d70ef)
+			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
 			at statement: $z1 = interfaceinvoke $r15.<com.amazon.insights.delivery.EventStore$EventIterator: boolean hasNext()>()
-
-		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #c6425f2b3b21b851dbceb2b223986a687ab64cd7d27779b4b4112130538d70ef)
-			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
-			at statement: $r17 = interfaceinvoke $r15.<com.amazon.insights.delivery.EventStore$EventIterator: java.lang.String peek()>()
-
-		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #c6425f2b3b21b851dbceb2b223986a687ab64cd7d27779b4b4112130538d70ef)
-			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
-			at statement: $r17 = interfaceinvoke $r15.<com.amazon.insights.delivery.EventStore$EventIterator: java.lang.String peek()>()
 
 
 Findings in Java Class: com.amazon.insights.delivery.FileEventStore$1
@@ -351,11 +351,11 @@ Findings in Java Class: com.amazon.insights.session.FileSessionStore
 	 in Method: com.amazon.insights.session.Session getSession()
 		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #c6425f2b3b21b851dbceb2b223986a687ab64cd7d27779b4b4112130538d70ef)
 			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
-			at statement: $r4 = virtualinvoke $r3.<com.amazon.insights.core.io.EncryptedBufferedReader: java.lang.String readLine()>()
+			at statement: $r3 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.io.EncryptedBufferedReader reader>
 
 		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #c6425f2b3b21b851dbceb2b223986a687ab64cd7d27779b4b4112130538d70ef)
 			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
-			at statement: $r3 = $r0.<com.amazon.insights.session.FileSessionStore: com.amazon.insights.core.io.EncryptedBufferedReader reader>
+			at statement: $r4 = virtualinvoke $r3.<com.amazon.insights.core.io.EncryptedBufferedReader: java.lang.String readLine()>()
 
 
 	 in Method: void <init>(com.amazon.insights.core.InsightsContext)
@@ -368,7 +368,7 @@ Findings in Java Class: com.amazon.identity.auth.device.appid.APIKeyDecoder
 
 	 in Method: byte[] getFingerprint(java.lang.String,byte[])
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #5c4747e91536dbccd9a572d96177531fa7d470a0706167dd442aea9e859d0fb5)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1269)
 
 
@@ -408,7 +408,7 @@ Findings in Java Class: com.amazon.ags.html5.content.FileUtils
 
 	 in Method: java.lang.String getMD5ChecksumForFile(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #c8ed50de536c156759b17c56d5df4773f15ea75d14cc9ac92640571098b346ba)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3065)
 
 

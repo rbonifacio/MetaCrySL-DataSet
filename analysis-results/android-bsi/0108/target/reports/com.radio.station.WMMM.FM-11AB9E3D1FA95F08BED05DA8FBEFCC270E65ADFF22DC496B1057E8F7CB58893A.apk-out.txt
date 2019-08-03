@@ -489,20 +489,32 @@ Findings in Java Class: com.nielsen.app.sdk.k
 
 	 in Method: java.lang.String a(java.lang.String,java.lang.String,java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #a2df00b34bcd30979260e19495f4364a2fd7ec44eab85b132c4e7ef0ba4bd8b0)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2087)
 
 
 Findings in Java Class: com.nielsen.app.nuid.a
 
 	 in Method: boolean a()
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #d21345f44fc5701227a0bb7fe61fbd2ed140003945ebb92179c3ca87ce67892b)
+			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
+			at statement: $r1 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2425)
+
+		NeverTypeOfError violating CrySL rule for java.security.KeyStore (on Object #7324dfc8acaf022f6a28d64af170a9d1c5ddc3332e03dadf1ebd11b3a9e34337)
+			Second parameter should never be of type java.lang.String.
+			at statement: virtualinvoke $r6.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r18, $r15)
+
 		TypestateError violating CrySL rule for java.security.KeyStore (on Object #7324dfc8acaf022f6a28d64af170a9d1c5ddc3332e03dadf1ebd11b3a9e34337)
 			Unexpected call to method getInstance on object of type java.security.KeyStore. Expect a call to one of the following methods getKey,getEntry,setEntry
 			at statement: $r6 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r5)
 
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #d21345f44fc5701227a0bb7fe61fbd2ed140003945ebb92179c3ca87ce67892b)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r1 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2425)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r13.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r12, varReplacer2433, $i0, varReplacer2434)
+
+		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			Constraint length(keyMaterial) + 0 >= off - len could not be evaluted due to insufficient information.
+			at statement: specialinvoke $r13.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r12, varReplacer2433, $i0, varReplacer2434)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
@@ -512,40 +524,20 @@ Findings in Java Class: com.nielsen.app.nuid.a
 			Unexpected call to method store on object of type java.security.KeyStore. Expect a call to one of the following methods getKey,getEntry,setEntry
 			at statement: virtualinvoke $r6.<java.security.KeyStore: void store(java.io.OutputStream,char[])>($r17, $r15)
 
-		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			Constraint length(keyMaterial) + 0 >= off - len could not be evaluted due to insufficient information.
-			at statement: specialinvoke $r13.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r12, varReplacer2433, $i0, varReplacer2434)
-
-		NeverTypeOfError violating CrySL rule for java.security.KeyStore (on Object #7324dfc8acaf022f6a28d64af170a9d1c5ddc3332e03dadf1ebd11b3a9e34337)
-			Second parameter should never be of type java.lang.String.
-			at statement: virtualinvoke $r6.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r18, $r15)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r13.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r12, varReplacer2433, $i0, varReplacer2434)
-
 
 Findings in Java Class: com.nielsen.app.nuid.AppNuid
 
 	 in Method: void run()
 		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #d21345f44fc5701227a0bb7fe61fbd2ed140003945ebb92179c3ca87ce67892b)
 			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
-			at statement: virtualinvoke $r6.<com.nielsen.app.nuid.b: boolean a(java.lang.String,java.lang.String)>(varReplacer11345, $r4)
+			at statement: $r6 = $r0.<com.nielsen.app.nuid.AppNuid: com.nielsen.app.nuid.b p>
 
 		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #d21345f44fc5701227a0bb7fe61fbd2ed140003945ebb92179c3ca87ce67892b)
 			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
-			at statement: $r6 = $r0.<com.nielsen.app.nuid.AppNuid: com.nielsen.app.nuid.b p>
+			at statement: virtualinvoke $r6.<com.nielsen.app.nuid.b: boolean a(java.lang.String,java.lang.String)>(varReplacer11345, $r4)
 
 
 	 in Method: void startQuery(boolean)
-		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #d21345f44fc5701227a0bb7fe61fbd2ed140003945ebb92179c3ca87ce67892b)
-			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
-			at statement: virtualinvoke $r5.<com.nielsen.app.nuid.b: boolean a(java.lang.String,java.lang.String)>(varReplacer11315, $r3)
-
-		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #d21345f44fc5701227a0bb7fe61fbd2ed140003945ebb92179c3ca87ce67892b)
-			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
-			at statement: virtualinvoke $r5.<com.nielsen.app.nuid.b: boolean a(java.lang.String,java.lang.String)>(varReplacer11338, $r3)
-
 		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #d21345f44fc5701227a0bb7fe61fbd2ed140003945ebb92179c3ca87ce67892b)
 			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
 			at statement: virtualinvoke $r5.<com.nielsen.app.nuid.b: boolean a(java.lang.String,java.lang.String)>(varReplacer11326, $r3)
@@ -554,41 +546,49 @@ Findings in Java Class: com.nielsen.app.nuid.AppNuid
 			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
 			at statement: virtualinvoke $r5.<com.nielsen.app.nuid.b: boolean a(java.lang.String,java.lang.String)>(varReplacer11330, $r3)
 
+		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #d21345f44fc5701227a0bb7fe61fbd2ed140003945ebb92179c3ca87ce67892b)
+			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
+			at statement: virtualinvoke $r5.<com.nielsen.app.nuid.b: boolean a(java.lang.String,java.lang.String)>(varReplacer11338, $r3)
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #d21345f44fc5701227a0bb7fe61fbd2ed140003945ebb92179c3ca87ce67892b)
+			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init
+			at statement: virtualinvoke $r5.<com.nielsen.app.nuid.b: boolean a(java.lang.String,java.lang.String)>(varReplacer11315, $r3)
+
 
 Findings in Java Class: com.nielsen.app.sdk.c
 
 	 in Method: boolean a()
-		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			Constraint length(keyMaterial) + 0 >= off - len could not be evaluted due to insufficient information.
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r13.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r12, varReplacer2581, $i0, varReplacer2582)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r12)
-
-		TypestateError violating CrySL rule for java.security.KeyStore (on Object #745c88399e386cb4988bd7e8ee31fd18372b0c0c3cb0d12c9e68f4688c0fa5d6)
-			Unexpected call to method getInstance on object of type java.security.KeyStore. Expect a call to one of the following methods getKey,getEntry,setEntry
-			at statement: $r6 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r5)
 
 		TypestateError violating CrySL rule for java.security.KeyStore (on Object #745c88399e386cb4988bd7e8ee31fd18372b0c0c3cb0d12c9e68f4688c0fa5d6)
 			Unexpected call to method store on object of type java.security.KeyStore. Expect a call to one of the following methods getKey,getEntry,setEntry
 			at statement: virtualinvoke $r6.<java.security.KeyStore: void store(java.io.OutputStream,char[])>($r17, $r15)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r13.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r12, varReplacer2570)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #b560e806c7286f8e7c3dc30ce06104d891d2a88267231b2763dd9ceeb8de2213)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r1 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2593)
-
 		NeverTypeOfError violating CrySL rule for java.security.KeyStore (on Object #745c88399e386cb4988bd7e8ee31fd18372b0c0c3cb0d12c9e68f4688c0fa5d6)
 			Second parameter should never be of type java.lang.String.
 			at statement: virtualinvoke $r6.<java.security.KeyStore: void load(java.io.InputStream,char[])>(varReplacer2588, $r15)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r12)
+
+		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			Constraint length(keyMaterial) + 0 >= off - len could not be evaluted due to insufficient information.
+			at statement: specialinvoke $r13.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r12, varReplacer2581, $i0, varReplacer2582)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r13.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r12, varReplacer2581, $i0, varReplacer2582)
+			at statement: specialinvoke $r13.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r12, varReplacer2570)
+
+		TypestateError violating CrySL rule for java.security.KeyStore (on Object #745c88399e386cb4988bd7e8ee31fd18372b0c0c3cb0d12c9e68f4688c0fa5d6)
+			Unexpected call to method getInstance on object of type java.security.KeyStore. Expect a call to one of the following methods getKey,getEntry,setEntry
+			at statement: $r6 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r5)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #b560e806c7286f8e7c3dc30ce06104d891d2a88267231b2763dd9ceeb8de2213)
+			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
+			at statement: $r1 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2593)
 
 
 	 in Method: byte[] a(byte[])
@@ -623,7 +623,7 @@ Findings in Java Class: com.mopub.common.util.Utils
 
 	 in Method: java.lang.String sha1(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #3532e27f4fb0078b3fcda24e00ce104a3d0ce185b0a1d87f608b51854d13935e)
-			First parameter (with value "SHA-1") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3857)
 
 
@@ -631,7 +631,7 @@ Findings in Java Class: com.facebook.ads.internal.util.s
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #869a8b5068947b0e126d20f4e1d90aaca9be7c6ae312e4987f0ff9f5b49c9b7e)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5811)
 
 
@@ -639,24 +639,32 @@ Findings in Java Class: com.facebook.ads.internal.h.a.o
 
 	 in Method: java.lang.String a(byte[],java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #4f2b9340a8c6b6c3768fecc0cb20ace57f2c8367bb045d83f9e61d093029d1c8)
-			First parameter (with value "SHA-1") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6226)
 
 
 Findings in Java Class: com.nielsen.app.sdk.AppLaunchMeasurementManager
 
 	 in Method: byte[] a(byte[],int)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke r62.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r13, varReplacer9897, $i1, varReplacer9898)
+
 		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			Constraint length(keyMaterial) + 0 >= off - len could not be evaluted due to insufficient information.
 			at statement: specialinvoke r62.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r13, varReplacer9897, $i1, varReplacer9898)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared I V
-			at statement: virtualinvoke $r16.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer9969, $r15, $r12)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke r61.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r13)
+
+		NeverTypeOfError violating CrySL rule for java.security.KeyStore (on Object #df665f084f1e770e2fb4717185530b11b34b780a49e13fb3ca461d98a46808a5)
+			Second parameter should never be of type java.lang.String.
+			at statement: virtualinvoke $r3.<java.security.KeyStore: void load(java.io.InputStream,char[])>(varReplacer9883, $r8)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared I V
+			at statement: virtualinvoke $r16.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer9969, $r15, $r12)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
@@ -665,14 +673,6 @@ Findings in Java Class: com.nielsen.app.sdk.AppLaunchMeasurementManager
 		TypestateError violating CrySL rule for java.security.KeyStore (on Object #df665f084f1e770e2fb4717185530b11b34b780a49e13fb3ca461d98a46808a5)
 			Unexpected call to method store on object of type java.security.KeyStore. Expect a call to one of the following methods getKey,getEntry,setEntry
 			at statement: virtualinvoke $r3.<java.security.KeyStore: void store(java.io.OutputStream,char[])>($r20, $r8)
-
-		NeverTypeOfError violating CrySL rule for java.security.KeyStore (on Object #df665f084f1e770e2fb4717185530b11b34b780a49e13fb3ca461d98a46808a5)
-			Second parameter should never be of type java.lang.String.
-			at statement: virtualinvoke $r3.<java.security.KeyStore: void load(java.io.InputStream,char[])>(varReplacer9883, $r8)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke r62.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r13, varReplacer9897, $i1, varReplacer9898)
 
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #a4d33a0ed37dffbc100584ee2ed3d88751b5f9bbb1a18b981cf9f037caf06104)
 			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
@@ -685,9 +685,9 @@ Findings in Java Class: com.nielsen.app.sdk.AppLaunchMeasurementManager
 
 	CogniCrypt found the following violations. For details see description above.
 	ConstraintError: 7
-	RequiredPredicateError: 9
 	TypestateError: 7
-	ImpreciseValueExtractionError: 3
+	RequiredPredicateError: 9
 	IncompleteOperationError: 8
 	NeverTypeOfError: 3
+	ImpreciseValueExtractionError: 3
 =====================================================================

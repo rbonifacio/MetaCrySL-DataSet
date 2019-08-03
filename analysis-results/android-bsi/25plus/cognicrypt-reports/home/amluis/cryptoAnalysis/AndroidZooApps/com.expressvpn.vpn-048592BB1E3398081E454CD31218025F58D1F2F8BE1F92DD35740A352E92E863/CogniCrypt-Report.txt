@@ -171,7 +171,7 @@ Findings in Java Class: com.expressvpn.vpn.tracking.TrackingUtils
 
 	 in Method: java.lang.String md5(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #873c6e513106c84fa0dc2f3ee514b3cac870084a921c6aa0c6c56582752a125e)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer437)
 
 
@@ -203,32 +203,28 @@ Findings in Java Class: com.expressvpn.vpn.config.crypter.PiiCrypter
 			at statement: $r1 = virtualinvoke $r3.<javax.crypto.Cipher: byte[] doFinal(byte[],int,int)>($r1, varReplacer1912, $i0)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared G C M
+			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1911, $r4, $r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
+			Third parameter was not properly generated as prepared G C M
 			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1911, $r4, $r5)
 
 
 Findings in Java Class: com.expressvpn.vpn.xvca.XvcaClient
 
 	 in Method: void init()
-		NeverTypeOfError violating CrySL rule for javax.net.ssl.KeyManagerFactory (on Object #fc95642d2db5d01f97556a1a65f3c3d8cb5890dd4359cf35ce8277aa05f611c9)
+		NeverTypeOfError violating CrySL rule for java.security.KeyStore (on Object #7b9159d5728e5dcdcbf4f957124a74b84e17fc980495d45d7b376dfd4eff6455)
 			Second parameter should never be of type java.lang.String.
-			at statement: virtualinvoke $r9.<javax.net.ssl.KeyManagerFactory: void init(java.security.KeyStore,char[])>($r1, $r8)
+			at statement: virtualinvoke $r1.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r6, $r8)
 
 		ConstraintError violating CrySL rule for javax.net.ssl.KeyManagerFactory (on Object #fc95642d2db5d01f97556a1a65f3c3d8cb5890dd4359cf35ce8277aa05f611c9)
 			First parameter (with value "X509") should be any of {PKIX}
 			at statement: $r9 = staticinvoke <javax.net.ssl.KeyManagerFactory: javax.net.ssl.KeyManagerFactory getInstance(java.lang.String)>(varReplacer2689)
 
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r11.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>($r10, varReplacer2682, varReplacer2682)
-
-		NeverTypeOfError violating CrySL rule for java.security.KeyStore (on Object #7b9159d5728e5dcdcbf4f957124a74b84e17fc980495d45d7b376dfd4eff6455)
+		NeverTypeOfError violating CrySL rule for javax.net.ssl.KeyManagerFactory (on Object #fc95642d2db5d01f97556a1a65f3c3d8cb5890dd4359cf35ce8277aa05f611c9)
 			Second parameter should never be of type java.lang.String.
-			at statement: virtualinvoke $r1.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r6, $r8)
+			at statement: virtualinvoke $r9.<javax.net.ssl.KeyManagerFactory: void init(java.security.KeyStore,char[])>($r1, $r8)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			First parameter was not properly generated as generated Key Manager
@@ -237,6 +233,10 @@ Findings in Java Class: com.expressvpn.vpn.xvca.XvcaClient
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.KeyManagerFactory
 			First parameter was not properly generated as generated Key Store
 			at statement: virtualinvoke $r9.<javax.net.ssl.KeyManagerFactory: void init(java.security.KeyStore,char[])>($r1, $r8)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r11.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>($r10, varReplacer2682, varReplacer2682)
 
 
 Findings in Java Class: com.expressvpn.vpn.config.service.XVPNHttpClient
@@ -264,9 +264,9 @@ Findings in Java Class: okhttp3.OkHttpClient
 	Number of Objects Analyzed: 19
 
 	CogniCrypt found the following violations. For details see description above.
-	RequiredPredicateError: 8
-	ConstraintError: 2
 	NeverTypeOfError: 3
+	ConstraintError: 2
 	ImpreciseValueExtractionError: 1
+	RequiredPredicateError: 8
 	TypestateError: 3
 =====================================================================

@@ -223,7 +223,7 @@ Findings in Java Class: com.mocoplex.adlib.d
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #13bf9b468a80b3972d385f56413fef1151d0417f486e2828ea9e3bc0f24c6df4)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer566)
 
 
@@ -231,7 +231,7 @@ Findings in Java Class: com.mocoplex.adlib.platform.c
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #148612d4b71ae3e5324f7e7b5296ebd207231ea93f7affe0c6393163854683ba)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1256)
 
 
@@ -239,7 +239,7 @@ Findings in Java Class: com.wafour.lib.a.a.m
 
 	 in Method: boolean a(java.security.PublicKey,java.lang.String,java.lang.String)
 		ConstraintError violating CrySL rule for java.security.Signature (on Object #4524d2abe4848cbff45b60ec63ea40bed265d65b8de3a569e11abf1ce4feaf3c)
-			First parameter (with value "SHA1withRSA") should be any of {SHA224withECDSA, SHA256withDSA, SHA256withRSA/PSS, SHA512withRSA/PSS, SHA512withRSA, SHA384withRSA/PSS, SHA384withRSA, NONEwithRSA, SHA224withRSA/PSS, SHA256withRSA, SHA224withRSA, DSA, DSS, SHA224withDSA}
+			First parameter (with value "SHA1withRSA") should be any of {RSASSA-PSS, SHA224withECDSA, SHA256withDSA, SHA256withRSA/PSS, SHA512withRSA/PSS, SHA512withRSA, SHA384withRSA/PSS, SHA384withRSA, NONEwithRSA, SHA224withRSA/PSS, SHA256withRSA, SHA224withRSA, DSA, DSS, SHA224withDSA}
 			at statement: $r3 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>(varReplacer6409)
 
 		RequiredPredicateError violating CrySL rule for java.security.Signature
@@ -250,26 +250,30 @@ Findings in Java Class: com.wafour.lib.a.a.m
 Findings in Java Class: com.inmobi.commons.core.utilities.a.b
 
 	 in Method: byte[] a(byte[],byte[])
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
+		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			Constraint length(keyMaterial) + 0 >= off - len could not be evaluted due to insufficient information.
 			at statement: specialinvoke r6.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r1, varReplacer7736, $i0, varReplacer7737)
 
 		ConstraintError violating CrySL rule for javax.crypto.Mac (on Object #8f79e60d4196d50f2fb8ef1b3a69aa6d36a6e1f3fa1a113b452b84a3f25c94bf)
 			First parameter (with value "HmacSHA1") should be any of {PBEwithHmacSHA512, PBEwithHmacSHA224, PBEwithHmacSHA256, HmacSHA224, HmacSHA256, HmacSHA384, HmacSHA512, PBEwithHmacSHA384}
 			at statement: $r3 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer7734)
 
-		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			Constraint length(keyMaterial) + 0 >= off - len could not be evaluted due to insufficient information.
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke r6.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r1, varReplacer7736, $i0, varReplacer7737)
 
 
 	 in Method: byte[] b(byte[],byte[],byte[])
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared I V
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7743, $r3, $r5)
+			Third parameter was not properly generated as prepared G C M
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7740, $r3, $r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared G C M
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7740, $r3, $r5)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared I V
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7740, $r3, $r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
@@ -278,31 +282,27 @@ Findings in Java Class: com.inmobi.commons.core.utilities.a.b
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Third parameter was not properly generated as prepared I V
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7740, $r3, $r5)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7740, $r3, $r5)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7741, $r3, $r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared G C M
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7743, $r3, $r5)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7743, $r3, $r5)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared I V
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7741, $r3, $r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke r13.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, $r4)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared I V
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7743, $r3, $r5)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared G C M
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7743, $r3, $r5)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7743, $r3, $r5)
 
 
 	 in Method: byte[] a(byte[],java.lang.String,java.lang.String)
@@ -312,21 +312,21 @@ Findings in Java Class: com.inmobi.commons.core.utilities.a.b
 
 
 	 in Method: byte[] a(byte[],byte[],byte[])
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, $r4)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r6.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r2)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7678, $r3, $r6)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Third parameter was not properly generated as prepared G C M
 			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7678, $r3, $r6)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, $r4)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer7678, $r3, $r6)
 
 
 ======================= CogniCrypt Summary ==========================

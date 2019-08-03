@@ -90,6 +90,13 @@ Analyzed Objects:
 		SHA-256: 24803b748bbae42c97a306c6e51cf6c9701dca3a54db217a6a7cc035b28e3125
 		Secure: false
 	Object:
+		Variable: $r4
+		Type: javax.net.ssl.SSLContext
+		Statement: $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1537)
+		Method: <ly.count.android.sdk.ConnectionQueue: void setServerURL(java.lang.String)>
+		SHA-256: 81397f96202ffc301783ba7f9b81bf69bbce091550b7f9ae857b95714d5e13b8
+		Secure: true
+	Object:
 		Variable: $r1
 		Type: java.security.PublicKey
 		Statement: $r1 = virtualinvoke $r0.<java.security.KeyPair: java.security.PublicKey getPublic()>()
@@ -216,13 +223,6 @@ Analyzed Objects:
 		SHA-256: c912c10fbdf9c59ad4f89e99034f2098742bd04a6912e7829063391bc286c150
 		Secure: false
 	Object:
-		Variable: $r4
-		Type: javax.net.ssl.SSLContext
-		Statement: $r4 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1536)
-		Method: <ly.count.android.sdk.ConnectionQueue: void setServerURL(java.lang.String)>
-		SHA-256: 88e20652521d03bef665456557257503f0c4378166f37c5aa98176068b6e067b
-		Secure: false
-	Object:
 		Variable: $r2
 		Type: java.security.MessageDigest
 		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2330)
@@ -302,13 +302,13 @@ Findings in Java Class: com.goodbarber.v2.core.common.utils.CryptoHelper
 
 	 in Method: java.lang.String toSHA1(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #24803b748bbae42c97a306c6e51cf6c9701dca3a54db217a6a7cc035b28e3125)
-			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer650)
 
 
 	 in Method: java.lang.String toMD5(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #b72cf7d6f14b5308965708af39510bb7bad89f5c6f8586b5ef435da2bf5fa409)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2330)
 
 
@@ -316,7 +316,7 @@ Findings in Java Class: com.flurry.sdk.fe
 
 	 in Method: byte[] d(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #c3fd373e949db8e45f463f51e4380a56b01913d66fcc2d762c2d5939e9cd5e4a)
-			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1127)
 
 
@@ -336,7 +336,7 @@ Findings in Java Class: com.google.android.gms.iid.InstanceID
 
 	 in Method: java.lang.String zza(java.security.KeyPair)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #e66d0c0897077e03886674472aa7f6ee2dc77aeda4f466b20652ba7d0bcb2a64)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA1") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5060)
 
 
@@ -344,56 +344,24 @@ Findings in Java Class: com.google.android.gms.internal.zzid
 
 	 in Method: java.lang.String zzgD()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #d3984a8ed6e6b63989ad82ca9b1d54bb277e960479ed168cb93978917c1fdacd)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer12058)
 
 
 Findings in Java Class: com.google.android.gms.internal.zzar
 
 	 in Method: byte[] zzc(byte[],java.lang.String)
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f5d630d6ed788b1e1b01598a9b0621a5a8dee062b621cc9971092178ecccffd5)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer12255)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer12253, $r10, $r3)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f5d630d6ed788b1e1b01598a9b0621a5a8dee062b621cc9971092178ecccffd5)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer12255)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f5d630d6ed788b1e1b01598a9b0621a5a8dee062b621cc9971092178ecccffd5)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer12255)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer12256)
 
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f5d630d6ed788b1e1b01598a9b0621a5a8dee062b621cc9971092178ecccffd5)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer12255)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f5d630d6ed788b1e1b01598a9b0621a5a8dee062b621cc9971092178ecccffd5)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer12255)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f5d630d6ed788b1e1b01598a9b0621a5a8dee062b621cc9971092178ecccffd5)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer12255)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f5d630d6ed788b1e1b01598a9b0621a5a8dee062b621cc9971092178ecccffd5)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer12255)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f5d630d6ed788b1e1b01598a9b0621a5a8dee062b621cc9971092178ecccffd5)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer12255)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer12253, $r10, $r3)
 
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f5d630d6ed788b1e1b01598a9b0621a5a8dee062b621cc9971092178ecccffd5)
 			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
@@ -404,7 +372,7 @@ Findings in Java Class: com.google.android.gms.ads.internal.util.client.zza
 
 	 in Method: java.lang.String zzaE(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #3e32269a13d00ebf5aac4ee9ee37b8476bc89841bebf226d416e6660cd9e1602)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer12504)
 
 
@@ -412,7 +380,7 @@ Findings in Java Class: com.google.ads.conversiontracking.g
 
 	 in Method: java.lang.String e(android.content.Context)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #41a0777699c549bec4f1a6aa31752b219afaf35c3d355a3e84a32b86a6d83b38)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer15161)
 
 
@@ -420,7 +388,7 @@ Findings in Java Class: com.google.android.gms.internal.zzbl
 
 	 in Method: java.security.MessageDigest zzcy()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #a9c18086b5aa3d0f6cdb9a85329c7c103e7682e3756629adc7e52db48a3a5479)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer17538)
 
 
@@ -436,18 +404,6 @@ Findings in Java Class: com.google.android.gms.internal.zzbm
 		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #a9c18086b5aa3d0f6cdb9a85329c7c103e7682e3756629adc7e52db48a3a5479)
 			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
 			at statement: $r11 = virtualinvoke $r10.<com.google.android.gms.internal.zzbl: byte[] zzz(java.lang.String)>($r1)
-
-
-Findings in Java Class: ly.count.android.sdk.ConnectionQueue
-
-	 in Method: void setServerURL(java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
-			at statement: virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1537, r9, varReplacer1537)
-
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r4.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1537, r9, varReplacer1537)
 
 
 Findings in Java Class: com.facebook.ads.internal.util.g
@@ -467,8 +423,8 @@ Findings in Java Class: com.facebook.ads.internal.util.g
 	Number of Objects Analyzed: 36
 
 	CogniCrypt found the following violations. For details see description above.
-	RequiredPredicateError: 8
-	IncompleteOperationError: 3
+	RequiredPredicateError: 6
 	ForbiddenMethodError: 1
-	ConstraintError: 18
+	IncompleteOperationError: 3
+	ConstraintError: 10
 =====================================================================

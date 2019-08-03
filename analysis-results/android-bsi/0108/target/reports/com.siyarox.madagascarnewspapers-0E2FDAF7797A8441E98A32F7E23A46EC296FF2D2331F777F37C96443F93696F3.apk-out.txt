@@ -44,13 +44,6 @@ Analyzed Objects:
 		SHA-256: b3492f891d84167abccf9963b0d39eee42f9dca0e46fbc735b9147acf4841156
 		Secure: false
 	Object:
-		Variable: $r3
-		Type: javax.crypto.spec.IvParameterSpec
-		Statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
-		Method: <com.siyarox.myhelper.Encryption$Builder: com.siyarox.myhelper.Encryption build()>
-		SHA-256: f68390d319630ed49c870fc588883aa49a772043d9a82f3ed0ce2409216e73f7
-		Secure: false
-	Object:
 		Variable: $r8
 		Type: javax.crypto.SecretKey
 		Statement: $r8 = virtualinvoke $r5.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
@@ -65,6 +58,13 @@ Analyzed Objects:
 		SHA-256: 13995045b6fe88ac1e570f57460505d4fec052026d8ba6f5f48c1982d4a554c7
 		Secure: true
 	Object:
+		Variable: $r2
+		Type: java.security.SecureRandom
+		Statement: $r2 = staticinvoke <java.security.SecureRandom: java.security.SecureRandom getInstance(java.lang.String)>($r1)
+		Method: <com.siyarox.myhelper.Encryption$Builder: com.siyarox.myhelper.Encryption build()>
+		SHA-256: 75c14c6229de692cf18e83e980d2bf0f81b0755b333ff02658ba8aa2ad638c68
+		Secure: true
+	Object:
 		Variable: $r1
 		Type: java.security.MessageDigest
 		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer613)
@@ -77,6 +77,13 @@ Analyzed Objects:
 		Statement: $r2 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
 		Method: <com.facebook.appevents.AppEvent: java.lang.String md5Checksum(java.lang.String)>
 		SHA-256: eb5aa20233d0a39f9efa2c49b15b711fba57bf442f97f41aee15900a081180c4
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.crypto.spec.IvParameterSpec
+		Statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
+		Method: <com.siyarox.myhelper.Encryption$Builder: com.siyarox.myhelper.Encryption build()>
+		SHA-256: f68390d319630ed49c870fc588883aa49a772043d9a82f3ed0ce2409216e73f7
 		Secure: false
 	Object:
 		Variable: $r9
@@ -156,13 +163,6 @@ Analyzed Objects:
 		SHA-256: df022d5a6be65eeb52814bda079672071012010f8212bd47d4c605dbc6673e1
 		Secure: false
 	Object:
-		Variable: $r2
-		Type: java.security.SecureRandom
-		Statement: $r2 = staticinvoke <java.security.SecureRandom: java.security.SecureRandom getInstance(java.lang.String)>($r1)
-		Method: <com.siyarox.myhelper.Encryption$Builder: com.siyarox.myhelper.Encryption build()>
-		SHA-256: 75c14c6229de692cf18e83e980d2bf0f81b0755b333ff02658ba8aa2ad638c68
-		Secure: true
-	Object:
 		Variable: $r1
 		Type: java.security.MessageDigest
 		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3298)
@@ -181,7 +181,7 @@ Findings in Java Class: com.facebook.ads.internal.util.u
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #abbff31d7329eae4ccc5a5f36ad456adb7549470e79f543c75a7b2755cef1068)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer613)
 
 
@@ -205,7 +205,7 @@ Findings in Java Class: com.facebook.appevents.AppEvent
 
 	 in Method: java.lang.String md5Checksum(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #3de97f46ed50bd7a74f25e5aa9190d17e5c90ea48feb7fcf4bdeef3b9e31a09b)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3298)
 
 
@@ -216,28 +216,24 @@ Findings in Java Class: com.siyarox.myhelper.Encryption
 			Operation on object of type javax.crypto.spec.PBEKeySpec object not completed. Expected call to clearPassword
 			at statement: $r8 = virtualinvoke $r5.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEKeySpec
+			Second parameter was not properly generated as randomized
+			at statement: specialinvoke $r2.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r1, $r7, $i0, $i1)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r9.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r7, $r4)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEKeySpec
-			Second parameter was not properly generated as randomized
+		NeverTypeOfError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #f7f45cbb0036bf84e7ddea966491d9b3da71500bbff176461d4e36e941eb68d7)
+			First parameter should never be of type java.lang.String.
 			at statement: specialinvoke $r2.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r1, $r7, $i0, $i1)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
 			First parameter was not properly generated as specced Key
 			at statement: $r8 = virtualinvoke $r5.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
 
-		NeverTypeOfError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #f7f45cbb0036bf84e7ddea966491d9b3da71500bbff176461d4e36e941eb68d7)
-			First parameter should never be of type java.lang.String.
-			at statement: specialinvoke $r2.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r1, $r7, $i0, $i1)
-
 
 	 in Method: java.lang.String decrypt(java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec,java.security.SecureRandom)>(varReplacer4193, $r5, $r7, $r8)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Fourth parameter was not properly generated as randomized
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec,java.security.SecureRandom)>(varReplacer4193, $r5, $r7, $r8)
@@ -246,12 +242,16 @@ Findings in Java Class: com.siyarox.myhelper.Encryption
 			Third parameter was not properly generated as prepared G C M
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec,java.security.SecureRandom)>(varReplacer4193, $r5, $r7, $r8)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec,java.security.SecureRandom)>(varReplacer4193, $r5, $r7, $r8)
+
 
 Findings in Java Class: com.facebook.ads.internal.i.a.o
 
 	 in Method: java.lang.String a(byte[],java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #58d7343e06adf6b4e52b1c44fb6959adb50e3d31cdb144bc19e88c868f9b39c4)
-			First parameter (with value "SHA-1") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4939)
 
 

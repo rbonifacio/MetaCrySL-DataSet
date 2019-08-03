@@ -34,18 +34,18 @@ Ruleset:
 
 Analyzed Objects: 
 	Object:
-		Variable: $r2
-		Type: java.security.KeyStore
-		Statement: $r2 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r1)
-		Method: <com.mexens.android.navizon.f: org.apache.http.impl.client.DefaultHttpClient a()>
-		SHA-256: 2e789f274b6517ebc571ea5de2c9f8824ec35db6b7f9beb82283c8bf221ffad9
-		Secure: true
-	Object:
 		Variable: $r7
 		Type: javax.crypto.Mac
 		Statement: $r7 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer8924)
 		Method: <oauth.signpost.signature.HmacSha1MessageSigner: java.lang.String sign(oauth.signpost.http.HttpRequest,oauth.signpost.http.HttpParameters)>
 		SHA-256: c90fdc8369c7e32a3046a069c7e276e763fefd10f2dcfe3e51d0bdff5f21b314
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: javax.net.ssl.SSLContext
+		Statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer2407)
+		Method: <com.mexens.android.navizon.f$a: void <init>(com.mexens.android.navizon.f,java.security.KeyStore)>
+		SHA-256: 5587f085cf4556243e874b00504ebb0b5c3a55a4879ffc511877f5941a6c0c7c
 		Secure: false
 	Object:
 		Variable: $r7
@@ -83,13 +83,6 @@ Analyzed Objects:
 		SHA-256: bf27b7a731609c8c75a866480ba3ff8cc2fba4242a70c348ed627371cd780a0b
 		Secure: false
 	Object:
-		Variable: $r3
-		Type: javax.net.ssl.SSLContext
-		Statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer2404)
-		Method: <com.mexens.android.navizon.f$a: void <init>(com.mexens.android.navizon.f,java.security.KeyStore)>
-		SHA-256: 89f31b8ce49d76917d310f48f9044bfa00933b6f2a5fda78338da63734136335
-		Secure: false
-	Object:
 		Variable: $r6
 		Type: byte[]
 		Statement: $r6 = virtualinvoke $r7.<javax.crypto.Mac: byte[] doFinal(byte[])>($r6)
@@ -118,6 +111,13 @@ Analyzed Objects:
 		SHA-256: 5d58819b9081b2fc224cffc43afb1df1227732ece367d77d9279139164c544fe
 		Secure: false
 	Object:
+		Variable: $r2
+		Type: java.security.KeyStore
+		Statement: $r2 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r1)
+		Method: <com.mexens.android.navizon.f: org.apache.http.impl.client.DefaultHttpClient a()>
+		SHA-256: 2e789f274b6517ebc571ea5de2c9f8824ec35db6b7f9beb82283c8bf221ffad9
+		Secure: true
+	Object:
 		Variable: varReplacer8920
 		Type: java.lang.String
 		Statement: specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer8920)
@@ -136,7 +136,7 @@ Findings in Java Class: com.mexens.android.navizon.j
 
 	 in Method: java.lang.String f()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #5d58819b9081b2fc224cffc43afb1df1227732ece367d77d9279139164c544fe)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r9 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2328)
 
 
@@ -144,7 +144,7 @@ Findings in Java Class: com.rtpl.create.app.v2.SplashActivity
 
 	 in Method: void getHashKey()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #89efe96fe45fc562a34de50aa2a934694a753f7ec0603af3de30bc7d99b1292)
-			First parameter (with value "SHA") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6865)
 
 
@@ -156,7 +156,7 @@ Findings in Java Class: oauth.signpost.signature.HmacSha1MessageSigner
 			at statement: specialinvoke r12.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer8920)
 
 		ConstraintError violating CrySL rule for javax.crypto.Mac (on Object #c90fdc8369c7e32a3046a069c7e276e763fefd10f2dcfe3e51d0bdff5f21b314)
-			First parameter (with value "HmacSHA1") should be any of {HmacSHA256, HmacSHA384, HmacSHA512}
+			First parameter (with value "HmacSHA1") should be any of {HmacSHA224, HmacSHA256, HmacSHA384, HmacSHA512}
 			at statement: $r7 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer8924)
 
 
@@ -164,8 +164,20 @@ Findings in Java Class: com.mexens.android.navizon.d
 
 	 in Method: java.lang.String a(org.altbeacon.beacon.Beacon)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #f2ddad2bc493784cb2af7949539b857657ab03c6b2369078fd62a145c00b2ad6)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r7 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer9773)
+
+
+Findings in Java Class: okhttp3.OkHttpClient
+
+	 in Method: void <init>(okhttp3.OkHttpClient$Builder)
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r22.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6695, varReplacer6695, varReplacer6695)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r22.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6695, varReplacer6695, varReplacer6695)
 
 
 Findings in Java Class: com.mexens.android.navizon.f$a
@@ -173,23 +185,11 @@ Findings in Java Class: com.mexens.android.navizon.f$a
 	 in Method: void <init>(com.mexens.android.navizon.f,java.security.KeyStore)
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			First parameter was not properly generated as generated Key Manager
-			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2406, $r6, varReplacer2406)
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2404, $r6, varReplacer2404)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2406, $r6, varReplacer2406)
-
-
-Findings in Java Class: okhttp3.OkHttpClient
-
-	 in Method: void <init>(okhttp3.OkHttpClient$Builder)
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
-			at statement: virtualinvoke $r22.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6695, varReplacer6695, varReplacer6695)
-
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r22.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6695, varReplacer6695, varReplacer6695)
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2404, $r6, varReplacer2404)
 
 
 ======================= CogniCrypt Summary ==========================

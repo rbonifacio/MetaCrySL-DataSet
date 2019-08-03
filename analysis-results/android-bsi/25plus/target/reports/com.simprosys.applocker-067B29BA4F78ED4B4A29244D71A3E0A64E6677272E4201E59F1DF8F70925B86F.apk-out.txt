@@ -52,17 +52,17 @@ Analyzed Objects:
 		Secure: false
 	Object:
 		Variable: $r3
-		Type: java.security.MessageDigest
-		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1537)
-		Method: <com.google.android.gms.d.oz: java.lang.String a(java.lang.String)>
-		SHA-256: c2c6e09af91af6386f5f1137719c5080d55e804501fca028d540c58e2c381616
-		Secure: false
-	Object:
-		Variable: $r3
 		Type: javax.crypto.spec.IvParameterSpec
 		Statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
 		Method: <com.google.android.gms.d.rm: byte[] a(byte[],java.lang.String)>
 		SHA-256: e83b500162e8525a3453cf45f49b248038fc5f2f7b54ed477b9ed7dd1c55e953
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.d.oz: java.lang.String a(java.lang.String)>
+		SHA-256: 6b50258c35ace037654fc31fc892895ff7ce6ceb3a71c9e0d76b23cd6d8d83ef
 		Secure: false
 	Object:
 		Variable: $r3
@@ -93,18 +93,18 @@ Analyzed Objects:
 		SHA-256: b0b8d4376c4f63f39517bbebb778eaf83dcd6395c652395bd0198943ed9e6e
 		Secure: false
 	Object:
-		Variable: $r4
-		Type: byte[]
-		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
-		Method: <com.google.android.gms.d.oz: java.lang.String a(java.lang.String)>
-		SHA-256: 6b50258c35ace037654fc31fc892895ff7ce6ceb3a71c9e0d76b23cd6d8d83ef
-		Secure: false
-	Object:
 		Variable: $r6
 		Type: byte[]
 		Statement: $r1 = virtualinvoke $r11.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6)
 		Method: <com.google.android.gms.d.rm: byte[] a(byte[],java.lang.String)>
 		SHA-256: 28e7a17472559d11a7701b11e4256034c15832185875035e5b933ce7ff5b801
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1540)
+		Method: <com.google.android.gms.d.oz: java.lang.String a(java.lang.String)>
+		SHA-256: 10a12007f5017d4c56b51c79885acc451cf5177a7cbcb6535ae285ee94112e3e
 		Secure: false
 	Object:
 		Variable: $r11
@@ -125,28 +125,24 @@ Findings in Java Class: com.google.android.gms.d.oc
 
 	 in Method: java.lang.String c()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #3d3a360fc0b01d51d493a27ca5ed6bd79fdad06dba6eda2c8875019b84cd6fb5)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1072)
 
 
 Findings in Java Class: com.google.android.gms.d.rm
 
 	 in Method: byte[] a(byte[],java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1126, $r10, $r3)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f023c85f863fecf2c713cc5de4a4d97b0f22548212eaaf406dd4d58b9c97438d)
-			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
-			at statement: $r11 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1128)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer1127)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer1127)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1126, $r10, $r3)
 
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f023c85f863fecf2c713cc5de4a4d97b0f22548212eaaf406dd4d58b9c97438d)
 			First parameter (with value "AES/CBC/PKCS5Padding") should be any of AES/CBC/{ISO10126Padding}
@@ -156,16 +152,16 @@ Findings in Java Class: com.google.android.gms.d.rm
 Findings in Java Class: com.google.android.gms.d.oz
 
 	 in Method: java.lang.String a(java.lang.String)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #c2c6e09af91af6386f5f1137719c5080d55e804501fca028d540c58e2c381616)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
-			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1537)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #10a12007f5017d4c56b51c79885acc451cf5177a7cbcb6535ae285ee94112e3e)
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1540)
 
 
 Findings in Java Class: com.google.android.gms.d.an
 
 	 in Method: java.security.MessageDigest a()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #b0b8d4376c4f63f39517bbebb778eaf83dcd6395c652395bd0198943ed9e6e)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2098)
 
 
@@ -188,7 +184,7 @@ Findings in Java Class: com.google.android.gms.d.ao
 	Number of Objects Analyzed: 12
 
 	CogniCrypt found the following violations. For details see description above.
-	IncompleteOperationError: 2
 	RequiredPredicateError: 3
-	ConstraintError: 5
+	ConstraintError: 4
+	IncompleteOperationError: 2
 =====================================================================

@@ -142,6 +142,13 @@ Analyzed Objects:
 		SHA-256: bcd515cbaac9ee62046fdd469ab3e692550be3707b793d45240f54b59720f91a
 		Secure: false
 	Object:
+		Variable: $r22
+		Type: javax.net.ssl.SSLContext
+		Statement: $r22 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1821)
+		Method: <okhttp3.OkHttpClient: void <init>(okhttp3.OkHttpClient$Builder)>
+		SHA-256: 2720d8a26b44fe3e69914c9e828896f72e243942cc62fc631b09bc2b61f2bd97
+		Secure: false
+	Object:
 		Variable: $r16
 		Type: byte[]
 		Statement: $r16 = virtualinvoke $r19.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r14)
@@ -197,31 +204,24 @@ Analyzed Objects:
 		Method: <com.cootek.usage.e: javax.crypto.Cipher a(java.lang.String,int)>
 		SHA-256: 1dd87a907508a51db8cbb1ef715e4dc7289da4743baadd1f526eb416595f7b67
 		Secure: false
-	Object:
-		Variable: $r22
-		Type: javax.net.ssl.SSLContext
-		Statement: $r22 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1821)
-		Method: <okhttp3.OkHttpClient: void <init>(okhttp3.OkHttpClient$Builder)>
-		SHA-256: 2720d8a26b44fe3e69914c9e828896f72e243942cc62fc631b09bc2b61f2bd97
-		Secure: false
 
 Findings in Java Class: com.cootek.tark.ads.utility.Utility
 
 	 in Method: java.lang.String MD5(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #a4fdd0f139e15d070d3bacc28ca543faead8c52e23701934fffc5ae2990c1019)
-			First parameter (with value "MD5") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer661)
 
 
 Findings in Java Class: com.cootek.usage.v
 
 	 in Method: void a(com.cootek.usage.v,com.cootek.usage.UsageData)
-		IncompleteOperationError violating CrySL rule for javax.crypto.CipherOutputStream (on Object #6686e0c6d6397311c0eb730cae9d461054f5173a001789ef723e66ae7d47a3e5)
-			Operation on object of type javax.crypto.CipherOutputStream object not completed. Expected call to write
-			at statement: specialinvoke r36.<javax.crypto.CipherOutputStream: void <init>(java.io.OutputStream,javax.crypto.Cipher)>($r2, $r16)
-
 		IncompleteOperationError violating CrySL rule for javax.crypto.Cipher (on Object #75e06a2eb8534302b5f4dbf61c532c7ff345b42b9e20be3081ee205fcdb8cc67)
 			Operation on object of type javax.crypto.Cipher object not completed. Expected call to init, update, wrap, doFinal
+			at statement: specialinvoke r36.<javax.crypto.CipherOutputStream: void <init>(java.io.OutputStream,javax.crypto.Cipher)>($r2, $r16)
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.CipherOutputStream (on Object #6686e0c6d6397311c0eb730cae9d461054f5173a001789ef723e66ae7d47a3e5)
+			Operation on object of type javax.crypto.CipherOutputStream object not completed. Expected call to write
 			at statement: specialinvoke r36.<javax.crypto.CipherOutputStream: void <init>(java.io.OutputStream,javax.crypto.Cipher)>($r2, $r16)
 
 
@@ -236,12 +236,12 @@ Findings in Java Class: com.cootek.usage.e
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, varReplacer5814)
 
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #75e06a2eb8534302b5f4dbf61c532c7ff345b42b9e20be3081ee205fcdb8cc67)
-			First parameter (with value "AES/ECB/PKCS5Padding") should be any of AES/{GCM, CBC, CTR}
-			at statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer5817)
-
 
 	 in Method: java.lang.String a(java.lang.String,byte[])
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke r8.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer5955)
+
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #5c630e9ccf6ebc13e50c8ba1e4ba78f1a772bc962b8b6d19555d2663092f7c1d)
 			First parameter (with value "AES/ECB/PKCS5Padding") should be any of AES/{GCM, CBC, CTR}
 			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer5952)
@@ -250,36 +250,24 @@ Findings in Java Class: com.cootek.usage.e
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r2.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer5956, r8)
 
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #5c630e9ccf6ebc13e50c8ba1e4ba78f1a772bc962b8b6d19555d2663092f7c1d)
-			First parameter (with value "AES/ECB/PKCS5Padding") should be any of AES/{GCM, CBC, CTR}
-			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer5952)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke r8.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer5955)
-
 
 Findings in Java Class: com.cootek.usage.p
 
 	 in Method: org.apache.http.client.methods.HttpPost c()
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f45dec34e6773de1e1b8325cc7600b683f84f68b2967522adddb66c8df9f5e24)
-			First parameter (with value "RSA/ECB/PKCS1PADDING") should be any of RSA/ECB/{OAEPwithSHA-512andMGF1Padding, OAEPwithSHA-224andMGF1Padding, OAEPPadding, NoPadding, OAEPwithSHA-384andMGF1Padding}
-			at statement: $r19 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer5918)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f45dec34e6773de1e1b8325cc7600b683f84f68b2967522adddb66c8df9f5e24)
-			First parameter (with value "RSA/ECB/PKCS1PADDING") should be any of RSA/ECB/{OAEPwithSHA-512andMGF1Padding, OAEPwithSHA-224andMGF1Padding, OAEPPadding, NoPadding, OAEPwithSHA-384andMGF1Padding}
-			at statement: $r19 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer5918)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r19.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer5925, $r18)
+
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #f45dec34e6773de1e1b8325cc7600b683f84f68b2967522adddb66c8df9f5e24)
+			First parameter (with value "RSA/ECB/PKCS1PADDING") should be any of RSA/ECB/{OAEPwithSHA-512andMGF1Padding, OAEPwithSHA-224andMGF1Padding, OAEPPadding, NoPadding, OAEPwithSHA-384andMGF1Padding}
+			at statement: $r19 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer5918)
 
 
 Findings in Java Class: okhttp3.internal.Util
 
 	 in Method: okio.ByteString sha1(okio.ByteString)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #b46b02210a4dc118c45ec7bb44fbb05dddb9a3c3f975d9a37702612f4c74fc30)
-			First parameter (with value "SHA-1") should be any of {SHA-224, SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7191)
 
 
@@ -312,7 +300,7 @@ Findings in Java Class: okhttp3.OkHttpClient
 	Number of Objects Analyzed: 24
 
 	CogniCrypt found the following violations. For details see description above.
-	ConstraintError: 8
+	ConstraintError: 5
 	IncompleteOperationError: 2
 	RequiredPredicateError: 8
 =====================================================================

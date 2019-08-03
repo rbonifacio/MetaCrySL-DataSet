@@ -111,13 +111,6 @@ Analyzed Objects:
 		SHA-256: 747cd7a5f455355ff0fe5f8014ce696ade9b9ee6cb3a69db753af9edf316dde6
 		Secure: true
 	Object:
-		Variable: $r1
-		Type: java.security.PublicKey
-		Statement: $r1 = virtualinvoke $r0.<java.security.KeyPair: java.security.PublicKey getPublic()>()
-		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
-		SHA-256: de23b6b43bf61a151236ba121fe635998ae5701838c416d3d6732f9c02675d0b
-		Secure: true
-	Object:
 		Variable: $r5
 		Type: java.security.Signature
 		Statement: $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r2)
@@ -167,20 +160,6 @@ Analyzed Objects:
 		SHA-256: bc6a5a23c9b257d27fea5f7f4a4a7d418b13648ef9703f300ba1ae12b45ffeb1
 		Secure: false
 	Object:
-		Variable: $r9
-		Type: java.security.PublicKey
-		Statement: $r9 = virtualinvoke $r2.<java.security.KeyPair: java.security.PublicKey getPublic()>()
-		Method: <com.google.android.gms.iid.zzc: void zza(android.os.Bundle,java.security.KeyPair,java.lang.String)>
-		SHA-256: c48f27d182cdd8384a7267bbbe741b6968b26af067f72b9c4b40a124ea07e8fe
-		Secure: true
-	Object:
-		Variable: $r4
-		Type: java.security.PrivateKey
-		Statement: $r4 = virtualinvoke $r0.<java.security.KeyPair: java.security.PrivateKey getPrivate()>()
-		Method: <com.google.android.gms.iid.zzc: java.lang.String zza(java.security.KeyPair,java.lang.String[])>
-		SHA-256: 6adb857c9c5aa3d70a96ff0750d1e4661180a6bbd2b29000a6c71896fd5a94e
-		Secure: true
-	Object:
 		Variable: varReplacer7765
 		Type: java.lang.String
 		Statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer7765)
@@ -195,12 +174,16 @@ Findings in Java Class: com.google.android.gms.iid.zzc
 			First parameter (with value "SHA256withECDSA") should be any of {RSASSA-PSS, SHA256withDSA, SHA256withRSA, DSA, SHA512withRSA, SHA384withRSA, DSS}
 			at statement: $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r2)
 
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Privkey
+			at statement: virtualinvoke $r5.<java.security.Signature: void initSign(java.security.PrivateKey)>($r4)
+
 
 Findings in Java Class: com.google.android.gms.iid.InstanceID
 
 	 in Method: java.lang.String zza(java.security.KeyPair)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #adb694c35fe72f46d2ba2dc9d876d52279d86f841ed96a85132292ebfd92b4cc)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA1") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1595)
 
 
@@ -208,7 +191,7 @@ Findings in Java Class: com.vizury.mobile.ImageUtil
 
 	 in Method: java.lang.String hashKeyForDisk(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #6529feb2e95b8f0efe57b9f6794fae85a862e2f2f31cb995138a6b7cd72d2e69)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2202)
 
 
@@ -216,27 +199,27 @@ Findings in Java Class: com.android.volley.InternalUtils
 
 	 in Method: java.lang.String sha1Hash(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #a9e3b95e5b48cfaa386c17736ff6f450e4c639ca325e6333917b326ddcf96772)
-			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA224, SHA256, SHA384, SHA-224, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7474)
 
 
 Findings in Java Class: com.twitter.sdk.android.core.internal.oauth.OAuth1aParameters
 
 	 in Method: java.lang.String calculateSignature(java.lang.String)
-		ConstraintError violating CrySL rule for javax.crypto.Mac (on Object #1c3c72aed4a1d57e885bd1cc5018ac7d8527c75028e2134608a8e412bfef0382)
-			First parameter (with value "HmacSHA1") should be any of {HmacSHA256, HmacSHA384, HmacSHA512}
-			at statement: $r6 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer7775)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r5, varReplacer7765)
 
+		ConstraintError violating CrySL rule for javax.crypto.Mac (on Object #1c3c72aed4a1d57e885bd1cc5018ac7d8527c75028e2134608a8e412bfef0382)
+			First parameter (with value "HmacSHA1") should be any of {HmacSHA224, HmacSHA256, HmacSHA384, HmacSHA512}
+			at statement: $r6 = staticinvoke <javax.crypto.Mac: javax.crypto.Mac getInstance(java.lang.String)>(varReplacer7775)
+
 
 ======================= CogniCrypt Summary ==========================
 	Number of CrySL rules: 32
-	Number of Objects Analyzed: 22
+	Number of Objects Analyzed: 19
 
 	CogniCrypt found the following violations. For details see description above.
-	RequiredPredicateError: 1
+	RequiredPredicateError: 2
 	ConstraintError: 5
 =====================================================================
