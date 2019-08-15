@@ -93,18 +93,18 @@ Analyzed Objects:
 		SHA-256: 7e5160b7666394d4855e5fa79b07d18e365d3658fff4e10438b9c46f9684a4a6
 		Secure: false
 	Object:
-		Variable: $r2
-		Type: java.security.MessageDigest
-		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2001)
-		Method: <com.facebook.common.util.SecureHashUtil: java.lang.String makeSHA1HashBase64(byte[])>
-		SHA-256: be708daa97bbe9ac96cff0b11480b8ee5942a85b247a5b6dfedb79e891a99304
-		Secure: false
-	Object:
 		Variable: $r3
 		Type: javax.net.ssl.SSLContext
 		Statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1739)
 		Method: <okhttp3.OkHttpClient: javax.net.ssl.SSLSocketFactory systemDefaultSslSocketFactory(javax.net.ssl.X509TrustManager)>
 		SHA-256: 76ae0ed3c7d126767a4517138c3170f0ffc8ae5a249101c263780d1324c3a62b
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2001)
+		Method: <com.facebook.common.util.SecureHashUtil: java.lang.String makeSHA1HashBase64(byte[])>
+		SHA-256: be708daa97bbe9ac96cff0b11480b8ee5942a85b247a5b6dfedb79e891a99304
 		Secure: false
 	Object:
 		Variable: $r1
@@ -153,20 +153,20 @@ Findings in Java Class: okhttp3.OkHttpClient
 			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1737, r7, varReplacer1737)
 
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
-			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1737, r7, varReplacer1737)
-
 		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #76ae0ed3c7d126767a4517138c3170f0ffc8ae5a249101c263780d1324c3a62b)
 			First parameter (with value "TLS") should be any of {Insecure}
 			at statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1739)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1737, r7, varReplacer1737)
 
 
 Findings in Java Class: com.baidu.simeji.common.util.MD5Utils
 
 	 in Method: void <clinit>()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #1c154b628451d88615c4c0b6fca1b2f6f98f8f3c949ed3ae64b3c9ec6b5fe2b6)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1963)
 
 
@@ -174,7 +174,7 @@ Findings in Java Class: com.facebook.common.util.SecureHashUtil
 
 	 in Method: java.lang.String makeSHA1HashBase64(byte[])
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #be708daa97bbe9ac96cff0b11480b8ee5942a85b247a5b6dfedb79e891a99304)
-			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2001)
 
 

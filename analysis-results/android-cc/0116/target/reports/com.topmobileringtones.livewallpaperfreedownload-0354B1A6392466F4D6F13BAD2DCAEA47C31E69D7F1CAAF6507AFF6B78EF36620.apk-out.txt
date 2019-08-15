@@ -93,11 +93,11 @@ Analyzed Objects:
 		SHA-256: d1ef2aeb9047bd4793ce799c9ec8ca25c778642cc7b4b3862e2fd7dc5087feb9
 		Secure: true
 	Object:
-		Variable: $r3
-		Type: java.security.MessageDigest
-		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1410)
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
 		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzcv(java.lang.String)>
-		SHA-256: 9e9726a7d1a31484d10921c70cb2360c1c9b5cb8d63adbf2286e69a6c1f26cbe
+		SHA-256: 7db32a49ea5dc429de86995e2eed699b72f2aae12158b456b4483d8fcf6e3495
 		Secure: false
 	Object:
 		Variable: $r5
@@ -105,6 +105,13 @@ Analyzed Objects:
 		Statement: $r5 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>($r4)
 		Method: <com.inmobi.commons.core.utilities.a.b: byte[] a(byte[],byte[],byte[])>
 		SHA-256: a800d14c2599b6d3e27b78559da994ad6e61b6f409a78782cbf7fe99629d0369
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1411)
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzcv(java.lang.String)>
+		SHA-256: f6650109295c90133e3f109a87356d1933c5b4cf68932d400198349a30f68fab
 		Secure: false
 	Object:
 		Variable: $r6
@@ -133,13 +140,6 @@ Analyzed Objects:
 		Statement: specialinvoke r13.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, $r4)
 		Method: <com.inmobi.commons.core.utilities.a.b: byte[] b(byte[],byte[],byte[])>
 		SHA-256: 2c8319c53abbd65bf565cbdbfa40bb368fb69ab930c492e331c37316aa518a82
-		Secure: false
-	Object:
-		Variable: $r4
-		Type: byte[]
-		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
-		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzcv(java.lang.String)>
-		SHA-256: 7db32a49ea5dc429de86995e2eed699b72f2aae12158b456b4483d8fcf6e3495
 		Secure: false
 	Object:
 		Variable: $r9
@@ -194,32 +194,24 @@ Analyzed Objects:
 Findings in Java Class: com.google.android.gms.ads.internal.util.client.zza
 
 	 in Method: java.lang.String zzcv(java.lang.String)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #9e9726a7d1a31484d10921c70cb2360c1c9b5cb8d63adbf2286e69a6c1f26cbe)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
-			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1410)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #f6650109295c90133e3f109a87356d1933c5b4cf68932d400198349a30f68fab)
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1411)
 
 
 Findings in Java Class: com.inmobi.commons.core.utilities.a.b
 
 	 in Method: byte[] a(byte[],byte[])
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke r6.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r1, varReplacer1679, $i0, varReplacer1680)
-
 		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			Constraint length(keyMaterial) + 0 >= off - len could not be evaluted due to insufficient information.
 			at statement: specialinvoke r6.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r1, varReplacer1679, $i0, varReplacer1680)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke r6.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r1, varReplacer1679, $i0, varReplacer1680)
+
 
 	 in Method: byte[] a(byte[],byte[],byte[])
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1631, $r3, $r6)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared G C M
-			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1631, $r3, $r6)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, $r4)
@@ -228,15 +220,31 @@ Findings in Java Class: com.inmobi.commons.core.utilities.a.b
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r6.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r2)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared G C M
+			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1631, $r3, $r6)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r5.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1631, $r3, $r6)
+
 
 	 in Method: byte[] b(byte[],byte[],byte[])
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
+			Third parameter was not properly generated as prepared I V
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1688, $r3, $r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared I V
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1688, $r3, $r5)
+			Third parameter was not properly generated as prepared G C M
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1686, $r3, $r5)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1684, $r3, $r5)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1686, $r3, $r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Third parameter was not properly generated as prepared G C M
@@ -247,27 +255,19 @@ Findings in Java Class: com.inmobi.commons.core.utilities.a.b
 			at statement: specialinvoke r13.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, $r4)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared G C M
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1686, $r3, $r5)
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1688, $r3, $r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Third parameter was not properly generated as prepared I V
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1686, $r3, $r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
+			Third parameter was not properly generated as prepared G C M
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1684, $r3, $r5)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1686, $r3, $r5)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Third parameter was not properly generated as prepared I V
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1684, $r3, $r5)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared G C M
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1684, $r3, $r5)
 
 
@@ -282,7 +282,7 @@ Findings in Java Class: com.inmobi.commons.core.utilities.a.b
 	Number of Objects Analyzed: 22
 
 	CogniCrypt found the following violations. For details see description above.
+	ImpreciseValueExtractionError: 1
 	RequiredPredicateError: 16
 	ConstraintError: 1
-	ImpreciseValueExtractionError: 1
 =====================================================================

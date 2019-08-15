@@ -276,11 +276,11 @@ Findings in Java Class: com.facebook.internal.Utility
 
 	 in Method: java.lang.String hashWithAlgorithm(java.lang.String,byte[])
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #b06ea93113caf1c0a34502b70367c98fc8260fbfa0ac30bcb23e381db0de6b00)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r0)
 
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #b06ea93113caf1c0a34502b70367c98fc8260fbfa0ac30bcb23e381db0de6b00)
-			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r0)
 
 
@@ -288,11 +288,11 @@ Findings in Java Class: com.qranio.webserviceconnect.Security$MySSLSocketFactory
 
 	 in Method: void <init>(java.security.KeyStore)
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
+			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6564, r5, varReplacer6564)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
+			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer6564, r5, varReplacer6564)
 
 		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #8b79e09278a2d9cb1ffcfa593de7fe79c2dc285d737cd9431d282c7ccbf205d)
@@ -304,20 +304,20 @@ Findings in Java Class: org.jarjar.apache.commons.codec.digest.DigestUtils
 
 	 in Method: java.security.MessageDigest getDigest(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #5c31efb8beb779517a7f291168d3912335afc0c4abe67c9d32ed8797b2e7c24a)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r0)
 
 
 Findings in Java Class: crittercism.android.y
 
 	 in Method: java.security.Provider a()
-		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #715a3ab1cff21fbedb092e7b5ab0c88b0148437c2b60091cf5f487991aedb203)
-			First parameter (with value "TLS") should be any of {TLSv1.2, TLSv1.1, TLSv1, Insecure}
-			at statement: $r0 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer9949)
-
 		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #715a3ab1cff21fbedb092e7b5ab0c88b0148437c2b60091cf5f487991aedb203)
 			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to init
 			at statement: $r1 = virtualinvoke $r0.<javax.net.ssl.SSLContext: java.security.Provider getProvider()>()
+
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #715a3ab1cff21fbedb092e7b5ab0c88b0148437c2b60091cf5f487991aedb203)
+			First parameter (with value "TLS") should be any of {TLSv1.2, TLSv1.1, TLSv1, Insecure}
+			at statement: $r0 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer9949)
 
 		IncompleteOperationError violating CrySL rule for javax.net.ssl.SSLContext (on Object #715a3ab1cff21fbedb092e7b5ab0c88b0148437c2b60091cf5f487991aedb203)
 			Operation on object of type javax.net.ssl.SSLContext object not completed. Expected call to init
@@ -327,13 +327,13 @@ Findings in Java Class: crittercism.android.y
 Findings in Java Class: com.qranio.util.Security
 
 	 in Method: java.lang.String decrypt(java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r2.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer10408, $r1)
-
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #afc99386d04f5c9dc2b666090c9fe24193eb5503bcc82091106c63785e731052)
 			First parameter (with value "AES") should be any of AES/{OFB, GCM, CBC, CTS, CTR, CFB}
 			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer10407)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r2.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer10408, $r1)
 
 
 	 in Method: java.security.Key generateKey()
@@ -345,10 +345,6 @@ Findings in Java Class: com.qranio.util.Security
 Findings in Java Class: com.squareup.okhttp.OkHttpClient
 
 	 in Method: javax.net.ssl.SSLSocketFactory getDefaultSSLSocketFactory()
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer15127, varReplacer15127, varReplacer15127)
-
 		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #12a9f43942ebbfe7ec9ba5bba54f8eb62402a3652f8461ef961c3c1379423f78)
 			First parameter (with value "TLS") should be any of {TLSv1.2, TLSv1.1, TLSv1, Insecure}
 			at statement: $r3 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer15130)
@@ -357,12 +353,16 @@ Findings in Java Class: com.squareup.okhttp.OkHttpClient
 			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer15127, varReplacer15127, varReplacer15127)
 
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r3.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer15127, varReplacer15127, varReplacer15127)
+
 
 Findings in Java Class: com.google.android.gms.ads.internal.util.client.zza
 
 	 in Method: java.lang.String zzaT(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #b9b37f96e3c0bd7e4b4332247230c4104b0379fbac1b0329b64e6aa5ea408acf)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer15485)
 
 
@@ -370,13 +370,13 @@ Findings in Java Class: com.squareup.okhttp.internal.Util
 
 	 in Method: java.lang.String shaBase64(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #1df48ce6c9e2daa1f7ac3cb1d1ec342ab90af26163391bfab3ad6c1c9b6a65a9)
-			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer16233)
 
 
 	 in Method: okio.ByteString sha1(okio.ByteString)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #21b12bd33ae609805e795eb19244da43abb60fbbdbbc8d0ff6e77e7d0d54a947)
-			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer17073)
 
 
@@ -401,7 +401,7 @@ Findings in Java Class: com.qranio.webserviceconnect.WSUtils
 	Number of Objects Analyzed: 34
 
 	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 10
 	IncompleteOperationError: 2
 	RequiredPredicateError: 8
-	ConstraintError: 10
 =====================================================================

@@ -41,13 +41,6 @@ Analyzed Objects:
 		SHA-256: 5a54f705314d6605f4cf61ba388d3b495336c885c3ea98cfb7cec081c65981da
 		Secure: false
 	Object:
-		Variable: $r3
-		Type: java.security.KeyStore
-		Statement: $r3 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r2)
-		Method: <com.heyzap.http.MySSLSocketFactory: java.security.KeyStore getKeystore()>
-		SHA-256: d011df71b400b4926b84dec0cad6ffb90a5bd3d26c43a5974bec9e614ef5edf5
-		Secure: true
-	Object:
 		Variable: $r0
 		Type: byte[]
 		Statement: $r0 = virtualinvoke $r1.<java.security.MessageDigest: byte[] digest()>()
@@ -62,12 +55,12 @@ Analyzed Objects:
 		SHA-256: edb51cf4616fa85f5871a60127e8dfacdaf93cd2a61e81b23cc28f7ac30443d5
 		Secure: false
 	Object:
-		Variable: $r2
-		Type: javax.net.ssl.SSLContext
-		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1392)
-		Method: <com.heyzap.http.MySSLSocketFactory: void <init>(java.security.KeyStore)>
-		SHA-256: bb50ce00a48a768e446804f3cd38360e355674f1085d6ba848f740e750acd636
-		Secure: false
+		Variable: $r3
+		Type: java.security.KeyStore
+		Statement: $r3 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r2)
+		Method: <com.heyzap.http.MySSLSocketFactory: java.security.KeyStore getKeystore()>
+		SHA-256: d011df71b400b4926b84dec0cad6ffb90a5bd3d26c43a5974bec9e614ef5edf5
+		Secure: true
 	Object:
 		Variable: $r1
 		Type: java.security.MessageDigest
@@ -75,28 +68,35 @@ Analyzed Objects:
 		Method: <com.heyzap.common.net.APIClient: byte[] a(byte[])>
 		SHA-256: 8869eb9401fcaa169583c54282db9c0640bf7f5194a4a820b33fe88961a062f4
 		Secure: false
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1394)
+		Method: <com.heyzap.http.MySSLSocketFactory: void <init>(java.security.KeyStore)>
+		SHA-256: 6ae3de674dac5d5e5a8fd240382ef654dc13ae78641b12d11bae278acf75676d
+		Secure: false
 
 Findings in Java Class: com.heyzap.http.MySSLSocketFactory
 
 	 in Method: void <init>(java.security.KeyStore)
-		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #bb50ce00a48a768e446804f3cd38360e355674f1085d6ba848f740e750acd636)
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #6ae3de674dac5d5e5a8fd240382ef654dc13ae78641b12d11bae278acf75676d)
 			First parameter (with value "TLS") should be any of {TLSv1.2, TLSv1.1, TLSv1, Insecure}
-			at statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1392)
+			at statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1394)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1393, r5, varReplacer1393)
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1392, r5, varReplacer1392)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			First parameter was not properly generated as generated Key Manager
-			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1393, r5, varReplacer1393)
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1392, r5, varReplacer1392)
 
 
 Findings in Java Class: com.heyzap.common.net.APIClient
 
 	 in Method: byte[] a(byte[])
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #8869eb9401fcaa169583c54282db9c0640bf7f5194a4a820b33fe88961a062f4)
-			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1487)
 
 
@@ -112,7 +112,7 @@ Findings in Java Class: com.unity3d.player.UnityPlayer
 			at statement: virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r1, varReplacer2079, $i3)
 
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #edb51cf4616fa85f5871a60127e8dfacdaf93cd2a61e81b23cc28f7ac30443d5)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2077)
 
 

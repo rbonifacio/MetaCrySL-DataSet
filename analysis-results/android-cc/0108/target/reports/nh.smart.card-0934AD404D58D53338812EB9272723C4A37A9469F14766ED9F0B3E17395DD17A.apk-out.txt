@@ -2,7 +2,7 @@ Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/nh.smart.card-0934AD404D58D
 Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
 Warning: Couldn't find any method for CryptSLMethod: javax.crypto.spec.PBEParameterSpec.PBEParameterSpec( salt iterationCount paramSpec);
 Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
-Alive 19862  5000
+Alive 22715  5000
 Ruleset: 
 	java.security.KeyStore
 	java.security.AlgorithmParameters
@@ -121,7 +121,7 @@ Analyzed Objects:
 		Statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r3)
 		Method: <btworks.jce.provider.rsa.O: void <init>()>
 		SHA-256: 4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4
-		Secure: false
+		Secure: true
 	Object:
 		Variable: $r5
 		Type: javax.crypto.spec.SecretKeySpec
@@ -480,6 +480,13 @@ Analyzed Objects:
 		SHA-256: fdcb2884b35eb10daa5d4583ba36d3d9b5cdf291750ce160d1e4f93337e8f555
 		Secure: false
 	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r19.<java.security.MessageDigest: byte[] digest()>()
+		Method: <btworks.codeguard.engine.B: void E()>
+		SHA-256: ba9156d58a1e739c609102251965e9ea05d61f0cb6d39678a6bbeb128c2c4b17
+		Secure: true
+	Object:
 		Variable: $r2
 		Type: byte[]
 		Statement: $r2 = virtualinvoke $r5.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r2)
@@ -599,22 +606,22 @@ Findings in Java Class: o.ﭠ
 			Unexpected call to method <javax.crypto.Cipher: byte[] doFinal()> on object of type javax.crypto.Cipher. Expect a call to one of the following methods javax.crypto.Cipher: byte[] doFinal(byte[]),javax.crypto.Cipher: byte[] doFinal(byte[],int,int),javax.crypto.Cipher: int doFinal(byte[],int,int,byte[]),javax.crypto.Cipher: void init(int,java.security.Key),javax.crypto.Cipher: void init(int,java.security.Key,java.security.AlgorithmParameters),javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec),javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec,java.security.SecureRandom),javax.crypto.Cipher: void init(int,java.security.cert.Certificate),javax.crypto.Cipher: void init(int,java.security.Key,java.security.AlgorithmParameters,java.security.SecureRandom),javax.crypto.Cipher: int update(byte[],int,int,byte[],int),javax.crypto.Cipher: int doFinal(java.nio.ByteBuffer,java.nio.ByteBuffer),javax.crypto.Cipher: void init(int,java.security.cert.Certificate,java.security.SecureRandom),javax.crypto.Cipher: byte[] wrap(java.security.Key),javax.crypto.Cipher: void init(int,java.security.Key,java.security.SecureRandom),javax.crypto.Cipher: int doFinal(byte[],int,int,byte[],int),javax.crypto.Cipher: byte[] update(byte[],int,int),javax.crypto.Cipher: byte[] update(byte[]),javax.crypto.Cipher: int update(byte[],int,int,byte[]),javax.crypto.Cipher: int update(java.nio.ByteBuffer,java.nio.ByteBuffer)
 			at statement: $r3 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] doFinal()>()
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1478, $r7)
-
 		ForbiddenMethodError violating CrySL rule for javax.crypto.Cipher
 			Detected call to forbidden method void init(int,java.security.Key) of class javax.crypto.Cipher. Instead, call method <javax.crypto.Cipher: void init(int,java.security.Key)>.
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1478, $r7)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1478, $r7)
 
 
 	 in Method: void ˏ(int,java.io.File,java.io.File)
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r12.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3222, $r13)
-
 		ForbiddenMethodError violating CrySL rule for javax.crypto.Cipher
 			Detected call to forbidden method void init(int,java.security.Key) of class javax.crypto.Cipher. Instead, call method <javax.crypto.Cipher: void init(int,java.security.Key)>.
+			at statement: virtualinvoke $r12.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3222, $r13)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r12.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer3222, $r13)
 
 		TypestateError violating CrySL rule for javax.crypto.Cipher (on Object #3bd0b3b85f6733ada2ab087fbb2dc2be12f9d12494f50d575ea961ec2ef59e00)
@@ -634,150 +641,6 @@ Findings in Java Class: o.ﭠ
 			at statement: specialinvoke $r2.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, $r4)
 
 
-Findings in Java Class: btworks.xcrypto.Cipher
-
-	 in Method: btworks.xcrypto.Cipher getInstance(java.lang.String)
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: specialinvoke $r3.<btworks.xcrypto.Cipher: void <init>(java.lang.String)>($r4)
-
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: specialinvoke $r8.<btworks.jce.provider.rsa.O: void <init>()>()
-
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: specialinvoke $r3.<btworks.xcrypto.Cipher: void <init>(java.lang.String)>($r4)
-
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: specialinvoke $r3.<btworks.xcrypto.Cipher: void <init>(java.lang.String)>($r4)
-
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: specialinvoke $r3.<btworks.xcrypto.Cipher: void <init>(java.lang.String)>($r4)
-
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: specialinvoke $r3.<btworks.xcrypto.Cipher: void <init>(java.lang.String)>($r4)
-
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: specialinvoke $r3.<btworks.xcrypto.Cipher: void <init>(java.lang.String)>($r4)
-
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: specialinvoke $r3.<btworks.xcrypto.Cipher: void <init>(java.lang.String)>($r4)
-
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: specialinvoke $r3.<btworks.xcrypto.Cipher: void <init>(java.lang.String)>($r4)
-
-
-	 in Method: byte[] doFinal(byte[])
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: staticinvoke <btworks.xcrypto.Cipher: void A(btworks.xcrypto.Cipher)>($r0)
-
-
-	 in Method: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: staticinvoke <btworks.xcrypto.Cipher: void A(btworks.xcrypto.Cipher)>($r0)
-
-
-	 in Method: void init(int,java.security.Key)
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: staticinvoke <btworks.xcrypto.Cipher: void A(btworks.xcrypto.Cipher)>($r0)
-
-
-Findings in Java Class: btworks.jce.provider.C.D
-
-	 in Method: int[] A(int,int,int,int,int,byte[],int)
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: $r1 = virtualinvoke $r8.<btworks.xcrypto.Cipher: byte[] doFinal(byte[])>($r6)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, $r7)
-
-
-Findings in Java Class: btworks.jce.provider.C.E
-
-	 in Method: int[] A(int,int,int,int,int,byte[],int)
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: $r1 = virtualinvoke $r15.<btworks.xcrypto.Cipher: byte[] doFinal(byte[])>($r1)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r12, $r14)
-
-
-Findings in Java Class: o.ᴸ
-
-	 in Method: java.lang.String ˎ(int,java.lang.String,java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r12.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, $r1)
-
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: $r2 = virtualinvoke $r13.<btworks.xcrypto.Cipher: byte[] doFinal(byte[])>($r2)
-
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: $r2 = virtualinvoke $r13.<btworks.xcrypto.Cipher: byte[] doFinal(byte[])>($r2)
-
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: $r2 = virtualinvoke $r13.<btworks.xcrypto.Cipher: byte[] doFinal(byte[])>($r2)
-
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: $r13 = staticinvoke <btworks.xcrypto.Cipher: btworks.xcrypto.Cipher getInstance(java.lang.String)>($r1)
-
-
-Findings in Java Class: o.ᐩ
-
-	 in Method: void ˏ(android.content.Context,boolean,o.ᐡ)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke r41.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r10)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke r40.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r11, $r5)
-
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #4cf6bd01317110fd3df2980c7532b6526228a1f556082e61ec15d246b9fc22e4)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: $r11 = virtualinvoke $r14.<btworks.xcrypto.Cipher: byte[] doFinal(byte[])>($r9)
-
-
-	 in Method: void ˎ()
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r6.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer9207, r13, $r7)
-
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
-			at statement: virtualinvoke $r6.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer9205, r13, $r7)
-
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
-			at statement: virtualinvoke $r6.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer9207, r13, $r7)
-
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r6.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer9205, r13, $r7)
-
-
 Findings in Java Class: btworks.codeguard.engine.B
 
 	 in Method: void E()
@@ -785,8 +648,20 @@ Findings in Java Class: btworks.codeguard.engine.B
 			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte),java.security.MessageDigest: void update(byte[])
 			at statement: $r1 = virtualinvoke $r19.<java.security.MessageDigest: byte[] digest()>()
 
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #290e52c18382e70ecd79373eb67e8530fe75ada46a9dea7fccddf65c79815c1e)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r19 = $r20
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #290e52c18382e70ecd79373eb67e8530fe75ada46a9dea7fccddf65c79815c1e)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, java.security.MessageDigest: void update(byte[],int,int), java.security.MessageDigest: void update(java.nio.ByteBuffer), java.security.MessageDigest: void update(byte), java.security.MessageDigest: void update(byte[])
+			at statement: virtualinvoke $r19.<java.security.MessageDigest: void update(byte[],int,int)>($r1, varReplacer9009, $i2)
+
 
 	 in Method: javax.net.ssl.SSLSocketFactory J()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r5.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer9022, r10, $r6)
+
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r5.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer9022, r10, $r6)
@@ -794,10 +669,6 @@ Findings in Java Class: btworks.codeguard.engine.B
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r5.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer9023, r10, $r6)
-
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r5.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer9022, r10, $r6)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			Second parameter was not properly generated as generated Trust Manager
@@ -828,6 +699,44 @@ Findings in Java Class: o.ˈ
 			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, $r4)
 
 
+Findings in Java Class: o.ᐩ
+
+	 in Method: void ˎ()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r6.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer9205, r13, $r7)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r6.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer9207, r13, $r7)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r6.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer9205, r13, $r7)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r6.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer9207, r13, $r7)
+
+
+	 in Method: void ˏ(android.content.Context,boolean,o.ᐡ)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke r40.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r11, $r5)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke r41.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r10)
+
+
+Findings in Java Class: btworks.jce.provider.C.E
+
+	 in Method: int[] A(int,int,int,int,int,byte[],int)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r12, $r14)
+
+
 Findings in Java Class: btworks.jce.provider.cipher.K
 
 	 in Method: java.security.spec.AlgorithmParameterSpec H()
@@ -852,6 +761,26 @@ Findings in Java Class: btworks.jce.provider.cipher.T
 			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r1)
 
 
+Findings in Java Class: btworks.jce.provider.C.D
+
+	 in Method: int[] A(int,int,int,int,int,byte[],int)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r4.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, $r7)
+
+
+Findings in Java Class: o.ᴸ
+
+	 in Method: java.lang.String ˎ(int,java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r2, $r1)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r12.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
+
+
 Findings in Java Class: o.ᕀ
 
 	 in Method: boolean ॱ(java.lang.String,java.lang.String,java.security.PublicKey)
@@ -874,11 +803,11 @@ Findings in Java Class: btworks.jce.provider.cipher.H
 
 ======================= CogniCrypt Summary ==========================
 	Number of CrySL rules: 32
-	Number of Objects Analyzed: 79
+	Number of Objects Analyzed: 80
 
 	CogniCrypt found the following violations. For details see description above.
-	IncompleteOperationError: 19
 	TypestateError: 3
-	RequiredPredicateError: 29
+	IncompleteOperationError: 2
 	ForbiddenMethodError: 2
+	RequiredPredicateError: 29
 =====================================================================

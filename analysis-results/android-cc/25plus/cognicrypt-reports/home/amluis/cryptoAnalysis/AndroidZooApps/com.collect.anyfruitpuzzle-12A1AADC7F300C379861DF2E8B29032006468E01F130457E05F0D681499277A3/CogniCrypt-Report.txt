@@ -48,11 +48,11 @@ Analyzed Objects:
 		SHA-256: 6f212fd969e9171ce08bf4d1e289877af8000f513b92c4a566d112ac1f4890b9
 		Secure: false
 	Object:
-		Variable: $r8
-		Type: javax.crypto.SecretKey
-		Statement: $r8 = virtualinvoke $r6.<javax.crypto.KeyGenerator: javax.crypto.SecretKey generateKey()>()
+		Variable: $r7
+		Type: java.security.SecureRandom
+		Statement: specialinvoke $r7.<java.security.SecureRandom: void <init>()>()
 		Method: <com.tencent.bugly.legu.proguard.a: byte[] a(int)>
-		SHA-256: 70833cfcbc5d2c27d396a5c56a0b7c9d134772efa0b8cc3475649c7af280fbfa
+		SHA-256: 5610145a09a7bb214f230ffcd546db69ba939fbd18273272977b5e9f5d649600
 		Secure: true
 	Object:
 		Variable: $r1
@@ -90,13 +90,6 @@ Analyzed Objects:
 		SHA-256: b4800a51ad6e6dc7b765a215d35edc5ed9946f6ba140ea79e3c94e2449b61fac
 		Secure: false
 	Object:
-		Variable: $r7
-		Type: java.security.SecureRandom
-		Statement: specialinvoke $r7.<java.security.SecureRandom: void <init>()>()
-		Method: <com.tencent.bugly.legu.proguard.a: byte[] a(int)>
-		SHA-256: 5610145a09a7bb214f230ffcd546db69ba939fbd18273272977b5e9f5d649600
-		Secure: true
-	Object:
 		Variable: $r0
 		Type: byte[]
 		Statement: $r0 = virtualinvoke $r5.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r0)
@@ -111,11 +104,11 @@ Analyzed Objects:
 		SHA-256: 4c8805849897924910606ff7ec6e192d3a2113f207c52e00f149c1730706802b
 		Secure: false
 	Object:
-		Variable: $r6
-		Type: javax.crypto.KeyGenerator
-		Statement: $r6 = staticinvoke <javax.crypto.KeyGenerator: javax.crypto.KeyGenerator getInstance(java.lang.String)>(varReplacer1685)
+		Variable: $r8
+		Type: javax.crypto.SecretKey
+		Statement: $r8 = virtualinvoke $r6.<javax.crypto.KeyGenerator: javax.crypto.SecretKey generateKey()>()
 		Method: <com.tencent.bugly.legu.proguard.a: byte[] a(int)>
-		SHA-256: 1b7af33d4f35151b22d5ce87596c2dc932dc2499b8fb4b87ab6cd5bf6238fa25
+		SHA-256: 70833cfcbc5d2c27d396a5c56a0b7c9d134772efa0b8cc3475649c7af280fbfa
 		Secure: true
 	Object:
 		Variable: $r0
@@ -125,19 +118,19 @@ Analyzed Objects:
 		SHA-256: 36bf61a68e0f5e447bd023cbc0807d55625d03346ac42018a6e3e97ba704224a
 		Secure: false
 	Object:
-		Variable: $r0
-		Type: byte[]
-		Statement: $r0 = interfaceinvoke $r8.<javax.crypto.SecretKey: byte[] getEncoded()>()
-		Method: <com.tencent.bugly.legu.proguard.a: byte[] a(int)>
-		SHA-256: 94b1945aef29601e10128305e3090f4cbdfcef9f5804d9b8d53ba21fe0b64313
-		Secure: true
-	Object:
 		Variable: $r2
 		Type: java.security.MessageDigest
 		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1740)
 		Method: <com.tencent.StubShell.a: java.lang.String a(java.io.InputStream)>
 		SHA-256: 9f98440ea9f4a28facc54fec6559e623d46f6d3aebd239b6731b1766c7b2f518
 		Secure: false
+	Object:
+		Variable: $r0
+		Type: byte[]
+		Statement: $r0 = interfaceinvoke $r8.<javax.crypto.SecretKey: byte[] getEncoded()>()
+		Method: <com.tencent.bugly.legu.proguard.a: byte[] a(int)>
+		SHA-256: 94b1945aef29601e10128305e3090f4cbdfcef9f5804d9b8d53ba21fe0b64313
+		Secure: true
 	Object:
 		Variable: $r6
 		Type: javax.crypto.SecretKeyFactory
@@ -188,6 +181,13 @@ Analyzed Objects:
 		SHA-256: 655cecbf31ebe6a542bbf9dfffce540c2dd9f684098c0dd0c88d0a240e8143d9
 		Secure: false
 	Object:
+		Variable: $r6
+		Type: javax.crypto.KeyGenerator
+		Statement: $r6 = staticinvoke <javax.crypto.KeyGenerator: javax.crypto.KeyGenerator getInstance(java.lang.String)>(varReplacer1682)
+		Method: <com.tencent.bugly.legu.proguard.a: byte[] a(int)>
+		SHA-256: 31bcf9cd9e3588e4304c9e0d8562829dbe3339d751efd83a8a84621a5af84b67
+		Secure: true
+	Object:
 		Variable: $r4
 		Type: javax.crypto.Cipher
 		Statement: $r4 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2028)
@@ -198,13 +198,17 @@ Analyzed Objects:
 Findings in Java Class: com.tencent.bugly.legu.proguard.af
 
 	 in Method: byte[] a(byte[])
-		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
-			First parameter was not properly generated as specced Key
-			at statement: $r7 = virtualinvoke $r6.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r4)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r8.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r5)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer515, $r7, $r8)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
+			First parameter was not properly generated as specced Key
+			at statement: $r7 = virtualinvoke $r6.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r4)
 
 		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #e589518b3fd4942155b64cfbb3193fc8be101f1956fa3ee997d10aa4300e8b9)
 			First parameter (with value "DES/CBC/PKCS5Padding") should be any of {AES_128, AES, AES_256, RSA}
@@ -214,21 +218,17 @@ Findings in Java Class: com.tencent.bugly.legu.proguard.af
 			First parameter (with value "DES") should be any of {PBKDF2withHmacSHA384, PBEwithHmacSHA224AndAES_256, PBKDF2withHmacSHA512, PBKDF2withHmacSHA224, PBEwithHmacSHA512AndAES_128, PBEwithHmacSHA224AndAES_128, PBEwithHmacSHA256AndAES_128, PBEwithHmacSHA512AndAES_256, Insecure, PBEwithHmacSHA384AndAES_128, PBEwithHmacSHA256AndAES_256, PBEwithHmacSHA384AndAES_256, PBKDF2withHmacSHA256}
 			at statement: $r6 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer513)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer515, $r7, $r8)
-
 
 Findings in Java Class: com.tencent.StubShell.a
 
 	 in Method: java.lang.String a(java.io.InputStream)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #9f98440ea9f4a28facc54fec6559e623d46f6d3aebd239b6731b1766c7b2f518)
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1740)
+
 		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #9f98440ea9f4a28facc54fec6559e623d46f6d3aebd239b6731b1766c7b2f518)
 			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte[]),java.security.MessageDigest: void update(byte)
 			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
-
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #9f98440ea9f4a28facc54fec6559e623d46f6d3aebd239b6731b1766c7b2f518)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
-			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1740)
 
 
 Findings in Java Class: com.tencent.bugly.legu.proguard.a
@@ -240,17 +240,17 @@ Findings in Java Class: com.tencent.bugly.legu.proguard.a
 
 
 	 in Method: byte[] a(int,byte[],byte[])
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r1)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer2026)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>($i0, $r3, $r2)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer2026)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r1)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Third parameter was not properly generated as prepared G C M
@@ -264,13 +264,13 @@ Findings in Java Class: com.tencent.bugly.legu.proguard.ae
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r6, varReplacer526)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r8.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r6)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r7.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer523, $r5, $r8)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r8.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r6)
 
 
 ======================= CogniCrypt Summary ==========================
@@ -278,7 +278,7 @@ Findings in Java Class: com.tencent.bugly.legu.proguard.ae
 	Number of Objects Analyzed: 23
 
 	CogniCrypt found the following violations. For details see description above.
-	RequiredPredicateError: 11
-	ConstraintError: 3
 	TypestateError: 1
+	ConstraintError: 3
+	RequiredPredicateError: 11
 =====================================================================

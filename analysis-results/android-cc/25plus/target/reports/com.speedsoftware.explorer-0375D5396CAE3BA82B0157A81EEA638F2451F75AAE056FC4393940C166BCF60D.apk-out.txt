@@ -1,8 +1,7 @@
 Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.speedsoftware.explorer-0375D5396CAE3BA82B0157A81EEA638F2451F75AAE056FC4393940C166BCF60D.apk
 Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
 Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
-Alive 75114  5000
-Alive 22091  5000
+Alive 28505  5000
 Ruleset: 
 	java.security.KeyStore
 	java.security.AlgorithmParameters
@@ -203,13 +202,21 @@ Analyzed Objects:
 Findings in Java Class: com.speedsoftware.rootexplorer.as
 
 	 in Method: javax.crypto.SecretKey a(byte[],java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
+			First parameter was not properly generated as specced Key
+			at statement: $r5 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #88bbe8b4bdab4f7a9b648269ad963be8850602ac2d8dcff18b13417abf974fae)
+			Operation on object of type javax.crypto.spec.PBEKeySpec object not completed. Expected call to clearPassword
+			at statement: $r5 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
+
 		NeverTypeOfError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #88bbe8b4bdab4f7a9b648269ad963be8850602ac2d8dcff18b13417abf974fae)
 			First parameter should never be of type java.lang.String.
 			at statement: specialinvoke $r2.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r3, $r0, $i1, $i0)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
-			First parameter was not properly generated as specced Key
-			at statement: $r5 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r6.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer1437)
 
 		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #cfe20cffc43aa720f07436fb470d54e14a3f09054507aa7536ec52d9f1692e03)
 			First parameter (with value "PBKDF2WithHmacSHA1") should be any of {PBKDF2withHmacSHA384, PBEwithHmacSHA224AndAES_256, PBKDF2withHmacSHA512, PBKDF2withHmacSHA224, PBEwithHmacSHA512AndAES_128, PBEwithHmacSHA224AndAES_128, PBEwithHmacSHA256AndAES_128, PBEwithHmacSHA512AndAES_256, Insecure, PBEwithHmacSHA384AndAES_128, PBEwithHmacSHA256AndAES_256, PBEwithHmacSHA384AndAES_256, PBKDF2withHmacSHA256}
@@ -219,20 +226,8 @@ Findings in Java Class: com.speedsoftware.rootexplorer.as
 			Second parameter was not properly generated as randomized
 			at statement: specialinvoke $r2.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r3, $r0, $i1, $i0)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r6.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer1437)
-
-		IncompleteOperationError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #88bbe8b4bdab4f7a9b648269ad963be8850602ac2d8dcff18b13417abf974fae)
-			Operation on object of type javax.crypto.spec.PBEKeySpec object not completed. Expected call to clearPassword
-			at statement: $r5 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r2)
-
 
 	 in Method: java.lang.String a(java.lang.String,javax.crypto.SecretKey,byte[])
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared I V
-			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1470, $r1, $r6)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1470, $r1, $r6)
@@ -240,6 +235,10 @@ Findings in Java Class: com.speedsoftware.rootexplorer.as
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r6.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared I V
+			at statement: virtualinvoke $r3.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1470, $r1, $r6)
 
 
 	 in Method: java.lang.String a(byte[],javax.crypto.SecretKey,byte[])
@@ -256,7 +255,7 @@ Findings in Java Class: com.dropbox.client2.android.AuthActivity
 
 	 in Method: java.lang.String b()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #303723a7f7c9967554c0e017e77ff449d78f2efa25a8fd120ec796a535181bd5)
-			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6074)
 
 
@@ -264,7 +263,7 @@ Findings in Java Class: a.d.v
 
 	 in Method: void <init>(byte[],boolean)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #d61252b05bfa65965d82e4ea93c4a283dd2ff3ad42d648a64bdebaeaa94b34b9)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7063)
 
 
@@ -273,11 +272,11 @@ Findings in Java Class: a.d.bi
 	 in Method: void a(a.d.u,a.d.u)
 		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #d61252b05bfa65965d82e4ea93c4a283dd2ff3ad42d648a64bdebaeaa94b34b9)
 			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: specialinvoke r38.<a.d.v: void <init>(byte[],boolean)>($r26, varReplacer7047)
+			at statement: specialinvoke r38.<a.d.v: void <init>(byte[],boolean)>($r6, varReplacer7048)
 
 		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #d61252b05bfa65965d82e4ea93c4a283dd2ff3ad42d648a64bdebaeaa94b34b9)
 			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: specialinvoke r38.<a.d.v: void <init>(byte[],boolean)>($r6, varReplacer7048)
+			at statement: specialinvoke r38.<a.d.v: void <init>(byte[],boolean)>($r26, varReplacer7047)
 
 
 Findings in Java Class: a.e.c
@@ -288,7 +287,7 @@ Findings in Java Class: a.e.c
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7108)
 
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #7c7c7f209150d140db045068b6fb7a9aab51b00a5daa0b19c8391d7bc8157959)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7108)
 
 
@@ -296,7 +295,7 @@ Findings in Java Class: a.d.t
 
 	 in Method: byte[] a(byte[],byte[],byte[])
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #468053375d0fa7e43e7abcf9f628a7130455ecbb5486ed4e1d86b034f03d6ba1)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r4 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer7206)
 
 
@@ -306,7 +305,7 @@ Findings in Java Class: a.d.t
 
 	CogniCrypt found the following violations. For details see description above.
 	IncompleteOperationError: 4
+	ConstraintError: 5
 	NeverTypeOfError: 1
 	RequiredPredicateError: 8
-	ConstraintError: 5
 =====================================================================

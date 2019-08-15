@@ -37,13 +37,6 @@ Ruleset:
 
 Analyzed Objects: 
 	Object:
-		Variable: $r8
-		Type: javax.crypto.Cipher
-		Statement: $r8 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1275)
-		Method: <com.amazon.device.ads.DebugProperties: byte[] decrypt(byte[])>
-		SHA-256: 55a15cf3c0ae09b45bb0ec80db2f73c55494a76654cf74531130edd6f1fbaa7b
-		Secure: false
-	Object:
 		Variable: $r4
 		Type: byte[]
 		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
@@ -93,11 +86,25 @@ Analyzed Objects:
 		SHA-256: 4e87a90add28cf22cc373814cd263e84ee4aa147d88e4b4d13f6f15a6b24ba91
 		Secure: false
 	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r8.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1)
+		Method: <com.amazon.device.ads.DebugProperties: byte[] decrypt(byte[])>
+		SHA-256: 78aa0526a800bf71c5e314ba5fcd40400c911438f10b199aac7ad9c52d88a29b
+		Secure: false
+	Object:
 		Variable: $r2
 		Type: java.security.MessageDigest
 		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer505)
 		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
 		SHA-256: 66eaafa019ab7d496010be0639440687521f39f7c801ba9d4a7650918436c69e
+		Secure: false
+	Object:
+		Variable: $r8
+		Type: javax.crypto.Cipher
+		Statement: $r8 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1275)
+		Method: <com.amazon.device.ads.DebugProperties: byte[] decrypt(byte[])>
+		SHA-256: 55a15cf3c0ae09b45bb0ec80db2f73c55494a76654cf74531130edd6f1fbaa7b
 		Secure: false
 	Object:
 		Variable: $r1
@@ -141,13 +148,6 @@ Analyzed Objects:
 		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
 		SHA-256: 5a54f705314d6605f4cf61ba388d3b495336c885c3ea98cfb7cec081c65981da
 		Secure: false
-	Object:
-		Variable: $r1
-		Type: byte[]
-		Statement: $r1 = virtualinvoke $r8.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r1)
-		Method: <com.amazon.device.ads.DebugProperties: byte[] decrypt(byte[])>
-		SHA-256: 78aa0526a800bf71c5e314ba5fcd40400c911438f10b199aac7ad9c52d88a29b
-		Secure: false
 
 Findings in Java Class: com.unity3d.player.UnityPlayer
 
@@ -157,7 +157,7 @@ Findings in Java Class: com.unity3d.player.UnityPlayer
 			at statement: virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r1, varReplacer506, $i3)
 
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #66eaafa019ab7d496010be0639440687521f39f7c801ba9d4a7650918436c69e)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer505)
 
 		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #66eaafa019ab7d496010be0639440687521f39f7c801ba9d4a7650918436c69e)
@@ -185,11 +185,11 @@ Findings in Java Class: com.heyzap.http.MySSLSocketFactory
 
 	 in Method: void <init>(java.security.KeyStore)
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
+			First parameter was not properly generated as generated Key Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer962, r5, varReplacer962)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
+			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer962, r5, varReplacer962)
 
 		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #939d29a6cbf323259cbcde2c9540e31a0d05cc1eccdb2e0ca19bd0399543bd0b)
@@ -201,7 +201,7 @@ Findings in Java Class: com.mopub.common.util.Utils
 
 	 in Method: java.lang.String sha1(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #441ca9d858fb54e747c405c5d93cdd44013060ed2957352117825821c32b173a)
-			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1487)
 
 
@@ -209,7 +209,7 @@ Findings in Java Class: com.jirbo.adcolony.ah
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #7443f2434975b17daebff2cb8f9caed3e562855cfdd1c290b66fcb5f54afd338)
-			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2004)
 
 
@@ -217,7 +217,7 @@ Findings in Java Class: com.chartboost.sdk.Libraries.b
 
 	 in Method: byte[] a(byte[])
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #68493d0866198d6a3daf253998c09a41d7a365a607a6b338e8f62589537befad)
-			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4308)
 
 
@@ -225,7 +225,7 @@ Findings in Java Class: com.immersion.hapticmediasdk.utils.FileManager
 
 	 in Method: java.lang.String getUniqueFileName(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #73c991e02a73bcc97bd7e9ea31c7715f3436ea6e70f02309029c571cd9a71f62)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4814)
 
 
@@ -234,7 +234,7 @@ Findings in Java Class: com.amazon.device.ads.DebugProperties
 	 in Method: byte[] decrypt(byte[])
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1279, $r7)
+			at statement: virtualinvoke $r8.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer1274, $r7)
 
 
 ======================= CogniCrypt Summary ==========================

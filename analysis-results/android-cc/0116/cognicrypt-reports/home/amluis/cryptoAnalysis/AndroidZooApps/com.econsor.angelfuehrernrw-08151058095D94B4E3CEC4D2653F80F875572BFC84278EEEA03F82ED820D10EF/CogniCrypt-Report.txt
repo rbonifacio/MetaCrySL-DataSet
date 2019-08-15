@@ -41,6 +41,13 @@ Analyzed Objects:
 		SHA-256: cf845706ce4daa48e149dad8ccb41de100e9e1eae93ad73e4db68957aa431ca
 		Secure: false
 	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer2227)
+		Method: <com.b.a.a.j: void <init>(java.security.KeyStore)>
+		SHA-256: 5999345dc32c3ba61d4ba23d74aaf12c3163807473a3a0365ed929eed77e70c1
+		Secure: false
+	Object:
 		Variable: $r0
 		Type: java.security.SecureRandom
 		Statement: specialinvoke $r0.<java.security.SecureRandom: void <init>()>()
@@ -188,13 +195,6 @@ Analyzed Objects:
 		SHA-256: acecb430a307b4ca818e1ec82b1506a7ea7cb0fac5567443fa6c2c2fd0c90292
 		Secure: false
 	Object:
-		Variable: $r10
-		Type: javax.crypto.Cipher
-		Statement: $r10 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2457)
-		Method: <org.a.a.b: byte[] a(org.a.a.c,javax.crypto.SecretKey,javax.crypto.SecretKey)>
-		SHA-256: bf70a9a39b2b4ee04fb3c2a7b740dff463182a0bf98305c2263c0dd66669957a
-		Secure: false
-	Object:
 		Variable: $r1
 		Type: java.security.KeyStore
 		Statement: $r1 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>($r0)
@@ -202,11 +202,11 @@ Analyzed Objects:
 		SHA-256: 804b090e8f05047aeaddc785134b86ab23233956db37a2272dbdd85a718d625d
 		Secure: true
 	Object:
-		Variable: $r2
-		Type: javax.net.ssl.SSLContext
-		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer2225)
-		Method: <com.b.a.a.j: void <init>(java.security.KeyStore)>
-		SHA-256: f957f2dc04a6a7b916a74c6278ac9c88393f4d57371761e74b13f8b884445a05
+		Variable: $r10
+		Type: javax.crypto.Cipher
+		Statement: $r10 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer2457)
+		Method: <org.a.a.b: byte[] a(org.a.a.c,javax.crypto.SecretKey,javax.crypto.SecretKey)>
+		SHA-256: bf70a9a39b2b4ee04fb3c2a7b740dff463182a0bf98305c2263c0dd66669957a
 		Secure: false
 	Object:
 		Variable: $r2
@@ -283,21 +283,25 @@ Findings in Java Class: com.b.a.a.j
 
 	 in Method: void <init>(java.security.KeyStore)
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2226, r5, varReplacer2226)
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2225, r5, varReplacer2225)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
-			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2226, r5, varReplacer2226)
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer2225, r5, varReplacer2225)
 
-		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #f957f2dc04a6a7b916a74c6278ac9c88393f4d57371761e74b13f8b884445a05)
+		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #5999345dc32c3ba61d4ba23d74aaf12c3163807473a3a0365ed929eed77e70c1)
 			First parameter (with value "TLS") should be any of {TLSv1.2, TLSv1.1, TLSv1, Insecure}
-			at statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer2225)
+			at statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer2227)
 
 
 Findings in Java Class: com.c.a
 
 	 in Method: java.lang.String d(java.lang.String)
+		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #ab2dc4aa4ffeed20136dfb32d4b1efe8739ee11c3153534d3e80e588b21c8c0e)
+			First parameter (with value "AES") should be any of AES/{OFB, GCM, CBC, CTS, CTR, CFB}
+			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>(varReplacer2297, varReplacer2298)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r3.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer2294)
@@ -305,10 +309,6 @@ Findings in Java Class: com.c.a
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r2.<javax.crypto.Cipher: void init(int,java.security.Key)>(varReplacer2296, $r3)
-
-		ConstraintError violating CrySL rule for javax.crypto.Cipher (on Object #ab2dc4aa4ffeed20136dfb32d4b1efe8739ee11c3153534d3e80e588b21c8c0e)
-			First parameter (with value "AES") should be any of AES/{OFB, GCM, CBC, CTS, CTR, CFB}
-			at statement: $r2 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String,java.lang.String)>(varReplacer2297, varReplacer2298)
 
 
 	 in Method: java.lang.String c(java.lang.String)
@@ -326,6 +326,14 @@ Findings in Java Class: com.c.a
 
 
 	 in Method: javax.crypto.SecretKey a(char[],byte[],java.lang.String,int,int)
+		NeverTypeOfError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #cf845706ce4daa48e149dad8ccb41de100e9e1eae93ad73e4db68957aa431ca)
+			First parameter should never be of type java.lang.String.
+			at statement: specialinvoke $r3.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r0, $r1, $i1, varReplacer2370)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
+			First parameter was not properly generated as specced Key
+			at statement: $r5 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r3)
+
 		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #ae5925d4e1790bbdb506b4bdd5af19ef8e9329494df9d4421fabd2072c48cef3)
 			First parameter (with value "PBEWithMD5AndDES") should be any of {Insecure}
 			at statement: $r4 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String,java.lang.String)>($r2, varReplacer2371)
@@ -346,33 +354,13 @@ Findings in Java Class: com.c.a
 			Second parameter was not properly generated as randomized
 			at statement: specialinvoke $r3.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r0, $r1, $i1, varReplacer2370)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
-			First parameter was not properly generated as specced Key
-			at statement: $r5 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r3)
-
-		NeverTypeOfError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #cf845706ce4daa48e149dad8ccb41de100e9e1eae93ad73e4db68957aa431ca)
-			First parameter should never be of type java.lang.String.
-			at statement: specialinvoke $r3.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r0, $r1, $i1, varReplacer2370)
-
 
 Findings in Java Class: org.a.a.b
 
 	 in Method: javax.crypto.SecretKey a(char[],byte[])
-		IncompleteOperationError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #d0e32e8657f15a39127d231134e61a974aee3181d8e677c48f67e83c44715901)
-			Operation on object of type javax.crypto.spec.PBEKeySpec object not completed. Expected call to clearPassword
-			at statement: $r7 = virtualinvoke $r5.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r6)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEKeySpec
-			Second parameter was not properly generated as randomized
-			at statement: specialinvoke $r6.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r1, $r2, $i0, varReplacer2424)
-
 		NeverTypeOfError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #d0e32e8657f15a39127d231134e61a974aee3181d8e677c48f67e83c44715901)
 			First parameter should never be of type java.lang.String.
 			at statement: specialinvoke $r6.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r1, $r2, $i0, varReplacer2424)
-
-		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #4f1084f1c47777a8f1de2654b87beb677eaaeb7c35d75746b1f75dc47c911109)
-			First parameter (with value "PBKDF2WithHmacSHA1") should be any of {Insecure}
-			at statement: $r5 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer2429)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
@@ -382,25 +370,37 @@ Findings in Java Class: org.a.a.b
 			First parameter was not properly generated as specced Key
 			at statement: $r7 = virtualinvoke $r5.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r6)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEKeySpec
+			Second parameter was not properly generated as randomized
+			at statement: specialinvoke $r6.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r1, $r2, $i0, varReplacer2424)
+
+		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #4f1084f1c47777a8f1de2654b87beb677eaaeb7c35d75746b1f75dc47c911109)
+			First parameter (with value "PBKDF2WithHmacSHA1") should be any of {Insecure}
+			at statement: $r5 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer2429)
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #d0e32e8657f15a39127d231134e61a974aee3181d8e677c48f67e83c44715901)
+			Operation on object of type javax.crypto.spec.PBEKeySpec object not completed. Expected call to clearPassword
+			at statement: $r7 = virtualinvoke $r5.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r6)
+
 
 	 in Method: byte[] a(org.a.a.c,javax.crypto.SecretKey,javax.crypto.SecretKey)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r11.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r5)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r10.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer2453, $r2, $r11)
 
-
-	 in Method: byte[] a(org.a.a.d,javax.crypto.SecretKey,javax.crypto.SecretKey)
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r10.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer2435, $r2, $r11)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r11.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r5)
+
+
+	 in Method: byte[] a(org.a.a.d,javax.crypto.SecretKey,javax.crypto.SecretKey)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r11.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r5)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r10.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer2435, $r2, $r11)
 
 
 ======================= CogniCrypt Summary ==========================
@@ -408,8 +408,8 @@ Findings in Java Class: org.a.a.b
 	Number of Objects Analyzed: 35
 
 	CogniCrypt found the following violations. For details see description above.
-	NeverTypeOfError: 2
-	RequiredPredicateError: 15
 	IncompleteOperationError: 2
+	RequiredPredicateError: 15
 	ConstraintError: 7
+	NeverTypeOfError: 2
 =====================================================================

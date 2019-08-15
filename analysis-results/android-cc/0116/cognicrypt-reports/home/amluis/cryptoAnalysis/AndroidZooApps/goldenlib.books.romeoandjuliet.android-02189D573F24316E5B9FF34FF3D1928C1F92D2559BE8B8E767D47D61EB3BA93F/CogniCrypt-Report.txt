@@ -48,13 +48,6 @@ Analyzed Objects:
 		SHA-256: 6549b80a3c626441ec023516df8fe27a10168ceb37d20674751180bf3284e148
 		Secure: false
 	Object:
-		Variable: $r4
-		Type: java.security.SecureRandom
-		Statement: specialinvoke $r4.<java.security.SecureRandom: void <init>()>()
-		Method: <com.google.android.gms.internal.e: java.lang.String a(byte[],java.lang.String)>
-		SHA-256: bafaf02378960ec4c5d421784c3ac6db4671cee3cfe6a73a3c4597725fba9d38
-		Secure: true
-	Object:
 		Variable: $r6
 		Type: byte[]
 		Statement: $r1 = virtualinvoke $r11.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6)
@@ -68,6 +61,13 @@ Analyzed Objects:
 		Method: <com.google.android.gms.internal.l: byte[] c(byte[],java.lang.String)>
 		SHA-256: 7c63af2ce99b67bd9fc092e777dbad80e54e893c3d6c69cfb9a1642b42fa6b17
 		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: virtualinvoke $r4.<java.security.SecureRandom: void nextBytes(byte[])>($r3)
+		Method: <com.google.android.gms.internal.e: java.lang.String a(byte[],java.lang.String)>
+		SHA-256: 21f87279ec8085a91b0c700695a369ca04a0f3d90738961013b1303779de45f
+		Secure: true
 	Object:
 		Variable: $r2
 		Type: java.security.MessageDigest
@@ -97,6 +97,20 @@ Analyzed Objects:
 		SHA-256: e9cd7154338a5368a4a134144b7c8c15ad2761183463168f479ef222d8ffb095
 		Secure: false
 	Object:
+		Variable: $r6
+		Type: java.security.MessageDigest
+		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1112)
+		Method: <com.google.android.gms.internal.e: java.lang.String a(byte[],java.lang.String)>
+		SHA-256: 56b026aaaeb77033233f1b0487afb66c75c7558037f1f55bd9e15a9b2430cc85
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: java.security.SecureRandom
+		Statement: specialinvoke $r4.<java.security.SecureRandom: void <init>()>()
+		Method: <com.google.android.gms.internal.e: java.lang.String a(byte[],java.lang.String)>
+		SHA-256: bafaf02378960ec4c5d421784c3ac6db4671cee3cfe6a73a3c4597725fba9d38
+		Secure: true
+	Object:
 		Variable: $r7
 		Type: byte[]
 		Statement: $r7 = virtualinvoke $r5.<java.security.MessageDigest: byte[] digest()>()
@@ -117,26 +131,12 @@ Analyzed Objects:
 		Method: <com.google.android.gms.internal.l: byte[] c(byte[],java.lang.String)>
 		SHA-256: f1d0d0dad88caccc9f0a4f15876e11c15b4a39a18b125f1f983504e32ba54f95
 		Secure: false
-	Object:
-		Variable: $r3
-		Type: byte[]
-		Statement: virtualinvoke $r4.<java.security.SecureRandom: void nextBytes(byte[])>($r3)
-		Method: <com.google.android.gms.internal.e: java.lang.String a(byte[],java.lang.String)>
-		SHA-256: 21f87279ec8085a91b0c700695a369ca04a0f3d90738961013b1303779de45f
-		Secure: true
-	Object:
-		Variable: $r6
-		Type: java.security.MessageDigest
-		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1113)
-		Method: <com.google.android.gms.internal.e: java.lang.String a(byte[],java.lang.String)>
-		SHA-256: 8a35d28c34f087c27ab5430e010fa591762f6f4ad3d0ef215f14736cd416cc07
-		Secure: false
 
 Findings in Java Class: com.google.android.gms.internal.cs
 
 	 in Method: java.lang.String q(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #1466b5d886eb84437f925b54cbcdd0621b27a5d091bccf31e2c77916dceebb0a)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer157)
 
 
@@ -144,16 +144,16 @@ Findings in Java Class: com.google.android.gms.internal.ck
 
 	 in Method: void <clinit>()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #e9cd7154338a5368a4a134144b7c8c15ad2761183463168f479ef222d8ffb095)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer847)
 
 
 Findings in Java Class: com.google.android.gms.internal.e
 
 	 in Method: java.lang.String a(byte[],java.lang.String)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #8a35d28c34f087c27ab5430e010fa591762f6f4ad3d0ef215f14736cd416cc07)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
-			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1113)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #56b026aaaeb77033233f1b0487afb66c75c7558037f1f55bd9e15a9b2430cc85)
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
+			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1112)
 
 
 Findings in Java Class: com.google.android.gms.internal.l

@@ -37,11 +37,11 @@ Ruleset:
 
 Analyzed Objects: 
 	Object:
-		Variable: varReplacer1670
+		Variable: varReplacer1672
 		Type: java.lang.String
-		Statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1670)
+		Statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1672)
 		Method: <com.b.a.d: java.lang.String a(java.lang.String)>
-		SHA-256: 9f747c65b0785a692a97a6d1cde76cab241652115044c311f27bb14f1d70a84b
+		SHA-256: 6bc37dba1a382d626bec930065b40bcfc89f50cd7c2953fafb8cc4d0e675dd8a
 		Secure: false
 	Object:
 		Variable: $r2
@@ -49,13 +49,6 @@ Analyzed Objects:
 		Statement: $r2 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r2)
 		Method: <com.looket.soim.util.a: java.lang.String b(java.lang.String,java.lang.String)>
 		SHA-256: 8aa317df098134d394b3cd8715e7123f63a9ff94368ad3b3bf1e5c3c531f42ea
-		Secure: false
-	Object:
-		Variable: $r2
-		Type: byte[]
-		Statement: $r2 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r2)
-		Method: <com.b.a.d: java.lang.String a(java.lang.String)>
-		SHA-256: 17f26941a9adf6d20101f01c75ef96c4ef049cd59b7332483ae89a797f9cb3ce
 		Secure: false
 	Object:
 		Variable: $r3
@@ -79,6 +72,13 @@ Analyzed Objects:
 		SHA-256: 9e3601a54c99e481e744bd37075441e49ecc25e416114cdc7bb325eac6065b75
 		Secure: false
 	Object:
+		Variable: $r5
+		Type: javax.crypto.spec.SecretKeySpec
+		Statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1672)
+		Method: <com.b.a.d: java.lang.String a(java.lang.String)>
+		SHA-256: 6af58139bb3a53f37b2881bb5178f48784144852f95be83950df0bf72a021009
+		Secure: false
+	Object:
 		Variable: varReplacer1008
 		Type: java.lang.String
 		Statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1008)
@@ -100,11 +100,18 @@ Analyzed Objects:
 		SHA-256: a7d723d82bdac9c61e77aef3350959372182e17cdc06238012d93df7a8167696
 		Secure: false
 	Object:
-		Variable: $r5
-		Type: javax.crypto.spec.SecretKeySpec
-		Statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1670)
+		Variable: $r6
+		Type: javax.crypto.Cipher
+		Statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1671)
 		Method: <com.b.a.d: java.lang.String a(java.lang.String)>
-		SHA-256: 71caf2421c354fb1b8229e679c499ea14b34a611dd71a428b68c5724221d6ec1
+		SHA-256: 8675abc469e7c78be1bb5120f79cd80db00d3428d57438d7c9056abbc746cd4f
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r6.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r2)
+		Method: <com.b.a.d: java.lang.String a(java.lang.String)>
+		SHA-256: 17f26941a9adf6d20101f01c75ef96c4ef049cd59b7332483ae89a797f9cb3ce
 		Secure: false
 	Object:
 		Variable: $r3
@@ -144,13 +151,6 @@ Analyzed Objects:
 	Object:
 		Variable: $r6
 		Type: javax.crypto.Cipher
-		Statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1667)
-		Method: <com.b.a.d: java.lang.String a(java.lang.String)>
-		SHA-256: 106c1641a60e0896b5dd360a78f03d174571a6d0d8d4152a0fb75c28d53ce644
-		Secure: false
-	Object:
-		Variable: $r6
-		Type: javax.crypto.Cipher
 		Statement: $r6 = staticinvoke <javax.crypto.Cipher: javax.crypto.Cipher getInstance(java.lang.String)>(varReplacer1010)
 		Method: <com.looket.soim.util.a: java.lang.String b(java.lang.String,java.lang.String)>
 		SHA-256: 758fdce09fafeb9bceb95e3b9c853e85aa349c8fbd0546aaaa2c130dcf1af1f4
@@ -160,62 +160,62 @@ Findings in Java Class: com.a.a.a.a.b.c
 
 	 in Method: byte[] a(byte[])
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #a7d723d82bdac9c61e77aef3350959372182e17cdc06238012d93df7a8167696)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2712)
+
+
+Findings in Java Class: com.looket.soim.util.a
+
+	 in Method: java.lang.String b(java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1008)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1006, $r5, $r3)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
+
+
+	 in Method: java.lang.String a(java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer712)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Third parameter was not properly generated as prepared I V
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer715, $r5, $r3)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer715, $r5, $r3)
 
 
 Findings in Java Class: com.b.a.d
 
 	 in Method: java.lang.String a(java.lang.String)
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Third parameter was not properly generated as prepared I V
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1666, $r5, $r3)
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1669, $r5, $r3)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1666, $r5, $r3)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1670)
-
-
-Findings in Java Class: com.looket.soim.util.a
-
-	 in Method: java.lang.String b(java.lang.String,java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1006, $r5, $r3)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1008)
-
-
-	 in Method: java.lang.String a(java.lang.String,java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer715, $r5, $r3)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r4)
+			at statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer1672)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Third parameter was not properly generated as prepared I V
-			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer715, $r5, $r3)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r5.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r4, varReplacer712)
+			at statement: virtualinvoke $r6.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1669, $r5, $r3)
 
 
 ======================= CogniCrypt Summary ==========================

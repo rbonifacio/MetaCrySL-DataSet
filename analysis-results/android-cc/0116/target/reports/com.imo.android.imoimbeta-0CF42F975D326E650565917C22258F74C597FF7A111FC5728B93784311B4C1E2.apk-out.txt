@@ -1,6 +1,7 @@
 Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/com.imo.android.imoimbeta-0CF42F975D326E650565917C22258F74C597FF7A111FC5728B93784311B4C1E2.apk
 Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
 Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
+Alive 448315  5000
 Ruleset: 
 	java.security.KeyStore
 	java.security.AlgorithmParameters
@@ -237,7 +238,7 @@ Findings in Java Class: com.facebook.ads.internal.l.ai
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #e1349def5685dd0c37687ad3b8e2f072d566dde566cf9e3aae1d71cfafb869b7)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer3128)
 
 
@@ -245,27 +246,27 @@ Findings in Java Class: com.facebook.ads.internal.h.a.o
 
 	 in Method: java.lang.String a(byte[],java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #8c76cce1cfbce4ee1138f0f8e2cc80f84015a6f3b19ff8b7aad19d5ff52cef50)
-			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer4086)
 
 
 Findings in Java Class: com.google.android.gms.iid.g
 
 	 in Method: java.lang.String a(java.security.KeyPair,java.lang.String[])
-		RequiredPredicateError violating CrySL rule for java.security.Signature
-			First parameter was not properly generated as generated Privkey
-			at statement: virtualinvoke $r5.<java.security.Signature: void initSign(java.security.PrivateKey)>($r4)
-
 		ConstraintError violating CrySL rule for java.security.Signature (on Object #4b41793ee0b8f2eedaf2e50095ab42e173ac0cc97c6d5acba53ebd4755ba3f4d)
 			First parameter (with value "SHA256withECDSA") should be any of {SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA}
 			at statement: $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r2)
+
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Privkey
+			at statement: virtualinvoke $r5.<java.security.Signature: void initSign(java.security.PrivateKey)>($r4)
 
 
 Findings in Java Class: com.google.android.gms.iid.a
 
 	 in Method: java.lang.String a(java.security.KeyPair)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #792c2d166a6a99eb68bb0bcea780b227a53b46f236f3ff4f868c73ddb3fd84d)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA1") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer9887)
 
 
@@ -284,20 +285,16 @@ Findings in Java Class: com.imo.android.imoim.h.a
 Findings in Java Class: com.imo.android.imoim.h.b
 
 	 in Method: void <clinit>()
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
-			First parameter was not properly generated as prepared Key Material
-			at statement: specialinvoke $r0.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r2, varReplacer10741, $i0, varReplacer10742)
-
 		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			Constraint length(keyMaterial) + 0 >= off - len could not be evaluted due to insufficient information.
 			at statement: specialinvoke $r0.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r2, varReplacer10741, $i0, varReplacer10742)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
+			First parameter was not properly generated as prepared Key Material
+			at statement: specialinvoke $r0.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],int,int,java.lang.String)>($r2, varReplacer10741, $i0, varReplacer10742)
+
 
 	 in Method: byte[] a(byte[],javax.crypto.SecretKey)
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
-			First parameter was not properly generated as randomized
-			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r2)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
 			Second parameter was not properly generated as generated Key
 			at statement: virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer13447, $r1, $r3)
@@ -306,17 +303,21 @@ Findings in Java Class: com.imo.android.imoim.h.b
 			Third parameter was not properly generated as prepared I V
 			at statement: virtualinvoke $r4.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer13447, $r1, $r3)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
+			First parameter was not properly generated as randomized
+			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r2)
+
 
 Findings in Java Class: com.imo.android.imoim.o.j
 
 	 in Method: java.lang.String a(java.io.RandomAccessFile)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #e4734665941a82ac72d166613ff12ce9beecc010eb40b589ba146dd86be3c945)
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer11352)
+
 		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #e4734665941a82ac72d166613ff12ce9beecc010eb40b589ba146dd86be3c945)
 			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte[]),java.security.MessageDigest: void update(byte)
 			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
-
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #e4734665941a82ac72d166613ff12ce9beecc010eb40b589ba146dd86be3c945)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
-			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer11352)
 
 
 Findings in Java Class: com.imo.android.imoim.util.ac$1
@@ -333,7 +334,7 @@ Findings in Java Class: com.imo.android.imoim.util.ac$1
 
 	CogniCrypt found the following violations. For details see description above.
 	RequiredPredicateError: 7
-	TypestateError: 1
-	ConstraintError: 6
 	ImpreciseValueExtractionError: 1
+	ConstraintError: 6
+	TypestateError: 1
 =====================================================================

@@ -91,6 +91,13 @@ Analyzed Objects:
 		Secure: false
 	Object:
 		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r4.<java.security.MessageDigest: byte[] digest()>()
+		Method: <hh: byte[] a(java.lang.String)>
+		SHA-256: a4ab256c4f717c23457f6b56f3479d6c5fd79e876bc0fce7b72b8a2d7c6a6363
+		Secure: false
+	Object:
+		Variable: $r3
 		Type: javax.crypto.spec.IvParameterSpec
 		Statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
 		Method: <fc: byte[] a(byte[],java.lang.String)>
@@ -115,7 +122,7 @@ Findings in Java Class: com.google.android.gms.ads.internal.util.client.a
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #fd0cf33f452041d6b36db71546044e734c8bb6c801f97808c4ce466c71e19cd5)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer581)
 
 
@@ -123,7 +130,7 @@ Findings in Java Class: vg
 
 	 in Method: java.lang.String b()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #8b927c954e497a63b86e68c000e5c7ca11cae07f469f624b65179cfffc237e12)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r5 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer862)
 
 
@@ -131,7 +138,7 @@ Findings in Java Class: hb
 
 	 in Method: java.security.MessageDigest a()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #7fb23d10fd0a7b57830d71da86601ec31a51d45042e7851b93537eea0edff483)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer2106)
 
 
@@ -139,17 +146,13 @@ Findings in Java Class: hh
 
 	 in Method: byte[] a(java.lang.String)
 		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #7fb23d10fd0a7b57830d71da86601ec31a51d45042e7851b93537eea0edff483)
-			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte[]),java.security.MessageDigest: void update(byte)
-			at statement: $r3 = virtualinvoke $r4.<java.security.MessageDigest: byte[] digest()>()
+			Unexpected call to method update on object of type java.security.MessageDigest. Expect a call to one of the following methods getInstance
+			at statement: virtualinvoke $r4.<java.security.MessageDigest: void update(byte[])>($r3)
 
 
 Findings in Java Class: fc
 
 	 in Method: byte[] a(byte[],java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1108, $r10, $r3)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer1110)
@@ -158,13 +161,17 @@ Findings in Java Class: fc
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
 
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1108, $r10, $r3)
+
 
 ======================= CogniCrypt Summary ==========================
 	Number of CrySL rules: 32
-	Number of Objects Analyzed: 11
+	Number of Objects Analyzed: 12
 
 	CogniCrypt found the following violations. For details see description above.
+	RequiredPredicateError: 3
 	TypestateError: 1
 	ConstraintError: 3
-	RequiredPredicateError: 3
 =====================================================================

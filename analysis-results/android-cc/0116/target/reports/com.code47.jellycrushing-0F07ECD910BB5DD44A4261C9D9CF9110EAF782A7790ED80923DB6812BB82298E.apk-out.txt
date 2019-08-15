@@ -39,9 +39,9 @@ Analyzed Objects:
 	Object:
 		Variable: $r6
 		Type: java.security.MessageDigest
-		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1159)
+		Statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1160)
 		Method: <com.facebook.unity.FB: java.lang.String getKeyHash()>
-		SHA-256: 61826bf5bc625428c47627702a1227f4a412f33f845b05d7433b38fd85693325
+		SHA-256: 55ee68351504f207de7fd50459fac5829171f29cd1b5da88406b02cdef17d4fa
 		Secure: false
 	Object:
 		Variable: $r7
@@ -49,6 +49,20 @@ Analyzed Objects:
 		Statement: $r7 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest()>()
 		Method: <com.facebook.unity.FB: java.lang.String getKeyHash()>
 		SHA-256: fbe47ce343b5df21a88c6af9649c2f8d6f5b813e936d699f053ff2a390f19c03
+		Secure: false
+	Object:
+		Variable: $r1
+		Type: byte[]
+		Statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: 5a54f705314d6605f4cf61ba388d3b495336c885c3ea98cfb7cec081c65981da
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: java.security.MessageDigest
+		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1107)
+		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
+		SHA-256: eac0198b7e3bbfa61b447bf1d76c8ff2bea867d9508e07369b26c4892d963f53
 		Secure: false
 	Object:
 		Variable: $r1
@@ -64,33 +78,19 @@ Analyzed Objects:
 		Method: <com.facebook.appevents.AppEvent: java.lang.String md5Checksum(java.lang.String)>
 		SHA-256: eb5aa20233d0a39f9efa2c49b15b711fba57bf442f97f41aee15900a081180c4
 		Secure: false
-	Object:
-		Variable: $r1
-		Type: byte[]
-		Statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
-		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
-		SHA-256: 5a54f705314d6605f4cf61ba388d3b495336c885c3ea98cfb7cec081c65981da
-		Secure: false
-	Object:
-		Variable: $r2
-		Type: java.security.MessageDigest
-		Statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1106)
-		Method: <com.unity3d.player.UnityPlayer: java.lang.String a(java.lang.String)>
-		SHA-256: ec5140baadf4787a4d5dc63914ae75807c05ca3139dd8c33041de7bb4c90aef8
-		Secure: false
 
 Findings in Java Class: com.unity3d.player.UnityPlayer
 
 	 in Method: java.lang.String a(java.lang.String)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #ec5140baadf4787a4d5dc63914ae75807c05ca3139dd8c33041de7bb4c90aef8)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #eac0198b7e3bbfa61b447bf1d76c8ff2bea867d9508e07369b26c4892d963f53)
 			Third parameter (with value 0)Variable pre_lenmust be  greater than pre_off
-			at statement: virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r1, varReplacer1108, $i3)
+			at statement: virtualinvoke $r2.<java.security.MessageDigest: void update(byte[],int,int)>($r1, varReplacer1111, $i3)
 
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #ec5140baadf4787a4d5dc63914ae75807c05ca3139dd8c33041de7bb4c90aef8)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
-			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1106)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #eac0198b7e3bbfa61b447bf1d76c8ff2bea867d9508e07369b26c4892d963f53)
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
+			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1107)
 
-		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #ec5140baadf4787a4d5dc63914ae75807c05ca3139dd8c33041de7bb4c90aef8)
+		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #eac0198b7e3bbfa61b447bf1d76c8ff2bea867d9508e07369b26c4892d963f53)
 			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte[]),java.security.MessageDigest: void update(byte)
 			at statement: $r1 = virtualinvoke $r2.<java.security.MessageDigest: byte[] digest()>()
 
@@ -98,16 +98,16 @@ Findings in Java Class: com.unity3d.player.UnityPlayer
 Findings in Java Class: com.facebook.unity.FB
 
 	 in Method: java.lang.String getKeyHash()
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #61826bf5bc625428c47627702a1227f4a412f33f845b05d7433b38fd85693325)
-			First parameter (with value "SHA") should be any of {SHA-256, SHA-384, SHA-512}
-			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1159)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #55ee68351504f207de7fd50459fac5829171f29cd1b5da88406b02cdef17d4fa)
+			First parameter (with value "SHA") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
+			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1160)
 
 
 Findings in Java Class: com.facebook.appevents.AppEvent
 
 	 in Method: java.lang.String md5Checksum(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #15457da7360421ffac2ba454524559e5e01ebdde3e86b2b3db7789898650d2ab)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1408)
 
 

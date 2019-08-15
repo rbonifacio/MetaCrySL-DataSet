@@ -132,7 +132,7 @@ Findings in Java Class: com.google.android.gms.e.sr
 
 	 in Method: java.lang.String a(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #d741bc750604163cb6d47b6153c6a642d69a1b9dbca98b4760e765b033315394)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer704)
 
 
@@ -159,6 +159,10 @@ Findings in Java Class: bestdict.common.code.SplashScreen
 Findings in Java Class: com.google.android.a.b.a
 
 	 in Method: void <init>(byte[],java.lang.String,java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
+			First parameter was not properly generated as specced Key
+			at statement: $r8 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r5)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r9.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer1267)
@@ -167,9 +171,13 @@ Findings in Java Class: com.google.android.a.b.a
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r11.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r1)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
-			First parameter was not properly generated as specced Key
-			at statement: $r8 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r5)
+		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #f1b43609abfd4306bb0fcad55da4ca3f07e15556268b21a10924fccf1c513827)
+			First parameter (with value "PBEWITHSHAAND256BITAES-CBC-BC") should be any of {Insecure}
+			at statement: $r4 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer1265)
+
+		ConstraintError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #3cb92825c220fd44b165823191cf353a74eb85959958024e634c367110e67be)
+			Third parameter (with value 1024)Variable iterationCountmust be  at least 10000
+			at statement: specialinvoke $r5.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r7, $r1, varReplacer1261, varReplacer1262)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
@@ -179,21 +187,13 @@ Findings in Java Class: com.google.android.a.b.a
 			First parameter should never be of type java.lang.String.
 			at statement: specialinvoke $r5.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r7, $r1, varReplacer1261, varReplacer1262)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEKeySpec
-			Second parameter was not properly generated as randomized
-			at statement: specialinvoke $r5.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r7, $r1, varReplacer1261, varReplacer1262)
-
 		IncompleteOperationError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #3cb92825c220fd44b165823191cf353a74eb85959958024e634c367110e67be)
 			Operation on object of type javax.crypto.spec.PBEKeySpec object not completed. Expected call to clearPassword
 			at statement: $r8 = virtualinvoke $r4.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r5)
 
-		ConstraintError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #3cb92825c220fd44b165823191cf353a74eb85959958024e634c367110e67be)
-			Third parameter (with value 1024)Variable iterationCountmust be  at least 10000
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEKeySpec
+			Second parameter was not properly generated as randomized
 			at statement: specialinvoke $r5.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r7, $r1, varReplacer1261, varReplacer1262)
-
-		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #f1b43609abfd4306bb0fcad55da4ca3f07e15556268b21a10924fccf1c513827)
-			First parameter (with value "PBEWITHSHAAND256BITAES-CBC-BC") should be any of {Insecure}
-			at statement: $r4 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer1265)
 
 
 ======================= CogniCrypt Summary ==========================
@@ -203,6 +203,6 @@ Findings in Java Class: com.google.android.a.b.a
 	CogniCrypt found the following violations. For details see description above.
 	IncompleteOperationError: 5
 	NeverTypeOfError: 1
-	RequiredPredicateError: 5
 	ConstraintError: 3
+	RequiredPredicateError: 5
 =====================================================================

@@ -41,13 +41,6 @@ Analyzed Objects:
 		SHA-256: 31c170703a3e398710b1cf8726a7467a05b032500ff68e3f2c43466982e38f87
 		Secure: true
 	Object:
-		Variable: $r1
-		Type: java.security.MessageDigest
-		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r0)
-		Method: <com.google.android.gms.measurement.internal.zzal: java.security.MessageDigest zzbZ(java.lang.String)>
-		SHA-256: 522d713ccdd51fb09c7367c1023d8059fd763d58aa7b393dcc325c80c85cc957
-		Secure: false
-	Object:
 		Variable: $r3
 		Type: java.security.MessageDigest
 		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer172)
@@ -61,6 +54,13 @@ Analyzed Objects:
 		Method: <com.google.android.gms.iid.zza: java.security.KeyPair zzCc()>
 		SHA-256: 968515fe3dc43775aac26b1af0e5ac4665f7dd045aac5aaf7b6965e6f3e812a6
 		Secure: true
+	Object:
+		Variable: $r21
+		Type: byte[]
+		Statement: $r21 = virtualinvoke $r11.<java.security.MessageDigest: byte[] digest(byte[])>($r21)
+		Method: <com.google.android.gms.measurement.internal.zzn: void zzkO()>
+		SHA-256: 11f2bd60f9801f2fc6b75a7ba331aaafa23c3be02ffcada1217859425bc095e6
+		Secure: false
 	Object:
 		Variable: $r8
 		Type: java.security.PrivateKey
@@ -83,6 +83,13 @@ Analyzed Objects:
 		SHA-256: 7032a0954db7bd1ce36bc7196ce24399c23934259a2b3e0a45884009b74cc7be
 		Secure: true
 	Object:
+		Variable: $r1
+		Type: java.security.MessageDigest
+		Statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r0)
+		Method: <com.google.android.gms.measurement.internal.zzal: java.security.MessageDigest zzbZ(java.lang.String)>
+		SHA-256: 522d713ccdd51fb09c7367c1023d8059fd763d58aa7b393dcc325c80c85cc957
+		Secure: false
+	Object:
 		Variable: $r5
 		Type: java.security.Signature
 		Statement: $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r2)
@@ -95,13 +102,6 @@ Analyzed Objects:
 		Statement: $r2 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
 		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
 		SHA-256: d877fb4dd7f0d0a4e150d0fd992249ddc9a19f0582b52e1ac77d90be8042bdc0
-		Secure: false
-	Object:
-		Variable: $r21
-		Type: byte[]
-		Statement: $r21 = virtualinvoke $r11.<java.security.MessageDigest: byte[] digest(byte[])>($r21)
-		Method: <com.google.android.gms.measurement.internal.zzn: void zzkO()>
-		SHA-256: 11f2bd60f9801f2fc6b75a7ba331aaafa23c3be02ffcada1217859425bc095e6
 		Secure: false
 	Object:
 		Variable: $r3
@@ -127,19 +127,19 @@ Findings in Java Class: com.google.android.gms.iid.InstanceID
 
 	 in Method: java.lang.String zza(java.security.KeyPair)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #271d3e76fae7ec6d576d4ed1c2d98a0114d4f82ddfdc97a347e0c3dd4ba5de70)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA1") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer172)
 
 
 Findings in Java Class: com.google.android.gms.measurement.internal.zzal
 
 	 in Method: java.security.MessageDigest zzbZ(java.lang.String)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #522d713ccdd51fb09c7367c1023d8059fd763d58aa7b393dcc325c80c85cc957)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
-			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r0)
-
 		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #522d713ccdd51fb09c7367c1023d8059fd763d58aa7b393dcc325c80c85cc957)
 			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r0)
+
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #522d713ccdd51fb09c7367c1023d8059fd763d58aa7b393dcc325c80c85cc957)
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r1 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>($r0)
 
 
@@ -147,12 +147,12 @@ Findings in Java Class: com.google.android.gms.measurement.internal.zzn
 
 	 in Method: void zzkO()
 		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #522d713ccdd51fb09c7367c1023d8059fd763d58aa7b393dcc325c80c85cc957)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: $r11 = staticinvoke <com.google.android.gms.measurement.internal.zzal: java.security.MessageDigest zzbZ(java.lang.String)>(varReplacer1331)
-
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #522d713ccdd51fb09c7367c1023d8059fd763d58aa7b393dcc325c80c85cc957)
 			Operation on object of type java.security.MessageDigest object not completed. Expected call to update, java.security.MessageDigest: byte[] digest(byte[])
 			at statement: $r21 = virtualinvoke $r11.<java.security.MessageDigest: byte[] digest(byte[])>($r21)
+
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #522d713ccdd51fb09c7367c1023d8059fd763d58aa7b393dcc325c80c85cc957)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: $r11 = staticinvoke <com.google.android.gms.measurement.internal.zzal: java.security.MessageDigest zzbZ(java.lang.String)>(varReplacer1328)
 
 
 ======================= CogniCrypt Summary ==========================

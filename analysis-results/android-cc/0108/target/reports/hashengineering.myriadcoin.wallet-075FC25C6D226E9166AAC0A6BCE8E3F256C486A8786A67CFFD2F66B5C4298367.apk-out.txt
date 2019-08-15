@@ -1,8 +1,8 @@
 Analyzing /home/amluis/cryptoAnalysis/AndroidZooApps/hashengineering.myriadcoin.wallet-075FC25C6D226E9166AAC0A6BCE8E3F256C486A8786A67CFFD2F66B5C4298367.apk
 Warning: Couldn't find any method for CryptSLMethod: java.security.SecureRandom.getInstanceStrong();
 Warning: Couldn't find any method for CryptSLMethod: javax.crypto.SecretKey.destroy();
-Alive 34800  5000
-Alive 67781  5000
+Alive 31391  5000
+Alive 62684  5000
 Ruleset: 
 	java.security.KeyStore
 	java.security.AlgorithmParameters
@@ -217,6 +217,10 @@ Analyzed Objects:
 Findings in Java Class: com.google.bitcoin.core.CheckpointManager
 
 	 in Method: void <init>(com.google.bitcoin.core.NetworkParameters,java.io.InputStream)
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #892c6fd33d1dc8041776a129128c0c64aa8bdeb2bb142964a121a4340de37302)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: specialinvoke $r3.<java.security.DigestInputStream: void <init>(java.io.InputStream,java.security.MessageDigest)>($r2, $r11)
+
 		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #892c6fd33d1dc8041776a129128c0c64aa8bdeb2bb142964a121a4340de37302)
 			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte[]),java.security.MessageDigest: void update(byte)
 			at statement: $r5 = virtualinvoke $r11.<java.security.MessageDigest: byte[] digest()>()
@@ -227,31 +231,27 @@ Findings in Java Class: com.google.bitcoin.core.CheckpointManager
 
 		IncompleteOperationError violating CrySL rule for java.security.DigestInputStream (on Object #b501322860cf6b46d4a3ca5a9672f34e477c550346be270e44218d81199ce94c)
 			Operation on object of type java.security.DigestInputStream object not completed. Expected call to read
-			at statement: virtualinvoke $r3.<java.security.DigestInputStream: void on(boolean)>(varReplacer1170)
-
-		IncompleteOperationError violating CrySL rule for java.security.DigestInputStream (on Object #b501322860cf6b46d4a3ca5a9672f34e477c550346be270e44218d81199ce94c)
-			Operation on object of type java.security.DigestInputStream object not completed. Expected call to read
 			at statement: virtualinvoke $r3.<java.security.DigestInputStream: void on(boolean)>(varReplacer1161)
 
 		ForbiddenMethodError violating CrySL rule for java.security.DigestInputStream
 			Detected call to forbidden method void on(boolean) of class java.security.DigestInputStream
 			at statement: virtualinvoke $r3.<java.security.DigestInputStream: void on(boolean)>(varReplacer1161)
 
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #892c6fd33d1dc8041776a129128c0c64aa8bdeb2bb142964a121a4340de37302)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: specialinvoke $r3.<java.security.DigestInputStream: void <init>(java.io.InputStream,java.security.MessageDigest)>($r2, $r11)
+		IncompleteOperationError violating CrySL rule for java.security.DigestInputStream (on Object #b501322860cf6b46d4a3ca5a9672f34e477c550346be270e44218d81199ce94c)
+			Operation on object of type java.security.DigestInputStream object not completed. Expected call to read
+			at statement: virtualinvoke $r3.<java.security.DigestInputStream: void on(boolean)>(varReplacer1170)
 
 
 Findings in Java Class: com.google.bitcoin.protocols.payments.PaymentSession
 
 	 in Method: com.google.bitcoin.protocols.payments.PaymentSession$PkiVerificationData verifyPki()
-		RequiredPredicateError violating CrySL rule for java.security.Signature
-			First parameter was not properly generated as generated Pubkey
-			at statement: virtualinvoke $r28.<java.security.Signature: void initVerify(java.security.PublicKey)>($r27)
-
 		ConstraintError violating CrySL rule for java.security.Signature (on Object #d3c7b83e7486f02ed3737d00a2cac468af662a3672495cefd4612607b0a6eeed)
 			First parameter (with value "SHA1withRSA") should be any of {SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA}
 			at statement: $r28 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r6)
+
+		RequiredPredicateError violating CrySL rule for java.security.Signature
+			First parameter was not properly generated as generated Pubkey
+			at statement: virtualinvoke $r28.<java.security.Signature: void initVerify(java.security.PublicKey)>($r27)
 
 		RequiredPredicateError violating CrySL rule for java.security.cert.PKIXParameters
 			First parameter was not properly generated as generated Key Store
@@ -259,15 +259,15 @@ Findings in Java Class: com.google.bitcoin.protocols.payments.PaymentSession
 
 
 	 in Method: java.security.KeyStore createKeyStore(java.lang.String)
-		NeverTypeOfError violating CrySL rule for java.security.KeyStore (on Object #42405f43c07d0cd9ac87f0e4cabacd6c6d8859ff772f57160ec37ce6ebdf0f30)
-			Second parameter should never be of type java.lang.String.
-			at statement: virtualinvoke $r6.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r7, $r5)
-
 		ConstraintError violating CrySL rule for java.security.KeyStore (on Object #856b7c6854391f6517711a0f6c5420d2fb9ade455a3bf082236ccac311c83e1e)
 			First parameter (with value "JKS") should be any of {BKS, PKCS12-DEF, BCPKCS12, PKCS12, BouncyCastle}
 			at statement: $r6 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer3851)
 
 		NeverTypeOfError violating CrySL rule for java.security.KeyStore (on Object #c802f952b3f7fbd04b9e61c85189101cdaa4ba6bbac327aa4fbf07b49ff3fc88)
+			Second parameter should never be of type java.lang.String.
+			at statement: virtualinvoke $r6.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r7, $r5)
+
+		NeverTypeOfError violating CrySL rule for java.security.KeyStore (on Object #42405f43c07d0cd9ac87f0e4cabacd6c6d8859ff772f57160ec37ce6ebdf0f30)
 			Second parameter should never be of type java.lang.String.
 			at statement: virtualinvoke $r6.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r7, $r5)
 
@@ -280,40 +280,40 @@ Findings in Java Class: com.google.bitcoin.script.Script
 
 	 in Method: void executeScript(com.google.bitcoin.core.Transaction,long,com.google.bitcoin.script.Script,java.util.LinkedList)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #b68749dac9e9fecf205b33d6c6e887c2c0b0a50b46cc4bd5573f280017e9d4cd)
-			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r26 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5161)
 
 
 Findings in Java Class: com.lambdaworks.crypto.PBKDF
 
 	 in Method: void pbkdf2(javax.crypto.Mac,byte[],int,byte[],int)
-		TypestateError violating CrySL rule for javax.crypto.Mac (on Object #c5d4d687adfe40e2536a8377a20113c3bc26c37e3628ad30c09e3bc290d256e3)
-			Unexpected call to method update on object of type javax.crypto.Mac.
-			at statement: virtualinvoke $r0.<javax.crypto.Mac: void update(byte[])>($r5)
-
 		IncompleteOperationError violating CrySL rule for javax.crypto.Mac (on Object #c5d4d687adfe40e2536a8377a20113c3bc26c37e3628ad30c09e3bc290d256e3)
 			Operation on object of type javax.crypto.Mac object not completed. Expected call to update, doFinal
 			at statement: $i3 = virtualinvoke $r0.<javax.crypto.Mac: int getMacLength()>()
 
 		TypestateError violating CrySL rule for javax.crypto.Mac (on Object #c5d4d687adfe40e2536a8377a20113c3bc26c37e3628ad30c09e3bc290d256e3)
 			Unexpected call to method update on object of type javax.crypto.Mac.
-			at statement: virtualinvoke $r0.<javax.crypto.Mac: void update(byte[])>($r4)
+			at statement: virtualinvoke $r0.<javax.crypto.Mac: void update(byte[])>($r5)
 
 		ImpreciseValueExtractionError violating CrySL rule for javax.crypto.Mac
 			Constraint length(output1) + 0 > outOffset + 0 could not be evaluted due to insufficient information.
 			at statement: virtualinvoke $r0.<javax.crypto.Mac: void doFinal(byte[],int)>($r4, varReplacer6606)
 
+		TypestateError violating CrySL rule for javax.crypto.Mac (on Object #c5d4d687adfe40e2536a8377a20113c3bc26c37e3628ad30c09e3bc290d256e3)
+			Unexpected call to method update on object of type javax.crypto.Mac.
+			at statement: virtualinvoke $r0.<javax.crypto.Mac: void update(byte[])>($r4)
+
 
 Findings in Java Class: com.lambdaworks.crypto.SCrypt
 
 	 in Method: byte[] scryptJ(byte[],byte[],int,int,int,int)
-		IncompleteOperationError violating CrySL rule for javax.crypto.Mac (on Object #c5d4d687adfe40e2536a8377a20113c3bc26c37e3628ad30c09e3bc290d256e3)
-			Operation on object of type javax.crypto.Mac object not completed. Expected call to update, doFinal
-			at statement: staticinvoke <com.lambdaworks.crypto.PBKDF: void pbkdf2(javax.crypto.Mac,byte[],int,byte[],int)>($r5, $r0, varReplacer6594, $r4, varReplacer6595)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r0, varReplacer6592)
+
+		IncompleteOperationError violating CrySL rule for javax.crypto.Mac (on Object #c5d4d687adfe40e2536a8377a20113c3bc26c37e3628ad30c09e3bc290d256e3)
+			Operation on object of type javax.crypto.Mac object not completed. Expected call to update, doFinal
+			at statement: staticinvoke <com.lambdaworks.crypto.PBKDF: void pbkdf2(javax.crypto.Mac,byte[],int,byte[],int)>($r5, $r0, varReplacer6594, $r4, varReplacer6595)
 
 
 ======================= CogniCrypt Summary ==========================
@@ -322,10 +322,10 @@ Findings in Java Class: com.lambdaworks.crypto.SCrypt
 
 	CogniCrypt found the following violations. For details see description above.
 	ImpreciseValueExtractionError: 1
-	ForbiddenMethodError: 2
-	RequiredPredicateError: 3
 	IncompleteOperationError: 5
-	NeverTypeOfError: 2
 	ConstraintError: 4
 	TypestateError: 3
+	ForbiddenMethodError: 2
+	NeverTypeOfError: 2
+	RequiredPredicateError: 3
 =====================================================================

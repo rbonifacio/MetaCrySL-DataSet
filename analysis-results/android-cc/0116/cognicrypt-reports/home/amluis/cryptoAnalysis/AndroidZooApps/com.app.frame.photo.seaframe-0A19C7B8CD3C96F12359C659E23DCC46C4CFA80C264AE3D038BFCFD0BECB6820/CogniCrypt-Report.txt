@@ -41,11 +41,25 @@ Analyzed Objects:
 		SHA-256: cd27a74eaddd7f7ca0c61565f78de4c8961e56c2c8102a2264a7f96b8c516804
 		Secure: false
 	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1266)
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzcu(java.lang.String)>
+		SHA-256: 6137864970bcaf62948f879c9379574651f5ef26f2ff812525e5325cd4b26ee9
+		Secure: false
+	Object:
 		Variable: varReplacer747
 		Type: int
 		Statement: specialinvoke $r3.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r4, $r1, varReplacer746, varReplacer747)
 		Method: <fc.info.appdata.AESHelper: javax.crypto.SecretKey deriveKey(java.lang.String,byte[])>
 		SHA-256: 5d422624be10232cad9decdb08b6c0d68f4126a4da409970664171733a1fea70
+		Secure: false
+	Object:
+		Variable: $r4
+		Type: byte[]
+		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
+		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzcu(java.lang.String)>
+		SHA-256: a8de7f4161f33e15339b4db966009de5efe1ebbfcd72ee5c244fa3f985a063ed
 		Secure: false
 	Object:
 		Variable: $r0
@@ -60,13 +74,6 @@ Analyzed Objects:
 		Statement: $r5 = virtualinvoke $r9.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r7)
 		Method: <fc.info.appdata.AESHelper: java.lang.String decrypt(java.lang.String,java.lang.String)>
 		SHA-256: 38b2864a77ec47b47c9b8b6f5c20ffc4aef8c1d23bd37302de9abab72780037c
-		Secure: false
-	Object:
-		Variable: $r3
-		Type: java.security.MessageDigest
-		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1265)
-		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzcu(java.lang.String)>
-		SHA-256: 20b994a5ad9bb01d9839ff82fb6792550c257d35b95bd011dd016570140515ad
 		Secure: false
 	Object:
 		Variable: $r7
@@ -125,13 +132,6 @@ Analyzed Objects:
 		SHA-256: c82daec10cec296338480607ed6139e50fc6ce302b575cd2bbb82f48693f7333
 		Secure: false
 	Object:
-		Variable: $r4
-		Type: byte[]
-		Statement: $r4 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest()>()
-		Method: <com.google.android.gms.ads.internal.util.client.zza: java.lang.String zzcu(java.lang.String)>
-		SHA-256: a8de7f4161f33e15339b4db966009de5efe1ebbfcd72ee5c244fa3f985a063ed
-		Secure: false
-	Object:
 		Variable: $r7
 		Type: byte[]
 		Statement: virtualinvoke $r8.<java.security.MessageDigest: byte[] digest(byte[])>($r7)
@@ -185,11 +185,11 @@ Findings in Java Class: fc.info.appdata.About_us
 
 	 in Method: void initKey()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #d3321748d0f50ac1fed4a6b82437d740cdc06e89dbeca4757d4330a35052fff0)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r8 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer497)
 
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #b1b5f7fd80a94c745bdb5497500ea6fdacdfadc51053c121246ff1c4788ea6f7)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r8 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer500)
 
 
@@ -200,25 +200,25 @@ Findings in Java Class: fc.info.appdata.AESHelper
 			Operation on object of type javax.crypto.spec.PBEKeySpec object not completed. Expected call to clearPassword
 			at statement: $r6 = virtualinvoke $r5.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r3)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEKeySpec
-			Second parameter was not properly generated as randomized
-			at statement: specialinvoke $r3.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r4, $r1, varReplacer746, varReplacer747)
+		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
+			First parameter was not properly generated as specced Key
+			at statement: $r6 = virtualinvoke $r5.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r3)
 
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r7.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer748)
 
-		RequiredPredicateError violating CrySL rule for javax.crypto.SecretKeyFactory
-			First parameter was not properly generated as specced Key
-			at statement: $r6 = virtualinvoke $r5.<javax.crypto.SecretKeyFactory: javax.crypto.SecretKey generateSecret(java.security.spec.KeySpec)>($r3)
+		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #6e3b86455592d59493f2db1cc0c5b9334438a8b2ae66b26a813c2c43edb047fd)
+			First parameter (with value "PBKDF2WithHmacSHA1") should be any of {Insecure}
+			at statement: $r5 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer749)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.spec.PBEKeySpec
+			Second parameter was not properly generated as randomized
+			at statement: specialinvoke $r3.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r4, $r1, varReplacer746, varReplacer747)
 
 		NeverTypeOfError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #f6e80809286ca13aa45ed8158e53b061ed2a85cc283213c3fb4909d6abe316b0)
 			First parameter should never be of type java.lang.String.
 			at statement: specialinvoke $r3.<javax.crypto.spec.PBEKeySpec: void <init>(char[],byte[],int,int)>($r4, $r1, varReplacer746, varReplacer747)
-
-		ConstraintError violating CrySL rule for javax.crypto.SecretKeyFactory (on Object #6e3b86455592d59493f2db1cc0c5b9334438a8b2ae66b26a813c2c43edb047fd)
-			First parameter (with value "PBKDF2WithHmacSHA1") should be any of {Insecure}
-			at statement: $r5 = staticinvoke <javax.crypto.SecretKeyFactory: javax.crypto.SecretKeyFactory getInstance(java.lang.String)>(varReplacer749)
 
 		ConstraintError violating CrySL rule for javax.crypto.spec.PBEKeySpec (on Object #f6e80809286ca13aa45ed8158e53b061ed2a85cc283213c3fb4909d6abe316b0)
 			Third parameter (with value 1000)Variable iterationCountmust be  at least 10000
@@ -226,33 +226,33 @@ Findings in Java Class: fc.info.appdata.AESHelper
 
 
 	 in Method: java.lang.String decrypt(java.lang.String,java.lang.String)
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r9.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer743, $r8, $r2)
-
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r2.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r6)
+
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r9.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer743, $r8, $r2)
 
 
 Findings in Java Class: com.photoedit.text.flowerphotoframe.SplashScreen
 
 	 in Method: void initKey()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #9504f29fc87d36c6a6ffd359fccdde4a2e8381985a1c7abffd0110c776834da8)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r8 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer839)
 
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #b3b225666089e5bb59121c95849469153ad7a4ea9b2eb441aa55db5e79395528)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r8 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer843)
 
 
 Findings in Java Class: com.google.android.gms.ads.internal.util.client.zza
 
 	 in Method: java.lang.String zzcu(java.lang.String)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #20b994a5ad9bb01d9839ff82fb6792550c257d35b95bd011dd016570140515ad)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
-			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1265)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #6137864970bcaf62948f879c9379574651f5ef26f2ff812525e5325cd4b26ee9)
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1266)
 
 
 ======================= CogniCrypt Summary ==========================
@@ -260,8 +260,8 @@ Findings in Java Class: com.google.android.gms.ads.internal.util.client.zza
 	Number of Objects Analyzed: 21
 
 	CogniCrypt found the following violations. For details see description above.
+	ConstraintError: 7
+	RequiredPredicateError: 5
 	NeverTypeOfError: 1
 	IncompleteOperationError: 1
-	RequiredPredicateError: 5
-	ConstraintError: 7
 =====================================================================

@@ -212,6 +212,10 @@ Analyzed Objects:
 Findings in Java Class: com.google.bitcoin.core.CheckpointManager
 
 	 in Method: void <init>(com.google.bitcoin.core.NetworkParameters,java.io.InputStream)
+		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #892c6fd33d1dc8041776a129128c0c64aa8bdeb2bb142964a121a4340de37302)
+			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
+			at statement: specialinvoke $r3.<java.security.DigestInputStream: void <init>(java.io.InputStream,java.security.MessageDigest)>($r2, $r11)
+
 		TypestateError violating CrySL rule for java.security.MessageDigest (on Object #892c6fd33d1dc8041776a129128c0c64aa8bdeb2bb142964a121a4340de37302)
 			Unexpected call to method <java.security.MessageDigest: byte[] digest()> on object of type java.security.MessageDigest. Expect a call to one of the following methods java.security.MessageDigest: void update(byte[],int,int),java.security.MessageDigest: void update(java.nio.ByteBuffer),java.security.MessageDigest: byte[] digest(byte[]),java.security.MessageDigest: void update(byte[]),java.security.MessageDigest: void update(byte)
 			at statement: $r5 = virtualinvoke $r11.<java.security.MessageDigest: byte[] digest()>()
@@ -222,19 +226,15 @@ Findings in Java Class: com.google.bitcoin.core.CheckpointManager
 
 		IncompleteOperationError violating CrySL rule for java.security.DigestInputStream (on Object #b501322860cf6b46d4a3ca5a9672f34e477c550346be270e44218d81199ce94c)
 			Operation on object of type java.security.DigestInputStream object not completed. Expected call to read
-			at statement: virtualinvoke $r3.<java.security.DigestInputStream: void on(boolean)>(varReplacer1170)
-
-		IncompleteOperationError violating CrySL rule for java.security.DigestInputStream (on Object #b501322860cf6b46d4a3ca5a9672f34e477c550346be270e44218d81199ce94c)
-			Operation on object of type java.security.DigestInputStream object not completed. Expected call to read
 			at statement: virtualinvoke $r3.<java.security.DigestInputStream: void on(boolean)>(varReplacer1161)
 
 		ForbiddenMethodError violating CrySL rule for java.security.DigestInputStream
 			Detected call to forbidden method void on(boolean) of class java.security.DigestInputStream
 			at statement: virtualinvoke $r3.<java.security.DigestInputStream: void on(boolean)>(varReplacer1161)
 
-		IncompleteOperationError violating CrySL rule for java.security.MessageDigest (on Object #892c6fd33d1dc8041776a129128c0c64aa8bdeb2bb142964a121a4340de37302)
-			Operation on object of type java.security.MessageDigest object not completed. Expected call to digest, update
-			at statement: specialinvoke $r3.<java.security.DigestInputStream: void <init>(java.io.InputStream,java.security.MessageDigest)>($r2, $r11)
+		IncompleteOperationError violating CrySL rule for java.security.DigestInputStream (on Object #b501322860cf6b46d4a3ca5a9672f34e477c550346be270e44218d81199ce94c)
+			Operation on object of type java.security.DigestInputStream object not completed. Expected call to read
+			at statement: virtualinvoke $r3.<java.security.DigestInputStream: void on(boolean)>(varReplacer1170)
 
 
 Findings in Java Class: com.google.bitcoin.protocols.payments.PaymentSession
@@ -254,20 +254,20 @@ Findings in Java Class: com.google.bitcoin.protocols.payments.PaymentSession
 			Second parameter should never be of type java.lang.String.
 			at statement: virtualinvoke $r6.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r7, $r5)
 
+		ConstraintError violating CrySL rule for java.security.KeyStore (on Object #856b7c6854391f6517711a0f6c5420d2fb9ade455a3bf082236ccac311c83e1e)
+			First parameter (with value "JKS") should be any of {BKS, PKCS12-DEF, PKCS12, BCPKCS12, AndroidKeyStore, BouncyCastle, AndroidCAStore}
+			at statement: $r6 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer3851)
+
 		NeverTypeOfError violating CrySL rule for java.security.KeyStore (on Object #c802f952b3f7fbd04b9e61c85189101cdaa4ba6bbac327aa4fbf07b49ff3fc88)
 			Second parameter should never be of type java.lang.String.
 			at statement: virtualinvoke $r6.<java.security.KeyStore: void load(java.io.InputStream,char[])>($r7, $r5)
-
-		ConstraintError violating CrySL rule for java.security.KeyStore (on Object #856b7c6854391f6517711a0f6c5420d2fb9ade455a3bf082236ccac311c83e1e)
-			First parameter (with value "JKS") should be any of {BKS, AndroidKeyStore, PKCS12, BouncyCastle, AndroidCAStore}
-			at statement: $r6 = staticinvoke <java.security.KeyStore: java.security.KeyStore getInstance(java.lang.String)>(varReplacer3851)
 
 
 Findings in Java Class: com.google.bitcoin.script.Script
 
 	 in Method: void executeScript(com.google.bitcoin.core.Transaction,long,com.google.bitcoin.script.Script,java.util.LinkedList)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #b68749dac9e9fecf205b33d6c6e887c2c0b0a50b46cc4bd5573f280017e9d4cd)
-			First parameter (with value "SHA-1") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "SHA-1") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r26 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer5161)
 
 
@@ -308,11 +308,11 @@ Findings in Java Class: com.lambdaworks.crypto.SCrypt
 	Number of Objects Analyzed: 25
 
 	CogniCrypt found the following violations. For details see description above.
-	TypestateError: 3
 	IncompleteOperationError: 5
-	ForbiddenMethodError: 2
 	ConstraintError: 3
-	NeverTypeOfError: 2
+	TypestateError: 3
 	ImpreciseValueExtractionError: 1
+	ForbiddenMethodError: 2
+	NeverTypeOfError: 2
 	RequiredPredicateError: 2
 =====================================================================

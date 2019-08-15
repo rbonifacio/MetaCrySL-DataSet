@@ -37,6 +37,20 @@ Ruleset:
 
 Analyzed Objects: 
 	Object:
+		Variable: r8
+		Type: java.security.SecureRandom
+		Statement: specialinvoke r8.<java.security.SecureRandom: void <init>()>()
+		Method: <org.jsoup.helper.HttpConnection$Response: void initUnSecureTSL()>
+		SHA-256: 13995045b6fe88ac1e570f57460505d4fec052026d8ba6f5f48c1982d4a554c7
+		Secure: true
+	Object:
+		Variable: $r2
+		Type: javax.net.ssl.SSLContext
+		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1775)
+		Method: <org.jsoup.helper.HttpConnection$Response: void initUnSecureTSL()>
+		SHA-256: 67944f3948902f71fdbc17ddd8f03131dbe5ac6eabc94a2e7812656ace6f6761
+		Secure: false
+	Object:
 		Variable: $r1
 		Type: byte[]
 		Statement: $r1 = virtualinvoke $r11.<javax.crypto.Cipher: byte[] doFinal(byte[])>($r6)
@@ -86,13 +100,6 @@ Analyzed Objects:
 		SHA-256: c912c10fbdf9c59ad4f89e99034f2098742bd04a6912e7829063391bc286c150
 		Secure: false
 	Object:
-		Variable: r8
-		Type: java.security.SecureRandom
-		Statement: specialinvoke r8.<java.security.SecureRandom: void <init>()>()
-		Method: <org.jsoup.helper.HttpConnection$Response: void initUnSecureTSL()>
-		SHA-256: 13995045b6fe88ac1e570f57460505d4fec052026d8ba6f5f48c1982d4a554c7
-		Secure: true
-	Object:
 		Variable: $r3
 		Type: java.security.MessageDigest
 		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6953)
@@ -128,13 +135,6 @@ Analyzed Objects:
 		SHA-256: bad283a12e7f4514d4d45823238f9ae624dc03d49a3af9b4fd98bffb74aac9a5
 		Secure: false
 	Object:
-		Variable: $r2
-		Type: javax.net.ssl.SSLContext
-		Statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1775)
-		Method: <org.jsoup.helper.HttpConnection$Response: void initUnSecureTSL()>
-		SHA-256: 67944f3948902f71fdbc17ddd8f03131dbe5ac6eabc94a2e7812656ace6f6761
-		Secure: false
-	Object:
 		Variable: varReplacer1451
 		Type: java.lang.String
 		Statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer1451)
@@ -153,31 +153,31 @@ Findings in Java Class: com.google.android.gms.internal.zzid
 
 	 in Method: java.lang.String zzgD()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #bad283a12e7f4514d4d45823238f9ae624dc03d49a3af9b4fd98bffb74aac9a5)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r6 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1195)
 
 
 Findings in Java Class: org.jsoup.helper.HttpConnection$Response
 
 	 in Method: void initUnSecureTSL()
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
-			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1773, r10, $r3)
-
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			Second parameter was not properly generated as generated Trust Manager
-			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1773, r10, $r3)
-
 		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #67944f3948902f71fdbc17ddd8f03131dbe5ac6eabc94a2e7812656ace6f6761)
 			First parameter (with value "SSL") should be any of {TLSv1.2, TLSv1.1, TLSv1, Insecure}
 			at statement: $r2 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1775)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			Second parameter was not properly generated as generated Trust Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1772, r10, $r3)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r2.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1772, r10, $r3)
 
 
 Findings in Java Class: com.google.android.gms.ads.internal.util.client.zza
 
 	 in Method: java.lang.String zzaE(java.lang.String)
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #d9266338aebdb6ec1610560ad1d4fdaebe4d1305539ab2e35612be8d6d3ebe87)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer6953)
 
 
@@ -197,7 +197,7 @@ Findings in Java Class: com.google.android.gms.internal.zzbl
 
 	 in Method: java.security.MessageDigest zzcy()
 		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #b211e8259eb30bac665303d76330cbf2477c9f1d9914e9eaa3b1481bbf8b85a)
-			First parameter (with value "MD5") should be any of {SHA-256, SHA-384, SHA-512}
+			First parameter (with value "MD5") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
 			at statement: $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer16462)
 
 
@@ -218,6 +218,10 @@ Findings in Java Class: com.google.android.gms.internal.zzbm
 Findings in Java Class: com.google.android.gms.internal.zzar
 
 	 in Method: byte[] zzc(byte[],java.lang.String)
+		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
+			Second parameter was not properly generated as generated Key
+			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1449, $r10, $r3)
+
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.SecretKeySpec
 			First parameter was not properly generated as prepared Key Material
 			at statement: specialinvoke $r10.<javax.crypto.spec.SecretKeySpec: void <init>(byte[],java.lang.String)>($r1, varReplacer1451)
@@ -225,10 +229,6 @@ Findings in Java Class: com.google.android.gms.internal.zzar
 		RequiredPredicateError violating CrySL rule for javax.crypto.spec.IvParameterSpec
 			First parameter was not properly generated as randomized
 			at statement: specialinvoke $r3.<javax.crypto.spec.IvParameterSpec: void <init>(byte[])>($r9)
-
-		RequiredPredicateError violating CrySL rule for javax.crypto.Cipher
-			Second parameter was not properly generated as generated Key
-			at statement: virtualinvoke $r11.<javax.crypto.Cipher: void init(int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>(varReplacer1449, $r10, $r3)
 
 
 ======================= CogniCrypt Summary ==========================

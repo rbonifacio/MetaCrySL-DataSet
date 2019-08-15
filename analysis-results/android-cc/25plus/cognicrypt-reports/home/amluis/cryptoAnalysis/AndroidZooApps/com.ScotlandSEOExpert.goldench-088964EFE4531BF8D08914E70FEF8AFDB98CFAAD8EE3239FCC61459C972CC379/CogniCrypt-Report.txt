@@ -41,11 +41,25 @@ Analyzed Objects:
 		SHA-256: 968515fe3dc43775aac26b1af0e5ac4665f7dd045aac5aaf7b6965e6f3e812a6
 		Secure: true
 	Object:
+		Variable: $r3
+		Type: java.security.MessageDigest
+		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1021)
+		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
+		SHA-256: b21a47434d7cec11d5bcb7a4b0a209c5cde3581b2e9f9e1beb9b04aadf6b0fb4
+		Secure: false
+	Object:
 		Variable: $r1
 		Type: javax.net.ssl.SSLContext
 		Statement: $r1 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1145)
 		Method: <com.braintreepayments.api.internal.TLSSocketFactory: void <init>()>
 		SHA-256: 23a86699334c939fbd6a5bea797960c76c02a753f684489c21d61857bd672a5a
+		Secure: false
+	Object:
+		Variable: $r2
+		Type: byte[]
+		Statement: $r2 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
+		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
+		SHA-256: d877fb4dd7f0d0a4e150d0fd992249ddc9a19f0582b52e1ac77d90be8042bdc0
 		Secure: false
 	Object:
 		Variable: $r5
@@ -62,33 +76,12 @@ Analyzed Objects:
 		SHA-256: 2abb37024bd464fc0c2ccf69b2ceddf0aedb43bffcb4711b7b94cf28f4b552ea
 		Secure: true
 	Object:
-		Variable: $r3
-		Type: java.security.MessageDigest
-		Statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1018)
-		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
-		SHA-256: 67b8431d01409f86d12cf1978e6eed9b6273862e5767981b2b7c67ca1bbcf86b
-		Secure: false
-	Object:
-		Variable: $r2
-		Type: byte[]
-		Statement: $r2 = virtualinvoke $r3.<java.security.MessageDigest: byte[] digest(byte[])>($r2)
-		Method: <com.google.android.gms.iid.InstanceID: java.lang.String zza(java.security.KeyPair)>
-		SHA-256: d877fb4dd7f0d0a4e150d0fd992249ddc9a19f0582b52e1ac77d90be8042bdc0
-		Secure: false
-	Object:
 		Variable: $r0
 		Type: java.security.KeyPairGenerator
 		Statement: $r0 = staticinvoke <java.security.KeyPairGenerator: java.security.KeyPairGenerator getInstance(java.lang.String)>(varReplacer1083)
 		Method: <com.google.android.gms.iid.zza: java.security.KeyPair zzCc()>
 		SHA-256: dbd39203a072ff85c719469050093dc71b7e01e0faeb6dfc8004e59a8e96f78c
 		Secure: true
-	Object:
-		Variable: $r3
-		Type: byte[]
-		Statement: $r3 = virtualinvoke $r5.<java.security.Signature: byte[] sign()>()
-		Method: <com.google.android.gms.iid.zzc: java.lang.String zza(java.security.KeyPair,java.lang.String[])>
-		SHA-256: 620c3090ee39f9e0f53b404a831eb8d63671b99583b54bc50694556834220d96
-		Secure: false
 	Object:
 		Variable: $r10
 		Type: java.security.KeyPair
@@ -102,6 +95,13 @@ Analyzed Objects:
 		Statement: $r15 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1135)
 		Method: <com.braintreepayments.api.internal.TLSSocketFactory: void <init>(java.io.InputStream)>
 		SHA-256: 7aa8ffb4476b249bd5fc4b8f38ba5fb08571e1ad675eea45cb451dbe2a270293
+		Secure: false
+	Object:
+		Variable: $r3
+		Type: byte[]
+		Statement: $r3 = virtualinvoke $r5.<java.security.Signature: byte[] sign()>()
+		Method: <com.google.android.gms.iid.zzc: java.lang.String zza(java.security.KeyPair,java.lang.String[])>
+		SHA-256: 620c3090ee39f9e0f53b404a831eb8d63671b99583b54bc50694556834220d96
 		Secure: false
 	Object:
 		Variable: $r5
@@ -121,33 +121,33 @@ Analyzed Objects:
 Findings in Java Class: com.google.android.gms.iid.zzc
 
 	 in Method: java.lang.String zza(java.security.KeyPair,java.lang.String[])
-		ConstraintError violating CrySL rule for java.security.Signature (on Object #3d513363b6c375f87a40f665c5ec4fa58169cb093ce4df37102581b14944da3e)
-			First parameter (with value "SHA256withECDSA") should be any of {SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA, SHA224withDSA}
-			at statement: $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r2)
-
 		RequiredPredicateError violating CrySL rule for java.security.Signature
 			First parameter was not properly generated as generated Privkey
 			at statement: virtualinvoke $r5.<java.security.Signature: void initSign(java.security.PrivateKey)>($r4)
+
+		ConstraintError violating CrySL rule for java.security.Signature (on Object #3d513363b6c375f87a40f665c5ec4fa58169cb093ce4df37102581b14944da3e)
+			First parameter (with value "SHA256withECDSA") should be any of {SHA1withDSA, SHA256withDSA, NONEwithDSA, SHA256withRSA, SHA224withDSA}
+			at statement: $r5 = staticinvoke <java.security.Signature: java.security.Signature getInstance(java.lang.String)>($r2)
 
 
 Findings in Java Class: com.google.android.gms.iid.InstanceID
 
 	 in Method: java.lang.String zza(java.security.KeyPair)
-		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #67b8431d01409f86d12cf1978e6eed9b6273862e5767981b2b7c67ca1bbcf86b)
-			First parameter (with value "SHA1") should be any of {SHA-256, SHA-384, SHA-512}
-			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1018)
+		ConstraintError violating CrySL rule for java.security.MessageDigest (on Object #b21a47434d7cec11d5bcb7a4b0a209c5cde3581b2e9f9e1beb9b04aadf6b0fb4)
+			First parameter (with value "SHA1") should be any of {SHA256, SHA384, SHA-256, SHA-512, SHA-384, SHA512}
+			at statement: $r3 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>(varReplacer1021)
 
 
 Findings in Java Class: com.braintreepayments.api.internal.TLSSocketFactory
 
 	 in Method: void <init>(java.io.InputStream)
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
-			at statement: virtualinvoke $r15.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1139, $r16, varReplacer1139)
-
 		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #7aa8ffb4476b249bd5fc4b8f38ba5fb08571e1ad675eea45cb451dbe2a270293)
 			First parameter (with value "TLS") should be any of {TLSv1.2, TLSv1.1, TLSv1, Insecure}
 			at statement: $r15 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1135)
+
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r15.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1139, $r16, varReplacer1139)
 
 		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
 			Second parameter was not properly generated as generated Trust Manager
@@ -155,6 +155,10 @@ Findings in Java Class: com.braintreepayments.api.internal.TLSSocketFactory
 
 
 	 in Method: void <init>()
+		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
+			First parameter was not properly generated as generated Key Manager
+			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1146, varReplacer1146, varReplacer1146)
+
 		ConstraintError violating CrySL rule for javax.net.ssl.SSLContext (on Object #23a86699334c939fbd6a5bea797960c76c02a753f684489c21d61857bd672a5a)
 			First parameter (with value "TLS") should be any of {TLSv1.2, TLSv1.1, TLSv1, Insecure}
 			at statement: $r1 = staticinvoke <javax.net.ssl.SSLContext: javax.net.ssl.SSLContext getInstance(java.lang.String)>(varReplacer1145)
@@ -163,16 +167,12 @@ Findings in Java Class: com.braintreepayments.api.internal.TLSSocketFactory
 			Second parameter was not properly generated as generated Trust Manager
 			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1146, varReplacer1146, varReplacer1146)
 
-		RequiredPredicateError violating CrySL rule for javax.net.ssl.SSLContext
-			First parameter was not properly generated as generated Key Manager
-			at statement: virtualinvoke $r1.<javax.net.ssl.SSLContext: void init(javax.net.ssl.KeyManager[],javax.net.ssl.TrustManager[],java.security.SecureRandom)>(varReplacer1146, varReplacer1146, varReplacer1146)
-
 
 ======================= CogniCrypt Summary ==========================
 	Number of CrySL rules: 32
 	Number of Objects Analyzed: 12
 
 	CogniCrypt found the following violations. For details see description above.
-	RequiredPredicateError: 5
 	ConstraintError: 4
+	RequiredPredicateError: 5
 =====================================================================
