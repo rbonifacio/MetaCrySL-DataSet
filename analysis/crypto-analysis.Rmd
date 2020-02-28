@@ -1,0 +1,115 @@
+---
+title: "CryptoAnalysis"
+author: "Rodrigo Bonifacio"
+date: "2/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(reshape2)
+require(sqldf)
+require(xtable)
+setwd(".")
+```
+
+## Load the Datasets
+
+```{r load}
+a0108 <- read.csv("../analysis-results/android/0108/summary-reportAllSeeds.csv", sep=";", head=T)
+a0108["Standard"] <- "Android"
+a0108["API"] <- "01-08"
+
+
+a0116 <- read.csv("../analysis-results/android/0116/summary-reportAllSeeds.csv", sep=";", head=T)
+a0116["Standard"] <- "Android"
+a0116["API"] <- "01-16"
+
+
+a25plus <- read.csv("../analysis-results/android/25plus/summary-reportAllSeeds.csv", sep=";", head=T)
+a25plus["Standard"] <- "Android"
+a25plus["API"] <- "25plus"
+
+
+bsi0108 <- read.csv("../analysis-results/android-bsi/0108/summary-reportAllSeeds.csv", sep=";", head=T)
+bsi0108["Standard"] <- "BSI"
+bsi0108["API"] <- "01-08"
+
+
+bsi0116 <- read.csv("../analysis-results/android-bsi/0116/summary-reportAllSeeds.csv", sep=";", head=T)
+bsi0116["Standard"] <- "BSI"
+bsi0116["API"] <- "01-16"
+
+
+bsi25plus <- read.csv("../analysis-results/android-bsi/25plus/summary-reportAllSeeds.csv", sep=";", head=T)
+bsi25plus["Standard"] <- "BSI"
+bsi25plus["API"] <- "25plus"
+
+
+cc0108 <- read.csv("../analysis-results/android-cc/0108/summary-reportAllSeeds.csv", sep=";", head=T)
+cc0108["Standard"] <- "CogniCrypt"
+cc0108["API"] <- "01-08"
+
+cc0116 <- read.csv("../analysis-results/android-cc/0116/summary-reportAllSeeds.csv", sep=";", head=T)
+cc0116["Standard"] <- "CogniCrypt"
+cc0116["API"] <- "01-16"
+
+
+cc25plus <- read.csv("../analysis-results/android-cc/25plus/summary-reportAllSeeds.csv", sep=";", head=T)
+cc25plus["Standard"] <- "CogniCrypt"
+cc25plus["API"] <- "25plus"
+
+```
+
+## Merge the datasets 
+
+```{r merge}
+df <- rbind(a0108, a0116)
+df <- rbind(df, a25plus)
+df <- rbind(df, bsi0108)
+df <- rbind(df, bsi0116)
+df <- rbind(df, bsi25plus)
+df <- rbind(df, cc0108)
+df <- rbind(df, cc0116)
+df <- rbind(df, cc25plus)
+```
+
+
+## Reshape and summarize the Datasets 
+
+```{r reshape}
+df <- melt(df, id.vars = c("SoftwareID", "Standard", "API", "SeedObjectCount", 
+                                "CallGraphTime_ms", "CryptoAnalysisTime_ms",                                                                    
+                                "CallGraphReachableMethods",                                                 
+                                "CallGraphReachableMethods_ActiveBodies","DataflowVisitedMethod",                                                
+                                "ConstraintError_sum", 
+                                "NeverTypeOfError_sum" , "TypestateError_sum", 
+                                "RequiredPredicateError_sum", "IncompleteOperationError_sum",
+                                "ImpreciseValueExtractionError_sum", "ForbiddenMethodError_sum"))
+df[is.na(df)] = 0
+
+df_summary <- sqldf("select SoftwareId, Standard, API, variable as Violation, sum(value) Total 
+                     from df 
+                     where value > 0
+                     group by SoftwareId, Standard, API, variable")
+```
+
+
+
+```{r exploratory, results="asis"}
+temp1 <- sqldf("select Standard, API, count(distinct SoftwareId) TotalApps
+                from df
+                group by Standard, API")
+
+temp2 <- sqldf("select Standard, API, count(distinct SoftwareId) TotalAppsWithViolation
+                from df_summary
+                group by Standard, API")
+
+
+temp3 <- merge(temp1, temp2)
+temp3["Rate"] <- temp3["TotalAppsWithViolation"] / temp3["TotalApps"] 
+
+print(xtable(temp3), type="latex") 
+
+lm(rate~Standard+API, data=temp3)
+```
